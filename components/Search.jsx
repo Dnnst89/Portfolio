@@ -3,7 +3,9 @@ import React from 'react';
 const Search = () => {
     return (
         <>
-            <input type="text" placeholder="Search" />
+            <div className="bg-yellow">
+                <input type="text" placeholder="Search" />
+            </div>
         </>
     );
 };

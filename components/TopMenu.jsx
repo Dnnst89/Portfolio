@@ -6,13 +6,12 @@ import Search from './Search';
 const TopMenu = () => {
     return (
         <>
-            <header className="grid grid-cols-3 bg-aquamarine">
+            <header className="grid grid-cols-3 bg-aquamarine items-center h-12">
                 <div>Logo</div>
                 <div>{<Search />}</div>
-                <div>
+                <div className="flex  bg-pink w-full justify-between py-2 h-full">
                     <div>
                         <p>
-                            Hola,{' '}
                             <span className="text-white font-bold hover:underline">
                                 {' '}
                                 <Link href="/login">iniciar sesión</Link>{' '}
