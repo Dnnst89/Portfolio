@@ -19,7 +19,7 @@ module.exports = {
             pink: '#ff49db',
             yellow: '#FFD000',
             orange: '#ff7849',
-            resene: 'F6EEE2',
+            resene: '#F6EEE2',
             floralwhite: '#F9F6F0',
         },
         fontFamily: {
