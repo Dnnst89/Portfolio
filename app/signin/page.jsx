@@ -2,13 +2,13 @@
 
 import Link from 'next/link';
 
-const LogIn = () => {
+const SignIn = () => {
     return (
         <>
             <div className="max-w-[280px] mx-auto">
                 <div className="flex flex-col items-center mt-[10vh]">
                     <h2 className="mb-5 text-gray-900 font-bold text-xl">
-                        Ingresa con tu cuenta
+                        Regístrate para continuar
                     </h2>
 
                     <form>
@@ -28,7 +28,7 @@ const LogIn = () => {
                             placeholder="Confirm password"
                         />
                         <button className="bg-blue-500 hover:bg-blue-300 text-white text-base rounded-lg py-2 px-5 transition-colors w-full text-[19px]">
-                            Ingresar
+                            Registrame
                         </button>
                         <div className="py-5 flex justify-center ">
                             <button className=" border border-gray-200 rounded-[50%] p-2 m-1 hover:bg-blue-100">
@@ -75,8 +75,15 @@ const LogIn = () => {
                             </button>
                         </div>
                     </form>
+                    <p className="text-center mt-3 text-[14px]">
+                        Ya tienes una cuenta?
+                        <span className="hover:underline   cursor-pointer text-blue-800">
+                            {' '}
+                            <Link href="/login">Iniciar sesión</Link>
+                        </span>
+                    </p>
                     <p className="text-center mt-3 text-[14px] hover:underline cursor-pointer">
-                        <Link href="/">Olvidaste la contraseña?</Link>
+                        <Link href="/login">Olvidaste la contraseña?</Link>
                     </p>
                 </div>
             </div>
@@ -84,4 +91,4 @@ const LogIn = () => {
     );
 };
 
-export default LogIn;
+export default SignIn;

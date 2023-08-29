@@ -1,22 +1,14 @@
 'use client';
+
 import Link from 'next/link';
-import { logIn, logOut } from '../../../redux/features/auth-slice';
-import { useSelector, useDispatch } from 'react-redux';
 
-const SighIn = () => {
-    const { isAuth, isModerator, uid } = useSelector(
-        (state) => state.auth.value
-    );
-
-    const dispatch = useDispatch();
-
-    console.log(uid);
+const LogIn = () => {
     return (
         <>
             <div className="max-w-[280px] mx-auto">
                 <div className="flex flex-col items-center mt-[10vh]">
                     <h2 className="mb-5 text-gray-900 font-bold text-xl">
-                        Regístrate para continuar
+                        Ingresar
                     </h2>
 
                     <form>
@@ -36,11 +28,8 @@ const SighIn = () => {
                             placeholder="Confirm password"
                         />
                         <button className="bg-blue-500 hover:bg-blue-300 text-white text-base rounded-lg py-2 px-5 transition-colors w-full text-[19px]">
-                            Registrarse
+                            Ingresar
                         </button>
-                        <div className=" flex py-2 my-2 justify-center">
-                            O continúa con:
-                        </div>
                         <div className="py-5 flex justify-center ">
                             <button className=" border border-gray-200 rounded-[50%] p-2 m-1 hover:bg-blue-100">
                                 <svg
@@ -86,19 +75,6 @@ const SighIn = () => {
                             </button>
                         </div>
                     </form>
-                    <p className="text-center mt-3 text-[14px]">
-                        Ya tienes una cuenta?{' '}
-                        <span className="text-blue-700 hover:underline cursor-pointer ">
-                            <Link
-                                href={{
-                                    pathname: '/auth',
-                                    query: { name: 'login' },
-                                }}
-                            >
-                                Iniciar sesión
-                            </Link>
-                        </span>
-                    </p>
                     <p className="text-center mt-3 text-[14px] hover:underline cursor-pointer">
                         <Link href="/">Olvidaste la contraseña?</Link>
                     </p>
@@ -108,4 +84,4 @@ const SighIn = () => {
     );
 };
 
-export default SighIn;
+export default LogIn;
