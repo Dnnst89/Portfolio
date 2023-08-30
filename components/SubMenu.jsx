@@ -1,6 +1,7 @@
-import Link from 'next/link';
+'use client';
 
-const Navbar = () => {
+import Link from 'next/link';
+const SubMenu = () => {
     const menuItems = [
         { id: 1, name: 'Home' },
         { id: 2, name: 'Saved' },
@@ -15,13 +16,16 @@ const Navbar = () => {
         { id: 11, name: 'Sell' },
     ];
     return (
-        <div className="">
-            <div className="flex items-center  w-full mx-auto  max-w-[1200px] py-5 ">
-                <ul className="flex items-center text-[13px] text-[#333333] px-2 h-2">
+        <div id="subMenu" className="border-b">
+            <div className="flex items-center justify-between w-full mx-auto  max-w-[1200px] py-5">
+                <ul
+                    id="TopMenuLeft"
+                    className="flex items-center text-[13px] text-[#333333] px-2 h-2"
+                >
                     {menuItems.map((item) => (
                         <li
                             key={item.id}
-                            className="px-3 hover:underline cursor-pointer font-bold"
+                            className="px-3 hover:underline cursor-pointer"
                         >
                             {item.name}
                         </li>
@@ -32,4 +36,4 @@ const Navbar = () => {
     );
 };
 
-export default Navbar;
+export default SubMenu;
