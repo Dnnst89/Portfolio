@@ -69,11 +69,19 @@ const products = [
         price: 1900,
         currency: 'USD',
     },
+    {
+        id: 9,
+        title: 'School Books',
+        discount: 25,
+        url: 'https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80',
+        price: 1900,
+        currency: 'USD',
+    },
 ];
 const Product = ({ product }) => {
     return (
         <>
-            <div className="grid grid-cols-5">
+            <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 w-full">
                 {products.map((item) => (
                     <div key={item.id} className="shadow-lg p-5 m-2 rounded-md">
                         <div className="shadow-lg cursor-pointer">

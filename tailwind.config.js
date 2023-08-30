@@ -21,6 +21,8 @@ module.exports = {
             orange: '#ff7849',
             resene: '#F6EEE2',
             floralwhite: '#F9F6F0',
+            white: '#FFFFFF',
+            black: '#000000',
         },
         fontFamily: {
             sans: ['Poppins', 'sans-serif'],

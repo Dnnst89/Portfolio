@@ -8,7 +8,7 @@ import { img2 } from '../app/assets/images';
 const TopMenu = () => {
     return (
         <>
-            <header className="grid grid-cols-3 grid-rows-2 gap-4 items-center h-[100px] mt-10">
+            <header className="grid grid-cols-3 grid-rows-1 gap-4 items-center h-[100px] bg-white">
                 <div className="flex justify-start ml-10 ">
                     <div>
                         <Image
@@ -23,17 +23,17 @@ const TopMenu = () => {
 
                 <div>{<Search />}</div>
                 <div className="flex w-full justify-between py-2 h-full">
-                    <div className="ml-5">
-                        <span className="text-white hover:underline pr-1">
+                    <div className="ml-5 flex  items-center">
+                        <span className="text-black hover:underline pr-1">
                             <Link href="/signin">Registrase</Link>{' '}
                         </span>{' '}
-                        <span className="text-white hover:underline">
+                        <span className="text-black hover:underline">
                             <Link href="/login">Ingresar</Link>{' '}
                         </span>{' '}
                     </div>
-                    <div className="mr-5 relative">
+                    <div className="flex items-center mr-5 relative">
                         <BsCart4 size={30} />
-                        <div className="absolute text-[10px] -top-[7px] left-[8px] bg-yellow w-[14px] h-[14px] rounded-full text-white">
+                        <div className="absolute text-[12px] -top-[-15px] left-[8px] bg-yellow w-[18px] h-[18px] rounded-full text-dark ">
                             <div className="flex items-center justify-center -mt-[1px] ">
                                 3
                             </div>
