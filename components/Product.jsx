@@ -22,7 +22,7 @@ const products = [
         currency: 'USD',
     },
     {
-        id: 1,
+        id: 3,
         title: 'Brown Leather Bag',
         discount: 20,
         url: 'https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80',
@@ -30,7 +30,7 @@ const products = [
         currency: 'USD',
     },
     {
-        id: 2,
+        id: 4,
         title: 'School Books',
         discount: 25,
         url: 'https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80',
@@ -38,7 +38,7 @@ const products = [
         currency: 'USD',
     },
     {
-        id: 1,
+        id: 5,
         title: 'Brown Leather Bag',
         discount: 20,
         url: 'https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80',
@@ -46,7 +46,7 @@ const products = [
         currency: 'USD',
     },
     {
-        id: 2,
+        id: 6,
         title: 'School Books',
         discount: 25,
         url: 'https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80',
@@ -54,7 +54,7 @@ const products = [
         currency: 'USD',
     },
     {
-        id: 1,
+        id: 7,
         title: 'Brown Leather Bag',
         discount: 20,
         url: 'https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80',
@@ -62,7 +62,7 @@ const products = [
         currency: 'USD',
     },
     {
-        id: 2,
+        id: 8,
         title: 'School Books',
         discount: 25,
         url: 'https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80',
@@ -96,9 +96,7 @@ const Product = ({ product }) => {
                                     <span className="bg-aquamarine rounded-lg text-[12px] p-1 mr-1">
                                         {item.currency}
                                     </span>
-                                    <span className="text-pink">
-                                        {item.price}
-                                    </span>
+                                    <span className="">{item.price}</span>
                                 </div>
                                 <div className="relative flex items-center text-[12px] text-gray-500 ">
                                     <div className="flex">

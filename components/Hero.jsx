@@ -3,7 +3,9 @@ import Product from './Product';
 const Hero = () => {
     return (
         <>
-            <Product />
+            <div>
+                <Product />
+            </div>
         </>
     );
 };
