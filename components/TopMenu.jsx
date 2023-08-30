@@ -14,8 +14,8 @@ const TopMenu = () => {
                         <Image
                             src={img2}
                             alt="Logo de la página"
-                            width={150}
-                            height={150}
+                            width={200}
+                            height={200}
                             priority
                         />
                     </div>
