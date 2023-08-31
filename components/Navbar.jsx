@@ -7,12 +7,6 @@ const Navbar = () => {
         { id: 3, name: 'Electronics', route: '/' },
         { id: 4, name: 'Motors', route: '/' },
         { id: 5, name: 'Fashion', route: '/' },
-        { id: 6, name: 'Collectables and Art', route: '/' },
-        { id: 7, name: 'Sports', route: '/' },
-        { id: 8, name: 'Health & Beauty', route: '/' },
-        { id: 9, name: 'Industrial Equipment', route: '/' },
-        { id: 10, name: 'Home & Garden', route: '/' },
-        { id: 11, name: 'Sell', route: '/' },
     ];
     return (
         <div className="bg-floralwhite shadow-sm">

@@ -8,36 +8,25 @@ import { img2 } from '../app/assets/images';
 const TopMenu = () => {
     return (
         <>
-            <header className="grid grid-cols-3 grid-rows-1 gap-4 items-center h-[100px] bg-white">
-                <div className="flex justify-start ml-10 ">
-                    <div>
-                        <Image
-                            src={img2}
-                            alt="Logo de la página"
-                            width={200}
-                            height={200}
-                            priority
-                        />
-                    </div>
+            <header className="grid grid-cols-3 h-full w-full">
+                <div className=" grid sm:col-span-1 col-span-1 order-1 justify-center content-center">
+                    logo
                 </div>
 
-                <div>{<Search />}</div>
-                <div className="flex w-full justify-between py-2 h-full">
-                    <div className="ml-5 flex  items-center">
-                        <span className="text-black hover:underline pr-1">
-                            <Link href="/signin">Registrase</Link>{' '}
+                <div className="grid justify-center content-center  sm:col-span-1 col-span-2 order-3 sm:order-2">
+                    {<Search />}
+                </div>
+                <div className=" grid grid-cols-2 sm:col-span-1 col-span-2 order-2 ">
+                    <div className=" grid justify-center content-center">
+                        <span className="">
+                            <Link href="/signin">R</Link>{' '}
                         </span>{' '}
-                        <span className="text-black hover:underline">
-                            <Link href="/login">Ingresar</Link>{' '}
+                        <span className="">
+                            <Link href="/login">Ing</Link>{' '}
                         </span>{' '}
                     </div>
-                    <div className="flex items-center mr-5 relative">
+                    <div className=" grid justify-center content-center">
                         <BsCart4 size={30} />
-                        <div className="absolute text-[12px] -top-[-15px] left-[8px] bg-yellow w-[18px] h-[18px] rounded-full text-dark ">
-                            <div className="flex items-center justify-center -mt-[1px] ">
-                                3
-                            </div>
-                        </div>
                     </div>
                 </div>
             </header>

@@ -36,6 +36,36 @@ const SideBar = () => {
             description: 'lorem inpsun',
         },
         { id: 11, name: 'Sell', route: '/', description: 'lorem inpsun' },
+        { id: 51, name: 'Home', route: '/home', description: 'lorem inpsun' },
+        { id: 99, name: 'Saved', route: '/login', description: 'lorem inpsun' },
+        {
+            id: 13,
+            name: 'Electronics',
+            route: '/',
+            description: 'lorem inpsun',
+        },
+        { id: 14, name: 'Motors', route: '/', description: 'lorem inpsun' },
+        { id: 15, name: 'Fashion', route: '/', description: 'lorem inpsun' },
+        { id: 50, name: 'Home', route: '/home', description: 'lorem inpsun' },
+        { id: 12, name: 'Saved', route: '/login', description: 'lorem inpsun' },
+        {
+            id: 16,
+            name: 'Electronics',
+            route: '/',
+            description: 'lorem inpsun',
+        },
+        { id: 17, name: 'Motors', route: '/', description: 'lorem inpsun' },
+        { id: 18, name: 'Fashion', route: '/', description: 'lorem inpsun' },
+        { id: 30, name: 'Home', route: '/home', description: 'lorem inpsun' },
+        { id: 19, name: 'Saved', route: '/login', description: 'lorem inpsun' },
+        {
+            id: 20,
+            name: 'Electronics',
+            route: '/',
+            description: 'lorem inpsun',
+        },
+        { id: 21, name: 'Motors', route: '/', description: 'lorem inpsun' },
+        { id: 22, name: 'Fashion', route: '/', description: 'lorem inpsun' },
     ];
 
     const [windowDimension, setwindowDimension] = useState({
@@ -55,7 +85,7 @@ const SideBar = () => {
     return (
         <>
             {windowDimension.width >= 980 ? (
-                <aside className="max-w-[300px] h-screen bg-white border-t-[1px]">
+                <aside className="max-w-[300px] h-screen bg-white border-t-[1px] overflow-y-scroll scrollbar-thin">
                     <ul>
                         {menuItems.map((item) => (
                             <div key={item.id}>
