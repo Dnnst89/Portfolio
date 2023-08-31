@@ -2,6 +2,7 @@
 
 import Navbar from '@/components/Navbar';
 import Product from '@/components/Product';
+import ProductContainer from '@/components/ProductContainer';
 import SideBar from '@/components/SideBar';
 import ToogleSideBar from '@/components/ToogleSideBar';
 import TopMenu from '@/components/TopMenu';
@@ -24,7 +25,7 @@ const MainLayour = () => {
                     <SideBar />
                 </div>
                 <div className="col-span-4 h-full">
-                    <Product />
+                    <ProductContainer />
                 </div>
             </div>
         </main>

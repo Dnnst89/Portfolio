@@ -1,0 +1,352 @@
+{
+    "data": [
+    {
+      "id": 1,
+      "attributes": {
+        "name": "Camiseta caballero",
+        "description": "Camiseta para caballero adulto M",
+        "brand": "nike",
+        "variants": {
+          "data": [
+            {
+              "id": 1,
+              "attributes": {
+                "color": "blanco",
+                "size": "m",
+                "price": 20000,
+                "ageRange": "Adulto",
+                "stock": 6,
+                "weight": {
+                  "id": 1,
+                  "weight": 50,
+                  "unitWeight": "g"
+                },
+                "images": {
+                  "data": [
+                    {
+                      "id": 3,
+                      "attributes": {
+                        "name": "R.8377034ad392b36dc7d68f38ec1915e3",
+                        "url": "https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80"
+                      }
+                    },
+                    {
+                      "id": 2,
+                      "attributes": {
+                        "name": "OIP.S5ngsIGuaqFr3qwztbTLEgHaJT",
+                        "url": "https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80" 
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 2,
+      "attributes": {
+        "name": "Pantalón deportivo",
+        "description": "Pantalón deportivo para hombre talla M",
+        "brand": "adidas",
+        "variants": {
+          "data": [
+            {
+              "id": 1,
+              "attributes": {
+                "color": "gris",
+                "size": "m",
+                "price": 35000,
+                "ageRange": "Adulto",
+                "stock": 10,
+                "weight": {
+                  "id": 1,
+                  "weight": 80,
+                  "unitWeight": "g"
+                },
+                "images": {
+                  "data": [
+                    {
+                      "id": 3,
+                      "attributes": {
+                        "name": "pantalon-deportivo-gris-1.jpg",
+                        "url": "https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80" 
+                      }
+                    },
+                    {
+                      "id": 4,
+                      "attributes": {
+                        "name": "pantalon-deportivo-gris-2.jpg",
+                        "url": "https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80" 
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 3,
+      "attributes": {
+        "name": "Zapatillas deportivas",
+        "description": "Zapatillas para correr talla 9",
+        "brand": "Reebok",
+        "variants": {
+          "data": [
+            {
+              "id": 3,
+              "attributes": {
+                "color": "azul",
+                "size": "9",
+                "price": 75000,
+                "ageRange": "Adulto",
+                "stock": 8,
+                "weight": {
+                  "id": 3,
+                  "weight": 300,
+                  "unitWeight": "g"
+                },
+                "images": {
+                  "data": [
+                    {
+                      "id": 7,
+                      "attributes": {
+                        "name": "zapatillas-azules-1.jpg",
+                        "url": "https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80"                  }
+                    },
+                    {
+                      "id": 8,
+                      "attributes": {
+                        "name": "zapatillas-azules-2.jpg",
+                        "url": "https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80"                  }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 4,
+      "attributes": {
+        "name": "Sudadera con capucha",
+        "description": "Sudadera para jóvenes talla S",
+        "brand": "Puma",
+        "variants": {
+          "data": [
+            {
+              "id": 4,
+              "attributes": {
+                "color": "negro",
+                "size": "s",
+                "price": 42000,
+                "ageRange": "Jóvenes",
+                "stock": 5,
+                "weight": {
+                  "id": 4,
+                  "weight": 280,
+                  "unitWeight": "g"
+                },
+                "images": {
+                  "data": [
+                    {
+                      "id": 9,
+                      "attributes": {
+                        "name": "sudadera-negra-1.jpg",
+                        "url": "https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80"               }
+                    },
+                    {
+                      "id": 10,
+                      "attributes": {
+                        "name": "sudadera-negra-2.jpg",
+                        "url": "https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80"               }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 5,
+      "attributes": {
+        "name": "Shorts deportivos",
+        "description": "Shorts para entrenamiento talla L",
+        "brand": "Under Armour",
+        "variants": {
+          "data": [
+            {
+              "id": 5,
+              "attributes": {
+                "color": "rojo",
+                "size": "l",
+                "price": 28000,
+                "ageRange": "Adulto",
+                "stock": 12,
+                "weight": {
+                  "id": 5,
+                  "weight": 150,
+                  "unitWeight": "g"
+                },
+                "images": {
+                  "data": [
+                    {
+                      "id": 11,
+                      "attributes": {
+                        "name": "shorts-rojos-1.jpg",
+                        "url": "https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80"             }
+                    },
+                    {
+                      "id": 12,
+                      "attributes": {
+                        "name": "shorts-rojos-2.jpg",
+                        "url": "https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80"             }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 6,
+      "attributes": {
+        "name": "Chaqueta ligera",
+        "description": "Chaqueta para exteriores talla M",
+        "brand": "The North Face",
+        "variants": {
+          "data": [
+            {
+              "id": 6,
+              "attributes": {
+                "color": "verde",
+                "size": "m",
+                "price": 58000,
+                "ageRange": "Adulto",
+                "stock": 7,
+                "weight": {
+                  "id": 6,
+                  "weight": 200,
+                  "unitWeight": "g"
+                },
+                "images": {
+                  "data": [
+                    {
+                      "id": 13,
+                      "attributes": {
+                        "name": "chaqueta-verde-1.jpg",
+                        "url": "https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80"               }
+                    },
+                    {
+                      "id": 14,
+                      "attributes": {
+                        "name": "chaqueta-verde-2.jpg",
+                        "url": "https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80"               }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 7,
+      "attributes": {
+        "name": "Gorra clásica",
+        "description": "Gorra ajustable unisex",
+        "brand": "New Era",
+        "variants": {
+          "data": [
+            {
+              "id": 7,
+              "attributes": {
+                "color": "negro",
+                "size": "única",
+                "price": 25000,
+                "ageRange": "Adulto",
+                "stock": 20,
+                "weight": {
+                  "id": 7,
+                  "weight": 100,
+                  "unitWeight": "g"
+                },
+                "images": {
+                  "data": [
+                    {
+                      "id": 15,
+                      "attributes": {
+                        "name": "gorra-negra-1.jpg",
+                        "url": "https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80"            }
+                    },
+                    {
+                      "id": 16,
+                      "attributes": {
+                        "name": "gorra-negra-2.jpg",
+                        "url": "https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80"            }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 8,
+      "attributes": {
+        "name": "Jersey clásico",
+        "description": "Jersey de fútbol talla L",
+        "brand": "Adidas Originals",
+        "variants": {
+          "data": [
+            {
+              "id": 8,
+              "attributes": {
+                "color": "rojo",
+                "size": "l",
+                "price": 60000,
+                "ageRange": "Adulto",
+                "stock": 9,
+                "weight": {
+                  "id": 8,
+                  "weight": 180,
+                  "unitWeight": "g"
+                },
+                "images": {
+                  "data": [
+                    {
+                      "id": 17,
+                      "attributes": {
+                        "name": "jersey-rojo-1.jpg",
+                        "url": "https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80"            }
+                    },
+                    {
+                      "id": 18,
+                      "attributes": {
+                        "name": "jersey-rojo-2.jpg",
+                        "url": "https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80"            }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
