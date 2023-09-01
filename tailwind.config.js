@@ -29,5 +29,5 @@ module.exports = {
             serif: ['Merriweather', 'serif'],
         },
     },
-    plugins: [],
+    plugins: [require('tailwind-scrollbar')],
 };

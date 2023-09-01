@@ -1,95 +1,43 @@
-'use client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { BsArrowDownShort } from 'react-icons/bs';
 import { HiArrowSmRight } from 'react-icons/hi';
 import GoProductBtn from './GoProductBtn';
-const products = [
+import { img9, img10, img11, img12 } from '../app/assets/images';
+const product = [
     {
         id: 1,
         title: 'Brown Leather Bag',
-        discount: 20,
-        url: 'https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80',
+        description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+    ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum`,
+        url: { img9 },
         price: 2500,
         currency: 'USD',
     },
     {
         id: 2,
         title: 'School Books',
-        discount: 25,
-        url: 'https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80',
-        price: 1900,
-        currency: 'USD',
-    },
-    {
-        id: 3,
-        title: 'Brown Leather Bag',
-        discount: 20,
-        url: 'https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80',
-        price: 2500,
-        currency: 'USD',
-    },
-    {
-        id: 4,
-        title: 'School Books',
-        discount: 25,
-        url: 'https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80',
-        price: 1900,
-        currency: 'USD',
-    },
-    {
-        id: 5,
-        title: 'Brown Leather Bag',
-        discount: 20,
-        url: 'https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80',
-        price: 2500,
-        currency: 'USD',
-    },
-    {
-        id: 6,
-        title: 'School Books',
-        discount: 25,
-        url: 'https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80',
-        price: 1900,
-        currency: 'USD',
-    },
-    {
-        id: 7,
-        title: 'Brown Leather Bag',
-        discount: 20,
-        url: 'https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80',
-        price: 2500,
-        currency: 'USD',
-    },
-    {
-        id: 8,
-        title: 'School Books',
-        discount: 25,
-        url: 'https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80',
-        price: 1900,
-        currency: 'USD',
-    },
-    {
-        id: 9,
-        title: 'School Books',
-        discount: 25,
-        url: 'https://images.unsplash.com/photo-1672600830594-ae4ccc159578?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1263&q=80',
+        description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+    ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum`,
+        url: { img10 },
         price: 1900,
         currency: 'USD',
     },
 ];
-const Product = ({ product }) => {
+const Product = () => {
     return (
         <>
-            <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 w-full">
-                {products.map((item) => (
+            <div className="grid grid-cols-3 lg:grid-cols-3 md:grid-cols-2 w-full">
+                {product.map((item) => (
                     <div key={item.id} className="shadow-lg p-5 m-2 rounded-md">
                         <div className="shadow-lg cursor-pointer">
                             <Image
                                 src={item.url}
                                 alt="Logo de la página"
-                                width={400}
-                                height={400}
+                                width={100}
+                                height={100}
                                 priority
                             />
                         </div>

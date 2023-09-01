@@ -1,33 +1,25 @@
 'use client';
 
-import Navbar from '@/components/Navbar';
+import Navbar from '@/app/layouts/includes/Navbar';
 import Product from '@/components/Product';
-import SideBar from '@/components/SideBar';
-import ToogleSideBar from '@/components/ToogleSideBar';
-import TopMenu from '@/components/TopMenu';
+import Search from '@/components/Search';
+import TopMenu from '@/app/layouts/includes/TopMenu';
 import React from 'react';
+import Footer from './includes/Footer';
+import SideBar from './includes/SideBar';
 
-const MainLayour = () => {
+const MainLayour = ({ children }) => {
     return (
-        <main>
-            <div className=" grid grid-cols-1">
-                <div className="h-[150px]  sm:h-[80px] ">
-                    <TopMenu />
-                </div>
-                <div className="bg-black h-10  text-white">
-                    <Navbar />
-                    <ToogleSideBar />
-                </div>
+        <>
+            <div className="">
+                <TopMenu />
+                <Navbar />
             </div>
-            <div className=" grid grid-cols-1 sm:grid-cols-5">
-                <div className=" h-full hidden sm:block ">
-                    <SideBar />
-                </div>
-                <div className="col-span-4 h-full">
-                    <Product />
-                </div>
-            </div>
-        </main>
+
+            <main className="bg-pink">{children}</main>
+            <SideBar />
+            <div>footer</div>
+        </>
     );
 };
 
