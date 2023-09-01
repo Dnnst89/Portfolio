@@ -14,7 +14,7 @@ const SideBar = () => {
     //overflow-y-scroll scrollbar-thin
     return (
         <>
-            <aside className="max-w-[300px] h-screen border-t-[1px] ">
+            <aside className=" grid grid-cols-1max-w-[300px] h-screen ">
                 <ul>
                     {menuItems.map((item) => (
                         <div key={item.id}>

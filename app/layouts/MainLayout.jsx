@@ -7,28 +7,20 @@ import SideBar from '@/components/SideBar';
 import ToogleSideBar from '@/components/ToogleSideBar';
 import TopMenu from '@/components/TopMenu';
 import React from 'react';
+import SideBar from './includes/SideBar';
 
-const MainLayour = () => {
+const MainLayour = ({ children }) => {
     return (
-        <main>
-            <div className=" grid grid-cols-1">
-                <div className="h-[150px]  sm:h-[80px] ">
-                    <TopMenu />
-                </div>
-                <div className="bg-black h-10  text-white">
-                    <Navbar />
-                    <ToogleSideBar />
-                </div>
+        <>
+            <div className="">
+                <TopMenu />
+                <Navbar />
             </div>
-            <div className=" grid grid-cols-1 sm:grid-cols-5">
-                <div className=" h-full hidden sm:block ">
-                    <SideBar />
-                </div>
-                <div className="col-span-4 h-full">
-                    <ProductContainer />
-                </div>
-            </div>
-        </main>
+
+            <main className="bg-pink">{children}</main>
+            <SideBar />
+            <div>footer</div>
+        </>
     );
 };
 

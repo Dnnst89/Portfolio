@@ -1,4 +1,3 @@
-'use client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { HiArrowSmRight } from 'react-icons/hi';
@@ -23,47 +22,6 @@ const Product = ({ id,name, brand, url,price }) => {
       </button>
     </div>
 
-
-
-
-{/* 
-
-
-                    <div key={id} className="shadow-lg p-5 m-2 rounded-md">
-                        <div className="shadow-lg cursor-pointer">
-                            <Image
-                                src={url}
-                                alt="Logo de la página"
-                                width={400}
-                                height={400}
-                                priority
-                            />
-                        </div>
-                        <div>
-                            <div className="pt-2 px-1 ">
-                                {' '}
-                                <div className="font-semibold text-[15px]  cursor-pointer">
-                                    {name}
-                                </div>
-                                <div className="font-extrabold">
-                                   
-                                    <span className="">{price}</span>
-                                </div>
-                                <div className="relative flex items-center text-[12px] text-gray-500 ">
-                                    <div className="flex">
-                                            {brand}
-                                    </div>
-                                    <div className=" ml-6 hover:text-lightblue">
-                                        <GoProductBtn
-                                            name={'mas detalles'}
-                                            icon={<HiArrowSmRight size={20} />}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-            */}
         </>
     );
 };
