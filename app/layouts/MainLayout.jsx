@@ -2,7 +2,7 @@
 
 
 import Product from '@/components/Product';
-import ProductContainer from '@/components/ProductContainer';
+import ProductContainer from '@/app/layouts/includes/ProductContainer';
 
 import ToogleSideBar from '@/components/ToogleSideBar';
 import React from 'react';
@@ -16,11 +16,12 @@ const MainLayour = ({ children }) => {
             <div className="">
                 <TopMenu />
                 <Navbar />
+                <ProductContainer/>
             </div>
 
             <main className="bg-pink">{children}</main>
             <SideBar />
-            <ProductContainer/>
+            
             <div>footer</div>
         </>
     );
