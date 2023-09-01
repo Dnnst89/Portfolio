@@ -1,7 +1,5 @@
 import Image from 'next/image';
-import Link from 'next/link';
-import { HiArrowSmRight } from 'react-icons/hi';
-import GoProductBtn from './GoProductBtn';
+
 
 const Product = ({ id,name, brand, url,price }) => {
     return (
