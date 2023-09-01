@@ -5,6 +5,8 @@ import Product from '@/components/Product';
 import SideBar from '@/components/SideBar';
 import ToogleSideBar from '@/components/ToogleSideBar';
 import TopMenu from '@/components/TopMenu';
+import SearchProduct from '@/components/SearchProducts';
+import Search from '@/components/Search';
 import React from 'react';
 
 const MainLayour = () => {
@@ -24,7 +26,7 @@ const MainLayour = () => {
                     <SideBar />
                 </div>
                 <div className="col-span-4 h-full">
-                    <Product />
+                    <Search />
                 </div>
             </div>
         </main>
