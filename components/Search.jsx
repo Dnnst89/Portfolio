@@ -3,7 +3,6 @@ import React from 'react';
 import Image from 'next/image';
 import { useState } from 'react';
 import algoliasearch from 'algoliasearch/lite';
-import styles from '../styles/Home.module.css';
 import { BsArrowDownShort } from 'react-icons/bs';
 import { HiArrowSmRight } from 'react-icons/hi';
 import GoProductBtn from './GoProductBtn';
@@ -41,13 +40,7 @@ const Search = () => {
 
     return (
         <div>
-            <form className={styles.search}>
-                <input
-                    placeholder="Busca aquí lo que quieras..."
-                    onChange={handleChange}
-                    type="search"
-                />
-            </form>
+            
             {results === null ? null : (
                 <div className="grid-cols-1 sm:grid md:grid-cols-3">
 

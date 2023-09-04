@@ -19,7 +19,7 @@ const index = searchClient.initIndex(ALGOLIA_INDEX);
 const Nav = ({ products }) => {
   return (
     <div>
-      <nav className="uk-navbar-container" data-uk-navbar>
+      <nav className="uk-navbar-container px-2 sm:px-0" data-uk-navbar>
         <div className="uk-navbar-left">
           <ul className="uk-navbar-nav">
             <li>
@@ -32,7 +32,6 @@ const Nav = ({ products }) => {
         <div className="uk-navbar-center">
           <Autocomplete
             openOnFocus={false}
-            detachedMediaQuery=''
             placeholder="Busca aquí lo que quieras..."
             getSources={({ query }) => [
               {
