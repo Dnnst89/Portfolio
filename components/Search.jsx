@@ -7,7 +7,6 @@ import styles from '../styles/Home.module.css';
 import { BsArrowDownShort } from 'react-icons/bs';
 import { HiArrowSmRight } from 'react-icons/hi';
 import GoProductBtn from './GoProductBtn';
-import SearchProduct from './SearchProducts';
 
 const APPLICATION_ID = '6TQCC8J5LB';
 const SEARCH_API_KEY = '5a6490a15e1b2c9a3c53d7f8328c3f8d';

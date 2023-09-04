@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import { BsCart4 } from 'react-icons/bs';
-import Search from './Search';
 import Image from 'next/image';
 import { img2 } from '../app/assets/images';
+import Nav from './Nav';
 const TopMenu = () => {
     return (
         <>
@@ -13,8 +13,8 @@ const TopMenu = () => {
                     logo
                 </div>
 
-                <div className="grid justify-center content-center  sm:col-span-6 col-span-3 order-3 sm:order-2">
-                    {<Search />}
+                <div className="py-5 content-center  sm:col-span-6 col-span-3 order-3 sm:order-2">
+                    {<Nav />}
                 </div>
                 <div className=" grid grid-cols-2 sm:col-span-1 col-span-2 order-2 ">
                     <div className=" grid justify-center content-center  text-sm ml-6 bg-orange">
