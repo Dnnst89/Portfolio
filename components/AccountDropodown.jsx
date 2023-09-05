@@ -8,19 +8,14 @@ const AccountDropodown = () => {
 
     function useOutsideAlerter(ref) {
         useEffect(() => {
-            /**
-             * Cuando se da click en cualquier parte del documento
-             * se cierra el dropdown
-             */
             function handleClickOutside(event) {
                 if (ref.current && !ref.current.contains(event.target)) {
                     setIsOpen(false);
                 }
             }
-            // Bind the event listener
+
             document.addEventListener('mousedown', handleClickOutside);
             return () => {
-                // Unbind the event listener on clean up
                 document.removeEventListener('mousedown', handleClickOutside);
             };
         }, [ref]);
@@ -39,18 +34,18 @@ const AccountDropodown = () => {
                 {isOpen ? (
                     <div
                         v-f="isOpen"
-                        className="bg-floralwhite rounded-lg py-2 shadow-md absolute"
+                        className="bg-floralwhite rounded-lg py-2 shadow-md absolute z-10"
                         ref={wrapperRef}
                     >
                         <Link
                             className="block px-4 py-2 hover:bg-resene text-orange"
-                            href="/signin"
+                            href="/register/singname"
                         >
                             Registrame
                         </Link>
                         <Link
                             className="block px-4 py-2 hover:bg-resene text-orange"
-                            href="d"
+                            href="/login"
                         >
                             Ingresar
                         </Link>
@@ -62,7 +57,7 @@ const AccountDropodown = () => {
                         </Link>
                         <Link
                             className="block px-4 py-2 hover:bg-resene text-orange"
-                            href="d"
+                            href="/"
                         >
                             Salir
                         </Link>

@@ -3,35 +3,35 @@ import React, { createElement, Fragment, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 
 export function Autocomplete(props) {
-  const containerRef = useRef(null);
-  const panelRootRef = useRef(null);
-  const rootRef = useRef(null);
+    const containerRef = useRef(null);
+    const panelRootRef = useRef(null);
+    const rootRef = useRef(null);
 
-  useEffect(() => {
-    if (!containerRef.current) {
-      return undefined;
-    }
-
-    const search = autocomplete({
-      container: containerRef.current,
-      renderer: { createElement, Fragment, render: () => {} },
-      render({ children }, root) {
-        if (!panelRootRef.current || rootRef.current !== root) {
-          rootRef.current = root;
-
-          panelRootRef.current?.unmount();
-          panelRootRef.current = createRoot(root);
+    useEffect(() => {
+        if (!containerRef.current) {
+            return undefined;
         }
 
-        panelRootRef.current.render(children);
-      },
-      ...props,
-    });
+        const search = autocomplete({
+            container: containerRef.current,
+            renderer: { createElement, Fragment, render: () => {} },
+            render({ children }, root) {
+                if (!panelRootRef.current || rootRef.current !== root) {
+                    rootRef.current = root;
 
-    return () => {
-      search.destroy();
-    };
-  }, [props]);
+                    panelRootRef.current?.unmount();
+                    panelRootRef.current = createRoot(root);
+                }
 
-  return <div ref={containerRef} />;
+                panelRootRef.current.render(children);
+            },
+            ...props,
+        });
+
+        return () => {
+            search.destroy();
+        };
+    }, [props]);
+
+    return <div ref={containerRef} />;
 }
