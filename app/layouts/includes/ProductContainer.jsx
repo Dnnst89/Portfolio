@@ -1,7 +1,7 @@
 "use client";
-import Image from "next/image";
 import Product from "../../../components/Product";
 import productsData from "../../data/products.json";
+
 const ProductContainer = () => {
   return (
     <>

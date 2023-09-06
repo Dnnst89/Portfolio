@@ -32,8 +32,6 @@ const SignupSchema = Yup.object().shape({
 
 const RegisterFormOne = () => {
   const router = useRouter();
-
-  const state = useSelector((x) => x.registryForm);
   const dispatch = useDispatch();
 
   const handleSubmit = (values) => {
