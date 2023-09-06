@@ -8,15 +8,17 @@ import { HiArrowSmRight } from 'react-icons/hi';
 import GoProductBtn from './GoProductBtn';
 import styles from '../styles/Home.module.css';
 import ProductContainer from '@/app/layouts/includes/ProductContainer';
-import Navbar from '@/app/layouts/includes/Navbar';
-//import { InstantSearch, SearchBox, Hits } from 'react-instantsearch';
 
-const APPLICATION_ID = '6TQCC8J5LB';
-const SEARCH_API_KEY = '5a6490a15e1b2c9a3c53d7f8328c3f8d';
-const ALGOLIA_INDEX = 'development_api::product.product';
+// const APPLICATION_ID = '6TQCC8J5LB';
+// const SEARCH_API_KEY = '5a6490a15e1b2c9a3c53d7f8328c3f8d';
+// const ALGOLIA_INDEX = 'development_api::product.product';
 
-const searchClient = algoliasearch(APPLICATION_ID, SEARCH_API_KEY);
-const index = searchClient.initIndex(ALGOLIA_INDEX);
+const id= process.env.NEXT_PUBLIC_APPLICATION_ID
+const key= process.env.NEXT_PUBLIC_SEARCH_API_KEY
+const indexAlgolia = process.env.NEXT_PUBLIC_ALGOLIA_INDEX
+
+const searchClient = algoliasearch(id, key);
+const index = searchClient.initIndex(indexAlgolia);
 
 function Hit({ hit }) {
     return (
