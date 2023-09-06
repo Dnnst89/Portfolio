@@ -16,11 +16,11 @@ const MainLayour = ({ children }) => {
             <div className="">
                 <TopMenu />
                 <Navbar />
-                <ProductContainer/>
+              
             </div>
 
             <main className="bg-pink">{children}</main>
-            <SideBar />
+           
             
             <div>footer</div>
         </>
