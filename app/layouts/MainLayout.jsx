@@ -1,6 +1,5 @@
 'use client';
 
-
 import Product from '@/components/Product';
 import ProductContainer from '@/app/layouts/includes/ProductContainer';
 
@@ -9,6 +8,7 @@ import React from 'react';
 import Navbar from './includes/Navbar';
 import TopMenu from './includes/TopMenu';
 import SideBar from './includes/SideBar';
+import { useQuery } from '@apollo/client';
 
 const MainLayour = ({ children }) => {
     return (
@@ -16,13 +16,11 @@ const MainLayour = ({ children }) => {
             <div className="">
                 <TopMenu />
                 <Navbar />
-              
             </div>
 
             <main className="bg-pink">{children}</main>
-           
-            
-            <div>footer</div>
+
+            <div>foot</div>
         </>
     );
 };

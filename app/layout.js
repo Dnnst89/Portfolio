@@ -1,10 +1,12 @@
-'use client'
+'use client';
 import { Providers } from '@/redux/provider';
 import './globals.css';
 import { Inter } from 'next/font/google';
 import { Poppins } from 'next/font/google';
 import { ApolloProvider } from '@apollo/client';
 import client from '@/src/graphQl/config';
+
+require('dotenv').config();
 
 const inter = Inter({ subsets: ['latin'] });
 

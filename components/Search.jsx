@@ -6,10 +6,10 @@ import algoliasearch from 'algoliasearch/lite';
 import { BsArrowDownShort } from 'react-icons/bs';
 import { HiArrowSmRight } from 'react-icons/hi';
 import GoProductBtn from './GoProductBtn';
-import styles from '../styles/Home.module.css'
+import styles from '../styles/Home.module.css';
 import ProductContainer from '@/app/layouts/includes/ProductContainer';
 import Navbar from '@/app/layouts/includes/Navbar';
-import { InstantSearch, SearchBox, Hits } from 'react-instantsearch';
+//import { InstantSearch, SearchBox, Hits } from 'react-instantsearch';
 
 const APPLICATION_ID = '6TQCC8J5LB';
 const SEARCH_API_KEY = '5a6490a15e1b2c9a3c53d7f8328c3f8d';
@@ -20,11 +20,11 @@ const index = searchClient.initIndex(ALGOLIA_INDEX);
 
 function Hit({ hit }) {
     return (
-      <article>
-        <h1>{hit.name}</h1>
-      </article>
+        <article>
+            <h1>{hit.name}</h1>
+        </article>
     );
-  }
+}
 
 const Search = () => {
     // return (
@@ -39,9 +39,7 @@ const Search = () => {
     const [results, setResults] = useState(null);
 
     const performSearch = async (value) => {
-        const { hits } = await index.search(value, {
-           
-        });
+        const { hits } = await index.search(value, {});
 
         const results = hits.map((hit) => {
             const { objectID: key, href, _highlightResult } = hit;
@@ -62,10 +60,14 @@ const Search = () => {
     return (
         <div>
             <form className={styles.search}>
-                <input placeholder='Busca aquí lo que quieras...' onChange={handleChange} type='search' />
+                <input
+                    placeholder="Busca aquí lo que quieras..."
+                    onChange={handleChange}
+                    type="search"
+                />
             </form>
-            <div className='py-20'>
-            <ProductContainer products={results}/>
+            <div className="py-20">
+                <ProductContainer products={results} />
             </div>
             {/* {results === null ? null : (
                 <div className="grid-cols-1 sm:grid md:grid-cols-3">
