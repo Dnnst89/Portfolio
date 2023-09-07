@@ -9,7 +9,7 @@ import GoProductBtn from './GoProductBtn';
 import styles from '../styles/Home.module.css'
 import ProductContainer from '@/app/layouts/includes/ProductContainer';
 import Navbar from '@/app/layouts/includes/Navbar';
-import { InstantSearch, SearchBox, Hits } from 'react-instantsearch';
+
 
 const APPLICATION_ID = '6TQCC8J5LB';
 const SEARCH_API_KEY = '5a6490a15e1b2c9a3c53d7f8328c3f8d';

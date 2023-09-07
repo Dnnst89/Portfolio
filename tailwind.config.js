@@ -23,6 +23,7 @@ module.exports = {
             floralwhite: '#F9F6F0',
             white: '#FFFFFF',
             black: '#000000',
+            red: '#FF0000',
         },
         fontFamily: {
             sans: ['Poppins', 'sans-serif'],
