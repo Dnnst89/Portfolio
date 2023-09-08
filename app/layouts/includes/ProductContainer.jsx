@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import Product from "../../../components/Product";
+import Product from "../../../components/ProductCard";
 import productsData from "../../data/products.json";
 const ProductContainer = ({ products }) => {
   return (

@@ -1,6 +1,6 @@
 'use client';
 
-import Product from '@/components/Product';
+import Product from '@/components/ProductCard';
 import ProductContainer from '@/app/layouts/includes/ProductContainer';
 
 import ToogleSideBar from '@/components/ToogleSideBar';
