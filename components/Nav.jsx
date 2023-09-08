@@ -29,6 +29,7 @@ const Nav = ({ products }) => {
         getSources={({ query }) => [
           {
             sourceId: "products",
+            getItemUrl( {item} ) { return `/detail/${item.id}`},
             getItems() {
               return getAlgoliaResults({
                 searchClient,
