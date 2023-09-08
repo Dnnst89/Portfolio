@@ -3,11 +3,12 @@ import Image from 'next/image';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { useState } from 'react';
+import { useMutation } from '@apollo/client';
 import CartQuantityBtn from './CartQuantityBtn';
+import DeleteBtn from './DeleteBtn';
 
 
-const CartItem = ({ idVariant, productName, brand, description, color, price, ageRange, size, weight, images, stockVariant, quantityCartItem }) => {
-    
+const CartItem = ({ cartItemId, idVariant, productName, brand, description, color, price, ageRange, size, weight, images, stockVariant, quantityCartItem }) => {
     return (<>
         <div className="bg-white shadow-md rounded-lg overflow-hidden ">
             <div className="p-4">
@@ -30,6 +31,8 @@ const CartItem = ({ idVariant, productName, brand, description, color, price, ag
             </div>
             <div className=" p-4">
                 <h2 className="text-xl font-semibold">Product: {productName}</h2>
+                <p className="text-gray-600">idcart: {cartItemId}</p>
+                <p className="text-gray-600">idVariant: {idVariant}</p>
                 <p className="text-gray-600">Brand: {brand}</p>
                 <p className="text-gray-800 mt-2">Description: {description}</p>
                 <p className="text-gray-700 mt-2">Color: {color}</p>
@@ -43,9 +46,8 @@ const CartItem = ({ idVariant, productName, brand, description, color, price, ag
             </div>
 
             {/* Botón para eliminar el producto del carrito */}
-            <button className="bg-orange hover:bg-yellow text-black py-2 px-4 m-4 rounded">
-                Remove from Cart
-            </button>
+            <DeleteBtn
+            idItem={cartItemId}/>
         </div>
     </>
 
