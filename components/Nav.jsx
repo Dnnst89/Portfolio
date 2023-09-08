@@ -25,7 +25,7 @@ const Nav = ({ products }) => {
     <div>
       <Autocomplete
         placeholder="Busca aquí lo que quieras..."
-        openOnFocus={true}
+        openOnFocus={false}
         getSources={({ query }) => [
           {
             sourceId: "products",
