@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-const GetCartItemsList = gql`
+const GET_CART_ITEMS_LIST = gql`
     query GetCartItems {
         cartItems {
           data{
@@ -50,4 +50,4 @@ const GetCartItemsList = gql`
       }
 `
 
-export default GetCartItemsList
+export default GET_CART_ITEMS_LIST

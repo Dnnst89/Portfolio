@@ -1,13 +1,25 @@
 'use client';
 import React from 'react'
 import { useQuery } from '@apollo/client';
-import GetCartItemsList from '../src/graphQl/queries/getCartItems';
+import GET_CART_ITEMS_LIST from '../src/graphQl/queries/getCartItems';
 import CartItem from './CartItem';
-const CartContainer = () => {
-    const { loading, error, data } = useQuery(GetCartItemsList);
+import { updateQtyItems } from '@/redux/features/cart-slice';
+import { useDispatch } from 'react-redux';
 
-    if(loading) return <p>loading</p>
-    
+const CartContainer = () => {
+    const { loading, error, data } = useQuery(GET_CART_ITEMS_LIST);
+    const dispatch = useDispatch()
+
+
+    if(loading) return <p>loading</p>//carga los items
+
+    ////////////actualizo la cantidad de items en el carrito haciendo la suma
+    const totalQuantity = data?.cartItems?.data?.reduce((accumulator, currentItem) => { //me suma la cantidad de items en carrito
+        return accumulator + currentItem.attributes.quantity;
+      }, 0)
+    dispatch(updateQtyItems(totalQuantity)) //me actualiza el estado(cantidad
+
+
     return (
         <div className='container mx-auto px-4'>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>

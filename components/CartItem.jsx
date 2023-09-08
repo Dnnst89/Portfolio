@@ -47,7 +47,8 @@ const CartItem = ({ cartItemId, idVariant, productName, brand, description, colo
 
             {/* Botón para eliminar el producto del carrito */}
             <DeleteBtn
-            idItem={cartItemId}/>
+            idItem={cartItemId}
+            qtyItem={quantityCartItem}/>
         </div>
     </>
 

@@ -10,7 +10,8 @@ import Navbar from './includes/Navbar';
 import TopMenu from './includes/TopMenu';
 import SideBar from './includes/SideBar';
 
-const MainLayour = ({ children }) => {
+
+const MainLayout = ({ children }) => {
     return (
         <>
             <div className="">
@@ -27,4 +28,4 @@ const MainLayour = ({ children }) => {
     );
 };
 
-export default MainLayour;
+export default MainLayout;

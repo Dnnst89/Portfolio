@@ -1,17 +1,21 @@
 import React, { useState } from 'react'
-
+import { addQtyItems,reduceQtyItems } from '@/redux/features/cart-slice';
+import { useDispatch } from 'react-redux';
 const CartQuantityBtn = ({ quantityCartItem, stock }) => {
     const [quantity, setQuantity] = useState(quantityCartItem);
+    const dispatch = useDispatch();
 
     const handleIncrement = () => {
         if (quantity < stock) {
             setQuantity(quantity + 1);
+            dispatch(addQtyItems())
         }
     };
 
     const handleDecrement = () => {
         if (quantity > 1) {
             setQuantity(quantity - 1);
+            dispatch(reduceQtyItems())
         }
     };
 
