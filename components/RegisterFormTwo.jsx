@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
@@ -8,6 +8,9 @@ import ErrorForm from "./ErrorForm";
 import { useSelector } from "react-redux";
 import { useMutation } from "@apollo/client";
 import RegisterUser from "@/src/graphQl/queries/registerUser";
+import { createElement } from "@/src/store/store";
+import { useRouter } from "next/navigation";
+import Spinner from "./Spinner";
 
 const initialValues = {
   email: "",
@@ -33,9 +36,10 @@ const validationSchema = Yup.object().shape({
 });
 
 const RegisterFormTwo = () => {
+  const [loading, setLoading] = useState(false);
   const { username } = useSelector((x) => x.registryForm);
-
-  const [createUser, { data, loading, error }] = useMutation(RegisterUser);
+  const router = useRouter();
+  const [createUser] = useMutation(RegisterUser);
 
   const handleSubmit = async (values) => {
     const dataValues = Object.keys(values).map((el) => {
@@ -44,19 +48,22 @@ const RegisterFormTwo = () => {
     if (dataValues.some((el) => !el)) {
       return;
     }
-
     const { email, password } = values;
 
-    console.log({ username, email, password });
-
-    console.log("trying");
-    await createUser({
-      variables: { username, email, password },
-    });
-    console.log(loading);
-    console.log(error);
-    console.log(data);
-    console.log("finally");
+    try {
+      setLoading(true);
+      const { data } = await createUser({
+        variables: { username, email, password },
+      });
+      if (!data) {
+        throw new Error("Algo ha ocurrido");
+      }
+      createElement("userData", JSON.stringify(data.register));
+      router.push("/");
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -112,17 +119,17 @@ const RegisterFormTwo = () => {
                     <ErrorForm>{errors.confirmPassword}</ErrorForm>
                   ) : null}
                 </div>
-                {/* <Link href="/register/signemail"> */}
                 <button
                   type="submit"
                   className="bg-blue-500 hover:bg-blue-300 text-whitetext-base rounded-lg py-2 px-5 transition-colors w-full text-[19px] text-white bg-aquamarine disabled:opacity-50"
                   disabled={
-                    Object.keys(errors).length && Object.keys(touched).length
+                    (Object.keys(errors).length &&
+                      Object.keys(touched).length) ||
+                    loading
                   }
                 >
-                  Registrame
+                  {loading ? <Spinner /> : "Registrame"}
                 </button>
-                {/* </Link> */}
               </Form>
             );
           }}

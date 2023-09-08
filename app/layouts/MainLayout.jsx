@@ -10,7 +10,7 @@ import TopMenu from "./includes/TopMenu";
 import SideBar from "./includes/SideBar";
 import { useQuery } from "@apollo/client";
 
-const MainLayour = ({ children }) => {
+const MainLayout = ({ children }) => {
   return (
     <>
       <div>
@@ -25,4 +25,4 @@ const MainLayour = ({ children }) => {
   );
 };
 
-export default MainLayour;
+export default MainLayout;
