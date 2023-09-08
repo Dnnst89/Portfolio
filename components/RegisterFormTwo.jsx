@@ -5,8 +5,9 @@ import * as Yup from "yup";
 import Link from "next/link";
 import SocialMediaRegistry from "./SocialMediaRegistry";
 import ErrorForm from "./ErrorForm";
-import { useDispatch, useSelector } from "react-redux";
-import { userData } from "@/redux/features/registryForm";
+import { useSelector } from "react-redux";
+import { useMutation } from "@apollo/client";
+import RegisterUser from "@/src/graphQl/queries/registerUser";
 
 const initialValues = {
   email: "",
@@ -32,10 +33,11 @@ const validationSchema = Yup.object().shape({
 });
 
 const RegisterFormTwo = () => {
-  const dispatch = useDispatch();
-  const state = useSelector((x) => x.registryForm);
+  const { username } = useSelector((x) => x.registryForm);
 
-  const handleSubmit = (values) => {
+  const [createUser, { data, loading, error }] = useMutation(RegisterUser);
+
+  const handleSubmit = async (values) => {
     const dataValues = Object.keys(values).map((el) => {
       return values[el];
     });
@@ -45,7 +47,16 @@ const RegisterFormTwo = () => {
 
     const { email, password } = values;
 
-    dispatch(userData({ ...state, email, password }));
+    console.log({ username, email, password });
+
+    console.log("trying");
+    await createUser({
+      variables: { username, email, password },
+    });
+    console.log(loading);
+    console.log(error);
+    console.log(data);
+    console.log("finally");
   };
 
   return (
