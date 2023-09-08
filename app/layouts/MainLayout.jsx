@@ -13,12 +13,12 @@ import { useQuery } from "@apollo/client";
 const MainLayour = ({ children }) => {
   return (
     <>
-      <div className="">
+      <div>
         <TopMenu />
         <Navbar />
       </div>
 
-      <main className="bg-pink">{children}</main>
+      <main>{children}</main>
 
       <div>foot</div>
     </>

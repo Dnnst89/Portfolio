@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import Navbar from "@/app/layouts/includes/Navbar";
 import TopMenu from "@/app/layouts/includes/TopMenu";
+import { algoliaInstace } from "@/src/axios/algoliaIntance/config";
+import Image from "next/image";
 
 const getRandomNumber = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -10,24 +12,19 @@ const getRandomNumber = (min, max) => {
 const getRandomReviews = () => getRandomNumber(5, 100);
 const getRandomStars = () => Math.random() + getRandomNumber(3, 4);
 
+const loader = ({ src }) => {
+  return `https://didactoysperu.com/wp-content/uploads/2020/04/${src}`;
+};
+
 export default function Post({ params }) {
   const [product, setProduct] = useState(null);
   const { id } = params;
 
   useEffect(() => {
     if (!id) return null;
-
-    fetch(
-      `https://6TQCC8J5LB.algolia.net/1/indexes/development_api::product.product/${id}`,
-      {
-        headers: {
-          "X-Algolia-Api-Key": "5a6490a15e1b2c9a3c53d7f8328c3f8d",
-          "X-Algolia-Application-Id": "6TQCC8J5LB",
-        },
-      }
-    )
-      .then((res) => res.json())
-      .then(setProduct);
+    algoliaInstace
+      .get(`/development_api::product.product/${id}`)
+      .then(({ data }) => setProduct(data));
   }, [id]);
 
   if (!product) return null;
@@ -36,20 +33,18 @@ export default function Post({ params }) {
 
   return (
     <>
-      <div className="">
-        <TopMenu />
-        <Navbar />
-      </div>
       <div
         className="relative items-center h-screen place-content-center transition-colors flex flex-col max-w-xs md:max-w-3xl mx-auto bg-white"
         target="_blank"
         rel="noopener noreferrer"
       >
         <div className="w-full md:w-1/3 grid place-items-center p-8">
-          <img
+          <Image
+            loader={loader}
+            priority={true}
             width="240"
             height="240"
-            src="https://didactoysperu.com/wp-content/uploads/2020/04/circuito-3-en-1.jpg"
+            src="circuito-3-en-1.jpg"
             alt="tailwind logo"
             className="rounded-xl"
           />
