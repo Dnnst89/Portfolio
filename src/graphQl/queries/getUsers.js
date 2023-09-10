@@ -1,11 +1,10 @@
 import { gql } from "@apollo/client";
 
 const GET_USERS = gql`
-    query GetUser {
-        up_users {
-            usermane,
-                
-            }
+    query CurrentUserForLayout {
+        currentUser {
+            login
+            avatar_url
         }
     }
 `;
