@@ -12,6 +12,7 @@
         "@algolia/autocomplete-js": "^1.11.0",
         "@algolia/autocomplete-theme-classic": "^1.11.0",
         "@apollo/client": "^3.8.3",
+        "@apollo/react-hooks": "^4.0.0",
         "@headlessui/react": "^1.7.17",
         "@reduxjs/toolkit": "^1.9.5",
         "algoliasearch": "^4.19.1",

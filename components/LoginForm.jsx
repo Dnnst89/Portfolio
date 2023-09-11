@@ -1,93 +1,123 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import Link from "next/link";
-import ErrorForm from "./ErrorForm";
 import SocialMediaRegistry from "./SocialMediaRegistry";
-
-import { userData } from "@/redux/features/registryForm";
-import { useEffect } from "react";
-
-const initialValues = {
-    username: "",
-    email: "",
-};
+import { LOGIN_MUTATION } from "@/src/graphQl/queries/LoginSession";
+import { useMutation } from "@apollo/client";
+import { useState } from "react";
+import InputField from "./InputField";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import { setUser } from "@/redux/features/authSlice";
 
 const SignupSchema = Yup.object().shape({
-    username: Yup.string().required("Este campo es requerido"),
-
-    emal: Yup.string()
-        .email("Correo inválido")
-        .required("Este campo es requerido"),
+    identifier: Yup.string().required("Este campo es requerido"),
+    password: Yup.string().required("Este campo es requerido"),
 });
 
-const LoginForm = ({ loading, error, data }) => {
-    useEffect(() => {
-        console.log(loading, error, data);
-    }, [loading, error, data]);
-    /* Notas: necesito enviar el estado del usuario al componente TrackUserState
-  y asi mostrar el nombre del usuario y si la sesion esta activa o no
-*/
+const LoginForm = () => {
+    const dispatch = useDispatch();
+    const authUser = useSelector((state) => state.auth.user);
+    const router = useRouter();
+    const [loginMutation, { data: loginData, error: loginError }] =
+        useMutation(LOGIN_MUTATION);
+    const [loginDetails, setLoginDetails] = useState({
+        identifier: "",
+        password: "",
+    });
+    const submitLogin = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await loginMutation({
+                variables: {
+                    input: loginDetails, // Provide the input object with identifier and password
+                },
+            });
+
+            if (response.data && response.data.login) {
+                // Successful login, handle the response
+                const { jwt, user } = response.data.login;
+                dispatch(setUser(user));
+                localStorage.setItem(
+                    "sessionData",
+                    JSON.stringify({ user, isAuthenticated: true })
+                );
+                router.push("/");
+            } else {
+                console.error("Login failed: Invalid data");
+            }
+        } catch (error) {
+            console.error("An error occurred during login:", error);
+        } finally {
+            setLoginDetails({
+                identifier: "",
+                password: "",
+            });
+        }
+    };
+
+    if (loginError) {
+        console.error("Apollo Client error during login:", loginError);
+    }
     return (
         <div className=" flex h-screen justify-center items-center w-full ">
             <div className="w-[300px]">
                 <Formik
-                    initialValues={initialValues}
+                    initialValues={{
+                        identifier: "",
+                        password: "",
+                    }}
                     validationSchema={SignupSchema}
                 >
                     {({ errors, touched }) => {
                         return (
-                            <Form>
+                            <Form onSubmit={submitLogin}>
                                 <h2
                                     className="text-orange font-semibold flex justify-center
                                  items-center h-[50px] "
                                 >
-                                    {JSON.stringify(data)}
-
-                                    {/* 
-                                    {"__typename":"UsersPermissionsUserEntity","id":"3",
-                                    "attributes":{"__typename":"UsersPermissionsUser","username":"asd",
-                                    "email":"john@doe.asd","updatedAt":"2023-09-06T21:44:47.178Z"}}, */}
+                                    Identifícate
                                 </h2>
                                 <div>
-                                    <Field
+                                    <InputField
                                         type="text"
-                                        id="username"
-                                        name="username"
+                                        id="identifier"
+                                        name="identifier"
                                         placeholder="Nombre de usuario"
-                                        className="focus:border-blue-500 outline-none w-full
-                                         px-6 py-2 mb-2 border  rounded-lg border-none"
-                                        autoFocus={true}
+                                        onChange={(e) =>
+                                            setLoginDetails({
+                                                ...loginDetails,
+                                                identifier: e.target.value,
+                                            })
+                                        }
+                                        error={
+                                            errors.identifier &&
+                                            touched.identifier
+                                        }
                                     />
-                                    {errors.username && touched.username ? (
-                                        <ErrorForm>{errors.username}</ErrorForm>
-                                    ) : null}
                                 </div>
                                 <div>
-                                    <Field
-                                        type="email"
-                                        id="email"
-                                        name="email"
-                                        placeholder="Correo electrónico"
-                                        className="focus:border-blue-500 outline-none w-full
-                                         px-6 py-2 mb-2 border  rounded-lg border-none"
+                                    <InputField
+                                        type="password"
+                                        id="password"
+                                        name="password"
+                                        placeholder="Contraseña"
+                                        onChange={(e) =>
+                                            setLoginDetails({
+                                                ...loginDetails,
+                                                password: e.target.value,
+                                            })
+                                        }
+                                        error={
+                                            errors.password && touched.password
+                                        }
                                     />
-                                    {errors.firstName && touched.firstName ? (
-                                        <ErrorForm>
-                                            {errors.firstName}
-                                        </ErrorForm>
-                                    ) : null}
                                 </div>
                                 <button
                                     type="submit"
                                     className="bg-blue-500 hover:bg-blue-300 text-whitetext-base
                                      rounded-lg py-2 px-5 transition-colors w-full text-[19px]
                                       text-white bg-aquamarine disabled:opacity-50"
-                                    disabled={
-                                        Object.keys(errors).length &&
-                                        Object.keys(touched).length
-                                    }
                                 >
                                     Ingresar
                                 </button>
