@@ -9,18 +9,22 @@ import Navbar from "./includes/Navbar";
 import TopMenu from "./includes/TopMenu";
 import SideBar from "./includes/SideBar";
 import { useQuery } from "@apollo/client";
+import { ApolloProvider } from "@apollo/client";
+import client from "@/src/graphQl/config";
 
 const MainLayout = ({ children }) => {
   return (
     <>
-      <div>
-        <TopMenu />
-        <Navbar />
-      </div>
+      <ApolloProvider client={client}>
+        <div>
+          <TopMenu />
+          <Navbar />
+        </div>
 
-      <main>{children}</main>
+        <main>{children}</main>
 
-      <div>foot</div>
+        <div>foot</div>
+      </ApolloProvider>
     </>
   );
 };
