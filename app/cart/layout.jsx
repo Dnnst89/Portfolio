@@ -16,7 +16,7 @@ const CartLayout = ({ children }) => {
             </div>
 
             <main >{children}</main>
-            <Cart/>
+            
         </>
     );
 };

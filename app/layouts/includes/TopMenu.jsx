@@ -32,10 +32,9 @@ const TopMenu = () => {
                         
                         <div className="flex justify-center items-center ">
                         <BsCart4 size={30} color="#67C3AD" />
-                        <p>{cartQtyItems}</p>
+                        <p className='bg-aquamarine rounded-full px-2 text-white'>{cartQtyItems}</p>
                     </div>
                     </Link>
-                    
                 </div>
             </header>
         </>
