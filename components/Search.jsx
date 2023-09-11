@@ -12,6 +12,12 @@ const indexAlgolia = process.env.NEXT_PUBLIC_ALGOLIA_INDEX
 const searchClient = algoliasearch(id, key);
 const index = searchClient.initIndex(indexAlgolia);
 
+index.search('query', {
+    page: 0,
+  }).then(({ hits }) => {
+    console.log(hits);
+  });
+
 const Search = () => {
 
     const [results, setResults] = useState(null);
