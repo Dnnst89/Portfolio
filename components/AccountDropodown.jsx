@@ -41,9 +41,18 @@ const AccountDropdown = () => {
         <>
             <HydrateSession />
             <div className="relative">
-                <button className="block" onClick={toggleDropdown}>
-                    <BiSolidUserCircle size={30} color="#67C3AD" />
-                </button>
+                <div className="grid grid-cols-2">
+                    {authUser && (
+                        <p className="px-4 py-2 text-orange">
+                            Welcome, {authUser.username}
+                        </p>
+                    )}
+
+                    <button className="block" onClick={toggleDropdown}>
+                        <BiSolidUserCircle size={30} color="#67C3AD" />
+                    </button>
+                </div>
+
                 {isOpen && (
                     <div
                         className="bg-floralwhite rounded-lg py-2 shadow-md absolute z-10"
@@ -51,9 +60,6 @@ const AccountDropdown = () => {
                     >
                         {authUser ? (
                             <>
-                                <p className="px-4 py-2 text-orange">
-                                    Welcome, {authUser.username}
-                                </p>
                                 <button
                                     className="block px-4 py-2 hover:bg-resene text-orange"
                                     onClick={handleLogout}
