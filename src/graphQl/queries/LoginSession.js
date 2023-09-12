@@ -12,3 +12,16 @@ export const LOGIN_MUTATION = gql`
         }
     }
 `;
+
+export const USER_EXIST = gql`
+    query UserExist {
+        usersPermissionsUsers {
+            data {
+                id
+                attributes {
+                    username
+                }
+            }
+        }
+    }
+`;
