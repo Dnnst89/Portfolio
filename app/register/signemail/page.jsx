@@ -1,73 +1,72 @@
 "use client";
 import React, { useState } from "react";
-// import { Formik, Form, Field } from "formik";
-// import * as Yup from "yup";
-// import SocialMediaRegistry from "@/components/SocialMediaRegistry";
-// import ErrorForm from "@/components/ErrorForm";
-// import { useSelector } from "react-redux";
-// import { useMutation } from "@apollo/client";
-// import RegisterUser from "@/src/graphQl/queries/registerUser";
-// import { createElement } from "@/src/store/store";
-// import { useRouter } from "next/navigation";
-// import Spinner from "@/components/Spinner";
-// import { Toaster, toast } from "react-hot-toast";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
+import SocialMediaRegistry from "@/components/SocialMediaRegistry";
+import ErrorForm from "@/components/ErrorForm";
+import { useSelector } from "react-redux";
+import { useMutation } from "@apollo/client";
+import RegisterUser from "@/src/graphQl/queries/registerUser";
+import { createElement } from "@/src/store/store";
+import { useRouter } from "next/navigation";
+import Spinner from "@/components/Spinner";
+import { Toaster, toast } from "react-hot-toast";
 
-// const initialValues = {
-//   username: "",
-//   firstName: "",
-//   lastName: "",
-// };
+const initialValues = {
+  username: "",
+  firstName: "",
+  lastName: "",
+};
 
-// const SignupSchema = Yup.object().shape({
-//   username: Yup.string()
-//     .min(2, "Nombre de usuario muy corto")
-//     .max(50, "Nombre de usuario muy largo")
-//     .required("Este campo es requerido"),
-
-//   firstName: Yup.string()
-//     .min(2, "Nombre muy corto")
-//     .max(50, "Nombre muy largo")
-//     .required("Este campo es requerido"),
-//   lastName: Yup.string()
-//     .min(2, "Apellido muy corto")
-//     .max(50, "Apellido muy largo")
-//     .required("Este campo es requerido"),
-// });
+const SignupSchema = Yup.object().shape({
+  username: Yup.string()
+    .min(2, "Nombre de usuario muy corto")
+    .max(50, "Nombre de usuario muy largo")
+    .required("Este campo es requerido"),
+  firstName: Yup.string()
+    .min(2, "Nombre muy corto")
+    .max(50, "Nombre muy largo")
+    .required("Este campo es requerido"),
+  lastName: Yup.string()
+    .min(2, "Apellido muy corto")
+    .max(50, "Apellido muy largo")
+    .required("Este campo es requerido"),
+});
 
 const SingEmail = () => {
-  // const [loading, setLoading] = useState(false);
-  // const [createUser] = useMutation(RegisterUser);
-  // const { username } = useSelector((x) => x.registryForm);
-  // const router = useRouter();
-  // const handleSubmit = async (values) => {
-  //   const dataValues = Object.keys(values).map((el) => {
-  //     return values[el];
-  //   });
-  //   if (dataValues.some((el) => !el)) {
-  //     return;
-  //   }
-  //   const { email, password } = values;
+  const [loading, setLoading] = useState(false);
+  const [createUser] = useMutation(RegisterUser);
+  const { username } = useSelector((x) => x.registryForm);
+  const router = useRouter();
+  const handleSubmit = async (values) => {
+    const dataValues = Object.keys(values).map((el) => {
+      return values[el];
+    });
+    if (dataValues.some((el) => !el)) {
+      return;
+    }
+    const { email, password } = values;
 
-  //   try {
-  //     setLoading(true);
-  //     const { data } = await createUser({
-  //       variables: { username, email, password },
-  //     });
-  //     router.push("/");
-  //     createElement("userData", JSON.stringify(data.register));
-  //   } catch (error) {
-  //     toast.error(
-  //       "No se pudo registrar tu cuenta, por favor intentalo más tarde"
-  //     );
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+    try {
+      setLoading(true);
+      const { data } = await createUser({
+        variables: { username, email, password },
+      });
+      router.push("/");
+      createElement("userData", JSON.stringify(data.register));
+    } catch (error) {
+      toast.error(
+        "No se pudo registrar tu cuenta, por favor intentalo más tarde"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
       <h2>Test registro</h2>
-      {/* <div className=" flex h-screen justify-center items-center w-full ">
+      <div className=" flex h-screen justify-center items-center w-full ">
         <div className="w-[300px]">
           <Formik
             initialValues={initialValues}
@@ -148,7 +147,7 @@ const SingEmail = () => {
           </Formik>
           <SocialMediaRegistry />
         </div>
-      </div> */}
+      </div>
     </>
   );
 };
