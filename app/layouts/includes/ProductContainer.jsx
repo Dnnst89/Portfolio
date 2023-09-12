@@ -12,7 +12,7 @@ const ProductContainer = ({ result, hitsPerPage, nbHits, nbPages, currentPage, s
       <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 w-full">
         {hits
           ? hits.map((item) => {
-            return <Product id={item.id} name={item.name} />;
+            return <Product key={item.id} name={item.name} />;
           })
           : null}
       </div>

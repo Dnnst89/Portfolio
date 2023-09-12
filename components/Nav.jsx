@@ -12,15 +12,11 @@ import "@algolia/autocomplete-theme-classic";
 
 const APPLICATION_ID = '6TQCC8J5LB';
 const SEARCH_API_KEY = '5a6490a15e1b2c9a3c53d7f8328c3f8d';
-const ALGOLIA_INDEX = 'development_api::product.product';
 
 const searchClient = algoliasearch(APPLICATION_ID, SEARCH_API_KEY);
-const index = searchClient.initIndex(ALGOLIA_INDEX);
-
-
 
 const Nav = ({ products }) => {
-  const [results, setResults] = useState(null);
+
   return (
     <div>
       <Autocomplete
@@ -29,7 +25,7 @@ const Nav = ({ products }) => {
         getSources={({ query }) => [
           {
             sourceId: "products",
-            getItemUrl( {item} ) { return `/detail/${item.id}`},
+            getItemUrl({ item }) { return `/detail/${item.id}` },
             getItems() {
               return getAlgoliaResults({
                 searchClient,
@@ -46,8 +42,14 @@ const Nav = ({ products }) => {
             },
             templates: {
               item({ item, components }) {
-                return <SearchItem hit={item} components={components} />;
-              }
+                return (
+                    <SearchItem hit={item} components={components} />
+                )
+              },
+              footer() {
+                return <Link href={`/results/${query}`}>Ver todos los resultados</Link>;
+              },
+          
             }
           },
         ]}

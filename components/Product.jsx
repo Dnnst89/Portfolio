@@ -2,11 +2,11 @@
 import Image from 'next/image';
 
 
-const Product = ({ id, name }) => {
+const Product = ({ key, name }) => {
 
   return (
     <>
-      <div className="w-full max-w-sm bg-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 " key={id}>
+      <div className="w-full max-w-sm bg-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 " key={key}>
         <a href="#">
           <img className="p-8 rounded-t-lg" src="https://didactoysperu.com/wp-content/uploads/2020/04/circuito-3-en-1.jpg" alt="product image" />
         </a>

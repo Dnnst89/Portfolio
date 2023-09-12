@@ -97,3 +97,30 @@ export default function Post({ params }) {
     </>
   );
 }
+
+export async function getStaticPaths() {
+  const res = await fetch(`https://6TQCC8J5LB.algolia.net/1/indexes/development_api::product.product/`, { headers: { "X-Algolia-Api-Key": "5a6490a15e1b2c9a3c53d7f8328c3f8d", "X-Algolia-Application-Id": "6TQCC8J5LB" } })
+  const data = await res.json()
+  const { hits } = data
+
+  const paths = hits.map((product) => ({
+    params: { id: product.id.toString() },
+  }))
+
+
+  return { paths, fallback: true }
+}
+
+export async function getStaticProps({params}) {
+  console.log(params.id)
+
+  const res = await fetch(`https://6TQCC8J5LB.algolia.net/1/indexes/development_api::product.product/${params.id}`, { headers: { "X-Algolia-Api-Key": "5a6490a15e1b2c9a3c53d7f8328c3f8d", "X-Algolia-Application-Id": "6TQCC8J5LB" } })
+  const data = await res.json()
+
+  return { 
+    props: {
+      id: data,
+    },
+    revalidate: 10
+  };
+}
