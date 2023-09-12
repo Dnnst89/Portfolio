@@ -1,4 +1,7 @@
 // hydrateSession.js
+/*
+   Este componente está diseñado para realizar la tarea de "hidratar" datos de sesión en la tienda Redux
+*/
 import { setUser } from "@/redux/features/authSlice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
