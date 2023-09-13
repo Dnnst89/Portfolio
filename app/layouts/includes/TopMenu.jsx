@@ -5,7 +5,7 @@ import Search from "../../../components/Search";
 import { img2 } from "../../assets/images";
 import Image from "next/image";
 import AccountDropodown from "@/components/AccountDropodown";
-import Searchbar from "@/components/Searchbar";
+import Searchbar from "@/components/Search";
 const TopMenu = () => {
   return (
     <>
