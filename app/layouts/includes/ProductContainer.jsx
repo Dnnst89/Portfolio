@@ -1,18 +1,8 @@
 "use client";
 import Image from "next/image";
-import Product from "../../../components/Product";
-import Pagination from "@/components/Pagination";
-
-const ProductContainer = ({
-  result,
-  hitsPerPage,
-  nbHits,
-  nbPages,
-  currentPage,
-  setCurrentPage,
-}) => {
-  const { hits } = result;
-
+import Product from "../../../components/ProductCard";
+import productsData from "../../data/products.json";
+const ProductContainer = ({ products }) => {
   return (
     <>
       <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 w-full">

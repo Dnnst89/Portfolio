@@ -1,0 +1,12 @@
+@font-face {
+  font-family: "Grandstander-Regular";
+  src: url("../app/fonts/Grandstander-Regular.ttf");
+  /* font-style: normal; */
+  font-weight: 900;
+}
+@font-face {
+  font-family: "Grandstander-Thin";
+  src: url("../app/fonts/Grandstander-Thin.ttf");
+  font-style: normal;
+  font-weight: 900;
+}

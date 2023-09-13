@@ -31,6 +31,36 @@ export default function Post({ params }) {
 
   const { name } = product;
 
+  console.log(product);
+
+  return (
+    <main>
+      <ProductDetail />
+      <ProductDetailTable />
+      <RelatedItems />
+    </main>
+  );
+}
+
+function ProductDetail() {
+  const [quantity, setQuantity] = useState(1);
+
+  const decreaseCounter = () => {
+    if (quantity === 0) return;
+    setQuantity((prev) => --prev);
+  };
+
+  const increaseCounter = () => {
+    setQuantity((prev) => ++prev);
+  };
+  const handleClick = () => {
+    // Find the element you want to scroll to
+    const element = document.querySelector("#detail-table");
+
+    // Scroll to the element
+    element.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <>
       <div
