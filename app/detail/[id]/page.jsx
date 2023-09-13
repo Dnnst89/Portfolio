@@ -23,7 +23,7 @@ export default function Post({ params }) {
   useEffect(() => {
     if (!id) return null;
     algoliaInstace
-      .get(`/development_api::product.product/${id}`)
+      .get(`/development.product/${id}`)
       .then(({ data }) => setProduct(data));
   }, [id]);
 
