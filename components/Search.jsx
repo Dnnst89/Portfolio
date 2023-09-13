@@ -15,7 +15,7 @@ const index = searchClient.initIndex(indexAlgolia);
 index.search('query', {
     page: 0,
   }).then(({ hits }) => {
-    console.log(hits);
+   
   });
 
 const Search = () => {
