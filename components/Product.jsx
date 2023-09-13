@@ -5,13 +5,11 @@ const loader = ({ src }) => {
   return `https://didactoysperu.com/wp-content/uploads/2020/04/${src}`;
 };
 
-const Product = ({ id, name }) => {
+const Product = ({ key, name }) => {
+
   return (
     <>
-      <div
-        className="w-full max-w-sm bg-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 "
-        key={id}
-      >
+      <div className="w-full max-w-sm bg-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 " key={key}>
         <a href="#">
           <Image
             loader={loader}

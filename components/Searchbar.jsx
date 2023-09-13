@@ -26,7 +26,7 @@ const Searchbar = ({ products }) => {
         getSources={({ query }) => [
           {
             sourceId: "products",
-            getItemUrl( {item} ) { return `/detail/${item.id}`},
+            getItemUrl({ item }) { return `/detail/${item.id}` },
             getItems() {
               return getAlgoliaResults({
                 searchClient,
@@ -43,9 +43,15 @@ const Searchbar = ({ products }) => {
             },
             templates: {
               item({ item, components }) {
-                return <SearchItem hit={item} components={components} />;
+                return (
+                    <SearchItem hit={item} components={components} />
+                )
               },
-            },
+              footer() {
+                return <Link href={`/results/${query}`}>Ver todos los resultados</Link>;
+              },
+          
+            }
           },
         ]}
       />

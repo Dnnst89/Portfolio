@@ -1,9 +1,11 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+
 const loader = ({ src }) => {
   return `https://didactoysperu.com/wp-content/uploads/2020/04/${src}`;
 };
+
 function SearchItem({ hit, components }) {
   return (
     <Link href={`/detail/${hit.id}`}>
@@ -11,8 +13,8 @@ function SearchItem({ hit, components }) {
         <Image
           loader={loader}
           priority={true}
-          width="240"
-          height="240"
+          width="50"
+          height="50"
           src="circuito-3-en-1.jpg"
           alt="tailwind logo"
           className="rounded-xl"
