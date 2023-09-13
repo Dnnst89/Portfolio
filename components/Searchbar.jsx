@@ -16,7 +16,7 @@ const ALGOLIA_INDEX = "development_api::product.product";
 const searchClient = algoliasearch(APPLICATION_ID, SEARCH_API_KEY);
 const index = searchClient.initIndex(ALGOLIA_INDEX);
 
-const Nav = ({ products }) => {
+const Searchbar = ({ products }) => {
   const [results, setResults] = useState(null);
   return (
     <div className="border border-lightblue focus:outline-none focus:ring-2 focus:ring-orange ">
@@ -52,4 +52,4 @@ const Nav = ({ products }) => {
   );
 };
 
-export default Nav;
+export default Searchbar;

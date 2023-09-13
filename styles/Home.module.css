@@ -24,7 +24,7 @@
   flex: 1;
   font: inherit;
   width: 100%;
-  padding: .5rem .5rem .5rem 2.5rem;
+  padding: 0.5rem 0.5rem 0.5rem 2.5rem;
 }
 
 .search input:focus {
@@ -34,11 +34,12 @@
 }
 
 .search::before {
-  background: url("data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%2309f%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2211%22 cy=%2211%22 r=%228%22/%3E%3Cline x1=%2221%22 y1=%2221%22 x2=%2216.65%22 y2=%2216.65%22/%3E%3C/svg%3E") repeat;
+  background: url("data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%2309f%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2211%22 cy=%2211%22 r=%228%22/%3E%3Cline x1=%2221%22 y1=%2221%22 x2=%2216.65%22 y2=%2216.65%22/%3E%3C/svg%3E")
+    repeat;
   content: "";
   height: 1rem;
   left: 1rem;
-  margin-top: -.5rem;
+  margin-top: -0.5rem;
   position: absolute;
   top: 50%;
   width: 1rem;

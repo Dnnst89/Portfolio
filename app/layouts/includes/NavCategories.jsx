@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 
-const Navbar = () => {
+const NavCategories = () => {
   const [clickedItem, setClickedItem] = useState(null);
 
   const menuItems = [
@@ -47,5 +47,5 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavCategories;
 // flex items-center text-[13px] text-[#333333] px-2 h-2 overflow-y-scroll scrollbar scrollbar-none
