@@ -1,4 +1,5 @@
 import { algoliaInstace } from "@/src/axios/algoliaIntance/config";
+import ProductDetail from "@/components/ProductDetail";
 
 async function getData(id) {
   try {
@@ -9,8 +10,9 @@ async function getData(id) {
   }
 }
 
-export default async function ProductDetail({params}) {
+export default async function Post({params}) {
 const {id} = params
+
 const data = await getData(id);
 
 const {name} = data

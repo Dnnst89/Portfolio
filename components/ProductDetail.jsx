@@ -1,7 +1,12 @@
-import React from 'react'
+'use client'
+import {useState} from 'react'
 import PropTypes from 'prop-types'
 
-const getRandomNumber = (min, max) => {
+
+function ProductDetail() {
+
+
+  const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
   
@@ -25,9 +30,6 @@ const getRandomNumber = (min, max) => {
     // Scroll to the element
     element.scrollIntoView({ behavior: "smooth" });
   };
-
-function ProductDetail() {
-
 
   return (
     <>
