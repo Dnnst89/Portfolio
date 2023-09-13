@@ -52,14 +52,10 @@ const LoginForm = () => {
         toast.success("Ingreso exitoso!😍");
         router.push("/");
       } else {
-        toast.error(
-          `Lo sentimos!! Credenciales incorrectas, intenta nuevamente.😥`
-        );
+        toast.error(`Credenciales incorrectas, intenta nuevamente.😥`);
       }
     } catch (error) {
-      toast.error(
-        `Lo sentimos!! Credenciales incorrectas, intenta nuevamente.😥`
-      );
+      toast.error(`Credenciales incorrectas, intenta nuevamente.😥`);
     } finally {
       //limpiar formulario
       resetForm();
@@ -71,7 +67,26 @@ const LoginForm = () => {
   }
   return (
     <div className=" flex h-screen justify-center items-center w-full ">
-      <Toaster />
+      <Toaster
+        containerStyle={{
+          top: 150,
+          left: 20,
+          bottom: 20,
+          right: 20,
+        }}
+        toastOptions={{
+          success: {
+            style: {
+              background: "#67C3AD",
+            },
+          },
+          error: {
+            style: {
+              background: "#f87171",
+            },
+          },
+        }}
+      />
       <div className="w-[300px]">
         <Formik
           initialValues={{
@@ -121,9 +136,9 @@ const LoginForm = () => {
                       className="absolute right-2 top-1/3 cursor-pointer"
                     >
                       {passwordVisible ? (
-                        <FaEyeSlash color="#ff7849" />
-                      ) : (
                         <FaEye color="#ff7849" />
+                      ) : (
+                        <FaEyeSlash color="#ff7849" />
                       )}
                     </button>
                   )}
