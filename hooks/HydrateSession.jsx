@@ -8,7 +8,7 @@ const HydrateSession = () => {
 
     useEffect(() => {
         // Retrieve session data from localStorage or sessionStorage
-        const sessionData = JSON.parse(localStorage.getItem("sessionData"));
+        const sessionData = JSON.parse(localStorage.getItem("userData"));
 
         // Dispatch actions to update the Redux store with session data
         if (sessionData && sessionData.isAuthenticated) {
