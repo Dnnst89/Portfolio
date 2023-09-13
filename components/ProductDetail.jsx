@@ -1,15 +1,20 @@
-'use client'
-import {useState} from 'react'
-import PropTypes from 'prop-types'
-
+"use client";
+import { useState } from "react";
+import PropTypes from "prop-types";
+import Image from "next/image";
+import ProductDetailTable from "./ProductDetailSecondary";
+import { BiPlus, BiMinus } from "react-icons/bi";
+import "@/styles/detail.page.css";
+import Link from "next/link";
+const loader = ({ src }) => {
+  return `https://didactoysperu.com/wp-content/uploads/2020/04/${src}`;
+};
 
 function ProductDetail() {
-
-
   const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
-  
+
   const getRandomReviews = () => getRandomNumber(5, 100);
   const getRandomStars = () => Math.random() + getRandomNumber(3, 4);
 
@@ -33,62 +38,177 @@ function ProductDetail() {
 
   return (
     <>
-    <div
-       className="relative items-center h-screen place-content-center transition-colors flex flex-col max-w-xs md:max-w-3xl mx-auto bg-white"
-       target="_blank"
-       rel="noopener noreferrer"
-     >
-       <div className="w-full md:w-1/3 grid place-items-center p-8">
-         <img
-           width="240"
-           height="240"
-           src="https://didactoysperu.com/wp-content/uploads/2020/04/circuito-3-en-1.jpg"
-           alt="tailwind logo"
-           className="rounded-xl"
-         />
-       </div>
-       <div className="w-full md:w-2/3 flex flex-col space-y-2 p-3">
-         <div className="flex justify-between item-center">
-           <div className="flex items-center">
-             <svg
-               xmlns="http://www.w3.org/2000/svg"
-               className="h-5 w-5 text-yellow-500"
-               viewBox="0 0 20 20"
-               fill="currentColor"
-             >
-               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-             </svg>
-             <p className="text-gray-600 font-bold text-sm ml-1">
-               {getRandomStars().toFixed(2)}
-               <span className="text-gray-500 font-normal">
-                 {" "}
-                 ({getRandomReviews()} reviews)
-               </span>
-             </p>
-           </div>
-           <div className="">
-             <svg
-               xmlns="http://www.w3.org/2000/svg"
-               className="h-5 w-5 text-pink-500"
-               viewBox="0 0 20 20"
-               fill="currentColor"
-             >
-               <path
-                 fillRule="evenodd"
-                 d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                 clipRule="evenodd"
-               />
-             </svg>
-           </div>
-         </div>
-         <h3 className="overflow-hidden overflow-ellipsis font-black text-gray-800 md:text-3xl text-xl">
-           Nombre
-         </h3>
-         <p className="md:text-lg text-gray-500 text-base">Descripción</p>
-         <p className="text-xl font-black text-gray-800">$900</p>
-       </div>
-     </div>
-     </>
-  )
+      <div className="bg-floralwhite" target="_blank" rel="noopener noreferrer">
+        <div className=" p-5 flex">
+          {/* imagen principal grande */}
+          <div className="w-6/12 flex justify-center">
+            <Image
+              loader={loader}
+              priority={true}
+              width="500"
+              height="800"
+              src="circuito-3-en-1.jpg"
+              alt="tailwind logo"
+              className="rounded-xl"
+            />
+          </div>
+          {/* parte derecha de la imagen principal grande*/}
+          <div className="w-6/12 flex flex-col">
+            <h2 className="flex justify-end">Ref 000</h2>
+            <h1 className="mb-3">Nombre del producto</h1>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+            <a onClick={() => handleClick()}>
+              <button className="flex justify-start text-lightblue">
+                Leer mas
+              </button>
+            </a>
+            {/* imagenes iconos y caracteristicas */}
+            <div className="  flex">
+              {/* primera caja */}
+              <div className="w-3/6">
+                <div className="flex mt-5">
+                  <Image
+                    loader={loader}
+                    priority={true}
+                    width="50"
+                    height="50"
+                    src="circuito-3-en-1.jpg"
+                    alt="tailwind logo"
+                    className="rounded-xl"
+                  />
+                  <p>Caracteristica del producto</p>
+                </div>
+
+                <div className="flex mt-5">
+                  <Image
+                    loader={loader}
+                    priority={true}
+                    width="50"
+                    height="50"
+                    src="circuito-3-en-1.jpg"
+                    alt="tailwind logo"
+                    className="rounded-xl"
+                  />
+                  <p>Caracteristica del producto</p>
+                </div>
+
+                <div className="flex mt-5">
+                  <Image
+                    loader={loader}
+                    priority={true}
+                    width="50"
+                    height="50"
+                    src="circuito-3-en-1.jpg"
+                    alt="tailwind logo"
+                    className="rounded-xl"
+                  />
+                  <p>Caracteristica del producto</p>
+                </div>
+              </div>
+              {/* segunda caja */}
+              <div className=" w-3/6">
+                <div className="flex mt-5">
+                  <Image
+                    loader={loader}
+                    priority={true}
+                    width="50"
+                    height="50"
+                    src="circuito-3-en-1.jpg"
+                    alt="tailwind logo"
+                    className="rounded-xl"
+                  />
+                  <p>Caracteristica del producto</p>
+                </div>
+
+                <div className="flex mt-5">
+                  <Image
+                    loader={loader}
+                    priority={true}
+                    width="50"
+                    height="50"
+                    src="circuito-3-en-1.jpg"
+                    alt="tailwind logo"
+                    className="rounded-xl"
+                  />
+                  <p>Caracteristica del producto</p>
+                </div>
+
+                <div className="flex mt-5">
+                  <Image
+                    loader={loader}
+                    priority={true}
+                    width="50"
+                    height="50"
+                    src="circuito-3-en-1.jpg"
+                    alt="tailwind logo"
+                    className="rounded-xl"
+                  />
+                  <p>Caracteristica del producto</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* //imagenes debajo de la principal */}
+        <div className="flex ">
+          <div className="flex h-32  w-6/12 justify-center">
+            <Image
+              loader={loader}
+              priority={true}
+              width="125"
+              height="100"
+              src="circuito-3-en-1.jpg"
+              alt="tailwind logo"
+              className="rounded-xl mx-2"
+            />
+            <Image
+              loader={loader}
+              priority={true}
+              width="125"
+              height="100"
+              src="circuito-3-en-1.jpg"
+              alt="tailwind logo"
+              className="rounded-xl mx-2"
+            />
+            <Image
+              loader={loader}
+              priority={true}
+              width="125"
+              height="100"
+              src="circuito-3-en-1.jpg"
+              alt="tailwind logo"
+              className="rounded-xl mx-2"
+            />
+          </div>
+          {/* precio, cantidad y carrito */}
+          <div className=" w-6/12 flex justify-between items-center p-4">
+            <span className="font-bold">$58.00</span>
+            <div className="flex flex-col items-end p-3">
+              <div className="flex items-center mb-2 ">
+                <span className="text-grey">Cantidad:</span>
+                <div className="bg-resene rounded-full m-1 ">
+                  <button className="mb-2 bg-grey rounded-full text-white m-4">
+                    <BiMinus onClick={decreaseCounter} />
+                  </button>
+                  <span>{quantity}</span>
+                  <button className="mb-2 bg-grey rounded-full  text-white m-4">
+                    <BiPlus onClick={increaseCounter} />
+                  </button>
+                </div>
+              </div>
+              <div className="bg-aquamarine rounded-sm p-3  mx-4">
+                <button className="text-white text-sm">
+                  Agregar al carrito
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
-export default ProductDetail
+export default ProductDetail;

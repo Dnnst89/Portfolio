@@ -1,7 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import Navbar from "@/app/layouts/includes/Navbar";
-import TopMenu from "@/app/layouts/includes/TopMenu";
 import ProductContainer from "@/app/layouts/includes/ProductContainer";
 
 export default function GetResults({ params }) {
@@ -37,9 +35,7 @@ export default function GetResults({ params }) {
 
   async function allResults() {
     const result = await getHits();
-    const { hitsPerPage } = result;
-    const { nbHits } = result;
-    const { nbPages } = result;
+    const { hitsPerPage, nbHits, nbPages } = result;
     setResult(result);
     setHitsPerPage(hitsPerPage);
     setNbHits(nbHits);
@@ -49,15 +45,10 @@ export default function GetResults({ params }) {
   useEffect(() => {
     if (!q) return null;
     allResults();
-    
   }, [currentPage]);
 
   return (
     <>
-      <div className="">
-        <TopMenu />
-        <Navbar />
-      </div>
       <ProductContainer
         result={result}
         hitsPerPage={hitsPerPage}
