@@ -10,7 +10,6 @@ import { setUser } from "@/redux/features/authSlice";
 import ErrorForm from "./ErrorForm";
 import toast, { Toaster } from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import Image from "next/image";
 const SignupSchema = Yup.object().shape({
   identifier: Yup.string().required("Este campo es requerido"),
   password: Yup.string().required("Este campo es requerido"),
@@ -25,12 +24,11 @@ const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false); // State to track password visibility
 
-  const submitLogin = async (values) => {
+  const submitLogin = async (values, { resetForm }) => {
     // validate if form values is empty
     const dataValues = Object.keys(values).map((el) => {
       return values[el];
     });
-    console.log(values);
     if (dataValues.some((el) => !el)) {
       return;
     }
@@ -64,6 +62,7 @@ const LoginForm = () => {
       );
     } finally {
       //limpiar formulario
+      resetForm();
     }
   };
 
@@ -82,7 +81,7 @@ const LoginForm = () => {
           validationSchema={SignupSchema}
           onSubmit={submitLogin}
         >
-          {({ errors, touched }) => {
+          {({ errors, touched, values }) => {
             return (
               <Form>
                 <h2
@@ -113,16 +112,21 @@ const LoginForm = () => {
                     className="focus:border-blue-500 outline-none
                      w-full px-6 py-2 mb-2 border  rounded-lg border-none"
                   />
-                  <button
-                    type="button"
-                    onClick={() => setPasswordVisible(!passwordVisible)}
-                    className="absolute right-2 top-3 cursor-pointer"
-                  >
-                    {passwordVisible ? <FaEye /> : <FaEyeSlash />}{" "}
-                  </button>
-                  {errors.password && touched.password ? (
-                    <ErrorForm>{errors.password}</ErrorForm>
-                  ) : null}
+                  {values.password.trim() === "" ? (
+                    ""
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setPasswordVisible(!passwordVisible)}
+                      className="absolute right-2 top-1/3 cursor-pointer"
+                    >
+                      {passwordVisible ? (
+                        <FaEyeSlash color="#ff7849" />
+                      ) : (
+                        <FaEye color="#ff7849" />
+                      )}
+                    </button>
+                  )}
                 </div>
                 <button
                   type="submit"
