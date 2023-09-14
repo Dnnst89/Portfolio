@@ -1,11 +1,12 @@
-import RegisterFormTwo from '@/components/RegisterFormTwo';
+"use client";
+import RegisterFormTwo from "@/components/RegisterFormTwo";
 
 const SingEmail = () => {
-    return (
-        <>
-            <RegisterFormTwo />
-        </>
-    );
+  return (
+    <>
+      <RegisterFormTwo />
+    </>
+  );
 };
 
 export default SingEmail;

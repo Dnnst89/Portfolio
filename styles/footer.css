@@ -1,0 +1,36 @@
+.main-container {
+  display: flex;
+  background-color: #f6eee2;
+  width: 85%;
+}
+.image-text-section {
+  width: 30%;
+  height: 200px;
+  display: block;
+  justify-content: center;
+  margin-bottom: 60px;
+}
+
+.products-section {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  width: 25%;
+  margin-top: 20px;
+}
+
+.product-star-div {
+  /* background-color: red; */
+  white-space: nowrap;
+  display: flex;
+  margin-bottom: 10px;
+  width: 39%;
+  font-size: 20px;
+}
+.centered-main-div {
+  display: flex;
+  justify-content: center;
+  background-color: #f6eee2;
+  margin-top: 90px;
+}
