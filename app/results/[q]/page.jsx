@@ -13,11 +13,8 @@ export async function getStaticPaths() {
   const { data } = await algoliaInstace.get(
     `/development_api::product.product/`
   );
-
   const paths = data?.hits.map((product) => ({
     params: { q: product.name.toString() },
   }));
-  console.log(paths);
-
   return { paths, fallback: true };
 }

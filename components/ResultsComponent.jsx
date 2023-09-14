@@ -18,7 +18,7 @@ const ResultsComponent = ({ query }) => {
       if (statusText !== "OK") {
         throw new Error(`Error! status: ${status}`);
       }
-      return data.hits;
+      return data;
     } catch (err) {
       console.log(err);
     }
@@ -26,9 +26,7 @@ const ResultsComponent = ({ query }) => {
 
   async function allResults() {
     const result = await getHits();
-    console.log(result);
     const { hitsPerPage, nbHits, nbPages } = result;
-    console.log(hitsPerPage, nbHits, nbPages);
     setResult(result);
     setHitsPerPage(hitsPerPage);
     setNbHits(nbHits);
