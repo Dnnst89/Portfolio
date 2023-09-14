@@ -2,38 +2,36 @@
 import Link from "next/link";
 import ProductCard from "./ProductCard";
 import { useEffect, useState } from "react";
+import { strapiInstance } from "@/src/axios/algoliaIntance/config";
 
 const FeaturedProducts = () => {
+  const [products, setProducts] = useState([]);
 
-  const [products, setProducts] = useState([])
-
-	useEffect(() => {
-		fetch(
-      `http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337/api/products?populate=*&filters[featured][$eq]=truepagination[page]=1&pagination[pageSize]=3`,
-    )
-		.then(response => response.json())
-		.then(datos => {
-			setProducts(datos.data)
-           
-		})
-	}, [])
-    console.log(products)
+  useEffect(() => {
+    getFeaturedProducts();
+  }, []);
+  const getFeaturedProducts = async () => {
+    const { data } = await strapiInstance.get(
+      "/api/products?populate=*&filters[featured][$eq]=truepagination[page]=1&pagination[pageSize]=3"
+    );
+    setProducts(data.data);
+  };
 
   return (
     <>
-    
-          {products && products.length && products.map((item) => (
-         <div className="flex  justify-center pt-10">
-     
-      <ProductCard name={item.attributes.name} defaultPrice={item.attributes.defaultPrice} url={"/uploads/juguete4_36d71de373.jpg"} />
-    </div>
-    
-      ))}
-        
+      {products.length &&
+        products.map((item) => (
+          <div className="flex  justify-center pt-10" key={item.id}>
+            <ProductCard
+              name={item.attributes.name}
+              defaultPrice={item.attributes.defaultPrice}
+              id={item.id}
+              url={"/uploads/juguete4_36d71de373.jpg"}
+            />
+          </div>
+        ))}
     </>
   );
-  
 };
 
 export default FeaturedProducts;
-

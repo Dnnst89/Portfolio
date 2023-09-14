@@ -9,4 +9,9 @@ const algoliaInstace = axios.create({
     }
   })
 
-export {algoliaInstace}
+const strapiInstance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_STRAPI_URL,
+  timeout: 10000,
+})
+
+export {algoliaInstace, strapiInstance}
