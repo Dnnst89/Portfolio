@@ -12,9 +12,9 @@ const loader = ({ src }) => {
 };
 
 const loaderImage = ({ src }) => {
-  return `http://localhost:1337${src}`;
+  return `http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337${src}`;
 };
-function ProductDetail({name, description, defaultPrice, sku, url}) {
+function ProductDetail({name, description, defaultPrice, sku, coverImage }) {
   const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
@@ -51,7 +51,7 @@ function ProductDetail({name, description, defaultPrice, sku, url}) {
               priority={true}
               width="500"
               height="800"
-              src={url}
+              src={coverImage ? coverImage.url : '/uploads/large_undefined_0cd8bc924a.png'}
               alt="tailwind logo"
               className="rounded-xl"
             />
@@ -163,7 +163,7 @@ function ProductDetail({name, description, defaultPrice, sku, url}) {
               priority={true}
               width="125"
               height="100"
-              src={url}
+              src={coverImage ? coverImage.url : '/uploads/large_undefined_0cd8bc924a.png'}
               alt="tailwind logo"
               className="rounded-xl mx-2"
             />
@@ -172,7 +172,7 @@ function ProductDetail({name, description, defaultPrice, sku, url}) {
               priority={true}
               width="125"
               height="100"
-              src={url}
+              src={coverImage ? coverImage.url : '/uploads/large_undefined_0cd8bc924a.png'}
               alt="tailwind logo"
               className="rounded-xl mx-2"
             />
@@ -181,7 +181,7 @@ function ProductDetail({name, description, defaultPrice, sku, url}) {
               priority={true}
               width="125"
               height="100"
-              src={url}
+              src={coverImage ? coverImage.url : '/uploads/large_undefined_0cd8bc924a.png'}
               alt="tailwind logo"
               className="rounded-xl mx-2"
             />

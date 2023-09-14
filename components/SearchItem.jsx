@@ -2,13 +2,13 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 const loader = ({ src }) => {
-  return `http://localhost:1337${src}`;
+  return `http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337${src}`;
 };
 
 function SearchItem({ hit, components }) {
-  const {coverImage} = hit
-  let primero = coverImage[0];
-  const {url} = primero
+
+  const image  = hit.coverImage
+  console.log(hit)
 
   return (
     <Link href={`/detail/${hit.id}`}>
@@ -18,8 +18,8 @@ function SearchItem({ hit, components }) {
           priority={true}
           width="100"
           height="100"
-          src={url}
-          alt="tailwind logo"
+          src={hit.coverImage ? hit.coverImage.url : '/uploads/large_undefined_0cd8bc924a.png'}
+          alt="/uploads/large_undefined_0cd8bc924a.png"
           className="rounded-xl object-contain"
         />
         <div>
