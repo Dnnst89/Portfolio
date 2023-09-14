@@ -5,13 +5,14 @@ import * as Yup from "yup";
 import Link from "next/link";
 import SocialMediaRegistry from "./SocialMediaRegistry";
 import ErrorForm from "./ErrorForm";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useMutation } from "@apollo/client";
 import RegisterUser from "@/src/graphQl/queries/registerUser";
 import { createElement } from "@/src/store/store";
 import { useRouter } from "next/navigation";
 import Spinner from "./Spinner";
 import { Toaster, toast } from "react-hot-toast";
+import { setUser } from "@/redux/features/authSlice";
 
 const initialValues = {
   email: "",
@@ -40,6 +41,7 @@ const RegisterFormTwo = () => {
   const [loading, setLoading] = useState(false);
   const { username } = useSelector((x) => x.registryForm);
   const router = useRouter();
+  const dispatch = useDispatch();
   const [createUser] = useMutation(RegisterUser);
   const handleSubmit = async (values) => {
     const dataValues = Object.keys(values).map((el) => {
@@ -57,6 +59,7 @@ const RegisterFormTwo = () => {
       });
       router.push("/");
       createElement("userData", JSON.stringify(data.register));
+      dispatch(setUser(data.register.user));
     } catch (error) {
       toast.error(
         "No se pudo registrar tu cuenta, por favor intentalo más tarde"

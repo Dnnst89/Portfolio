@@ -11,21 +11,13 @@ const TopMenu = () => {
     <>
       <header className="grid grid-cols-2 sm:grid-cols-6">
         <div className="flex justify-center items-center order-1 col-span-1 sm:col-span-1  h-[60px]">
-          <Link href="/">
-            <Image
-              priority={100}
-              src={img2}
-              alt="dfskdk"
-              width={100}
-              height={100}
-            />
-          </Link>
+          <Image src={img2} alt="dfskdk" width={100} height={100} />
         </div>
 
-        <div className="py-2 items-center  order-3 sm:order-2 col-span-2 sm:col-span-4 h-[60px] ">
-          {<Searchbar />}
+        <div className="py-5 items-center  order-3 sm:order-2 col-span-2 sm:col-span-3 h-[60px] ">
+          {<Search />}
         </div>
-        <div className="grid grid-cols-2 justify-center items-center  order-2 sm:order-3 col-span-1 sm:col-span-1 ">
+        <div className="grid grid-cols-2 justify-center items-center  order-2 sm:order-3 col-span-1 sm:col-span-2 ">
           <div className="  ">
             <span className=" flex justify-center items-center ">
               <AccountDropodown />

@@ -1,9 +1,11 @@
 import React from "react";
-
+import BodyComponent from "@/components/BodyComponent";
 const detailLayout = ({ children }) => {
   return (
     <>
-      <main>{children}</main>
+      <BodyComponent>
+        <main>{children}</main>
+      </BodyComponent>
     </>
   );
 };
