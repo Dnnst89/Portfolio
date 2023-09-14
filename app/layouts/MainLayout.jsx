@@ -8,6 +8,7 @@ import brush from "../assets/brush.png";
 import guitar from "../assets/guitar.png";
 import libro from "../assets/libro.png";
 import BodyComponent from "@/components/BodyComponent";
+import FeaturedProducts from "@/components/FeaturedProducts";
 const MainLayout = ({ children }) => {
   const name = "Juguete";
   const defaultPrice = 8900;
@@ -20,9 +21,7 @@ const MainLayout = ({ children }) => {
           <h1 className="text-lg">Top de productos</h1>
         </div>
         <div className="flex  justify-center pt-10">
-          <ProductCard name={name} defaultPrice={defaultPrice} url={url} />
-          <ProductCard name={name} defaultPrice={defaultPrice} url={url} />
-          <ProductCard name={name} defaultPrice={defaultPrice} url={url} />
+<FeaturedProducts/>
         </div>
         <div className="flex justify-center mt-10 text-lg">
           <h1>Ideas de regalo para todas las edades</h1>
