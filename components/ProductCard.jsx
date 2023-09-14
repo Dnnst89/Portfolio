@@ -1,16 +1,24 @@
 "use client";
 import Image from "next/image";
 
-const ProductCard = ({ key, name }) => {
+const loader = ({ src }) => {
+  return `http://localhost:1337${src}`;
+};
+
+const ProductCard = ({ name, defaultPrice, url }) => {
   return (
-    <div key={key} className="m-4 max-w-sm rounded-[15px] shadow-lg w-[300px] h-[450px] transition-transform transform hover:scale-105 hover:bg-resene duration-1000 hover:cursor-pointer">
+    <div className="m-4 max-w-sm rounded-[15px] shadow-lg w-[300px] h-[450px] transition-transform transform hover:scale-105 hover:bg-resene duration-1000 hover:cursor-pointer">
       <div className="w-[280px] h-[280px] mx-auto p-1">
         <a href="#">
-          <img
-            className="rounded-[15px]"
-            src="https://didactoysperu.com/wp-content/uploads/2020/04/circuito-3-en-1.jpg"
-            alt="product image"
-          />
+           <Image
+          loader={loader}
+          priority={true}
+          width="600"
+          height="500"
+          src={url}
+          alt="tailwind logo"
+          className="rounded-[15px]"
+        />
         </a>
       </div>
 
@@ -37,7 +45,7 @@ const ProductCard = ({ key, name }) => {
       </div>
 
       <div className="bg-aquamarine w-100 h-[15.6%] text-lg rounded-b-[15px] font-bold flex justify-center">
-        <button className="hover:underline text-white">$0,000.00</button>
+        <button className="hover:underline text-white">₡{defaultPrice}</button>
       </div>
     </div>
   );

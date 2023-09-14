@@ -12,12 +12,16 @@ const ProductContainer = ({
   setCurrentPage,
 }) => {
   const { hits } = result;
+  console.log(hits)
   return (
     <>
       <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 w-full">
         {hits
           ? hits.map((item) => {
-              return <Product key={item.id} id={item.id} name={item.name} />;
+            const {coverImage} = item
+            let primero = coverImage[0];
+            const {url} = primero
+              return <Product key={item.id} id={item.id} name={item.name} defaultPrice={item.defaultPrice} url={url}/>;
             })
           : null}
       </div>

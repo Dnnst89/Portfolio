@@ -14,7 +14,7 @@ export default function GetResults({ params }) {
   async function getHits() {
     try {
       const response = await fetch(
-        `https://6TQCC8J5LB.algolia.net/1/indexes/development.product?query=${q}&page=${currentPage}`,
+        `https://6TQCC8J5LB.algolia.net/1/indexes/development_api::product.product?query=${q}&page=${currentPage}`,
         {
           headers: {
             "X-Algolia-Api-Key": "5a6490a15e1b2c9a3c53d7f8328c3f8d",
