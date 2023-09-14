@@ -1,23 +1,23 @@
 "use client";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { algoliaInstace } from "@/src/axios/algoliaIntance/config";
 import Link from "next/link";
-
 
 const NavCategories = () => {
   const [clickedItem, setClickedItem] = useState(null);
 
-  const [menuItems, setMenuItems] = useState([])
+  const [menuItems, setMenuItems] = useState([]);
 
-const getData = async ()=> {
-  const { data } = await algoliaInstace.get("development_api::category.category/")
-    setMenuItems(data.hits)
-}
+  const getData = async () => {
+    const { data } = await algoliaInstace.get(
+      "development_api::category.category/"
+    );
+    setMenuItems(data.hits);
+  };
 
-	useEffect(() => {
-    getData()
-
-	}, [])
+  useEffect(() => {
+    getData();
+  }, []);
 
   const handleItemClick = (id) => {
     if (clickedItem === id) {
@@ -32,17 +32,16 @@ const getData = async ()=> {
     <>
       <div className="grid grid-cols-1 h-[50px] mt-[0.5px] bg-resene">
         <ul className="flex justify-center content-center text-[#333333]  overflow-y-scroll scrollbar scrollbar-none">
-        
-         
-          {menuItems && menuItems.length && menuItems.map((item) => (
-         <li
-              key={item.id}
-              className="px-3 hover:underline font-bold cursor-grab flex justify-center items-center"
-            >
-              <Link href={`/results/${item.name}`}> {item.name}</Link>;
-              
-            </li>
-          ))}
+          {menuItems &&
+            menuItems.length &&
+            menuItems.map((item) => (
+              <li
+                key={item.id}
+                className="px-3 hover:underline font-bold cursor-grab flex justify-center items-center"
+              >
+                <Link href={`/results/${item.name}`}> {item.name}</Link>
+              </li>
+            ))}
         </ul>
       </div>
     </>
