@@ -1,22 +1,24 @@
 "use client";
-import { useState } from "react";
+import { useState,useEffect } from "react";
+import { algoliaInstace } from "@/src/axios/algoliaIntance/config";
 import Link from "next/link";
+
 
 const NavCategories = () => {
   const [clickedItem, setClickedItem] = useState(null);
 
-  const menuItems = [
-    { id: 1, name: "Home", route: "/" },
-    { id: 2, name: "Saved", route: "/login" },
-    { id: 3, name: "Electronics", route: "/" },
-    { id: 4, name: "Motors", route: "/" },
-    { id: 5, name: "Fashion", route: "/" },
-    { id: 6, name: "Sports", route: "/" },
-    { id: 7, name: "Clothing", route: "/login" },
-    { id: 8, name: "Shoes", route: "/" },
-    { id: 9, name: "Toys", route: "/" },
-    { id: 10, name: "Others", route: "/" },
-  ];
+  const [menuItems, setMenuItems] = useState([])
+
+const getData = async ()=> {
+  const { data } = await algoliaInstace.get("development_api::category.category/")
+    setMenuItems(data.hits)
+}
+
+	useEffect(() => {
+    getData()
+
+	}, [])
+
   const handleItemClick = (id) => {
     if (clickedItem === id) {
       // Si se hace clic nuevamente en el mismo elemento, deselecciona
@@ -30,15 +32,15 @@ const NavCategories = () => {
     <>
       <div className="grid grid-cols-1 h-[50px] mt-[0.5px] bg-resene">
         <ul className="flex justify-center content-center text-[#333333]  overflow-y-scroll scrollbar scrollbar-none">
-          {menuItems.map((item) => (
-            <li
+        
+         
+          {menuItems && menuItems.length && menuItems.map((item) => (
+         <li
               key={item.id}
-              className={`px-3 hover:underline font-bold cursor-grab flex justify-center items-center ${
-                clickedItem === item.id ? "text-yellow-200" : ""
-              }`}
-              onClick={() => handleItemClick(item.id)}
+              className="px-3 hover:underline font-bold cursor-grab flex justify-center items-center"
             >
-              <Link href={item.route}>{item.name}</Link>
+              <Link href={`/results/${item.name}`}> {item.name}</Link>;
+              
             </li>
           ))}
         </ul>
