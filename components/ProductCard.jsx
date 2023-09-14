@@ -3,10 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 const loader = ({ src }) => {
-  return `http://localhost:1337${src}`;
+  return `http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337${src}`;
 };
 
-const ProductCard = ({ id, name, defaultPrice, url }) => {
+const ProductCard = ({ id, name, defaultPrice, coverImage}) => {
   return (
     <Link href={`/detail/${id}`}>
       <div className="m-4 max-w-sm rounded-[15px] shadow-lg w-[300px] h-[450px] transition-transform transform hover:scale-105 hover:bg-resene duration-1000 hover:cursor-pointer">
@@ -17,7 +17,7 @@ const ProductCard = ({ id, name, defaultPrice, url }) => {
               priority={true}
               width="600"
               height="500"
-              src={url}
+              src={coverImage ? coverImage.url : '/uploads/large_undefined_0cd8bc924a.png'}
               alt="tailwind logo"
               className="rounded-[15px]"
             />
