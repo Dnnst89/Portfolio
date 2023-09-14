@@ -1,14 +1,5 @@
 "use client";
-
-import Product from "@/components/ProductCard";
-import ProductContainer from "@/app/layouts/includes/ProductContainer";
-
-import ToogleSideBar from "@/components/ToogleSideBar";
 import React from "react";
-import NavCategories from "./includes/NavCategories";
-import NavMenu from "./includes/NavMenu";
-import SideBar from "./includes/SideBar";
-import { useQuery } from "@apollo/client";
 import ProductCard from "@/components/ProductCard";
 import GiftIdeasCard from "@/components/GiftIdeasCard";
 import heart from "../assets/heart.png";

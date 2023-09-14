@@ -3,9 +3,6 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { Poppins } from "next/font/google";
 import ApolloProviders from "@/src/graphQl/ApolloProviders";
-import NavCategories from "./layouts/includes/NavCategories";
-import NavMenu from "./layouts/includes/NavMenu";
-import Footer from "./layouts/includes/Footer";
 
 require("dotenv").config();
 

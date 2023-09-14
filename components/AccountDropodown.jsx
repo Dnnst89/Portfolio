@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { BiSolidUserCircle } from "react-icons/bi";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "@/redux/features/authSlice";
-import HydrateSession from "@/hooks/hydrateSession";
+import useSession from "@/hooks/useSession";
 import Link from "next/link";
 
 const AccountDropdown = () => {
@@ -33,10 +33,9 @@ const AccountDropdown = () => {
     dispatch(logout());
     localStorage.removeItem("userData");
   };
-
+  useSession();
   return (
     <>
-      <HydrateSession />
       <div className="relative grid grid-cols-2">
         <div className="">
           {authUser && (
