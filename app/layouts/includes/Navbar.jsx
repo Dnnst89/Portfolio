@@ -46,14 +46,15 @@ const Navbar = () => {
               key={item.id}
               className="px-3 hover:underline font-bold cursor-grab flex justify-center items-center"
             >
-              <Link href={"#"}>{item.name}</Link>
+              <Link href={`/results/${item.name}`}> {item.name}</Link>;
+              
             </li>
           ))}
         </ul>
       </div>
     </>
   );
-  
+
 };
 
 export default Navbar;
