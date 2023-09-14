@@ -19,8 +19,7 @@ const LoginForm = () => {
   const dispatch = useDispatch();
   const authUser = useSelector((state) => state.auth.user);
   const router = useRouter();
-  const [loginMutation, { data: loginData, error: loginError }] =
-    useMutation(LOGIN_MUTATION);
+  const [loginMutation, { data: loginData }] = useMutation(LOGIN_MUTATION);
   const [loading, setLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false); // State to track password visibility
 
@@ -51,8 +50,6 @@ const LoginForm = () => {
         );
         toast.success("Ingreso exitoso!😍");
         router.push("/");
-      } else {
-        toast.error(`Credenciales incorrectas, intenta nuevamente.😥`);
       }
     } catch (error) {
       toast.error(`Credenciales incorrectas, intenta nuevamente.😥`);
@@ -61,10 +58,6 @@ const LoginForm = () => {
       resetForm();
     }
   };
-
-  if (loginError) {
-    toast.error(`Credenciales incorrectas, intenta nuevamente.😥`);
-  }
   return (
     <div className=" flex h-screen justify-center items-center w-full ">
       <Toaster

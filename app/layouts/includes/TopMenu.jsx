@@ -1,12 +1,11 @@
 "use client";
-
 import Link from "next/link";
 import { BsCart4 } from "react-icons/bs";
 import Search from "../../../components/Search";
 import { img2 } from "../../assets/images";
 import Image from "next/image";
 import AccountDropodown from "@/components/AccountDropodown";
-import Nav from "@/components/Nav";
+import Searchbar from "@/components/Search";
 const TopMenu = () => {
   return (
     <>
