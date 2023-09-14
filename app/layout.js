@@ -7,9 +7,7 @@ import NavCategories from "./layouts/includes/NavCategories";
 import NavMenu from "./layouts/includes/NavMenu";
 import Footer from "./layouts/includes/Footer";
 
-
 require("dotenv").config();
-
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,10 +26,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${poppins.className} bg-floralwhite`}>
         <ApolloProviders>
-          <NavMenu />
-          <NavCategories />
           <Providers>{children}</Providers>
-          <Footer />
         </ApolloProviders>
       </body>
     </html>
