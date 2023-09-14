@@ -45,6 +45,7 @@ export default function GetResults({ params }) {
   useEffect(() => {
     if (!q) return null;
     allResults();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
   return (
