@@ -6,11 +6,15 @@ import ProductDetailTable from "./ProductDetailSecondary";
 import { BiPlus, BiMinus } from "react-icons/bi";
 import "@/styles/detail.page.css";
 import Link from "next/link";
+
 const loader = ({ src }) => {
-  return `https://didactoysperu.com/wp-content/uploads/2020/04/${src}`;
+  return `https://img.freepik.com/vector-gratis/${src}`;
 };
 
-function ProductDetail() {
+const loaderImage = ({ src }) => {
+  return `http://localhost:1337${src}`;
+};
+function ProductDetail({name, description, defaultPrice, sku, url}) {
   const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
@@ -43,22 +47,21 @@ function ProductDetail() {
           {/* imagen principal grande */}
           <div className="w-6/12 flex justify-center">
             <Image
-              loader={loader}
+              loader={loaderImage}
               priority={true}
               width="500"
               height="800"
-              src="circuito-3-en-1.jpg"
+              src={url}
               alt="tailwind logo"
               className="rounded-xl"
             />
           </div>
           {/* parte derecha de la imagen principal grande*/}
           <div className="w-6/12 flex flex-col">
-            <h2 className="flex justify-end">Ref 000</h2>
-            <h1 className="mb-3">Nombre del producto</h1>
+            <h2 className="flex justify-end">Ref {sku}</h2>
+            <h1 className="mb-3">{name}</h1>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+             {description}
             </p>
             <a onClick={() => handleClick()}>
               <button className="flex justify-start text-lightblue">
@@ -75,7 +78,7 @@ function ProductDetail() {
                     priority={true}
                     width="50"
                     height="50"
-                    src="circuito-3-en-1.jpg"
+                    src="comienzo_53876-25533.jpg?w=360"
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
@@ -88,7 +91,7 @@ function ProductDetail() {
                     priority={true}
                     width="50"
                     height="50"
-                    src="circuito-3-en-1.jpg"
+                    src="comienzo_53876-25533.jpg?w=360"
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
@@ -101,7 +104,7 @@ function ProductDetail() {
                     priority={true}
                     width="50"
                     height="50"
-                    src="circuito-3-en-1.jpg"
+                    src="comienzo_53876-25533.jpg?w=360"
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
@@ -116,7 +119,7 @@ function ProductDetail() {
                     priority={true}
                     width="50"
                     height="50"
-                    src="circuito-3-en-1.jpg"
+                    src="comienzo_53876-25533.jpg?w=360"
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
@@ -129,7 +132,7 @@ function ProductDetail() {
                     priority={true}
                     width="50"
                     height="50"
-                    src="circuito-3-en-1.jpg"
+                    src="comienzo_53876-25533.jpg?w=360"
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
@@ -142,7 +145,7 @@ function ProductDetail() {
                     priority={true}
                     width="50"
                     height="50"
-                    src="circuito-3-en-1.jpg"
+                    src="comienzo_53876-25533.jpg?w=360"
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
@@ -156,36 +159,36 @@ function ProductDetail() {
         <div className="flex ">
           <div className="flex h-32  w-6/12 justify-center">
             <Image
-              loader={loader}
+              loader={loaderImage}
               priority={true}
               width="125"
               height="100"
-              src="circuito-3-en-1.jpg"
+              src={url}
               alt="tailwind logo"
               className="rounded-xl mx-2"
             />
             <Image
-              loader={loader}
+              loader={loaderImage}
               priority={true}
               width="125"
               height="100"
-              src="circuito-3-en-1.jpg"
+              src={url}
               alt="tailwind logo"
               className="rounded-xl mx-2"
             />
             <Image
-              loader={loader}
+              loader={loaderImage}
               priority={true}
               width="125"
               height="100"
-              src="circuito-3-en-1.jpg"
+              src={url}
               alt="tailwind logo"
               className="rounded-xl mx-2"
             />
           </div>
           {/* precio, cantidad y carrito */}
           <div className=" w-6/12 flex justify-between items-center p-4">
-            <span className="font-bold">$58.00</span>
+            <span className="font-bold">₡ {defaultPrice}</span>
             <div className="flex flex-col items-end p-3">
               <div className="flex items-center mb-2 ">
                 <span className="text-grey">Cantidad:</span>

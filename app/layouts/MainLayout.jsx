@@ -18,15 +18,19 @@ import guitar from "../assets/guitar.png";
 import libro from "../assets/libro.png";
 
 const MainLayout = ({ children }) => {
+  const name="Juguete"
+  const defaultPrice=8900
+  const url="/uploads/juguete4_36d71de373.jpg"
+  
   return (
     <>
       <div className="flex justify-center pt-10">
         <h1 className="text-lg">Top de productos</h1>
       </div>
       <div className="flex  justify-center pt-10">
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
+        <ProductCard  name={name} defaultPrice={defaultPrice} url={url}/>
+        <ProductCard  name={name} defaultPrice={defaultPrice} url={url}/>
+        <ProductCard  name={name} defaultPrice={defaultPrice} url={url}/>
       </div>
       <div className="flex justify-center mt-10 text-lg">
         <h1>Ideas de regalo para todas las edades</h1>

@@ -2,6 +2,11 @@
 import ProductCard from "./ProductCard";
 
 const RelatedItems = () => {
+
+  const name="Juguete"
+  const defaultPrice=8900
+  const url="/uploads/juguete3_10b4adc7f0.jpg"
+
   return (
     <div>
       <div className="flex justify-center p-6">
@@ -10,10 +15,10 @@ const RelatedItems = () => {
         </h1>
       </div>
       <section className="flex justify-center">
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
+        <ProductCard name={name} defaultPrice={defaultPrice} url={url}/>
+        <ProductCard name={name} defaultPrice={defaultPrice} url={url}/>
+        <ProductCard name={name} defaultPrice={defaultPrice} url={url}/>
+        <ProductCard name={name} defaultPrice={defaultPrice} url={url}/>
       </section>
     </div>
   );

@@ -19,12 +19,15 @@ export default async function Post({ params }) {
 
   const data = await getData(id);
 
-  const { name } = data;
+  const {coverImage} = data
+  let primero = coverImage[0];
+  const {url} = primero
+  const { name, description, defaultPrice, sku } = data;
 
   return (
     <main>
-      <ProductDetail />
-      <ProductDetailTable />
+      <ProductDetail name={name} description={description} defaultPrice={defaultPrice} sku={sku} url={url}/>
+      <ProductDetailTable description={description}/>
       <RelatedItems />
     </main>
   );

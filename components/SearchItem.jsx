@@ -9,7 +9,7 @@ function SearchItem({ hit, components }) {
   const {coverImage} = hit
   let primero = coverImage[0];
   const {url} = primero
-  console.log(url)
+
   return (
     <Link href={`/detail/${hit.id}`}>
       <div className="hover:bg-blue-300 flex gap-4 p-4">

@@ -1,20 +1,12 @@
 "use client";
 
-const ProductDetailTable = () => {
+const ProductDetailTable = ({ description }) => {
   return (
     <main className="bg-resene" id="detail-table">
       <section className="flex m-5 gap-5 description-section pt-10">
         <h1 className="m-1 text-lg">Descripción</h1>
         <p>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.
+          {description}
         </p>
       </section>
       <section className="mt-2 size-section description-section">
