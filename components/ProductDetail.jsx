@@ -51,7 +51,7 @@ function ProductDetail({name, description, defaultPrice, sku, coverImage }) {
               priority={true}
               width="500"
               height="800"
-              src={coverImage ? coverImage.url : '/uploads/large_undefined_0cd8bc924a.png'}
+              src={coverImage ? coverImage.attributes.url: '/uploads/large_undefined_0cd8bc924a.png'}
               alt="tailwind logo"
               className="rounded-xl"
             />
@@ -163,7 +163,7 @@ function ProductDetail({name, description, defaultPrice, sku, coverImage }) {
               priority={true}
               width="125"
               height="100"
-              src={coverImage ? coverImage.url : '/uploads/large_undefined_0cd8bc924a.png'}
+              src={coverImage ? coverImage.attributes.url: '/uploads/large_undefined_0cd8bc924a.png'}
               alt="tailwind logo"
               className="rounded-xl mx-2"
             />
@@ -172,7 +172,7 @@ function ProductDetail({name, description, defaultPrice, sku, coverImage }) {
               priority={true}
               width="125"
               height="100"
-              src={coverImage ? coverImage.url : '/uploads/large_undefined_0cd8bc924a.png'}
+              src={coverImage ? coverImage.attributes.url: '/uploads/large_undefined_0cd8bc924a.png'}
               alt="tailwind logo"
               className="rounded-xl mx-2"
             />
@@ -181,7 +181,7 @@ function ProductDetail({name, description, defaultPrice, sku, coverImage }) {
               priority={true}
               width="125"
               height="100"
-              src={coverImage ? coverImage.url : '/uploads/large_undefined_0cd8bc924a.png'}
+              src={coverImage ? coverImage.attributes.url: '/uploads/large_undefined_0cd8bc924a.png'}
               alt="tailwind logo"
               className="rounded-xl mx-2"
             />

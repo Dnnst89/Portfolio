@@ -6,7 +6,7 @@ const loader = ({ src }) => {
   return `http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337${src}`;
 };
 
-const ProductCard = ({ id, name, defaultPrice, coverImage}) => {
+const ProductCard = ({ id, name, defaultPrice, coverImage, brand }) => {
   return (
     <Link href={`/detail/${id}`}>
       <div className="m-4 max-w-sm rounded-[15px] shadow-lg w-[300px] h-[450px] transition-transform transform hover:scale-105 hover:bg-resene duration-1000 hover:cursor-pointer">
@@ -25,22 +25,19 @@ const ProductCard = ({ id, name, defaultPrice, coverImage}) => {
         </div>
 
         <div className="px-5 pb-5">
-         
-            <h5
-              className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white"
-              dangerouslySetInnerHTML={{
-                __html: name,
-              }}
-            ></h5>
-        
+
+          <h5
+            className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white"
+            dangerouslySetInnerHTML={{
+              __html: name,
+            }}
+          ></h5>
+
 
           <div className="pt-3 rounded-lg">
-            <h1 className="font-bold text-gray-900 dark:text-white ">
-              Nombre largo de este producto
-            </h1>
             <h2 className="flex justify-end p-3 relative">
               <div href="#" className=" text-sm ">
-                Nombre de marca
+                {brand}
               </div>
             </h2>
           </div>

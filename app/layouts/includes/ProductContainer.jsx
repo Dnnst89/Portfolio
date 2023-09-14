@@ -19,7 +19,7 @@ const ProductContainer = ({
         {hits
           ? hits.map((item) => {
             const coverImage = item.coverImage
-            return <Product key={item.id} id={item.id} name={item.name} defaultPrice={item.defaultPrice} coverImage={coverImage} />;
+            return <Product key={item.id} id={item.id} name={item.name} defaultPrice={item.defaultPrice} coverImage={coverImage} brand={item.brand}/>;
           })
           : null}
       </div>
