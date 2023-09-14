@@ -63,7 +63,7 @@ const LoginForm = () => {
   };
 
   if (loginError) {
-    console.error("Apollo Client error during login:", loginError);
+    toast.error(`Credenciales incorrectas, intenta nuevamente.😥`);
   }
   return (
     <div className=" flex h-screen justify-center items-center w-full ">
