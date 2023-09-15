@@ -6,6 +6,7 @@ import ProductDetailTable from "./ProductDetailSecondary";
 import { BiPlus, BiMinus } from "react-icons/bi";
 import "@/styles/detail.page.css";
 import Link from "next/link";
+import AddCartItemBtn from "./AddCartItemBtn";
 
 const loader = ({ src }) => {
   return `https://img.freepik.com/vector-gratis/${src}`;
@@ -14,8 +15,8 @@ const loader = ({ src }) => {
 const loaderImage = ({ src }) => {
   return `http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337${src}`;
 };
-function ProductDetail({name, description, defaultPrice, sku, coverImage, material, variant, category }) {
-  
+function ProductDetail({ name, description, defaultPrice, sku, coverImage, material, variant, variantId, category }) {
+ 
   const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
@@ -204,9 +205,7 @@ function ProductDetail({name, description, defaultPrice, sku, coverImage, materi
                 </div>
               </div>
               <div className="bg-aquamarine rounded-sm p-3  mx-4">
-                <button className="text-white text-sm">
-                  Agregar al carrito
-                </button>
+                <AddCartItemBtn quantity={quantity} idVariant={variantId} />
               </div>
             </div>
           </div>

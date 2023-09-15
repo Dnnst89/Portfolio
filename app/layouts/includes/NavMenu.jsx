@@ -6,8 +6,10 @@ import Image from "next/image";
 import AccountDropodown from "@/components/AccountDropodown";
 import Searchbar from "@/components/Search";
 import Link from "next/link";
+import { useSelector } from "react-redux";
 
 const TopMenu = () => {
+  const { cartQtyItems } = useSelector(state => state.cart) //obtengo la cantidad de items que tengo en carrito
   return (
     <header className="grid grid-cols-2 sm:grid-cols-6">
       <div className="flex justify-center items-center mt-[15px] order-1 col-span-1 sm:col-span-1  h-[60px]">
@@ -25,9 +27,12 @@ const TopMenu = () => {
             <AccountDropodown />
           </span>
         </div>
-        <div className="flex justify-center items-center">
-          <BsCart4 size={40} color="#67C3AD" />
-        </div>
+        <Link href={"/cart"}>
+          <div className="flex justify-center items-center ">
+            <BsCart4 size={30} color="#67C3AD" />
+            <p className='bg-aquamarine rounded-full px-2 text-white'>{cartQtyItems}</p>
+          </div>
+        </Link>
       </div>
     </header>
   );

@@ -29,18 +29,19 @@ export default async function Post({ params }) {
 
   const variants = attributes.variants.data
   let two = variants[0];
+  const variantId = two.id
   const variant= two.attributes
-
+  
   
   const categories = attributes.categories.data
   let three = categories[0];
   const category= three.attributes.name
 
   const { name, description, defaultPrice, sku } = attributes;
-
+  
   return (
     <main>
-      <ProductDetail name={name} description={description} defaultPrice={defaultPrice} sku={sku} coverImage={coverImage} material={material} variant={variant} category={category}/>
+      <ProductDetail idProduct={id} name={name} description={description} defaultPrice={defaultPrice} sku={sku} coverImage={coverImage} material={material} variant={variant} variantId={variantId} category={category}/>
       <ProductDetailTable description={description} />
       <RelatedItems />
     </main>
