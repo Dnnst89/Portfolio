@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { BiPlus, BiMinus } from "react-icons/bi";
 import "./../../../styles/detail.page.css";
 import ProductCard from "@/components/ProductCard";
+import Link from "next/link";
 
 const getRandomNumber = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -198,20 +199,22 @@ function ProductDetail() {
             <div className="flex flex-col items-end p-3">
               <div className="flex items-center mb-2 ">
                 <span className="text-grey">Cantidad:</span>
-                <div className="bg-resene rounded-full m-1 ">
-                  <button className="mb-2 bg-grey rounded-full text-white m-4">
+                <div className="bg-resene rounded-full m-3 w-[120px] flex items-center justify-center p-2 space-x-4">
+                  <button className=" bg-grey rounded-full text-white">
                     <BiMinus onClick={decreaseCounter} />
                   </button>
                   <span>{quantity}</span>
-                  <button className="mb-2 bg-grey rounded-full  text-white m-4">
+                  <button className=" bg-grey rounded-full  text-white">
                     <BiPlus onClick={increaseCounter} />
                   </button>
                 </div>
               </div>
               <div className="bg-aquamarine rounded-sm p-3  mx-4">
-                <button className="text-white text-sm">
-                  Agregar al carrito
-                </button>
+                <Link href={"/cardView"}>
+                  <button className="text-white text-sm">
+                    Agregar al carrito
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
