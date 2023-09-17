@@ -60,7 +60,11 @@ export default function CardView() {
             </span>
           </section>
         </div>
-        <CartDetail />
+        <section>
+          <CartDetail />
+          <hr />
+          <TotalCost />
+        </section>
       </main>
     </div>
   );
@@ -68,11 +72,42 @@ export default function CardView() {
 
 function CartDetail() {
   return (
-    <div className="bg-resene rounded-sm">
-      <h1>Detalle del carrito</h1>
-      <section>
-        <p>N artículos</p>
-      </section>
+    <div className="bg-resene rounded-sm flex flex-col">
+      <h1 className=" flex justify-center">Detalle del carrito</h1>
+
+      <div className="flex justify-between ">
+        <p className="whitespace-nowrap ">N° artículos</p>
+        <p>$0,000.00</p>
+      </div>
+      <div className="flex justify-center">
+        <input />
+        <button>OK</button>
+      </div>
+      <div className="flex justify-between ">
+        <p>Subtotal:</p>
+        <p>$0,000.00</p>
+      </div>
+      <div className="flex justify-between ">
+        <p>Costo de envio:</p>
+        <p>$0,000.00</p>
+      </div>
+    </div>
+  );
+}
+
+function TotalCost() {
+  return (
+    <div className="flex flex-col">
+      <p className="flex justify-center">Cost Total(IVA Incluido)</p>
+      <p className="flex justify-center">$0,000.00</p>
+      <div className="flex justify-between ">
+        <p>Entrega Estimada:</p>
+        <p>DD/MM/AA</p>
+      </div>
+      <p className="flex justify-center text-sm">
+        *Detalle acerca de la fecha de entrega*
+      </p>
+      <button>Proceder al pago</button>
     </div>
   );
 }
