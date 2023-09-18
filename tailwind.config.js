@@ -22,7 +22,7 @@ module.exports = {
       floralwhite: "#F9F6F0",
       white: "#FFFFFF",
       black: "#000000",
-      grey: "#787878",
+      grey: { 100: "#787878", 200: "#A1A1A1" },
       yellow: {
         100: "#FFD000",
         200: "#F9BB5C",

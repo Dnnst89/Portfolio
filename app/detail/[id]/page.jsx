@@ -210,7 +210,7 @@ function ProductDetail() {
                 </div>
               </div>
               <div className="bg-aquamarine rounded-sm p-3  mx-4">
-                <Link href={"/cardView"}>
+                <Link href={"/cartView"}>
                   <button className="text-white text-sm">
                     Agregar al carrito
                   </button>
