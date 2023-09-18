@@ -8,7 +8,7 @@ import Searchbar from "@/components/Search";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 
-const TopMenu = () => {
+const NavMenu = () => {
   const { cartQtyItems } = useSelector(state => state.cart) //obtengo la cantidad de items que tengo en carrito
   return (
     <header className="grid grid-cols-2 sm:grid-cols-6">
@@ -38,4 +38,4 @@ const TopMenu = () => {
   );
 };
 
-export default TopMenu;
+export default NavMenu;
