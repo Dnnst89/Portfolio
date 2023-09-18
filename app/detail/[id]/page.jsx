@@ -200,17 +200,17 @@ function ProductDetail() {
               <div className="flex items-center mb-2 ">
                 <span className="text-grey">Cantidad:</span>
                 <div className="bg-resene rounded-full m-3 w-[120px] flex items-center justify-center p-2 space-x-4">
-                  <button className=" bg-grey rounded-full text-white">
+                  <button className=" bg-grey-100 rounded-full text-white">
                     <BiMinus onClick={decreaseCounter} />
                   </button>
                   <span>{quantity}</span>
-                  <button className=" bg-grey rounded-full  text-white">
+                  <button className=" bg-grey-100 rounded-full  text-white">
                     <BiPlus onClick={increaseCounter} />
                   </button>
                 </div>
               </div>
               <div className="bg-aquamarine rounded-sm p-3  mx-4">
-                <Link href={"/cartView"}>
+                <Link href={"/cart"}>
                   <button className="text-white text-sm">
                     Agregar al carrito
                   </button>
