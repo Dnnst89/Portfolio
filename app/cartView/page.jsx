@@ -20,9 +20,9 @@ export default function CartView() {
         </div>
 
         <div className=" bg-resene rounded-sm w-1/4 p-4 h-[500px]">
-          <div className="flex flex-col space-y-3">
+          
             <CartDetail />
-          </div>
+          
 
           <CartProceedPayment />
         </div>

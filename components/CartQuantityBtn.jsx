@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { addQtyItems,reduceQtyItems } from '@/redux/features/cart-slice';
 import { useDispatch } from 'react-redux';
+import { BiMinus, BiPlus } from 'react-icons/bi';
 const CartQuantityBtn = ({ quantityCartItem, stock }) => {
     const [quantity, setQuantity] = useState(quantityCartItem);
     const dispatch = useDispatch();
@@ -20,15 +21,22 @@ const CartQuantityBtn = ({ quantityCartItem, stock }) => {
     };
 
     return (
-        
-            <div className="flex items-center space-x-2 ">
-                <button onClick={handleDecrement} className="px-3 py-1 bg-lightblue text-black rounded-md hover:bg-resene focus:outline-none focus:ring-2 focus:ring-aquamarine">
-                    -
-                </button>
-                <span className="text-xl font-semibold ">{quantity}/{stock}</span>
-                <button onClick={handleIncrement} className="px-3 py-1 bg-lightblue text-black rounded-md hover:bg-resene focus:outline-none focus:ring-2 focus:ring-aquamarine"
-                >+</button>
-            </div>
+
+<section className="w-1/4 mx-2 ">
+<div className="flex items-center mb-2 ">
+  <span className="text-grey">Cantidad:</span>
+  <div className="bg-resene rounded-full m-3 w-[120px] flex items-center justify-center p-2 space-x-4">
+    <button className=" bg-grey rounded-full text-white">
+      <BiMinus onClick={handleDecrement} />
+    </button>
+    <span>{quantity}</span>
+    <button className=" bg-grey rounded-full  text-white">
+      <BiPlus onClick={handleIncrement} />
+    </button>
+  </div>
+</div>
+</section>
+
        
     );
 }

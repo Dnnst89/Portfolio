@@ -28,11 +28,11 @@ const DeleteCartItemBtn = ({idItem, qtyItem}) => {
         });
     };
   return (
-    <div><button className="bg-orange hover:bg-yellow text-black py-2 px-4 m-4 rounded"
-    onClick={handleDelete}
-    >
-    Remove
-</button></div>
+<button className="ml-3 text-3xl"  onClick={handleDelete}>
+          {/* <BiX /> */}
+          🗑
+        </button>
+
   )
 }
 

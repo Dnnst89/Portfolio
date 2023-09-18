@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image';
+import test from "../app/assets/heart.png";
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import CartQuantityBtn from './CartQuantityBtn';
@@ -8,27 +9,39 @@ import DeleteCartItemBtn from './DeleteCartItemBtn';
 
 const CartItem = ({ cartItemId, idVariant, productName, brand, description, color, price, ageRange, size, weight, images, stockVariant, quantityCartItem }) => {
     return (<>
-        <div className="bg-white shadow-md rounded-lg overflow-hidden ">
-            <div className="p-4">
-                <Carousel showArrows={true} showThumbs={false} className="w-full h-auto">
-                    {images.map((img, index) => (
-                        <div key={index}>
-                            <div className="w-80 h-60">
-                                <Image
-                                    key={img.id}
-                                    src={"http://localhost:1337" + img}
-                                    alt={productName}
-
-                                    layout="fill" // Esto permite que la imagen llene su contenedor
-                                    objectFit="cover" // Esto ajusta la imagen al tamaño del contenedor
-                                />
+        <div className="flex items-center py-1">
+            <section className="w-2/4 ">
+                <div className="flex items-center">
+                    <Carousel showArrows={true} showThumbs={false}>
+                        {images.map((img, index) => (
+                            <div key={index}>
+                                <div>
+                                    <Image
+                                        key={img.id}
+                                        src={"http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337" + img}
+                                        alt={productName}
+                                        style={{ width: "140px", height: "140px" }}
+                                        width={140} // Establecer el ancho
+                                        height={140} // Establecer el alto
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </Carousel>
+                        ))}
+                    </Carousel>
+
+                    <div className="p-3">
+                        <h1>Producto: {productName}</h1>
+                        <h1>Marca: {brand}</h1>
+                        <span className="text-sm text-grey">Ref {idVariant}</span>
+                    </div>
+                </div>
+            </section>
+            <div className="mt-4">
+                <CartQuantityBtn quantityCartItem={quantityCartItem} stock={stockVariant} /> {/* Puedes ajustar el límite según tus necesidades */}
+            </div>
+            {/* <div className="p-4">
             </div>
             <div className=" p-4">
-                <h2 className="text-xl font-semibold">Product: {productName}</h2>
                 <p className="text-gray-600">idcart: {cartItemId}</p>
                 <p className="text-gray-600">idVariant: {idVariant}</p>
                 <p className="text-gray-600">Brand: {brand}</p>
@@ -38,15 +51,15 @@ const CartItem = ({ cartItemId, idVariant, productName, brand, description, colo
                 <p className="text-gray-700">Age: {ageRange}</p>
                 <p className="text-gray-700">Size: {size}</p>
                 <p className="text-gray-700">Weight: {weight.weight} {weight.unitWeight}</p>
-                <div className="mt-4">
-                    <CartQuantityBtn quantityCartItem={quantityCartItem} stock={stockVariant} /> {/* Puedes ajustar el límite según tus necesidades */}
-                </div>
-            </div>
+            </div> */}
+            <section className=" flex w-1/4 mx-2 items-center justify-center ">
+                <span>${price}</span>
+                {/* Botón para eliminar el producto del carrito */}
+                <DeleteCartItemBtn
+                    idItem={cartItemId}
+                    qtyItem={quantityCartItem} />
+            </section>
 
-            {/* Botón para eliminar el producto del carrito */}
-            <DeleteCartItemBtn
-            idItem={cartItemId}
-            qtyItem={quantityCartItem}/>
         </div>
     </>
 
