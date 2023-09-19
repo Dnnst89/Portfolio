@@ -7,7 +7,10 @@ import { updateQtyItems } from '@/redux/features/cart-slice';
 import { useDispatch } from 'react-redux';
 
 const CartContainer = () => {
-    const { loading, error, data } = useQuery(GET_CART_ITEMS_LIST);
+    const { loading, error, data } = useQuery(GET_CART_ITEMS_LIST, {
+        fetchPolicy: "network-only", // Forzar la consulta directa al servidor
+      });
+      
     const dispatch = useDispatch()
 
 

@@ -37,7 +37,7 @@ const CartItem = ({ cartItemId, idVariant, productName, brand, description, colo
                 </div>
             </section>
             <div className="mt-4">
-                <CartQuantityBtn quantityCartItem={quantityCartItem} stock={stockVariant} /> {/* Puedes ajustar el límite según tus necesidades */}
+                <CartQuantityBtn quantityCartItem={quantityCartItem} stock={stockVariant} idCartItem={cartItemId} /> {/* Puedes ajustar el límite según tus necesidades */}
             </div>
             {/* <div className="p-4">
             </div>
