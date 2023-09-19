@@ -23,6 +23,7 @@ const Pagination = ({
 
   const onSpecificPage = (number) => {
     setCurrentPage(number - 1);
+    setCurrentPage(number - 1);
   };
 
   return (
