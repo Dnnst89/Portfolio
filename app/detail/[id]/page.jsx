@@ -1,47 +1,47 @@
-"use client";
-import { useEffect, useState } from "react";
-import { BiPlus, BiMinus } from "react-icons/bi";
-import "./../../../styles/detail.page.css";
-import ProductCard from "@/components/ProductCard";
-import Link from "next/link";
+import { algoliaInstace } from "@/src/axios/algoliaIntance/config";
+import ProductDetail from "@/components/ProductDetail";
+import ProductDetailTable from "@/components/ProductDetailSecondary";
+import RelatedItems from "@/components/RelatedItems";
+import { atRule } from "postcss";
+import { Convergence } from "next/font/google";
 
-const getRandomNumber = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
+async function getData(id) {
+  try {
+    const res = await fetch(
+      `http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337/api/products/${id}?populate=*`
+    );
+    const { data } = await res.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-const getRandomReviews = () => getRandomNumber(5, 100);
-const getRandomStars = () => Math.random() + getRandomNumber(3, 4);
-
-export default function Post({ params }) {
-  const [product, setProduct] = useState(null);
+export default async function Post({ params }) {
   const { id } = params;
 
-  useEffect(() => {
-    if (!id) return null;
+  const {attributes} = await getData(id);
+  const coverImage = attributes.coverImage.data
 
-    fetch(
-      `https://6TQCC8J5LB.algolia.net/1/indexes/development_api::product.product/${id}`,
-      {
-        headers: {
-          "X-Algolia-Api-Key": "5a6490a15e1b2c9a3c53d7f8328c3f8d",
-          "X-Algolia-Application-Id": "6TQCC8J5LB",
-        },
-      }
-    )
-      .then((res) => res.json())
-      .then(setProduct);
-  }, [id]);
+  const materials = attributes.materials.data
+  let one = materials[0];
+  const material= one.attributes.name
 
-  if (!product) return null;
+  const variants = attributes.variants.data
+  let two = variants[0];
+  const variant= two.attributes
 
-  const { name } = product;
+  
+  const categories = attributes.categories.data
+  let three = categories[0];
+  const category= three.attributes.name
 
-  console.log(product);
+  const { name, description, defaultPrice, sku } = attributes;
 
   return (
     <main>
-      <ProductDetail />
-      <ProductDetailTable />
+      <ProductDetail name={name} description={description} defaultPrice={defaultPrice} sku={sku} coverImage={coverImage} material={material} variant={variant} category={category}/>
+      <ProductDetailTable description={description} />
       <RelatedItems />
     </main>
   );
@@ -222,173 +222,11 @@ function ProductDetail() {
       </div>
     </>
   );
-}
+  const { data } = await res.json();
 
-function ProductDetailTable() {
-  return (
-    <main className="bg-resene" id="detail-table">
-      <section className="flex m-5 gap-5 description-section pt-10">
-        <h1 className="m-1 text-lg">Descripción</h1>
-        <p>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.
-        </p>
-      </section>
-      <section className="mt-2 size-section description-section">
-        <h1 className="text-lg mr-5">Reviews</h1>
-        <table>
-          <tbody className="tbody-clases">
-            <tr className="border-b-[1px] border-grey flex gap-[257px] ">
-              <th>Nombre</th>
-              <th>Puntuacion</th>
-              <th>Comentario</th>
-            </tr>
-            <tr className="border-b-[1px] border-grey flex gap-[200px]">
-              <td className="td-starts">Alexandra</td>
-              <td>
-                <div class="flex items-center td-starts">
-                  <svg
-                    class="w-4 h-4 text-yellow-300 mr-1"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                  </svg>
-                  <svg
-                    class="w-4 h-4 text-yellow-300 mr-1"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                  </svg>
-                  <svg
-                    class="w-4 h-4 text-yellow-300 mr-1"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                  </svg>
-                  <svg
-                    class="w-4 h-4 text-yellow-300 mr-1"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                  </svg>
-                  <svg
-                    class="w-4 h-4 text-gray-300 mr-1 dark:text-gray-500"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                  </svg>
-                  <p class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">
-                    4.95 out of 5
-                  </p>
-                </div>
-              </td>
-              <td>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.{" "}
-              </td>
-            </tr>
-            <tr className="border-b-[1px] border-grey flex gap-[200px]">
-              <td className="td-starts">Alexandra</td>
-              <td>
-                <div class="flex items-center td-starts">
-                  <svg
-                    class="w-4 h-4 text-yellow-300 mr-1"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                  </svg>
-                  <svg
-                    class="w-4 h-4 text-yellow-300 mr-1"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                  </svg>
-                  <svg
-                    class="w-4 h-4 text-yellow-300 mr-1"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                  </svg>
-                  <svg
-                    class="w-4 h-4 text-yellow-300 mr-1"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                  </svg>
-                  <svg
-                    class="w-4 h-4 text-gray-300 mr-1 dark:text-gray-500"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 22 20"
-                  >
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                  </svg>
-                  <p class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">
-                    4.95 out of 5
-                  </p>
-                </div>
-              </td>
-              <td>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.{" "}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-    </main>
-  );
-}
+  const paths = data.map((product) => ({
+    params: { id: product.id.toString() },
+  }));
 
-function RelatedItems() {
-  return (
-    <div>
-      <div className="flex justify-center p-6">
-        <h1 className="text-lg shadow-text">
-          Encuentra nuestros articulos relacionados
-        </h1>
-      </div>
-      <section className="flex justify-center">
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-      </section>
-    </div>
-  );
+  return { paths, fallback: true };
 }
