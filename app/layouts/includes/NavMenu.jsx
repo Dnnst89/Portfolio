@@ -9,7 +9,7 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 
 const NavMenu = () => {
-  const { cartQtyItems } = useSelector(state => state.cart) //obtengo la cantidad de items que tengo en carrito
+  const { cartItems } = useSelector(state => state.cart) //obtengo la cantidad de items que tengo en carrito
   return (
     <header className="grid grid-cols-2 sm:grid-cols-6">
       <div className="flex justify-center items-center mt-[15px] order-1 col-span-1 sm:col-span-1  h-[60px]">
@@ -30,7 +30,7 @@ const NavMenu = () => {
         <Link href={"/cart"}>
           <div className="flex justify-center items-center ">
             <BsCart4 size={30} color="#67C3AD" />
-            <p className='bg-aquamarine rounded-full px-2 text-white'>{cartQtyItems}</p>
+            <p className='bg-aquamarine rounded-full px-2 text-white'>{cartItems.length}</p>
           </div>
         </Link>
       </div>

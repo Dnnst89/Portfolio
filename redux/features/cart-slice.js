@@ -4,6 +4,7 @@ const initialState = {
     cartQtyItems: 0, // Cantidad de items
     cartItems: [],
     cartItem: {},
+    shoppingSession: null
 };
 
 export const cart = createSlice({
@@ -24,8 +25,15 @@ export const cart = createSlice({
             // Inicializa la cantidad de items
             state.cartQtyItems = action.payload;
         },
+        updateShoppingSession: (state, action) => {
+            state.shoppingSession = action.payload;
+          },
+        addItemToCart: (state, action) => {
+            // Agrega un objeto al array cartItems
+            state.cartItems.push(action.payload);
+        },
     },
 });
 
-export const { addQtyItems, reduceQtyItems, updateQtyItems } = cart.actions;
+export const { addQtyItems, reduceQtyItems, updateQtyItems, updateShoppingSession,addItemToCart } = cart.actions;
 export default cart.reducer;
