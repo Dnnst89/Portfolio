@@ -80,10 +80,10 @@ function ProductDetail({
               </button>
             </a>
             {/* imagenes iconos y caracteristicas */}
-            <div className="  flex">
+            <div className="flex">
               {/* primera caja */}
               <div className="w-3/6">
-                <div className="flex mt-5">
+                <div className="flex mt-5 items-center">
                   <Image
                     loader={loader}
                     priority={true}
@@ -96,7 +96,7 @@ function ProductDetail({
                   <p>Tipo de material: {material}</p>
                 </div>
 
-                <div className="flex mt-5">
+                <div className="flex mt-5 items-center">
                   <Image
                     loader={loader}
                     priority={true}
@@ -109,7 +109,7 @@ function ProductDetail({
                   <p>Color: {variant.color}</p>
                 </div>
 
-                <div className="flex mt-5">
+                <div className="flex mt-5 items-center">
                   <Image
                     loader={loader}
                     priority={true}
@@ -124,7 +124,7 @@ function ProductDetail({
               </div>
               {/* segunda caja */}
               <div className=" w-3/6">
-                <div className="flex mt-5">
+                <div className="flex mt-5 items-center">
                   <Image
                     loader={loader}
                     priority={true}
@@ -137,7 +137,7 @@ function ProductDetail({
                   <p>Rango de edades: {variant.ageRange}</p>
                 </div>
 
-                <div className="flex mt-5">
+                <div className="flex mt-5 items-center">
                   <Image
                     loader={loader}
                     priority={true}
@@ -150,7 +150,7 @@ function ProductDetail({
                   <p>Stock: {variant.stock}</p>
                 </div>
 
-                <div className="flex mt-5">
+                <div className="flex mt-5 items-center">
                   <Image
                     loader={loader}
                     priority={true}

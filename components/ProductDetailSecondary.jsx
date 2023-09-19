@@ -1,13 +1,11 @@
 "use client";
 
-const ProductDetailTable = ({ description }) => {
+const ProductDetailSecondary = ({ description }) => {
   return (
     <main className="bg-resene" id="detail-table">
-      <section className="flex m-5 gap-5 description-section pt-10">
+      <section className="flex items-center m-5 gap-5 description-section pt-10">
         <h1 className="m-1 text-lg">Descripción</h1>
-        <p>
-          {description}
-        </p>
+        <p>{description}</p>
       </section>
       <section className="mt-2 size-section description-section">
         <h1 className="text-lg mr-5">Reviews</h1>
@@ -18,7 +16,7 @@ const ProductDetailTable = ({ description }) => {
               <th>Puntuacion</th>
               <th>Comentario</th>
             </tr>
-            <tr className="border-b-[1px] border-grey flex gap-[200px]">
+            <tr className="border-b-[1px] border-grey flex items-center gap-[200px]">
               <td className="td-starts">Alexandra</td>
               <td>
                 <div className="flex items-center td-starts">
@@ -74,10 +72,10 @@ const ProductDetailTable = ({ description }) => {
               </td>
               <td>
                 Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.{" "}
+                industry.
               </td>
             </tr>
-            <tr className="border-b-[1px] border-grey flex gap-[200px]">
+            <tr className="border-b-[1px] border-grey flex items-center gap-[200px]">
               <td className="td-starts">Alexandra</td>
               <td>
                 <div className="flex items-center td-starts">
@@ -142,4 +140,4 @@ const ProductDetailTable = ({ description }) => {
     </main>
   );
 };
-export default ProductDetailTable;
+export default ProductDetailSecondary;
