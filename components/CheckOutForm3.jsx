@@ -6,7 +6,7 @@ export default function CheckOutForm3() {
         <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
           3
         </div>
-        <h1>Formulario de pago</h1>
+        <h1 className="text-xl">Formulario de pago</h1>
       </div>
       <div className="flex justify-center mt-8 mb-8 w-3/4 ">
         <button className="bg-pink-200 text-white rounded-sm p-2 w-[200px] whitespace-nowrap">

@@ -16,7 +16,7 @@ export default function ShoppingCart() {
   };
 
   return (
-    <div className="flex items-center py-1">
+    <div className="flex items-center py-1  border-b-2 border-dashed border-grey-200">
       <section className="w-2/4 ">
         <div className="flex items-center">
           <Image

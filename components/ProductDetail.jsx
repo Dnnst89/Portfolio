@@ -14,8 +14,16 @@ const loader = ({ src }) => {
 const loaderImage = ({ src }) => {
   return `http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337${src}`;
 };
-function ProductDetail({name, description, defaultPrice, sku, coverImage, material, variant, category }) {
-  
+function ProductDetail({
+  name,
+  description,
+  defaultPrice,
+  sku,
+  coverImage,
+  material,
+  variant,
+  category,
+}) {
   const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
@@ -52,7 +60,11 @@ function ProductDetail({name, description, defaultPrice, sku, coverImage, materi
               priority={true}
               width="500"
               height="800"
-              src={coverImage ? coverImage.attributes.url: '/uploads/large_undefined_0cd8bc924a.png'}
+              src={
+                coverImage
+                  ? coverImage.attributes.url
+                  : "/uploads/large_undefined_0cd8bc924a.png"
+              }
               alt="tailwind logo"
               className="rounded-xl"
             />
@@ -61,9 +73,7 @@ function ProductDetail({name, description, defaultPrice, sku, coverImage, materi
           <div className="w-6/12 flex flex-col">
             <h2 className="flex justify-end">Ref {sku}</h2>
             <h1 className="mb-3">{name}</h1>
-            <p>
-             {description}
-            </p>
+            <p>{description}</p>
             <a onClick={() => handleClick()}>
               <button className="flex justify-start text-lightblue">
                 Leer mas
@@ -164,7 +174,11 @@ function ProductDetail({name, description, defaultPrice, sku, coverImage, materi
               priority={true}
               width="125"
               height="100"
-              src={coverImage ? coverImage.attributes.url: '/uploads/large_undefined_0cd8bc924a.png'}
+              src={
+                coverImage
+                  ? coverImage.attributes.url
+                  : "/uploads/large_undefined_0cd8bc924a.png"
+              }
               alt="tailwind logo"
               className="rounded-xl mx-2"
             />
@@ -173,7 +187,11 @@ function ProductDetail({name, description, defaultPrice, sku, coverImage, materi
               priority={true}
               width="125"
               height="100"
-              src={coverImage ? coverImage.attributes.url: '/uploads/large_undefined_0cd8bc924a.png'}
+              src={
+                coverImage
+                  ? coverImage.attributes.url
+                  : "/uploads/large_undefined_0cd8bc924a.png"
+              }
               alt="tailwind logo"
               className="rounded-xl mx-2"
             />
@@ -182,7 +200,11 @@ function ProductDetail({name, description, defaultPrice, sku, coverImage, materi
               priority={true}
               width="125"
               height="100"
-              src={coverImage ? coverImage.attributes.url: '/uploads/large_undefined_0cd8bc924a.png'}
+              src={
+                coverImage
+                  ? coverImage.attributes.url
+                  : "/uploads/large_undefined_0cd8bc924a.png"
+              }
               alt="tailwind logo"
               className="rounded-xl mx-2"
             />
@@ -193,20 +215,22 @@ function ProductDetail({name, description, defaultPrice, sku, coverImage, materi
             <div className="flex flex-col items-end p-3">
               <div className="flex items-center mb-2 ">
                 <span className="text-grey">Cantidad:</span>
-                <div className="bg-resene rounded-full m-1 ">
-                  <button className="mb-2 bg-grey rounded-full text-white m-4">
+                <div className="bg-resene rounded-full m-3 w-[120px] flex items-center justify-center p-2 space-x-4">
+                  <button className=" bg-grey-100 rounded-full text-white">
                     <BiMinus onClick={decreaseCounter} />
                   </button>
                   <span>{quantity}</span>
-                  <button className="mb-2 bg-grey rounded-full  text-white m-4">
+                  <button className=" bg-grey-100 rounded-full  text-white">
                     <BiPlus onClick={increaseCounter} />
                   </button>
                 </div>
               </div>
               <div className="bg-aquamarine rounded-sm p-3  mx-4">
-                <button className="text-white text-sm">
-                  Agregar al carrito
-                </button>
+                <Link href={"/cart"}>
+                  <button className="text-white text-sm">
+                    Agregar al carrito
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

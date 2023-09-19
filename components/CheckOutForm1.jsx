@@ -9,7 +9,7 @@ export default function CheckOutForm1() {
           {" "}
           1{" "}
         </div>
-        <h1>Información de envío</h1>
+        <h1 className="text-xl">Información de envío</h1>
       </div>
       <main className="flex ">
         <section className="w-3/4">
