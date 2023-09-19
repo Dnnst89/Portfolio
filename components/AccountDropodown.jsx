@@ -1,73 +1,87 @@
-"use client";
-import Link from "next/link";
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { BiSolidUserCircle } from "react-icons/bi";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "@/redux/features/authSlice";
+import useSession from "@/hooks/useSession";
+import Link from "next/link";
 
-const AccountDropodown = () => {
+const AccountDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const authUser = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
 
-  function useOutsideAlerter(ref) {
-    useEffect(() => {
-      function handleClickOutside(event) {
-        if (ref.current && !ref.current.contains(event.target)) {
-          setIsOpen(false);
-        }
-      }
-
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, [ref]);
-  }
-  const HandleDropDown = () => {
-    setIsOpen(true);
-  };
   const wrapperRef = useRef(null);
-  useOutsideAlerter(wrapperRef);
+
+  useEffect(() => {
+    function handleOutsideClick(event) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    localStorage.removeItem("userData");
+  };
+  useSession();
   return (
     <>
-      <div className="relative">
-        <button className="block" onClick={() => HandleDropDown()}>
-          <BiSolidUserCircle size={40} color="#67C3AD" />
+      <div className="relative grid grid-cols-2">
+        <div className="">
+          {authUser && (
+            <p className="px-4 py-2 text-orange">
+              Welcome, {authUser.username}
+            </p>
+          )}
+        </div>
+        <button className="block" onClick={toggleDropdown}>
+          <BiSolidUserCircle size={30} color="#67C3AD" />
         </button>
-        {isOpen ? (
+        {isOpen && (
           <div
-            v-f="isOpen"
             className="bg-floralwhite rounded-lg py-2 shadow-md absolute z-10"
             ref={wrapperRef}
           >
-            <Link
-              className="block px-4 py-2 hover:bg-resene text-orange"
-              href="/register/singname"
-            >
-              Registrame
-            </Link>
-            <Link
-              className="block px-4 py-2 hover:bg-resene text-orange"
-              href="/login"
-            >
-              Ingresar
-            </Link>
-            <Link
-              className="block px-4 py-2 hover:bg-resene text-orange"
-              href="d"
-            >
-              Soporte
-            </Link>
-            <Link
-              className="block px-4 py-2 hover:bg-resene text-orange"
-              href="/"
-            >
-              Salir
-            </Link>
+            {authUser ? (
+              <>
+                <button
+                  className="block px-4 py-2 hover:bg-resene text-orange"
+                  onClick={handleLogout}
+                >
+                  Salir
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  className="block px-4 py-2 hover:bg-resene text-orange"
+                  href="/register/singname"
+                >
+                  Registrarme
+                </Link>
+                <Link
+                  className="block px-4 py-2 hover:bg-resene text-orange"
+                  href="/login"
+                >
+                  Ingresar
+                </Link>
+              </>
+            )}
           </div>
-        ) : (
-          ""
         )}
       </div>
     </>
   );
 };
 
-export default AccountDropodown;
+export default AccountDropdown;

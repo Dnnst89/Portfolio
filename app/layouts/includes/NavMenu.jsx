@@ -4,13 +4,16 @@ import { BsCart4 } from "react-icons/bs";
 import { img2 } from "../../assets/images";
 import Image from "next/image";
 import AccountDropodown from "@/components/AccountDropodown";
-import Searchbar from "@/components/Searchbar";
+import Searchbar from "@/components/Search";
+import Link from "next/link";
 
 const TopMenu = () => {
   return (
     <header className="grid grid-cols-2 sm:grid-cols-6">
       <div className="flex justify-center items-center mt-[15px] order-1 col-span-1 sm:col-span-1  h-[60px]">
-        <Image src={img2} alt="dfskdk" width={120} height={50} />
+        <Link href={"/"}>
+          <Image src={img2} alt="dfskdk" width={120} height={50} />
+        </Link>
       </div>
 
       <div className="py-5 items-center order-3 sm:order-2 col-span-2 sm:col-span-4 h-[60px]">
