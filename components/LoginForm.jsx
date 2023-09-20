@@ -10,6 +10,8 @@ import { setUser } from "@/redux/features/authSlice";
 import ErrorForm from "./ErrorForm";
 import toast, { Toaster } from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import CheckOutHeader from "./CheckoutHeader";
+import Link from "next/link";
 const SignupSchema = Yup.object().shape({
   identifier: Yup.string().required("Este campo es requerido"),
   password: Yup.string().required("Este campo es requerido"),
@@ -59,99 +61,114 @@ const LoginForm = () => {
     }
   };
   return (
-    <div className=" flex h-screen justify-center items-center w-full ">
-      <Toaster
-        containerStyle={{
-          top: 150,
-          left: 20,
-          bottom: 20,
-          right: 20,
-        }}
-        toastOptions={{
-          success: {
-            style: {
-              background: "#67C3AD",
-            },
-          },
-          error: {
-            style: {
-              background: "#f87171",
-            },
-          },
-        }}
-      />
-      <div className="w-[300px]">
-        <Formik
-          initialValues={{
-            identifier: "",
-            password: "",
+    <div className="h-screen">
+      <CheckOutHeader regresar={"/register/signemail"} />
+      <div className=" flex justify-center items-center ">
+        <Toaster
+          containerStyle={{
+            top: 150,
+            left: 20,
+            bottom: 20,
+            right: 20,
           }}
-          validationSchema={SignupSchema}
-          onSubmit={submitLogin}
-        >
-          {({ errors, touched, values }) => {
-            return (
-              <Form>
-                <h2
-                  className="text-orange font-semibold flex justify-center
-                                 items-center h-[50px] "
-                >
-                  Identifícate
-                </h2>
-                <div>
-                  <Field
-                    type="text"
-                    id="identifier"
-                    name="identifier"
-                    placeholder="Nombre de usuario"
-                    className="focus:border-blue-500 outline-none w-full px-6 py-2
+          toastOptions={{
+            success: {
+              style: {
+                background: "#67C3AD",
+              },
+            },
+            error: {
+              style: {
+                background: "#f87171",
+              },
+            },
+          }}
+        />
+        <div className="">
+          <Formik
+            initialValues={{
+              identifier: "",
+              password: "",
+            }}
+            validationSchema={SignupSchema}
+            onSubmit={submitLogin}
+          >
+            {({ errors, touched, values }) => {
+              return (
+                <Form>
+                  <h2
+                    className=" text-4xl flex justify-center
+                                 items-center mt-20 mb-10 "
+                  >
+                    Iniciar sesión
+                  </h2>
+                  <div className="bg-resene p-10">
+                    <div>
+                      <label>
+                        Correo Electrónico
+                        <span className="text-pink-200 ml-1">*</span>
+                      </label>
+                      <Field
+                        type="text"
+                        id="identifier"
+                        name="identifier"
+                        className="focus:border-blue-500 outline-none w-full px-6 py-2
                      mb-2 border  rounded-lg border-none"
-                  />
-                  {errors.identifier && touched.identifier ? (
-                    <ErrorForm>{errors.identifier}</ErrorForm>
-                  ) : null}
-                </div>
-                <div className="relative">
-                  <Field
-                    type={passwordVisible ? "text" : "password"}
-                    id="password"
-                    name="password"
-                    placeholder="Contraseña"
-                    className="focus:border-blue-500 outline-none
+                      />
+                      {errors.identifier && touched.identifier ? (
+                        <ErrorForm>{errors.identifier}</ErrorForm>
+                      ) : null}
+                    </div>
+                    <div className="relative">
+                      <label>
+                        Contraseña
+                        <span className="text-pink-200 ml-1">*</span>
+                      </label>
+                      <Field
+                        type={passwordVisible ? "text" : "password"}
+                        id="password"
+                        name="password"
+                        className="focus:border-blue-500 outline-none
                      w-full px-6 py-2 mb-2 border  rounded-lg border-none"
-                  />
-                  {values.password.trim() === "" ? (
-                    ""
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => setPasswordVisible(!passwordVisible)}
-                      className="absolute right-2 top-1/3 cursor-pointer"
-                    >
-                      {passwordVisible ? (
-                        <FaEye color="#ff7849" />
+                      />
+                      {values.password.trim() === "" ? (
+                        ""
                       ) : (
-                        <FaEyeSlash color="#ff7849" />
+                        <button
+                          type="button"
+                          onClick={() => setPasswordVisible(!passwordVisible)}
+                          className="absolute right-2 top-1/3 cursor-pointer"
+                        >
+                          {passwordVisible ? (
+                            <FaEye color="#ff7849" />
+                          ) : (
+                            <FaEyeSlash color="#ff7849" />
+                          )}
+                        </button>
                       )}
-                    </button>
-                  )}
-                </div>
-                <button
-                  type="submit"
-                  className="bg-blue-500 hover:bg-blue-300 text-whitetext-base
+                    </div>
+                    <p className="text-center mt-3 text-sm hover:underline cursor-pointer text-lightblue">
+                      <Link href="/login">Recuperar contraseña</Link>
+                    </p>
+                    <button
+                      type="submit"
+                      className="bg-blue-500 hover:bg-blue-300 text-whitetext-base
                                      rounded-lg py-2 px-5 transition-colors w-full text-[19px]
-                                      text-white bg-aquamarine disabled:opacity-50"
-                  disabled={
-                    Object.keys(errors).length && Object.keys(touched).length
-                  }
-                >
-                  Ingresar
-                </button>
-              </Form>
-            );
-          }}
-        </Formik>
-        <SocialMediaRegistry />
+                                      text-white bg-pink-200 disabled:opacity-50"
+                      disabled={
+                        Object.keys(errors).length &&
+                        Object.keys(touched).length
+                      }
+                    >
+                      Iniciar Sesión
+                    </button>
+                  </div>
+                </Form>
+              );
+            }}
+          </Formik>
+          {/* <SocialMediaRegistry /> */}
+        </div>
       </div>
     </div>
   );

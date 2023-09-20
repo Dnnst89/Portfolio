@@ -8,7 +8,7 @@ import CheckOutHeader from "@/components/CheckoutHeader";
 export default function CheckOut() {
   return (
     <div>
-      <CheckOutHeader />
+      <CheckOutHeader regresar={"cart"} />
       <CheckOutForm1 />
       <CheckOutForm2 />
       <CheckOutForm3 />
