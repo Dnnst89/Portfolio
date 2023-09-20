@@ -15,14 +15,13 @@ const loaderImage = ({ src }) => {
   return `http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337${src}`;
 };
 function ProductDetail({ name, description, sku, variants }) {
-  console.log(variants)
+  // console.log(variants)
 
-  let first = null
-  if (variants != null) {
-    first = variants[0]
-    console.log(first.attributes.ageRange)
-  }
-
+  // let first = null
+  // if (variants != null) {
+  //   first = variants[0]
+  //   console.log(first.attributes.ageRange)
+  // }
 
   const [quantity, setQuantity] = useState(1);
 
