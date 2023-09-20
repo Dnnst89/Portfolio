@@ -15,14 +15,13 @@ const loaderImage = ({ src }) => {
   return `http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337${src}`;
 };
 function ProductDetail({ name, description, sku, variants }) {
-  console.log(variants)
+  console.log(variants);
 
-  let first = null
-  if (variants != null) {
-    first = variants[0]
-    console.log(first.attributes.ageRange)
-  }
-
+  // let first = null
+  // if (variants != null) {
+  //   first = variants[0]
+  //   console.log(first.attributes.ageRange)
+  // }
 
   const [quantity, setQuantity] = useState(1);
 
@@ -53,7 +52,7 @@ function ProductDetail({ name, description, sku, variants }) {
               priority={true}
               width="500"
               height="800"
-              src='/uploads/large_undefined_0cd8bc924a.png'
+              src="/uploads/large_undefined_0cd8bc924a.png"
               alt="tailwind logo"
               className="rounded-xl"
             />
@@ -62,9 +61,7 @@ function ProductDetail({ name, description, sku, variants }) {
           <div className="w-6/12 flex flex-col">
             <h2 className="flex justify-end">Ref {sku}</h2>
             <h1 className="mb-3">{name}</h1>
-            <p>
-              {description}
-            </p>
+            <p>{description}</p>
             <a onClick={() => handleClick()}>
               <button className="flex justify-start text-lightblue">
                 Leer mas
@@ -165,7 +162,7 @@ function ProductDetail({ name, description, sku, variants }) {
               priority={true}
               width="125"
               height="100"
-              src='/uploads/large_undefined_0cd8bc924a.png'
+              src="/uploads/large_undefined_0cd8bc924a.png"
               alt="tailwind logo"
               className="rounded-xl mx-2"
             />
@@ -174,7 +171,7 @@ function ProductDetail({ name, description, sku, variants }) {
               priority={true}
               width="125"
               height="100"
-              src='/uploads/large_undefined_0cd8bc924a.png'
+              src="/uploads/large_undefined_0cd8bc924a.png"
               alt="tailwind logo"
               className="rounded-xl mx-2"
             />
@@ -183,7 +180,7 @@ function ProductDetail({ name, description, sku, variants }) {
               priority={true}
               width="125"
               height="100"
-              src='/uploads/large_undefined_0cd8bc924a.png'
+              src="/uploads/large_undefined_0cd8bc924a.png"
               alt="tailwind logo"
               className="rounded-xl mx-2"
             />

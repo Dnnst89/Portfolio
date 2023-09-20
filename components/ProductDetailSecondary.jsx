@@ -1,6 +1,6 @@
 import ProductReview from "./ProductReview";
 
-const ProductDetailTable = ({ description, reviews }) => {
+const ProductDetailSecondary = ({ description, reviews }) => {
   return (
     <main className="bg-resene" id="detail-table">
       <section className="flex items-center m-5 gap-5 description-section pt-10">
@@ -18,8 +18,17 @@ const ProductDetailTable = ({ description, reviews }) => {
             </tr>
             {reviews
               ? reviews.map((item) => {
-                return <ProductReview comment={item.attributes.comment} score={item.attributes.score} user={item.attributes.users_permissions_user.data.attributes.username} />;
-              })
+                  return (
+                    <ProductReview
+                      comment={item.attributes.comment}
+                      score={item.attributes.score}
+                      user={
+                        item.attributes.users_permissions_user.data.attributes
+                          .username
+                      }
+                    />
+                  );
+                })
               : null}
           </tbody>
         </table>
