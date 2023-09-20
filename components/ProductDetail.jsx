@@ -14,22 +14,15 @@ const loader = ({ src }) => {
 const loaderImage = ({ src }) => {
   return `http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337${src}`;
 };
-function ProductDetail({
-  name,
-  description,
-  defaultPrice,
-  sku,
-  coverImage,
-  material,
-  variant,
-  category,
-}) {
-  const getRandomNumber = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
+function ProductDetail({ name, description, sku, variants }) {
+  console.log(variants)
 
-  const getRandomReviews = () => getRandomNumber(5, 100);
-  const getRandomStars = () => Math.random() + getRandomNumber(3, 4);
+  let first = null
+  if (variants != null) {
+    first = variants[0]
+    console.log(first.attributes.ageRange)
+  }
+
 
   const [quantity, setQuantity] = useState(1);
 
@@ -60,11 +53,7 @@ function ProductDetail({
               priority={true}
               width="500"
               height="800"
-              src={
-                coverImage
-                  ? coverImage.attributes.url
-                  : "/uploads/large_undefined_0cd8bc924a.png"
-              }
+              src='/uploads/large_undefined_0cd8bc924a.png'
               alt="tailwind logo"
               className="rounded-xl"
             />
@@ -73,7 +62,9 @@ function ProductDetail({
           <div className="w-6/12 flex flex-col">
             <h2 className="flex justify-end">Ref {sku}</h2>
             <h1 className="mb-3">{name}</h1>
-            <p>{description}</p>
+            <p>
+              {description}
+            </p>
             <a onClick={() => handleClick()}>
               <button className="flex justify-start text-lightblue">
                 Leer mas
@@ -93,7 +84,7 @@ function ProductDetail({
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
-                  <p>Tipo de material: {material}</p>
+                  <p>Tipo de material: </p>
                 </div>
 
                 <div className="flex mt-5 items-center">
@@ -106,7 +97,7 @@ function ProductDetail({
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
-                  <p>Color: {variant.color}</p>
+                  <p>Color: </p>
                 </div>
 
                 <div className="flex mt-5 items-center">
@@ -119,7 +110,7 @@ function ProductDetail({
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
-                  <p>Tamaño: {variant.size}</p>
+                  <p>Tamaño: </p>
                 </div>
               </div>
               {/* segunda caja */}
@@ -134,7 +125,7 @@ function ProductDetail({
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
-                  <p>Rango de edades: {variant.ageRange}</p>
+                  <p>Rango de edades: </p>
                 </div>
 
                 <div className="flex mt-5 items-center">
@@ -147,7 +138,7 @@ function ProductDetail({
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
-                  <p>Stock: {variant.stock}</p>
+                  <p>Stock: </p>
                 </div>
 
                 <div className="flex mt-5 items-center">
@@ -160,7 +151,7 @@ function ProductDetail({
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
-                  <p>Categorías: {category}</p>
+                  <p>Categorías: </p>
                 </div>
               </div>
             </div>
@@ -174,11 +165,7 @@ function ProductDetail({
               priority={true}
               width="125"
               height="100"
-              src={
-                coverImage
-                  ? coverImage.attributes.url
-                  : "/uploads/large_undefined_0cd8bc924a.png"
-              }
+              src='/uploads/large_undefined_0cd8bc924a.png'
               alt="tailwind logo"
               className="rounded-xl mx-2"
             />
@@ -187,11 +174,7 @@ function ProductDetail({
               priority={true}
               width="125"
               height="100"
-              src={
-                coverImage
-                  ? coverImage.attributes.url
-                  : "/uploads/large_undefined_0cd8bc924a.png"
-              }
+              src='/uploads/large_undefined_0cd8bc924a.png'
               alt="tailwind logo"
               className="rounded-xl mx-2"
             />
@@ -200,18 +183,14 @@ function ProductDetail({
               priority={true}
               width="125"
               height="100"
-              src={
-                coverImage
-                  ? coverImage.attributes.url
-                  : "/uploads/large_undefined_0cd8bc924a.png"
-              }
+              src='/uploads/large_undefined_0cd8bc924a.png'
               alt="tailwind logo"
               className="rounded-xl mx-2"
             />
           </div>
           {/* precio, cantidad y carrito */}
           <div className=" w-6/12 flex justify-between items-center p-4">
-            <span className="font-bold">₡ {defaultPrice}</span>
+            <span className="font-bold">₡ </span>
             <div className="flex flex-col items-end p-3">
               <div className="flex items-center mb-2 ">
                 <span className="text-grey">Cantidad:</span>
