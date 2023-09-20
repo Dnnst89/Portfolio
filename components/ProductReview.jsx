@@ -1,37 +1,20 @@
-const getData = (id) => {
-    try {
-        return fetch(
-            `http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337/api/reviews/${id}?populate=*`, {
-            next: {
-                revalidate: 60
-            }
-        })
-            .then(res => res.json())
 
-    } catch (error) {
-        console.log(error);
-    }
-}
+export default function ProductReview({ comment, score, user }) {
 
-
-export default async function ProductReview({ id }) {
-    const { data } = await getData(id);
-    const { attributes } = data
-    const { score, comment, users_permissions_user } = attributes;
     const stars = [];
     const noStars = [];
 
-    for (let i = 1; i <= attributes.score; i++) {
+    for (let i = 1; i <= score; i++) {
         stars.push(i);
     }
 
-    for (let i = attributes.score; i < 5; i++) {
+    for (let i = score; i < 5; i++) {
         noStars.push(i);
     }
 
     return (
         <tr className="border-b-[1px] border-grey flex gap-[200px]">
-            <td className="td-starts">{users_permissions_user.data.attributes.username}</td>
+            <td className="td-starts">{user}</td>
             <td>
                 <div className="flex items-center td-starts">
                     {

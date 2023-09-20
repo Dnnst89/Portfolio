@@ -20,7 +20,7 @@ const ProductDetailTable = ({ description, reviews }) => {
             </tr>
             {reviews
               ? reviews.map((item) => {
-                return <ProductReview id={item.id} />;
+                return <ProductReview comment={item.attributes.comment} score={item.attributes.score} user={item.attributes.users_permissions_user.data.attributes.username} />;
               })
               : null}
           </tbody>
