@@ -5,6 +5,7 @@ import CartDetail from "@/components/CartDetail";
 import CartProceedPayment from "@/components/CartProceedPayment";
 import CartContainer from "@/components/CartContainer";
 
+
 export default function CartView() {
   return (
     <div className="bg-floralwhite ">

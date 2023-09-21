@@ -15,6 +15,7 @@ import { Toaster, toast } from "react-hot-toast";
 import { setUser } from "@/redux/features/authSlice";
 import { updateShoppingSession } from '@/redux/features/cart-slice';
 import CREATE_SHOPPING_SESSION_MUTATION from "@/src/graphQl/queries/createShoppingSession";
+import useSession from "@/hooks/useSession";
 
 const initialValues = {
   email: "",
@@ -77,6 +78,7 @@ const RegisterFormTwo = () => {
       setLoading(false);
     }
   };
+  useSession();
 
   return (
     <div className=" flex h-screen justify-center items-center w-full ">

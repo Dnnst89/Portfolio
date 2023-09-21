@@ -12,12 +12,14 @@ mutation CreateShoppingSession( $publishedAt: DateTime!,$userId: ID!) {
       data{
         id
         attributes{
-          users_permissions_user{
-            data{
-              id
-              attributes{
-               username 
-              }
+            total
+            active
+            users_permissions_user{
+                data{
+                    id
+                attributes{
+                    username 
+                }
             }
           }
         }

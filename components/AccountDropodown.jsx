@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout } from "@/redux/features/authSlice";
 import useSession from "@/hooks/useSession";
 import Link from "next/link";
+import { updateShoppingSession } from "@/redux/features/cart-slice";
 
 const AccountDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,7 +32,9 @@ const AccountDropdown = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(updateShoppingSession(null))
     localStorage.removeItem("userData");
+    localStorage.removeItem("cartSession");
   };
   useSession();
   return (
