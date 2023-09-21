@@ -61,9 +61,9 @@ const LoginForm = () => {
     }
   };
   return (
-    <div className="h-screen">
+    <div className="h-screen ">
       <CheckOutHeader regresar={"/register/signemail"} />
-      <div className=" flex justify-center items-center ">
+      <div className=" flex justify-center items-center">
         <Toaster
           containerStyle={{
             top: 150,
@@ -84,7 +84,7 @@ const LoginForm = () => {
             },
           }}
         />
-        <div className="">
+        <div className="w-full">
           <Formik
             initialValues={{
               identifier: "",
@@ -95,16 +95,19 @@ const LoginForm = () => {
           >
             {({ errors, touched, values }) => {
               return (
-                <Form>
+                <Form className="flex flex-col items-center">
                   <h2
-                    className=" text-4xl flex justify-center
+                    className=" text-3xl flex justify-center
                                  items-center mt-20 mb-10 "
                   >
                     Iniciar sesión
                   </h2>
-                  <div className="bg-resene p-10">
-                    <div>
-                      <label>
+                  <div className="bg-resene p-10 px-[100px] w-6/12 flex flex-col items-center">
+                    <div className="w-3/6">
+                      <label
+                        className="text-lg whitespace-nowrap"
+                        htmlFor="identifier"
+                      >
                         Correo Electrónico
                         <span className="text-pink-200 ml-1">*</span>
                       </label>
@@ -113,14 +116,14 @@ const LoginForm = () => {
                         id="identifier"
                         name="identifier"
                         className="focus:border-blue-500 outline-none w-full px-6 py-2
-                     mb-2 border  rounded-lg border-none"
+                     mb-6 rounded-xl border-2 border-grey-200"
                       />
                       {errors.identifier && touched.identifier ? (
                         <ErrorForm>{errors.identifier}</ErrorForm>
                       ) : null}
                     </div>
-                    <div className="relative">
-                      <label>
+                    <div className="relative w-3/6">
+                      <label className="text-lg" htmlFor="password">
                         Contraseña
                         <span className="text-pink-200 ml-1">*</span>
                       </label>
@@ -129,7 +132,7 @@ const LoginForm = () => {
                         id="password"
                         name="password"
                         className="focus:border-blue-500 outline-none
-                     w-full px-6 py-2 mb-2 border  rounded-lg border-none"
+                     w-full px-6 py-2 mb-2 border-2 border-grey-200 flex rounded-xl "
                       />
                       {values.password.trim() === "" ? (
                         ""
@@ -137,24 +140,22 @@ const LoginForm = () => {
                         <button
                           type="button"
                           onClick={() => setPasswordVisible(!passwordVisible)}
-                          className="absolute right-2 top-1/3 cursor-pointer"
+                          className="absolute right-6 top-11 cursor-pointer"
                         >
                           {passwordVisible ? (
-                            <FaEye color="#ff7849" />
+                            <FaEye color="#FB82AF" />
                           ) : (
-                            <FaEyeSlash color="#ff7849" />
+                            <FaEyeSlash color="#FB82AF" />
                           )}
                         </button>
                       )}
                     </div>
-                    <p className="text-center mt-3 text-sm hover:underline cursor-pointer text-lightblue">
+                    <p className="text-center mt-3 text-sm hover:underline cursor-pointer text-lightblue mb-3">
                       <Link href="/login">Recuperar contraseña</Link>
                     </p>
                     <button
                       type="submit"
-                      className="bg-blue-500 hover:bg-blue-300 text-whitetext-base
-                                     rounded-lg py-2 px-5 transition-colors w-full text-[19px]
-                                      text-white bg-pink-200 disabled:opacity-50"
+                      className="rounded-lg py-2 px-5 flex justify-center mx-auto transition-colors w-1/3 text-lg text-white bg-pink-200 disabled:opacity-50 whitespace-nowrap"
                       disabled={
                         Object.keys(errors).length &&
                         Object.keys(touched).length

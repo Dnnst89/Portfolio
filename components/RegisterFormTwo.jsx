@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import Spinner from "./Spinner";
 import { Toaster, toast } from "react-hot-toast";
 import { setUser } from "@/redux/features/authSlice";
+import CheckOutHeader from "./CheckoutHeader";
 
 const initialValues = {
   email: "",
@@ -70,86 +71,133 @@ const RegisterFormTwo = () => {
   };
 
   return (
-    <div className=" flex h-screen justify-center items-center w-full ">
-      <div className="w-[300px]">
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-        >
-          {({ errors, touched }) => {
-            return (
-              <>
-                <Form>
-                  <h2 className="text-orange font-semibold flex justify-center items-center h-[50px] ">
-                    Verifica tu cuenta
-                  </h2>
+    <div className="h-screen">
+      <CheckOutHeader regresar={"/login"} />
+      <div className=" flex justify-center items-center w-full mt-20">
+        <div className="">
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            {({ errors, touched }) => {
+              return (
+                <>
+                  <Form className=" w-screen flex flex-col items-center">
+                    <h2 className=" text-3xl flex justify-center items-center mb-10">
+                      Registrate
+                    </h2>
 
-                  <div>
-                    <Field
-                      type="email"
-                      id="email"
-                      name="email"
-                      placeholder="Correo Electrónico"
-                      className="focus:border-blue-500 outline-none w-full px-6 py-2 mb-2 border  rounded-lg border-none"
-                      autoFocus={true}
-                    />
-                    {errors.email && touched.email ? (
-                      <ErrorForm>{errors.email}</ErrorForm>
-                    ) : null}
-                  </div>
-                  <div>
-                    <Field
-                      type="password"
-                      id="password"
-                      name="password"
-                      placeholder="Constraseña"
-                      className="focus:border-blue-500 outline-none w-full px-6 py-2 mb-2 border  rounded-lg border-none"
-                      autoFocus={true}
-                    />
-                    {errors.password && touched.password ? (
-                      <ErrorForm>{errors.password}</ErrorForm>
-                    ) : null}
-                  </div>
-                  <div>
-                    <Field
-                      type="password"
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      placeholder="Confirmar contraseña"
-                      className="focus:border-blue-500 outline-none w-full px-6 py-2 mb-2 border  rounded-lg border-none"
-                      autoFocus={true}
-                    />
-                    {errors.confirmPassword && touched.confirmPassword ? (
-                      <ErrorForm>{errors.confirmPassword}</ErrorForm>
-                    ) : null}
-                  </div>
-                  <button
-                    type="submit"
-                    className="bg-blue-500 hover:bg-blue-300 text-whitetext-base rounded-lg py-2 px-5 transition-colors w-full text-[19px] text-white bg-aquamarine disabled:opacity-50"
-                    disabled={
-                      (Object.keys(errors).length &&
-                        Object.keys(touched).length) ||
-                      loading
-                    }
-                  >
-                    {loading ? <Spinner /> : "Registrame"}
-                  </button>
-                </Form>
-                <Toaster
-                  toastOptions={{
-                    style: {
-                      backgroundColor: "#be123d",
-                      color: "#FFF",
-                      fontSize: "14px",
-                    },
-                  }}
-                />
-              </>
-            );
-          }}
-        </Formik>
-        <SocialMediaRegistry />
+                    <div className="bg-resene p-10 w-6/12 flex flex-col items-center">
+                      <div className="flex w-10/12 space-x-3">
+                        <section className=" p-3 w-3/6">
+                          <div className="flex flex-col mb-2">
+                            <label
+                              className="whitespace-nowrap"
+                              htmlFor="userName"
+                            >
+                              Nombre de usuario
+                              <span className="text-pink-200">*</span>
+                            </label>
+                            <Field
+                              type="text"
+                              id="userName"
+                              name="userName"
+                              className="focus:border-blue-500 outline-none px-6 py-2 mb-2 rounded-lg border-2 border-grey-200"
+                              autoFocus={true}
+                            />
+                            {errors.email && touched.email ? (
+                              <ErrorForm>{errors.email}</ErrorForm>
+                            ) : null}
+                          </div>
+                          <div className="flex flex-col">
+                            <label htmlFor="password">
+                              Constraseña
+                              <span className="text-pink-200">*</span>
+                            </label>
+                            <Field
+                              type="password"
+                              id="password"
+                              name="password"
+                              className="focus:border-blue-500 outline-none  px-6 py-2 mb-2 border-2 border-grey-200 rounded-lg "
+                              autoFocus={true}
+                            />
+                            {errors.password && touched.password ? (
+                              <ErrorForm>{errors.password}</ErrorForm>
+                            ) : null}
+                          </div>
+                        </section>
+                        <section className="p-3 w-3/6">
+                          <div className="flex flex-col mb-2">
+                            <label
+                              className="whitespace-nowrap"
+                              htmlFor="email"
+                            >
+                              Correo electrónico
+                              <span className="text-pink-200">*</span>
+                            </label>
+                            <Field
+                              type="email"
+                              id="email"
+                              name="email"
+                              className="focus:border-blue-500 outline-none px-6 py-2 mb-2 rounded-lg border-2 border-grey-200"
+                              autoFocus={true}
+                            />
+                            {errors.email && touched.email ? (
+                              <ErrorForm>{errors.email}</ErrorForm>
+                            ) : null}
+                          </div>
+                          <div className="flex flex-col">
+                            <label
+                              className="whitespace-nowrap w-[100px]"
+                              htmlFor="confirmPassword"
+                            >
+                              Confirmar contraseña
+                              <span className="text-pink-200">*</span>
+                            </label>
+                            <Field
+                              type="password"
+                              id="confirmPassword"
+                              name="confirmPassword"
+                              className="focus:border-blue-500 outline-none  px-6 py-2 mb-2 rounded-lg border-2 border-grey-200"
+                              autoFocus={true}
+                            />
+                            {errors.confirmPassword &&
+                            touched.confirmPassword ? (
+                              <ErrorForm>{errors.confirmPassword}</ErrorForm>
+                            ) : null}
+                          </div>
+                        </section>
+                      </div>
+
+                      <button
+                        type="submit"
+                        className="bg-blue-500 hover:bg-blue-300 text-whitetext-base rounded-lg py-2 px-5 transition-colors text-lg text-white bg-pink-200 disabled:opacity-50 flex justify-center mx-auto mt-5"
+                        disabled={
+                          (Object.keys(errors).length &&
+                            Object.keys(touched).length) ||
+                          loading
+                        }
+                      >
+                        {loading ? <Spinner /> : "Registrar"}
+                      </button>
+                    </div>
+                  </Form>
+                  <Toaster
+                    toastOptions={{
+                      style: {
+                        backgroundColor: "#be123d",
+                        color: "#FFF",
+                        fontSize: "14px",
+                      },
+                    }}
+                  />
+                </>
+              );
+            }}
+          </Formik>
+          {/* <SocialMediaRegistry /> */}
+        </div>
       </div>
     </div>
   );
