@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
-import Product from "../../../components/ProductCard";
-import productsData from "../../data/products.json";
+import ProductCard from "../../../components/ProductCard";
 import Pagination from "@/components/Pagination";
 const ProductContainer = ({
   result,
@@ -19,7 +18,7 @@ const ProductContainer = ({
         {hits
           ? hits.map((item) => {
             const coverImage = item.coverImage
-            return <Product key={item.id} id={item.id} name={item.name} defaultPrice={item.defaultPrice} coverImage={coverImage} brand={item.brand}/>;
+            return <ProductCard key={item.id} id={item.id} name={item.name} defaultPrice={item.defaultPrice} coverImage={coverImage} brand={item.brand} />;
           })
           : null}
       </div>
