@@ -11,11 +11,9 @@ const loaderImage = ({ src }) => {
 };
 function ProductDetail({ name, description, sku, variants, materials }) {
 
-  console.log(variants[0].attributes.images.data[0].attributes.url)
-
   const [quantity, setQuantity] = useState(1);
 
-  let images
+  let images = 0
   if (variants.length > 0) {
     images = variants[0].attributes.images.data
   }
@@ -42,8 +40,8 @@ function ProductDetail({ name, description, sku, variants, materials }) {
         <div className=" p-5 flex">
           {/* imagen principal grande */}
           <div className="w-6/12 flex justify-center">
-            {variants.length > 0
-              ? <ProductImage key={variants[0].attributes.images.data[0].id} url={variants[0].attributes.images.data[0].attributes.url} width={"500"} height={"800"} className={"rounded-xl mx-2"} />
+            {images.length > 0
+              ? <ProductImage key={variants[0].attributes.images.data[0].id} url={images[0].attributes.url} width={"500"} height={"800"} className={"rounded-xl mx-2"} />
               : null}
           </div>
           {/* parte derecha de la imagen principal grande*/}
@@ -72,9 +70,27 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
-                  {materials.length > 0
-                    ? <p>Tipo de material: {materials[0].attributes.name}</p>
-                    : null}
+                  <p>Tipo de material:
+                    {materials.length > 0
+                      ? materials[0].attributes.name
+                      : null}
+                  </p>
+                </div>
+                <div className="flex mt-5 items-center">
+                  <Image
+                    loader={loaderImage}
+                    priority={true}
+                    width="50"
+                    height="50"
+                    src="/uploads/Asset_4_2_f88170fa82.png"
+                    alt="tailwind logo"
+                    className="rounded-xl"
+                  />
+                  <p>Color:
+                    {variants.length > 0
+                      ? variants[0].attributes.color
+                      : null}
+                  </p>
                 </div>
 
                 <div className="flex mt-5 items-center">
@@ -87,24 +103,11 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
-                  {variants.length > 0
-                    ? <p>Color: {variants[0].attributes.color}</p>
-                    : null}
-                </div>
-
-                <div className="flex mt-5 items-center">
-                  <Image
-                    loader={loaderImage}
-                    priority={true}
-                    width="50"
-                    height="50"
-                    src="/uploads/Asset_4_2_f88170fa82.png"
-                    alt="tailwind logo"
-                    className="rounded-xl"
-                  />
-                  {variants.length > 0
-                    ? <p>Tamaño: {variants[0].attributes.size}</p>
-                    : null}
+                  <p>Tamaño:
+                    {variants.length > 0
+                      ? variants[0].attributes.size
+                      : null}
+                  </p>
                 </div>
               </div>
               {/* segunda caja */}
@@ -119,9 +122,11 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
-                  {variants.length > 0
-                    ? <p>Rango de edades: {variants[0].attributes.ageRange}</p>
-                    : null}
+                  <p>Rango de edades:
+                    {variants.length > 0
+                      ? variants[0].attributes.ageRange
+                      : null}
+                  </p>
                 </div>
 
                 <div className="flex mt-5 items-center">
@@ -134,9 +139,11 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
-                  {variants.length > 0
-                    ? <p>Stock: {variants[0].attributes.stock}</p>
-                    : null}
+                  <p>Stock:
+                    {variants.length > 0
+                      ? variants[0].attributes.stock
+                      : null}
+                  </p>
                 </div>
 
                 <div className="flex mt-5 items-center">
@@ -149,9 +156,11 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
-                  {variants.length > 0
-                    ? <p>Peso: {variants[0].attributes.weight.weight} {variants[0].attributes.weight.unitWeight}</p>
-                    : null}
+                  <p>Peso:
+                    {variants.length > 0 && variants[0].attributes.weight != null
+                      ? variants[0].attributes.weight.weight + variants[0].attributes.weight.unitWeight
+                      : null}
+                  </p>
                 </div>
               </div>
             </div>
