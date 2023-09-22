@@ -10,7 +10,7 @@ const algoliaInstace = axios.create({
 });
 
 const strapiInstance = axios.create({
-  baseURL: 'http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337',
+  baseURL: process.env.NEXT_PUBLIC_STRAPI_URL,
   timeout: 10000,
 });
 

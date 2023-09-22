@@ -11,6 +11,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "detinmarin",
   description: "DetinMarin",
+  
 };
 
 const poppins = Poppins({
@@ -21,9 +22,6 @@ const poppins = Poppins({
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
-        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
-      </head>
       <body className={`${poppins.className} bg-floralwhite`}>
         <ApolloProviders>
           <Providers>{children}</Providers>
