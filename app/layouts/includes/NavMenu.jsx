@@ -7,9 +7,33 @@ import AccountDropodown from "@/components/AccountDropodown";
 import Searchbar from "@/components/Search";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import useCartSession from "@/hooks/useCartSession";
+import { useEffect, useState } from "react";
+import useCartSummary from "@/hooks/useCartSummary";
 
 const NavMenu = () => {
-  const { cartItems } = useSelector(state => state.cart) //obtengo la cantidad de items que tengo en carrito
+
+  //const authUser = useSelector((state) => state.auth.user);
+  const [userId, setUserId] = useState()
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userData = JSON.parse(localStorage.getItem("userData"));
+        console.log(userData.user.id)
+        setUserId(userData.user.id)
+      } catch (error) {
+        console.error("Error al obtener datos del localStorage:", error);
+      }
+    };
+    fetchData();
+  }, [])
+
+  const info = useCartSummary(userId)
+  console.log(info)
+
+  //console.log(info)
   return (
     <header className="grid grid-cols-2 sm:grid-cols-6">
       <div className="flex justify-center items-center mt-[15px] order-1 col-span-1 sm:col-span-1  h-[60px]">
@@ -30,7 +54,12 @@ const NavMenu = () => {
         <Link href={"/cart"}>
           <div className="flex justify-center items-center ">
             <BsCart4 size={30} color="#67C3AD" />
-            <p className='bg-aquamarine rounded-full px-2 text-white'>{cartItems.length}</p>
+            {info ? <p className='bg-aquamarine rounded-full px-2 text-white'>{
+              info.quantity
+
+            }</p> :
+              <p className='bg-aquamarine rounded-full px-2 text-white'>0</p>}
+
           </div>
         </Link>
       </div>
