@@ -7,7 +7,7 @@ import CartQuantityBtn from './CartQuantityBtn';
 import DeleteCartItemBtn from './DeleteCartItemBtn';
 
 
-const CartItem = ({ cartItemId, idVariant, productName, brand, description, color, price, ageRange, size, weight, images, stockVariant, quantityCartItem }) => {
+const CartItem = ({ cartItemId, idVariant, productName, brand, description, color, price, totalPrice, ageRange, size, weight, images, stockVariant, quantityCartItem }) => {
     return (<>
         <div className="flex items-center py-1">
             <section className="w-2/4 ">
@@ -53,7 +53,8 @@ const CartItem = ({ cartItemId, idVariant, productName, brand, description, colo
                 <p className="text-gray-700">Weight: {weight.weight} {weight.unitWeight}</p>
             </div> */}
             <section className=" flex w-1/4 mx-2 items-center justify-center ">
-                <span>${price}</span>
+                <span className='mx-2'>Precio Unitario: ${price.toFixed(2)}</span>
+                <span className='mx-2'>Precio Total: ${totalPrice.toFixed(2)}</span>
                 {/* Botón para eliminar el producto del carrito */}
                 <DeleteCartItemBtn
                     idItem={cartItemId}
