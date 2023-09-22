@@ -17,7 +17,7 @@ const TopMenu = () => {
       </div>
 
       <div className="py-5 items-center order-3 sm:order-2 col-span-2 sm:col-span-4 h-[60px]">
-        {<Searchbar />}
+        {/* {<Searchbar />} */}
       </div>
       <div className="grid grid-cols-2 justify-center items-center  order-2 sm:order-3 col-span-1 sm:col-span-1">
         <div className="">
