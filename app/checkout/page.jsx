@@ -7,6 +7,7 @@ import CheckOutHeader from "@/components/CheckoutHeader";
 import { login } from "../../api/tilopay/login";
 export default function CheckOut() {
   const accessCredential = login();
+  console.log("from checkout ", accessCredential);
   /*
     -Login to make the call Tilopay and make the payment
   */
