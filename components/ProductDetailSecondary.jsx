@@ -18,8 +18,18 @@ const ProductDetailSecondary = ({ description, reviews }) => {
             </tr>
             {reviews
               ? reviews.map((item) => {
-                return <ProductReview key={item.id} comment={item.attributes.comment} score={item.attributes.score} user={item.attributes.users_permissions_user.data.attributes.username} />;
-              })
+                  return (
+                    <ProductReview
+                      key={item.id}
+                      comment={item.attributes.comment}
+                      score={item.attributes.score}
+                      user={
+                        item.attributes.users_permissions_user.data.attributes
+                          .username
+                      }
+                    />
+                  );
+                })
               : null}
           </tbody>
         </table>
