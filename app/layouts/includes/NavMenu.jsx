@@ -20,7 +20,7 @@ const NavMenu = () => {
         const userData = JSON.parse(localStorage.getItem("userData"));
         setUserId(userData.user.id)
       } catch (error) {
-        console.error("Error al obtener datos del localStorage:", error);
+        setUserId(null)
       }
     };
     fetchData();
