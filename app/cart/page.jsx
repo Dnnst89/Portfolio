@@ -14,12 +14,12 @@ export default function CartView() {
       </div>
 
       <main className="flex p-5">
-        <CartContainer/>
+        <CartContainer />
 
         <div className=" bg-resene rounded-sm w-1/4 p-4 h-[500px]">
-          
-            <CartDetail />
-          
+
+          <CartDetail />
+
 
           <CartProceedPayment />
         </div>

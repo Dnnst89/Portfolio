@@ -4,6 +4,7 @@ import { algoliaInstace } from "@/src/axios/algoliaIntance/config";
 import React, { useEffect, useState } from "react";
 
 const ResultsComponent = ({ query }) => {
+
   const [result, setResult] = useState([]);
   const [hitsPerPage, setHitsPerPage] = useState(null);
   const [nbHits, setNbHits] = useState(null);

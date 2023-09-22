@@ -16,7 +16,7 @@ export default function ShoppingCart() {
   };
 
   return (
-    <div className="flex items-center py-1">
+    <div className="flex items-center py-1  border-b-2 border-dashed border-grey-200">
       <section className="w-2/4 ">
         <div className="flex items-center">
           <Image
@@ -34,11 +34,11 @@ export default function ShoppingCart() {
         <div className="flex items-center mb-2 ">
           <span className="text-grey">Cantidad:</span>
           <div className="bg-resene rounded-full m-3 w-[120px] flex items-center justify-center p-2 space-x-4">
-            <button className=" bg-grey rounded-full text-white">
+            <button className=" bg-grey-100 rounded-full text-white">
               <BiMinus onClick={decreaseCounter} />
             </button>
             <span>{quantity}</span>
-            <button className=" bg-grey rounded-full  text-white">
+            <button className=" bg-grey-100 rounded-full  text-white">
               <BiPlus onClick={increaseCounter} />
             </button>
           </div>

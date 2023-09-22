@@ -5,9 +5,9 @@ export default function CartProceedPayment() {
     <div className="flex flex-col p-4 space-y-3">
       <div className="flex justify-between ">
         <p>Entrega Estimada:</p>
-        <p className="text-grey">DD/MM/AA</p>
+        <p className="text-grey-100">DD/MM/AA</p>
       </div>
-      <p className="flex justify-center text-sm text-grey whitespace-nowrap">
+      <p className="flex justify-center text-sm text-grey-100 whitespace-nowrap">
         *Detalle acerca de la fecha de entrega*
       </p>
 

@@ -17,7 +17,11 @@ const ProductCard = ({ id, name, defaultPrice, coverImage, brand }) => {
               priority={true}
               width="600"
               height="500"
-              src={coverImage ? coverImage.url : '/uploads/large_undefined_0cd8bc924a.png'}
+              src={
+                coverImage
+                  ? coverImage.url
+                  : "/uploads/large_undefined_0cd8bc924a.png"
+              }
               alt="tailwind logo"
               className="rounded-[15px]"
             />
@@ -25,14 +29,12 @@ const ProductCard = ({ id, name, defaultPrice, coverImage, brand }) => {
         </div>
 
         <div className="px-5 pb-5">
-
           <h5
             className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white"
             dangerouslySetInnerHTML={{
               __html: name,
             }}
           ></h5>
-
 
           <div className="pt-3 rounded-lg">
             <h2 className="flex justify-end p-3 relative">
@@ -43,8 +45,10 @@ const ProductCard = ({ id, name, defaultPrice, coverImage, brand }) => {
           </div>
         </div>
 
-        <div className="bg-aquamarine w-100 h-[15.6%] text-lg rounded-b-[15px] font-bold flex justify-center">
-          <button className="hover:underline text-white">₡ {defaultPrice}</button>
+        <div className="bg-aquamarine w-100 h-[15.6%] text-lg rounded-b-[15px] font-bold flex justify-center absolute bottom-0 left-0 right-0">
+          <button className="hover:underline text-white">
+            ₡ {defaultPrice}
+          </button>
         </div>
       </div>
     </Link>
