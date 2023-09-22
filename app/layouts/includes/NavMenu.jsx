@@ -12,21 +12,21 @@ import { useEffect, useState } from "react";
 import useCartSummary from "@/hooks/useCartSummary";
 
 const NavMenu = () => {
-  const [userId, setUserId] = useState()
+  const [userId, setUserId] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const userData = JSON.parse(localStorage.getItem("userData"));
-        setUserId(userData.user.id)
+        setUserId(userData.user.id);
       } catch (error) {
         setUserId(null)
       }
     };
     fetchData();
-  }, [])
+  }, []);
 
-  const info = useCartSummary({ userId })
+  const info = useCartSummary({ userId });
 
   return (
     <header className="grid grid-cols-2 sm:grid-cols-6">
@@ -45,15 +45,16 @@ const NavMenu = () => {
             <AccountDropodown />
           </span>
         </div>
-        <Link href={"/cart"}>
+        <Link href={userId ? "/cart" : "/"}>
           <div className="flex justify-center items-center ">
             <BsCart4 size={30} color="#67C3AD" />
-            {info ? <p className='bg-aquamarine rounded-full px-2 text-white'>{
-              info.quantity
-
-            }</p> :
-              <p className='bg-aquamarine rounded-full px-2 text-white'>0</p>}
-
+            {info ? (
+              <p className="bg-aquamarine rounded-full px-2 text-white">
+                {info.quantity}
+              </p>
+            ) : (
+              <p className="bg-aquamarine rounded-full px-2 text-white">0</p>
+            )}
           </div>
         </Link>
       </div>
