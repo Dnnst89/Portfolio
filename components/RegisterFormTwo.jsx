@@ -14,6 +14,9 @@ import Spinner from "./Spinner";
 import { Toaster, toast } from "react-hot-toast";
 import { setUser } from "@/redux/features/authSlice";
 import CheckOutHeader from "./CheckoutHeader";
+import { updateShoppingSession } from '@/redux/features/cart-slice';
+import CREATE_SHOPPING_SESSION_MUTATION from "@/src/graphQl/queries/createShoppingSession";
+import useSession from "@/hooks/useSession";
 
 const initialValues = {
   email: "",
@@ -44,6 +47,7 @@ const RegisterFormTwo = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [createUser] = useMutation(RegisterUser);
+  const [createShoppingSession] = useMutation(CREATE_SHOPPING_SESSION_MUTATION)
   const handleSubmit = async (values) => {
     const dataValues = Object.keys(values).map((el) => {
       return values[el];
@@ -54,13 +58,19 @@ const RegisterFormTwo = () => {
     const { email, password } = values;
 
     try {
+      const fechaActual = new Date();
+      const fechaFormateada = fechaActual.toISOString();
       setLoading(true);
       const { data } = await createUser({
         variables: { username, email, password },
-      });
+      })
       router.push("/");
       createElement("userData", JSON.stringify(data.register));
       dispatch(setUser(data.register.user));
+      const { data: dataSession } = await createShoppingSession({ //query para crear la session al user
+        variables: { publishedAt: fechaFormateada, userId: data.register.user.id },
+      });
+      dispatch(updateShoppingSession(dataSession.createShoppingSession.data)); //ACTUALIZO LA SESSION CON LOS DATOS OBTENIDOS
     } catch (error) {
       toast.error(
         "No se pudo registrar tu cuenta, por favor intentalo más tarde"
@@ -69,6 +79,7 @@ const RegisterFormTwo = () => {
       setLoading(false);
     }
   };
+  useSession();
 
   return (
     <div className="h-screen">
@@ -163,7 +174,7 @@ const RegisterFormTwo = () => {
                               autoFocus={true}
                             />
                             {errors.confirmPassword &&
-                            touched.confirmPassword ? (
+                              touched.confirmPassword ? (
                               <ErrorForm>{errors.confirmPassword}</ErrorForm>
                             ) : null}
                           </div>

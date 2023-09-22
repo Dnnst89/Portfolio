@@ -2,8 +2,8 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import SocialMediaRegistry from "./SocialMediaRegistry";
 import { LOGIN_MUTATION } from "@/src/graphQl/queries/LoginSession";
-import { useMutation } from "@apollo/client";
-import { useState } from "react";
+import { useMutation, useQuery } from "@apollo/client";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { setUser } from "@/redux/features/authSlice";
@@ -12,6 +12,11 @@ import toast, { Toaster } from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import CheckOutHeader from "./CheckoutHeader";
 import Link from "next/link";
+import GET_SHOPPING_SESSION_BY_USER from "@/src/graphQl/queries/getShoppingSessionByUser";
+import { updateShoppingSession } from "@/redux/features/cart-slice";
+import client from "../src/graphQl/config"; //se utiliza para poder usar usequery en funciones
+import GET_CART_ITEMS_LIST_SHOPPING_SESSION from "@/src/graphQl/queries/getCartItemsByShoppingSession";
+
 const SignupSchema = Yup.object().shape({
   identifier: Yup.string().required("Este campo es requerido"),
   password: Yup.string().required("Este campo es requerido"),
@@ -22,8 +27,40 @@ const LoginForm = () => {
   const authUser = useSelector((state) => state.auth.user);
   const router = useRouter();
   const [loginMutation, { data: loginData }] = useMutation(LOGIN_MUTATION);
-  const [loading, setLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false); // State to track password visibility
+
+  // const getCartSession = async (userId) => {//me trae la session del usuario
+  //   try {
+
+  //     const { data } = await client.query({ //llamo la query para traer la shopping session
+  //       query: GET_SHOPPING_SESSION_BY_USER,
+  //       variables: { userId },
+  //     });
+
+  //     if (data) { // Si existe la sesión
+  //       const shoppingSession = data.shoppingSessions.data[0]; 
+  //       const { data: cartItemsData } = await client.query({ //llamo la query para cartitems de la session
+  //         query: GET_CART_ITEMS_LIST_SHOPPING_SESSION,
+  //         variables: { shoppingSessionId: shoppingSession.id },
+  //       });
+  //       const cartItems = cartItemsData.cartItems;
+  //       // Obtener el objeto cartSession del localStorage (si existe)
+  //       const existingCartSession = localStorage.getItem('cartSession');
+  //       const parsedCartSession = existingCartSession ? JSON.parse(existingCartSession) : {};
+
+  //       // Agregar tanto shoppingSession como cartItems al objeto cartSession
+  //       parsedCartSession.shoppingSession = shoppingSession;
+  //       parsedCartSession.cartItems = cartItems;
+
+  //       // Almacenar el objeto cartSession en el localStorage
+  //       localStorage.setItem('cartSession', JSON.stringify(parsedCartSession));
+  //     }
+  //   }
+  //   catch (error) {
+  //     //Manejo de errores
+  //     toast.error(`Ha sucedido un error: `+ error);
+  //   }
+  // };
 
   const submitLogin = async (values, { resetForm }) => {
     // validate if form values is empty
@@ -33,7 +70,6 @@ const LoginForm = () => {
     if (dataValues.some((el) => !el)) {
       return;
     }
-    //const {identifier, password} = values;
 
     try {
       const response = await loginMutation({
@@ -50,6 +86,8 @@ const LoginForm = () => {
           "userData",
           JSON.stringify({ user, isAuthenticated: true })
         );
+        //await getCartSession(user.id);//obtengo la sesion de compra
+
         toast.success("Ingreso exitoso!😍");
         router.push("/");
       }

@@ -3,8 +3,6 @@ import ShoppingCart from "@/components/ShoppingCart";
 import ProductCard from "@/components/ProductCard";
 import CartDetail from "@/components/CartDetail";
 import CartProceedPayment from "@/components/CartProceedPayment";
-import CartContainer from "@/components/CartContainer";
-
 
 export default function CartView() {
   return (
@@ -14,17 +12,21 @@ export default function CartView() {
       </div>
 
       <main className="flex p-5">
-        <CartContainer />
+        <div className="flex flex-col w-3/4">
+          <ShoppingCart />
+          <ShoppingCart />
+          <ShoppingCart />
+          <ShoppingCart />
+        </div>
 
         <div className=" bg-resene rounded-sm w-1/4 p-4 h-[500px]">
-
-          <CartDetail />
-
+          
+            <CartDetail />
+          
 
           <CartProceedPayment />
         </div>
       </main>
-      {/* ///////////LOS SIGUIENTES DATOS ESTAN QUEMADOS */}
       <div>
         <h1 className="flex justify-center text-xl">
           Descubre nuestros productos estrella
