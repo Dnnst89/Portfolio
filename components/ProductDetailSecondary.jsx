@@ -1,6 +1,7 @@
 import ProductReview from "./ProductReview";
+import ProductReviewForm from "./ProductReviewForm";
 
-const ProductDetailSecondary = ({ description, reviews }) => {
+const ProductDetailSecondary = ({ id, description, reviews }) => {
   return (
     <main className="bg-resene" id="detail-table">
       <section className="flex items-center m-5 gap-5 description-section pt-10">
@@ -34,6 +35,7 @@ const ProductDetailSecondary = ({ description, reviews }) => {
           </tbody>
         </table>
       </section>
+      <ProductReviewForm idProduct={id} />
     </main>
   );
 };
