@@ -46,7 +46,7 @@ export default function CheckOutForm1() {
               <p className="mr-4 whitespace-nowrap">Factura Electrónica</p>
               <label className="switch">
                 <input type="checkbox" />
-                <span class="slider round"></span>
+                <span className="slider round"></span>
               </label>
             </section>
             <section className="w-1/4 flex p-2"></section>
