@@ -1,9 +1,16 @@
 import client from '@/src/graphQl/config';
 import GET_CART_ITEMS_LIST_SHOPPING_SESSION from '@/src/graphQl/queries/getCartItemsByShoppingSession';
 import GET_SHOPPING_SESSION_BY_USER from '@/src/graphQl/queries/getShoppingSessionByUser';
+import { useLazyQuery, useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react'
 
-
+// se ocupa ingresar el id del usuario para poder obtener la session y sus respectivos items del carrito, 
+//calculos de totales y cantidades de productos, retorna un obj con las props
+//  {
+//         total: number
+//         items: array,
+//         quantity: number,
+//     }
 const useCartSummary = ({ userId }) => {
 
 
@@ -13,58 +20,56 @@ const useCartSummary = ({ userId }) => {
         quantity: 0,
     })
     const [error, setError] = useState(false)
-
+    const [getSession] = useLazyQuery(GET_SHOPPING_SESSION_BY_USER)
 
     useEffect(() => {
-        getCartSession()
+        const getCartSession = async () => {//me trae la session del usuario
+            try {
+
+
+                const { data } = await getSession({ //llamo la query para traer la shopping session
+
+                    variables: { userId },
+                });
+
+
+                if (data) { // Si existe la sesión
+                    const shoppingSession = data.shoppingSessions.data[0];
+                    const { data: cartItemsData } = await client.query({ //llamo la query para cartitems de la session
+                        query: GET_CART_ITEMS_LIST_SHOPPING_SESSION,
+                        variables: { shoppingSessionId: shoppingSession.id },
+                    });
+                    const cartItems = cartItemsData.cartItems;
+
+                    setCartData(prev => ({
+                        ...prev,
+                        total: cartItems.data.reduce((accumulator, item) => {
+                            return accumulator + item.attributes.variant.data.attributes.price * item.attributes.quantity
+                        }, 0),
+                        quantity: cartItems.data.reduce((accumulator, item) => {
+                            return accumulator + item.attributes.quantity
+                        }, 0),
+                        items: cartItems.data.map(item => {
+                            return {
+                                totalItemPrice: item.attributes.variant.data.attributes.price * item.attributes.quantity,
+                                quantity: item.attributes.quantity,
+                                ...item
+                            }
+                        })
+                    }))
+
+                }
+            }
+            catch (error) {
+                //Manejo de errores
+                console.log(error)
+                setError(true)
+            }
+        }
+        if (userId) { getCartSession() }
         //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userId])
 
-
-    if (userId) return null //si no recibe un usuario retorna null
-
-    const getCartSession = async () => {//me trae la session del usuario
-        try {
-
-
-            const { data } = await client.query({ //llamo la query para traer la shopping session
-                query: GET_SHOPPING_SESSION_BY_USER,
-                variables: { userId },
-            });
-            console.log(userId)
-            console.log(data)
-            if (data) { // Si existe la sesión
-                const shoppingSession = data.shoppingSessions.data[0];
-                const { data: cartItemsData } = await client.query({ //llamo la query para cartitems de la session
-                    query: GET_CART_ITEMS_LIST_SHOPPING_SESSION,
-                    variables: { shoppingSessionId: shoppingSession.id },
-                });
-                const cartItems = cartItemsData.cartItems;
-
-                setCartData(prev => ({
-                    ...prev,
-                    total: cartItems.reduce((accumulator, item) => {
-                        return accumulator + item.attributes.variant.data.attributes.price * item.attributes.quantity
-                    }, 0),
-                    quantity: cartItems.reduce((accumulator, item) => {
-                        return accumulator + item.attributes.quantity
-                    }, 0),
-                    items: cartItems.data.map(item => {
-                        return {
-                            totalItemPrice: item.attributes.variant.data.attributes.price * item.attributes.quantity,
-                            quantity: item.attributes.quantity,
-                            ...item
-                        }
-                    })
-                }))
-
-            }
-        }
-        catch (error) {
-            //Manejo de errores
-            setError(true)
-        }
-    }
 
     return {
         total: cartData.total,

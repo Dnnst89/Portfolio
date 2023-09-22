@@ -12,16 +12,12 @@ import { useEffect, useState } from "react";
 import useCartSummary from "@/hooks/useCartSummary";
 
 const NavMenu = () => {
-
-  //const authUser = useSelector((state) => state.auth.user);
   const [userId, setUserId] = useState()
-
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const userData = JSON.parse(localStorage.getItem("userData"));
-        console.log(userData.user.id)
         setUserId(userData.user.id)
       } catch (error) {
         console.error("Error al obtener datos del localStorage:", error);
@@ -30,10 +26,8 @@ const NavMenu = () => {
     fetchData();
   }, [])
 
-  const info = useCartSummary(userId)
-  console.log(info)
+  const info = useCartSummary({ userId })
 
-  //console.log(info)
   return (
     <header className="grid grid-cols-2 sm:grid-cols-6">
       <div className="flex justify-center items-center mt-[15px] order-1 col-span-1 sm:col-span-1  h-[60px]">
