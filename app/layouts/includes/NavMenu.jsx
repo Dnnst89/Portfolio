@@ -6,8 +6,28 @@ import Image from "next/image";
 import AccountDropodown from "@/components/AccountDropodown";
 import Searchbar from "@/components/Search";
 import Link from "next/link";
+import { useSelector } from "react-redux";
+import useCartSession from "@/hooks/useCartSession";
+import { useEffect, useState } from "react";
+import useCartSummary from "@/hooks/useCartSummary";
 
-const TopMenu = () => {
+const NavMenu = () => {
+  const [userId, setUserId] = useState()
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userData = JSON.parse(localStorage.getItem("userData"));
+        setUserId(userData.user.id)
+      } catch (error) {
+        console.error("Error al obtener datos del localStorage:", error);
+      }
+    };
+    fetchData();
+  }, [])
+
+  const info = useCartSummary({ userId })
+
   return (
     <header className="grid grid-cols-2 sm:grid-cols-6">
       <div className="flex justify-center items-center mt-[15px] order-1 col-span-1 sm:col-span-1  h-[60px]">
@@ -17,7 +37,7 @@ const TopMenu = () => {
       </div>
 
       <div className="py-5 items-center order-3 sm:order-2 col-span-2 sm:col-span-4 h-[60px]">
-        {<Searchbar />}
+        {/* {<Searchbar />} */}
       </div>
       <div className="grid grid-cols-2 justify-center items-center  order-2 sm:order-3 col-span-1 sm:col-span-1">
         <div className="">
@@ -25,12 +45,20 @@ const TopMenu = () => {
             <AccountDropodown />
           </span>
         </div>
-        <div className="flex justify-center items-center">
-          <BsCart4 size={40} color="#67C3AD" />
-        </div>
+        <Link href={"/cart"}>
+          <div className="flex justify-center items-center ">
+            <BsCart4 size={30} color="#67C3AD" />
+            {info ? <p className='bg-aquamarine rounded-full px-2 text-white'>{
+              info.quantity
+
+            }</p> :
+              <p className='bg-aquamarine rounded-full px-2 text-white'>0</p>}
+
+          </div>
+        </Link>
       </div>
     </header>
   );
 };
 
-export default TopMenu;
+export default NavMenu;
