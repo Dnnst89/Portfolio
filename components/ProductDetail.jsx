@@ -15,7 +15,7 @@ function ProductDetail({ name, description, sku, variants, materials }) {
 
   let images = 0
   if (variants.length > 0) {
-    images = variants[0].attributes.images.data;
+    images = variants[0].attributes.images.data
   }
 
   const decreaseCounter = () => {
@@ -48,7 +48,9 @@ function ProductDetail({ name, description, sku, variants, materials }) {
           <div className="w-6/12 flex flex-col">
             <h2 className="flex justify-end">Ref {sku}</h2>
             <h1 className="mb-3">{name}</h1>
-            <p>{description}</p>
+            <p>
+              {description}
+            </p>
             <a onClick={() => handleClick()}>
               <button className="flex justify-start text-lightblue">
                 Leer mas
@@ -68,9 +70,27 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
-                  {materials.length > 0 ? (
-                    <p>Tipo de material: {materials[0].attributes.name}</p>
-                  ) : null}
+                  <p>Tipo de material:
+                    {materials.length > 0
+                      ? materials[0].attributes.name
+                      : null}
+                  </p>
+                </div>
+                <div className="flex mt-5 items-center">
+                  <Image
+                    loader={loaderImage}
+                    priority={true}
+                    width="50"
+                    height="50"
+                    src="/uploads/Asset_4_2_f88170fa82.png"
+                    alt="tailwind logo"
+                    className="rounded-xl"
+                  />
+                  <p>Color:
+                    {variants.length > 0
+                      ? variants[0].attributes.color
+                      : null}
+                  </p>
                 </div>
 
                 <div className="flex mt-5 items-center">
@@ -151,22 +171,15 @@ function ProductDetail({ name, description, sku, variants, materials }) {
           <div className="flex h-32  w-6/12 justify-center">
             {images
               ? images.map((item) => {
-                return (
-                  <ProductImage
-                    key={item.id}
-                    url={item.attributes.url}
-                    width={"125"}
-                    height={"100"}
-                    className={"rounded-xl mx-2"}
-                  />
-                );
+                return <ProductImage key={item.id} url={item.attributes.url} width={"125"} height={"100"} className={"rounded-xl mx-2"} />;
               })
               : null}
           </div>
           {/* precio, cantidad y carrito */}
           <div className=" w-6/12 flex justify-between items-center p-4">
-            <span className="font-bold">
-              ₡ {variants.length > 0 ? variants[0].attributes.price : null}
+            <span className="font-bold">₡  {variants.length > 0
+              ? variants[0].attributes.price
+              : null}
             </span>
             <div className="flex flex-col items-end p-3">
               <div className="flex items-center mb-2 ">
