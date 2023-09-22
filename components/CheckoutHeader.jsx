@@ -16,7 +16,7 @@ export default function CheckOutHeader({ regresar }) {
             </button>
           </Link>
         </div>
-        <div className=" w-10/12 flex justify-center p-2">
+        <div className=" w-10/12 flex justify-center p-2 relative left-8">
           <Image
             src={logo}
             alt=""

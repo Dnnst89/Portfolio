@@ -83,12 +83,12 @@ const RegisterFormTwo = () => {
             {({ errors, touched }) => {
               return (
                 <>
-                  <Form className=" w-screen flex flex-col items-center">
+                  <Form className=" w-screen flex flex-col items-center mt-20">
                     <h2 className=" text-3xl flex justify-center items-center mb-10">
                       Registrate
                     </h2>
 
-                    <div className="bg-resene p-10 w-6/12 flex flex-col items-center">
+                    <div className="bg-resene p-10 w-6/12 flex flex-col items-center ">
                       <div className="flex w-10/12 space-x-3">
                         <section className=" p-3 w-3/6">
                           <div className="flex flex-col mb-2">
