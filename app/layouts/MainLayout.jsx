@@ -21,7 +21,7 @@ const MainLayout = ({ children }) => {
           <h1 className="text-lg">Top de productos</h1>
         </div>
         <div className="flex  justify-center pt-10">
-<FeaturedProducts/>
+          <FeaturedProducts />
         </div>
         <div className="flex justify-center mt-10 text-lg">
           <h1>Ideas de regalo para todas las edades</h1>

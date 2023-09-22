@@ -23,6 +23,7 @@ query GetProducts($id: ID){
               attributes{
                 size,
                 color,
+                price,
                 weight{
                   id,
                   unitWeight,
