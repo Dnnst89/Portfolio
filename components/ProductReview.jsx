@@ -33,7 +33,8 @@ export default function ProductReview({ comment, score, user }) {
                     {
                         noStars.map(star => (
                             <svg key={star}
-                                className="w-4 h-4 text-gray-300 mr-1 dark:text-gray-500"
+                                className="w-4 h-4 mr-1 dark:text-gray-500"
+                                color="#ABABAB"
                                 aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="currentColor"
