@@ -15,12 +15,10 @@ const loaderImage = ({ src }) => {
   return `http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337${src}`;
 };
 function ProductDetail({ name, description, sku, variants, materials }) {
-
   const [quantity, setQuantity] = useState(1);
-
-  let images = 0
+  let images = 0;
   if (variants.length > 0) {
-    images = variants[0].attributes.images.data
+    images = variants[0].attributes.images.data;
   }
 
   const decreaseCounter = () => {
@@ -45,17 +43,21 @@ function ProductDetail({ name, description, sku, variants, materials }) {
         <div className=" p-5 flex">
           {/* imagen principal grande */}
           <div className="w-6/12 flex justify-center">
-            {images.length > 0
-              ? <ProductImage key={variants[0].attributes.images.data[0].id} url={images[0].attributes.url} width={"500"} height={"800"} className={"rounded-xl mx-2"} />
-              : null}
+            {images.length > 0 ? (
+              <ProductImage
+                key={variants[0].attributes.images.data[0].id}
+                url={images[0].attributes.url}
+                width={"500"}
+                height={"800"}
+                className={"rounded-xl mx-2"}
+              />
+            ) : null}
           </div>
           {/* parte derecha de la imagen principal grande*/}
           <div className="w-6/12 flex flex-col">
             <h2 className="flex justify-end">Ref {sku}</h2>
             <h1 className="mb-3">{name}</h1>
-            <p>
-              {description}
-            </p>
+            <p>{description}</p>
             <a onClick={() => handleClick()}>
               <button className="flex justify-start text-lightblue">
                 Leer mas
@@ -75,10 +77,9 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
-                  <p>Tipo de material:
-                    {materials.length > 0
-                      ? materials[0].attributes.name
-                      : null}
+                  <p>
+                    Tipo de material:
+                    {materials.length > 0 ? materials[0].attributes.name : null}
                   </p>
                 </div>
                 <div className="flex mt-5 items-center">
@@ -91,10 +92,9 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
-                  <p>Color:
-                    {variants.length > 0
-                      ? variants[0].attributes.color
-                      : null}
+                  <p>
+                    Color:
+                    {variants.length > 0 ? variants[0].attributes.color : null}
                   </p>
                 </div>
 
@@ -108,10 +108,9 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
-                  <p>Tamaño:
-                    {variants.length > 0
-                      ? variants[0].attributes.size
-                      : null}
+                  <p>
+                    Tamaño:
+                    {variants.length > 0 ? variants[0].attributes.size : null}
                   </p>
                 </div>
               </div>
@@ -127,7 +126,8 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
-                  <p>Rango de edades:
+                  <p>
+                    Rango de edades:
                     {variants.length > 0
                       ? variants[0].attributes.ageRange
                       : null}
@@ -144,10 +144,9 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
-                  <p>Stock:
-                    {variants.length > 0
-                      ? variants[0].attributes.stock
-                      : null}
+                  <p>
+                    Stock:
+                    {variants.length > 0 ? variants[0].attributes.stock : null}
                   </p>
                 </div>
 
@@ -161,9 +160,12 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                     alt="tailwind logo"
                     className="rounded-xl"
                   />
-                  <p>Peso:
-                    {variants.length > 0 && variants[0].attributes.weight != null
-                      ? variants[0].attributes.weight.weight + variants[0].attributes.weight.unitWeight
+                  <p>
+                    Peso:
+                    {variants.length > 0 &&
+                    variants[0].attributes.weight != null
+                      ? variants[0].attributes.weight.weight +
+                        variants[0].attributes.weight.unitWeight
                       : null}
                   </p>
                 </div>
@@ -176,15 +178,22 @@ function ProductDetail({ name, description, sku, variants, materials }) {
           <div className="flex h-32  w-6/12 justify-center">
             {images
               ? images.map((item) => {
-                return <ProductImage key={item.id} url={item.attributes.url} width={"125"} height={"100"} className={"rounded-xl mx-2"} />;
-              })
+                  return (
+                    <ProductImage
+                      key={item.id}
+                      url={item.attributes.url}
+                      width={"125"}
+                      height={"100"}
+                      className={"rounded-xl mx-2"}
+                    />
+                  );
+                })
               : null}
           </div>
           {/* precio, cantidad y carrito */}
           <div className=" w-6/12 flex justify-between items-center p-4">
-            <span className="font-bold">₡  {variants.length > 0
-              ? variants[0].attributes.price
-              : null}
+            <span className="font-bold">
+              ₡ {variants.length > 0 ? variants[0].attributes.price : null}
             </span>
             <div className="flex flex-col items-end p-3">
               <div className="flex items-center mb-2 ">
@@ -200,7 +209,10 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                 </div>
               </div>
               <div className="bg-aquamarine rounded-sm p-3  mx-4">
-                <AddCartItemBtn quantity={quantity} idVariant={variantId} />
+                <AddCartItemBtn
+                  quantity={quantity}
+                  idVariant={variants[0]?.id}
+                />
               </div>
             </div>
           </div>
