@@ -37,7 +37,8 @@ function ProductDetail({ name, description, sku, variants, materials }) {
     // Scroll to the element
     element.scrollIntoView({ behavior: "smooth" });
   };
-  const shortDescrption = description.split(",")[0];
+  const shortDescrption = description.split(" ").splice(0, 20).join(" ");
+  console.log(shortDescrption);
 
   return (
     <>
@@ -61,7 +62,7 @@ function ProductDetail({ name, description, sku, variants, materials }) {
             <h1 className="mb-3 text-xl">{name}</h1>
             <p>{shortDescrption}...</p>
             <a onClick={() => handleClick()}>
-              <button className="flex justify-start text-lightblue mb-3">
+              <button className="flex justify-start text-lightblue mb-3 bg-blue-500 transition duration-200 ease-in-out opacity-60 hover:opacity-100">
                 Leer mas
               </button>
             </a>

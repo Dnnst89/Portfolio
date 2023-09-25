@@ -1,8 +1,4 @@
 /* productProductDetail styles */
-.star-rating {
-  display: flex;
-  align-items: center;
-}
 
 .description-section {
   display: flex;
@@ -10,26 +6,9 @@
   width: 690px;
 }
 
-.mi-tabla {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.mi-tabla td {
-  padding: 80px;
-  border: 1px solid #ccc;
-  width: auto;
-  max-width: 100%;
-  box-sizing: border-box;
-}
 .size-section {
   width: 75%;
   margin-top: 50px;
-}
-tbody {
-  width: auto;
-  border-collapse: collapse;
-  overflow: hidden;
 }
 
 .td-starts {
