@@ -209,10 +209,10 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                 </div>
               </div>
               <div className="bg-aquamarine rounded-sm p-3  mx-4">
-                <AddCartItemBtn
+                {/* <AddCartItemBtn
                   quantity={quantity}
                   idVariant={variants[0]?.id}
-                />
+                /> */}
               </div>
             </div>
           </div>

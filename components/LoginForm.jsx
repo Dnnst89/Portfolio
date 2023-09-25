@@ -38,7 +38,7 @@ const LoginForm = () => {
   //     });
 
   //     if (data) { // Si existe la sesión
-  //       const shoppingSession = data.shoppingSessions.data[0]; 
+  //       const shoppingSession = data.shoppingSessions.data[0];
   //       const { data: cartItemsData } = await client.query({ //llamo la query para cartitems de la session
   //         query: GET_CART_ITEMS_LIST_SHOPPING_SESSION,
   //         variables: { shoppingSessionId: shoppingSession.id },
@@ -88,11 +88,15 @@ const LoginForm = () => {
         );
         //await getCartSession(user.id);//obtengo la sesion de compra
 
-        toast.success("Ingreso exitoso!😍");
+        toast.success("Ingreso exitoso!😍", {
+          duration: 1000,
+        });
         router.push("/");
       }
     } catch (error) {
-      toast.error(`Credenciales incorrectas, intenta nuevamente.😥`);
+      toast.error(`Credenciales incorrectas, intenta nuevamente.😥`, {
+        duration: 1000,
+      });
     } finally {
       //limpiar formulario
       resetForm();
@@ -115,11 +119,11 @@ const LoginForm = () => {
                 background: "#67C3AD",
               },
             },
-            error: {
-              style: {
-                background: "#f87171",
-              },
-            },
+            // error: {
+            //   style: {
+            //     background: "#f87171",
+            //   },
+            // },
           }}
         />
         <div className="w-full">
