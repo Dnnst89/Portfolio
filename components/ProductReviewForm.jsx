@@ -34,6 +34,7 @@ function ProductReviewForm({ idProduct }) {
                     autoClose: 5000
                 });
                 reset()
+                setRating(0)
                 captchaRef.current.reset();
             }
             else {
