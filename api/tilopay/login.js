@@ -17,7 +17,6 @@ export const login = async () => {
     if (response.status === 200) {
       // Request was successful, handle the response here
       const dataResponse = await response.json();
-      console.log("Response data:", dataResponse);
       return dataResponse.access_token; // Return the access token
     } else {
       // Request failed with an error status code, handle the error here

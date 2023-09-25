@@ -1,5 +1,7 @@
 "use client";
+import { useSelector, useDispatch } from "react-redux";
 export default function CartDetail() {
+  const dispatch = useDispatch();
   return (
     <div className="p-3 space-y-3">
       <h1 className=" flex justify-center">Detalle del carrito</h1>

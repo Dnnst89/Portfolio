@@ -1,6 +1,6 @@
 "use client";
 import CartDetail from "./CartDetail";
-
+import { transactionData } from "../app/data/tilopay/transactionData";
 export default function CheckOutForm1() {
   return (
     <div className="mt-[40px] mx-[30px]">
