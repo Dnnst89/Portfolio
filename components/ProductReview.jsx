@@ -19,10 +19,10 @@ export default function ProductReview({ comment, score, user }) {
   }
 
   return (
-    <tr className="border-b-[1px] border-grey flex gap-[150px] w-11/12">
-      <td className="td-starts">{user}</td>
+    <tr className="border-b-[1px] border-grey flex gap-[210px] w-11/12">
+      <td className="w-[0]">{user}</td>
       <td>
-        <div className="flex items-center td-starts">
+        <div className="flex items-center whitespace-nowrap">
           {stars.map((star) => (
             <svg
               key={star}
@@ -52,14 +52,14 @@ export default function ProductReview({ comment, score, user }) {
           </p>
         </div>
       </td>
-      <td>
+      <td className="">
         {showFullComment ? comment : truncatedComment}
         {comment.length > 100 && lastSpaceIndex !== -1 && (
           <span>
             {showFullComment ? null : "... "}
             <button
               onClick={toggleComment}
-              className="text-lightblue ml-2text-lightblue bg-blue-500 transition duration-200 ease-in-out opacity-60 hover:opacity-100"
+              className="text-lightblue ml-2 transition duration-100 opacity-60 hover:opacity-100"
             >
               {showFullComment ? "Leer menos" : "Leer más"}
             </button>

@@ -2,7 +2,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import { BiPlus, BiMinus } from "react-icons/bi";
-import "@/styles/detail.page.css";
 import Link from "next/link";
 import AddCartItemBtn from "./AddCartItemBtn";
 import ProductImage from "./ProductImage";
@@ -62,7 +61,7 @@ function ProductDetail({ name, description, sku, variants, materials }) {
             <h1 className="mb-3 text-xl">{name}</h1>
             <p>{shortDescrption}...</p>
             <a onClick={() => handleClick()}>
-              <button className="flex justify-start text-lightblue mb-3 bg-blue-500 transition duration-200 ease-in-out opacity-60 hover:opacity-100">
+              <button className="flex justify-start text-lightblue mb-3 bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
                 Leer mas
               </button>
             </a>

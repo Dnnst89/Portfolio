@@ -47,12 +47,12 @@ function ProductReviewForm({ idProduct }) {
 
   return (
     <form onSubmit={onSubmit}>
-      <div className="text-center">
-        <label>Danos tu opinión del producto</label>
+      <div className="flex flex-col items-center space-y-3 p-10">
+        <label htmlFor="message">Danos tu opinión del producto</label>
         <textarea
           id="message"
           rows="4"
-          className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="block p-2.5 w-5/12 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Escribe aquí tu opinión..."
           {...register("comment", { required: true })}
         ></textarea>
@@ -72,7 +72,12 @@ function ProductReviewForm({ idProduct }) {
           sitekey="6LfCrUYoAAAAAPgdh0MpvKzzHvhksbGTM3cP1prU"
           ref={captchaRef}
         />
-        <button type="submit">Enviar reseña</button>
+        <button
+          type="submit"
+          className="bg-aquamarine text-white p-2 rounded-md mb-5"
+        >
+          Enviar reseña
+        </button>
       </div>
     </form>
   );

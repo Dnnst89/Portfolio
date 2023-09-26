@@ -4,18 +4,18 @@ import ProductReviewForm from "./ProductReviewForm";
 const ProductDetailSecondary = ({ id, description, reviews }) => {
   return (
     <main className="bg-resene" id="detail-table">
-      <section className="flex  m-5 gap-5 description-section pt-10">
+      <section className="flex mx-auto m-5 gap-5 w-6/12 pt-10">
         <h1 className="m-1 text-xl">Descripción</h1>
         <p>{description}</p>
       </section>
-      <section className="mt-2 size-section description-section">
+      <section className="w-3/4 mt-10 flex mx-auto">
         <h1 className="text-xl mr-5">Reseñas</h1>
         <table>
           <tbody className="tbody-clases">
-            <tr className="border-b-[1px] border-grey flex gap-[160px] w-11/12 ">
+            <tr className="border-b-[1px] border-grey flex gap-[170px] w-11/12 ">
               <th>Nombre de usuario</th>
               <th>Puntuación</th>
-              <th>Comentario</th>
+              <th className="ml-[40px]">Comentario</th>
             </tr>
             {reviews
               ? reviews.map((item) => {
