@@ -2,7 +2,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import { BiPlus, BiMinus } from "react-icons/bi";
-import "@/styles/detail.page.css";
 import Link from "next/link";
 import AddCartItemBtn from "./AddCartItemBtn";
 import ProductImage from "./ProductImage";
@@ -36,18 +35,20 @@ function ProductDetail({ name, description, sku, variants, materials }) {
     // Scroll to the element
     element.scrollIntoView({ behavior: "smooth" });
   };
+  const shortDescrption = description.split(" ").splice(0, 20).join(" ");
+  console.log(shortDescrption);
 
   return (
     <>
       <div className="bg-floralwhite" target="_blank" rel="noopener noreferrer">
-        <div className=" p-5 flex">
+        <div className=" p-5 flex ">
           {/* imagen principal grande */}
           <div className="w-6/12 flex justify-center">
             {images.length > 0 ? (
               <ProductImage
                 key={variants[0].attributes.images.data[0].id}
                 url={images[0].attributes.url}
-                width={"500"}
+                width={"450"}
                 height={"800"}
                 className={"rounded-xl mx-2"}
               />
@@ -55,11 +56,11 @@ function ProductDetail({ name, description, sku, variants, materials }) {
           </div>
           {/* parte derecha de la imagen principal grande*/}
           <div className="w-6/12 flex flex-col">
-            <h2 className="flex justify-end">Ref {sku}</h2>
-            <h1 className="mb-3">{name}</h1>
-            <p>{description}</p>
+            <h2 className="flex justify-end text-sm">Ref {sku}</h2>
+            <h1 className="mb-3 text-xl">{name}</h1>
+            <p>{shortDescrption}...</p>
             <a onClick={() => handleClick()}>
-              <button className="flex justify-start text-lightblue">
+              <button className="flex justify-start text-lightblue mb-3 bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
                 Leer mas
               </button>
             </a>
@@ -75,10 +76,10 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                     height="50"
                     src="/uploads/Asset_4_2_f88170fa82.png"
                     alt="tailwind logo"
-                    className="rounded-xl"
+                    className="rounded-xl mr-3"
                   />
                   <p>
-                    Tipo de material:
+                    Tipo de material : <br />
                     {materials.length > 0 ? materials[0].attributes.name : null}
                   </p>
                 </div>
@@ -90,11 +91,15 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                     height="50"
                     src="/uploads/Asset_4_2_f88170fa82.png"
                     alt="tailwind logo"
-                    className="rounded-xl"
+                    className="rounded-xl mr-3"
                   />
-                  <p>
+                  <p className="">
                     Color:
-                    {variants.length > 0 ? variants[0].attributes.color : null}
+                    <span className="m-2">
+                      {variants.length > 0
+                        ? variants[0].attributes.color
+                        : null}
+                    </span>
                   </p>
                 </div>
 
@@ -106,11 +111,13 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                     height="50"
                     src="/uploads/Asset_4_2_f88170fa82.png"
                     alt="tailwind logo"
-                    className="rounded-xl"
+                    className="rounded-xl mr-3"
                   />
                   <p>
                     Tamaño:
-                    {variants.length > 0 ? variants[0].attributes.size : null}
+                    <span className="m-2">
+                      {variants.length > 0 ? variants[0].attributes.size : null}
+                    </span>
                   </p>
                 </div>
               </div>
@@ -124,10 +131,11 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                     height="50"
                     src="/uploads/Asset_4_2_f88170fa82.png"
                     alt="tailwind logo"
-                    className="rounded-xl"
+                    className="rounded-xl mr-3"
                   />
                   <p>
                     Rango de edades:
+                    <br />
                     {variants.length > 0
                       ? variants[0].attributes.ageRange
                       : null}
@@ -142,11 +150,15 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                     height="50"
                     src="/uploads/Asset_4_2_f88170fa82.png"
                     alt="tailwind logo"
-                    className="rounded-xl"
+                    className="rounded-xl mr-3"
                   />
                   <p>
                     Stock:
-                    {variants.length > 0 ? variants[0].attributes.stock : null}
+                    <span className="m-2">
+                      {variants.length > 0
+                        ? variants[0].attributes.stock
+                        : null}
+                    </span>
                   </p>
                 </div>
 
@@ -158,15 +170,17 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                     height="50"
                     src="/uploads/Asset_4_2_f88170fa82.png"
                     alt="tailwind logo"
-                    className="rounded-xl"
+                    className="rounded-xl mr-3"
                   />
                   <p>
                     Peso:
-                    {variants.length > 0 &&
-                      variants[0].attributes.weight != null
-                      ? variants[0].attributes.weight.weight +
-                      variants[0].attributes.weight.unitWeight
-                      : null}
+                    <span className="m-2">
+                      {variants.length > 0 &&
+                        variants[0].attributes.weight != null
+                        ? variants[0].attributes.weight.weight +
+                        variants[0].attributes.weight.unitWeight
+                        : null}
+                    </span>
                   </p>
                 </div>
               </div>
