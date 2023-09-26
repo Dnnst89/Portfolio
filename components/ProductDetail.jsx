@@ -163,9 +163,9 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                   <p>
                     Peso:
                     {variants.length > 0 &&
-                    variants[0].attributes.weight != null
+                      variants[0].attributes.weight != null
                       ? variants[0].attributes.weight.weight +
-                        variants[0].attributes.weight.unitWeight
+                      variants[0].attributes.weight.unitWeight
                       : null}
                   </p>
                 </div>
@@ -178,16 +178,16 @@ function ProductDetail({ name, description, sku, variants, materials }) {
           <div className="flex h-32  w-6/12 justify-center">
             {images
               ? images.map((item) => {
-                  return (
-                    <ProductImage
-                      key={item.id}
-                      url={item.attributes.url}
-                      width={"125"}
-                      height={"100"}
-                      className={"rounded-xl mx-2"}
-                    />
-                  );
-                })
+                return (
+                  <ProductImage
+                    key={item.id}
+                    url={item.attributes.url}
+                    width={"125"}
+                    height={"100"}
+                    className={"rounded-xl mx-2"}
+                  />
+                );
+              })
               : null}
           </div>
           {/* precio, cantidad y carrito */}
@@ -209,10 +209,10 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                 </div>
               </div>
               <div className="bg-aquamarine rounded-sm p-3  mx-4">
-                {/* <AddCartItemBtn
-                  quantity={quantity}
+                <AddCartItemBtn
+                  quantityItem={quantity}
                   idVariant={variants[0]?.id}
-                /> */}
+                />
               </div>
             </div>
           </div>

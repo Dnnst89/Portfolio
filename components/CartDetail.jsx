@@ -3,7 +3,7 @@
 import { useSelector } from "react-redux";
 
 export default function CartDetail() {
-  const { cartQtyItems } = useSelector(state => state.cart) //obtengo la cantidad de items que tengo en carrito
+
   return (
     <div className="p-3 space-y-3">
       <h1 className=" flex justify-center">Detalle del carrito</h1>

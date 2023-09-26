@@ -13,31 +13,20 @@ import Link from "next/link";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import AlertNotAuth from "./AlertNotAuth";
+import useStorage from "@/hooks/useStorage";
 
 const CartContainer = () => {
     const router = useRouter();
-    const [userId, setUserId] = useState();
+    const state = useSelector((x) => x.cart);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const userData = JSON.parse(localStorage.getItem("userData"));
 
-                setUserId(userData.user.id);
-            } catch (error) {
-                toast.custom((t) => <AlertNotAuth t={t} />);
-            }
-        };
-        fetchData();
-    }, []);
-
+    const { user } = useStorage();//me trae el usuario de local storage
     const {
         total,
         items,
         quantity,
         error
-    } = useCartSummary({ userId })
-    console.log(items)
+    } = useCartSummary({ userId: user?.id });
 
     return (
         <><Toaster
@@ -60,7 +49,6 @@ const CartContainer = () => {
                 },
             }}
         />
-
             <div className="flex flex-col w-3/4">
                 {items?.map((item) => {
                     const variant = item.attributes.variant.data; // Desestructuración aquí
