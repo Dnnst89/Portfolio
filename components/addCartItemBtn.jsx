@@ -10,6 +10,7 @@ import useStorage from "@/hooks/useStorage";
 import UPDATE_CART_ITEM_QUANTITY_MUTATION from "@/src/graphQl/queries/updateCartItemQuantity";
 
 const AddCartItemBtn = ({ quantityItem, idVariant }) => {
+    //verificar que el nombre de este componente este con la primera letra en mayuscula en la carpeta de components
     const dispatch = useDispatch();
     const [createCartItem] = useMutation(CREATE_CART_ITEM_MUTATION, {});
     const [updateCartItemQuantity] = useMutation(UPDATE_CART_ITEM_QUANTITY_MUTATION);
