@@ -9,12 +9,8 @@ import useStorage from '@/hooks/useStorage';
 import useCartSummary from '@/hooks/useCartSummary';
 
 const DeleteCartItemBtn = ({ idItem, qtyItem }) => {
-  const [deletedItem, setDeletedItem] = useState(null)
   const dispatch = useDispatch()
   const { user } = useStorage();
-  useEffect(() => {
-    console.log("producto eliminado")
-  }, [deletedItem])
 
   const {
     items,
@@ -24,20 +20,13 @@ const DeleteCartItemBtn = ({ idItem, qtyItem }) => {
 
   const [deleteCartItem] = useMutation(DELETE_CART_ITEM_MUTATION, {
   });
-  useEffect(() => {
-    if (deletedItem) {
-      // Si deletedItem no es null, significa que se eliminó un producto
-      console.log("producto eliminado");
-    }
-  }, [deletedItem]);
+
   const handleDelete = () => {
     deleteCartItem({ variables: { id: idItem } })
       .then((response) => {
-        console.log("quantity " + quantity)
-        console.log("qtyItem " + qtyItem)
         // Manejar la respuesta de la mutación aquí, si es necesario
         dispatch(updateQtyItems(quantity - qtyItem))//actualiza la cantidad de items en el state
-        setDeletedItem(response)
+
         toast.success('Se ha eliminado un producto');
       })
       .catch((error) => {

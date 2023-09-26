@@ -1,24 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useLazyQuery, useQuery } from "@apollo/client";
-import GET_CART_ITEMS_LIST from "../src/graphQl/queries/getCartItems";
 import CartItem from "./CartItem";
-import { updateQtyItems } from "@/redux/features/cart-slice";
-import { useDispatch, useSelector } from "react-redux";
-import GET_CART_ITEMS_LIST_SHOPPING_SESSION from "@/src/graphQl/queries/getCartItemsByShoppingSession";
-import useCartSession from "@/hooks/useCartSession";
-import useSession from "@/hooks/useSession";
 import useCartSummary from "@/hooks/useCartSummary";
-import Link from "next/link";
 import toast, { Toaster } from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import AlertNotAuth from "./AlertNotAuth";
 import useStorage from "@/hooks/useStorage";
 
 const CartContainer = () => {
-    const router = useRouter();
-    const state = useSelector((x) => x.cart);
-
 
     const { user } = useStorage();//me trae el usuario de local storage
     const {
