@@ -6,27 +6,22 @@ import Image from "next/image";
 import AccountDropodown from "@/components/AccountDropodown";
 import Searchbar from "@/components/Search";
 import Link from "next/link";
-import { useSelector } from "react-redux";
 import useCartSession from "@/hooks/useCartSession";
 import { useEffect, useState } from "react";
 import useCartSummary from "@/hooks/useCartSummary";
-
+import useStorage from "@/hooks/useStorage";
+import { Toaster, toast } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 const NavMenu = () => {
-  const [userId, setUserId] = useState()
+  const { isAuthenticated } = useSelector((x) => x.auth);
+  const { user } = useStorage();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userData = JSON.parse(localStorage.getItem("userData"));
-        setUserId(userData.user.id)
-      } catch (error) {
-        console.error("Error al obtener datos del localStorage:", error);
-      }
-    };
-    fetchData();
-  }, [])
+  const info = useCartSummary({ userId: user?.id });
 
-  const info = useCartSummary({ userId })
+  const showAlert = (e) => {
+    if (user?.id && isAuthenticated) return;
+    toast.error("Debe iniciar sesión para ingresar al carrito");
+  };
 
   return (
     <header className="grid grid-cols-2 sm:grid-cols-6">
@@ -45,18 +40,36 @@ const NavMenu = () => {
             <AccountDropodown />
           </span>
         </div>
-        <Link href={"/cart"}>
+        <Link
+          onClick={showAlert}
+          href={user?.id && isAuthenticated ? "/cart" : "/"}
+        >
           <div className="flex justify-center items-center ">
             <BsCart4 size={30} color="#67C3AD" />
-            {info ? <p className='bg-aquamarine rounded-full px-2 text-white'>{
-              info.quantity
-
-            }</p> :
-              <p className='bg-aquamarine rounded-full px-2 text-white'>0</p>}
-
+            {info ? (
+              <p className="bg-aquamarine rounded-full px-2 text-white">
+                {info.quantity}
+              </p>
+            ) : (
+              <p className="bg-aquamarine rounded-full px-2 text-white">0</p>
+            )}
           </div>
         </Link>
       </div>
+      <Toaster
+        toastOptions={{
+          success: {
+            style: {
+              background: "#67C3AD",
+            },
+          },
+          error: {
+            style: {
+              background: "#f87171",
+            },
+          },
+        }}
+      />
     </header>
   );
 };

@@ -15,7 +15,6 @@ const loaderImage = ({ src }) => {
 };
 function ProductDetail({ name, description, sku, variants, materials }) {
   const [quantity, setQuantity] = useState(1);
-
   let images = 0;
   if (variants.length > 0) {
     images = variants[0].attributes.images.data;

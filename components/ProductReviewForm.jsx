@@ -3,12 +3,12 @@ import AddReview from "@/src/graphQl/queries/addReview";
 import { useMutation } from "@apollo/client";
 import toast, { Toaster } from "react-hot-toast";
 import ReCAPTCHA from "react-google-recaptcha";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
+import { FaStar } from "react-icons/fa";
 
 function ProductReviewForm({ idProduct }) {
   const sessionData = JSON.parse(localStorage.getItem("userData"));
   const captchaRef = useRef(null);
-
   const {
     register,
     handleSubmit,
@@ -16,6 +16,8 @@ function ProductReviewForm({ idProduct }) {
     reset,
   } = useForm();
   const [createUser] = useMutation(AddReview);
+
+  const [rating, setRating] = useState(null);
 
   const onSubmit = handleSubmit((data) => {
     const comment = data.comment;
