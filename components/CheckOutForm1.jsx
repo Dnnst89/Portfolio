@@ -1,7 +1,30 @@
 "use client";
+import { useState } from "react";
 import CartDetail from "./CartDetail";
-import { transactionData } from "../app/data/tilopay/transactionData";
+
 export default function CheckOutForm1() {
+  const [formData, setFormData] = useState({
+    redirect: "https://localhost:3000/checkout", // Fix the URL format
+    key: process.env.NEXT_PUBLIC_TILOPAY_API_KEY,
+    amount: "0.55",
+    currency: "CRC",
+    billToFirstName: "Danny",
+    billToLastName: "Soto",
+    billToAddress: "Alajuela",
+    billToAddress2: "San Rafael",
+    billToCity: "Alajuela",
+    billToState: "Alajuela",
+    billToZipPostCode: "506",
+    billToCountry: "CR",
+    billToTelephone: "84111915",
+    billToEmail: "dnnst89@gmail.com",
+    orderNumber: "1",
+    capture: "1",
+    subscription: "0",
+    platform: "api",
+    returnData: "dXNlcl9pZD0xMg==",
+    hashVersion: "V2",
+  });
   return (
     <div className="mt-[40px] mx-[30px]">
       <div className="flex w-3/4 justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
@@ -16,29 +39,92 @@ export default function CheckOutForm1() {
           <div className="flex justify-center">
             <section className="w-1/4 flex flex-col p-2 space-y-1">
               <label>Nombre</label>
-              <input />
+              <input
+                type="text"
+                placeholder="Nombre"
+                value={formData.billToFirstName}
+                onChange={(e) =>
+                  setFormData({ ...formData, billToFirstName: e.target.value })
+                }
+              />
               <label>Correo Electrónico</label>
-              <input />
+              <input
+                type="text"
+                placeholder="Nombre"
+                value={formData.billToEmail}
+                onChange={(e) =>
+                  setFormData({ ...formData, billToEmail: e.target.value })
+                }
+              />
               <label>País</label>
-              <input />
+              <input
+                type="text"
+                placeholder="Nombre"
+                value={formData.billToCountry}
+                onChange={(e) =>
+                  setFormData({ ...formData, billToCountry: e.target.value })
+                }
+              />
               <label>Cantón</label>
-              <input />
+              <input
+                type="text"
+                placeholder="Nombre"
+                value={formData.billToCity}
+                onChange={(e) =>
+                  setFormData({ ...formData, billToCity: e.target.value })
+                }
+              />
               <label>Código Postal</label>
               <input />
               <label>Otras señas</label>
-              <input />
+              <input
+                type="text"
+                placeholder="Nombre"
+                value={formData.billToAddress2}
+                onChange={(e) =>
+                  setFormData({ ...formData, billToAddress2: e.target.value })
+                }
+              />
             </section>
             <section className="w-1/4 flex flex-col p-2 space-y-1">
               <label>Apellidos</label>
-              <input />
+              <input
+                type="text"
+                placeholder="Nombre"
+                value={formData.billToLastName}
+                onChange={(e) =>
+                  setFormData({ ...formData, billToLastName: e.target.value })
+                }
+              />
               <label>Teléfono</label>
-              <input />
+              <input
+                type="text"
+                placeholder="Nombre"
+                value={formData.billToTelephone}
+                onChange={(e) =>
+                  setFormData({ ...formData, billToTelephone: e.target.value })
+                }
+              />
               <label>Provincia</label>
-              <input />
+              <input
+                type="text"
+                placeholder="Nombre"
+                value={formData.billToState}
+                onChange={(e) =>
+                  setFormData({ ...formData, billToState: e.target.value })
+                }
+              />
               <label>Ciudad</label>
               <input />
               <label>Dirección</label>
-              <input />
+              <input
+                type="text"
+                placeholder="Nombre"
+                value={formData.billToAddress}
+                onChange={(e) =>
+                  setFormData({ ...formData, billToAddress: e.target.value })
+                }
+              />
             </section>
           </div>
           <div className="flex  justify-center">
