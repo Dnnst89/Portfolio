@@ -20,11 +20,13 @@ const useCartSummary = ({ userId }) => {
   const [error, setError] = useState(false);
   const [getSession] = useLazyQuery(GET_SHOPPING_SESSION_BY_USER);
   const [getCart] = useLazyQuery(GET_CART_ITEMS_LIST_SHOPPING_SESSION);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getCartSession = async () => {
       //me trae la session del usuario
       try {
+        setLoading(true);
         const { data } = await getSession({
           //llamo la query para traer la shopping session
           variables: { userId },
@@ -62,6 +64,7 @@ const useCartSummary = ({ userId }) => {
             }),
           }));
         }
+        setLoading(false);
       } catch (error) {
         //Manejo de errores
         console.log(error);
@@ -79,6 +82,7 @@ const useCartSummary = ({ userId }) => {
     items: cartData.items,
     quantity: cartData.quantity,
     error,
+    loading,
   };
 };
 

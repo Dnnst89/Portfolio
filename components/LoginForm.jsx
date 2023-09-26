@@ -119,11 +119,11 @@ const LoginForm = () => {
                 background: "#67C3AD",
               },
             },
-            // error: {
-            //   style: {
-            //     background: "#f87171",
-            //   },
-            // },
+            error: {
+              style: {
+                background: "#f87171",
+              },
+            },
           }}
         />
         <div className="w-full">

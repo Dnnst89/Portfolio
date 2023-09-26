@@ -19,6 +19,7 @@ query GetCartItemsBySession($shoppingSessionId: ID!) {
                     name
                     brand
                     description
+                    cabys
                   }
                 }
               }
