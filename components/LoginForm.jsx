@@ -1,6 +1,5 @@
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import SocialMediaRegistry from "./SocialMediaRegistry";
 import { LOGIN_MUTATION } from "@/src/graphQl/queries/LoginSession";
 import { useMutation, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
@@ -12,10 +11,6 @@ import toast, { Toaster } from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import CheckOutHeader from "./CheckoutHeader";
 import Link from "next/link";
-import GET_SHOPPING_SESSION_BY_USER from "@/src/graphQl/queries/getShoppingSessionByUser";
-import { updateShoppingSession } from "@/redux/features/cart-slice";
-import client from "../src/graphQl/config"; //se utiliza para poder usar usequery en funciones
-import GET_CART_ITEMS_LIST_SHOPPING_SESSION from "@/src/graphQl/queries/getCartItemsByShoppingSession";
 
 const SignupSchema = Yup.object().shape({
   identifier: Yup.string().required("Este campo es requerido"),
@@ -86,6 +81,10 @@ const LoginForm = () => {
           "userData",
           JSON.stringify({ user, isAuthenticated: true })
         );
+        document.cookie = `userData=${JSON.stringify({
+          user,
+          isAuthenticated: true,
+        })}`;
         //await getCartSession(user.id);//obtengo la sesion de compra
 
         toast.success("Ingreso exitoso!😍", {
