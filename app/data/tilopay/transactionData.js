@@ -1,5 +1,5 @@
 export const paymentDataForm = {
-  redirect: "https://localhost:3000/checkout", // Fix the URL format
+  redirect: "http://localhost:3000/checkout", // Fix the URL format
   key: process.env.NEXT_PUBLIC_TILOPAY_API_KEY,
   amount: "0.55",
   currency: "CRC",
@@ -13,7 +13,7 @@ export const paymentDataForm = {
   billToCountry: "CR",
   billToTelephone: "84111915",
   billToEmail: "dnnst89@gmail.com",
-  orderNumber: "1",
+  orderNumber: "505040",
   capture: "1",
   subscription: "0",
   platform: "api",

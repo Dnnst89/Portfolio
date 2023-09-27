@@ -1,4 +1,5 @@
-export const login = async () => {
+// Function to get a valid access token
+const getAccessToken = async () => {
   const requestBody = {
     apiuser: process.env.NEXT_PUBLIC_TILOPAY_API_USER,
     password: process.env.NEXT_PUBLIC_TILOPAY_API_PASSWORD,
@@ -24,8 +25,19 @@ export const login = async () => {
       throw new Error("Failed to obtain access token.");
     }
   } catch (error) {
-    // Handle any network or other errors here
     console.error("Error:", error);
+    throw error;
+  }
+};
+
+// Export a function to login or refresh the token
+export const login = async () => {
+  try {
+    const accessToken = await getAccessToken();
+    return accessToken;
+  } catch (error) {
+    // Handle token expiration or other errors here
+    console.error("Login failed:", error);
     throw error;
   }
 };
