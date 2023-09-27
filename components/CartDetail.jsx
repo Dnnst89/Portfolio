@@ -2,11 +2,10 @@
 
 import { useSelector } from "react-redux";
 
-export default function CartDetail() {
-
+export default function CartDetail({ detailTitle }) {
   return (
     <div className="p-3 space-y-3">
-      <h1 className=" flex justify-center">Detalle del carrito</h1>
+      <h1 className=" flex justify-center text-xl">{detailTitle}</h1>
 
       <div className="flex justify-between ">
         <p className="whitespace-nowrap ">N° artículos</p>
@@ -24,11 +23,11 @@ export default function CartDetail() {
         <p>Subtotal:</p>
         <p className="text-grey-100">$0,000.00</p>
       </div>
-      <div className="flex justify-between ">
+      <div className="flex justify-between border-b-2 border-dashed border-grey-200">
         <p>Costo de envío:</p>
         <p className="text-grey-100">$0,000.00</p>
       </div>
-      <hr />
+
       <div className="flex flex-col p-4 space-y-3">
         <p className="flex justify-center">Costo Total(IVA Incluido)</p>
         <p className="flex justify-center text-grey-100">$0,000.00</p>
