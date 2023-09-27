@@ -12,13 +12,15 @@ import useCartSummary from "@/hooks/useCartSummary";
 import useStorage from "@/hooks/useStorage";
 import { Toaster, toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
+import { updateCartItems, updateQtyItems } from "@/redux/features/cart-slice";
 const NavMenu = () => {
+  const dispatch = useDispatch()
   const { isAuthenticated } = useSelector((x) => x.auth);
-  const { user } = useStorage();
-
+  const { user } = useStorage();  // hook para obtener el usuario almacenado en el localstorage
   const info = useCartSummary({ userId: user?.id });
+  const cartState = useSelector((state) => state.cart);//obtenemos los datos del slice de carrito
 
-  const showAlert = (e) => {
+  const showAlert = (e) => { //si el usuario no esta autenticado
     if (user?.id && isAuthenticated) return;
     toast.error("Debe iniciar sesión para ingresar al carrito");
   };
