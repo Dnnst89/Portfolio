@@ -2,7 +2,7 @@
 import useStorage from "@/hooks/useStorage";
 import useCartSummary from "@/hooks/useCartSummary";
 import Spinner from "./Spinner";
-import { getAccessToken } from "@/helpers";
+// import { getAccessToken } from "@/helpers";
 import { useEffect } from "react";
 
 const CartDetail = ({ isCheckout = false }) => {
