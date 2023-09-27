@@ -37,6 +37,8 @@ const AccountDropdown = () => {
     dispatch(updateShoppingSession(null));
     localStorage.removeItem("userData");
     localStorage.removeItem("cartSession");
+    // Recargar la página para que no quede data basura
+    window.location.reload();
   };
   useSession();
   return (
