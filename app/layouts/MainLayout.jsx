@@ -30,7 +30,7 @@ const MainLayout = ({ children }) => {
         </div>
         <div className="flex justify-center pt-10">
           <GiftIdeasCard
-            ageRange={"6-12"}
+            ageRange={"1-2years"}
             image={heart}
             age={"Menores de 2 años"}
             button={"bg-aquamarine rounded-lg text-white text-sm p-2"}
