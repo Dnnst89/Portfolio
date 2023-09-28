@@ -1,24 +1,9 @@
 "use client";
-import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export default function CheckOutForm3({ paymentUrl, description, code }) {
+export default function CheckOutForm3({ paymentUrl }) {
   const router = useRouter();
-
-  // Use useEffect to automatically execute code when code and description are available
-  useEffect(() => {
-    if (code === "1") {
-      // Payment was successful
-      toast.success("Payment Successful:", description);
-
-      // Redirect to the payment URL
-      //router.push(paymentUrl);
-    } else {
-      // Payment failed
-      toast.error("Payment Failed:", description);
-    }
-  }, [code, description, router]);
 
   return (
     <div className="mt-[40px] mx-[30px]">

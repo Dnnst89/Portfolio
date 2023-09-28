@@ -9,7 +9,8 @@ import { redirect } from "next/navigation";
 // insuficient founds card 4112 6134 5159 1116
 const CheckOut = async (params) => {
   // Get query parameters from the URL
-  const { code, description, auth, order } = await params.searchParams;
+  const { code, description, auth, order } = params.searchParams;
+  console.log("params:", code);
 
   // Function to handle the payment response
   const handlePaymentResponse = () => {
@@ -17,10 +18,10 @@ const CheckOut = async (params) => {
     if (code === "1") {
       // Payment was successful
       console.log("Payment Successful:", description);
-      redirect("/checkout"); //redirect to thankyou here
+      redirect("/checkout");
     } else {
       // Payment failed
-      redirect("/checkout"); // redirect to payment failed here
+      console.error("Payment Failed:", description);
     }
   };
 
@@ -33,11 +34,7 @@ const CheckOut = async (params) => {
       <CheckOutHeader />
       <CheckOutForm1 />
       <CheckOutForm2 />
-      <CheckOutForm3
-        paymentUrl={paymentUrl}
-        description={description}
-        code={code}
-      />
+      <CheckOutForm3 paymentUrl={paymentUrl} />
     </div>
   );
 };
