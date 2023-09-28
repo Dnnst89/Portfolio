@@ -33,10 +33,14 @@ const AccountDropdown = () => {
 
   const handleLogout = () => {
     router.push("/");
+    router.refresh();
     dispatch(logout());
     dispatch(updateShoppingSession(null));
     localStorage.removeItem("userData");
     localStorage.removeItem("cartSession");
+    document.cookie = "userData=null";
+    // Recargar la página para que no quede data basura
+    window.location.reload();
   };
   useSession();
   return (

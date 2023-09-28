@@ -20,6 +20,12 @@ const NavMenu = () => {
   const info = useCartSummary({ userId: user?.id });
   const cartState = useSelector((state) => state.cart);//obtenemos los datos del slice de carrito
 
+  useEffect(() => {
+
+    toast.remove(); //elimina notificaciones anteriores 
+
+  }, [])
+
   const showAlert = (e) => { //si el usuario no esta autenticado
     if (user?.id && isAuthenticated) return;
     toast.error("Debe iniciar sesión para ingresar al carrito");

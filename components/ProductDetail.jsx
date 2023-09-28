@@ -3,7 +3,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { BiPlus, BiMinus } from "react-icons/bi";
 import Link from "next/link";
-import AddCartItemBtn from "./AddCartItemBtn";
+import AddItemBtn from "./AddItemBtn";
 import ProductImage from "./ProductImage";
 
 const loader = ({ src }) => {
@@ -36,7 +36,6 @@ function ProductDetail({ name, description, sku, variants, materials }) {
     element.scrollIntoView({ behavior: "smooth" });
   };
   const shortDescrption = description.split(" ").splice(0, 20).join(" ");
-  console.log(shortDescrption);
 
   return (
     <>
@@ -223,7 +222,7 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                 </div>
               </div>
               <div className="bg-aquamarine rounded-sm p-3  mx-4">
-                <AddCartItemBtn
+                <AddItemBtn
                   quantityItem={quantity}
                   idVariant={variants[0]?.id}
                 />

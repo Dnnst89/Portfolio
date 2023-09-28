@@ -7,7 +7,7 @@ import CartQuantityBtn from './CartQuantityBtn';
 import DeleteCartItemBtn from './DeleteCartItemBtn';
 
 
-const CartItem = ({ cartItemId, idVariant, productName, brand, description, color, price, totalPrice, ageRange, size, weight, images, stockVariant, quantityCartItem }) => {
+const CartItem = ({ cartItemId, idVariant, productName, brand, description, color, price, totalPrice, ageRange, size, weight, images, stockVariant, quantityCartItem, loading }) => {
     return (<>
         <div className="flex items-center py-1">
             <section className="w-2/4 ">
@@ -36,8 +36,8 @@ const CartItem = ({ cartItemId, idVariant, productName, brand, description, colo
                     </div>
                 </div>
             </section>
-            <div className="mt-4">
-                <CartQuantityBtn quantityCartItem={quantityCartItem} stock={stockVariant} idCartItem={cartItemId} /> {/* Puedes ajustar el límite según tus necesidades */}
+            <div className="mt-4" >
+                <CartQuantityBtn quantityCartItem={quantityCartItem} stock={stockVariant} idCartItem={cartItemId} loading={loading} /> {/* Puedes ajustar el límite según tus necesidades */}
             </div>
             {/* <div className="p-4">
             </div>
