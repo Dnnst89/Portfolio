@@ -46,7 +46,7 @@ export default function CheckOutForm1() {
               <p className="mr-4 whitespace-nowrap">Factura Electrónica</p>
               <label className="switch">
                 <input type="checkbox" />
-                <span class="slider round"></span>
+                <span className="slider round"></span>
               </label>
             </section>
             <section className="w-1/4 flex p-2"></section>
@@ -68,7 +68,7 @@ export default function CheckOutForm1() {
         </section>
         <div className=" bg-resene rounded-sm w-1/4 h-[350px] ml-[25px] mt-[-80px]">
           <div className="flex flex-col space-y-3 ">
-            <CartDetail />
+            <CartDetail isCheckout />
           </div>
         </div>
       </main>

@@ -20,9 +20,7 @@ export default function CartView() {
         </div>
 
         <div className=" bg-resene rounded-sm w-1/4 p-4 h-[500px]">
-          
-            <CartDetail />
-          
+          <CartDetail isCheckout={false} />
 
           <CartProceedPayment />
         </div>
