@@ -2,7 +2,7 @@ import ProductReview from "./ProductReview";
 import ProductReviewForm from "./ProductReviewForm";
 
 const ProductDetailSecondary = ({ id, description, reviews }) => {
-  console.log(reviews)
+
   return (
     <main className="bg-resene" id="detail-table">
       <section className="flex mx-auto m-5 gap-5 w-6/12 pt-10">

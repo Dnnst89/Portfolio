@@ -30,6 +30,7 @@ const MainLayout = ({ children }) => {
         </div>
         <div className="flex justify-center pt-10">
           <GiftIdeasCard
+            ageRange={"6-12"}
             image={heart}
             age={"Menores de 2 años"}
             button={"bg-aquamarine rounded-lg text-white text-sm p-2"}
@@ -38,6 +39,7 @@ const MainLayout = ({ children }) => {
             }
           />
           <GiftIdeasCard
+            ageRange={"2-3years"}
             image={wood}
             age={"De 2 a 3 años"}
             button={"bg-lightblue rounded-lg text-white text-sm p-2"}
@@ -46,6 +48,7 @@ const MainLayout = ({ children }) => {
             }
           />
           <GiftIdeasCard
+            ageRange={"4-5years"}
             image={brush}
             age={"De 4 a 5 años"}
             button={"bg-yellow-200 rounded-lg text-white text-sm p-2"}
@@ -54,6 +57,7 @@ const MainLayout = ({ children }) => {
             }
           />
           <GiftIdeasCard
+            ageRange={"6-7years"}
             image={guitar}
             age={"De 6 a 7 años"}
             button={"bg-pink-200 rounded-lg text-white text-sm p-2"}
@@ -62,6 +66,7 @@ const MainLayout = ({ children }) => {
             }
           />
           <GiftIdeasCard
+            ageRange={"8-9years"}
             image={libro}
             age={"De 8 años o mas"}
             button={"bg-yellow-300 rounded-lg text-white text-sm p-2"}
