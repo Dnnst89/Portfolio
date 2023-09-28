@@ -3,21 +3,25 @@ import CheckOutForm1 from "@/components/CheckOutForm1";
 import CheckOutForm2 from "@/components/CheckOutForm2";
 import CheckOutForm3 from "@/components/CheckOutForm3";
 import CheckOutHeader from "@/components/CheckoutHeader";
+import { redirect } from "next/navigation";
+
+// workin visa card 5100270000000023
+// insuficient founds card 4112 6134 5159 1116
 const CheckOut = async (params) => {
   // Get query parameters from the URL
-  const { code, description, auth, order } = params.searchParams;
-  console.log("Params :", code);
+  const { code, description, auth, order } = await params.searchParams;
+  console.log("params :", params);
+
   // Function to handle the payment response
   const handlePaymentResponse = () => {
     // Handle the payment data as needed
     if (code === "1") {
       // Payment was successful
       console.log("Payment Successful:", description);
-
-      // You can update your order status or take other actions here
+      redirect("/checkout"); //redirect to thankyou here
     } else {
       // Payment failed
-      console.error("Payment Failed:", description);
+      redirect("/checkout"); // redirect to payment failed here
     }
   };
 
@@ -30,7 +34,11 @@ const CheckOut = async (params) => {
       <CheckOutHeader />
       <CheckOutForm1 />
       <CheckOutForm2 />
-      <CheckOutForm3 paymentUrl={paymentUrl} />
+      <CheckOutForm3
+        paymentUrl={paymentUrl}
+        description={description}
+        code={code}
+      />
     </div>
   );
 };
