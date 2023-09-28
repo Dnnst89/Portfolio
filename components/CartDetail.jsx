@@ -23,6 +23,7 @@ const CartDetail = ({
   useEffect(() => {
     // getAccessToken();
     getTaxCost();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items?.length]);
 
   const getTaxCost = () => {
