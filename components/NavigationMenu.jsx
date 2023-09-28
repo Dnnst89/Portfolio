@@ -5,9 +5,9 @@ import Link from "next/link";
 export default function () {
   const [isSelected, setIsSelected] = useState(null);
   const selectedStyle =
-    "bg-pink-200 rounded-full p-2 text-4xl text-resene mb-2";
+    "bg-pink-200 rounded-full  text-resene p-1 text-2xl mb-2 sm:p-1 sm:text-2xl md:p-1 md:text-2xl lg:p-2 lg:text-4xl";
   const nonSelectedStyle =
-    "bg-black rounded-full p-2 text-4xl text-resene mb-2";
+    "bg-black rounded-full text-resene mb-2 p-1 text-2xl sm:p-1 sm:text-2xl md:p-1 md:text-2xl lg:p-2 lg:text-4xl ";
   const handleItemClick = (id) => {
     if (isSelected === id) {
       // Si se hace clic nuevamente en el mismo elemento, deselecciona
@@ -17,7 +17,7 @@ export default function () {
     }
   };
   return (
-    <div className="border-t-4 border-pink-200 w-1/6 p-3 space-y-4 bg-resene h-[250px]">
+    <div className="border-t-4 border-pink-200 sm:w-3/6 md:w-2/6 lg:w-1/6 p-3 space-y-4 bg-resene h-[250px]">
       <Link
         href={""}
         className={`border-b-2 border-dashed border-grey-200 flex justify-between items-center ${
@@ -33,7 +33,7 @@ export default function () {
 
       <Link
         href={"/order"}
-        className={`border-b-2 border-dashed border-grey-200 flex items-center justify-between ${
+        className={`border-b-2 border-dashed border-grey-200 flex items-center justify-between  ${
           isSelected === "pedidos" ? "text-pink-200" : ""
         }`}
       >
@@ -48,7 +48,7 @@ export default function () {
 
       <Link
         href={""}
-        className={`border-b-2 border-dashed border-grey-200 flex items-center justify-between ${
+        className={`border-b-2 border-dashed border-grey-200 flex items-center justify-between  ${
           isSelected === "direcciones" ? "text-pink-200" : ""
         }`}
       >
@@ -62,7 +62,7 @@ export default function () {
       </Link>
 
       <div className="flex justify-center">
-        <button className="bg-pink-200 text-white p-2 rounded-sm">
+        <button className="bg-pink-200 text-white p-2 sm:p-1 md:p-1 md:text-sm rounded-sm">
           CERRAR SESIÓN
         </button>
       </div>
