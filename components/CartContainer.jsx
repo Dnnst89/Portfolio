@@ -12,7 +12,8 @@ const CartContainer = () => {
         total,
         items,
         quantity,
-        error
+        error,
+        loading
     } = useCartSummary({ userId: user?.id });
 
     return (
@@ -59,6 +60,7 @@ const CartContainer = () => {
                                 size={variantAtt.size}
                                 weight={variantAtt.weight} //el weight es un objeto del peso y la unidad
                                 images={variantAtt.images.data.map(img => img.attributes.url)}//se mapea para obtener array de url
+                                loading={loading}
                             />
                         </div>
                     );

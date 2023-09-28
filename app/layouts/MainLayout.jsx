@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import ProductCard from "@/components/ProductCard";
 import GiftIdeasCard from "@/components/GiftIdeasCard";
 import heart from "../assets/heart.png";
@@ -9,10 +9,12 @@ import guitar from "../assets/guitar.png";
 import libro from "../assets/libro.png";
 import BodyComponent from "@/components/BodyComponent";
 import FeaturedProducts from "@/components/FeaturedProducts";
+import toast from "react-hot-toast";
 const MainLayout = ({ children }) => {
   const name = "Juguete";
   const defaultPrice = 8900;
   const url = "/uploads/juguete4_36d71de373.jpg";
+
 
   return (
     <>
