@@ -13,7 +13,7 @@ function ProductReviewForm({ idProduct }) {
     const captchaRef = useRef(null)
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm()
-    const [createUser] = useMutation(AddReview);
+    const [createReview] = useMutation(AddReview);
 
     const onSubmit = handleSubmit((data) => {
 
@@ -26,7 +26,7 @@ function ProductReviewForm({ idProduct }) {
 
         try {
             if (token) {
-                createUser({
+                createReview({
                     variables: { comment, score, product, users_permissions_user },
                 });
 

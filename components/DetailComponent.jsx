@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/client";
 import ProductDetail from "./ProductDetail";
 import ProductDetailSecondary from "./ProductDetailSecondary";
 import RelatedItems from "./RelatedItems";
-import ProductDetailQuery from "@/src/graphQl/queries/productDetail";
+import ProductDetailQuery from "@/src/graphQl/queries/getProductById";
 
 export default function DetailComponent({ id }) {
   const { loading, error, data } = useQuery(ProductDetailQuery, {
@@ -11,6 +11,7 @@ export default function DetailComponent({ id }) {
   });
 
   if (loading) return <p>Loading ...</p>;
+  if (error) return <p>{error.message}</p>
 
   return (
     <main>
