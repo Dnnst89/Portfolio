@@ -1,79 +1,55 @@
-import { useForm } from "react-hook-form";
-import AddReview from "@/src/graphQl/queries/addReview";
+import { useForm } from "react-hook-form"
+import AddReview from '@/src/graphQl/queries/addReview';
 import { useMutation } from "@apollo/client";
 import toast, { Toaster } from "react-hot-toast";
-import ReCAPTCHA from "react-google-recaptcha";
-import React, { useRef, useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha"
+import React, { useRef, useState } from 'react';
 import { FaStar } from "react-icons/fa";
 
 function ProductReviewForm({ idProduct }) {
-  const sessionData = JSON.parse(localStorage.getItem("userData"));
-  const captchaRef = useRef(null);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm();
-  const [createUser] = useMutation(AddReview);
 
-  const [rating, setRating] = useState(null);
+  const [rating, setRating] = useState(null)
+  const sessionData = JSON.parse(localStorage.getItem("userData"));
+  const captchaRef = useRef(null)
+
+  const { register, handleSubmit, formState: { errors }, reset } = useForm()
+  const [createReview] = useMutation(AddReview);
 
   const onSubmit = handleSubmit((data) => {
-    const comment = data.comment;
-    const score = parseInt(data.score);
-    const product = idProduct;
-    const users_permissions_user = sessionData.user.id;
+
+    const comment = data.comment
+    const score = parseInt(rating)
+    const product = idProduct
+    const users_permissions_user = sessionData.user.id
     const token = captchaRef.current.getValue();
+
 
     try {
       if (token) {
-        createUser({
+        createReview({
           variables: { comment, score, product, users_permissions_user },
         });
 
         toast.success("Gracias por tu reseña!😍", {
-          autoClose: 5000,
+          autoClose: 5000
         });
-        reset();
+        reset()
+        setRating(0)
         captchaRef.current.reset();
-      } else {
-        toast.error("Por favor selecciona la casilla de verificación");
       }
-    } catch {
-      toast.error(
-        "Lo sentimos, no se ha podido ingresar la reseña. Intentalo de nuevo más tarde😥"
-      );
+      else {
+        toast.error("Por favor selecciona la casilla de verificación", {
+          autoClose: 5000
+        });
+      }
+
     }
-  });
-
-
-  try {
-    if (token) {
-      createReview({
-        variables: { comment, score, product, users_permissions_user },
-      });
-
-      toast.success("Gracias por tu reseña!😍", {
-        autoClose: 5000
-      });
-      reset()
-      setRating(0)
-      captchaRef.current.reset();
-    }
-    else {
-      toast.error("Por favor selecciona la casilla de verificación", {
+    catch {
+      toast.error("Lo sentimos, no se ha podido ingresar la reseña. Intentalo de nuevo más tarde😥", {
         autoClose: 5000
       });
     }
-
-  }
-  catch {
-    toast.error("Lo sentimos, no se ha podido ingresar la reseña. Intentalo de nuevo más tarde😥", {
-      autoClose: 5000
-    });
-  }
-
+  })
 
   return (
     <>
@@ -113,4 +89,4 @@ function ProductReviewForm({ idProduct }) {
   )
 }
 
-export default ProductReviewForm;
+export default ProductReviewForm
