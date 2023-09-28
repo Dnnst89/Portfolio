@@ -5,7 +5,10 @@ import Spinner from "./Spinner";
 // import { getAccessToken } from "@/helpers";
 import { useEffect } from "react";
 
-const CartDetail = ({ isCheckout = false }) => {
+const CartDetail = ({
+  isCheckout = false,
+  detailTitle = "Detalle del carrito",
+}) => {
   const { user } = useStorage();
 
   const {
@@ -20,6 +23,7 @@ const CartDetail = ({ isCheckout = false }) => {
   useEffect(() => {
     // getAccessToken();
     getTaxCost();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items?.length]);
 
   const getTaxCost = () => {
@@ -44,7 +48,7 @@ const CartDetail = ({ isCheckout = false }) => {
     <div className="p-3 space-y-3">
       {!loading ? (
         <>
-          <h1 className=" flex justify-center">Detalle del carrito</h1>
+          <h1 className=" flex justify-center">{detailTitle}</h1>
 
           <div className="flex justify-between ">
             <p className="whitespace-nowrap ">N° artículos</p>
