@@ -10,7 +10,6 @@ import { redirect } from "next/navigation";
 const CheckOut = async (params) => {
   // Get query parameters from the URL
   const { code, description, auth, order } = await params.searchParams;
-  console.log("params :", params);
 
   // Function to handle the payment response
   const handlePaymentResponse = () => {
