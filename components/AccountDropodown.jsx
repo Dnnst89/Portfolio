@@ -45,24 +45,32 @@ const AccountDropdown = () => {
   useSession();
   return (
     <>
-      <div className="relative grid grid-cols-2">
+      <div className="flex space-x-2 p-2">
         <div className="">
           {authUser && (
-            <p className="px-4 py-2 text-orange">
-              Welcome, {authUser.username}
+            <p className="px-1 py-2 text-orange whitespace-nowrap">
+              Bienvenido, {authUser.username}
             </p>
           )}
         </div>
-        <button className="block" onClick={toggleDropdown}>
-          <BiSolidUserCircle size={30} color="#67C3AD" />
+
+        <button onClick={toggleDropdown} className="">
+          <BiSolidUserCircle size={30} color="#67C3AD" className="mr-10" />
         </button>
+
         {isOpen && (
           <div
-            className="bg-floralwhite rounded-lg py-2 shadow-md absolute z-10"
+            className="bg-floralwhite rounded-lg py-2 shadow-md z-10 absolute top-20 right-20"
             ref={wrapperRef}
           >
             {authUser ? (
               <>
+                <Link
+                  href={"/welcomeUser"}
+                  className="block px-4 py-2 hover:bg-resene text-orange"
+                >
+                  Mi perfil
+                </Link>
                 <button
                   className="block px-4 py-2 hover:bg-resene text-orange"
                   onClick={handleLogout}

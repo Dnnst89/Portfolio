@@ -25,5 +25,13 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/cart", "/checkout", "/register/singname", "/register/signemail"],
+  matcher: [
+    "/cart",
+    "/checkout",
+    "/register/singname",
+    "/register/signemail",
+    "/order",
+    "/order/orderViewDetail",
+    "/welcomeUser",
+  ],
 };
