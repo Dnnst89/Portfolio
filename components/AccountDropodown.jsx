@@ -74,7 +74,7 @@ const AccountDropdown = () => {
               <>
                 <Link
                   className="block px-4 py-2 hover:bg-resene text-orange"
-                  href="/register/singname"
+                  href="/register/signemail"
                 >
                   Registrarme
                 </Link>

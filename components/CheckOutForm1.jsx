@@ -68,11 +68,7 @@ export default function CheckOutForm1() {
         </section>
         <div className=" bg-resene rounded-sm w-1/4 h-[350px] ml-[25px] mt-[-80px]">
           <div className="flex flex-col space-y-3 ">
-<<<<<<< HEAD
             <CartDetail detailTitle={"Detalle del carrito"} />
-=======
-            <CartDetail isCheckout />
->>>>>>> dev
           </div>
         </div>
       </main>
