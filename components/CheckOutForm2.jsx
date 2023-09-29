@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import moovin from "../app/assets/moovin.png";
+import logo from "../app/assets/tk-logo.png";
 
 export default function CheckOutForm2() {
   return (
@@ -11,8 +12,8 @@ export default function CheckOutForm2() {
         </div>
         <h1 className="text-xl">Método de envío</h1>
       </div>
-      <div className="w-3/4 flex justify-center mt-5">
-        <div className="bg-white w-3/4 flex  rounded-t-3xl drop-shadow-lg text-xl">
+      <div className="w-3/4 flex flex-col items-center mt-5 space-y-10">
+        <section className="bg-white w-3/4 flex  rounded-t-3xl drop-shadow-lg text-xl">
           <div className=" border-r-2 border-dashed border-grey-200  w-[100px] flex justify-center items-center ml-[10px]">
             <input
               type="radio"
@@ -28,10 +29,30 @@ export default function CheckOutForm2() {
               src={moovin}
               alt=""
               style={{ width: "230px", height: "65px" }}
-              className="ml-5"
+              className="ml-10"
             />
           </div>
-        </div>
+        </section>
+        <section className="bg-white w-3/4 flex  rounded-t-3xl drop-shadow-lg text-xl">
+          <div className=" border-r-2 border-dashed border-grey-200  w-[100px] flex justify-center items-center ml-[10px]">
+            <input
+              type="radio"
+              id="moovin"
+              name="del_method"
+              value="MOOVIN"
+              className="w-5 h-5"
+            />
+          </div>
+          <div className="flex  items-center  pl-[90px]">
+            <label className="tracking-wider">Recoger en tienda:</label>
+            <Image
+              src={logo}
+              alt=""
+              style={{ width: "150px", height: "65px" }}
+              className="ml-20"
+            />
+          </div>
+        </section>
       </div>
       <div className="flex justify-center mt-8 mb-8 w-3/4 ">
         <button className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap">

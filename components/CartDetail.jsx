@@ -44,9 +44,7 @@ const CartDetail = ({ isCheckout = false, detailTitle }) => {
     <div className="p-3 space-y-3">
       {!loading ? (
         <>
-          <h1 className=" flex justify-center">
-            Detalle del carrito{detailTitle}
-          </h1>
+          <h1 className=" flex justify-center">{detailTitle}</h1>
 
           <div className="flex justify-between ">
             <p className="whitespace-nowrap ">N° artículos</p>
