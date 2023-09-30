@@ -1,6 +1,6 @@
-import Image from "next/image";
-
+import { useRouter } from "next/navigation";
 const OrderFailed = ({ description }) => {
+  const router = useRouter();
   return (
     <>
       <div className="flex flex-col items-end justify-center space-y-3">
@@ -14,7 +14,6 @@ const OrderFailed = ({ description }) => {
         <div className="bg-white w-[250px] p-3 flex flex-col items-center ml-[20px] rounded-md">
           <h2>No te preocupes, tus productos continuan en tu carrito.</h2>
         </div>
-
         <button
           onClick={() => router.push("/checkout")} // Specify the URL to which you want to navigate
           className="bg-pink-200 text-white rounded-sm p-2 w-[150px]"

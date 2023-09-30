@@ -1,43 +1,43 @@
 {
-    "name": "detinmarin_frontend",
-    "version": "0.1.0",
-    "private": true,
-    "scripts": {
-        "dev": "next dev",
-        "build": "next build",
-        "start": "next start",
-        "lint": "next lint"
-    },
-    "dependencies": {
-        "@algolia/autocomplete-js": "^1.11.0",
-        "@algolia/autocomplete-theme-classic": "^1.11.0",
-        "@apollo/client": "^3.8.3",
-        "@headlessui/react": "^1.7.17",
-        "@reduxjs/toolkit": "^1.9.5",
-        "algoliasearch": "^4.19.1",
-        "autoprefixer": "10.4.15",
-        "axios": "^1.5.0",
-        "dotenv": "^16.3.1",
-        "eslint": "8.48.0",
-        "eslint-config-next": "13.4.19",
-        "formik": "^2.4.3",
-        "graphql": "^16.8.0",
-        "instantsearch.js": "^4.56.10",
-        "next": "^13.4.19",
-        "postcss": "8.4.28",
-        "react": "18.2.0",
-        "react-dom": "18.2.0",
-        "react-hot-toast": "^2.4.1",
-        "react-icons": "^4.10.1",
-        "react-instantsearch": "^7.0.2",
-        "react-instantsearch-dom": "^6.40.4",
-        "react-redux": "^8.1.2",
-        "react-responsive-carousel": "^3.2.23",
-        "sharp": "^0.32.5",
-        "tailwindcss": "3.3.3",
-        "yup": "^1.2.0"
-    },
-    "devDependencies": {
-        "tailwind-scrollbar": "^3.0.5"
-    }
+  "name": "detinmarin_frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@algolia/autocomplete-js": "^1.11.0",
+    "@algolia/autocomplete-theme-classic": "^1.11.0",
+    "@apollo/client": "^3.8.3",
+    "@headlessui/react": "^1.7.17",
+    "@reduxjs/toolkit": "^1.9.5",
+    "algoliasearch": "^4.19.1",
+    "autoprefixer": "10.4.15",
+    "axios": "^1.5.0",
+    "dotenv": "^16.3.1",
+    "eslint": "8.48.0",
+    "eslint-config-next": "13.4.19",
+    "formik": "^2.4.3",
+    "graphql": "^16.8.0",
+    "instantsearch.js": "^4.56.10",
+    "next": "^13.4.19",
+    "postcss": "8.4.28",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hot-toast": "^2.4.1",
+    "react-icons": "^4.10.1",
+    "react-instantsearch": "^7.0.2",
+    "react-instantsearch-dom": "^6.40.4",
+    "react-redux": "^8.1.2",
+    "react-responsive-carousel": "^3.2.23",
+    "sharp": "^0.32.5",
+    "tailwindcss": "3.3.3",
+    "yup": "^1.2.0"
+  },
+  "devDependencies": {
+    "tailwind-scrollbar": "^3.0.5"
+  }
 }
