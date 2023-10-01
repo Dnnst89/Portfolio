@@ -5,9 +5,11 @@ export const GET_PAYMENT_DETAILS = gql`
     usersPermissionsUser(id: $userId) {
       data {
         id
+
         attributes {
           firstName
           lastName
+          phoneNumber
           users_address {
             data {
               attributes {
