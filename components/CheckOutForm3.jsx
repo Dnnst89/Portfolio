@@ -4,10 +4,26 @@ import Spinner from "./Spinner";
 import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
 import { useQuery } from "@apollo/client";
 import { paymentDataForm } from "../app/data/tilopay/transactionData";
-
+import { useRouter } from "next/navigation";
 export default function CheckOutForm3() {
-  const [paymentUrl, setPaymentUrl] = useState(null);
+  const router = useRouter();
+
   const [formData, setFormData] = useState(paymentDataForm);
+  const paymentUrlPromise = paymentRequest();
+  let paymentUrl = "";
+  paymentUrlPromise
+    .then((result) => {
+      // The Promise has resolved
+      console.log("Received payment URL:", result);
+      // You can use the result
+      paymentUrl = result;
+      // Now you can use the 'paymentUrl' variable as the payment URL.
+      console.log("Payment URL:", paymentUrl);
+    })
+    .catch((error) => {
+      // Handle any errors that might occur during the Promise execution
+      console.error("Promise rejected with error:", error);
+    });
   console.log(paymentUrl);
   const userInSession = JSON.parse(localStorage.getItem("userData"));
   const { id, email } = userInSession?.user || {};
@@ -15,25 +31,7 @@ export default function CheckOutForm3() {
     variables: { userId: id },
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const url = await paymentRequest();
-        setPaymentUrl(url);
-      } catch (error) {
-        console.error("Error fetching payment URL:", error);
-        // Handle the error as needed
-      }
-    };
-
-    // Call fetchData inside a try-catch block
-    try {
-      fetchData();
-    } catch (error) {
-      console.error("Error in fetchData:", error);
-      // Handle the error as needed
-    }
-  }, []);
+  // Call fetchData inside a try-catch block
 
   useEffect(() => {
     if (!loading && !error) {
@@ -127,9 +125,8 @@ export default function CheckOutForm3() {
           <div>Error loading payment details.</div>
         ) : (
           <button
-            onClick={paymentUrl}
+            onClick={() => router.push(paymentUrl)}
             className="bg-pink-200 text-white rounded-sm p-2 w-[200px] whitespace-nowrap"
-            //disabled={!paymentUrl}
           >
             Proceder al pago
           </button>
