@@ -8,10 +8,10 @@ export async function middleware(request) {
     } = request;
     const cookie = cookies.get("userData");
     const userData = JSON.parse(cookie?.value);
-    if(!userData) {
-      if(
+    if (!userData) {
+      if (
         pathname === "/register/signemail" ||
-        pathname === "/register/singname" || 
+        pathname === "/register/singname" ||
         pathname === "/login"
       ) {
         return NextResponse.next();
@@ -21,14 +21,14 @@ export async function middleware(request) {
       // check if the user is logued
       if (
         pathname === "/register/signemail" ||
-        pathname === "/register/singname" || 
+        pathname === "/register/singname" ||
         pathname === "/login"
       ) {
         return NextResponse.redirect(new URL("/", request.url));
       }
       return NextResponse.next();
     }
-    
+
     return NextResponse.redirect(new URL("/", request.url));
   } catch (error) {
     console.log(error);
@@ -36,7 +36,6 @@ export async function middleware(request) {
 }
 
 export const config = {
-<<<<<<< HEAD
   matcher: [
     "/cart",
     "/checkout",
@@ -46,7 +45,4 @@ export const config = {
     "/order/orderViewDetail",
     "/welcomeUser",
   ],
-=======
-  matcher: ["/cart", "/checkout", "/register/singname", "/register/signemail", '/order', '/order/orderViewDetail', '/login'],
->>>>>>> dev
 };

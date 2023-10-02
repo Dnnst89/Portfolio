@@ -5,14 +5,10 @@ import Spinner from "./Spinner";
 // import { getAccessToken } from "@/helpers";
 import { useEffect } from "react";
 
-<<<<<<< HEAD
-const CartDetail = ({ isCheckout = false, detailTitle }) => {
-=======
 const CartDetail = ({
   isCheckout = false,
   detailTitle = "Detalle del carrito",
 }) => {
->>>>>>> dev
   const { user } = useStorage();
 
   const {
