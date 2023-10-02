@@ -8,12 +8,14 @@ const useSession = () => {
 
   useEffect(() => {
     // Retrieve session data from localStorage or sessionStorage
-    const sessionData = JSON.parse(localStorage.getItem("userData"));
+    const sessionData = JSON.parse(localStorage.getItem("userData"));//datos de user
+
 
     // Dispatch actions to update the Redux store with session data
     if (sessionData && sessionData.isAuthenticated) {
       dispatch(setUser(sessionData.user));
     }
+
   }, [dispatch]);
 };
 

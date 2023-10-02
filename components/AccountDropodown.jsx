@@ -4,12 +4,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout } from "@/redux/features/authSlice";
 import useSession from "@/hooks/useSession";
 import Link from "next/link";
+import { updateShoppingSession } from "@/redux/features/cart-slice";
+import { useRouter } from "next/navigation";
 
 const AccountDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const authUser = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
-
+  const router = useRouter();
   const wrapperRef = useRef(null);
 
   useEffect(() => {
@@ -30,8 +32,15 @@ const AccountDropdown = () => {
   };
 
   const handleLogout = () => {
+    router.push("/");
+    router.refresh();
     dispatch(logout());
+    dispatch(updateShoppingSession(null));
     localStorage.removeItem("userData");
+    localStorage.removeItem("cartSession");
+    document.cookie = "userData=null";
+    // Recargar la página para que no quede data basura
+    window.location.reload();
   };
   useSession();
   return (

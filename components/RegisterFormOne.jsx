@@ -7,6 +7,7 @@ import ErrorForm from "./ErrorForm";
 import SocialMediaRegistry from "./SocialMediaRegistry";
 import { useDispatch, useSelector } from "react-redux";
 import { userData } from "@/redux/features/registryForm";
+import useSession from "@/hooks/useSession";
 
 const initialValues = {
   username: "",
@@ -48,7 +49,7 @@ const RegisterFormOne = () => {
     // change the route to email form page
     router.push("/register/signemail");
   };
-
+  useSession();
   return (
     <div className=" flex h-screen justify-center items-center w-full ">
       <div className="w-[300px]">
