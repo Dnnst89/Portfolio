@@ -14,4 +14,9 @@ const strapiInstance = axios.create({
   timeout: 10000,
 });
 
-export { algoliaInstace, strapiInstance };
+const facturationInstace = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_ELECTRONIC_BILL,
+  timeout: 10000
+})
+
+export { algoliaInstace, strapiInstance, facturationInstace };

@@ -2,9 +2,9 @@
 import useStorage from "@/hooks/useStorage";
 import useCartSummary from "@/hooks/useCartSummary";
 import Spinner from "./Spinner";
-// import { getAccessToken } from "@/helpers";
-import { useEffect } from "react";
-
+import { getAccessToken, formatTaxData } from "@/helpers";
+import { useCallback, useEffect } from "react";
+import { facturationInstace } from "@/src/axios/algoliaIntance/config";
 const CartDetail = ({
   isCheckout = false,
   detailTitle = "Detalle del carrito",
@@ -21,27 +21,23 @@ const CartDetail = ({
   });
 
   useEffect(() => {
-    // getAccessToken();
     getTaxCost();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items?.length]);
 
-  const getTaxCost = () => {
-    const lineDetails = items?.map((item) => {
-      return {
-        measurementUnit: "Sp",
-        unitaryPrice: item?.attributes?.variant?.data?.attributes?.price,
-        qty: item?.quantity,
-        cabys:
-          item?.attributes?.variant?.data?.attributes?.product?.data?.attributes
-            ?.cabys,
-      };
-    });
+  const getTaxCost = async () => {
+    const token = await getAccessToken();
+    const formatedItems = formatTaxData(items);
     const body = {
       serviceDetail: {
-        lineDetails,
+        lineDetails: [...formatedItems],
       },
     };
+    const { data } = await facturationInstace.post(
+      `/api/utils/get-detail-line?access_token=${token}`,
+      body
+    );
+    console.log(data);
   };
 
   return (
