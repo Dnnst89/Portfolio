@@ -1,11 +1,14 @@
-import AgeResultsComponent from "@/components/AgeResultsComponent"
+import AgeResultsComponent from "@/components/AgeResultsComponent";
+import BodyComponent from "@/components/BodyComponent";
 
 function page({ params }) {
-    const { q } = params
+  const { q } = params;
 
-    return (
-        <AgeResultsComponent ageRange={q} />
-    )
+  return (
+    <BodyComponent>
+      <AgeResultsComponent ageRange={q} />
+    </BodyComponent>
+  );
 }
 
-export default page
+export default page;

@@ -5,7 +5,14 @@ import Spinner from "./Spinner";
 // import { getAccessToken } from "@/helpers";
 import { useEffect } from "react";
 
+<<<<<<< HEAD
 const CartDetail = ({ isCheckout = false, detailTitle }) => {
+=======
+const CartDetail = ({
+  isCheckout = false,
+  detailTitle = "Detalle del carrito",
+}) => {
+>>>>>>> dev
   const { user } = useStorage();
 
   const {
@@ -20,6 +27,7 @@ const CartDetail = ({ isCheckout = false, detailTitle }) => {
   useEffect(() => {
     // getAccessToken();
     getTaxCost();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items?.length]);
 
   const getTaxCost = () => {
