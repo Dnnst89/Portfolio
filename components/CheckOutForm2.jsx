@@ -1,8 +1,9 @@
 "use client";
 import Image from "next/image";
 import moovin from "../app/assets/moovin.png";
-
+import { useRouter } from "next/navigation";
 export default function CheckOutForm2() {
+  const router = useRouter();
   return (
     <div className="mt-[40px] mx-[30px]">
       <div className="flex w-3/4 justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
@@ -34,7 +35,10 @@ export default function CheckOutForm2() {
         </div>
       </div>
       <div className="flex justify-center mt-8 mb-8 w-3/4 ">
-        <button className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap">
+        <button
+          onClick={() => router.push("/proceedPayment")}
+          className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
+        >
           Continuar
         </button>
       </div>

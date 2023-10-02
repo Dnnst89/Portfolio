@@ -44,9 +44,7 @@ export default function ThankYouMessage(params) {
           const { data } = await updateOrderDetailsStatus({
             variables: {
               id: order,
-              data: {
-                status: "Approved",
-              },
+              newStatus: "Approved",
             },
           });
           console.log("response strapi :", data);
@@ -62,9 +60,9 @@ export default function ThankYouMessage(params) {
           // Update the order status for rejected payments
           const { data } = await updateOrderDetailsStatus({
             variables: {
-              id: order,
-              data: {
-                status: "Rejected",
+              variables: {
+                id: order,
+                newStatus: "Rejected",
               },
             },
           });
