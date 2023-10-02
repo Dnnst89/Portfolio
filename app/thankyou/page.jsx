@@ -3,6 +3,8 @@ import OrderFailed from "@/components/OrderFailed";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useMutation } from "@apollo/client";
+import { UPDATE_ORDER_DETAILS_STATUS } from "@/src/graphQl/queries/updateOrderDetailsStatus";
 /*
   recives the Tilopay response , based on the returns params 
   redirects to an certain page.
@@ -10,39 +12,70 @@ import { useEffect, useState } from "react";
   IMPORTANT= is posible to change the order number in the url
   clean after response
 */
+
 export default function ThankYouMessage(params) {
   const router = useRouter();
   const [description, setDescription] = useState("");
   const [code, setCode] = useState("");
   const [order, setOrder] = useState("");
+  //calling the mutation
+  const [updateOrderDetailsStatus] = useMutation(UPDATE_ORDER_DETAILS_STATUS);
 
   useEffect(() => {
     handleTilopayResponse();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params?.searchParams]);
 
-  const handleTilopayResponse = () => {
+  const handleTilopayResponse = async () => {
     if (params?.searchParams?.code) {
       // Get query parameters from the URL
       const { code, description, auth, order } = params.searchParams;
-
       // Set the description in the component state
       setDescription(description);
       setCode(code);
       setOrder(order);
-      console.log("description", description);
       // Handle the payment data as needed
       if (code === "1") {
         // Payment was successful
         console.log("Pago exitoso :", description);
+        // I need to change the status of ther order to approved
+        try {
+          console.log(order);
+          const { data } = await updateOrderDetailsStatus({
+            variables: {
+              id: order,
+              data: {
+                status: "Approved",
+              },
+            },
+          });
+          console.log("response strapi :", data);
+        } catch (error) {
+          console.error("Error updating order status:", error);
+        }
       } else {
         // Payment failed
-        console.error("No se ha podido realizar el pago:", description);
         // Render the description when code is not "1"
+        console.error("No se ha podido realizar el pago:", description);
+        // I need to change the status of ther order to rejected
+        try {
+          // Update the order status for rejected payments
+          const { data } = await updateOrderDetailsStatus({
+            variables: {
+              id: order,
+              data: {
+                status: "Rejected",
+              },
+            },
+          });
+
+          // Continue with other actions you want to perform on failure
+        } catch (error) {
+          console.error("Error updating order status:", error);
+        }
       }
     }
   };
-
   return (
     <div className="bg-floralwhite p-[100px] flex justify-center">
       <main className="bg-resene border-2 border-dashed border-grey-200 flex flex-col justify-center h-auto p-10">

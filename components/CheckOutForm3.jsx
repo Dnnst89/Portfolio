@@ -10,28 +10,21 @@ export default function CheckOutForm3() {
 
   const [formData, setFormData] = useState(paymentDataForm);
   const paymentUrlPromise = paymentRequest();
+
   let paymentUrl = "";
   paymentUrlPromise
     .then((result) => {
-      // The Promise has resolved
-      console.log("Received payment URL:", result);
-      // You can use the result
       paymentUrl = result;
-      // Now you can use the 'paymentUrl' variable as the payment URL.
-      console.log("Payment URL:", paymentUrl);
     })
     .catch((error) => {
-      // Handle any errors that might occur during the Promise execution
       console.error("Promise rejected with error:", error);
     });
-  console.log(paymentUrl);
+
   const userInSession = JSON.parse(localStorage.getItem("userData"));
   const { id, email } = userInSession?.user || {};
   const { loading, error, data } = useQuery(GET_PAYMENT_DETAILS, {
     variables: { userId: id },
   });
-
-  // Call fetchData inside a try-catch block
 
   useEffect(() => {
     if (!loading && !error) {
