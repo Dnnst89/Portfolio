@@ -39,8 +39,8 @@ export default function ThankYouMessage(params) {
         // Payment was successful
         console.log("Pago exitoso :", description);
         // I need to change the status of ther order to approved
+        console.log("change the status of the order :", order);
         try {
-          console.log(order);
           const { data } = await updateOrderDetailsStatus({
             variables: {
               id: order,
@@ -60,10 +60,8 @@ export default function ThankYouMessage(params) {
           // Update the order status for rejected payments
           const { data } = await updateOrderDetailsStatus({
             variables: {
-              variables: {
-                id: order,
-                newStatus: "Rejected",
-              },
+              id: order,
+              newStatus: "Rejected",
             },
           });
 
@@ -79,11 +77,11 @@ export default function ThankYouMessage(params) {
       <main className="bg-resene border-2 border-dashed border-grey-200 flex flex-col justify-center h-auto p-10">
         <section className="flex justify-center">
           <figure className="">
-            <Image
+            {/* <Image
               src={""}
               alt="Detinmarin logo"
               style={{ width: "390px", height: "170px" }}
-            />
+            /> */}
           </figure>
           {code === "1" ? (
             <div className="flex flex-col items-end justify-center space-y-3">

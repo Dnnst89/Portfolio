@@ -1,12 +1,31 @@
 import { gql } from "@apollo/client";
 
 export const CREATE_ORDER = gql`
-  mutation CreateOrderDetail($input: OrderDetailCreateInput!) {
-    createOrderDetail(input: $input) {
-      orderDetail {
+  mutation CreateOrderDetail(
+    $user_id: ID!
+    $status: String!
+    $total: Float
+    $publishedAt: DateTime!
+  ) {
+    createOrderDetail(
+      data: {
+        publishedAt: $publishedAt
+        status: $status
+        total: $total
+        users_permissions_user: $user_id
+      }
+    ) {
+      data {
         id
-        total
-        status
+        attributes {
+          total
+          users_permissions_user {
+            data {
+              id
+            }
+          }
+          status
+        }
       }
     }
   }
