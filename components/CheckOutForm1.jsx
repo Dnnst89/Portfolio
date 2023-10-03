@@ -1,40 +1,60 @@
 "use client";
 import { CREATE_ORDER } from "@/src/graphQl/queries/createUserOrder";
 import CartDetail from "./CartDetail";
-import { useMutation } from "@apollo/client";
-import { useRouter } from "next/navigation";
+import { useMutation, useQuery } from "@apollo/client";
+import { redirect, useRouter } from "next/navigation";
 import InputForm from "./InputForm";
+import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
+import { useEffect, useState } from "react";
+import { paymentDataForm } from "@/app/data/tilopay/transactionData";
+
 export default function CheckOutForm1() {
   const router = useRouter();
+  const [formData, setFormData] = useState(paymentDataForm);
   const [createOrder] = useMutation(CREATE_ORDER);
-  //upload the payment data to create the order
-
   const userInSession = JSON.parse(localStorage.getItem("userData"));
+  let hasPendingOrder = false;
   const { id } = userInSession?.user || {};
   const total = parseFloat(0.1);
-  //CREATING ORDER DETAIL
+  const { data } = useQuery(GET_PENDING_ORDER, {
+    variables: { userId: id },
+  });
+  const userData = data?.usersPermissionsUser?.data?.attributes;
+  if (userData) {
+    const { order_details } = userData;
+    const { data: orderDetailsData } = order_details || { data: [] };
+    // Check if there are any pending orders
+    hasPendingOrder = orderDetailsData.some((orderDetail) =>
+      orderDetail.attributes.status.includes("P")
+    );
+  }
+  const resentPendingOrder = () => {
+    // Need to pass the created order to Tilopay request data
+    if (userData) {
+      if (hasPendingOrder.length > 0) {
+        setFormData({
+          orderNumber: hasPendingOrder.join(","),
+        });
+      }
+      router.push("/proceedPayment");
+    }
+  };
   const handleCreateOrder = async () => {
     const isoDate = new Date().toISOString();
-    console.log("creating order detail :", isoDate, parseInt(id), total);
     try {
       const { data } = await createOrder({
         variables: {
           user_id: parseInt(id),
           total: total,
-          status: "P", //Pending
+          status: "P", // Pending
           publishedAt: isoDate,
         },
       });
-
-      console.log("data from created order:", data);
       router.push("/proceedPayment");
     } catch (error) {
       console.error("Error creating order:", error);
     }
   };
-
-  //we need to get it from caritemdetails
-
   return (
     <div className="mt-[40px] mx-[30px]">
       <div className="flex w-3/4 justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
@@ -123,7 +143,9 @@ export default function CheckOutForm1() {
       </main>
       <div className="flex justify-center mt-8 mb-8 w-3/4 ">
         <button
-          onClick={() => handleCreateOrder()}
+          onClick={() =>
+            hasPendingOrder ? resentPendingOrder() : handleCreateOrder()
+          }
           className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
         >
           Continuar

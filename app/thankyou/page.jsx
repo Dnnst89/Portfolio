@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { UPDATE_ORDER_DETAILS_STATUS } from "@/src/graphQl/queries/updateOrderDetailsStatus";
+import { logo } from "../assets/images";
 /*
   recives the Tilopay response , based on the returns params 
   redirects to an certain page.
@@ -46,14 +47,13 @@ export default function ThankYouMessage(params) {
               newStatus: "A", // Approved
             },
           });
-          console.log("response strapi :", data);
         } catch (error) {
           console.error("Error updating order status:", error);
         }
       } else {
         // Payment failed
         // Render the description when code is not "1"
-        console.error("No se ha podido realizar el pago");
+        console.log("No se ha podido realizar el pago");
         // I need to change the status of ther order to rejected
         try {
           // Update the order status for rejected payments
@@ -76,11 +76,11 @@ export default function ThankYouMessage(params) {
       <main className="bg-resene border-2 border-dashed border-grey-200 flex flex-col justify-center h-auto p-10">
         <section className="flex justify-center">
           <figure className="">
-            {/* <Image
-              src={""}
+            <Image
+              src={logo}
               alt="Detinmarin logo"
               style={{ width: "390px", height: "170px" }}
-            /> */}
+            />
           </figure>
           {code === "1" ? (
             <div className="flex flex-col items-end justify-center space-y-3">

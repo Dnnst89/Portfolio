@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
 import { useQuery } from "@apollo/client";
 import { paymentDataForm } from "@/app/data/tilopay/transactionData";
+
 export default function CheckOutForm3() {
   const router = useRouter();
   const [formData, setFormData] = useState(paymentDataForm);
@@ -32,7 +33,6 @@ export default function CheckOutForm3() {
           order_details,
         } = userData;
         // Create an array of order detail objects
-        console.log("form 1 :", userData);
         const { data: orderDetailsData } = order_details || { data: [] };
         // Use the find method to search for the order with the specific orderNumber
 
