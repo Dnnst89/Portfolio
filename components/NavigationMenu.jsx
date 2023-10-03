@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import Link from "next/link";
-
-export default function () {
+const NavidationMenu = () => {
   const [isSelected, setIsSelected] = useState(null);
   const selectedStyle =
     "bg-pink-200 rounded-full  text-resene p-1 text-2xl mb-2 sm:p-1 sm:text-2xl md:p-1 md:text-2xl lg:p-2 lg:text-4xl";
@@ -68,4 +67,5 @@ export default function () {
       </div>
     </div>
   );
-}
+};
+export default NavidationMenu;
