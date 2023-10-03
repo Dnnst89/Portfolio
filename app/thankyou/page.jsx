@@ -37,14 +37,13 @@ export default function ThankYouMessage(params) {
       // Handle the payment data as needed
       if (code === "1") {
         // Payment was successful
-        console.log("Pago exitoso :", description);
+        console.log("Pago exitoso ");
         // I need to change the status of ther order to approved
-        console.log("change the status of the order :", order);
         try {
           const { data } = await updateOrderDetailsStatus({
             variables: {
               id: order,
-              newStatus: "Approved",
+              newStatus: "A", // Approved
             },
           });
           console.log("response strapi :", data);
@@ -54,14 +53,14 @@ export default function ThankYouMessage(params) {
       } else {
         // Payment failed
         // Render the description when code is not "1"
-        console.error("No se ha podido realizar el pago:", description);
+        console.error("No se ha podido realizar el pago");
         // I need to change the status of ther order to rejected
         try {
           // Update the order status for rejected payments
           const { data } = await updateOrderDetailsStatus({
             variables: {
               id: order,
-              newStatus: "Rejected",
+              newStatus: "C", //Cancelled
             },
           });
 

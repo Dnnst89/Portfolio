@@ -6,7 +6,7 @@ import CheckOutHeader from "@/components/CheckoutHeader";
 const CheckOut = () => {
   return (
     <div>
-      <CheckOutHeader />
+      <CheckOutHeader regresar={"/cart"} />
       <CheckOutForm1 />
       <CheckOutForm2 />
     </div>

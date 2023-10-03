@@ -38,12 +38,9 @@ export default function CheckOutForm3() {
 
         // Use filter to find orders with "Pending" status
         const pendingOrderId = orderDetailsData
-          .filter((orderDetail) =>
-            orderDetail.attributes.status.includes("Pending")
-          )
+          .filter((orderDetail) => orderDetail.attributes.status.includes("P"))
           .map((orderDetail) => orderDetail.id);
         //get the total of the pending order
-        console.log("first", pendingOrderId);
         const specificOrder = orderDetailsData.find(
           (orderDetail) => orderDetail.id === pendingOrderId.join(",")
         );
@@ -102,7 +99,6 @@ export default function CheckOutForm3() {
     .catch((error) => {
       console.error("Promise rejected with error:", error);
     });
-  console.log("paymenturl :", paymentUrl);
 
   return (
     <div className="mt-[40px] mx-[30px]">

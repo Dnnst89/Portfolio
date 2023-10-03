@@ -9,7 +9,7 @@ export default function CheckOutForm1() {
   //upload the payment data to create the order
 
   const userInSession = JSON.parse(localStorage.getItem("userData"));
-  const { id, email } = userInSession?.user || {};
+  const { id } = userInSession?.user || {};
   const total = parseFloat(0.1);
   //CREATING ORDER DETAIL
   const handleCreateOrder = async () => {
@@ -20,7 +20,7 @@ export default function CheckOutForm1() {
         variables: {
           user_id: parseInt(id),
           total: total,
-          status: "Pending",
+          status: "P", //Pending
           publishedAt: isoDate,
         },
       });
