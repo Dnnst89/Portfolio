@@ -54,7 +54,7 @@ const useCartSummary = ({ userId }) => {
               return (
                 accumulator +
                 item.attributes.variant.data.attributes.price *
-                  item.attributes.quantity
+                item.attributes.quantity
               );
             }, 0),
             quantity: cartItems.data.reduce((accumulator, item) => {
@@ -73,7 +73,6 @@ const useCartSummary = ({ userId }) => {
         }
       } catch (error) {
         //Manejo de errores
-        console.log(error);
         setError(true);
       } finally {
         setLoading(false);
