@@ -10,9 +10,6 @@ const ProtectedRoutes = ({ children, toLogin = false }) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   useEffect(() => {
-    console.log(userData);
-    console.log(toLogin);
-    console.log(user?.id);
     if (!user?.id && !userData?.id && !toLogin) {
       if (window.location.pathname === "/") return;
       return router.push("/");
@@ -21,7 +18,7 @@ const ProtectedRoutes = ({ children, toLogin = false }) => {
       return router.push("/");
     }
     setLoading(false);
-  }, [children, router, user, toLogin]);
+  }, [children, router, user, toLogin, userData]);
   return loading ? <></> : children;
 };
 
