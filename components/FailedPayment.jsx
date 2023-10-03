@@ -1,25 +1,29 @@
 "use client";
-import toast, { Toaster } from "react-hot-toast";
+import React, { useEffect, useState } from "react";
+
 const FailedPayment = ({ description }) => {
-  return (
-    <>
-      {toast.error(`${description}...  Por favor intentelo nuevamente. `)}
-      <Toaster
-        position="top-center"
-        reverseOrder={false}
-        toastOptions={{
-          className: "",
-          style: {
-            border: "1px solid #ffffff",
-            padding: "16px",
-            color: "#ffffff",
-            background: "#f87171",
-            height: "100px",
-          },
-        }}
-      />
-    </>
-  );
+  // State to track the visibility of the component
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    // Set a timer to hide the component after 3 seconds
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+    }, 3000); // 3000 milliseconds (3 seconds)
+
+    // Clear the timer when the component unmounts
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Render the component only if isVisible is true
+  return isVisible ? (
+    <div>
+      <div className="flex justify-center items-center rounded-sm w-[500px] h-[100px] z-50 bg-[#ef4444] absolute top-0 left-0 right-0 mx-auto">
+        <h2 className="text-white text-2xl font-semibold">{description}</h2>
+        <p>Por favor inténtalo nuevamente.</p>
+      </div>
+    </div>
+  ) : null;
 };
 
 export default FailedPayment;

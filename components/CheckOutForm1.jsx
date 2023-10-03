@@ -1,30 +1,40 @@
 "use client";
-import InputForm from "./InputForm";
+import { CREATE_ORDER } from "@/src/graphQl/queries/createUserOrder";
 import CartDetail from "./CartDetail";
-
+import { useMutation } from "@apollo/client";
+import { useRouter } from "next/navigation";
+import InputForm from "./InputForm";
 export default function CheckOutForm1() {
-  const [formData, setFormData] = useState({
-    redirect: "https://localhost:3000/checkout", // Fix the URL format
-    key: process.env.NEXT_PUBLIC_TILOPAY_API_KEY,
-    amount: "0.55",
-    currency: "CRC",
-    billToFirstName: "Danny",
-    billToLastName: "Soto",
-    billToAddress: "Alajuela",
-    billToAddress2: "San Rafael",
-    billToCity: "Alajuela",
-    billToState: "Alajuela",
-    billToZipPostCode: "506",
-    billToCountry: "CR",
-    billToTelephone: "84111915",
-    billToEmail: "dnnst89@gmail.com",
-    orderNumber: "1",
-    capture: "1",
-    subscription: "0",
-    platform: "api",
-    returnData: "dXNlcl9pZD0xMg==",
-    hashVersion: "V2",
-  });
+  const router = useRouter();
+  const [createOrder] = useMutation(CREATE_ORDER);
+  //upload the payment data to create the order
+
+  const userInSession = JSON.parse(localStorage.getItem("userData"));
+  const { id } = userInSession?.user || {};
+  const total = parseFloat(0.1);
+  //CREATING ORDER DETAIL
+  const handleCreateOrder = async () => {
+    const isoDate = new Date().toISOString();
+    console.log("creating order detail :", isoDate, parseInt(id), total);
+    try {
+      const { data } = await createOrder({
+        variables: {
+          user_id: parseInt(id),
+          total: total,
+          status: "P", //Pending
+          publishedAt: isoDate,
+        },
+      });
+
+      console.log("data from created order:", data);
+      router.push("/proceedPayment");
+    } catch (error) {
+      console.error("Error creating order:", error);
+    }
+  };
+
+  //we need to get it from caritemdetails
+
   return (
     <div className="mt-[40px] mx-[30px]">
       <div className="flex w-3/4 justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
@@ -112,7 +122,10 @@ export default function CheckOutForm1() {
         </div>
       </main>
       <div className="flex justify-center mt-8 mb-8 w-3/4 ">
-        <button className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap">
+        <button
+          onClick={() => handleCreateOrder()}
+          className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
+        >
           Continuar
         </button>
       </div>
