@@ -1,11 +1,11 @@
-import RegisterFormOne from '@/components/RegisterFormOne';
+import RegisterFormOne from "@/components/RegisterFormOne";
 
 const SingName = () => {
-    return (
-        <div>
-            <RegisterFormOne />
-        </div>
-    );
+  return (
+    <div>
+      <RegisterFormOne />
+    </div>
+  );
 };
 
 export default SingName;

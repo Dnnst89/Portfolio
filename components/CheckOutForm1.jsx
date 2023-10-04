@@ -1,47 +1,104 @@
 "use client";
+import { CREATE_ORDER } from "@/src/graphQl/queries/createUserOrder";
 import CartDetail from "./CartDetail";
+import { useMutation, useQuery } from "@apollo/client";
+import { redirect, useRouter } from "next/navigation";
+import InputForm from "./InputForm";
+import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
+import { useEffect, useState } from "react";
+import { paymentDataForm } from "@/app/data/tilopay/transactionData";
 
 export default function CheckOutForm1() {
+  const router = useRouter();
+  const [formData, setFormData] = useState(paymentDataForm);
+  const [createOrder] = useMutation(CREATE_ORDER);
+  const userInSession = JSON.parse(localStorage.getItem("userData"));
+  let hasPendingOrder = false;
+  const { id } = userInSession?.user || {};
+  const total = parseFloat(0.1);
+  const { data } = useQuery(GET_PENDING_ORDER, {
+    variables: { userId: id },
+  });
+  const userData = data?.usersPermissionsUser?.data?.attributes;
+  if (userData) {
+    const { order_details } = userData;
+    const { data: orderDetailsData } = order_details || { data: [] };
+    // Check if there are any pending orders
+    hasPendingOrder = orderDetailsData.some((orderDetail) =>
+      orderDetail.attributes.status.includes("P")
+    );
+  }
+  const resentPendingOrder = () => {
+    // Need to pass the created order to Tilopay request data
+    if (userData) {
+      if (hasPendingOrder.length > 0) {
+        setFormData({
+          orderNumber: hasPendingOrder.join(","),
+        });
+      }
+      router.push("/proceedPayment");
+    }
+  };
+  const handleCreateOrder = async () => {
+    const isoDate = new Date().toISOString();
+    try {
+      const { data } = await createOrder({
+        variables: {
+          user_id: parseInt(id),
+          total: total,
+          status: "P", // Pending
+          publishedAt: isoDate,
+        },
+      });
+      router.push("/proceedPayment");
+    } catch (error) {
+      console.error("Error creating order:", error);
+    }
+  };
   return (
     <div className="mt-[40px] mx-[30px]">
       <div className="flex w-3/4 justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
         <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
-          {" "}
-          1{" "}
+          1
         </div>
         <h1 className="text-xl">Información de envío</h1>
       </div>
       <main className="flex ">
         <section className="w-3/4">
           <div className="flex justify-center">
-            <section className="w-1/4 flex flex-col p-2 space-y-1">
-              <label>Nombre</label>
-              <input />
-              <label>Correo Electrónico</label>
-              <input />
-              <label>País</label>
-              <input />
-              <label>Cantón</label>
-              <input />
-              <label>Código Postal</label>
-              <input />
-              <label>Otras señas</label>
-              <input />
+            <section className="w-1/4 flex flex-col p-2">
+              <InputForm label={"Nombre"} htmlFor={"name"} id={"name"} />
+              <InputForm
+                label={"Correo Electrónico"}
+                htmlFor={"email"}
+                id={"email"}
+              />
+              <InputForm label={"País"} htmlFor={"country"} id={"country"} />
+              <InputForm label={"Cantón"} htmlFor={"canton"} id={"canton"} />
+              <InputForm label={"Código Postal"} htmlFor={"zip"} id={"zip"} />
+              <InputForm label={"Segunda Dirección"} htmlFor={"2"} id={"2"} />
             </section>
-            <section className="w-1/4 flex flex-col p-2 space-y-1">
-              <label>Apellidos</label>
-              <input />
-              <label>Teléfono</label>
-              <input />
-              <label>Provincia</label>
-              <input />
-              <label>Ciudad</label>
-              <input />
-              <label>Dirección</label>
-              <input />
+            <section className="w-1/4 flex flex-col p-2">
+              <InputForm
+                label={"Apellidos"}
+                htmlFor={"lastname"}
+                id={"lastname"}
+              />
+              <InputForm label={"Teléfono"} htmlFor={"phone"} id={"phone"} />
+              <InputForm
+                label={"Provincia"}
+                htmlFor={"provincia"}
+                id={"provincia"}
+              />
+              <InputForm label={"Ciudad"} htmlFor={"city"} id={"city"} />
+              <InputForm
+                label={"Dirección"}
+                htmlFor={"direction"}
+                id={"direction"}
+              />
             </section>
           </div>
-          <div className="flex  justify-center">
+          <div className="flex justify-center">
             <section className="w-1/4 flex p-2">
               <p className="mr-4 whitespace-nowrap">Factura Electrónica</p>
               <label className="switch">
@@ -52,28 +109,45 @@ export default function CheckOutForm1() {
             <section className="w-1/4 flex p-2"></section>
           </div>
           <div className="flex justify-center">
-            <section className="w-1/4 flex flex-col p-2  space-y-1">
-              <label>Tipo De Cédula</label>
-              <input />
-              <label>Nombre Comercial</label>
-              <input />
+            <section className="w-1/4 flex flex-col p-2  ">
+              <InputForm
+                label={"Tipo De Cédula"}
+                htmlFor={"cedula"}
+                id={"cedula"}
+              />
+              <InputForm
+                label={"Nombre Comercial"}
+                htmlFor={"businessname"}
+                id={"businessname"}
+              />
             </section>
-            <section className="w-1/4 flex flex-col p-2  space-y-1">
-              <label>Cédula Comercial</label>
-              <input />
-              <label>Correo Electrónico</label>
-              <input />
+            <section className="w-1/4 flex flex-col p-2">
+              <InputForm
+                label={"Cédula Comercial"}
+                htmlFor={"businessid"}
+                id={"businessid"}
+              />
+              <InputForm
+                label={"Correo Electrónico"}
+                htmlFor={"email2"}
+                id={"email2"}
+              />
             </section>
           </div>
         </section>
         <div className=" bg-resene rounded-sm w-1/4 h-[350px] ml-[25px] mt-[-80px]">
           <div className="flex flex-col space-y-3 ">
-            <CartDetail isCheckout />
+            <CartDetail detailTitle={"Detalle del carrito"} />
           </div>
         </div>
       </main>
       <div className="flex justify-center mt-8 mb-8 w-3/4 ">
-        <button className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap">
+        <button
+          onClick={() =>
+            hasPendingOrder ? resentPendingOrder() : handleCreateOrder()
+          }
+          className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
+        >
           Continuar
         </button>
       </div>
