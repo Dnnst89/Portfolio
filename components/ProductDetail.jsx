@@ -39,7 +39,11 @@ function ProductDetail({ name, description, sku, variants, materials }) {
 
   return (
     <>
-      <div className="bg-floralwhite" target="_blank" rel="noopener noreferrer">
+      <div
+        className="bg-floralwhite h-screen"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <div className=" p-5 flex ">
           {/* imagen principal grande */}
           <div className="w-6/12 flex justify-center">
@@ -175,9 +179,9 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                     Peso:
                     <span className="m-2">
                       {variants.length > 0 &&
-                        variants[0].attributes.weight != null
+                      variants[0].attributes.weight != null
                         ? variants[0].attributes.weight.weight +
-                        variants[0].attributes.weight.unitWeight
+                          variants[0].attributes.weight.unitWeight
                         : null}
                     </span>
                   </p>
@@ -191,16 +195,16 @@ function ProductDetail({ name, description, sku, variants, materials }) {
           <div className="flex h-32  w-6/12 justify-center">
             {images
               ? images.map((item) => {
-                return (
-                  <ProductImage
-                    key={item.id}
-                    url={item.attributes.url}
-                    width={"125"}
-                    height={"100"}
-                    className={"rounded-xl mx-2"}
-                  />
-                );
-              })
+                  return (
+                    <ProductImage
+                      key={item.id}
+                      url={item.attributes.url}
+                      width={"125"}
+                      height={"100"}
+                      className={"rounded-xl mx-2"}
+                    />
+                  );
+                })
               : null}
           </div>
           {/* precio, cantidad y carrito */}
