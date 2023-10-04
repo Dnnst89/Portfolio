@@ -3,8 +3,7 @@ import ProductContainer from "@/app/layouts/includes/ProductContainer";
 import { algoliaInstace } from "@/src/axios/algoliaIntance/config";
 import React, { useEffect, useState } from "react";
 
-const ResultsComponent = ({ query }) => {
-
+const ResultsComponent = ({ query = "" }) => {
   const [result, setResult] = useState([]);
   const [hitsPerPage, setHitsPerPage] = useState(null);
   const [nbHits, setNbHits] = useState(null);
@@ -17,7 +16,7 @@ const ResultsComponent = ({ query }) => {
         `/development_api::product.product?query=${query}&page=${currentPage}`
       );
       if (statusText !== "OK") {
-        throw new Error(`Error! status: ${status}`);
+        // throw new Error(`Error! status: ${status}`);
       }
       return data;
     } catch (err) {
@@ -35,8 +34,9 @@ const ResultsComponent = ({ query }) => {
   }
 
   useEffect(() => {
-    if (!query) return null;
-    allResults();
+    if (query) {
+      allResults();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, query]);
 

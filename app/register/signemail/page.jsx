@@ -1,10 +1,13 @@
 "use client";
+import ProtectedRoutes from "@/components/ProtectedRoutes";
 import RegisterFormTwo from "@/components/RegisterFormTwo";
 
 const SingEmail = () => {
   return (
     <>
-      <RegisterFormTwo />
+      <ProtectedRoutes toLogin={true}>
+        <RegisterFormTwo />
+      </ProtectedRoutes>
     </>
   );
 };
