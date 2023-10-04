@@ -24,6 +24,7 @@ export default function CheckOutForm1() {
     const { order_details } = userData;
     const { data: orderDetailsData } = order_details || { data: [] };
     // Check if there are any pending orders
+    // bring daba already filtered
     hasPendingOrder = orderDetailsData.some((orderDetail) =>
       orderDetail.attributes.status.includes("P")
     );
