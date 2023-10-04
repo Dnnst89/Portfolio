@@ -6,6 +6,11 @@ import CartProceedPayment from "@/components/CartProceedPayment";
 import { useEffect, useState } from "react";
 import GET_ORDER_ITEMS_BY_ORDER_ID from "@/src/graphQl/queries/getOrderItemsByOrderId";
 import { useLazyQuery } from "@apollo/client";
+import OrderDetailSummary from "./OrderSummary";
+import Spinner from "./Spinner";
+import OrderSummary from "./OrderSummary";
+import { Carousel } from 'react-responsive-carousel';
+import CarouselImages from "./CarouselImages";
 export default function OrderDetailSecondary({ orderId }) {
 
   const [orderData, setOrderData] = useState(
@@ -79,26 +84,33 @@ export default function OrderDetailSecondary({ orderId }) {
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  console.log(orderId)
   if (loading) {
-    return <p>loading</p>;
+    return <div className="flex justify-center">
+      <Spinner />
+    </div>
   }
-  console.log(orderData)
+
+  orderData.orderItems.map((item) => { console.log(item.images) })
 
   return (
     <div className="bg-resene">
       <h1 className="flex justify-center text-xl p-5">Pedido N°: {orderData.order.orderRef}</h1>
       <div className=" lg:space-x-8 sm:pt- sm:block md:block lg:flex">
-        {orderData.orderItems.length > 0 ? orderData.orderItems?.map((item) => ( //si existen items
-          <div key={item.ref}>
-            <section className=" border-b-2 border-dashed border-grey-200 p-5 h-[125px]">
+
+        <div >
+          {orderData.orderItems.length > 0 ? orderData.orderItems?.map((item) => ( //si existen items
+            <section key={item.itemRef} className=" border-b-2 border-dashed border-grey-200 p-5 h-[125px]">
               <div className="flex lg:space-x-3  sm:space-between">
-                <Image
-                  src={test}
-                  alt="imagen de producto seleccionado"
-                  style={{ width: "100px", height: "90px" }}
-                  className="rounded-xl"
-                />
+                {item.images.length > 0 ?
+                  <CarouselImages images={item.images} widthImg={100} heightImg={90} />
+                  : (
+                    <Image
+                      src={test}
+                      alt="imagen de producto seleccionado"
+                      style={{ width: "100px", height: "90px" }}
+                      className="rounded-xl"
+                    />
+                  )}
                 <div className="flex sm:items-center md:items-baseline lg:items-baseline justify-between sm:p-3  sm:w-full">
                   <div className="pr-5">
                     <h1 className="sm:text-sm">Nombre: {item.name} </h1>
@@ -112,12 +124,14 @@ export default function OrderDetailSecondary({ orderId }) {
                 </div>
               </div>
             </section>
-          </div>
-        )) : <h1>vacio</h1>//si no existen items
-        }
+
+          )) : <h1>vacio</h1>//si no existen items
+          }  </div>
 
         <section className="lg:border-l-4 lg:border-lightblue  h-[450px] p-3 sm:border-0">
-          <CartDetail detailTitle={"Detalle del pedido"} />
+          <OrderSummary detailTitle={"Detalle del pedido"} quantity={orderData.orderItems.reduce((accumulator, item) => {
+            return accumulator + item.quantity;
+          }, 0)} subTotal={orderData.order.subtotal} taxes={orderData.order.taxes} total={orderData.order.total} />
           <CartProceedPayment textButton={"Ver dirección"} page={""} />
         </section>
       </div>
