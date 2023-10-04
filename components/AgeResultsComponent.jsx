@@ -4,6 +4,7 @@ import getProductByAgeRange from "@/src/graphQl/queries/getProductByAgeRange";
 import ProductFilterContainer from "./ProductFilterContainer";
 import React, { useState } from "react";
 import Spinner from "./Spinner";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function AgeResultsComponent({ ageRange }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,15 +16,21 @@ export default function AgeResultsComponent({ ageRange }) {
   });
 
   if (loading) return <Spinner />;
-  if (error) return <p>{error.message}</p>;
+  if (error) return toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
+    autoClose: 5000
+  })
+
 
   const { variants } = data;
 
   return (
-    <ProductFilterContainer
-      result={variants}
-      currentPage={currentPage}
-      setCurrentPage={setCurrentPage}
-    />
+    <div>
+      <Toaster />
+      <ProductFilterContainer
+        result={variants}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
+    </div>
   );
 }
