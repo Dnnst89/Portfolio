@@ -9,9 +9,6 @@ import { logo } from "../assets/images";
 /*
   recives the Tilopay response , based on the returns params 
   redirects to an certain page.
-
-  IMPORTANT= is posible to change the order number in the url
-  clean after response
 */
 
 export default function ThankYouMessage(params) {
