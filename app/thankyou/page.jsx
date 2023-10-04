@@ -44,6 +44,11 @@ export default function ThankYouMessage(params) {
               newStatus: "A", // Approved
             },
           });
+          /*
+            get rid of the cart session and delete carts items from database
+            after that create a new empty cart session
+            DC-161 
+          */
         } catch (error) {
           console.error("Error updating order status:", error);
         }
