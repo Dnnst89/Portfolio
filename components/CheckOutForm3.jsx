@@ -40,7 +40,6 @@ export default function CheckOutForm3() {
         if (pendingOrderId) {
           // You can access the total and status properties of the specific order
           // PAYMENT DATA
-          console.log("Pending Order", pendingOrderId);
           setFormData({
             amount: total,
             billToFirstName: firstName,

@@ -3,7 +3,6 @@ import { paymentDataForm } from "@/app/data/tilopay/transactionData";
 const PAYMENT_URL = process.env.NEXT_PUBLIC_TILOPAY_PROCESS_TO_PAYMENT;
 
 export const paymentRequest = async () => {
-  console.log("paymentrequest data: ", paymentDataForm);
   try {
     const access_token = await login();
     const headers = {
