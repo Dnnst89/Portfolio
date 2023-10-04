@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images: { unoptimized: true },
+    images: {
+        domains: ['images.unsplash.com', 'https://didactoysperu.com', 'localhost', "ec2-54-189-90-96.us-west-2.compute.amazonaws.com"],
+    },
     trailingSlash: true,
-    output: 'export',
     distDir: 'build'
 };
 

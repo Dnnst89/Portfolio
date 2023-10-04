@@ -30,7 +30,7 @@ function ProductReviewForm({ idProduct }) {
           variables: { comment, score, product, users_permissions_user },
         });
 
-        toast.success("Gracias por tu reseña!😍", {
+        toast.success("Gracias por tu reseña!", {
           autoClose: 5000
         });
         reset()
@@ -45,7 +45,7 @@ function ProductReviewForm({ idProduct }) {
 
     }
     catch {
-      toast.error("Lo sentimos, no se ha podido ingresar la reseña. Intentalo de nuevo más tarde😥", {
+      toast.error("Lo sentimos, no se ha podido ingresar la reseña. Intentalo de nuevo más tarde", {
         autoClose: 5000
       });
     }
@@ -56,7 +56,7 @@ function ProductReviewForm({ idProduct }) {
       {sessionData &&
 
         < form onSubmit={onSubmit} >
-          <div><Toaster /></div>
+          <Toaster />
 
           <div className="text-center">
             <label>Danos tu opinión del producto</label>
