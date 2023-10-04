@@ -98,8 +98,7 @@ export default function CheckOutForm3() {
         </div>
         <h1 className="text-xl">Formulario de pago</h1>
       </div>
-
-      <div className="flex justify-center mt-8 mb-8 w-3/4">
+      <div className="flex justify-center mt-8 mb-8 w-3/4 ">
         <button
           onClick={() => router.push(paymentUrl)}
           className="bg-pink-200 text-white rounded-sm p-2 w-[200px] whitespace-nowrap"

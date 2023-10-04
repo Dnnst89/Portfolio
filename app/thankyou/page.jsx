@@ -1,5 +1,4 @@
 "use client";
-import OrderFailed from "@/components/OrderFailed";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -75,7 +74,7 @@ export default function ThankYouMessage(params) {
         <section className="flex justify-center">
           <figure>
             <Image
-              src={logo}
+              src={tk}
               alt="Detinmarin logo"
               style={{ width: "390px", height: "170px" }}
             />
@@ -107,6 +106,14 @@ export default function ThankYouMessage(params) {
             </>
           )}
         </section>
+        <Link
+          href={"/checkout"}
+          className="flex items-center justify-center pt-10"
+        >
+          <button className="bg-pink-200 text-white rounded-sm p-2 w-[150px] ">
+            Volver
+          </button>
+        </Link>
       </main>
     </div>
   ) : null;
