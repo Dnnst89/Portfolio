@@ -17,18 +17,9 @@ const ProductContainer = ({
       <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 w-full">
         {hits
           ? hits.map((item) => {
-              const coverImage = item.coverImage;
-              return (
-                <ProductCard
-                  key={item.id}
-                  id={item.id}
-                  name={item.name}
-                  defaultPrice={item.defaultPrice}
-                  coverImage={coverImage}
-                  brand={item.brand}
-                />
-              );
-            })
+            const coverImage = item.coverImage
+            return <ProductCard key={item.id} id={item.id} name={item.name} defaultPrice={item.defaultPrice} coverImage={coverImage} brand={item.brand} />;
+          })
           : null}
       </div>
       <Pagination

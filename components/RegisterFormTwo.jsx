@@ -97,7 +97,7 @@ const RegisterFormTwo = () => {
 
   return (
     <div className="h-screen">
-      <CheckOutHeader regresar={"/"} />
+      <CheckOutHeader regresar={"/login"} />
       <div className=" flex justify-center items-center w-full">
         <div className="">
           <Formik
