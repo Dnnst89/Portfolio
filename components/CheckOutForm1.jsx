@@ -1,60 +1,8 @@
 "use client";
-import { CREATE_ORDER } from "@/src/graphQl/queries/createUserOrder";
-import CartDetail from "./CartDetail";
-import { useMutation, useQuery } from "@apollo/client";
-import { redirect, useRouter } from "next/navigation";
 import InputForm from "./InputForm";
-import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
-import { useEffect, useState } from "react";
-import { paymentDataForm } from "@/app/data/tilopay/transactionData";
+import CartDetail from "./CartDetail";
 
 export default function CheckOutForm1() {
-  const router = useRouter();
-  const [formData, setFormData] = useState(paymentDataForm);
-  const [createOrder] = useMutation(CREATE_ORDER);
-  const userInSession = JSON.parse(localStorage.getItem("userData"));
-  let hasPendingOrder = false;
-  const { id } = userInSession?.user || {};
-  const total = parseFloat(0.1);
-  const { data } = useQuery(GET_PENDING_ORDER, {
-    variables: { userId: id },
-  });
-  const userData = data?.usersPermissionsUser?.data?.attributes;
-  if (userData) {
-    const { order_details } = userData;
-    const { data: orderDetailsData } = order_details || { data: [] };
-    // Check if there are any pending orders
-    hasPendingOrder = orderDetailsData.some((orderDetail) =>
-      orderDetail.attributes.status.includes("P")
-    );
-  }
-  const resentPendingOrder = () => {
-    // Need to pass the created order to Tilopay request data
-    if (userData) {
-      if (hasPendingOrder.length > 0) {
-        setFormData({
-          orderNumber: hasPendingOrder.join(","),
-        });
-      }
-      router.push("/proceedPayment");
-    }
-  };
-  const handleCreateOrder = async () => {
-    const isoDate = new Date().toISOString();
-    try {
-      const { data } = await createOrder({
-        variables: {
-          user_id: parseInt(id),
-          total: total,
-          status: "P", // Pending
-          publishedAt: isoDate,
-        },
-      });
-      router.push("/proceedPayment");
-    } catch (error) {
-      console.error("Error creating order:", error);
-    }
-  };
   return (
     <div className="mt-[40px] mx-[30px]">
       <div className="flex w-3/4 justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
@@ -142,12 +90,7 @@ export default function CheckOutForm1() {
         </div>
       </main>
       <div className="flex justify-center mt-8 mb-8 w-3/4 ">
-        <button
-          onClick={() =>
-            hasPendingOrder ? resentPendingOrder() : handleCreateOrder()
-          }
-          className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
-        >
+        <button className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap">
           Continuar
         </button>
       </div>
