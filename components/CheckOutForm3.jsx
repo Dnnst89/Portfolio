@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
 import { useQuery } from "@apollo/client";
 import { paymentDataForm } from "@/app/data/tilopay/transactionData";
-
+import useStorage from "@/hooks/useStorage";
 export default function CheckOutForm3() {
   const router = useRouter();
   const [formData, setFormData] = useState(paymentDataForm);
-  const userInSession = JSON.parse(localStorage.getItem("userData"));
-  const { id, email } = userInSession?.user || {};
+  const { user } = useStorage();
+  const { id, email } = user || {};
   // total final to pay , WE NEED TO GET IT FROM FACTURAZEN
   const total = parseFloat(0.1);
   const { loading, error, data } = useQuery(GET_PAYMENT_DETAILS, {
@@ -28,25 +28,15 @@ export default function CheckOutForm3() {
           users_address: {
             data: { attributes: userAddressAttributes },
           },
-          province,
           phoneNumber,
           order_details,
         } = userData;
         // Create an array of order detail objects
         const { data: orderDetailsData } = order_details || { data: [] };
-        // Use the find method to search for the order with the specific orderNumber
-
-        // Use filter to find orders with "Pending" status
+        // filter to find orders with "Pending" status
         const pendingOrderId = orderDetailsData
           .filter((orderDetail) => orderDetail.attributes.status.includes("P"))
           .map((orderDetail) => orderDetail.id);
-        //get the total of the pending order
-        const specificOrder = orderDetailsData.find(
-          (orderDetail) => orderDetail.id === pendingOrderId.join(",")
-        );
-
-        // const pendingOrderAmount = specificOrder.attributes.total;
-
         if (pendingOrderId) {
           // You can access the total and status properties of the specific order
           // PAYMENT DATA
