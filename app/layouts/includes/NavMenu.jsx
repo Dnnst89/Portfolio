@@ -37,7 +37,7 @@ const NavMenu = () => {
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           
-          <div className="flex items-center sm:items-stretch sm:justify-start w-1/6 md:w-4/6">
+          <div className="flex items-center sm:items-stretch sm:justify-start w-full">
             <div className="flex-shrink-0  md:pr-7 items-center">
               <Image
                 src={img2}
@@ -46,10 +46,6 @@ const NavMenu = () => {
                 height={50}
               />
             </div>
-            
-          </div>
-          <div className="flex items-center sm:items-stretch sm:justify-start w-full">
-            
             <div className="hidden sm:ml-1 items-center justify-between sm:flex md:w-full">
               <div className="flex space-x-4 w-full">
                 <div className="items-center justify-between hidden w-full md:flex md:w-full md:order-1">
