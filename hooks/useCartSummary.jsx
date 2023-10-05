@@ -41,39 +41,74 @@ const useCartSummary = ({ userId }) => {
         if (data) {
           // Si existe la sesión
           const shoppingSession = data.shoppingSessions.data[0];
-          const { data: cartItemsData } = await getCart({
-            //llamo la query para cartitems de la session
-            variables: { shoppingSessionId: shoppingSession.id },
-          });
-          const cartItems = cartItemsData.cartItems;
-          //guardo los datos  total,items,quantity,sessionId
-          setCartData((prev) => ({
-            ...prev,
-            sessionId: shoppingSession.id,
-            total: cartItems.data.reduce((accumulator, item) => {
+          let currentPage = 1;
+          let pageSize = 25;
+          let fetchedData = []; // para ir juntando los datos de cada pagina
+          let pageCount = 1
+
+          do {//debemos hacer un primer recorrido ya que el dato paeCount de la consulta es incierto
+            const { data: cartItemsData } = await getCart({
+              variables: {
+                shoppingSessionId: shoppingSession.id,
+                page: currentPage,
+                pageSize,
+              },
+            });
+
+            const cartItems = cartItemsData.cartItems;
+            fetchedData = fetchedData.concat(cartItems.data);
+            pageCount = cartItems.meta.pagination.pageCount;
+            currentPage++;
+          } while (currentPage <= pageCount);
+          //}
+
+          // Ahora,se procesa los datos recopilados
+          const total = fetchedData.reduce((accumulator, item) => {
+            if (item.attributes.variant.data && item.attributes.variant.data.attributes.product.data) {
+              //debe existir un producto con su respectiva variante
               return (
                 accumulator +
-                item.attributes.variant.data.attributes.price *
-                  item.attributes.quantity
+                item.attributes.variant.data.attributes.price * item.attributes.quantity
               );
-            }, 0),
-            quantity: cartItems.data.reduce((accumulator, item) => {
+            }
+            return accumulator;
+          }, 0);
+
+          const quantity = fetchedData.reduce((accumulator, item) => {
+            if (item.attributes.variant.data && item.attributes.variant.data.attributes.product.data) {
+              //debe existir un producto con su respectiva variante
               return accumulator + item.attributes.quantity;
-            }, 0),
-            items: cartItems.data.map((item) => {
+            }
+            return accumulator;
+          }, 0);
+
+          const items = fetchedData.map((item) => {
+            if (item.attributes.variant.data && item.attributes.variant.data.attributes.product.data) {
+              //debe existir un producto con su respectiva variante
               return {
                 totalItemPrice:
-                  item.attributes.variant.data.attributes.price *
-                  item.attributes.quantity,
+                  item.attributes.variant.data.attributes.price * item.attributes.quantity,
                 quantity: item.attributes.quantity,
                 ...item,
               };
-            }),
-          }));
+            }
+            return null; // lo asigno null para filtrarlo luego y no agregarlo a los items
+          });
+
+          // Actualiza el estado después de que se hayan procesado todos los datos
+          setCartData({
+            sessionId: shoppingSession.id,
+            total,
+            quantity,
+            items: items.filter(Boolean), // Filtra elementos nulos
+          });
+
+
+
         }
       } catch (error) {
         //Manejo de errores
-        console.log(error);
+        console.log(error)
         setError(true);
       } finally {
         setLoading(false);
