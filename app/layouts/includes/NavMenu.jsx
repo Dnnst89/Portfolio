@@ -3,6 +3,7 @@
 import { BsCart4 } from "react-icons/bs";
 import { img2 } from "../../assets/images";
 import Image from "next/image";
+import { Disclosure } from '@headlessui/react';
 import AccountDropodown from "@/components/AccountDropodown";
 import Searchbar from "@/components/Search";
 import Link from "next/link";
@@ -31,53 +32,83 @@ const NavMenu = () => {
   };
 
   return (
-    <header className="grid grid-cols-2 sm:grid-cols-6">
-      <div className="flex justify-center items-center mt-[15px] order-1 col-span-1 sm:col-span-1  h-[60px]">
-        <Link href={"/"}>
-          <Image src={img2} alt="dfskdk" width={120} height={50} />
-        </Link>
+
+    <header className="">
+      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          
+          <div className="flex items-center sm:items-stretch sm:justify-start w-1/6 md:w-4/6">
+            <div className="flex-shrink-0  md:pr-7 items-center">
+              <Image
+                src={img2}
+                alt="Detinmarin"
+                width={120}
+                height={50}
+              />
+            </div>
+            
+          </div>
+          <div className="flex items-center sm:items-stretch sm:justify-start w-full">
+            
+            <div className="hidden sm:ml-1 items-center justify-between sm:flex md:w-full">
+              <div className="flex space-x-4 w-full">
+                <div className="items-center justify-between hidden w-full md:flex md:w-full md:order-1">
+                  <Searchbar />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+            <div className="grid grid-cols-2 justify-center items-center  order-2 sm:order-3 col-span-1 sm:col-span-1">
+              <div className="">
+                <span className=" flex justify-center items-center ">
+                  <AccountDropodown />
+                </span>
+              </div>
+              <Link
+                onClick={showAlert}
+                href={user?.id && isAuthenticated ? "/cart" : "/"}
+              >
+                <div className="flex justify-center items-center ">
+                  <BsCart4 size={30} color="#67C3AD" />
+                  {info ? (
+                    <p className="bg-aquamarine rounded-full px-2 text-white">
+                      {info.quantity}
+                    </p>
+                  ) : (
+                    <p className="bg-aquamarine rounded-full px-2 text-white">0</p>
+                  )}
+                </div>
+              </Link>
+            </div>
+            <Toaster
+              toastOptions={{
+                success: {
+                  style: {
+                    background: "#67C3AD",
+                  },
+                },
+                error: {
+                  style: {
+                    background: "#f87171",
+                  },
+                },
+              }}
+            />
+          </div>
+        </div>
       </div>
 
-      <div className="py-5 items-center order-3 sm:order-2 col-span-2 sm:col-span-4 h-[60px]">
-        <Searchbar />
-      </div>
-      <div className="grid grid-cols-2 justify-center items-center  order-2 sm:order-3 col-span-1 sm:col-span-1">
-        <div className="">
-          <span className=" flex justify-center items-center ">
-            <AccountDropodown />
-          </span>
-        </div>
-        <Link
-          onClick={showAlert}
-          href={user?.id && isAuthenticated ? "/cart" : "/"}
-        >
-          <div className="flex justify-center items-center ">
-            <BsCart4 size={30} color="#67C3AD" />
-            {info ? (
-              <p className="bg-aquamarine rounded-full px-2 text-white">
-                {info.quantity}
-              </p>
-            ) : (
-              <p className="bg-aquamarine rounded-full px-2 text-white">0</p>
-            )}
+      {/* Mobile menu */}
+      <div className="sm:hidden" id="mobile-menu">
+        <div className="space-y-1 px-2 pb-3 pt-2">
+        <div className="items-center justify-between m-auto w-4/5 md:flex md:w-full md:order-1">
+                  <Searchbar />
           </div>
-        </Link>
+        </div>
       </div>
-      <Toaster
-        toastOptions={{
-          success: {
-            style: {
-              background: "#67C3AD",
-            },
-          },
-          error: {
-            style: {
-              background: "#f87171",
-            },
-          },
-        }}
-      />
     </header>
+
   );
 };
 
