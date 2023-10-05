@@ -7,6 +7,7 @@ const loader = ({ src }) => {
 };
 
 const AgeProductCard = ({ id, name, defaultPrice, coverImage, brand }) => {
+  const baseURL = "http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337";
   return (
     <Link href={{ pathname: "/detail", query: { id } }}>
       <div className="m-4 max-w-sm rounded-[15px] shadow-lg w-[300px] h-[450px] transition-transform transform hover:scale-105 hover:bg-resene duration-1000 hover:cursor-pointer">
@@ -19,8 +20,8 @@ const AgeProductCard = ({ id, name, defaultPrice, coverImage, brand }) => {
               height="500"
               src={
                 coverImage
-                  ? coverImage.attributes.url
-                  : "/uploads/large_undefined_0cd8bc924a.png"
+                  ? `${baseURL}${coverImage.attributes.url}`
+                  : `${baseURL}/uploads/large_undefined_0cd8bc924a.png`
               }
               alt="tailwind logo"
               className="rounded-[15px]"

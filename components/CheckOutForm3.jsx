@@ -89,7 +89,6 @@ export default function CheckOutForm3() {
     .catch((error) => {
       console.error("Promise rejected with error:", error);
     });
-
   return (
     <div className="mt-[40px] mx-[30px]">
       <div className="flex w-3/4 justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
