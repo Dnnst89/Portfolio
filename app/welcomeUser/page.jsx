@@ -45,7 +45,7 @@ const WelcomeUser = () => {
             image={pedidos}
             alt={"Pedidos"}
             description={"Pedidos"}
-            link={"order"}
+            link={"/order"}
           />
           <ProfileUserCard
             image={direcciones}

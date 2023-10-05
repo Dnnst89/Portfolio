@@ -13,7 +13,6 @@ mutation CreateShoppingSession( $publishedAt: DateTime!,$userId: ID!) {
         id
         attributes{
             total
-            active
             users_permissions_user{
                 data{
                     id

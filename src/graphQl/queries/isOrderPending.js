@@ -1,17 +1,22 @@
 import { gql } from "@apollo/client";
 
 export const GET_PENDING_ORDER = gql`
-  query GetUserOrders($userId: ID!) {
-    usersPermissionsUser(id: $userId) {
+  query GetUserOrderStatus($userId: ID!, $status: String) {
+    orderDetails(
+      filters: {
+        status: { eq: $status }
+        and: { users_permissions_user: { id: { eq: $userId } } }
+      }
+    ) {
       data {
+        id
         attributes {
-          order_details {
+          users_permissions_user {
             data {
-              attributes {
-                status
-              }
+              id
             }
           }
+          status
         }
       }
     }
