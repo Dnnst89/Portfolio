@@ -32,7 +32,7 @@ function ProductReviewForm({ idProduct }) {
           variables: { comment, score, product, users_permissions_user },
         });
 
-        toast.success("Gracias por tu reseña!😍", {
+        toast.success("Gracias por tu reseña!", {
           autoClose: 5000,
         });
         reset();

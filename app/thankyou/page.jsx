@@ -1,4 +1,5 @@
 "use client";
+import OrderFailed from "@/components/OrderFailed";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -8,6 +9,9 @@ import { logo } from "../assets/images";
 /*
   recives the Tilopay response , based on the returns params 
   redirects to an certain page.
+
+  IMPORTANT= is posible to change the order number in the url
+  clean after response
 */
 
 export default function ThankYouMessage(params) {
@@ -67,54 +71,40 @@ export default function ThankYouMessage(params) {
       }
     }
   };
-
-  return code ? (
+  return (
     <div className="bg-floralwhite p-[100px] flex justify-center">
       <main className="bg-resene border-2 border-dashed border-grey-200 flex flex-col justify-center h-auto p-10">
         <section className="flex justify-center">
-          <figure>
+          <figure className="">
             <Image
-              src={tk}
+              src={logo}
               alt="Detinmarin logo"
               style={{ width: "390px", height: "170px" }}
             />
           </figure>
-
-          {parseInt(code) === 1 ? (
-            <>
-              <div className="flex flex-col items-end justify-center space-y-3">
-                <div className="flex flex-col items-center space-y-1 ml-3">
-                  <h1 className="text-xl bold">¡Gracias por tu compra!</h1>
-                  <p className="text-sm">{description}</p>
-                  <p className="text-sm">Ya estamos preparando tu pedido</p>
-                </div>
-                <div className="bg-white w-[250px] p-3 flex flex-col items-center ml-[20px] rounded-md">
-                  <p className="text-grey-100">N° de pedido</p>
-                  <p>{order}</p>
-                </div>
-                <button
-                  onClick={() => router.push("/")} // Specify the URL to which you want to navigate
-                  className="bg-pink-200 text-white rounded-sm p-2 w-[150px]"
-                >
-                  Volver
-                </button>
+          {code === "1" ? (
+            <div className="flex flex-col items-end justify-center space-y-3">
+              <div className="flex flex-col items-center space-y-1 ml-3">
+                <h1 className="text-xl bold">¡Gracias por tu compra!</h1>
+                <p className="text-sm">{description}</p>
+                <p className="text-sm">Ya estamos preparando tu pedido</p>
               </div>
-            </>
+              <div className="bg-white w-[250px] p-3 flex flex-col items-center ml-[20px] rounded-md">
+                <p className="text-grey-100">N° de pedido</p>
+                <p>{order}</p>
+              </div>
+              <button
+                onClick={() => router.push("/")} // Specify the URL to which you want to navigate
+                className="bg-pink-200 text-white rounded-sm p-2 w-[150px]"
+              >
+                Volver
+              </button>
+            </div>
           ) : (
-            <>
-              <OrderFailed description={description} />
-            </>
+            <OrderFailed description={description} />
           )}
         </section>
-        <Link
-          href={"/checkout"}
-          className="flex items-center justify-center pt-10"
-        >
-          <button className="bg-pink-200 text-white rounded-sm p-2 w-[150px] ">
-            Volver
-          </button>
-        </Link>
       </main>
     </div>
-  ) : null;
+  );
 }
