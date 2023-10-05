@@ -36,6 +36,7 @@ export default function CheckOutForm3() {
           users_address: {
             data: { attributes: userAddressAttributes },
           },
+          province,
           phoneNumber,
         } = userData;
 

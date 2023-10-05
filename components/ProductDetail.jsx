@@ -21,12 +21,16 @@ function ProductDetail({ name, description, sku, variants, materials }) {
   }
 
   const decreaseCounter = () => {
-    if (quantity === 0) return;
+    if (quantity === 1) return;
     setQuantity((prev) => --prev);
   };
 
   const increaseCounter = () => {
-    setQuantity((prev) => ++prev);
+    if (variants.length > 0) {
+      if (quantity >= variants[0].attributes.stock) return;
+      setQuantity((prev) => ++prev);
+    }
+
   };
   const handleClick = () => {
     // Find the element you want to scroll to
