@@ -14,7 +14,6 @@ const FeaturedProducts = () => {
     const { data } = await strapiInstance.get(
       "/api/products?populate=*&filters[featured][$eq]=truepagination[page]=1&pagination[pageSize]=3"
     );
-    console.log(data.data);
     setProducts(data.data);
   };
 

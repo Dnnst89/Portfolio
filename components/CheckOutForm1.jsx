@@ -7,6 +7,7 @@ import InputForm from "./InputForm";
 import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
 import useStorage from "@/hooks/useStorage";
 export default function CheckOutForm1() {
+  const userInSession = useStorage();
   const router = useRouter();
   const [createOrder] = useMutation(CREATE_ORDER);
   const { user } = useStorage();
