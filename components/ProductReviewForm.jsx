@@ -32,8 +32,13 @@ function ProductReviewForm({ idProduct }) {
           variables: { comment, score, product, users_permissions_user },
         });
 
+<<<<<<< HEAD
         toast.success("Gracias por tu reseña!😍", {
           autoClose: 5000,
+=======
+        toast.success("Gracias por tu reseña!", {
+          autoClose: 5000
+>>>>>>> 7377be4af54f7057a9c58faadad93b0db103aa51
         });
         reset();
         setRating(0);
@@ -51,6 +56,7 @@ function ProductReviewForm({ idProduct }) {
         }
       );
     }
+<<<<<<< HEAD
   });
 
   return (
@@ -60,6 +66,21 @@ function ProductReviewForm({ idProduct }) {
           <div>
             <Toaster />
           </div>
+=======
+    catch {
+      toast.error("Lo sentimos, no se ha podido ingresar la reseña. Intentalo de nuevo más tarde", {
+        autoClose: 5000
+      });
+    }
+  })
+
+  return (
+    <>
+      {sessionData &&
+
+        < form onSubmit={onSubmit} >
+          <Toaster />
+>>>>>>> 7377be4af54f7057a9c58faadad93b0db103aa51
 
           <div className="text-center">
             <label htmlFor="message" className="">

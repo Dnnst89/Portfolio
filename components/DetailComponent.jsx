@@ -4,17 +4,22 @@ import ProductDetail from "./ProductDetail";
 import ProductDetailSecondary from "./ProductDetailSecondary";
 import RelatedItems from "./RelatedItems";
 import ProductDetailQuery from "@/src/graphQl/queries/getProductById";
+import Spinner from "@/components/Spinner";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function DetailComponent({ id }) {
   const { loading, error, data } = useQuery(ProductDetailQuery, {
     variables: { id },
   });
 
-  if (loading) return <p>Loading ...</p>;
-  if (error) return <p>{error.message}</p>
+  if (loading) return <Spinner />
+  if (error) return toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
+    autoClose: 5000
+  })
 
   return (
-    <main>
+    <div>
+      <Toaster />
       <ProductDetail
         name={data?.product.data.attributes.name}
         description={data?.product.data.attributes.description}
@@ -28,6 +33,6 @@ export default function DetailComponent({ id }) {
         reviews={data?.product.data.attributes.reviews.data}
       />
       <RelatedItems />
-    </main>
+    </div>
   );
 }
