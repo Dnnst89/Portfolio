@@ -20,3 +20,4 @@ export const paymentDataForm = {
   returnData: "dXNlcl9pZD0xMg==",
   hashVersion: "V2",
 };
+console.log("paymentDataForm ", paymentDataForm);

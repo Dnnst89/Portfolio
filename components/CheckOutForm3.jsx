@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import paymentRequest from "@/api/tilopay/paymentRequest";
 import Spinner from "./Spinner";
@@ -6,21 +7,28 @@ import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
 import { useQuery } from "@apollo/client";
 import { paymentDataForm } from "@/app/data/tilopay/transactionData";
 import useStorage from "@/hooks/useStorage";
+import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
 export default function CheckOutForm3() {
   const router = useRouter();
   const [formData, setFormData] = useState(paymentDataForm);
+  console.log("formdata ...:", formData);
   const { user } = useStorage();
   const { id, email } = user || {};
   // total final to pay , WE NEED TO GET IT FROM FACTURAZEN
   const total = parseFloat(0.1);
-  const { loading, error, data } = useQuery(GET_PAYMENT_DETAILS, {
-    variables: { userId: id },
+  //RETRIEVE STATUS
+  const { data } = useQuery(GET_PENDING_ORDER, {
+    variables: { userId: id, status: "P" },
   });
+  console.log("----", data);
+  // const { loading, error, data } = useQuery(GET_PAYMENT_DETAILS, {
+  //   variables: { userId: id },
+  // });
   // RETRIEVE USER DATA
   useEffect(() => {
     if (!loading && !error) {
       const userData = data?.usersPermissionsUser?.data?.attributes;
-
+      console.log("user data: ", userData);
       if (userData) {
         const {
           firstName,
@@ -29,15 +37,13 @@ export default function CheckOutForm3() {
             data: { attributes: userAddressAttributes },
           },
           phoneNumber,
-          order_details,
         } = userData;
-        // Create an array of order detail objects
-        const { data: orderDetailsData } = order_details || { data: [] };
-        // filter to find orders with "Pending" status
-        const pendingOrderId = orderDetailsData
-          .filter((orderDetail) => orderDetail.attributes.status.includes("P"))
-          .map((orderDetail) => orderDetail.id);
-        if (pendingOrderId) {
+
+        const status =
+          existPendingOrder?.orderDetails?.data[0]?.attributes?.status;
+        console.log("status :", status);
+        const orderNumber = data?.orderDetails?.data[0]?.id;
+        if (status === "P") {
           // You can access the total and status properties of the specific order
           // PAYMENT DATA
           setFormData({
@@ -51,7 +57,7 @@ export default function CheckOutForm3() {
             billToZipPostCode: userAddressAttributes.postCode,
             billToTelephone: phoneNumber,
             billToEmail: email,
-            orderNumber: pendingOrderId.join(","),
+            orderNumber: orderNumber,
           });
         } else {
           // Handle the case where the specific order is not found
@@ -59,6 +65,7 @@ export default function CheckOutForm3() {
         }
       }
     }
+    console.log("formdata", formData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, loading, error]);
 
@@ -78,7 +85,7 @@ export default function CheckOutForm3() {
 
     // You can proceed with the payment logic here
   };
-  handlePaymentProceed();
+  //handlePaymentProceed();
   const paymentUrlPromise = paymentRequest();
 
   let paymentUrl = "";
