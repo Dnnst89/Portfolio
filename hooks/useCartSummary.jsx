@@ -42,7 +42,7 @@ const useCartSummary = ({ userId }) => {
           // Si existe la sesión
           const shoppingSession = data.shoppingSessions.data[0];
           let currentPage = 1;
-          let pageSize = 1;
+          let pageSize = 25;
           let fetchedData = []; // para ir juntando los datos de cada pagina
           let pageCount = 1
 
@@ -59,9 +59,6 @@ const useCartSummary = ({ userId }) => {
             fetchedData = fetchedData.concat(cartItems.data);
             pageCount = cartItems.meta.pagination.pageCount;
             currentPage++;
-            console.log("pagina: " + currentPage)
-            console.log("pageCount: " + pageCount)
-            console.log("cartItemsData: " + cartItemsData)
           } while (currentPage <= pageCount);
           //}
 
