@@ -1,17 +1,18 @@
-'use client';
+"use client";
 
-import BodyComponent from '@/components/BodyComponent';
-import React from 'react';
+import BodyComponent from "@/components/BodyComponent";
+import ProtectedRoutes from "@/components/ProtectedRoutes";
+import React from "react";
 const CartLayout = ({ children }) => {
-    return (
-        <>
-          
-      <BodyComponent>
-        <main>{children}</main>
-      </BodyComponent>
- 
-        </>
-    );
+  return (
+    <>
+      <ProtectedRoutes>
+        <BodyComponent>
+          <main>{children}</main>
+        </BodyComponent>
+      </ProtectedRoutes>
+    </>
+  );
 };
 
 export default CartLayout;

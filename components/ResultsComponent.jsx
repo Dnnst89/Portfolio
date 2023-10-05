@@ -2,10 +2,8 @@
 import ProductContainer from "@/app/layouts/includes/ProductContainer";
 import { algoliaInstace } from "@/src/axios/algoliaIntance/config";
 import React, { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
 
-const ResultsComponent = ({ query }) => {
-
+const ResultsComponent = ({ query = "" }) => {
   const [result, setResult] = useState([]);
   const [hitsPerPage, setHitsPerPage] = useState(null);
   const [nbHits, setNbHits] = useState(null);
@@ -19,18 +17,20 @@ const ResultsComponent = ({ query }) => {
       );
       if (statusText !== "OK") {
 <<<<<<< HEAD
+<<<<<<< HEAD
         throw new Error(`Error! status: ${status}`);
 =======
         toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
           autoClose: 5000
         })
 >>>>>>> 7377be4af54f7057a9c58faadad93b0db103aa51
+=======
+        // throw new Error(`Error! status: ${status}`);
+>>>>>>> f35f13ea8178ea3dd4eb74efa7901ba869bb3e15
       }
       return data;
     } catch (err) {
-      toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
-        autoClose: 5000
-      })
+      console.log(err);
     }
   }
 
@@ -44,23 +44,21 @@ const ResultsComponent = ({ query }) => {
   }
 
   useEffect(() => {
-    if (!query) return null;
-    allResults();
+    if (query) {
+      allResults();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, query]);
 
   return (
-    <div>
-      <Toaster />
-      <ProductContainer
-        result={result}
-        hitsPerPage={hitsPerPage}
-        nbHits={nbHits}
-        nbPages={nbPages}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      />
-    </div>
+    <ProductContainer
+      result={result}
+      hitsPerPage={hitsPerPage}
+      nbHits={nbHits}
+      nbPages={nbPages}
+      currentPage={currentPage}
+      setCurrentPage={setCurrentPage}
+    />
   );
 };
 

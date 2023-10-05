@@ -28,6 +28,7 @@ export default function CheckOutForm3() {
           users_address: {
             data: { attributes: userAddressAttributes },
           },
+          province,
           phoneNumber,
           order_details,
         } = userData;
@@ -98,7 +99,6 @@ export default function CheckOutForm3() {
     .catch((error) => {
       console.error("Promise rejected with error:", error);
     });
-  console.log(paymentUrl);
   return (
     <div className="mt-[40px] mx-[30px]">
       <div className="flex w-3/4 justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
