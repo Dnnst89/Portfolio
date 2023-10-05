@@ -19,12 +19,17 @@ import CREATE_SHOPPING_SESSION_MUTATION from "@/src/graphQl/queries/createShoppi
 import useSession from "@/hooks/useSession";
 
 const initialValues = {
+  username: "",
   email: "",
   password: "",
   confirmPassword: "",
 };
 
 const validationSchema = Yup.object().shape({
+  username: Yup.string()
+    .min(2, "Nombre de usuario muy corto")
+    .max(50, "Nombre de usuario muy largo")
+    .required("Este campo es requerido"),
   email: Yup.string()
     .email("Correo inválido")
     .required("Este campo es requerido"),
@@ -48,6 +53,7 @@ const RegisterFormTwo = () => {
   const dispatch = useDispatch();
   const [createUser] = useMutation(RegisterUser);
   const [createShoppingSession] = useMutation(CREATE_SHOPPING_SESSION_MUTATION);
+
   const handleSubmit = async (values) => {
     const dataValues = Object.keys(values).map((el) => {
       return values[el];
@@ -91,8 +97,8 @@ const RegisterFormTwo = () => {
 
   return (
     <div className="h-screen">
-      <CheckOutHeader regresar={"/login"} />
-      <div className=" flex justify-center items-center w-full mt-20">
+      <CheckOutHeader regresar={"/"} />
+      <div className=" flex justify-center items-center w-full">
         <div className="">
           <Formik
             initialValues={initialValues}
@@ -113,20 +119,20 @@ const RegisterFormTwo = () => {
                           <div className="flex flex-col mb-2">
                             <label
                               className="whitespace-nowrap"
-                              htmlFor="userName"
+                              htmlFor="username"
                             >
                               Nombre de usuario
                               <span className="text-pink-200">*</span>
                             </label>
                             <Field
                               type="text"
-                              id="userName"
-                              name="userName"
+                              id="username"
+                              name="username"
                               className="focus:border-blue-500 outline-none px-6 py-2 mb-2 rounded-lg border-2 border-grey-200"
                               autoFocus={true}
                             />
-                            {errors.email && touched.email ? (
-                              <ErrorForm>{errors.email}</ErrorForm>
+                            {errors.username && touched.username ? (
+                              <ErrorForm>{errors.username}</ErrorForm>
                             ) : null}
                           </div>
                           <div className="flex flex-col">
