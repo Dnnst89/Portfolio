@@ -22,7 +22,7 @@ const FeaturedProducts = () => {
     <>
       {products.length &&
         products.map((item) => (
-          <div className="flex  justify-center pt-10" key={item.id}>
+          <div className="lg:w-md md:w-md flex  justify-center pt-10" key={item.id}>
             <ProductCard
               name={item.attributes.name}
               defaultPrice={item.attributes.defaultPrice}
