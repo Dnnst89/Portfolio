@@ -30,7 +30,6 @@ function ProductDetail({ name, description, sku, variants, materials }) {
       if (quantity >= variants[0].attributes.stock) return;
       setQuantity((prev) => ++prev);
     }
-
   };
   const handleClick = () => {
     // Find the element you want to scroll to
@@ -43,11 +42,7 @@ function ProductDetail({ name, description, sku, variants, materials }) {
 
   return (
     <>
-      <div
-        className="bg-floralwhite h-screen"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <div className="bg-floralwhite" target="_blank" rel="noopener noreferrer">
         <div className=" p-5 flex ">
           {/* imagen principal grande */}
           <div className="w-6/12 flex justify-center">
