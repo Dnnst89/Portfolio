@@ -23,7 +23,7 @@ const ProductContainer = ({
                   id={item.id}
                   name={item.name}
                   defaultPrice={item.defaultPrice}
-                  coverImage={item?.coverImage}
+                  coverImage={item.coverImage}
                   brand={item.brand}
                 />
               );
