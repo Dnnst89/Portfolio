@@ -17,7 +17,6 @@ const searchClient = algoliasearch(APPLICATION_ID, SEARCH_API_KEY);
 const index = searchClient.initIndex(ALGOLIA_INDEX);
 
 const Searchbar = () => {
-  
   return (
     <div className="border border-lightblue rounded-[4px] focus:outline-none focus:ring-2  ">
       <Autocomplete
@@ -26,7 +25,9 @@ const Searchbar = () => {
         getSources={({ query }) => [
           {
             sourceId: "products",
-            getItemUrl({ item }) { return `/detail/${item.id}` },
+            getItemUrl({ item }) {
+              return `/detail/${item.id}`;
+            },
             getItems() {
               return getAlgoliaResults({
                 searchClient,
@@ -43,15 +44,16 @@ const Searchbar = () => {
             },
             templates: {
               item({ item, components }) {
-                return (
-                    <SearchItem hit={item} components={components} />
-                )
+                return <SearchItem hit={item} components={components} />;
               },
               footer() {
-                return <Link href={`/results/${query}`}>Ver todos los resultados</Link>;
+                return (
+                  <Link href={{ pathname: "/results", query: { query } }}>
+                    Ver todos los resultados
+                  </Link>
+                );
               },
-          
-            }
+            },
           },
         ]}
       />

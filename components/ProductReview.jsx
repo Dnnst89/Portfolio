@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+
 export default function ProductReview({ comment, score, user }) {
   const [showFullComment, setShowFullComment] = useState(false);
   const stars = [];
@@ -19,9 +20,11 @@ export default function ProductReview({ comment, score, user }) {
   }
 
   return (
-    <tr className="border-b-[1px] border-grey flex gap-[210px] w-11/12">
-      <td className="w-[0]">{user}</td>
-      <td>
+    <tr className="border-b-2 border-grey-200/50 flex text-sm">
+      <td className="px-4 py-2 w-1/3 overflow-hidden whitespace-nowrap">
+        {user}
+      </td>
+      <td className="px-4 py-2 w-1/3 overflow-hidden">
         <div className="flex items-center whitespace-nowrap">
           {stars.map((star) => (
             <svg
@@ -52,14 +55,15 @@ export default function ProductReview({ comment, score, user }) {
           </p>
         </div>
       </td>
-      <td className="">
+      <td className="px-4 py-2 w-2/3 text-grey-100">
         {showFullComment ? comment : truncatedComment}
         {comment.length > 100 && lastSpaceIndex !== -1 && (
           <span>
             {showFullComment ? null : "... "}
+            <br />
             <button
               onClick={toggleComment}
-              className="text-lightblue ml-2 transition duration-100 opacity-60 hover:opacity-100"
+              className="text-lightblue  transition duration-100 opacity-60 hover:opacity-100"
             >
               {showFullComment ? "Leer menos" : "Leer más"}
             </button>

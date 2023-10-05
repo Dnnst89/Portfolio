@@ -5,7 +5,6 @@ import CartDetail from "@/components/CartDetail";
 import CartProceedPayment from "@/components/CartProceedPayment";
 import CartContainer from "@/components/CartContainer";
 
-
 export default function CartView() {
   return (
     <div className="bg-floralwhite ">
@@ -17,11 +16,12 @@ export default function CartView() {
         <CartContainer />
 
         <div className=" bg-resene rounded-sm w-1/4 p-4 h-[500px]">
+          <CartDetail detailTitle={"Detalle del carrito"} />
 
-          <CartDetail />
-
-
-          <CartProceedPayment />
+          <CartProceedPayment
+            textButton={"Proceder al pago"}
+            page={"/checkout"}
+          />
         </div>
       </main>
       {/* ///////////LOS SIGUIENTES DATOS ESTAN QUEMADOS */}

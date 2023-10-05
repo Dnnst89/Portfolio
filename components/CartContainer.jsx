@@ -6,37 +6,32 @@ import toast, { Toaster } from "react-hot-toast";
 import useStorage from "@/hooks/useStorage";
 
 const CartContainer = () => {
-
-    const { user } = useStorage();//me trae el usuario de local storage
-    const {
-        total,
-        items,
-        quantity,
-        error,
-        loading
-    } = useCartSummary({ userId: user?.id });
-    console.log(quantity)
+    const { user } = useStorage(); //me trae el usuario de local storage
+    const { total, items, quantity, error, loading } = useCartSummary({
+        userId: user?.id,
+    });
     return (
-        <><Toaster
-            containerStyle={{
-                top: 150,
-                left: 20,
-                bottom: 20,
-                right: 20,
-            }}
-            toastOptions={{
-                success: {
-                    style: {
-                        background: "#67C3AD",
+        <>
+            <Toaster
+                containerStyle={{
+                    top: 150,
+                    left: 20,
+                    bottom: 20,
+                    right: 20,
+                }}
+                toastOptions={{
+                    success: {
+                        style: {
+                            background: "#67C3AD",
+                        },
                     },
-                },
-                error: {
-                    style: {
-                        background: "#f87171",
+                    error: {
+                        style: {
+                            background: "#f87171",
+                        },
                     },
-                },
-            }}
-        />
+                }}
+            />
             <div className="flex flex-col w-3/4">
                 {items?.map((item, index) => {
                     if (typeof item == "undefined") {
@@ -48,7 +43,6 @@ const CartContainer = () => {
 
                     return (
                         <div key={item.id}>
-
                             <CartItem
                                 key={item.id}
                                 cartItemId={item.id}
@@ -70,6 +64,7 @@ const CartContainer = () => {
                         </div>
                     );
                 })}
+
             </div>
         </>
     );
