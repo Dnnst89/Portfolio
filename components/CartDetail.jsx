@@ -34,7 +34,7 @@ const CartDetail = ({
       },
     };
     const { data } = await facturationInstace.post(
-      `/api/utils/get-detail-line?access_token=${token}`,
+      `/utils/get-detail-line?access_token=${token}`,
       body
     );
     console.log(data);
