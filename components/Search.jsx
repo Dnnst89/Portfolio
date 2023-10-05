@@ -18,7 +18,7 @@ const index = searchClient.initIndex(ALGOLIA_INDEX);
 
 const Searchbar = () => {
   return (
-    <div className="border border-lightblue rounded-[4px] focus:outline-none focus:ring-2  ">
+    <div className="border border-lightblue rounded-[4px] focus:outline-none focus:ring-2  w-full">
       <Autocomplete
         placeholder="Busca aquí lo que quieras..."
         openOnFocus={false}
