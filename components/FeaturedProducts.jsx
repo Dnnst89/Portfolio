@@ -14,6 +14,7 @@ const FeaturedProducts = () => {
     const { data } = await strapiInstance.get(
       "/api/products?populate=*&filters[featured][$eq]=truepagination[page]=1&pagination[pageSize]=3"
     );
+    console.log(data.data);
     setProducts(data.data);
   };
 
@@ -27,6 +28,7 @@ const FeaturedProducts = () => {
               defaultPrice={item.attributes.defaultPrice}
               id={item.id}
               url={"/uploads/juguete4_36d71de373.jpg"}
+              coverImage={item.attributes.coverImage}
             />
           </div>
         ))}

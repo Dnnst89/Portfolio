@@ -9,16 +9,17 @@ import guitar from "../assets/guitar.png";
 import libro from "../assets/libro.png";
 import BodyComponent from "@/components/BodyComponent";
 import FeaturedProducts from "@/components/FeaturedProducts";
+import NavCategories from "@/app/layouts/includes/NavCategories";
 import toast from "react-hot-toast";
 const MainLayout = ({ children }) => {
   const name = "Juguete";
   const defaultPrice = 8900;
   const url = "/uploads/juguete4_36d71de373.jpg";
 
-
   return (
     <>
       <BodyComponent>
+        <NavCategories />
         <div className="flex justify-center pt-10">
           <h1 className="text-lg">Top de productos</h1>
         </div>

@@ -6,13 +6,7 @@ import Link from "next/link";
 import AddItemBtn from "./AddItemBtn";
 import ProductImage from "./ProductImage";
 
-const loader = ({ src }) => {
-  return `https://img.freepik.com/vector-gratis/${src}`;
-};
-
-const loaderImage = ({ src }) => {
-  return `http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337${src}`;
-};
+const baseURL = "http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337";
 function ProductDetail({ name, description, sku, variants, materials }) {
   const [quantity, setQuantity] = useState(1);
   let images = 0;
@@ -30,7 +24,6 @@ function ProductDetail({ name, description, sku, variants, materials }) {
       if (quantity >= variants[0].attributes.stock) return;
       setQuantity((prev) => ++prev);
     }
-
   };
   const handleClick = () => {
     // Find the element you want to scroll to
@@ -73,11 +66,10 @@ function ProductDetail({ name, description, sku, variants, materials }) {
               <div className="w-3/6">
                 <div className="flex mt-5 items-center">
                   <Image
-                    loader={loaderImage}
                     priority={true}
                     width="50"
                     height="50"
-                    src="/uploads/Asset_4_2_f88170fa82.png"
+                    src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
                     alt="tailwind logo"
                     className="rounded-xl mr-3"
                   />
@@ -88,11 +80,10 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                 </div>
                 <div className="flex mt-5 items-center">
                   <Image
-                    loader={loaderImage}
                     priority={true}
                     width="50"
                     height="50"
-                    src="/uploads/Asset_4_2_f88170fa82.png"
+                    src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
                     alt="tailwind logo"
                     className="rounded-xl mr-3"
                   />
@@ -108,11 +99,10 @@ function ProductDetail({ name, description, sku, variants, materials }) {
 
                 <div className="flex mt-5 items-center">
                   <Image
-                    loader={loaderImage}
                     priority={true}
                     width="50"
                     height="50"
-                    src="/uploads/Asset_4_2_f88170fa82.png"
+                    src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
                     alt="tailwind logo"
                     className="rounded-xl mr-3"
                   />
@@ -128,11 +118,10 @@ function ProductDetail({ name, description, sku, variants, materials }) {
               <div className=" w-3/6">
                 <div className="flex mt-5 items-center">
                   <Image
-                    loader={loaderImage}
                     priority={true}
                     width="50"
                     height="50"
-                    src="/uploads/Asset_4_2_f88170fa82.png"
+                    src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
                     alt="tailwind logo"
                     className="rounded-xl mr-3"
                   />
@@ -147,11 +136,10 @@ function ProductDetail({ name, description, sku, variants, materials }) {
 
                 <div className="flex mt-5 items-center">
                   <Image
-                    loader={loaderImage}
                     priority={true}
                     width="50"
                     height="50"
-                    src="/uploads/Asset_4_2_f88170fa82.png"
+                    src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
                     alt="tailwind logo"
                     className="rounded-xl mr-3"
                   />
@@ -167,11 +155,10 @@ function ProductDetail({ name, description, sku, variants, materials }) {
 
                 <div className="flex mt-5 items-center">
                   <Image
-                    loader={loaderImage}
                     priority={true}
                     width="50"
                     height="50"
-                    src="/uploads/Asset_4_2_f88170fa82.png"
+                    src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
                     alt="tailwind logo"
                     className="rounded-xl mr-3"
                   />
@@ -179,9 +166,9 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                     Peso:
                     <span className="m-2">
                       {variants.length > 0 &&
-                        variants[0].attributes.weight != null
+                      variants[0].attributes.weight != null
                         ? variants[0].attributes.weight.weight +
-                        variants[0].attributes.weight.unitWeight
+                          variants[0].attributes.weight.unitWeight
                         : null}
                     </span>
                   </p>
@@ -195,16 +182,16 @@ function ProductDetail({ name, description, sku, variants, materials }) {
           <div className="flex h-32  w-6/12 justify-center">
             {images
               ? images.map((item) => {
-                return (
-                  <ProductImage
-                    key={item.id}
-                    url={item.attributes.url}
-                    width={"125"}
-                    height={"100"}
-                    className={"rounded-xl mx-2"}
-                  />
-                );
-              })
+                  return (
+                    <ProductImage
+                      key={item.id}
+                      url={item.attributes.url}
+                      width={"125"}
+                      height={"100"}
+                      className={"rounded-xl mx-2"}
+                    />
+                  );
+                })
               : null}
           </div>
           {/* precio, cantidad y carrito */}
