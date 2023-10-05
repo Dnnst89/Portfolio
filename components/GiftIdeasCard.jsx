@@ -3,9 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 function GiftIdeasCard({ ageRange, image, age, button, border }) {
-
   return (
-    <Link href={`/resultsByAge/${ageRange}`}>
+    <Link href={{ pathname: "/resultsByAge", query: { ageRange } }}>
       <div className=" m-4">
         <section className="mt-10 ">
           <div className={border}>
