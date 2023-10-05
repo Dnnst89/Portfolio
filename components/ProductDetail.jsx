@@ -9,6 +9,7 @@ import ProductImage from "./ProductImage";
 const baseURL = "http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337";
 function ProductDetail({ name, description, sku, variants, materials }) {
   const [quantity, setQuantity] = useState(1);
+  let shortDescrption = ""
   let images = 0;
   if (variants.length > 0) {
     images = variants[0].attributes.images.data;
@@ -32,7 +33,9 @@ function ProductDetail({ name, description, sku, variants, materials }) {
     // Scroll to the element
     element.scrollIntoView({ behavior: "smooth" });
   };
-  const shortDescrption = description.split(" ").splice(0, 20).join(" ");
+  if (description != null) {
+    shortDescrption = description.split(" ").splice(0, 20).join(" ");
+  }
 
   return (
     <>
