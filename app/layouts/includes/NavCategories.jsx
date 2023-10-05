@@ -31,7 +31,7 @@ const NavCategories = () => {
   return (
     <>
       <div className="grid grid-cols-1 h-[50px] mt-[0.5px] bg-resene">
-        <ul className="max-w-screen-xl m-auto flex justify-center content-center text-[#333333]  overflow-y-scroll scrollbar scrollbar-none">
+        <ul className="flex md:justify-center content-center text-[#333333]  overflow-y-scroll scrollbar scrollbar-none">
           {menuItems &&
             menuItems.length &&
             menuItems.map((item) => (
