@@ -14,23 +14,20 @@ export default function AgeResultsComponent({ ageRange }) {
   const { loading, error, data } = useQuery(getProductByAgeRange, {
     variables: { ageRange, page, pageSize },
   });
-
-  if (loading) return <Spinner />;
+  //if (loading) return <Spinner />;
   if (error) return toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
     autoClose: 5000
   })
 
-
-  const { variants } = data;
-
   return (
-    <div>
-      <Toaster />
-      <ProductFilterContainer
-        result={variants}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      />
+    <div className={loading ? "grid place-items-center" : ""}>
+      {loading ? <Spinner /> : <div> <Toaster />
+        <ProductFilterContainer
+          result={data.products}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        /></div>}
+
     </div>
   );
 }

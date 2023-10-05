@@ -12,27 +12,27 @@ export default function DetailComponent({ id }) {
     variables: { id },
   });
 
-  if (loading) return <Spinner />
   if (error) return toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
     autoClose: 5000
   })
 
   return (
-    <div>
-      <Toaster />
-      <ProductDetail
-        name={data?.product.data.attributes.name}
-        description={data?.product.data.attributes.description}
-        sku={data?.product.data.attributes.sku}
-        variants={data?.product.data.attributes.variants.data}
-        materials={data?.product.data.attributes.materials.data}
-      />
-      <ProductDetailSecondary
-        id={data?.product.data.id}
-        description={data?.product.data.attributes.description}
-        reviews={data?.product.data.attributes.reviews.data}
-      />
-      <RelatedItems />
+    <div className={loading ? "grid place-items-center" : ""}>
+      {loading ? <Spinner /> : <div> <Toaster />
+        <ProductDetail
+          name={data?.product.data.attributes.name}
+          description={data?.product.data.attributes.description}
+          sku={data?.product.data.attributes.sku}
+          variants={data?.product.data.attributes.variants.data}
+          materials={data?.product.data.attributes.materials.data}
+        />
+        <ProductDetailSecondary
+          id={data?.product.data.id}
+          description={data?.product.data.attributes.description}
+          reviews={data?.product.data.attributes.reviews.data}
+        />
+        <RelatedItems /></div>}
+
     </div>
   );
 }
