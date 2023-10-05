@@ -1,7 +1,6 @@
 "use client";
 import { CREATE_ORDER } from "@/src/graphQl/queries/createUserOrder";
 import CartDetail from "./CartDetail";
-s;
 import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import InputForm from "./InputForm";
