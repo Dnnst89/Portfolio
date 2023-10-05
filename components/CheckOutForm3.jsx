@@ -5,11 +5,12 @@ import { useRouter } from "next/navigation";
 import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
 import { useQuery } from "@apollo/client";
 import { paymentDataForm } from "@/app/data/tilopay/transactionData";
+import useStorage from "@/hooks/useStorage";
 
 export default function CheckOutForm3() {
+  const userInSession = useStorage();
   const router = useRouter();
   const [formData, setFormData] = useState(paymentDataForm);
-  const userInSession = JSON.parse(localStorage.getItem("userData"));
   const { id, email } = userInSession?.user || {};
   // total final to pay , WE NEED TO GET IT FROM FACTURAZEN
   const total = parseFloat(0.1);

@@ -1,19 +1,19 @@
 "use client";
 import { CREATE_ORDER } from "@/src/graphQl/queries/createUserOrder";
 import CartDetail from "./CartDetail";
-s;
 import { useMutation, useQuery } from "@apollo/client";
 import { redirect, useRouter } from "next/navigation";
 import InputForm from "./InputForm";
 import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
 import { useEffect, useState } from "react";
 import { paymentDataForm } from "@/app/data/tilopay/transactionData";
+import useStorage from "@/hooks/useStorage";
 
 export default function CheckOutForm1() {
+  const userInSession = useStorage();
   const router = useRouter();
   const [formData, setFormData] = useState(paymentDataForm);
   const [createOrder] = useMutation(CREATE_ORDER);
-  const userInSession = JSON.parse(localStorage.getItem("userData"));
   let hasPendingOrder = false;
   const { id } = userInSession?.user || {};
   const total = parseFloat(0.1);
