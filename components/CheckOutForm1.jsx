@@ -5,30 +5,26 @@ import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import InputForm from "./InputForm";
 import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
-import { useState } from "react";
-import { paymentDataForm } from "@/app/data/tilopay/transactionData";
-import { useDispatch } from "react-redux";
-import { addOrder } from "@/redux/features/orderSlice";
+import useStorage from "@/hooks/useStorage";
 export default function CheckOutForm1() {
-  const dispatch = useDispatch();
   const router = useRouter();
   const [createOrder] = useMutation(CREATE_ORDER);
-  const userInSession = JSON.parse(localStorage.getItem("userData"));
-  const { id } = userInSession?.user || {};
+  const { user } = useStorage();
+  const { id } = user || {};
   //Get them from
   const total = parseFloat(0.1);
   const subTotal = parseFloat(0.1);
   const taxes = parseFloat(0.1);
-
+  // retrieving pending order if exist
   const { data } = useQuery(GET_PENDING_ORDER, {
     variables: { userId: id, status: "P" },
   });
-  // We need it to verify is there is an order pending
+  // getting pending order
   const status = data?.orderDetails?.data[0]?.attributes?.status;
   // an order might not exist
   const orderNumber = data?.orderDetails?.data[0]?.id;
   const resentPendingOrder = () => {
-    // Need to pass the created order to reducer
+    // storing ordernumber if exist
     localStorage.setItem("createdOrder", orderNumber);
     router.push("/proceedPayment");
   };
@@ -45,10 +41,9 @@ export default function CheckOutForm1() {
           publishedAt: isoDate,
         },
       });
-      console.log("data from mutation ", data?.createOrderDetail?.data?.id);
+      // if the order not exist we create one
       // After create an order now we can get that pending order
       const orderNumber = await data?.createOrderDetail?.data?.id;
-      console.log("orderNumber", orderNumber);
       // Store the orderNumber in localStorage
       localStorage.setItem("createdOrder", orderNumber);
       router.push("/proceedPayment");

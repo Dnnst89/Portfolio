@@ -16,13 +16,13 @@ export default function CheckOutForm3() {
   // total final to pay , WE NEED TO GET IT FROM FACTURAZEN
   const total = parseFloat(0.1);
   //RETRIEVE STATUS
-  // get the order if exist
+  // get the order retrieved or created
   const storedOrder = localStorage.getItem("createdOrder");
-
+  // Retrieve user data
   const { loading, error, data } = useQuery(GET_PAYMENT_DETAILS, {
     variables: { userId: id },
   });
-  // RETRIEVE USER DATA
+
   useEffect(() => {
     if (!loading && !error) {
       const userData = data?.usersPermissionsUser?.data?.attributes;
@@ -35,10 +35,9 @@ export default function CheckOutForm3() {
           },
           phoneNumber,
         } = userData;
-        console.log("user data ", userData);
+        // the next step is to send the data to the request
+        // we load data into the state
         if (userData) {
-          // You can access the total and status properties of the specific order
-          // PAYMENT DATA
           setFormData({
             amount: total,
             billToFirstName: firstName,
@@ -61,7 +60,8 @@ export default function CheckOutForm3() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, loading, error]);
-  console.log("formData : ", formData);
+  // The data is ready to send it to the object that will be
+  // called by the request method.
   const handlePaymentProceed = () => {
     // Update paymentDataForm with the values from formData
     paymentDataForm.amount = formData.amount;
@@ -80,7 +80,7 @@ export default function CheckOutForm3() {
   };
   handlePaymentProceed();
   const paymentUrlPromise = paymentRequest();
-
+  // the url return an payment url to redirect the user to Tilopay payment.
   let paymentUrl = "";
   paymentUrlPromise
     .then((result) => {
