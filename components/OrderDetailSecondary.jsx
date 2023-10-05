@@ -83,7 +83,7 @@ export default function OrderDetailSecondary({ orderId }) {
       getOrdersItemsInfo(orderId)
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [orderId])
   if (loading) {
     return <div className="flex justify-center">
       <Spinner />

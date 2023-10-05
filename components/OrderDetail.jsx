@@ -3,8 +3,12 @@ import GET_USER_ORDERS from "@/src/graphQl/queries/getUserOrders";
 import { useLazyQuery } from "@apollo/client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Pagination from "./Pagination";
+import AgePagination from "./AgePagination";
 export default function OrderDetail() {
-
+  const [page, setPage] = useState(1)
+  const [nbPages, setNbPages] = useState()
+  const pageSize = 3
   const [userData, setUserData] = useState({
     user: {
       firstName: "",
@@ -28,28 +32,36 @@ export default function OrderDetail() {
   useEffect(() => {
     const { user } = JSON.parse(localStorage.getItem("userData"))
 
-    const getOrdersInfo = async (id) => {
+    const getOrdersInfo = async (id, page, pageSize) => {
       try {
         //me trae las ordenes e informacion del usuario
         setLoading(true);
 
         const { data } = await getOrders({
           //llamo la query para traer la shopping session
-          variables: { userId: id },
+          variables: {
+            userId: id,
+            page,
+            pageSize
+          },
         });
         if (data) {
-          const userInfo = data.usersPermissionsUser.data
+          console.log(data)
+          const pagination = data.orderDetails.meta.pagination //es un objeto con la informacion de paginacion
+          setNbPages(pagination.pageCount)
+          const info = data.orderDetails.data
+          const userInfo = info[0].attributes.users_permissions_user.data.attributes //solo guardo los datos del user con el primer dato del array
           setUserData((prev) => ({
             ...prev,
             user: {
-              firstName: userInfo.attributes.firstName,
-              lastName: userInfo.attributes.lastName,
+              firstName: userInfo.firstName,
+              lastName: userInfo.lastName,
             },
             address: {
-              province: userInfo.attributes.users_address.data.attributes.province,
-              canton: userInfo.attributes.users_address.data.attributes.canton,
+              province: userInfo.users_address.data.attributes.province,
+              canton: userInfo.users_address.data.attributes.canton,
             },
-            order: userInfo.attributes.order_details.data.map((item) => {
+            order: info.map((item) => {
               return {
                 ref: item.id,
                 status: item.attributes.status,
@@ -71,10 +83,11 @@ export default function OrderDetail() {
 
     }
     if (user) {
-      getOrdersInfo(user.id)
+      getOrdersInfo(user.id, page, pageSize)
     }
+    console.log(userData)
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [page])
 
 
   if (loading) {
@@ -97,7 +110,7 @@ export default function OrderDetail() {
                 <div>Ciudad: {userData.address.canton}</div>
                 <div>Estado: {order.status}</div>
               </div>
-              <Link href={`/order/orderViewDetail/${order.ref}`}>
+              <Link href={{ pathname: `/order/orderViewDetail`, query: { orderId: order.ref } }}>
                 <button className="bg-aquamarine mt-3 p-1 rounded-sm text-floralwhite">
                   Ver detalle
                 </button>
@@ -106,7 +119,7 @@ export default function OrderDetail() {
           </div>
         ))}
       </div>
-
+      <AgePagination nbPages={nbPages} currentPage={page} setCurrentPage={setPage} />
     </div>
   );
 }
