@@ -7,28 +7,25 @@ import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
 import { useQuery } from "@apollo/client";
 import { paymentDataForm } from "@/app/data/tilopay/transactionData";
 import useStorage from "@/hooks/useStorage";
-import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
+
 export default function CheckOutForm3() {
   const router = useRouter();
   const [formData, setFormData] = useState(paymentDataForm);
-  console.log("formdata ...:", formData);
   const { user } = useStorage();
   const { id, email } = user || {};
   // total final to pay , WE NEED TO GET IT FROM FACTURAZEN
   const total = parseFloat(0.1);
   //RETRIEVE STATUS
-  const { data } = useQuery(GET_PENDING_ORDER, {
-    variables: { userId: id, status: "P" },
+  // get the order if exist
+  const storedOrder = localStorage.getItem("createdOrder");
+
+  const { loading, error, data } = useQuery(GET_PAYMENT_DETAILS, {
+    variables: { userId: id },
   });
-  console.log("----", data);
-  // const { loading, error, data } = useQuery(GET_PAYMENT_DETAILS, {
-  //   variables: { userId: id },
-  // });
   // RETRIEVE USER DATA
   useEffect(() => {
     if (!loading && !error) {
       const userData = data?.usersPermissionsUser?.data?.attributes;
-      console.log("user data: ", userData);
       if (userData) {
         const {
           firstName,
@@ -36,15 +33,10 @@ export default function CheckOutForm3() {
           users_address: {
             data: { attributes: userAddressAttributes },
           },
-          province,
           phoneNumber,
         } = userData;
-
-        const status =
-          existPendingOrder?.orderDetails?.data[0]?.attributes?.status;
-        console.log("status :", status);
-        const orderNumber = data?.orderDetails?.data[0]?.id;
-        if (status === "P") {
+        console.log("user data ", userData);
+        if (userData) {
           // You can access the total and status properties of the specific order
           // PAYMENT DATA
           setFormData({
@@ -58,7 +50,7 @@ export default function CheckOutForm3() {
             billToZipPostCode: userAddressAttributes.postCode,
             billToTelephone: phoneNumber,
             billToEmail: email,
-            orderNumber: orderNumber,
+            orderNumber: storedOrder,
           });
         } else {
           // Handle the case where the specific order is not found
@@ -66,10 +58,10 @@ export default function CheckOutForm3() {
         }
       }
     }
-    console.log("formdata", formData);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, loading, error]);
-
+  console.log("formData : ", formData);
   const handlePaymentProceed = () => {
     // Update paymentDataForm with the values from formData
     paymentDataForm.amount = formData.amount;
@@ -86,7 +78,7 @@ export default function CheckOutForm3() {
 
     // You can proceed with the payment logic here
   };
-  //handlePaymentProceed();
+  handlePaymentProceed();
   const paymentUrlPromise = paymentRequest();
 
   let paymentUrl = "";

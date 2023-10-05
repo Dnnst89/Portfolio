@@ -7,10 +7,11 @@ import InputForm from "./InputForm";
 import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
 import { useState } from "react";
 import { paymentDataForm } from "@/app/data/tilopay/transactionData";
-
+import { useDispatch } from "react-redux";
+import { addOrder } from "@/redux/features/orderSlice";
 export default function CheckOutForm1() {
+  const dispatch = useDispatch();
   const router = useRouter();
-  const [createdOrder, setCreatedOrder] = useState(paymentDataForm.orderNumber);
   const [createOrder] = useMutation(CREATE_ORDER);
   const userInSession = JSON.parse(localStorage.getItem("userData"));
   const { id } = userInSession?.user || {};
@@ -22,18 +23,13 @@ export default function CheckOutForm1() {
   const { data } = useQuery(GET_PENDING_ORDER, {
     variables: { userId: id, status: "P" },
   });
+  // We need it to verify is there is an order pending
   const status = data?.orderDetails?.data[0]?.attributes?.status;
+  // an order might not exist
   const orderNumber = data?.orderDetails?.data[0]?.id;
-
   const resentPendingOrder = () => {
-    // Need to pass the created order to Tilopay request data
-
-    if (status === "P") {
-      setCreatedOrder({
-        orderNumber,
-      });
-    }
-    paymentDataForm.orderNumber = createdOrder.orderNumber;
+    // Need to pass the created order to reducer
+    localStorage.setItem("createdOrder", orderNumber);
     router.push("/proceedPayment");
   };
   const handleCreateOrder = async () => {
@@ -49,6 +45,12 @@ export default function CheckOutForm1() {
           publishedAt: isoDate,
         },
       });
+      console.log("data from mutation ", data?.createOrderDetail?.data?.id);
+      // After create an order now we can get that pending order
+      const orderNumber = await data?.createOrderDetail?.data?.id;
+      console.log("orderNumber", orderNumber);
+      // Store the orderNumber in localStorage
+      localStorage.setItem("createdOrder", orderNumber);
       router.push("/proceedPayment");
     } catch (error) {
       console.error("Error creating order:", error);

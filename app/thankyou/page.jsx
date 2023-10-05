@@ -71,6 +71,7 @@ export default function ThankYouMessage(params) {
       }
     }
   };
+  localStorage.removeItem("createdOrder");
   return (
     <div className="bg-floralwhite p-[100px] flex justify-center">
       <main className="bg-resene border-2 border-dashed border-grey-200 flex flex-col justify-center h-auto p-10">
