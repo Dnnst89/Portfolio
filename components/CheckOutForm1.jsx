@@ -2,10 +2,10 @@
 import { CREATE_ORDER } from "@/src/graphQl/queries/createUserOrder";
 import CartDetail from "./CartDetail";
 import { useMutation, useQuery } from "@apollo/client";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import InputForm from "./InputForm";
 import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { paymentDataForm } from "@/app/data/tilopay/transactionData";
 
 export default function CheckOutForm1() {
@@ -13,29 +13,26 @@ export default function CheckOutForm1() {
   const [formData, setFormData] = useState(paymentDataForm);
   const [createOrder] = useMutation(CREATE_ORDER);
   const userInSession = JSON.parse(localStorage.getItem("userData"));
-  let hasPendingOrder = false;
   const { id } = userInSession?.user || {};
+  //Get them from
   const total = parseFloat(0.1);
+  const subTotal = parseFloat(0.1);
+  const taxes = parseFloat(0.1);
+
   const { data } = useQuery(GET_PENDING_ORDER, {
-    variables: { userId: id },
+    variables: { userId: id, status: "P" },
   });
-  const userData = data?.usersPermissionsUser?.data?.attributes;
-  if (userData) {
-    const { order_details } = userData;
-    const { data: orderDetailsData } = order_details || { data: [] };
-    // Check if there are any pending orders
-    hasPendingOrder = orderDetailsData.some((orderDetail) =>
-      orderDetail.attributes.status.includes("P")
-    );
-  }
+  const status = data?.orderDetails?.data[0]?.attributes?.status;
+  const orderNumber = data?.orderDetails?.data[0]?.id;
+
   const resentPendingOrder = () => {
     // Need to pass the created order to Tilopay request data
-    if (userData) {
-      if (hasPendingOrder.length > 0) {
-        setFormData({
-          orderNumber: hasPendingOrder.join(","),
-        });
-      }
+
+    if (status === "P") {
+      setFormData({
+        orderNumber: parseInt(orderNumber),
+      });
+
       router.push("/proceedPayment");
     }
   };
@@ -47,6 +44,8 @@ export default function CheckOutForm1() {
           user_id: parseInt(id),
           total: total,
           status: "P", // Pending
+          subTotal: subTotal,
+          taxes: taxes,
           publishedAt: isoDate,
         },
       });
@@ -144,7 +143,7 @@ export default function CheckOutForm1() {
       <div className="flex justify-center mt-8 mb-8 w-3/4 ">
         <button
           onClick={() =>
-            hasPendingOrder ? resentPendingOrder() : handleCreateOrder()
+            status === "P" ? resentPendingOrder() : handleCreateOrder()
           }
           className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
         >

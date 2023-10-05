@@ -14,18 +14,19 @@ import { Toaster, toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCartItems, updateQtyItems } from "@/redux/features/cart-slice";
 const NavMenu = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const { isAuthenticated } = useSelector((x) => x.auth);
-  const { user } = useStorage(); // hook para obtener el usuario almacenado en el localstorage
+  const { user } = useStorage();  // hook para obtener el usuario almacenado en el localstorage
   const info = useCartSummary({ userId: user?.id });
-  const cartState = useSelector((state) => state.cart); //obtenemos los datos del slice de carrito
+  const cartState = useSelector((state) => state.cart);//obtenemos los datos del slice de carrito
 
   useEffect(() => {
-    toast.remove(); //elimina notificaciones anteriores
-  }, []);
 
-  const showAlert = (e) => {
-    //si el usuario no esta autenticado
+    toast.remove(); //elimina notificaciones anteriores 
+
+  }, [])
+
+  const showAlert = (e) => { //si el usuario no esta autenticado
     if (user?.id && isAuthenticated) return;
     toast.error("Debe iniciar sesión para ingresar al carrito");
   };
@@ -39,7 +40,7 @@ const NavMenu = () => {
       </div>
 
       <div className="py-5 items-center order-3 sm:order-2 col-span-2 sm:col-span-4 h-[60px]">
-        <Searchbar />
+        {/* {<Searchbar />} */}
       </div>
       <div className="grid grid-cols-2 justify-center items-center  order-2 sm:order-3 col-span-1 sm:col-span-1">
         <div className="">

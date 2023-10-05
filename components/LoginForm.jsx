@@ -103,7 +103,7 @@ const LoginForm = () => {
   };
   return (
     <div className="h-screen ">
-      <CheckOutHeader regresar={"/"} />
+      <CheckOutHeader regresar={"/register/signemail"} />
       <div className=" flex justify-center items-center">
         <Toaster
           containerStyle={{

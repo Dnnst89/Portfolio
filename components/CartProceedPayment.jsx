@@ -10,6 +10,7 @@ export default function CartProceedPayment({ textButton, page }) {
       <p className="flex justify-center text-sm text-grey-100 whitespace-nowrap">
         *Detalle acerca de la fecha de entrega*
       </p>
+
       <Link className="flex justify-center" href={page}>
         <button className="bg-pink-200 text-white rounded-sm p-2 w-[200px] whitespace-nowrap">
           {textButton}

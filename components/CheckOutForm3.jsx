@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
 import { useQuery } from "@apollo/client";
 import { paymentDataForm } from "@/app/data/tilopay/transactionData";
-import useStorage from "@/hooks/useStorage";
+
 export default function CheckOutForm3() {
   const router = useRouter();
   const [formData, setFormData] = useState(paymentDataForm);
-  const { user } = useStorage();
-  const { id, email } = user || {};
+  const userInSession = JSON.parse(localStorage.getItem("userData"));
+  const { id, email } = userInSession?.user || {};
   // total final to pay , WE NEED TO GET IT FROM FACTURAZEN
   const total = parseFloat(0.1);
   const { loading, error, data } = useQuery(GET_PAYMENT_DETAILS, {
@@ -33,10 +33,19 @@ export default function CheckOutForm3() {
         } = userData;
         // Create an array of order detail objects
         const { data: orderDetailsData } = order_details || { data: [] };
-        // filter to find orders with "Pending" status
+        // Use the find method to search for the order with the specific orderNumber
+
+        // Use filter to find orders with "Pending" status
         const pendingOrderId = orderDetailsData
           .filter((orderDetail) => orderDetail.attributes.status.includes("P"))
           .map((orderDetail) => orderDetail.id);
+        //get the total of the pending order
+        const specificOrder = orderDetailsData.find(
+          (orderDetail) => orderDetail.id === pendingOrderId.join(",")
+        );
+
+        // const pendingOrderAmount = specificOrder.attributes.total;
+
         if (pendingOrderId) {
           // You can access the total and status properties of the specific order
           // PAYMENT DATA
@@ -89,7 +98,7 @@ export default function CheckOutForm3() {
     .catch((error) => {
       console.error("Promise rejected with error:", error);
     });
-
+  console.log(paymentUrl);
   return (
     <div className="mt-[40px] mx-[30px]">
       <div className="flex w-3/4 justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
@@ -98,7 +107,8 @@ export default function CheckOutForm3() {
         </div>
         <h1 className="text-xl">Formulario de pago</h1>
       </div>
-      <div className="flex justify-center mt-8 mb-8 w-3/4 ">
+
+      <div className="flex justify-center mt-8 mb-8 w-3/4">
         <button
           onClick={() => router.push(paymentUrl)}
           className="bg-pink-200 text-white rounded-sm p-2 w-[200px] whitespace-nowrap"
