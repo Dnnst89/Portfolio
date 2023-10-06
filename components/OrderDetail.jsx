@@ -11,7 +11,7 @@ export default function OrderDetail({
     <div className="bg-resene w-12/12 sm:w-3/6 md:w-3/6 lg:w-6/12">
       <h1 className=" flex justify-center mt-3 text-xl">Tus pedidos</h1>
       <div className=" p-4 h-auto grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-5">
-        <section className="bg-floralwhite flex flex-col items-center border-2 border-dashed border-grey-200 rounded-2xl h-[250px] ">
+        <section className="bg-floralwhite flex flex-col items-center border-2 border-dashed border-grey-200 rounded-2xl h-[250px] w-[200px] ">
           <h2 className="font-semibold mt-8">N° {numero}</h2>
           <div className="text-sm space-y-2 pt-3">
             <div>Nombre:{nombre}</div>

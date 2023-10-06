@@ -46,7 +46,7 @@ const NavidationMenu = () => {
       </Link>
 
       <Link
-        href={""}
+        href={"/address"}
         className={`border-b-2 border-dashed border-grey-200 flex items-center justify-between  ${
           isSelected === "direcciones" ? "text-pink-200" : ""
         }`}

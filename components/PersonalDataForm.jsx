@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 export default function PersonalDataForm() {
   return (
@@ -7,11 +8,11 @@ export default function PersonalDataForm() {
       <div className="flex justify-center w-11/12">
         <section className="w-6/12 p-5 space-y-2">
           <div className="mb-4">
-            <label htmlFor="user">Nombre de usuario:</label>
+            <label>Nombre de usuario:</label>
             <input
               className="py-1 w-full rounded-lg border-2 border-grey-300/40 outline-none bg-grey-400 mb-3"
-              id="user"
               placeholder="este espacio no se edita"
+              readOnly
             />
           </div>
           <div>
@@ -24,11 +25,11 @@ export default function PersonalDataForm() {
         </section>
         <section className="w-6/12 p-5 space-y-2">
           <div className="mb-4">
-            <label htmlFor="email">Correo Electrónico:</label>
+            <label>Correo Electrónico:</label>
             <input
               className="py-1 w-full rounded-lg border-2 border-grey-300/40 outline-none bg-grey-400 mb-3"
-              id="email"
               placeholder="este espacio no se edita"
+              readOnly
             />
           </div>
           <div>
