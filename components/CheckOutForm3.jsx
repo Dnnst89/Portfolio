@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import paymentRequest from "@/api/tilopay/paymentRequest";
 import Spinner from "./Spinner";
@@ -5,22 +6,27 @@ import { useRouter } from "next/navigation";
 import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
 import { useQuery } from "@apollo/client";
 import { paymentDataForm } from "@/app/data/tilopay/transactionData";
+import useStorage from "@/hooks/useStorage";
 
 export default function CheckOutForm3() {
+  const userInSession = useStorage();
   const router = useRouter();
   const [formData, setFormData] = useState(paymentDataForm);
-  const userInSession = JSON.parse(localStorage.getItem("userData"));
-  const { id, email } = userInSession?.user || {};
+  const { user } = useStorage();
+  const { id, email } = user || {};
   // total final to pay , WE NEED TO GET IT FROM FACTURAZEN
   const total = parseFloat(0.1);
+  //RETRIEVE STATUS
+  // get the order retrieved or created
+  const storedOrder = localStorage.getItem("createdOrder");
+  // Retrieve user data
   const { loading, error, data } = useQuery(GET_PAYMENT_DETAILS, {
     variables: { userId: id },
   });
-  // RETRIEVE USER DATA
+
   useEffect(() => {
     if (!loading && !error) {
       const userData = data?.usersPermissionsUser?.data?.attributes;
-
       if (userData) {
         const {
           firstName,
@@ -28,28 +34,11 @@ export default function CheckOutForm3() {
           users_address: {
             data: { attributes: userAddressAttributes },
           },
-          province,
           phoneNumber,
-          order_details,
         } = userData;
-        // Create an array of order detail objects
-        const { data: orderDetailsData } = order_details || { data: [] };
-        // Use the find method to search for the order with the specific orderNumber
-
-        // Use filter to find orders with "Pending" status
-        const pendingOrderId = orderDetailsData
-          .filter((orderDetail) => orderDetail.attributes.status.includes("P"))
-          .map((orderDetail) => orderDetail.id);
-        //get the total of the pending order
-        const specificOrder = orderDetailsData.find(
-          (orderDetail) => orderDetail.id === pendingOrderId.join(",")
-        );
-
-        // const pendingOrderAmount = specificOrder.attributes.total;
-
-        if (pendingOrderId) {
-          // You can access the total and status properties of the specific order
-          // PAYMENT DATA
+        // the next step is to send the data to the request
+        // we load data into the state
+        if (userData) {
           setFormData({
             amount: total,
             billToFirstName: firstName,
@@ -61,7 +50,7 @@ export default function CheckOutForm3() {
             billToZipPostCode: userAddressAttributes.postCode,
             billToTelephone: phoneNumber,
             billToEmail: email,
-            orderNumber: pendingOrderId.join(","),
+            orderNumber: storedOrder,
           });
         } else {
           // Handle the case where the specific order is not found
@@ -69,9 +58,11 @@ export default function CheckOutForm3() {
         }
       }
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, loading, error]);
-
+  // The data is ready to send it to the object that will be
+  // called by the request method.
   const handlePaymentProceed = () => {
     // Update paymentDataForm with the values from formData
     paymentDataForm.amount = formData.amount;
@@ -90,7 +81,7 @@ export default function CheckOutForm3() {
   };
   handlePaymentProceed();
   const paymentUrlPromise = paymentRequest();
-
+  // the url return an payment url to redirect the user to Tilopay payment.
   let paymentUrl = "";
   paymentUrlPromise
     .then((result) => {

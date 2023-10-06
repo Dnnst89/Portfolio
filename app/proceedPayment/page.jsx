@@ -2,7 +2,7 @@
 
 import CheckOutForm3 from "@/components/CheckOutForm3";
 
-const page = () => {
+const ProccedPayment = () => {
   return (
     <>
       <CheckOutForm3 />
@@ -10,4 +10,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default ProccedPayment;

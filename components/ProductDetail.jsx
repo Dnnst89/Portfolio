@@ -5,12 +5,17 @@ import { BiPlus, BiMinus } from "react-icons/bi";
 import Link from "next/link";
 import AddItemBtn from "./AddItemBtn";
 import ProductImage from "./ProductImage";
+import useCartSummary from "@/hooks/useCartSummary";
+import useStorage from "@/hooks/useStorage";
 
 const baseURL = "http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337";
 function ProductDetail({ name, description, sku, variants, materials }) {
   const [quantity, setQuantity] = useState(1);
-  let shortDescrption = ""
+  let shortDescrption = "";
   let images = 0;
+  const { user } = useStorage();
+  const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
+
   if (variants.length > 0) {
     images = variants[0].attributes.images.data;
   }
@@ -20,10 +25,25 @@ function ProductDetail({ name, description, sku, variants, materials }) {
     setQuantity((prev) => --prev);
   };
 
-  const increaseCounter = () => {
-    if (variants.length > 0) {
-      if (quantity >= variants[0].attributes.stock) return;
-      setQuantity((prev) => ++prev);
+  const increaseCounter = async () => {
+    const itemFiltrado = await cartSummary.items.find(
+      (item) => item.attributes.variant.data.id === variants[0]?.id
+    );
+    if (itemFiltrado) {
+      //si el item ya esta en carrito
+      if (variants.length > 0) {
+        if (
+          quantity >=
+          variants[0].attributes.stock - itemFiltrado.attributes.quantity
+        )
+          return;
+        setQuantity((prev) => ++prev);
+      }
+    } else {
+      if (variants.length > 0) {
+        if (quantity >= variants[0].attributes.stock) return;
+        setQuantity((prev) => ++prev);
+      }
     }
   };
   const handleClick = () => {
@@ -219,6 +239,10 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                 <AddItemBtn
                   quantityItem={quantity}
                   idVariant={variants[0]?.id}
+                  cartItems={cartSummary.items}
+                  cartQuantity={cartSummary.quantity}
+                  sessionId={cartSummary.sessionId}
+                  user={user}
                 />
               </div>
             </div>

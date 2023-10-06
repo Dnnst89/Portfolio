@@ -10,7 +10,6 @@ const CartContainer = () => {
   const { total, items, quantity, error, loading } = useCartSummary({
     userId: user?.id,
   });
-
   return (
     <>
       <Toaster
@@ -34,10 +33,18 @@ const CartContainer = () => {
         }}
       />
       <div className="flex flex-col w-3/4">
-        {items?.map((item) => {
+        {items?.map((item, index) => {
+          if (typeof item == "undefined") {
+            return (
+              <div key={index}>
+                {" "}
+                <p>error, uno de sus productos agregados ha sido eliminado</p>
+              </div>
+            );
+          }
           const variant = item.attributes.variant.data; // Desestructuración aquí
           const variantAtt = variant.attributes;
-          const productAtt = variant.attributes.product.data.attributes; // Desestructuración aquí
+          const productAtt = variant.attributes.product?.data?.attributes; // Desestructuración aquí
           return (
             <div key={item.id}>
               <CartItem
