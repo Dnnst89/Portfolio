@@ -2,6 +2,7 @@
 import React from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Button from "@/components/Button";
+import Link from "next/link";
 export default function UserDataCard(props) {
   return (
     <div className="bg-resene w-12/12 sm:w-3/6 md:w-3/6 lg:w-6/12">
@@ -16,13 +17,19 @@ export default function UserDataCard(props) {
             <div>Factura E: Sí/No:{props.bill} </div>
           </div>
           <div className="text-pink-200 flex justify-between w-full text-2xl pl-10 pr-10 p-5">
-            <FaEdit />
+            <Link href={"/address/edit/"}>
+              <FaEdit />
+            </Link>
             <FaTrash />
           </div>
         </section>
       </div>
       <div className="flex justify-center p-5">
-        <Button link="" description="Agregar Dirección" bgColor="pink-200" />
+        <Button
+          link="/address/addAddress/"
+          description="Agregar Dirección"
+          bgColor="pink-200"
+        />
       </div>
     </div>
   );
