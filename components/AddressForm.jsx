@@ -12,21 +12,13 @@ import { useRouter } from "next/navigation";
 import { GetAddress } from "@/src/graphQl/queries/getAddress";
 import { useMutation, useQuery } from "@apollo/client";
 import { useEffect } from "react";
+import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
+import { GET_ADDRESS } from "@/src/graphQl/queries/getAddress";
 //import { CreateAddress } from "@/src/graphQl/queries/CreateAddress";
 //import { UpdateUserAddress } from "@/src/graphQl/queries/updateUserAddress";
 
 import FormikField from "./FormikField";
 import useStorage from "@/hooks/useStorage";
-
-
-
-
-
-
-
-
-
-
 
 const validationSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -71,17 +63,23 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddresForm = () => {
-    const sessionData = useStorage();
+
+    const { user } = useStorage();
+    const { id } = user || {};
+    const { data } = useQuery(GET_ADDRESS, {
+        variables: { id: id },
+    });
+    const { users_address } = data.usersPermissionsUser.data.attributes || {};
     const router = useRouter();
     //const [CreateAddress1] = useMutation(CreateAddress);
     //const [UpdateAddress1] = useMutation(UpdateUserAddress);
 
-    const id = parseInt(sessionData.user.id);
-    const { loading, error, address } = useQuery(GetAddress, {
-        variables: { id },
-    });
 
-    console.log(id);
+
+
+
+
+
     const initialValues = {
         firstName: "",
         lastName: "",
@@ -105,6 +103,12 @@ const AddresForm = () => {
               
               return;
           }*/
+
+        if (users_address) {
+            console.log(users_address)
+        } else {
+            console.log("Eo")
+        }
 
         const id = values.user
         const { postCode, country, addressLine1, addressLine2, province, canton, user } = values;
@@ -149,7 +153,7 @@ const AddresForm = () => {
                                     type="hidden"
                                     id="id"
                                     name="id"
-                                    value={sessionData}
+                                    value={"sessionData"}
                                 />
                                 <div>
 
