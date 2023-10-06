@@ -10,6 +10,7 @@ import libro from "../assets/libro.png";
 import BodyComponent from "@/components/BodyComponent";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import NavCategories from "@/app/layouts/includes/NavCategories";
+import"../../styles/fonts.css";
 import toast from "react-hot-toast";
 const MainLayout = ({ children }) => {
   const name = "Juguete";
@@ -21,15 +22,15 @@ const MainLayout = ({ children }) => {
       <BodyComponent>
         <NavCategories />
         <div className="flex justify-center pt-10">
-          <h1 className="text-lg">Top de productos</h1>
+          <h1>Top de productos</h1>
         </div>
-        <div className="flex  justify-center pt-10">
+        <div className="flex flex-wrap max-w-screen-xl m-auto justify-center pt-10">
           <FeaturedProducts />
         </div>
-        <div className="flex justify-center mt-10 text-lg">
+        <div className="flex justify-center m-10 ">
           <h1>Ideas de regalo para todas las edades</h1>
         </div>
-        <div className="flex justify-center pt-10">
+        <div className="flex flex-wrap max-w-screen-xl m-auto justify-center pt-1">
           <GiftIdeasCard
             ageRange={"1-2"}
             image={heart}

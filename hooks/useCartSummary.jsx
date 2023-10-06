@@ -108,7 +108,6 @@ const useCartSummary = ({ userId }) => {
         }
       } catch (error) {
         //Manejo de errores
-        console.log(error)
         setError(true);
       } finally {
         setLoading(false);
