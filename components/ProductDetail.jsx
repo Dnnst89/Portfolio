@@ -5,28 +5,42 @@ import { BiPlus, BiMinus } from "react-icons/bi";
 import Link from "next/link";
 import AddItemBtn from "./AddItemBtn";
 import ProductImage from "./ProductImage";
+import useCartSummary from "@/hooks/useCartSummary";
+import useStorage from "@/hooks/useStorage";
 
-const loader = ({ src }) => {
-  return `https://img.freepik.com/vector-gratis/${src}`;
-};
 
-const loaderImage = ({ src }) => {
-  return `http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337${src}`;
-};
+const baseURL = "http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337";
 function ProductDetail({ name, description, sku, variants, materials }) {
   const [quantity, setQuantity] = useState(1);
+  let shortDescrption = ""
   let images = 0;
+  const { user } = useStorage();
+  const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
+
+
+
   if (variants.length > 0) {
     images = variants[0].attributes.images.data;
   }
 
   const decreaseCounter = () => {
-    if (quantity === 0) return;
+    if (quantity === 1) return;
     setQuantity((prev) => --prev);
   };
 
-  const increaseCounter = () => {
-    setQuantity((prev) => ++prev);
+  const increaseCounter = async () => {
+    const itemFiltrado = await cartSummary.items.find((item) => item.attributes.variant.data.id === variants[0]?.id);
+    if (itemFiltrado) {//si el item ya esta en carrito
+      if (variants.length > 0) {
+        if (quantity >= variants[0].attributes.stock - itemFiltrado.attributes.quantity) return;
+        setQuantity((prev) => ++prev);
+      }
+    } else {
+      if (variants.length > 0) {
+        if (quantity >= variants[0].attributes.stock) return;
+        setQuantity((prev) => ++prev);
+      }
+    }
   };
   const handleClick = () => {
     // Find the element you want to scroll to
@@ -35,7 +49,9 @@ function ProductDetail({ name, description, sku, variants, materials }) {
     // Scroll to the element
     element.scrollIntoView({ behavior: "smooth" });
   };
-  const shortDescrption = description.split(" ").splice(0, 20).join(" ");
+  if (description != null) {
+    shortDescrption = description.split(" ").splice(0, 20).join(" ");
+  }
 
   return (
     <>
@@ -69,11 +85,10 @@ function ProductDetail({ name, description, sku, variants, materials }) {
               <div className="w-3/6">
                 <div className="flex mt-5 items-center">
                   <Image
-                    loader={loaderImage}
                     priority={true}
                     width="50"
                     height="50"
-                    src="/uploads/Asset_4_2_f88170fa82.png"
+                    src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
                     alt="tailwind logo"
                     className="rounded-xl mr-3"
                   />
@@ -84,11 +99,10 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                 </div>
                 <div className="flex mt-5 items-center">
                   <Image
-                    loader={loaderImage}
                     priority={true}
                     width="50"
                     height="50"
-                    src="/uploads/Asset_4_2_f88170fa82.png"
+                    src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
                     alt="tailwind logo"
                     className="rounded-xl mr-3"
                   />
@@ -104,11 +118,10 @@ function ProductDetail({ name, description, sku, variants, materials }) {
 
                 <div className="flex mt-5 items-center">
                   <Image
-                    loader={loaderImage}
                     priority={true}
                     width="50"
                     height="50"
-                    src="/uploads/Asset_4_2_f88170fa82.png"
+                    src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
                     alt="tailwind logo"
                     className="rounded-xl mr-3"
                   />
@@ -124,11 +137,10 @@ function ProductDetail({ name, description, sku, variants, materials }) {
               <div className=" w-3/6">
                 <div className="flex mt-5 items-center">
                   <Image
-                    loader={loaderImage}
                     priority={true}
                     width="50"
                     height="50"
-                    src="/uploads/Asset_4_2_f88170fa82.png"
+                    src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
                     alt="tailwind logo"
                     className="rounded-xl mr-3"
                   />
@@ -143,11 +155,10 @@ function ProductDetail({ name, description, sku, variants, materials }) {
 
                 <div className="flex mt-5 items-center">
                   <Image
-                    loader={loaderImage}
                     priority={true}
                     width="50"
                     height="50"
-                    src="/uploads/Asset_4_2_f88170fa82.png"
+                    src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
                     alt="tailwind logo"
                     className="rounded-xl mr-3"
                   />
@@ -163,11 +174,10 @@ function ProductDetail({ name, description, sku, variants, materials }) {
 
                 <div className="flex mt-5 items-center">
                   <Image
-                    loader={loaderImage}
                     priority={true}
                     width="50"
                     height="50"
-                    src="/uploads/Asset_4_2_f88170fa82.png"
+                    src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
                     alt="tailwind logo"
                     className="rounded-xl mr-3"
                   />
@@ -225,6 +235,10 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                 <AddItemBtn
                   quantityItem={quantity}
                   idVariant={variants[0]?.id}
+                  cartItems={cartSummary.items}
+                  cartQuantity={cartSummary.quantity}
+                  sessionId={cartSummary.sessionId}
+                  user={user}
                 />
               </div>
             </div>

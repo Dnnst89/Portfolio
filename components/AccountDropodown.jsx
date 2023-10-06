@@ -60,7 +60,7 @@ const AccountDropdown = () => {
 
         {isOpen && (
           <div
-            className="bg-floralwhite rounded-lg py-2 shadow-md z-10 absolute top-20 right-20"
+            className="bg-floralwhite rounded-lg py-2 shadow-md z-10 absolute top-12"
             ref={wrapperRef}
           >
             {authUser ? (

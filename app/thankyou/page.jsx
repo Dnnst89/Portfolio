@@ -9,6 +9,9 @@ import { logo } from "../assets/images";
 /*
   recives the Tilopay response , based on the returns params 
   redirects to an certain page.
+
+  IMPORTANT= is posible to change the order number in the url
+  clean after response
 */
 
 export default function ThankYouMessage(params) {
@@ -73,7 +76,7 @@ export default function ThankYouMessage(params) {
       }
     }
   };
-
+  localStorage.removeItem("createdOrder");
   return code ? (
     <div className="bg-floralwhite p-[100px] flex justify-center">
       <main className="bg-resene border-2 border-dashed border-grey-200 flex flex-col justify-center h-auto p-10">

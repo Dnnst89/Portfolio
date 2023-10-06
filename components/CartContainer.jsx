@@ -6,42 +6,41 @@ import toast, { Toaster } from "react-hot-toast";
 import useStorage from "@/hooks/useStorage";
 
 const CartContainer = () => {
-
-    const { user } = useStorage();//me trae el usuario de local storage
-    const {
-        total,
-        items,
-        quantity,
-        error,
-        loading
-    } = useCartSummary({ userId: user?.id });
-
+    const { user } = useStorage(); //me trae el usuario de local storage
+    const { total, items, quantity, error, loading } = useCartSummary({
+        userId: user?.id,
+    });
     return (
-        <><Toaster
-            containerStyle={{
-                top: 150,
-                left: 20,
-                bottom: 20,
-                right: 20,
-            }}
-            toastOptions={{
-                success: {
-                    style: {
-                        background: "#67C3AD",
+        <>
+            <Toaster
+                containerStyle={{
+                    top: 150,
+                    left: 20,
+                    bottom: 20,
+                    right: 20,
+                }}
+                toastOptions={{
+                    success: {
+                        style: {
+                            background: "#67C3AD",
+                        },
                     },
-                },
-                error: {
-                    style: {
-                        background: "#f87171",
+                    error: {
+                        style: {
+                            background: "#f87171",
+                        },
                     },
-                },
-            }}
-        />
+                }}
+            />
             <div className="flex flex-col w-3/4">
-                {items?.map((item) => {
+                {items?.map((item, index) => {
+                    if (typeof item == "undefined") {
+                        return (<div key={index}> <p>error, uno de sus productos agregados ha sido eliminado</p></div>)
+                    }
                     const variant = item.attributes.variant.data; // Desestructuración aquí
                     const variantAtt = variant.attributes;
-                    const productAtt = variant.attributes.product.data.attributes; // Desestructuración aquí
+                    const productAtt = variant.attributes.product?.data?.attributes; // Desestructuración aquí
+
                     return (
                         <div key={item.id}>
                             <CartItem
@@ -65,6 +64,7 @@ const CartContainer = () => {
                         </div>
                     );
                 })}
+
             </div>
         </>
     );

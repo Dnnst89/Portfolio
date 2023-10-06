@@ -48,7 +48,6 @@ const validationSchema = Yup.object().shape({
 
 const RegisterFormTwo = () => {
   const [loading, setLoading] = useState(false);
-  const { username } = useSelector((x) => x.registryForm);
   const router = useRouter();
   const dispatch = useDispatch();
   const [createUser] = useMutation(RegisterUser);
@@ -61,7 +60,7 @@ const RegisterFormTwo = () => {
     if (dataValues.some((el) => !el)) {
       return;
     }
-    const { email, password } = values;
+    const { email, password, username } = values;
 
     try {
       const fechaActual = new Date();

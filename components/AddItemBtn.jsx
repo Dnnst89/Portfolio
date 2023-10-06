@@ -5,19 +5,16 @@ import CREATE_CART_ITEM_MUTATION from "../src/graphQl/queries/createCartItem";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCartItems, updateQtyItems } from "@/redux/features/cart-slice";
-import useCartSummary from "@/hooks/useCartSummary";
+
 import useStorage from "@/hooks/useStorage";
 import UPDATE_CART_ITEM_QUANTITY_MUTATION from "@/src/graphQl/queries/updateCartItemQuantity";
 
-const AddItemBtn = ({ quantityItem, idVariant }) => {
+const AddItemBtn = ({ quantityItem, idVariant, cartItems, cartQuantity, sessionId, user }) => {
     const dispatch = useDispatch();
     const { isAuthenticated } = useSelector((x) => x.auth);
     const [createCartItem] = useMutation(CREATE_CART_ITEM_MUTATION, {});
     const [updateCartItemQuantity] = useMutation(UPDATE_CART_ITEM_QUANTITY_MUTATION);
-    const { user } = useStorage();
-    const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
-
-    const handleAdd = async () => {
+    const handleAdd = () => {
         //filtro los items para verificar si ya ese producto fue agregado, si fue agregado, se actualiza los  item en el carrito
         //si no esta en los items del carrito se crea o agrega como uno nuevo
         if (!user?.id && !isAuthenticated) {
@@ -25,30 +22,35 @@ const AddItemBtn = ({ quantityItem, idVariant }) => {
         } else {
 
 
-            const itemFiltrado = await cartSummary.items.find((item) => item.attributes.variant.data.id === idVariant);
+            const itemFiltrado = cartItems.find((item) => item.attributes.variant.data.id === idVariant);
             const fechaActual = new Date();
             const fechaFormateada = fechaActual.toISOString();
             if (itemFiltrado) {//si el item esta en carrito
                 const newQuantity = quantityItem + itemFiltrado.quantity
                 console.log(itemFiltrado.id + " " + newQuantity)
-                updateCartItemQuantity({
-                    variables: {
-                        newQuantity: newQuantity,
-                        cartItemId: itemFiltrado.id
-                    }
-                })
-                    .then((response) => {
-                        dispatch(updateQtyItems(cartSummary.quantity + quantityItem))
-                        toast.success("Se ha actulizado un producto");
-
-                        // Manejar la respuesta de la mutación aquí, si es necesario
-
+                if (newQuantity > itemFiltrado.attributes.variant.data.attributes.stock) {
+                    toast.error('No puedes agregar mas de este producto al carrito');
+                } else {
+                    updateCartItemQuantity({
+                        variables: {
+                            newQuantity: newQuantity,
+                            cartItemId: itemFiltrado.id
+                        }
                     })
-                    .catch((error) => {
-                        // Manejar errores de la mutación aquí
-                        console.log(error)
-                        toast.error('Ha sucedido un error:' + error);
-                    });
+                        .then((response) => {
+                            dispatch(updateQtyItems(cartQuantity + quantityItem))
+                            toast.success("Se ha actulizado un producto");
+
+                            // Manejar la respuesta de la mutación aquí, si es necesario
+
+                        })
+                        .catch((error) => {
+                            // Manejar errores de la mutación aquí
+                            console.log(error)
+                            toast.error('Ha sucedido un error:' + error);
+                        });
+                }
+
 
             } else {//si el item nunca se ha agregado al carrito
                 console.log("item no duplicado");
@@ -56,15 +58,15 @@ const AddItemBtn = ({ quantityItem, idVariant }) => {
                     variables: {
                         quantity: quantityItem,
                         variantId: idVariant,
-                        shoppingSessionId: cartSummary.sessionId,
+                        shoppingSessionId: sessionId,
                         publishedAt: fechaFormateada,
                     },
                 })
                     .then((response) => {
                         // Manejar la respuesta de la mutación aquí, si es necesario
                         const newCartItem = response.data.createCartItem.data;
-                        dispatch(updateQtyItems(cartSummary.quantity + quantityItem))//actualiza la cantidad de items en el state
-                        dispatch(updateCartItems([...cartSummary.items, newCartItem]));
+                        dispatch(updateQtyItems(cartQuantity + quantityItem))//actualiza la cantidad de items en el state
+                        dispatch(updateCartItems([...cartItems, newCartItem]));
                         toast.success("Se ha agregado un producto");
                     })
                     .catch((error) => {
