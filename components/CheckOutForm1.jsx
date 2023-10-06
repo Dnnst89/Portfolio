@@ -7,8 +7,7 @@ import InputForm from "./InputForm";
 import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
 import useStorage from "@/hooks/useStorage";
 import { useState } from "react";
-export default function CheckOutForm1() {
-  const userInSession = useStorage();
+export default function CheckOutForm1({ isCheckout = false }) {
   const router = useRouter();
 
   const [amount, setAmount] = useState({
@@ -44,10 +43,8 @@ export default function CheckOutForm1() {
       const { data } = await createOrder({
         variables: {
           user_id: parseInt(id),
-          total: total,
+          total,
           status: "P", // Pending
-          subTotal: subTotal,
-          taxes: taxes,
           publishedAt: isoDate,
         },
       });
@@ -154,9 +151,10 @@ export default function CheckOutForm1() {
       </main>
       <div className="flex justify-center mt-8 mb-8 w-3/4 ">
         <button
-          onClick={() =>
-            status === "P" ? resentPendingOrder() : handleCreateOrder()
-          }
+          onClick={() => {
+            if (!isCheckout) return;
+            status === "P" ? resentPendingOrder() : handleCreateOrder();
+          }}
           className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
         >
           Continuar

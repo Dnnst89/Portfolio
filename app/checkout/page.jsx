@@ -7,7 +7,7 @@ const CheckOut = () => {
   return (
     <div>
       <CheckOutHeader regresar={"/cart"} />
-      <CheckOutForm1 />
+      <CheckOutForm1 isCheckout />
       <CheckOutForm2 />
     </div>
   );

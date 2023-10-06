@@ -27,9 +27,8 @@ const CartDetail = ({
   });
 
   useEffect(() => {
-    if (isCheckout) {
-      getTaxCost();
-    }
+    getTaxCost();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items?.length]);
 
@@ -51,11 +50,13 @@ const CartDetail = ({
       total: data?.billSummary?.totalDocument,
       tax: data?.billSummary?.totalTax,
     }));
-    onChange({
-      total: data?.billSummary?.totalDocument,
-      taxes: data?.billSummary?.totalTax,
-      subTotal,
-    });
+    if (isCheckout) {
+      onChange({
+        total: data?.billSummary?.totalDocument,
+        taxes: data?.billSummary?.totalTax,
+        subTotal,
+      });
+    }
   };
 
   return (
@@ -86,23 +87,21 @@ const CartDetail = ({
           </div>
 
           <hr />
-          {isCheckout ? (
-            <>
-              <div className="flex justify-between ">
-                <p>Impuestos:</p>
-                <p className="text-grey-100">
-                  {amounts.tax} {amounts.currencyType}
-                </p>
-              </div>
-              <div className="flex flex-col p-4 space-y-3">
-                <p className="flex justify-center">Costo Total(IVA Incluido)</p>
-                <p className="flex justify-center text-grey-100">
-                  {amounts?.total}
-                  {amounts.currencyType}
-                </p>
-              </div>
-            </>
-          ) : null}
+          <>
+            <div className="flex justify-between ">
+              <p>Impuestos:</p>
+              <p className="text-grey-100">
+                {amounts.tax} {amounts.currencyType}
+              </p>
+            </div>
+            <div className="flex flex-col p-4 space-y-3">
+              <p className="flex justify-center">Costo Total(IVA Incluido)</p>
+              <p className="flex justify-center text-grey-100">
+                {amounts?.total}
+                {amounts.currencyType}
+              </p>
+            </div>
+          </>
         </>
       ) : (
         <div className="flex justify-center">
