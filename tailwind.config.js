@@ -12,6 +12,9 @@ module.exports = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      dropShadow: {
+        'card': '5px 5px 5px rgba(0, 0, 0, 0.30)'
+      },
     },
     colors: {
       aquamarine: "#67C3AD",
@@ -32,8 +35,8 @@ module.exports = {
     fontFamily: {
       sans: ["Poppins", "sans-serif"],
       serif: ["Merriweather", "serif"],
-      GrandStanderRegular: ["Grandstander-Regular"],
-      GrandStanderThin: ["Grandstander-Thin"],
+      'GrandStanderRegular': ["Grandstander-Regular"],
+      'GrandStanderThin': ["Grandstander-Thin"],
     },
   },
   plugins: [require("tailwind-scrollbar")],
