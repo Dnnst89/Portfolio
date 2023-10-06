@@ -2,54 +2,61 @@
 import { CREATE_ORDER } from "@/src/graphQl/queries/createUserOrder";
 import CartDetail from "./CartDetail";
 import { useMutation, useQuery } from "@apollo/client";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import InputForm from "./InputForm";
 import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
-import { useEffect, useState } from "react";
-import { paymentDataForm } from "@/app/data/tilopay/transactionData";
-
+import useStorage from "@/hooks/useStorage";
+import { useState } from "react";
 export default function CheckOutForm1() {
+  const userInSession = useStorage();
   const router = useRouter();
-  const [formData, setFormData] = useState(paymentDataForm);
-  const [createOrder] = useMutation(CREATE_ORDER);
-  const userInSession = JSON.parse(localStorage.getItem("userData"));
-  let hasPendingOrder = false;
-  const { id } = userInSession?.user || {};
-  const total = parseFloat(0.1);
-  const { data } = useQuery(GET_PENDING_ORDER, {
-    variables: { userId: id },
+
+  const [amount, setAmount] = useState({
+    total: 0,
+    subTotal: 0,
+    taxes: 0,
   });
-  const userData = data?.usersPermissionsUser?.data?.attributes;
-  if (userData) {
-    const { order_details } = userData;
-    const { data: orderDetailsData } = order_details || { data: [] };
-    // Check if there are any pending orders
-    hasPendingOrder = orderDetailsData.some((orderDetail) =>
-      orderDetail.attributes.status.includes("P")
-    );
-  }
+  const [createOrder] = useMutation(CREATE_ORDER);
+  const { user } = useStorage();
+  const { id } = user || {};
+  // retrieving pending order if exist
+  const { data } = useQuery(GET_PENDING_ORDER, {
+    variables: { userId: id, status: "P" },
+  });
+  // getting pending order
+  const status = data?.orderDetails?.data[0]?.attributes?.status;
+  // an order might not exist
+  const orderNumber = data?.orderDetails?.data[0]?.id;
   const resentPendingOrder = () => {
-    // Need to pass the created order to Tilopay request data
-    if (userData) {
-      if (hasPendingOrder.length > 0) {
-        setFormData({
-          orderNumber: hasPendingOrder.join(","),
-        });
-      }
-      router.push("/proceedPayment");
-    }
+    // storing ordernumber if exist
+    localStorage.setItem("createdOrder", orderNumber);
+    router.push("/proceedPayment");
+  };
+
+  const handleChange = (data) => {
+    console.log(data);
+    setAmount(data);
   };
   const handleCreateOrder = async () => {
     const isoDate = new Date().toISOString();
+    const { total, subTotal, taxes } = amount;
     try {
       const { data } = await createOrder({
         variables: {
           user_id: parseInt(id),
           total: total,
           status: "P", // Pending
+          subTotal: subTotal,
+          taxes: taxes,
           publishedAt: isoDate,
         },
       });
+      console.log(data);
+      // if the order not exist we create one
+      // After create an order now we can get that pending order
+      const orderNumber = await data?.createOrderDetail?.data?.id;
+      // Store the orderNumber in localStorage
+      localStorage.setItem("createdOrder", orderNumber);
       router.push("/proceedPayment");
     } catch (error) {
       console.error("Error creating order:", error);
@@ -137,14 +144,18 @@ export default function CheckOutForm1() {
         </section>
         <div className=" bg-resene rounded-sm w-1/4 h-[350px] ml-[25px] mt-[-80px]">
           <div className="flex flex-col space-y-3 ">
-            <CartDetail detailTitle={"Detalle del carrito"} />
+            <CartDetail
+              detailTitle={"Detalle del carrito"}
+              isCheckout
+              onChange={handleChange}
+            />
           </div>
         </div>
       </main>
       <div className="flex justify-center mt-8 mb-8 w-3/4 ">
         <button
           onClick={() =>
-            hasPendingOrder ? resentPendingOrder() : handleCreateOrder()
+            status === "P" ? resentPendingOrder() : handleCreateOrder()
           }
           className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
         >

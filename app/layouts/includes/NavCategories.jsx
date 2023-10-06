@@ -31,7 +31,7 @@ const NavCategories = () => {
   return (
     <>
       <div className="grid grid-cols-1 h-[50px] mt-[0.5px] bg-resene">
-        <ul className="flex justify-center content-center text-[#333333]  overflow-y-scroll scrollbar scrollbar-none">
+        <ul className="flex md:justify-center content-center text-[#333333]  overflow-y-scroll scrollbar scrollbar-none">
           {menuItems &&
             menuItems.length &&
             menuItems.map((item) => (
@@ -39,7 +39,7 @@ const NavCategories = () => {
                 key={item.id}
                 className="px-3 hover:underline font-bold cursor-grab flex justify-center items-center"
               >
-                <Link href={`/results/${item.name}`}> {item.name}</Link>
+                <Link href={`/results?query=${item.name}`}> {item.name}</Link>
               </li>
             ))}
         </ul>

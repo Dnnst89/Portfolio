@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import ProductCard from "./ProductCard";
+import AgeProductCard from "./AgeProductCard";
 import { useEffect, useState } from "react";
 import { strapiInstance } from "@/src/axios/algoliaIntance/config";
 
@@ -21,12 +21,13 @@ const FeaturedProducts = () => {
     <>
       {products.length &&
         products.map((item) => (
-          <div className="flex  justify-center pt-10" key={item.id}>
-            <ProductCard
+          <div className="flex  justify-center pt-2" key={item.id}>
+            <AgeProductCard
               name={item.attributes.name}
               defaultPrice={item.attributes.defaultPrice}
               id={item.id}
               url={"/uploads/juguete4_36d71de373.jpg"}
+              coverImage={item.attributes.coverImage.data}
             />
           </div>
         ))}
