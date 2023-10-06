@@ -5,9 +5,9 @@ import Link from "next/link";
 
 const Footer = () => {
   return (
-    <div className="bg-resene w-screen h-auto p-10 pt-5 mt-10 ">
+    <div className="bg-resene max-w-screen h-auto p-10 pt-5 mt-10 pb-5">
       <div className="flex flex-wrap max-w-screen-xl m-auto justify-center items-top">
-        <section className="border-b-2 md:border-r-2 md:border-b-0 border-dashed border-grey-200 pb-4 w-full md:w-2/6 grid place-content-center md:h-52 content-baseline">
+        <section className="border-b-2 md:border-r-2 md:border-b-0 border-dashed border-grey-200 pb-4 pl-6 w-full md:w-2/6 grid place-content-center md:h-52 content-baseline">
           <Image
             src={logo}
             alt="Detinmarin Logo"
