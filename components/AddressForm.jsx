@@ -75,13 +75,13 @@ const AddresForm = () => {
     const router = useRouter();
     //const [CreateAddress1] = useMutation(CreateAddress);
     //const [UpdateAddress1] = useMutation(UpdateUserAddress);
-    console.log("ssss");
-    /*
-        
-        const { loading, error, address } = useQuery(getAddress, {
-            variables: { id },
-        });*/
-    console.log(sessionData);
+
+    const id = parseInt(sessionData.user.id);
+    const { loading, error, address } = useQuery(GetAddress, {
+        variables: { id },
+    });
+
+    console.log(id);
     const initialValues = {
         firstName: "",
         lastName: "",
