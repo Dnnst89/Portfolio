@@ -2,15 +2,21 @@
 import useStorage from "@/hooks/useStorage";
 import useCartSummary from "@/hooks/useCartSummary";
 import Spinner from "./Spinner";
-// import { getAccessToken } from "@/helpers";
-import { useEffect } from "react";
+import { getAccessToken, formatTaxData } from "@/helpers";
+import { useCallback, useEffect, useState } from "react";
+import { facturationInstace } from "@/src/axios/algoliaIntance/config";
 
 const CartDetail = ({
   isCheckout = false,
   detailTitle = "Detalle del carrito",
+  onChange,
 }) => {
   const { user } = useStorage();
-
+  const [amounts, setAmounts] = useState({
+    total: 0,
+    tax: 0,
+    currencyType: "CRC",
+  });
   const {
     loading,
     items,
@@ -21,27 +27,36 @@ const CartDetail = ({
   });
 
   useEffect(() => {
-    // getAccessToken();
     getTaxCost();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items?.length]);
 
-  const getTaxCost = () => {
-    const lineDetails = items?.map((item) => {
-      return {
-        measurementUnit: "Sp",
-        unitaryPrice: item?.attributes?.variant?.data?.attributes?.price,
-        qty: item?.quantity,
-        cabys:
-          item?.attributes?.variant?.data?.attributes?.product?.data?.attributes
-            ?.cabys,
-      };
-    });
+  const getTaxCost = async () => {
+    if (!items.length) return;
+    const token = await getAccessToken();
+    const formatedItems = formatTaxData(items);
     const body = {
       serviceDetail: {
-        lineDetails,
+        lineDetails: [...formatedItems],
       },
     };
+    const { data } = await facturationInstace.post(
+      `/utils/get-detail-line?access_token=${token}`,
+      body
+    );
+    setAmounts((prev) => ({
+      ...prev,
+      total: data?.billSummary?.totalDocument,
+      tax: data?.billSummary?.totalTax,
+    }));
+    if (isCheckout) {
+      onChange({
+        total: data?.billSummary?.totalDocument,
+        taxes: data?.billSummary?.totalTax,
+        subTotal,
+      });
+    }
   };
 
   return (
@@ -70,13 +85,23 @@ const CartDetail = ({
             <p>Costo de envío:</p>
             <p className="text-grey-100">$0,000.00</p>
           </div>
+
           <hr />
-          {isCheckout ? (
+          <>
+            <div className="flex justify-between ">
+              <p>Impuestos:</p>
+              <p className="text-grey-100">
+                {amounts.tax} {amounts.currencyType}
+              </p>
+            </div>
             <div className="flex flex-col p-4 space-y-3">
               <p className="flex justify-center">Costo Total(IVA Incluido)</p>
-              <p className="flex justify-center text-grey-100">$0,000.00</p>
+              <p className="flex justify-center text-grey-100">
+                {amounts?.total}
+                {amounts.currencyType}
+              </p>
             </div>
-          ) : null}
+          </>
         </>
       ) : (
         <div className="flex justify-center">

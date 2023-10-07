@@ -38,6 +38,7 @@ query GetCartItemsBySession($shoppingSessionId: ID!, $page: Int!, $pageSize: Int
                     name
                     brand
                     description
+                    cabys
                   }
                 }
               }
