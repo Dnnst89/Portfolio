@@ -94,7 +94,7 @@ export default function ThankYouMessage(params) {
               <div className="flex flex-col items-end justify-center space-y-3">
                 <div className="flex flex-col items-center space-y-1 ml-3">
                   <h1 className="text-xl bold">¡Gracias por tu compra!</h1>
-                  <p className="text-sm">{description}</p>
+                  <p className="text-sm">Transacción Aprovada</p>
                   <p className="text-sm">Ya estamos preparando tu pedido</p>
                 </div>
                 <div className="bg-white w-[250px] p-3 flex flex-col items-center ml-[20px] rounded-md">
