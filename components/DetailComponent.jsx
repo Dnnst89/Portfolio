@@ -31,8 +31,8 @@ export default function DetailComponent({ id }) {
           description={data?.product.data.attributes.description}
           reviews={data?.product.data.attributes.reviews.data}
         />
-  <RelatedItems/></div>
-        }
+        <RelatedItems /></div>
+      }
     </div>
   );
 }

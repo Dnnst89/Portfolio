@@ -6,12 +6,12 @@ const ProductDetailSecondary = ({ id, description, reviews }) => {
   const [showAllReviews, setShowAllReviews] = useState(false);
   return (
     <main className="bg-resene" id="detail-table">
-      <section className="flex items-baseline mx-auto gap-5 w-8/12 pt-10">
-        <h1 className="text-xl">Descripción</h1>
-        <p className="w-8/12 text-sm text-grey-100">{description}</p>
+      <section className="grid md:flex md:items-baseline mx-auto gap-5 w-10/12 md:w-8/12 pt-10">
+        <h1 className="w:full text-xl">Descripción</h1>
+        <p className="w-full md:w-8/12 text-sm text-grey-100">{description}</p>
       </section>
       {reviews.length > 0 ? (
-        <section className="mt-10 flex justify-center">
+        <section className="grid md:flex md:items-baseline mx-auto gap-5 w-10/12 md:w-8/12 pt-10">
           <h1 className="text-xl mr-2">Reseñas</h1>
           <table className="w-7/12">
             <tr className="border-b-2 border-grey-200/50 flex">
@@ -51,7 +51,7 @@ const ProductDetailSecondary = ({ id, description, reviews }) => {
           </table>
         </section>
       ) : (
-        <p className="mt-10 text-xl text-center">
+        <p className="mt-10 tflex w-full m-auto  text-center">
           Aún no hay reseñas de este producto
         </p>
       )}
