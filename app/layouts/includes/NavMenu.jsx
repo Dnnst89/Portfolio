@@ -13,6 +13,7 @@ import useCartSummary from "@/hooks/useCartSummary";
 import useStorage from "@/hooks/useStorage";
 import { Toaster, toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
+import NavCategories from "@/app/layouts/includes/NavCategories";
 import { updateCartItems, updateQtyItems } from "@/redux/features/cart-slice";
 const NavMenu = () => {
   const dispatch = useDispatch();
@@ -103,6 +104,7 @@ const NavMenu = () => {
           </div>
         </div>
       </div>
+      <NavCategories />
     </header>
 
   );

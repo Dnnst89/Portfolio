@@ -9,7 +9,6 @@ import guitar from "../assets/guitar.png";
 import libro from "../assets/libro.png";
 import BodyComponent from "@/components/BodyComponent";
 import FeaturedProducts from "@/components/FeaturedProducts";
-import NavCategories from "@/app/layouts/includes/NavCategories";
 import"../../styles/fonts.css";
 import toast from "react-hot-toast";
 const MainLayout = ({ children }) => {
@@ -20,7 +19,7 @@ const MainLayout = ({ children }) => {
   return (
     <>
       <BodyComponent>
-        <NavCategories />
+        
         <div className="flex justify-center pt-10">
           <h1>Top de productos</h1>
         </div>

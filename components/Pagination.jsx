@@ -25,12 +25,12 @@ const Pagination = ({
   };
 
   return (
-    <div>
-      <nav aria-label="Page navigation example">
-        <ul className="inline-flex -space-x-px text-sm">
+    <div className="flex flex-wrap max-w-screen-xl m-auto justify-center py-10">
+      <nav aria-label="">
+        <ul className="list-style-none flex">
           <li>
             <button
-              className="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              className="pointer-events-none relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-500 transition-all duration-300 dark:text-neutral-400"
               disabled={currentPage === 0 ? true : false}
               onClick={onPreviusPage}
             >
@@ -40,7 +40,7 @@ const Pagination = ({
           {noPages.map((noPage) => (
             <li key={noPage}>
               <button
-                className={`flex items-center justify-center px-3 h-8 leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white bg${noPage === currentPage + 1 ? "-white" : ""
+                className={`relative block rounded bg-primary-100 px-3 py-1.5 text-sm font-medium text-primary-700 transition-all duration-300 bg${noPage === currentPage + 1 ? "-white" : ""
                   }`}
                 onClick={() => onSpecificPage(noPage)}
               >
@@ -51,7 +51,7 @@ const Pagination = ({
           <li>
             <button
               href="#"
-              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              className="pointer-events-none relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-500 transition-all duration-300 dark:text-neutral-400"
               disabled={currentPage === noPages.length - 1 ? true : false}
               onClick={onNextPage}
             >

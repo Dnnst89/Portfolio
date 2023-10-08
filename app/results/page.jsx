@@ -2,6 +2,7 @@
 import ResultsComponent from "@/components/ResultsComponent";
 import { useState, useEffect } from "react";
 import Spinner from "@/components/Spinner";
+import"../../styles/fonts.css";
 
 const GetResults = () => {
   const [querySearch, setQuerySearch] = useState("");
