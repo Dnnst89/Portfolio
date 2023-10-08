@@ -55,10 +55,12 @@ function ProductDetail({ name, description, sku, variants, materials }) {
 
   return (
     <>
-      <div className="bg-floralwhite" target="_blank" rel="noopener noreferrer">
-        <div className=" p-5 flex ">
+      <div className="bg-floralwhite max-w-screen-xl grid grid-cols-12 m-auto p-5" target="_blank" rel="noopener noreferrer">
+
+        {/* Columna de imagenes */}
+        <div className="mb-10 col-span-12 md:col-span-6">
           {/* imagen principal grande */}
-          <div className="w-6/12 flex justify-center">
+          <div className="m-auto w-full flex justify-center">
             {images.length > 0 ? (
               <ProductImage
                 key={variants[0].attributes.images.data[0].id}
@@ -69,136 +71,8 @@ function ProductDetail({ name, description, sku, variants, materials }) {
               />
             ) : null}
           </div>
-          {/* parte derecha de la imagen principal grande*/}
-          <div className="w-6/12 flex flex-col">
-            <h2 className="flex justify-end text-sm">Ref {sku}</h2>
-            <h1 className="mb-3 text-xl">{name}</h1>
-            <p>{shortDescrption}...</p>
-            <a onClick={() => handleClick()}>
-              <button className="flex justify-start text-lightblue mb-3 bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
-                Leer mas
-              </button>
-            </a>
-            {/* imagenes iconos y caracteristicas */}
-            <div className="flex">
-              {/* primera caja */}
-              <div className="w-3/6">
-                <div className="flex mt-5 items-center">
-                  <Image
-                    priority={true}
-                    width="50"
-                    height="50"
-                    src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
-                    alt="tailwind logo"
-                    className="rounded-xl mr-3"
-                  />
-                  <p>
-                    Tipo de material : <br />
-                    {materials.length > 0 ? materials[0].attributes.name : null}
-                  </p>
-                </div>
-                <div className="flex mt-5 items-center">
-                  <Image
-                    priority={true}
-                    width="50"
-                    height="50"
-                    src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
-                    alt="tailwind logo"
-                    className="rounded-xl mr-3"
-                  />
-                  <p className="">
-                    Color:
-                    <span className="m-2">
-                      {variants.length > 0
-                        ? variants[0].attributes.color
-                        : null}
-                    </span>
-                  </p>
-                </div>
-
-                <div className="flex mt-5 items-center">
-                  <Image
-                    priority={true}
-                    width="50"
-                    height="50"
-                    src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
-                    alt="tailwind logo"
-                    className="rounded-xl mr-3"
-                  />
-                  <p>
-                    Tamaño:
-                    <span className="m-2">
-                      {variants.length > 0 ? variants[0].attributes.size : null}
-                    </span>
-                  </p>
-                </div>
-              </div>
-              {/* segunda caja */}
-              <div className=" w-3/6">
-                <div className="flex mt-5 items-center">
-                  <Image
-                    priority={true}
-                    width="50"
-                    height="50"
-                    src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
-                    alt="tailwind logo"
-                    className="rounded-xl mr-3"
-                  />
-                  <p>
-                    Rango de edades:
-                    <br />
-                    {variants.length > 0
-                      ? variants[0].attributes.ageRange
-                      : null}
-                  </p>
-                </div>
-
-                <div className="flex mt-5 items-center">
-                  <Image
-                    priority={true}
-                    width="50"
-                    height="50"
-                    src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
-                    alt="tailwind logo"
-                    className="rounded-xl mr-3"
-                  />
-                  <p>
-                    Stock:
-                    <span className="m-2">
-                      {variants.length > 0
-                        ? variants[0].attributes.stock
-                        : null}
-                    </span>
-                  </p>
-                </div>
-
-                <div className="flex mt-5 items-center">
-                  <Image
-                    priority={true}
-                    width="50"
-                    height="50"
-                    src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
-                    alt="tailwind logo"
-                    className="rounded-xl mr-3"
-                  />
-                  <p>
-                    Peso:
-                    <span className="m-2">
-                      {variants.length > 0 &&
-                        variants[0].attributes.weight != null
-                        ? variants[0].attributes.weight.weight +
-                        variants[0].attributes.weight.unitWeight
-                        : null}
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* //imagenes debajo de la principal */}
-        <div className="flex ">
-          <div className="flex h-32  w-6/12 justify-center">
+          {/* //imagenes debajo de la principal */}
+          <div className="flex h-32 md:w-12/12 pt-5 justify-center">
             {images
               ? images.map((item) => {
                 return (
@@ -213,8 +87,130 @@ function ProductDetail({ name, description, sku, variants, materials }) {
               })
               : null}
           </div>
+
+        </div>
+
+        {/* Sección con los detalles del producto*/}
+        <div className="mb-10 col-span-12 md:col-span-6 m-auto">
+          <h2 className="flex justify-end text-sm">Ref {sku}</h2>
+          <h1 className="mb-3 text-xl">{name}</h1>
+          <p>{shortDescrption}...</p>
+          <a onClick={() => handleClick()}>
+            <button className="flex justify-start text-lightblue mb-3 bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
+              Leer mas
+            </button>
+          </a>
+          {/* imagenes iconos y caracteristicas */}
+          <div className="flex grid grid-cols-12 gap-2 w-full justify-items-stretch ">
+
+            <div className="col-span-6 flex mt-5 items-center">
+              <Image
+                priority={true}
+                width="50"
+                height="50"
+                src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
+                alt="tailwind logo"
+                className="rounded-xl mr-3"
+              />
+              <p className="text-sm md:text-base">
+                Tipo de material : <br />
+                {materials.length > 0 ? materials[0].attributes.name : null}
+              </p>
+            </div>
+            <div className="col-span-6 flex mt-5 items-center">
+              <Image
+                priority={true}
+                width="50"
+                height="50"
+                src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
+                alt="tailwind logo"
+                className="rounded-xl mr-3"
+              />
+              <p className="text-sm md:text-base">
+                Rango de edades:
+                <br />
+                {variants.length > 0
+                  ? variants[0].attributes.ageRange
+                  : null}
+              </p>
+            </div>
+            <div className="col-span-6 flex mt-5 items-center">
+              <Image
+                priority={true}
+                width="50"
+                height="50"
+                src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
+                alt="tailwind logo"
+                className="rounded-xl mr-3"
+              />
+              <p className="text-sm md:text-base">
+                Color:
+                <span className="m-2">
+                  {variants.length > 0
+                    ? variants[0].attributes.color
+                    : null}
+                </span>
+              </p>
+            </div>
+            <div className="col-span-6 flex mt-5 items-center">
+              <Image
+                priority={true}
+                width="50"
+                height="50"
+                src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
+                alt="tailwind logo"
+                className="rounded-xl mr-3"
+              />
+              <p className="text-sm md:text-base">
+                Stock:
+                <span className="m-2">
+                  {variants.length > 0
+                    ? variants[0].attributes.stock
+                    : null}
+                </span>
+              </p>
+            </div>
+            <div className="col-span-6 flex mt-5 items-center">
+              <Image
+                priority={true}
+                width="50"
+                height="50"
+                src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
+                alt="tailwind logo"
+                className="rounded-xl mr-3"
+              />
+              <p className="text-sm md:text-base">
+                Tamaño:
+                <span className="m-2">
+                  {variants.length > 0 ? variants[0].attributes.size : null}
+                </span>
+              </p>
+            </div>
+            <div className="col-span-6 flex mt-5 items-center">
+              <Image
+                priority={true}
+                width="50"
+                height="50"
+                src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
+                alt="tailwind logo"
+                className="rounded-xl mr-3"
+              />
+              <p className="text-sm md:text-base">
+                Peso:
+                <span className="m-2">
+                  {variants.length > 0 &&
+                    variants[0].attributes.weight != null
+                    ? variants[0].attributes.weight.weight + " " +
+                    variants[0].attributes.weight.unitWeight
+                    : null}
+                </span>
+              </p>
+            </div>
+
+
+          </div>
           {/* precio, cantidad y carrito */}
-          <div className=" w-6/12 flex justify-between items-center p-4">
+          <div className="col-span-12 flex justify-between items-center p-4">
             <span className="font-bold">
               ₡ {variants.length > 0 ? variants[0].attributes.price : null}
             </span>
@@ -244,6 +240,9 @@ function ProductDetail({ name, description, sku, variants, materials }) {
             </div>
           </div>
         </div>
+
+
+
       </div>
     </>
   );
