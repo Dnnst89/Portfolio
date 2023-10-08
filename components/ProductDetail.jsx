@@ -97,7 +97,7 @@ function ProductDetail({ name, description, sku, variants, materials }) {
         {/* Sección con los detalles del producto*/}
         <div className="mb-10 col-span-12 md:col-span-6 m-auto">
           <h2 className="flex justify-end text-sm">Ref {sku}</h2>
-          <h1 className="mb-3 text-xl">{name}</h1>
+          <h1 className="mb-3 text-xl font-bold">{name}</h1>
           <p>{shortDescrption}...</p>
           <a onClick={() => handleClick()}>
             <button className="flex justify-start text-lightblue mb-3 bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
