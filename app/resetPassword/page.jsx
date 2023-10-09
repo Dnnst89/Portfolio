@@ -1,14 +1,12 @@
 "use client";
 import ResetPasswordForm from "@/components/resetPasswordForm";
-import { useParams } from "next/navigation";
-
-const ResetPassword = () => {
-  const params = useParams();
-  alert(params);
-  console.log("token", params);
+//Get the url params
+const ResetPassword = (params) => {
+  //Extract the token
+  const { code } = params.searchParams;
   return (
     <div>
-      <ResetPasswordForm />
+      <ResetPasswordForm code={code} />
     </div>
   );
 };

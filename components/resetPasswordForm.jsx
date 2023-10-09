@@ -4,20 +4,13 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { useMutation } from "@apollo/client";
-import RegisterUser from "@/src/graphQl/queries/registerUser";
-import { createElement } from "@/src/store/store";
-import { useRouter } from "next/navigation";
 import { Toaster, toast } from "react-hot-toast";
 import { setUser } from "@/redux/features/authSlice";
-import { updateShoppingSession } from "@/redux/features/cart-slice";
-import CREATE_SHOPPING_SESSION_MUTATION from "@/src/graphQl/queries/createShoppingSession";
-import useSession from "@/hooks/useSession";
 import CheckOutHeader from "@/components/CheckoutHeader";
 import ErrorForm from "@/components/ErrorForm";
-import Spinner from "@/components/Spinner";
-
+import { UPDATE_PASSWORD } from "@/src/graphQl/queries/updatePassword";
+import { useRouter } from "next/navigation";
 const initialValues = {
-  code: "",
   password: "",
   confirmPassword: "",
 };
@@ -36,53 +29,31 @@ const validationSchema = Yup.object().shape({
     .oneOf([Yup.ref("password"), null], "Las contraseñas no coinciden"),
 });
 
-const ResetPasswordForm = ({ token }) => {
+const ResetPasswordForm = ({ code }) => {
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
   const dispatch = useDispatch();
-  const [createUser] = useMutation(RegisterUser);
-  const [createShoppingSession] = useMutation(CREATE_SHOPPING_SESSION_MUTATION);
+  const router = useRouter();
 
-  const handleSubmit = async (values) => {
-    const dataValues = Object.keys(values).map((el) => {
-      return values[el];
-    });
-    if (dataValues.some((el) => !el)) {
-      return;
-    }
-    const { email, password, username } = values;
+  const [updatePassword] = useMutation(UPDATE_PASSWORD);
+
+  const handleUpdatePassword = async (values) => {
+    const { password, confirmPassword } = values;
 
     try {
-      const fechaActual = new Date();
-      const fechaFormateada = fechaActual.toISOString();
-      setLoading(true);
-      const { data } = await createUser({
-        variables: { username, email, password },
+      const { data } = await updatePassword({
+        variables: { password, passwordConfirmation: confirmPassword, code },
       });
-      router.push("/");
-      createElement("userData", JSON.stringify(data.register));
-      document.cookie = `userData=${JSON.stringify({
-        user: data.register.user,
-        isAuthenticated: true,
-      })}`;
-      dispatch(setUser(data.register.user));
-      const { data: dataSession } = await createShoppingSession({
-        //query para crear la session al user
-        variables: {
-          publishedAt: fechaFormateada,
-          userId: data.register.user.id,
-        },
-      });
-      dispatch(updateShoppingSession(dataSession.createShoppingSession.data)); //ACTUALIZO LA SESSION CON LOS DATOS OBTENIDOS
+
+      // Handle the response here store the JWT token
+      toast.success("Contraseña actualizada correctamente.");
+
+      // Dispatch user and update shopping session
+      dispatch(setUser(data.resetPassword.user));
+      router.push("/login");
     } catch (error) {
-      toast.error(
-        "No se pudo registrar tu cuenta, por favor intentalo más tarde"
-      );
-    } finally {
-      setLoading(false);
+      toast.error("No fue posible actualizar tu contraseña");
     }
   };
-  useSession();
 
   return (
     <div className="h-screen">
@@ -92,7 +63,7 @@ const ResetPasswordForm = ({ token }) => {
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={handleSubmit}
+            onSubmit={handleUpdatePassword}
           >
             {({ errors, touched }) => {
               return (
@@ -150,13 +121,8 @@ const ResetPasswordForm = ({ token }) => {
                         type="submit"
                         className="bg-blue-500 hover:bg-blue-300 text-whitetext-base rounded-lg py-2 px-5 transition-colors text-lg
                          text-white bg-pink-200 disabled:opacity-50 flex justify-center mx-auto mt-5"
-                        disabled={
-                          (Object.keys(errors).length &&
-                            Object.keys(touched).length) ||
-                          loading
-                        }
                       >
-                        {loading ? <Spinner /> : "Continuar"}
+                        Continuar
                       </button>
                     </div>
                   </Form>

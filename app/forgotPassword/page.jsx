@@ -4,6 +4,7 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useMutation } from "@apollo/client";
 import { RESET_PASSWORD } from "../../src/graphQl/queries/resetPassword";
+import { useRouter } from "next/navigation";
 const ResetPasswordSchema = Yup.object().shape({
   email: Yup.string()
     .email("El formato del correo no es el correcto.")
@@ -11,6 +12,7 @@ const ResetPasswordSchema = Yup.object().shape({
 });
 
 const ForgotPassword = () => {
+  const router = useRouter();
   const [resetPassword, { loading, error, data }] = useMutation(RESET_PASSWORD);
 
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -24,6 +26,7 @@ const ForgotPassword = () => {
       if (response.data && response.data.forgotPassword.ok) {
         // Password reset was successful
         console.log("Password reset successful");
+        router.push("/login");
       } else {
         // Password reset failed, handle the error
         console.error("Password reset failed");
