@@ -7,7 +7,7 @@ export default function InputForm({ label, id, htmlFor }) {
         <span className="text-pink-200 ml-1">*</span>
       </label>
       <input
-        className="border-2 border-grey-200/40 outline-pink-200/30 mb-4"
+        className="border-2 border-grey-300/40 outline-pink-200/30 mb-4 rounded-lg h-[30px]"
         id={id}
       />
     </>

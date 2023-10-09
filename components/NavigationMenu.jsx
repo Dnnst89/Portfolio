@@ -18,7 +18,7 @@ const NavidationMenu = () => {
   return (
     <div className="border-t-4 border-pink-200 sm:w-3/6 md:w-2/6 lg:w-1/6 p-3 space-y-4 bg-resene h-[250px]">
       <Link
-        href={""}
+        href={"/personalData"}
         className={`border-b-2 border-dashed border-grey-200 flex justify-between items-center ${
           isSelected === "datos" ? "text-pink-200" : ""
         }`}
@@ -46,7 +46,7 @@ const NavidationMenu = () => {
       </Link>
 
       <Link
-        href={""}
+        href={"/address"}
         className={`border-b-2 border-dashed border-grey-200 flex items-center justify-between  ${
           isSelected === "direcciones" ? "text-pink-200" : ""
         }`}

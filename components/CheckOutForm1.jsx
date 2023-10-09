@@ -6,16 +6,18 @@ import { useRouter } from "next/navigation";
 import InputForm from "./InputForm";
 import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
 import useStorage from "@/hooks/useStorage";
-export default function CheckOutForm1() {
-  const userInSession = useStorage();
+import { useState } from "react";
+export default function CheckOutForm1({ isCheckout = false }) {
   const router = useRouter();
+
+  const [amount, setAmount] = useState({
+    total: 0,
+    subTotal: 0,
+    taxes: 0,
+  });
   const [createOrder] = useMutation(CREATE_ORDER);
   const { user } = useStorage();
   const { id } = user || {};
-  //Get them from
-  const total = parseFloat(0.1);
-  const subTotal = parseFloat(0.1);
-  const taxes = parseFloat(0.1);
   // retrieving pending order if exist
   const { data } = useQuery(GET_PENDING_ORDER, {
     variables: { userId: id, status: "P" },
@@ -29,19 +31,24 @@ export default function CheckOutForm1() {
     localStorage.setItem("createdOrder", orderNumber);
     router.push("/proceedPayment");
   };
+
+  const handleChange = (data) => {
+    console.log(data);
+    setAmount(data);
+  };
   const handleCreateOrder = async () => {
     const isoDate = new Date().toISOString();
+    const { total, subTotal, taxes } = amount;
     try {
       const { data } = await createOrder({
         variables: {
           user_id: parseInt(id),
-          total: total,
+          total,
           status: "P", // Pending
-          subTotal: subTotal,
-          taxes: taxes,
           publishedAt: isoDate,
         },
       });
+      console.log(data);
       // if the order not exist we create one
       // After create an order now we can get that pending order
       const orderNumber = await data?.createOrderDetail?.data?.id;
@@ -134,15 +141,20 @@ export default function CheckOutForm1() {
         </section>
         <div className=" bg-resene rounded-sm w-1/4 h-[350px] ml-[25px] mt-[-80px]">
           <div className="flex flex-col space-y-3 ">
-            <CartDetail detailTitle={"Detalle del carrito"} />
+            <CartDetail
+              detailTitle={"Detalle del carrito"}
+              isCheckout
+              onChange={handleChange}
+            />
           </div>
         </div>
       </main>
       <div className="flex justify-center mt-8 mb-8 w-3/4 ">
         <button
-          onClick={() =>
-            status === "P" ? resentPendingOrder() : handleCreateOrder()
-          }
+          onClick={() => {
+            if (!isCheckout) return;
+            status === "P" ? resentPendingOrder() : handleCreateOrder();
+          }}
           className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
         >
           Continuar
