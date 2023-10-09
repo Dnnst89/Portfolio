@@ -7,8 +7,9 @@ import CheckOutHeader from "@/components/CheckoutHeader";
 const CheckOut = () => {
   return (
     <div>
-      <AddresForm />
-
+      <CheckOutHeader regresar={"/cart"} />
+      <CheckOutForm1 isCheckout />
+      <CheckOutForm2 />
     </div>
   );
 };

@@ -6,18 +6,17 @@ function GiftIdeasCard({ ageRange, image, age, button, border }) {
   return (
     <Link href={{ pathname: "/resultsByAge", query: { ageRange } }}>
       <div className=" m-4">
-        <section className="mt-10 ">
+        <section className="mt-5 ">
           <div className={border}>
             <Image
               src={image}
               alt="heart image"
-              style={{ width: "245px", height: "220px" }}
-              className="rounded-[10px]"
+              className="rounded-[10px] w-[140px] md:w-[220px]"
             />
-            <div className="flex justify-center mt-5">
-              <h1>{age}</h1>
+            <div className="flex justify-center m-auto mt-5">
+              <h1  className="text-xs md:text-xl ">{age}</h1>
             </div>
-            <div className="flex justify-center mt-5">
+            <div className="flex justify-center m-auto mt-5">
               <button className={button}> A EXPLORAR</button>
             </div>
           </div>
