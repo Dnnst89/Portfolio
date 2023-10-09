@@ -37,7 +37,6 @@ const AgeProductCard = ({ id, name, defaultPrice, coverImage, brand }) => {
             </h5>
           <div className=" rounded-lg">
             <h2 className="flex justify-end  relative">
-              
               <div href="#" className="px-1 pt-1 text-[7px] md:text-xs  text-[#757575]">
               {brand}
               </div>

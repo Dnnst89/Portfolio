@@ -8,13 +8,13 @@ const RelatedItems = () => {
   const url="/uploads/juguete3_10b4adc7f0.jpg"
 
   return (
-    <div>
+    <div className="flex grid w-full justify-center">
       <div className="flex justify-center p-6">
         <h1 className="text-lg shadow-text">
           Encuentra nuestros articulos relacionados
         </h1>
       </div>
-      <section className="flex justify-center">
+      <section className="flex flex-wrap max-w-screen-xl m-auto justify-center">
         <ProductCard name={name} defaultPrice={defaultPrice} url={url}/>
         <ProductCard name={name} defaultPrice={defaultPrice} url={url}/>
         <ProductCard name={name} defaultPrice={defaultPrice} url={url}/>
