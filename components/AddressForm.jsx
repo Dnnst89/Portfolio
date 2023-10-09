@@ -14,7 +14,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { useEffect } from "react";
 import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
 import { GET_ADDRESS } from "@/src/graphQl/queries/getAddress";
-//import { CreateAddress } from "@/src/graphQl/queries/CreateAddress";
+import { CreateAddress } from "@/src/graphQl/queries/CreateAddress";
 //import { UpdateUserAddress } from "@/src/graphQl/queries/updateUserAddress";
 
 import FormikField from "./FormikField";
@@ -69,14 +69,14 @@ const AddresForm = () => {
     const { data } = useQuery(GET_ADDRESS, {
         variables: { id: id },
     });
-    const { users_address } = data.usersPermissionsUser.data.attributes || {};
+    //const { users_address } =  || {};
     const router = useRouter();
-    //const [CreateAddress1] = useMutation(CreateAddress);
-    //const [UpdateAddress1] = useMutation(UpdateUserAddress);
+    //const [CreateAddress] = useMutation(CreateAddress);
+    //const [UpdateAddress] = useMutation(UpdateUserAddress);
+    const { users_address } = data.usersPermissionsUser.data.attributes || {};
+    console.log(users_address);
 
-
-
-
+    // console.log(user)
 
 
 
@@ -122,9 +122,9 @@ const AddresForm = () => {
             /* CreateAddress1({
                  variables: { postCode, country, addressLine1, addressLine2, province, canton, user },
              });
- 
+     
              router.push("/");
- */
+    */
         } catch (error) {
             console.log(error)
         } finally {
