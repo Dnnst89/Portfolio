@@ -16,3 +16,15 @@ h1 {
   font-size: x-large;
   color: #484848;
 }
+
+p {
+  color: #484848;
+}
+
+label {
+  color: #484848;
+}
+
+input[type=text], input[type=password],input[type=email] {
+  border: 2px solid #B2B1C5;
+}

@@ -9,7 +9,7 @@ import guitar from "../assets/guitar.png";
 import libro from "../assets/libro.png";
 import BodyComponent from "@/components/BodyComponent";
 import FeaturedProducts from "@/components/FeaturedProducts";
-import"../../styles/fonts.css";
+import "../../styles/fonts.css";
 import toast from "react-hot-toast";
 const MainLayout = ({ children }) => {
   const name = "Juguete";

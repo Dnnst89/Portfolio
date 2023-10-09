@@ -97,8 +97,8 @@ const RegisterFormTwo = () => {
   return (
     <div className="h-screen">
       <CheckOutHeader regresar={"/"} />
-      <div className=" flex justify-center items-center w-full">
-        <div className="">
+      <div className="flex justify-center items-center w-full max-w-screen-xl  m-auto">
+        <div className="w-full">
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -107,15 +107,15 @@ const RegisterFormTwo = () => {
             {({ errors, touched }) => {
               return (
                 <>
-                  <Form className=" w-screen flex flex-col items-center mt-20">
-                    <h2 className=" text-3xl flex justify-center items-center mb-10">
+                  <Form className=" max-w-screen-xl items-center mt-20 grid grid-cols-12">
+                    <h1 className=" text-3xl flex justify-center items-center mb-10 col-span-12">
                       Registrate
-                    </h2>
+                    </h1>
 
-                    <div className="bg-resene p-10 w-6/12 flex flex-col items-center ">
-                      <div className="flex w-10/12 space-x-3">
-                        <section className=" p-3 w-3/6">
-                          <div className="flex flex-col mb-2">
+                    <div className="bg-resene  pt-10 w-full flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-3 col-span-8">
+                      <div className="flex grid w-full">
+                        <section className="p-3 w-10/12 m-auto grid grid-cols-12 gap-5">
+                          <div className="grid col-span-12 md:col-span-6">
                             <label
                               className="whitespace-nowrap"
                               htmlFor="username"
@@ -134,25 +134,7 @@ const RegisterFormTwo = () => {
                               <ErrorForm>{errors.username}</ErrorForm>
                             ) : null}
                           </div>
-                          <div className="flex flex-col">
-                            <label htmlFor="password">
-                              Constraseña
-                              <span className="text-pink-200">*</span>
-                            </label>
-                            <Field
-                              type="password"
-                              id="password"
-                              name="password"
-                              className="focus:border-blue-500 outline-none  px-6 py-2 mb-2 border-2 border-grey-200 rounded-lg "
-                              autoFocus={true}
-                            />
-                            {errors.password && touched.password ? (
-                              <ErrorForm>{errors.password}</ErrorForm>
-                            ) : null}
-                          </div>
-                        </section>
-                        <section className="p-3 w-3/6">
-                          <div className="flex flex-col mb-2">
+                          <div className="grid col-span-12 md:col-span-6">
                             <label
                               className="whitespace-nowrap"
                               htmlFor="email"
@@ -171,7 +153,26 @@ const RegisterFormTwo = () => {
                               <ErrorForm>{errors.email}</ErrorForm>
                             ) : null}
                           </div>
-                          <div className="flex flex-col">
+                          
+                        </section>
+                        <section className="p-3 w-10/12 m-auto grid grid-cols-12 gap-5">
+                        <div className="grid col-span-12 md:col-span-6">
+                            <label htmlFor="password">
+                              Constraseña
+                              <span className="text-pink-200">*</span>
+                            </label>
+                            <Field
+                              type="password"
+                              id="password"
+                              name="password"
+                              className="focus:border-blue-500 outline-none  px-6 py-2 mb-2 border-2 border-grey-200 rounded-lg "
+                              autoFocus={true}
+                            />
+                            {errors.password && touched.password ? (
+                              <ErrorForm>{errors.password}</ErrorForm>
+                            ) : null}
+                          </div>
+                          <div className="grid col-span-12 md:col-span-6">
                             <label
                               className="whitespace-nowrap w-[100px]"
                               htmlFor="confirmPassword"

@@ -27,10 +27,10 @@ const Pagination = ({
   return (
     <div className="flex flex-wrap max-w-screen-xl m-auto justify-center py-10">
       <nav aria-label="">
-        <ul className="list-style-none flex">
+        <ul className="list-style-none flex ">
           <li>
             <button
-              className="pointer-events-none relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-500 transition-all duration-300 dark:text-neutral-400"
+              className="pointer-events-none relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-500 transition-all duration-300 dark:text-neutral-400 pr-10"
               disabled={currentPage === 0 ? true : false}
               onClick={onPreviusPage}
             >
@@ -51,7 +51,7 @@ const Pagination = ({
           <li>
             <button
               href="#"
-              className="pointer-events-none relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-500 transition-all duration-300 dark:text-neutral-400"
+              className="pointer-events-none relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-500 transition-all duration-300 dark:text-neutral-400 pl-10"
               disabled={currentPage === noPages.length - 1 ? true : false}
               onClick={onNextPage}
             >

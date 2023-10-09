@@ -1,6 +1,7 @@
 "use client";
 import ProtectedRoutes from "@/components/ProtectedRoutes";
 import RegisterFormTwo from "@/components/RegisterFormTwo";
+import "../../../styles/fonts.css";
 
 const SingEmail = () => {
   return (

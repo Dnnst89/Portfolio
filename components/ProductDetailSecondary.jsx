@@ -8,7 +8,7 @@ const ProductDetailSecondary = ({ id, description, reviews }) => {
     <main className="bg-resene" id="detail-table">
       <section className="grid md:flex md:items-baseline mx-auto gap-5 w-10/12 md:w-8/12 pt-10">
         <h1 className="w:full text-xl">Descripción</h1>
-        <p className="w-full md:w-8/12 text-sm text-grey-100">{description}</p>
+        <p className="w-full md:w-12/12 text-sm text-grey-100">{description}</p>
       </section>
       {reviews.length > 0 ? (
         <section className="grid md:flex md:items-baseline mx-auto gap-5 w-10/12 md:w-8/12 pt-10">
