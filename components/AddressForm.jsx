@@ -14,8 +14,10 @@ import { useMutation, useQuery } from "@apollo/client";
 import { useEffect } from "react";
 import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
 import { GET_ADDRESS } from "@/src/graphQl/queries/getAddress";
-import { CreateAddress } from "@/src/graphQl/queries/CreateAddress";
-//import { UpdateUserAddress } from "@/src/graphQl/queries/updateUserAddress";
+import { CREATE_ADDRESS } from "@/src/graphQl/queries/CreateAddress";
+
+import { UPDATE_USER_INFORMATION } from "@/src/graphQl/queries/UpdateUserInformation";
+import { UPDATE_ADDRESS } from "@/src/graphQl/queries/UpdateAddress ";
 
 import FormikField from "./FormikField";
 import useStorage from "@/hooks/useStorage";
@@ -62,38 +64,82 @@ const validationSchema = Yup.object().shape({
 
 });
 
-const AddresForm = () => {
 
+const AddresForm = () => {
     const { user } = useStorage();
     const { id } = user || {};
-    const { data } = useQuery(GET_ADDRESS, {
-        variables: { id: id },
-    });
-    //const { users_address } =  || {};
-    const router = useRouter();
-    //const [CreateAddress] = useMutation(CreateAddress);
-    //const [UpdateAddress] = useMutation(UpdateUserAddress);
-    const { users_address } = data.usersPermissionsUser.data.attributes || {};
-    console.log(users_address);
+    const [firstName, setFirstName] = useState();
+    const [lastName, setLastName] = useState();
+    const [email, setEmail] = useState();
+    const [phone, setPhone] = useState();
+    const [postCode, setPostCode] = useState();
+    const [country, setCountry] = useState();
+    const [addressLine1, setAddressLine1] = useState();
+    const [addressLine2, setAddressLine2] = useState();
+    const [province, setProvince] = useState();
+    const [canton, setCanton] = useState();
+    const [direccion, setDireccion] = useState();
 
-    // console.log(user)
-
-
+    const [CreateAddress] = useMutation(CREATE_ADDRESS);
+    const [UpdateUserInformation] = useMutation(UPDATE_USER_INFORMATION);
+    const [UpdateAddress] = useMutation(UPDATE_ADDRESS);
 
     const initialValues = {
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: 0,
-        postCode: "",
-        country: "",
-        addressLine1: "",
-        addressLine2: "",
-        province: "",
-        canton: "",
-        user: "",
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phone: phone,
+        postCode: postCode,
+        country: country,
+        addressLine1: addressLine1,
+        addressLine2: addressLine2,
+        province: province,
+        canton: canton,
 
-    };
+
+    }
+
+    //const { users_address } =  || {};
+    const router = useRouter();
+
+    const cargar = async () => {
+        try {
+
+            const { data } = await useQuery(GET_ADDRESS, {
+                variables: { id: id },
+            });
+
+
+            const { usersPermissionsUser } = data || {};
+            const { users_address } = usersPermissionsUser.data.attributes || {};
+            setDireccion(users_address.data.id);
+            setFirstName(usersPermissionsUser.data.attributes.firstName);
+            setLastName(usersPermissionsUser.data.attributes.lastName);
+            setPhone(usersPermissionsUser.data.attributes.phoneNumber);
+            setEmail(usersPermissionsUser.data.attributes.email);
+            setPostCode(users_address.data.attributes.postCode);
+            setCountry(users_address.data.attributes.country);
+            setAddressLine1(users_address.data.attributes.addressLine1);
+            setAddressLine2(users_address.data.attributes.addressLine2);
+            setProvince(users_address.data.attributes.province);
+            setCanton(users_address.data.attributes.canton);
+            console.log(email, country)
+
+
+        } catch (error) {
+            console.log("ssss")
+        }
+
+
+    }
+    cargar();
+
+
+
+
+
+
+
 
     const handleSubmit = (values) => {
         /*  const dataValues = Object.keys(values).map((el) => {
@@ -103,30 +149,74 @@ const AddresForm = () => {
               
               return;
           }*/
+        const isoDate = new Date().toISOString();
 
-        if (users_address) {
-            console.log(users_address)
-        } else {
-            console.log("Eo")
-        }
-
-        const id = values.user
-        const { postCode, country, addressLine1, addressLine2, province, canton, user } = values;
+        //const id = values.user
+        const { firstName, lastName, email, phone, postCode, country, addressLine1, addressLine2, province, canton, user } = values;
+        //console.log(id);
+        //  console.log(values);
+        //console.log(isoDate);
 
 
         try {
 
+            if (direccion == null) {
+                CreateAddress({
+                    variables: {
+                        postCode: postCode,
+                        country: country,
+                        addressLine1: addressLine1,
+                        addressLine2: addressLine2,
+                        province: province,
+                        canton: canton,
+                        publishedAt: isoDate,
+                        id: parseInt(id),
+                    },
+                });
+                UpdateUserInformation({
+                    variables: {
+                        firstName: firstName,
+                        lastName: lastName,
+                        phone: parseInt(phone),
+                        email: email,
+                        id: parseInt(id)
+                    },
+                });
+            } else {
+                UpdateAddress({
+                    variables: {
+                        country: country,
+                        postCode: postCode,
+                        province: province,
+                        addressLine1: addressLine1,
+                        addressLine2: addressLine2,
+                        canton: canton,
+                        id: parseInt(id),
+                    },
+                });
+                UpdateUserInformation({
+                    variables: {
+                        firstName: firstName,
+                        lastName: lastName,
+                        phone: parseInt(phone),
+                        email: email,
+                        id: parseInt(id)
+                    },
+                });
+                console.log("ssssss");
+                router.push("/checkout");
 
-            console.log(values)
+            }
 
-            /* CreateAddress1({
-                 variables: { postCode, country, addressLine1, addressLine2, province, canton, user },
-             });
-     
-             router.push("/");
+            /*
+           
+             
+          
     */
+
         } catch (error) {
-            console.log(error)
+
+
         } finally {
 
         }
@@ -149,12 +239,7 @@ const AddresForm = () => {
 
 
                             <section className="w-2/4 flex flex-col p-2 space-y-1">
-                                <Field
-                                    type="hidden"
-                                    id="id"
-                                    name="id"
-                                    value={"sessionData"}
-                                />
+
                                 <div>
 
                                     <FormikField
@@ -287,7 +372,7 @@ const AddresForm = () => {
 
                             </section>
 
-                            <section className="w-2/4 flex flex-col p-2 space-y-1">
+                            <section className="w-1/4 flex flex-col p-2 space-y-1">
                                 <button
                                     type="submit"
                                     className="bg-blue-500 hover:bg-blue-300 text-whitetext-base rounded-lg py-2 px-5 transition-colors w-full text-[19px] text-white bg-aquamarine disabled:opacity-50"
@@ -296,6 +381,16 @@ const AddresForm = () => {
                                     Continuar
                                 </button>
                             </section>
+                            <div className="flex justify-center">
+                                <section className="w-1/4 flex p-2">
+                                    <p className="mr-4 whitespace-nowrap">Factura Electrónica</p>
+                                    <label className="switch">
+                                        <input type="checkbox" />
+                                        <span className="slider round"></span>
+                                    </label>
+                                </section>
+                                <section className="w-1/4 flex p-2"></section>
+                            </div>
 
                         </Form>
                     </>

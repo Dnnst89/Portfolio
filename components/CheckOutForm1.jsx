@@ -7,6 +7,7 @@ import InputForm from "./InputForm";
 import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
 import useStorage from "@/hooks/useStorage";
 import { useState } from "react";
+import AddresForm from "./AddressForm";
 export default function CheckOutForm1({ isCheckout = false }) {
   const router = useRouter();
 
@@ -70,37 +71,7 @@ export default function CheckOutForm1({ isCheckout = false }) {
       <main className="flex ">
         <section className="w-3/4">
           <div className="flex justify-center">
-            <section className="w-1/4 flex flex-col p-2">
-              <InputForm label={"Nombre"} htmlFor={"name"} id={"name"} />
-              <InputForm
-                label={"Correo Electrónico"}
-                htmlFor={"email"}
-                id={"email"}
-              />
-              <InputForm label={"País"} htmlFor={"country"} id={"country"} />
-              <InputForm label={"Cantón"} htmlFor={"canton"} id={"canton"} />
-              <InputForm label={"Código Postal"} htmlFor={"zip"} id={"zip"} />
-              <InputForm label={"Segunda Dirección"} htmlFor={"2"} id={"2"} />
-            </section>
-            <section className="w-1/4 flex flex-col p-2">
-              <InputForm
-                label={"Apellidos"}
-                htmlFor={"lastname"}
-                id={"lastname"}
-              />
-              <InputForm label={"Teléfono"} htmlFor={"phone"} id={"phone"} />
-              <InputForm
-                label={"Provincia"}
-                htmlFor={"provincia"}
-                id={"provincia"}
-              />
-              <InputForm label={"Ciudad"} htmlFor={"city"} id={"city"} />
-              <InputForm
-                label={"Dirección"}
-                htmlFor={"direction"}
-                id={"direction"}
-              />
-            </section>
+            <AddresForm />
           </div>
           <div className="flex justify-center">
             <section className="w-1/4 flex p-2">
