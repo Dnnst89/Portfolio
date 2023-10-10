@@ -13,7 +13,7 @@ function SearchItem({ hit, components }) {
           src={
             hit.coverImage
               ? `${hit.coverImage.url}`
-              : `https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/undefined_eb8416869d.png`
+              : `https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/undefined_76582dee58.png`
           }
           alt="undefined"
           className="rounded-xl object-contain"
