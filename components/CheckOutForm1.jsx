@@ -73,42 +73,8 @@ export default function CheckOutForm1({ isCheckout = false }) {
           <div className="flex justify-center">
             <AddresForm />
           </div>
-          <div className="flex justify-center">
-            <section className="w-1/4 flex p-2">
-              <p className="mr-4 whitespace-nowrap">Factura Electrónica</p>
-              <label className="switch">
-                <input type="checkbox" />
-                <span className="slider round"></span>
-              </label>
-            </section>
-            <section className="w-1/4 flex p-2"></section>
-          </div>
-          <div className="flex justify-center">
-            <section className="w-1/4 flex flex-col p-2  ">
-              <InputForm
-                label={"Tipo De Cédula"}
-                htmlFor={"cedula"}
-                id={"cedula"}
-              />
-              <InputForm
-                label={"Nombre Comercial"}
-                htmlFor={"businessname"}
-                id={"businessname"}
-              />
-            </section>
-            <section className="w-1/4 flex flex-col p-2">
-              <InputForm
-                label={"Cédula Comercial"}
-                htmlFor={"businessid"}
-                id={"businessid"}
-              />
-              <InputForm
-                label={"Correo Electrónico"}
-                htmlFor={"email2"}
-                id={"email2"}
-              />
-            </section>
-          </div>
+
+
         </section>
         <div className=" bg-resene rounded-sm w-1/4 h-[350px] ml-[25px] mt-[-80px]">
           <div className="flex flex-col space-y-3 ">
@@ -120,17 +86,7 @@ export default function CheckOutForm1({ isCheckout = false }) {
           </div>
         </div>
       </main>
-      <div className="flex justify-center mt-8 mb-8 w-3/4 ">
-        <button
-          onClick={() => {
-            if (!isCheckout) return;
-            status === "P" ? resentPendingOrder() : handleCreateOrder();
-          }}
-          className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
-        >
-          Continuar
-        </button>
-      </div>
+
     </div>
   );
 }

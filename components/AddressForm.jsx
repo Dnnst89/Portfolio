@@ -18,7 +18,7 @@ import { CREATE_ADDRESS } from "@/src/graphQl/queries/CreateAddress";
 
 import { UPDATE_USER_INFORMATION } from "@/src/graphQl/queries/UpdateUserInformation";
 import { UPDATE_ADDRESS } from "@/src/graphQl/queries/UpdateAddress ";
-
+import { UPDATE_ID_CARD } from "@/src/graphQl/queries/updateIdCard";
 import FormikField from "./FormikField";
 import useStorage from "@/hooks/useStorage";
 
@@ -83,6 +83,7 @@ const AddresForm = () => {
     const [CreateAddress] = useMutation(CREATE_ADDRESS);
     const [UpdateUserInformation] = useMutation(UPDATE_USER_INFORMATION);
     const [UpdateAddress] = useMutation(UPDATE_ADDRESS);
+    const [UpdateIdCard] = useMutation(UPDATE_ID_CARD);
 
     const initialValues = {
         firstName: firstName,
@@ -95,6 +96,9 @@ const AddresForm = () => {
         addressLine2: addressLine2,
         province: province,
         canton: canton,
+        checkbox: false,
+        idNumber: 0,
+        idType: ""
 
 
     }
@@ -152,7 +156,7 @@ const AddresForm = () => {
         const isoDate = new Date().toISOString();
 
         //const id = values.user
-        const { firstName, lastName, email, phone, postCode, country, addressLine1, addressLine2, province, canton, user } = values;
+        const { checkbox, idNumber, idType, firstName, lastName, email, phone, postCode, country, addressLine1, addressLine2, province, canton, user } = values;
         //console.log(id);
         //  console.log(values);
         //console.log(isoDate);
@@ -160,7 +164,29 @@ const AddresForm = () => {
 
         try {
 
-            if (direccion == null) {
+            if (direccion != null) {
+                UpdateAddress({
+                    variables: {
+                        country: country,
+                        postCode: postCode,
+                        province: province,
+                        addressLine1: addressLine1,
+                        addressLine2: addressLine2,
+                        canton: canton,
+                        id: parseInt(id),
+                    },
+                });
+                UpdateUserInformation({
+                    variables: {
+                        firstName: firstName,
+                        lastName: lastName,
+                        phone: parseInt(phone),
+                        email: email,
+                        id: parseInt(id)
+                    },
+                });
+                router.push("/");
+            } else {
                 CreateAddress({
                     variables: {
                         postCode: postCode,
@@ -182,43 +208,33 @@ const AddresForm = () => {
                         id: parseInt(id)
                     },
                 });
-            } else {
-                UpdateAddress({
-                    variables: {
-                        country: country,
-                        postCode: postCode,
-                        province: province,
-                        addressLine1: addressLine1,
-                        addressLine2: addressLine2,
-                        canton: canton,
-                        id: parseInt(id),
-                    },
-                });
-                UpdateUserInformation({
-                    variables: {
-                        firstName: firstName,
-                        lastName: lastName,
-                        phone: parseInt(phone),
-                        email: email,
-                        id: parseInt(id)
-                    },
-                });
-                console.log("ssssss");
-                router.push("/checkout");
+                router.push("/");
+
 
             }
 
-            /*
-           
-             
-          
-    */
+            if (checkbox == true) {
+                UpdateIdCard({
+                    variables: {
+
+                        idNumber: parseInt(idNumber),
+                        idType: idType,
+                        id: parseInt(id)
+                    },
+                });
+            }
+            router.push("/");
+
+
+
+
+
 
         } catch (error) {
 
 
         } finally {
-
+            router.push("/");
         }
     };
 
@@ -237,159 +253,192 @@ const AddresForm = () => {
                     <>
                         <Form>
 
+                            <section className="w-3/4 flex flex-col p-2 space-y-1">
+                                <section className="w-2/4 flex flex-col p-2 space-y-1">
 
-                            <section className="w-2/4 flex flex-col p-2 space-y-1">
+                                    <div>
 
-                                <div>
+                                        <FormikField
+                                            label={"Nombre"}
+                                            htmlFor={"firstName"}
+                                            id={"firstName"}
+                                        />
+                                        {errors?.firstName && touched?.firstName ? (
+                                            <ErrorForm>{errors?.firstName}</ErrorForm>
+                                        ) : null}
+                                    </div>
+                                    <div>
+                                        <FormikField
+                                            label={"Correo Electrónico"}
+                                            htmlFor={"email"}
+                                            id={"email"}
+                                        />
+                                        {errors?.email && touched?.email ? (
+                                            <ErrorForm>{errors?.email}</ErrorForm>
+                                        ) : null
+                                        }
 
-                                    <FormikField
-                                        label={"Nombre"}
-                                        htmlFor={"firstName"}
-                                        id={"firstName"}
-                                    />
-                                    {errors?.firstName && touched?.firstName ? (
-                                        <ErrorForm>{errors?.firstName}</ErrorForm>
-                                    ) : null}
-                                </div>
-                                <div>
-                                    <FormikField
-                                        label={"Correo Electrónico"}
-                                        htmlFor={"email"}
-                                        id={"email"}
-                                    />
-                                    {errors?.email && touched?.email ? (
-                                        <ErrorForm>{errors?.email}</ErrorForm>
-                                    ) : null
-                                    }
+                                    </div>
 
-                                </div>
+                                    <div>
+                                        <FormikField
+                                            label={"País"}
+                                            htmlFor={"country"}
+                                            id={"country"}
+                                        />
 
-                                <div>
-                                    <FormikField
-                                        label={"País"}
-                                        htmlFor={"country"}
-                                        id={"country"}
-                                    />
-
-                                    {errors?.country && touched?.country ? (
-                                        <ErrorForm>{errors?.country}</ErrorForm>
-                                    ) : null}
-                                </div>
-                                <div>
-                                    <FormikField
-                                        label={"Cantón"}
-                                        htmlFor={"canton"}
-                                        id={"canton"}
-                                    />
-                                    {errors?.canton && touched?.canton ? (
-                                        <ErrorForm>{errors?.canton}</ErrorForm>
-                                    ) : null}
-
-
-                                </div>
-
-                                <div>
-                                    <FormikField
-                                        label={"Código Postal"}
-                                        htmlFor={"postCode"}
-                                        id={"postCode"}
-                                    />
-
-                                    {errors?.postCode && touched?.postCode ? (
-                                        <ErrorForm>{errors?.postCode}</ErrorForm>
-                                    ) : null}
-
-                                </div>
+                                        {errors?.country && touched?.country ? (
+                                            <ErrorForm>{errors?.country}</ErrorForm>
+                                        ) : null}
+                                    </div>
+                                    <div>
+                                        <FormikField
+                                            label={"Cantón"}
+                                            htmlFor={"canton"}
+                                            id={"canton"}
+                                        />
+                                        {errors?.canton && touched?.canton ? (
+                                            <ErrorForm>{errors?.canton}</ErrorForm>
+                                        ) : null}
 
 
+                                    </div>
 
+                                    <div>
+                                        <FormikField
+                                            label={"Código Postal"}
+                                            htmlFor={"postCode"}
+                                            id={"postCode"}
+                                        />
+
+                                        {errors?.postCode && touched?.postCode ? (
+                                            <ErrorForm>{errors?.postCode}</ErrorForm>
+                                        ) : null}
+
+                                    </div>
+
+
+
+                                </section>
+                                <section className="w-2/4 flex flex-col p-2 space-y-1">
+
+                                    <div>
+                                        <FormikField
+                                            label={"Apellidos"}
+                                            htmlFor={"lastName"}
+                                            id={"lastName"}
+                                        />
+
+                                        {errors?.lastName && touched?.lastName ? (
+                                            <ErrorForm>{errors?.lastName}</ErrorForm>
+                                        ) : null}
+                                    </div>
+                                    <div>
+
+                                        <FormikField
+                                            label={"Teléfono"}
+                                            htmlFor={"phone"}
+                                            id={"phone"}
+                                        />
+
+                                        {errors?.phone && touched?.phone ? (
+                                            <ErrorForm>{errors?.phone}</ErrorForm>
+                                        ) : null}
+                                    </div>
+
+                                    <div>
+
+                                        <FormikField
+                                            label={"Provincia"}
+                                            htmlFor={"province"}
+                                            id={"province"}
+                                        />
+
+                                        {errors?.province && touched?.province ? (
+                                            <ErrorForm>{errors?.province}</ErrorForm>
+                                        ) : null}
+                                    </div>
+                                    <div>
+                                        <FormikField
+                                            label={"Ciudad"}
+                                            htmlFor={"addressLine1"}
+                                            id={"addressLine1"}
+                                        />
+
+                                        {errors?.addressLine1 && touched?.addressLine1 ? (
+                                            <ErrorForm>{errors?.addressLine1}</ErrorForm>
+                                        ) : null}
+
+                                    </div>
+
+                                    <div>
+                                        <FormikField
+                                            label={"Segunda Dirección"}
+                                            htmlFor={"addressLine2"}
+                                            id={"addressLine2"}
+                                        />
+
+                                        {errors?.addressLine2 && touched?.addressLine2 ? (
+                                            <ErrorForm>{errors?.addressLine2}</ErrorForm>
+                                        ) : null}
+
+
+                                    </div>
+
+
+                                </section>
                             </section>
-                            <section className="w-2/4 flex flex-col p-2 space-y-1">
 
-                                <div>
-                                    <FormikField
-                                        label={"Apellidos"}
-                                        htmlFor={"lastName"}
-                                        id={"lastName"}
-                                    />
-
-                                    {errors?.lastName && touched?.lastName ? (
-                                        <ErrorForm>{errors?.lastName}</ErrorForm>
-                                    ) : null}
+                            <div className="flex justify-center">
+                                <div >
+                                    <section className="w-1/4 flex p-2">
+                                        <p className="mr-4 whitespace-nowrap">Factura Electrónica</p>
+                                        <label className="switch">
+                                            <Field type="checkbox" name="checkbox" id="checkbox" />
+                                            <span className="slider round"></span>
+                                        </label>
+                                    </section>
+                                    <section className="w-1/4 flex p-2"></section>
                                 </div>
-                                <div>
-
-                                    <FormikField
-                                        label={"Teléfono"}
-                                        htmlFor={"phone"}
-                                        id={"phone"}
-                                    />
-
-                                    {errors?.phone && touched?.phone ? (
-                                        <ErrorForm>{errors?.phone}</ErrorForm>
-                                    ) : null}
+                                <section className="w-1/4 flex p-2"></section>
+                                <div className="flex justify-center">
+                                    <section className="w-2/4 flex flex-col p-2  ">
+                                        <FormikField
+                                            label={"Tipo De Cédula"}
+                                            htmlFor={"cedula"}
+                                            id={"cedula"}
+                                        />
+                                        <FormikField
+                                            label={"Nombre Comercial"}
+                                            htmlFor={"businessname"}
+                                            id={"businessname"}
+                                        />
+                                    </section>
+                                    <section className="w-2/4 flex flex-col p-2">
+                                        <FormikField
+                                            label={"Cédula Comercial"}
+                                            htmlFor={"businessid"}
+                                            id={"businessid"}
+                                        />
+                                        <FormikField
+                                            label={"Correo Electrónico"}
+                                            htmlFor={"email2"}
+                                            id={"email2"}
+                                        />
+                                    </section>
                                 </div>
-
-                                <div>
-
-                                    <FormikField
-                                        label={"Provincia"}
-                                        htmlFor={"province"}
-                                        id={"province"}
-                                    />
-
-                                    {errors?.province && touched?.province ? (
-                                        <ErrorForm>{errors?.province}</ErrorForm>
-                                    ) : null}
-                                </div>
-                                <div>
-                                    <FormikField
-                                        label={"Ciudad"}
-                                        htmlFor={"addressLine1"}
-                                        id={"addressLine1"}
-                                    />
-
-                                    {errors?.addressLine1 && touched?.addressLine1 ? (
-                                        <ErrorForm>{errors?.addressLine1}</ErrorForm>
-                                    ) : null}
-
-                                </div>
-
-                                <div>
-                                    <FormikField
-                                        label={"Segunda Dirección"}
-                                        htmlFor={"addressLine2"}
-                                        id={"addressLine2"}
-                                    />
-
-                                    {errors?.addressLine2 && touched?.addressLine2 ? (
-                                        <ErrorForm>{errors?.addressLine2}</ErrorForm>
-                                    ) : null}
-
-
-                                </div>
-
-
-                            </section>
-
+                            </div>
                             <section className="w-1/4 flex flex-col p-2 space-y-1">
+
+                            </section>
+                            <div className="flex justify-center mt-8 mb-8 w-3/4 ">
                                 <button
                                     type="submit"
-                                    className="bg-blue-500 hover:bg-blue-300 text-whitetext-base rounded-lg py-2 px-5 transition-colors w-full text-[19px] text-white bg-aquamarine disabled:opacity-50"
+                                    className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
 
                                 >
                                     Continuar
                                 </button>
-                            </section>
-                            <div className="flex justify-center">
-                                <section className="w-1/4 flex p-2">
-                                    <p className="mr-4 whitespace-nowrap">Factura Electrónica</p>
-                                    <label className="switch">
-                                        <input type="checkbox" />
-                                        <span className="slider round"></span>
-                                    </label>
-                                </section>
-                                <section className="w-1/4 flex p-2"></section>
                             </div>
 
                         </Form>
