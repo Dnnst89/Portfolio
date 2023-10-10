@@ -127,7 +127,7 @@ const AddresForm = () => {
             setAddressLine2(users_address.data.attributes.addressLine2);
             setProvince(users_address.data.attributes.province);
             setCanton(users_address.data.attributes.canton);
-            console.log(email, country)
+            //  console.log(email, country)
 
 
         } catch (error) {
@@ -136,7 +136,7 @@ const AddresForm = () => {
 
 
     }
-    cargar();
+
 
 
 
@@ -153,6 +153,7 @@ const AddresForm = () => {
               
               return;
           }*/
+        cargar();
         const isoDate = new Date().toISOString();
 
         //const id = values.user
@@ -185,6 +186,16 @@ const AddresForm = () => {
                         id: parseInt(id)
                     },
                 });
+                if (checkbox == true) {
+                    UpdateIdCard({
+                        variables: {
+                            id: parseInt(id),
+                            idNumber: parseInt(idNumber),
+                            idType: idType
+
+                        },
+                    });
+                }
                 router.push("/");
             } else {
                 CreateAddress({
@@ -208,21 +219,22 @@ const AddresForm = () => {
                         id: parseInt(id)
                     },
                 });
+                if (checkbox == true) {
+                    UpdateIdCard({
+                        variables: {
+                            id: parseInt(id),
+                            idNumber: parseInt(idNumber),
+                            idType: idType
+
+                        },
+                    });
+                }
                 router.push("/");
 
 
             }
 
-            if (checkbox == true) {
-                UpdateIdCard({
-                    variables: {
 
-                        idNumber: parseInt(idNumber),
-                        idType: idType,
-                        id: parseInt(id)
-                    },
-                });
-            }
             router.push("/");
 
 
@@ -406,7 +418,7 @@ const AddresForm = () => {
                                         <FormikField
                                             label={"Tipo De Cédula"}
                                             htmlFor={"cedula"}
-                                            id={"cedula"}
+                                            id={"idType"}
                                         />
                                         <FormikField
                                             label={"Nombre Comercial"}
@@ -418,7 +430,7 @@ const AddresForm = () => {
                                         <FormikField
                                             label={"Cédula Comercial"}
                                             htmlFor={"businessid"}
-                                            id={"businessid"}
+                                            id={"idNumber"}
                                         />
                                         <FormikField
                                             label={"Correo Electrónico"}
