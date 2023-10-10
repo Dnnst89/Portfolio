@@ -8,8 +8,7 @@ import ProductImage from "./ProductImage";
 import useCartSummary from "@/hooks/useCartSummary";
 import useStorage from "@/hooks/useStorage";
 
-const baseURL = "http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337";
-function ProductDetail({ name, description, sku, variants, materials }) {
+function ProductDetail({ name, brand, description, sku, variants, materials }) {
   const [quantity, setQuantity] = useState(1);
   let shortDescrption = "";
   let images = 0;
@@ -76,20 +75,24 @@ function ProductDetail({ name, description, sku, variants, materials }) {
             ) : null}
           </div>
           {/* //imagenes debajo de la principal */}
-          <div className="flex h-32 md:w-12/12 pt-5 justify-center">
+          <div className="carousel carousel-center flex h-32 md:w-12/12 pt-5 justify-center ">
+
             {images
               ? images.map((item) => {
-                  return (
+                return (
+                  <div className="carousel-item mx-2">
                     <ProductImage
                       key={item.id}
                       url={item.attributes.url}
                       width={"125"}
                       height={"100"}
-                      className={"rounded-xl mx-2"}
+                      className={"rounded-xl"}
                     />
-                  );
-                })
+                  </div>
+                );
+              })
               : null}
+
           </div>
 
         </div>
@@ -112,7 +115,7 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                 priority={true}
                 width="50"
                 height="50"
-                src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
+                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/undefined_eb8416869d.png`}
                 alt="tailwind logo"
                 className="rounded-xl mr-3"
               />
@@ -126,7 +129,7 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                 priority={true}
                 width="50"
                 height="50"
-                src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
+                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/undefined_eb8416869d.png`}
                 alt="tailwind logo"
                 className="rounded-xl mr-3"
               />
@@ -143,7 +146,7 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                 priority={true}
                 width="50"
                 height="50"
-                src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
+                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/undefined_eb8416869d.png`}
                 alt="tailwind logo"
                 className="rounded-xl mr-3"
               />
@@ -161,7 +164,7 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                 priority={true}
                 width="50"
                 height="50"
-                src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
+                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/undefined_eb8416869d.png`}
                 alt="tailwind logo"
                 className="rounded-xl mr-3"
               />
@@ -179,7 +182,7 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                 priority={true}
                 width="50"
                 height="50"
-                src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
+                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/undefined_eb8416869d.png`}
                 alt="tailwind logo"
                 className="rounded-xl mr-3"
               />
@@ -195,7 +198,7 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                 priority={true}
                 width="50"
                 height="50"
-                src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
+                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/undefined_eb8416869d.png`}
                 alt="tailwind logo"
                 className="rounded-xl mr-3"
               />
@@ -214,11 +217,11 @@ function ProductDetail({ name, description, sku, variants, materials }) {
 
           </div>
           {/* precio, cantidad y carrito */}
-          <div className="col-span-12 flex justify-between items-center p-4">
-            <span className="font-bold">
+          <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between  p-4">
+            <span className="col-span-5 font-bold">
               ₡ {variants.length > 0 ? variants[0].attributes.price : null}
             </span>
-            <div className="flex flex-col items-end p-3">
+            <div className="col-span-7 md:flex md:flex-col items-end md:items-end p-3">
               <div className="flex items-center mb-2 ">
                 <span className="text-grey">Cantidad:</span>
                 <div className="bg-resene rounded-full m-3 w-[120px] flex items-center justify-center p-2 space-x-4">
@@ -231,7 +234,7 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                   </button>
                 </div>
               </div>
-              <div className="bg-aquamarine rounded-sm p-3  mx-4">
+              <div className="bg-aquamarine rounded-sm p-2 md:p-3  md:mx-4">
                 <AddItemBtn
                   quantityItem={quantity}
                   idVariant={variants[0]?.id}

@@ -192,7 +192,7 @@ const LoginForm = () => {
                       )}
                     </div>
                     <p className="text-center mt-3 text-sm hover:underline cursor-pointer text-lightblue mb-3">
-                      <Link href="/login">Recuperar contraseña</Link>
+                      <Link href="/forgotPassword">Recuperar contraseña</Link>
                     </p>
                     <button
                       type="submit"

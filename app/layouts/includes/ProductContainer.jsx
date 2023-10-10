@@ -11,7 +11,7 @@ const ProductContainer = ({
   setCurrentPage,
 }) => {
   const { hits } = result;
-
+  
   return (
     <>
       <div className="flex flex-wrap max-w-screen-xl m-auto justify-center">

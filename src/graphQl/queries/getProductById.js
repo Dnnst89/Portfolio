@@ -7,6 +7,7 @@ query GetProducts($id: ID){
         id,
         attributes{
           name,
+          brand,
           description,
           sku,
           materials{
