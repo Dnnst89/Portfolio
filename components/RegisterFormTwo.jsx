@@ -83,6 +83,9 @@ const RegisterFormTwo = () => {
           userId: data.register.user.id,
         },
       });
+      toast.success(
+        "Registro exitoso, hemos enviado un correo de confirmación."
+      );
       dispatch(updateShoppingSession(dataSession.createShoppingSession.data)); //ACTUALIZO LA SESSION CON LOS DATOS OBTENIDOS
     } catch (error) {
       toast.error(

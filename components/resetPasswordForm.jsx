@@ -1,6 +1,8 @@
 "use client";
-import React, { useState } from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+/*
+  Get reset password code and update the password
+*/
+import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { useMutation } from "@apollo/client";
@@ -14,7 +16,7 @@ const initialValues = {
   password: "",
   confirmPassword: "",
 };
-
+// Validation Schema
 const validationSchema = Yup.object().shape({
   password: Yup.string()
     .required("Este campo es requerido")
@@ -30,16 +32,16 @@ const validationSchema = Yup.object().shape({
 });
 
 const ResetPasswordForm = ({ code }) => {
-  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
-
+  // Call mutation
   const [updatePassword] = useMutation(UPDATE_PASSWORD);
-
+  //pass the input values
   const handleUpdatePassword = async (values) => {
     const { password, confirmPassword } = values;
 
     try {
+      // execute the mutation with the necesary parameters
       const { data } = await updatePassword({
         variables: { password, passwordConfirmation: confirmPassword, code },
       });

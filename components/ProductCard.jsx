@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-const baseURL = "http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337";
+
 const ProductCard = ({ id, name, defaultPrice, coverImage, brand, url }) => {
 
   return (
@@ -15,8 +15,8 @@ const ProductCard = ({ id, name, defaultPrice, coverImage, brand, url }) => {
               height="500"
               src={
                 coverImage
-                  ? `${baseURL}${coverImage.url}`
-                  : `${baseURL}/uploads/large_undefined_0cd8bc924a.png`
+                  ? `${coverImage.url}`
+                  : `https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/undefined_eb8416869d.png`
               }
               alt="tailwind logo"
               className="rounded-[15px]"
@@ -28,9 +28,9 @@ const ProductCard = ({ id, name, defaultPrice, coverImage, brand, url }) => {
           <h5 className="md:h-[40px]   text-[10px] md:text-base   font-semibold  leading-3 tracking-normal mt-2 tracking-tight text-[#484848] dark:text-white w-6/7"
           >
             {name}
-            </h5>
+          </h5>
 
-            <div className=" rounded-lg">
+          <div className=" rounded-lg">
             <h2 className="flex justify-end  relative">
               <div href="#" className="px-1 pt-1 text-[7px] md:text-xs  text-[#757575]">
                 {brand}
