@@ -46,13 +46,6 @@ const AccountDropdown = () => {
   return (
     <>
       <div className="flex space-x-2 p-2">
-        <div className="">
-          {authUser && (
-            <p className="px-1 py-2 text-orange whitespace-nowrap">
-              Bienvenido, {authUser.username}
-            </p>
-          )}
-        </div>
 
         <button onClick={toggleDropdown} className="">
           <BiSolidUserCircle size={30} color="#67C3AD" className="mr-10" />
