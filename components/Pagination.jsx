@@ -6,11 +6,12 @@ const Pagination = ({
   setCurrentPage,
 }) => {
   const noPages = [];
-
+  
   for (let index = 1; index <= nbPages; index++) {
     noPages.push(index);
   }
-
+  
+  console.log("🚀 ~ file: Pagination.jsx:9 ~ noPages:", noPages)
   const onPreviusPage = () => {
     setCurrentPage(currentPage - 1);
   };
@@ -30,7 +31,7 @@ const Pagination = ({
         <ul className="list-style-none flex ">
           <li>
             <button
-              className="pointer-events-none relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-500 transition-all duration-300 dark:text-neutral-400 pr-10"
+              className="relative min-w-[90px] block rounded bg-[#484848] mr-2 px-3 py-1.5 text-sm text-white transition-all duration-300 dark:text-neutral-400 pr-3"
               disabled={currentPage === 0 ? true : false}
               onClick={onPreviusPage}
             >
@@ -40,7 +41,7 @@ const Pagination = ({
           {noPages.map((noPage) => (
             <li key={noPage}>
               <button
-                className={`relative block rounded bg-primary-100 px-3 py-1.5 text-sm font-medium text-primary-700 transition-all duration-300 bg${noPage === currentPage + 1 ? "-white" : ""
+                className={`relative block rounded bg-primary-500 mx-1 px-3 py-1.5 text-sm font-medium text-primary-700 transition-all duration-300 bg${noPage === currentPage + 1 ? "-white" : ""
                   }`}
                 onClick={() => onSpecificPage(noPage)}
               >
@@ -51,7 +52,7 @@ const Pagination = ({
           <li>
             <button
               href="#"
-              className="pointer-events-none relative block rounded bg-transparent px-3 py-1.5 text-sm text-neutral-500 transition-all duration-300 dark:text-neutral-400 pl-10"
+              className={`relative min-w-[90px] block rounded bg-[#484848] px-3 py-1.5 text-sm text-white transition-all duration-300 dark:text-neutral-400 pl-3 ml-2 ${currentPage === noPages - 1 ? "bg-black" : ""}`}
               disabled={currentPage === noPages.length - 1 ? true : false}
               onClick={onNextPage}
             >
