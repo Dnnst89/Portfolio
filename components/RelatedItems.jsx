@@ -9,8 +9,8 @@ const RelatedItems = () => {
 
   return (
     <div className="flex grid w-full justify-center">
-      <div className="flex justify-center p-6">
-        <h1 className="text-lg shadow-text">
+      <div className="flex justify-center p-6 pt-10">
+        <h1 className="text-xl shadow-text font-bold">
           Encuentra nuestros articulos relacionados
         </h1>
       </div>
