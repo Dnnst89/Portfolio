@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-const baseURL = "http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337";
 
 function SearchItem({ hit, components }) {
   return (
@@ -13,10 +12,10 @@ function SearchItem({ hit, components }) {
           height="100"
           src={
             hit.coverImage
-              ? `${baseURL}${hit.coverImage.url}`
-              : `${baseURL}/uploads/large_undefined_0cd8bc924a.png`
+              ? `${hit.coverImage.url}`
+              : `https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/undefined_eb8416869d.png`
           }
-          alt="/uploads/large_undefined_0cd8bc924a.png"
+          alt="undefined"
           className="rounded-xl object-contain"
         />
         <div>
