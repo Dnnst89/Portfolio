@@ -15,8 +15,9 @@ export default function DetailComponent({ id }) {
   if (error) return toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
     autoClose: 5000
   })
-
+  
   return (
+    
     <div className={loading ? "grid place-items-center" : " max-w-screen-xl m-auto"}>
       {loading ? <Spinner /> : <div> <Toaster />
         <ProductDetail
