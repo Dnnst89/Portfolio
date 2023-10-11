@@ -34,7 +34,6 @@ export default function CheckOutForm1({ isCheckout = false }) {
   };
 
   const handleChange = (data) => {
-    console.log(data);
     setAmount(data);
   };
   const handleCreateOrder = async () => {

@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import ErrorForm from "./ErrorForm";
 import { useRouter } from "next/navigation";
-import { useMutation, useQuery } from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { useEffect } from "react";
 import { GET_USER_PAYMENT_INFO } from "@/src/graphQl/queries/getUserPaymentInfo";
 import { CREATE_ADDRESS } from "@/src/graphQl/queries/createAddress";
@@ -56,9 +56,11 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddressForm = () => {
-  const { user } = useStorage();
-  const { id } = user || {};
-  const [userInformation, setUserInformation] = useState({
+
+  // const { user } = useStorage(); //me trae el usuario autorizado
+  // const userId = user?.id
+  // console.log(userId)
+  const [userInformation, setUserInformation] = useState({ //campos de userAddress
     firstName: "",
     lastName: "",
     email: "",
@@ -85,30 +87,54 @@ const AddressForm = () => {
   /**
    * Get
    */
-  const { data } = useQuery(GET_USER_PAYMENT_INFO, {
-    variables: { id: id },
-  });
+
+  const [getUser] = useLazyQuery(GET_USER_PAYMENT_INFO);
+
 
   const cargar = async () => {
     try {
-      const { usersPermissionsUser } = data || {};
-      const { users_address } = usersPermissionsUser.data.attributes || {};
-      setDireccion(users_address.data.id);
-      setFirstName(usersPermissionsUser.data.attributes.firstName);
-      setLastName(usersPermissionsUser.data.attributes.lastName);
-      setPhone(usersPermissionsUser.data.attributes.phoneNumber);
-      setEmail(usersPermissionsUser.data.attributes.email);
-      setPostCode(users_address.data.attributes.postCode);
-      setCountry(users_address.data.attributes.country);
-      setAddressLine1(users_address.data.attributes.addressLine1);
-      setAddressLine2(users_address.data.attributes.addressLine2);
-      setProvince(users_address.data.attributes.province);
-      setCanton(users_address.data.attributes.canton);
+      const { user } = JSON.parse(localStorage.getItem("userData"));
+      if (user) {
+        const { data } = await getUser({
+          variables: { id: user.id },
+        });
+
+        if (data) {
+
+
+          console.log(data); // Agregar esto para depurar la respuesta
+          const userData = data?.usersPermissionsUser?.data?.attributes;
+          const userAddress = data?.usersPermissionsUser?.data?.attributes?.users_address?.data?.attributes;
+          setUserInformation(
+            prevState => ({
+              ...prevState,
+              firstName: userData?.firstName,
+              lastName: userData?.lastName,
+              email: userData?.email,
+              phone: userData?.phoneNumber,
+              postCode: userAddress?.postCode,
+              country: userAddress?.country,
+              addressLine1: userAddress?.addressLine1,
+              addressLine2: userAddress?.addressLine2,
+              province: userAddress?.province,
+              canton: userAddress?.canton,
+              idNumber: userData?.idCard?.idNumber,
+              idType: userData?.idCard?.idType,
+            }));
+
+          console.log(userInformation);
+
+        }
+      }
     } catch (error) {
-      console.log("error");
+      console.log(error);
     }
   };
-  cargar();
+
+  useEffect(() => {
+    cargar();
+  }, []);
+
   const handleSubmit = (values) => {
     const isoDate = new Date().toISOString();
     const {
