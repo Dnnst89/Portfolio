@@ -32,7 +32,7 @@ const CartContainer = () => {
           },
         }}
       />
-      <div className="flex flex-col w-3/4">
+      <div className="col-span-9 me-2">
         {items?.map((item, index) => {
           if (typeof item == "undefined") {
             return (
@@ -46,7 +46,7 @@ const CartContainer = () => {
           const variantAtt = variant.attributes;
           const productAtt = variant.attributes.product?.data?.attributes; // Desestructuración aquí
           return (
-            <div key={item.id}>
+            <div key={item.id} >
               <CartItem
                 key={item.id}
                 cartItemId={item.id}

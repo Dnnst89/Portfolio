@@ -10,37 +10,39 @@ import CarouselImages from './CarouselImages';
 
 const CartItem = ({ cartItemId, idVariant, productName, brand, description, color, price, totalPrice, ageRange, size, weight, images, stockVariant, quantityCartItem, loading }) => {
     return (<>
-        <div className="flex items-center py-1">
-            <section className="w-2/4 ">
-                <div className="flex items-center">
+        <div className="grid grid-cols-12 w-full py-3 border-dashed border-[#787878] border-b-[2px]">
+            <section className="grid grid-cols-12 col-span-4">
+                <div className="grid grid-cols-12 col-span-12 items-center">
                     {images.length > 0 ?
-                        <CarouselImages images={images} widthImg={140} heightImg={140} />
+                        <CarouselImages  images={images} widthImg={140} heightImg={140} classStyle={'rounded-2xl'} />
                         : (
                             <Image
                                 src={test}
-                                alt="imagen de producto seleccionado"
+                                alt= {productName}
                                 style={{ width: "140px", height: "140px" }}
-                                className="rounded-xl"
                             />
                         )}
 
-                    <div className="p-3">
-                        <h1>Producto: {productName}</h1>
-                        <h1>Marca: {brand}</h1>
-                        <span className="text-sm text-grey">Ref {idVariant}</span>
+                    <div className="p-3 col-span-6">
+                        <h1 className='text-lg'>{productName}</h1>
+                        <p className='text-xs text-lightblue'>{brand}</p>
+                        <span className="text-xs text-grey">Ref {idVariant}</span>
                     </div>
                 </div>
             </section>
-            <div className="mt-4" >
+            <div className="col-span-3 flex items-center" >
                 <CartQuantityBtn quantityCartItem={quantityCartItem} stock={stockVariant} idCartItem={cartItemId} loading={loading} /> {/* Puedes ajustar el límite según tus necesidades */}
             </div>
-            <section className=" flex w-1/4 mx-2 items-center justify-center ">
-                <span className='mx-2'>Precio Unitario: ${price.toFixed(2)}</span>
-                <span className='mx-2'>Precio Total: ${totalPrice.toFixed(2)}</span>
+            <section className="grid grid-cols-12 col-span-5 ">
+                <div className='grid grid-cols-6 col-span-6 place-content-center '>
+                    <span className='text-xs mx-2 col-start-2 col-span-6'>Precio Unitario: ${price.toFixed(2)}</span>
+                    
+                    <span className='mx-2 font-bold col-start-2 col-span-6'>Precio Total: ${totalPrice.toFixed(2)}</span>   
+                </div>
                 {/* Botón para eliminar el producto del carrito */}
                 <DeleteCartItemBtn
                     idItem={cartItemId}
-                    qtyItem={quantityCartItem} />
+                    qtyItem={quantityCartItem}/>
             </section>
 
         </div>

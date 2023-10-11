@@ -81,12 +81,11 @@ const CartDetail = ({
             <p>Subtotal:</p>
             <p className="text-grey-100">${subTotal}</p>
           </div>
-          <div className="flex justify-between ">
+          <div className="flex justify-between border-dashed border-[#787878] border-b-[2px] pb-3">
             <p>Costo de envío:</p>
             <p className="text-grey-100">$0,000.00</p>
           </div>
 
-          <hr />
           <>
             <div className="flex justify-between ">
               <p>Impuestos:</p>

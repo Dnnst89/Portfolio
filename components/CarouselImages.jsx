@@ -5,9 +5,9 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // Asegúrate de importar los estilos
 
 
-function CarouselImages({ images, widthImg, heightImg }) {
+function CarouselImages({ images, widthImg, heightImg, classStyle }) {
     return (
-        <Carousel showArrows={true} showThumbs={false}>
+        <Carousel className={"col-span-6"} showArrows={true} showThumbs={false} showStatus={false}>
             {images.map((img, index) => (
                 <div key={index}>
                     <div>
@@ -18,6 +18,7 @@ function CarouselImages({ images, widthImg, heightImg }) {
                             style={{ width: `${widthImg}px`, height: `${heightImg}px` }}
                             width={widthImg} // Establecer el ancho
                             height={heightImg} // Establecer el alto
+                            className={classStyle}
                         />
                     </div>
                 </div>

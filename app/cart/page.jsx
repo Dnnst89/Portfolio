@@ -7,15 +7,15 @@ import CartContainer from "@/components/CartContainer";
 
 export default function CartView() {
   return (
-    <div className="bg-floralwhite ">
+    <div className="bg-floralwhite flex flex-wrap max-w-screen-xl m-auto justify-center">
       <div className="flex justify-center mt-3">
-        <h1 className="text-xl">Carrito de compras</h1>
+        <h1 className=" mt-10">Carrito de compras</h1>
       </div>
 
-      <main className="flex p-5">
+      <main className="grid p-5 grid-cols-12 w-full">
         <CartContainer />
 
-        <div className=" bg-resene rounded-sm w-1/4 p-4 h-[500px]">
+        <div className=" bg-resene rounded-sm col-span-3 p-4 h-[500px]">
           <CartDetail detailTitle={"Detalle del carrito"} />
 
           <CartProceedPayment

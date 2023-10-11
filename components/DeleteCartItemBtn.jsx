@@ -36,7 +36,7 @@ const DeleteCartItemBtn = ({ idItem, qtyItem }) => {
   };
   return (
     <><Toaster />
-      <button className="ml-3 text-3xl" onClick={handleDelete}>
+      <button className="ml-3 text-3xl col-span-6 center" onClick={handleDelete}>
         {/* <BiX /> */}
         🗑
       </button> </>
