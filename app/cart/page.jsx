@@ -1,8 +1,7 @@
 "use client";
 import ShoppingCart from "@/components/ShoppingCart";
 import ProductCard from "@/components/ProductCard";
-import CartDetail from "@/components/CartDetail";
-import CartProceedPayment from "@/components/CartProceedPayment";
+
 import CartContainer from "@/components/CartContainer";
 
 export default function CartView() {
@@ -15,14 +14,7 @@ export default function CartView() {
       <main className="flex p-5">
         <CartContainer />
 
-        <div className=" bg-resene rounded-sm w-1/4 p-4 h-[500px]">
-          <CartDetail detailTitle={"Detalle del carrito"} />
 
-          <CartProceedPayment
-            textButton={"Proceder al pago"}
-            page={"/checkout"}
-          />
-        </div>
       </main>
       {/* ///////////LOS SIGUIENTES DATOS ESTAN QUEMADOS */}
       <div>

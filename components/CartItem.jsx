@@ -8,7 +8,7 @@ import DeleteCartItemBtn from './DeleteCartItemBtn';
 import CarouselImages from './CarouselImages';
 
 
-const CartItem = ({ cartItemId, idVariant, productName, brand, description, color, price, totalPrice, ageRange, size, weight, images, stockVariant, quantityCartItem, loading }) => {
+const CartItem = ({ cartItemId, idVariant, productName, brand, description, color, price, totalPrice, ageRange, size, weight, images, stockVariant, quantityCartItem, loading, error }) => {
     return (<>
         <div className="flex items-center py-1">
             <section className="w-2/4 ">
@@ -31,6 +31,9 @@ const CartItem = ({ cartItemId, idVariant, productName, brand, description, colo
                     </div>
                 </div>
             </section>
+            {error?.id == idVariant ? <p className="animate-shake-x text-red-500 text-orange">
+                * Stock Insuficiente
+            </p> : <p></p>}
             <div className="mt-4" >
                 <CartQuantityBtn quantityCartItem={quantityCartItem} stock={stockVariant} idCartItem={cartItemId} loading={loading} /> {/* Puedes ajustar el límite según tus necesidades */}
             </div>

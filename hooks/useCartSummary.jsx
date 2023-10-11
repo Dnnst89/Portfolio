@@ -21,7 +21,7 @@ const useCartSummary = ({ userId }) => {
     quantity: 0,
     sessionId: null,
   });
-  const [error, setError] = useState(false);
+  const [error, setError] = useState();
   const [loading, setLoading] = useState(true);
   const [getSession] = useLazyQuery(GET_SHOPPING_SESSION_BY_USER);
   const [getCart] = useLazyQuery(GET_CART_ITEMS_LIST_SHOPPING_SESSION, {
@@ -85,12 +85,18 @@ const useCartSummary = ({ userId }) => {
           const items = fetchedData.map((item) => {
             if (item.attributes.variant.data && item.attributes.variant.data.attributes.product.data) {
               //debe existir un producto con su respectiva variante
+              if (item.attributes.quantity > item.attributes.variant.data.attributes.stock) {//se agrega validacion ITEM >= STOCK
+                setError(item.attributes.variant.data)
+              }
               return {
                 totalItemPrice:
                   item.attributes.variant.data.attributes.price * item.attributes.quantity,
                 quantity: item.attributes.quantity,
                 ...item,
               };
+
+              //se agrega validacion ITEM >= STOCK
+
             }
             return null; // lo asigno null para filtrarlo luego y no agregarlo a los items
           });
@@ -108,7 +114,7 @@ const useCartSummary = ({ userId }) => {
         }
       } catch (error) {
         //Manejo de errores
-        setError(true);
+        setError(error);
       } finally {
         setLoading(false);
       }
