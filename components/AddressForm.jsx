@@ -81,9 +81,27 @@ const AddressForm = () => {
   // const [UpdateUserInformation] = useMutation(UPDATE_USER_INFORMATION);
   // const [UpdateAddress] = useMutation(UPDATE_ADDRES);
   // const [UpdateIdCard] = useMutation(UPDATE_ID_CARD);
+
+
+
   const initialValues = {
-    userInformation,
+    firstName: userInformation.firstName,
+    lastName: userInformation.lastName,
+    email: userInformation.email,
+    phone: userInformation.phone,
+    postCode: userInformation.postCode,
+    country: userInformation.country,
+    addressLine1: userInformation.addressLine1,
+    addressLine2: userInformation.addressLine2,
+    province: userInformation.province,
+    canton: userInformation.canton,
+    checkbox: false,
+    idNumber: userInformation.idNumber,
+    idType: userInformation.idType,
+
+
   };
+
   /**
    * Get
    */
@@ -91,17 +109,14 @@ const AddressForm = () => {
   const [getUser] = useLazyQuery(GET_USER_PAYMENT_INFO);
 
 
-  const cargar = async () => {
+  const cargar = async () => { //me carga la informacion del usuario si el ya el la ha ingresado
     try {
       const { user } = JSON.parse(localStorage.getItem("userData"));
       if (user) {
         const { data } = await getUser({
           variables: { id: user.id },
         });
-
         if (data) {
-
-
           console.log(data); // Agregar esto para depurar la respuesta
           const userData = data?.usersPermissionsUser?.data?.attributes;
           const userAddress = data?.usersPermissionsUser?.data?.attributes?.users_address?.data?.attributes;
@@ -121,9 +136,6 @@ const AddressForm = () => {
               idNumber: userData?.idCard?.idNumber,
               idType: userData?.idCard?.idType,
             }));
-
-          console.log(userInformation);
-
         }
       }
     } catch (error) {
@@ -133,8 +145,9 @@ const AddressForm = () => {
 
   useEffect(() => {
     cargar();
-  }, []);
 
+  }, []);
+  console.log(userInformation);
   const handleSubmit = (values) => {
     const isoDate = new Date().toISOString();
     const {
@@ -222,7 +235,7 @@ const AddressForm = () => {
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={validationSchema}
+      validationSchema={validationSchema} // Agrega tu esquema de validación
       onSubmit={handleSubmit}
     >
       {({ errors, touched }) => {
@@ -232,54 +245,103 @@ const AddressForm = () => {
               <section className="w-3/4">
                 <div className="flex justify-center">
                   <section className="w-1/4 flex flex-col p-2">
-                    <InputForm label={"Nombre"} htmlFor={"name"} id={"name"} />
-                    <InputForm
-                      label={"Correo Electrónico"}
-                      htmlFor={"email"}
-                      id={"email"}
+                    <label htmlFor="name">Nombre</label>
+                    <Field
+                      type="text"
+                      id="name"
+                      name="name"
+                      placeholder="Nombre"
+                      className="form-input"
                     />
-                    <InputForm
-                      label={"País"}
-                      htmlFor={"country"}
-                      id={"country"}
+                    <label htmlFor="email">Email</label>
+                    <Field
+                      type="text"
+                      id="email"
+                      name="email"
+                      placeholder="Nombre"
+                      className="form-input"
                     />
-                    <InputForm
-                      label={"Cantón"}
-                      htmlFor={"canton"}
-                      id={"canton"}
+                    <label htmlFor="country">Pais</label>
+                    <Field
+                      type="text"
+                      id="country"
+                      name="country"
+                      placeholder="País"
+                      className="form-input"
                     />
-                    <InputForm
-                      label={"Código Postal"}
-                      htmlFor={"zip"}
-                      id={"zip"}
+                    <label htmlFor="canton">Cantón</label>
+                    <Field
+                      type="text"
+                      id="canton"
+                      name="canton"
+                      placeholder="Cantón"
+                      className="form-input"
                     />
-                    <InputForm
-                      label={"Segunda Dirección"}
-                      htmlFor={"2"}
-                      id={"2"}
+                    <label htmlFor="postCode">Código Postal</label>
+                    <Field
+                      type="text"
+                      id="postCode"
+                      name="postCode"
+                      placeholder="Código Postal"
+                      className="form-input"
+                    />
+                    <label htmlFor="addressLine2">Direccion 1</label>
+                    <Field
+                      type="text"
+                      id="addressLine2"
+                      name="addressLine2"
+                      placeholder="Direccion 1"
+                      className="form-input"
                     />
                   </section>
                   <section className="w-1/4 flex flex-col p-2">
-                    <InputForm
-                      label={"Apellidos"}
-                      htmlFor={"lastname"}
-                      id={"lastname"}
+                    <label htmlFor="lastname">Apellidos</label>
+                    <Field
+                      type="text"
+                      id="lastname"
+                      name="lastname"
+                      placeholder="Apellidos"
+                      className="form-input"
                     />
-                    <InputForm
-                      label={"Teléfono"}
-                      htmlFor={"phone"}
-                      id={"phone"}
+                    <label htmlFor="phone">Teléfono</label>
+                    <Field
+                      type="text"
+                      id="phone"
+                      name="phone"
+                      placeholder="Teléfono"
+                      className="form-input"
                     />
-                    <InputForm
-                      label={"Provincia"}
-                      htmlFor={"provincia"}
-                      id={"provincia"}
+                    <label htmlFor="province">Provincia</label>
+                    <Field
+                      type="text"
+                      id="province"
+                      name="province"
+                      placeholder="Provincia"
+                      className="form-input"
                     />
-                    <InputForm label={"Ciudad"} htmlFor={"city"} id={"city"} />
-                    <InputForm
-                      label={"Dirección"}
-                      htmlFor={"direction"}
-                      id={"direction"}
+                    <label htmlFor="province">Ciudad</label>
+                    <Field
+                      type="text"
+                      id="province"
+                      name="province"
+                      placeholder="Ciudad"
+                      className="form-input"
+                    />
+                    <label htmlFor="canton">canton</label>
+                    <Field
+                      type="text"
+                      id="canton"
+                      name="canton"
+                      placeholder="canton"
+                      className="form-input"
+                    />
+                    <label htmlFor="addressLine1">Dirección 1</label>
+                    <Field
+                      type="text"
+                      id="addressLine1"
+                      name="addressLine1"
+                      placeholder="direccion 1"
+                      className="form-input"
                     />
                   </section>
                 </div>
@@ -297,15 +359,21 @@ const AddressForm = () => {
                 </div>
                 <div className="flex justify-center">
                   <section className="w-1/4 flex flex-col p-2  ">
-                    <InputForm
-                      label={"Tipo De Cédula"}
-                      htmlFor={"cedula"}
-                      id={"cedula"}
+                    <label htmlFor="idNumber">Cédula</label>
+                    <Field
+                      type="text"
+                      id="idNumber"
+                      name="idNumber"
+                      placeholder="Tipo De Cédula"
+                      className="form-input"
                     />
-                    <InputForm
-                      label={"Nombre Comercial"}
-                      htmlFor={"businessname"}
-                      id={"businessname"}
+                    <label htmlFor="idType">Tipo De Cédula</label>
+                    <Field
+                      type="text"
+                      id="idType"
+                      name="idType"
+                      placeholder="Tipo De Cédula"
+                      className="form-input"
                     />
                   </section>
                   <section className="w-1/4 flex flex-col p-2">
@@ -314,11 +382,7 @@ const AddressForm = () => {
                       htmlFor={"businessid"}
                       id={"businessid"}
                     />
-                    <InputForm
-                      label={"Correo Electrónico"}
-                      htmlFor={"email2"}
-                      id={"email2"}
-                    />
+
                   </section>
                 </div>
               </section>
@@ -329,5 +393,4 @@ const AddressForm = () => {
     </Formik>
   );
 };
-
 export default AddressForm;
