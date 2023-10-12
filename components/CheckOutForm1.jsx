@@ -61,22 +61,24 @@ export default function CheckOutForm1({ isCheckout = false }) {
     }
   };
   return (
-    <div className="mt-[40px] mx-[30px]">
-      <div className="flex w-3/4 justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
-        <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
-          1
-        </div>
-        <h1 className="text-xl">Información de envío</h1>
-      </div>
-      <main className="flex ">
-        <section className="w-3/4">
+    <div className="grid grid-cols-12 max-w-screen-xl m-auto items-center mt-10">
+
+      <main className="grid grid-cols-12 col-span-12">
+
+        <section className="col-span-9">
+          <div className="flex justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
+            <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
+              1
+            </div>
+            <h1 className="text-xl">Información de envío</h1>
+          </div>
           <div className="flex justify-center">
             <AddresForm />
           </div>
 
 
         </section>
-        <div className=" bg-resene rounded-sm w-1/4 h-[350px] ml-[25px] mt-[-80px]">
+        <div className=" bg-resene rounded-sm col-span-3 h-fit border-l-4 border-[#76BAE2]">
           <div className="flex flex-col space-y-3 ">
             <CartDetail
               detailTitle={"Detalle del carrito"}

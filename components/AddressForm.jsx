@@ -263,13 +263,11 @@ const AddresForm = () => {
 
                 return (
                     <>
-                        <Form>
+                        <Form className="w-full">
 
-                            <section className="w-3/4 flex flex-col p-2 space-y-1">
-                                <section className="w-2/4 flex flex-col p-2 space-y-1">
-
-                                    <div>
-
+                            <section className="w-full grid grid-cols-12 justify-items-center py-5">
+                                <section className="col-span-12 grid grid-cols-12 p-2 space-y-1 w-5/6 gap-x-10 ">
+                                    <div className="col-span-6">
                                         <FormikField
                                             label={"Nombre"}
                                             htmlFor={"firstName"}
@@ -279,7 +277,18 @@ const AddresForm = () => {
                                             <ErrorForm>{errors?.firstName}</ErrorForm>
                                         ) : null}
                                     </div>
-                                    <div>
+                                    <div className="col-span-6">
+                                        <FormikField
+                                            label={"Apellidos"}
+                                            htmlFor={"lastName"}
+                                            id={"lastName"}
+                                        />
+
+                                        {errors?.lastName && touched?.lastName ? (
+                                            <ErrorForm>{errors?.lastName}</ErrorForm>
+                                        ) : null}
+                                    </div>
+                                    <div className="col-span-6">
                                         <FormikField
                                             label={"Correo Electrónico"}
                                             htmlFor={"email"}
@@ -291,61 +300,7 @@ const AddresForm = () => {
                                         }
 
                                     </div>
-
-                                    <div>
-                                        <FormikField
-                                            label={"País"}
-                                            htmlFor={"country"}
-                                            id={"country"}
-                                        />
-
-                                        {errors?.country && touched?.country ? (
-                                            <ErrorForm>{errors?.country}</ErrorForm>
-                                        ) : null}
-                                    </div>
-                                    <div>
-                                        <FormikField
-                                            label={"Cantón"}
-                                            htmlFor={"canton"}
-                                            id={"canton"}
-                                        />
-                                        {errors?.canton && touched?.canton ? (
-                                            <ErrorForm>{errors?.canton}</ErrorForm>
-                                        ) : null}
-
-
-                                    </div>
-
-                                    <div>
-                                        <FormikField
-                                            label={"Código Postal"}
-                                            htmlFor={"postCode"}
-                                            id={"postCode"}
-                                        />
-
-                                        {errors?.postCode && touched?.postCode ? (
-                                            <ErrorForm>{errors?.postCode}</ErrorForm>
-                                        ) : null}
-
-                                    </div>
-
-
-
-                                </section>
-                                <section className="w-2/4 flex flex-col p-2 space-y-1">
-
-                                    <div>
-                                        <FormikField
-                                            label={"Apellidos"}
-                                            htmlFor={"lastName"}
-                                            id={"lastName"}
-                                        />
-
-                                        {errors?.lastName && touched?.lastName ? (
-                                            <ErrorForm>{errors?.lastName}</ErrorForm>
-                                        ) : null}
-                                    </div>
-                                    <div>
+                                    <div className="col-span-6">
 
                                         <FormikField
                                             label={"Teléfono"}
@@ -357,8 +312,18 @@ const AddresForm = () => {
                                             <ErrorForm>{errors?.phone}</ErrorForm>
                                         ) : null}
                                     </div>
+                                    <div className="col-span-6">
+                                        <FormikField
+                                            label={"País"}
+                                            htmlFor={"country"}
+                                            id={"country"}
+                                        />
 
-                                    <div>
+                                        {errors?.country && touched?.country ? (
+                                            <ErrorForm>{errors?.country}</ErrorForm>
+                                        ) : null}
+                                    </div>
+                                    <div className="col-span-6">
 
                                         <FormikField
                                             label={"Provincia"}
@@ -370,7 +335,19 @@ const AddresForm = () => {
                                             <ErrorForm>{errors?.province}</ErrorForm>
                                         ) : null}
                                     </div>
-                                    <div>
+                                    <div className="col-span-6">
+                                        <FormikField
+                                            label={"Cantón"}
+                                            htmlFor={"canton"}
+                                            id={"canton"}
+                                        />
+                                        {errors?.canton && touched?.canton ? (
+                                            <ErrorForm>{errors?.canton}</ErrorForm>
+                                        ) : null}
+
+
+                                    </div>
+                                    <div className="col-span-6">
                                         <FormikField
                                             label={"Ciudad"}
                                             htmlFor={"addressLine1"}
@@ -382,8 +359,19 @@ const AddresForm = () => {
                                         ) : null}
 
                                     </div>
+                                    <div className="col-span-6">
+                                        <FormikField
+                                            label={"Código Postal"}
+                                            htmlFor={"postCode"}
+                                            id={"postCode"}
+                                        />
 
-                                    <div>
+                                        {errors?.postCode && touched?.postCode ? (
+                                            <ErrorForm>{errors?.postCode}</ErrorForm>
+                                        ) : null}
+
+                                    </div>
+                                    <div className="col-span-6">
                                         <FormikField
                                             label={"Segunda Dirección"}
                                             htmlFor={"addressLine2"}
@@ -398,11 +386,13 @@ const AddresForm = () => {
                                     </div>
 
 
+
                                 </section>
+
                             </section>
 
-                            <div className="flex justify-center">
-                                <div >
+                            <div className="w-full grid grid-cols-12 justify-center m-auto">
+                                <div className="col-span-12">
                                     <section className="w-1/4 flex p-2">
                                         <p className="mr-4 whitespace-nowrap">Factura Electrónica</p>
                                         <label className="switch">
@@ -413,37 +403,46 @@ const AddresForm = () => {
                                     <section className="w-1/4 flex p-2"></section>
                                 </div>
                                 <section className="w-1/4 flex p-2"></section>
-                                <div className="flex justify-center">
-                                    <section className="w-2/4 flex flex-col p-2  ">
-                                        <FormikField
-                                            label={"Tipo De Cédula"}
-                                            htmlFor={"cedula"}
-                                            id={"idType"}
-                                        />
-                                        <FormikField
-                                            label={"Nombre Comercial"}
-                                            htmlFor={"businessname"}
-                                            id={"businessname"}
-                                        />
+                                <div className="grid grid-cols-12 col-span-12 j w-full grid grid-cols-12 justify-items-center ">
+                                    <section className="col-span-12 grid grid-cols-12 p-2 space-y-1 w-5/6 gap-x-10">
+                                        <div className="col-span-6">
+                                            <FormikField
+                                                label={"Tipo De Cédula"}
+                                                htmlFor={"cedula"}
+                                                id={"idType"}
+                                            />
+                                        </div>
+
+                                        <div className="col-span-6">
+                                            <FormikField
+                                                label={"Nombre Comercial"}
+                                                htmlFor={"businessname"}
+                                                id={"businessname"}
+                                            />
+                                        </div>
+                                        <div className="col-span-6">
+                                            <FormikField
+                                                label={"Cédula Comercial"}
+                                                htmlFor={"businessid"}
+                                                id={"idNumber"}
+                                            />
+                                        </div>
+                                        <div className="col-span-6">
+                                            <FormikField
+                                                label={"Correo Electrónico"}
+                                                htmlFor={"email2"}
+                                                id={"email2"}
+                                            />
+                                        </div>
+
                                     </section>
-                                    <section className="w-2/4 flex flex-col p-2">
-                                        <FormikField
-                                            label={"Cédula Comercial"}
-                                            htmlFor={"businessid"}
-                                            id={"idNumber"}
-                                        />
-                                        <FormikField
-                                            label={"Correo Electrónico"}
-                                            htmlFor={"email2"}
-                                            id={"email2"}
-                                        />
-                                    </section>
+
                                 </div>
                             </div>
                             <section className="w-1/4 flex flex-col p-2 space-y-1">
 
                             </section>
-                            <div className="flex justify-center mt-8 mb-8 w-3/4 ">
+                            <div className="flex justify-center mt-8 mb-8 w-full">
                                 <button
                                     type="submit"
                                     className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
