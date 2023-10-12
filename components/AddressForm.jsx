@@ -95,20 +95,32 @@ const AddressForm = () => {
         lastName: data?.usersPermissionsUser?.data?.attributes?.lastName,
         phone: data?.usersPermissionsUser?.data?.attributes?.phoneNumber,
 
-        postCode: data?.usersPermissionsUser?.data?.attributes?.users_address?.data?.attributes?.postCode,
-        country: data?.usersPermissionsUser?.data?.attributes?.users_address?.data?.attributes?.country,
-        addressLine1: data?.usersPermissionsUser?.data?.attributes?.users_address?.data?.attributes?.addressLine1,
-        addressLine2: data?.usersPermissionsUser?.data?.attributes?.users_address?.data?.attributes?.addressLine2,
-        province: data?.usersPermissionsUser?.data?.attributes?.users_address?.data?.attributes?.province,
-        canton: data?.usersPermissionsUser?.data?.attributes?.users_address?.data?.attributes?.canton,
-        idNumber: data?.usersPermissionsUser?.data?.attributes?.idCard?.idNumber,
+        postCode:
+          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+            ?.attributes?.postCode,
+        country:
+          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+            ?.attributes?.country,
+        addressLine1:
+          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+            ?.attributes?.addressLine1,
+        addressLine2:
+          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+            ?.attributes?.addressLine2,
+        province:
+          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+            ?.attributes?.province,
+        canton:
+          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+            ?.attributes?.canton,
+        idNumber:
+          data?.usersPermissionsUser?.data?.attributes?.idCard?.idNumber,
         idType: data?.usersPermissionsUser?.data?.attributes?.idCard?.idType,
       });
-
     }
   }, [data]);
 
-  console.log(userInfoExist)
+  console.log(userInfoExist);
   const initialValues = {
     firstName: "",
     lastName: "",
@@ -124,112 +136,58 @@ const AddressForm = () => {
     idNumber: 0,
     idType: "",
   };
-  const handleSubmit = async (values) => {
-    const {
-      checkbox,
-      idNumber,
-      idType,
-      firstName,
-      lastName,
-      email,
-      phone,
-      postCode,
-      country,
-      addressLine1,
-      addressLine2,
-      province,
-      canton,
-    } = values;
-
-    console.log("values : ", canton, addressLine1, addressLine2);
-
+  const updatingAddress = async () => {
     try {
-      if (values) {
-        const isAddressUpdated = await UpdateAddress({
-          variables: {
-            country: country,
-            postCode: postCode,
-            province: province,
-            addressLine1: addressLine1,
-            addressLine2: addressLine2,
-            canton: canton,
-            id: parseInt(id),
-          },
-        });
-        console.log("Values :", isAddressUpdated);
-      }
+      const isAddressUpdated = await updateAddress({
+        variables: {
+          country: country,
+          postCode: postCode,
+          province: province,
+          addressLine1: addressLine1,
+          addressLine2: addressLine2,
+          canton: canton,
+          id: parseInt(id),
+        },
+      });
+      console.log("updating address :", isAddressUpdated);
     } catch (error) {
-      console.log("error making the mutation :", error);
+      console.log("error updating user adress :", error);
     }
   };
-  //const isoDate = new Date().toISOString();
+};
+const updatingUserInfo = async () => {
+  try {
+    const isUserInfoUpdated = awaitUpdateUserInformation({
+      variables: {
+        firstName: firstName,
+        lastName: lastName,
+        phone: parseInt(phone),
+        id: parseInt(id),
+      },
+    });
+    console.log("updating address :", isUserInfoUpdated);
+  } catch (error) {
+    console.log("error updating using information :", error);
+  }
+};
+const handleSubmit = async (values) => {
+  updatingUserInfo();
+  userInfoExist ? updatingAddress() : createNewAddress();
 
-  // try {
-  //   if (direccion != null) {
-  //     UpdateAddress({
-  //       variables: {
-  //         country: country,
-  //         postCode: postCode,
-  //         province: province,
-  //         addressLine1: addressLine1,
-  //         addressLine2: addressLine2,
-  //         canton: canton,
-  //         id: parseInt(id),
-  //       },
-  //     });
-  //     UpdateUserInformation({
-  //       variables: {
-  //         firstName: firstName,
-  //         lastName: lastName,
-  //         phone: parseInt(phone),
-  //         email: email,
-  //         id: parseInt(id),
-  //       },
-  //     });
-  //     if (checkbox == true) {
-  //       UpdateIdCard({
-  //         variables: {
-  //           id: parseInt(id),
-  //           idNumber: parseInt(idNumber),
-  //           idType: idType,
-  //         },
-  //       });
-  //     }
-  //   } else {
-  //     CreateAddress({
-  //       variables: {
-  //         postCode: postCode,
-  //         country: country,
-  //         addressLine1: addressLine1,
-  //         addressLine2: addressLine2,
-  //         province: province,
-  //         canton: canton,
-  //         publishedAt: isoDate,
-  //         id: parseInt(id),
-  //       },
-  //     });
-  //     UpdateUserInformation({
-  //       variables: {
-  //         firstName: firstName,
-  //         lastName: lastName,
-  //         phone: parseInt(phone),
-  //         email: email,
-  //         id: parseInt(id),
-  //       },
-  //     });
-  //     if (checkbox == true) {
-  //       UpdateIdCard({
-  //         variables: {
-  //           id: parseInt(id),
-  //           idNumber: parseInt(idNumber),
-  //           idType: idType,
-  //         },
-  //       });
-  //     }
-  //   }
-  // } catch (error) {
-  // } finally {
-  // }
+  const {
+    checkbox,
+    idNumber,
+    idType,
+    firstName,
+    lastName,
+    phone,
+    postCode,
+    country,
+    addressLine1,
+    addressLine2,
+    province,
+    canton,
+  } = values;
 
   return (
     <Formik
