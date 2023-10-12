@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image';
 import test from "../app/assets/heart.png";
 
@@ -6,9 +6,13 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import CartQuantityBtn from './CartQuantityBtn';
 import DeleteCartItemBtn from './DeleteCartItemBtn';
 import CarouselImages from './CarouselImages';
+import { useSelector } from 'react-redux';
 
 
 const CartItem = ({ cartItemId, idVariant, productName, brand, description, color, price, totalPrice, ageRange, size, weight, images, stockVariant, quantityCartItem, loading, error }) => {
+
+
+
     return (<>
         <div className="flex items-center py-1">
             <section className="w-2/4 ">
@@ -32,8 +36,8 @@ const CartItem = ({ cartItemId, idVariant, productName, brand, description, colo
                 </div>
             </section>
             {error?.id == idVariant ? <p className="animate-shake-x text-red-500 text-orange">
-                * Stock Insuficiente
-            </p> : <p></p>}
+                * Stock Insuficiente {error?.id}
+            </p> : <p>no error</p>}
             <div className="mt-4" >
                 <CartQuantityBtn quantityCartItem={quantityCartItem} stock={stockVariant} idCartItem={cartItemId} loading={loading} /> {/* Puedes ajustar el límite según tus necesidades */}
             </div>

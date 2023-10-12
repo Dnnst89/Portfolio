@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 //         quantity: number,
 //     }
 const useCartSummary = ({ userId }) => {
-  const state = useSelector((x) => x.cart);
+  const cartQuantity = useSelector((state) => state.cart.quantity);
   const [cartData, setCartData] = useState({
     total: 0,
     items: [],
@@ -85,9 +85,9 @@ const useCartSummary = ({ userId }) => {
           const items = fetchedData.map((item) => {
             if (item.attributes.variant.data && item.attributes.variant.data.attributes.product.data) {
               //debe existir un producto con su respectiva variante
-              if (item.attributes.quantity > item.attributes.variant.data.attributes.stock) {//se agrega validacion ITEM >= STOCK
+              if (item.attributes.quantity > item.attributes.variant.data.attributes.stock) {//se agrega validacion ITEM <= STOCK
                 setError(item.attributes.variant.data)
-              }
+              } else { setError(null) }
               return {
                 totalItemPrice:
                   item.attributes.variant.data.attributes.price * item.attributes.quantity,
@@ -123,7 +123,7 @@ const useCartSummary = ({ userId }) => {
       getCartSession();
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId, state.quantity]);
+  }, [userId, cartQuantity]);
 
   return {
     total: cartData.total,

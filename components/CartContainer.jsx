@@ -6,12 +6,15 @@ import toast, { Toaster } from "react-hot-toast";
 import useStorage from "@/hooks/useStorage";
 import CartDetail from "@/components/CartDetail";
 import CartProceedPayment from "@/components/CartProceedPayment";
+import { useSelector } from "react-redux";
 
 const CartContainer = () => {
     const { user } = useStorage(); //me trae el usuario de local storage
+
     const { total, items, quantity, error, loading } = useCartSummary({
         userId: user?.id,
     });
+
     return (
         <>
             <Toaster
