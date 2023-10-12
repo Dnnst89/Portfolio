@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { useEffect } from "react";
 import { CREATE_ADDRESS } from "@/src/graphQl/queries/createAddress";
+import { UPDATE_ADDRESS } from "@/src/graphQl/queries/updateAddress";
 import useStorage from "@/hooks/useStorage";
 import InputForm from "./InputForm";
 import { GET_USER_PAYMENT_INFO } from "@/src/graphQl/queries/getUserPaymentInfo";
@@ -78,7 +79,7 @@ const AddressForm = () => {
   //const [createAddress] = useMutation(CREATE_ADDRESS);
 
   // const [UpdateUserInformation] = useMutation(UPDATE_USER_INFORMATION);
-  // const [UpdateAddress] = useMutation(UPDATE_ADDRES);
+  const [updateAddress] = useMutation(UPDATE_ADDRESS);
   // const [UpdateIdCard] = useMutation(UPDATE_ID_CARD);
   const { data } = useQuery(GET_USER_PAYMENT_INFO, {
     variables: { id: id },
@@ -114,64 +115,22 @@ const AddressForm = () => {
       });
     }
   }, [data]);
-  console.log("user information : ", userInformation);
   const initialValues = {
-    firstName: userInformation.firstName,
-    lastName: userInformation.lastName,
-    email: userInformation.email,
-    phone: userInformation.phone,
-    postCode: userInformation.postCode,
-    country: userInformation.country,
-    addressLine1: userInformation.addressLine1,
-    addressLine2: userInformation.addressLine2,
-    province: userInformation.province,
-    canton: userInformation.canton,
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    postCode: "",
+    country: "",
+    addressLine1: "",
+    addressLine2: "",
+    province: "",
+    canton: "",
     checkbox: false,
-    idNumber: userInformation.idNumber,
-    idType: userInformation.idType,
+    idNumber: 0,
+    idType: "",
   };
-  const cargar = async () => {
-    //me carga la informacion del usuario si el ya el la ha ingresado
-    try {
-      const { user } = JSON.parse(localStorage.getItem("userData"));
-      if (user) {
-        const { data } = await getUser({
-          variables: { id: user.id },
-        });
-        if (data) {
-          console.log(data); // Agregar esto para depurar la respuesta
-          const userData = data?.usersPermissionsUser?.data?.attributes;
-          const userAddress =
-            data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-              ?.attributes;
-          setUserInformation({
-            firstName: userData?.firstName,
-            lastName: userData?.lastName,
-            email: userData?.email,
-            phone: userData?.phoneNumber,
-            postCode: userAddress?.postCode,
-            country: userAddress?.country,
-            addressLine1: userAddress?.addressLine1,
-            addressLine2: userAddress?.addressLine2,
-            province: userAddress?.province,
-            canton: userAddress?.canton,
-            idNumber: userData?.idCard?.idNumber,
-            idType: userData?.idCard?.idType,
-          });
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    cargar();
-  }, []);
-  console.log(userInformation);
-
-  const handleSubmit = (values) => {
-    const isoDate = new Date().toISOString();
+  const handleSubmit = async (values) => {
     const {
       checkbox,
       idNumber,
@@ -187,9 +146,12 @@ const AddressForm = () => {
       province,
       canton,
     } = values;
+
+    console.log("values : ", canton, addressLine1, addressLine2);
+
     try {
-      if (direccion != null) {
-        UpdateAddress({
+      if (values) {
+        const isAddressUpdated = await UpdateAddress({
           variables: {
             country: country,
             postCode: postCode,
@@ -200,78 +162,100 @@ const AddressForm = () => {
             id: parseInt(id),
           },
         });
-        UpdateUserInformation({
-          variables: {
-            firstName: firstName,
-            lastName: lastName,
-            phone: parseInt(phone),
-            email: email,
-            id: parseInt(id),
-          },
-        });
-        if (checkbox == true) {
-          UpdateIdCard({
-            variables: {
-              id: parseInt(id),
-              idNumber: parseInt(idNumber),
-              idType: idType,
-            },
-          });
-        }
-      } else {
-        CreateAddress({
-          variables: {
-            postCode: postCode,
-            country: country,
-            addressLine1: addressLine1,
-            addressLine2: addressLine2,
-            province: province,
-            canton: canton,
-            publishedAt: isoDate,
-            id: parseInt(id),
-          },
-        });
-        UpdateUserInformation({
-          variables: {
-            firstName: firstName,
-            lastName: lastName,
-            phone: parseInt(phone),
-            email: email,
-            id: parseInt(id),
-          },
-        });
-        if (checkbox == true) {
-          UpdateIdCard({
-            variables: {
-              id: parseInt(id),
-              idNumber: parseInt(idNumber),
-              idType: idType,
-            },
-          });
-        }
+        console.log("Values :", isAddressUpdated);
       }
     } catch (error) {
-    } finally {
+      console.log("error making the mutation :", error);
     }
   };
+  //const isoDate = new Date().toISOString();
+
+  // try {
+  //   if (direccion != null) {
+  //     UpdateAddress({
+  //       variables: {
+  //         country: country,
+  //         postCode: postCode,
+  //         province: province,
+  //         addressLine1: addressLine1,
+  //         addressLine2: addressLine2,
+  //         canton: canton,
+  //         id: parseInt(id),
+  //       },
+  //     });
+  //     UpdateUserInformation({
+  //       variables: {
+  //         firstName: firstName,
+  //         lastName: lastName,
+  //         phone: parseInt(phone),
+  //         email: email,
+  //         id: parseInt(id),
+  //       },
+  //     });
+  //     if (checkbox == true) {
+  //       UpdateIdCard({
+  //         variables: {
+  //           id: parseInt(id),
+  //           idNumber: parseInt(idNumber),
+  //           idType: idType,
+  //         },
+  //       });
+  //     }
+  //   } else {
+  //     CreateAddress({
+  //       variables: {
+  //         postCode: postCode,
+  //         country: country,
+  //         addressLine1: addressLine1,
+  //         addressLine2: addressLine2,
+  //         province: province,
+  //         canton: canton,
+  //         publishedAt: isoDate,
+  //         id: parseInt(id),
+  //       },
+  //     });
+  //     UpdateUserInformation({
+  //       variables: {
+  //         firstName: firstName,
+  //         lastName: lastName,
+  //         phone: parseInt(phone),
+  //         email: email,
+  //         id: parseInt(id),
+  //       },
+  //     });
+  //     if (checkbox == true) {
+  //       UpdateIdCard({
+  //         variables: {
+  //           id: parseInt(id),
+  //           idNumber: parseInt(idNumber),
+  //           idType: idType,
+  //         },
+  //       });
+  //     }
+  //   }
+  // } catch (error) {
+  // } finally {
+  // }
+
   return (
     <Formik
       validationSchema={validationSchema} // Agrega tu esquema de validación
-      //onSubmit={handleSubmit}
+      initialValues={initialValues}
     >
       {({ errors, touched }) => {
         return (
           <>
-            <Form>
+            <Form onSubmit={handleSubmit}>
               <section className="w-3/4">
                 <div className="flex justify-center">
                   <section className="w-1/4 flex flex-col p-2">
                     <label htmlFor="name">Nombre</label>
                     <Field
                       type="text"
-                      id="name"
-                      name="name"
+                      name="firstName"
+                      id="firstName"
                       className="form-input"
+                      onChange={Formik.handleChange}
                       value={userInformation.firstName}
                     />
                     <label htmlFor="country">Pais</label>
@@ -280,6 +264,7 @@ const AddressForm = () => {
                       id="country"
                       name="country"
                       className="form-input"
+                      onChange={Formik.handleChange}
                       value={userInformation.country}
                     />
                     <label htmlFor="canton">Cantón</label>
@@ -288,6 +273,7 @@ const AddressForm = () => {
                       id="canton"
                       name="canton"
                       className="form-input"
+                      onChange={Formik.handleChange}
                       value={userInformation.canton}
                     />
                     <label htmlFor="postCode">Código Postal</label>
@@ -296,26 +282,29 @@ const AddressForm = () => {
                       id="postCode"
                       name="postCode"
                       className="form-input"
+                      onChange={Formik.handleChange}
                       value={userInformation.postCode}
                     />
                     <label htmlFor="addressLine2">Direccion 1</label>
                     <Field
                       type="text"
-                      id="addressLine2"
-                      name="addressLine2"
+                      id="addressLine1"
+                      name="addressLine1"
                       placeholder="Direccion 1"
                       className="form-input"
+                      onChange={Formik.handleChange}
                       value={userInformation.addressLine2}
                     />
                   </section>
                   <section className="w-1/4 flex flex-col p-2">
-                    <label htmlFor="lastname">Apellidos</label>
+                    <label htmlFor="lastName">Apellidos</label>
                     <Field
                       type="text"
-                      id="lastname"
-                      name="lastname"
+                      id="lastName"
+                      name="lastName"
                       placeholder="Apellidos"
                       className="form-input"
+                      onChange={Formik.handleChange}
                       value={userInformation.lastName}
                     />
                     <label htmlFor="phone">Teléfono</label>
@@ -325,6 +314,7 @@ const AddressForm = () => {
                       name="phone"
                       placeholder="Teléfono"
                       className="form-input"
+                      onChange={Formik.handleChange}
                       value={userInformation.phone}
                     />
                     <label htmlFor="province">Provincia</label>
@@ -334,6 +324,7 @@ const AddressForm = () => {
                       name="province"
                       placeholder="Provincia"
                       className="form-input"
+                      onChange={Formik.handleChange}
                       value={userInformation.province}
                     />
                   </section>
@@ -376,6 +367,12 @@ const AddressForm = () => {
                       id={"businessid"}
                     />
                   </section>
+                  <button
+                    type="submit"
+                    className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
+                  >
+                    Continuar
+                  </button>
                 </div>
               </section>
             </Form>
