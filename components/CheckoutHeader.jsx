@@ -2,6 +2,7 @@
 import Image from "next/image";
 import logo from "../app/assets/small-logo.png";
 import Link from "next/link";
+import "../styles/fonts.css";
 import { BiArrowBack } from "react-icons/bi";
 
 export default function CheckOutHeader({ regresar }) {
