@@ -57,6 +57,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddressForm = () => {
+  const isoDate = new Date().toISOString();
   let userInfoExist = false; //esta bandera me indica si debo actualizar o crear la informacion para el usuario
   const { user } = useStorage(); //me trae el usuario autorizado
   const id = user?.id;
@@ -77,7 +78,7 @@ const AddressForm = () => {
     idType: "",
   });
 
-  //const [createAddress] = useMutation(CREATE_ADDRESS);
+  const [createAddress] = useMutation(CREATE_ADDRESS);
 
   // const [UpdateUserInformation] = useMutation(UPDATE_USER_INFORMATION);
   const [updateAddress] = useMutation(UPDATE_ADDRESS);
@@ -86,7 +87,8 @@ const AddressForm = () => {
     variables: { id: id },
   });
 
-  userInfoExist = !!data?.usersPermissionsUser?.data?.attributes?.users_address; // si user_address existe se guarda en true, si no en false
+  userInfoExist =
+    !!data?.usersPermissionsUser?.data?.attributes?.users_address?.data; // si user_address existe se guarda en true, si no en false
   useEffect(() => {
     // Check if data is available and set userInformation
     if (data && data.usersPermissionsUser) {
@@ -136,6 +138,27 @@ const AddressForm = () => {
     idNumber: 0,
     idType: "",
   };
+
+  const createNewAddress = async (addressInfo) => {
+    try {
+      const isAddressUpdated = await createAddress({
+        variables: {
+          postCode: userInformation.postCode,
+          country: userInformation.country,
+          addressLine1: userInformation.addressLine1,
+          addressLine2: userInformation.addressLine2,
+          province: userInformation.province,
+          canton: userInformation.canton,
+          publishedAt: isoDate,
+          id: parseInt(id),
+        },
+      });
+      console.log("isAddress Updated : ", isAddressUpdated);
+    } catch (error) {
+      console.error("error creating address ", error);
+    }
+  };
+
   const updatingAddress = async () => {
     try {
       const isAddressUpdated = await updateAddress({
