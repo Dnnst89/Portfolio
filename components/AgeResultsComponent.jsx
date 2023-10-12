@@ -10,7 +10,7 @@ export default function AgeResultsComponent({ ageRange }) {
   const [currentPage, setCurrentPage] = useState(1);
 
   const page = currentPage;
-  const pageSize = 10;
+  const pageSize = 12;
   const { loading, error, data } = useQuery(getProductByAgeRange, {
     variables: { ageRange, page, pageSize },
   });
@@ -20,7 +20,7 @@ export default function AgeResultsComponent({ ageRange }) {
   })
 
   return (
-    <div className={loading ? "grid place-items-center" : ""}>
+    <div className={loading ? "flex flex-wrap max-w-screen-xl m-auto justify-center my-10" : ""}>
       {loading ? <Spinner /> : <div> <Toaster />
         <ProductFilterContainer
           result={data.products}

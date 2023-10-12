@@ -8,7 +8,7 @@ const ProductFilterContainer = ({ result, currentPage, setCurrentPage }) => {
     const { data } = result
     return (
         <>
-            <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 w-full">
+            <div className="flex flex-wrap max-w-screen-xl m-auto justify-center">
                 {data
                     ? data.map((item) => {
                         return <AgeProductCard key={item.id} id={item.id} name={item.attributes.name} coverImage={item.attributes.coverImage.data} defaultPrice={item.attributes.brand} />;
