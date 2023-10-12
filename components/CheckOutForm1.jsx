@@ -3,7 +3,6 @@ import { CREATE_ORDER } from "@/src/graphQl/queries/createUserOrder";
 import CartDetail from "./CartDetail";
 import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/navigation";
-
 import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
 import useStorage from "@/hooks/useStorage";
 import { useState } from "react";
@@ -32,7 +31,10 @@ export default function CheckOutForm1({ isCheckout = false }) {
     localStorage.setItem("createdOrder", orderNumber);
     router.push("/proceedPayment");
   };
-
+  /**
+   *
+   * @param {Object} data
+   */
   const handleChange = (data) => {
     setAmount(data);
   };
@@ -42,8 +44,10 @@ export default function CheckOutForm1({ isCheckout = false }) {
     try {
       const { data } = await createOrder({
         variables: {
-          user_id: parseInt(id),
-          total,
+          user_id: id,
+          total: total,
+          subTotal: subTotal,
+          taxes: taxes,
           status: "P", // Pending
           publishedAt: isoDate,
         },

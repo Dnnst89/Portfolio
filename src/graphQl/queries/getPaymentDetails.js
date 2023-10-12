@@ -18,7 +18,7 @@ export const GET_PAYMENT_DETAILS = gql`
               }
             }
           }
-          order_details {
+          order_details(filters: { status: { eq: "P" } }) {
             data {
               id
               attributes {
