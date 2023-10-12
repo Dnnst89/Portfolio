@@ -5,17 +5,11 @@ export const UPDATE_USER_INFORMATION = gql`
     $firstName: String!
     $lastName: String!
     $phone: Int!
-    $email: String
     $id: ID!
   ) {
     updateUsersPermissionsUser(
       id: $id
-      data: {
-        firstName: $firstName
-        lastName: $lastName
-        phoneNumber: $phone
-        email: $email
-      }
+      data: { firstName: $firstName, lastName: $lastName, phoneNumber: $phone }
     ) {
       data: data {
         id

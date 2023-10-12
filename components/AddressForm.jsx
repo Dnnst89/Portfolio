@@ -11,6 +11,7 @@ import { CREATE_ADDRESS } from "@/src/graphQl/queries/createAddress";
 import { UPDATE_ADDRESS } from "@/src/graphQl/queries/updateAddress";
 import useStorage from "@/hooks/useStorage";
 import InputForm from "./InputForm";
+import { UPDATE_USER_INFORMATION } from "@/src/graphQl/queries/updateUserInformation";
 import { GET_USER_PAYMENT_INFO } from "@/src/graphQl/queries/getUserPaymentInfo";
 const validationSchema = Yup.object().shape({
   firstName: Yup.string()
@@ -58,9 +59,9 @@ const validationSchema = Yup.object().shape({
 
 const AddressForm = () => {
   const isoDate = new Date().toISOString();
-  let userInfoExist = false; //esta bandera me indica si debo actualizar o crear la informacion para el usuario
   const { user } = useStorage(); //me trae el usuario autorizado
-  const id = user?.id;
+
+  const userId = user?.id;
   const [userInformation, setUserInformation] = useState({
     //campos de userAddress
     firstName: "",
@@ -80,68 +81,86 @@ const AddressForm = () => {
 
   const [createAddress] = useMutation(CREATE_ADDRESS);
 
-  // const [UpdateUserInformation] = useMutation(UPDATE_USER_INFORMATION);
+  const [updateUserInformation] = useMutation(UPDATE_USER_INFORMATION);
   const [updateAddress] = useMutation(UPDATE_ADDRESS);
   // const [UpdateIdCard] = useMutation(UPDATE_ID_CARD);
-  const { data } = useQuery(GET_USER_PAYMENT_INFO, {
-    variables: { id: id },
-  });
 
-  userInfoExist =
-    !!data?.usersPermissionsUser?.data?.attributes?.users_address?.data; // si user_address existe se guarda en true, si no en false
-  useEffect(() => {
-    // Check if data is available and set userInformation
-    if (data && data.usersPermissionsUser) {
-      setUserInformation({
-        firstName: data?.usersPermissionsUser?.data?.attributes?.firstName,
-        lastName: data?.usersPermissionsUser?.data?.attributes?.lastName,
-        phone: data?.usersPermissionsUser?.data?.attributes?.phoneNumber,
+  const [getUserInfo] = useLazyQuery(GET_USER_PAYMENT_INFO);
+  //get the id of the addresses user
+  const [addressId, setAddressId] = useState();
+  const [userInfoExist, setUserInfoExist] = useState(); //esta bandera me indica si debo actualizar o crear la informacion para el usuario
 
-        postCode:
-          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-            ?.attributes?.postCode,
-        country:
-          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-            ?.attributes?.country,
-        addressLine1:
-          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-            ?.attributes?.addressLine1,
-        addressLine2:
-          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-            ?.attributes?.addressLine2,
-        province:
-          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-            ?.attributes?.province,
-        canton:
-          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-            ?.attributes?.canton,
-        idNumber:
-          data?.usersPermissionsUser?.data?.attributes?.idCard?.idNumber,
-        idType: data?.usersPermissionsUser?.data?.attributes?.idCard?.idType,
-      });
-    }
-  }, [data]);
-
-  console.log(userInfoExist);
-  const initialValues = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    postCode: "",
-    country: "",
-    addressLine1: "",
-    addressLine2: "",
-    province: "",
-    canton: "",
-    checkbox: false,
-    idNumber: 0,
-    idType: "",
-  };
-
-  const createNewAddress = async (addressInfo) => {
+  const cargaDatos = async () => {
+    const userData = JSON.parse(localStorage.getItem("userData")); //datos de user
+    const userDataId = userData.user.id;
     try {
-      const isAddressUpdated = await createAddress({
+      const { data } = await getUserInfo({
+        variables: { id: userDataId },
+      });
+      console.log(data);
+      // Check if data is available and set userInformation
+      if (data && data.usersPermissionsUser) {
+        setAddressId(
+          data?.usersPermissionsUser?.data?.attributes?.users_address?.data?.id
+        );
+        setUserInfoExist(
+          !!data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+        );
+
+        setUserInformation({
+          firstName: data?.usersPermissionsUser?.data?.attributes?.firstName,
+          lastName: data?.usersPermissionsUser?.data?.attributes?.lastName,
+          phone: data?.usersPermissionsUser?.data?.attributes?.phoneNumber,
+
+          postCode:
+            data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+              ?.attributes?.postCode,
+          country:
+            data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+              ?.attributes?.country,
+          addressLine1:
+            data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+              ?.attributes?.addressLine1,
+          addressLine2:
+            data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+              ?.attributes?.addressLine2,
+          province:
+            data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+              ?.attributes?.province,
+          canton:
+            data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+              ?.attributes?.canton,
+          idNumber:
+            data?.usersPermissionsUser?.data?.attributes?.idCard?.idNumber,
+          idType: data?.usersPermissionsUser?.data?.attributes?.idCard?.idType,
+        });
+      }
+    } catch (error) {
+      console.log("error de cargar : " + error);
+    }
+  };
+  useEffect(() => {
+    cargaDatos();
+  }, []);
+  // const initialValues = {
+  //   firstName: "",
+  //   lastName: "",
+  //   email: "",
+  //   phone: "",
+  //   postCode: "",
+  //   country: "",
+  //   addressLine1: "",
+  //   addressLine2: "",
+  //   province: "",
+  //   canton: "",
+  //   checkbox: false,
+  //   idNumber: 0,
+  //   idType: "",
+  // };
+
+  const createNewAddress = async (userId, userInformation) => {
+    try {
+      const isAddressCreated = await createAddress({
         variables: {
           postCode: userInformation.postCode,
           country: userInformation.country,
@@ -150,72 +169,62 @@ const AddressForm = () => {
           province: userInformation.province,
           canton: userInformation.canton,
           publishedAt: isoDate,
-          id: parseInt(id),
+          id: userId,
         },
       });
-      console.log("isAddress Updated : ", isAddressUpdated);
+      console.log("isAddress Updated : ", isAddressCreated);
     } catch (error) {
       console.error("error creating address ", error);
     }
   };
-
-  const updatingAddress = async () => {
+  const updatingAddress = async (userInformation) => {
     try {
-      const isAddressUpdated = await updateAddress({
+      const { isAddressUpdated } = await updateAddress({
         variables: {
-          country: country,
-          postCode: postCode,
-          province: province,
-          addressLine1: addressLine1,
-          addressLine2: addressLine2,
-          canton: canton,
-          id: parseInt(id),
+          country: userInformation.country,
+          postCode: userInformation.postCode,
+          province: userInformation.province,
+          addressLine1: userInformation.addressLine1,
+          addressLine2: userInformation.addressLine2,
+          canton: userInformation.canton,
+          id: addressId,
         },
       });
       console.log("updating address :", isAddressUpdated);
     } catch (error) {
-      console.log("error updating user adress :", error);
+      console.error("error updating user adress :", error);
     }
   };
-};
-const updatingUserInfo = async () => {
-  try {
-    const isUserInfoUpdated = awaitUpdateUserInformation({
-      variables: {
-        firstName: firstName,
-        lastName: lastName,
-        phone: parseInt(phone),
-        id: parseInt(id),
-      },
-    });
-    console.log("updating address :", isUserInfoUpdated);
-  } catch (error) {
-    console.log("error updating using information :", error);
-  }
-};
-const handleSubmit = async (values) => {
-  updatingUserInfo();
-  userInfoExist ? updatingAddress() : createNewAddress();
 
-  const {
-    checkbox,
-    idNumber,
-    idType,
-    firstName,
-    lastName,
-    phone,
-    postCode,
-    country,
-    addressLine1,
-    addressLine2,
-    province,
-    canton,
-  } = values;
+  const updatingUserInfo = async (userId, userInformation) => {
+    try {
+      const { isUserInfoUpdated } = await updateUserInformation({
+        variables: {
+          firstName: userInformation.firstName,
+          lastName: userInformation.lastName,
+          phone: userInformation.phone,
+          id: userId,
+        },
+      });
+      console.log("updating address :", isUserInfoUpdated);
+    } catch (error) {
+      console.error("error updating user information :", error);
+    }
+  };
+
+  const handleSubmit = async () => {
+    console.log("-----------", userInformation);
+
+    updatingUserInfo(userId, userInformation);
+    userInfoExist
+      ? updatingAddress(userInformation)
+      : createNewAddress(userId, userInformation);
+  };
 
   return (
     <Formik
       validationSchema={validationSchema} // Agrega tu esquema de validación
-      initialValues={initialValues}
+      initialValues={userInformation}
     >
       {({ errors, touched }) => {
         return (
@@ -342,7 +351,7 @@ const handleSubmit = async (values) => {
                       }}
                       value={userInformation.province}
                     />
-                    <label htmlFor="addressLine2">Direccion 1</label>
+                    <label htmlFor="addressLine1">Direccion 1</label>
                     <Field
                       type="text"
                       id="addressLine1"
@@ -355,7 +364,7 @@ const handleSubmit = async (values) => {
                           addressLine1: e.target.value,
                         });
                       }}
-                      value={userInformation.addressLine2}
+                      value={userInformation.addressLine1}
                     />
                   </section>
                 </div>
