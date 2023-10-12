@@ -249,57 +249,13 @@ const AddressForm = () => {
                       name="firstName"
                       id="firstName"
                       className="form-input"
-                      onChange={Formik.handleChange}
+                      onChange={(e) => {
+                        setUserInformation({
+                          ...userInformation,
+                          firstName: e.target.value,
+                        });
+                      }}
                       value={userInformation.firstName}
-                    />
-                    <label htmlFor="country">Pais</label>
-                    <Field
-                      type="text"
-                      id="country"
-                      name="country"
-                      className="form-input"
-                      onChange={Formik.handleChange}
-                      value={userInformation.country}
-                    />
-                    <label htmlFor="canton">Cantón</label>
-                    <Field
-                      type="text"
-                      id="canton"
-                      name="canton"
-                      className="form-input"
-                      onChange={Formik.handleChange}
-                      value={userInformation.canton}
-                    />
-                    <label htmlFor="postCode">Código Postal</label>
-                    <Field
-                      type="text"
-                      id="postCode"
-                      name="postCode"
-                      className="form-input"
-                      onChange={Formik.handleChange}
-                      value={userInformation.postCode}
-                    />
-                    <label htmlFor="addressLine2">Direccion 1</label>
-                    <Field
-                      type="text"
-                      id="addressLine1"
-                      name="addressLine1"
-                      placeholder="Direccion 1"
-                      className="form-input"
-                      onChange={Formik.handleChange}
-                      value={userInformation.addressLine2}
-                    />
-                  </section>
-                  <section className="w-1/4 flex flex-col p-2">
-                    <label htmlFor="lastName">Apellidos</label>
-                    <Field
-                      type="text"
-                      id="lastName"
-                      name="lastName"
-                      placeholder="Apellidos"
-                      className="form-input"
-                      onChange={Formik.handleChange}
-                      value={userInformation.lastName}
                     />
                     <label htmlFor="phone">Teléfono</label>
                     <Field
@@ -308,8 +264,87 @@ const AddressForm = () => {
                       name="phone"
                       placeholder="Teléfono"
                       className="form-input"
-                      onChange={Formik.handleChange}
+                      onChange={(e) => {
+                        setUserInformation({
+                          ...userInformation,
+                          phone: e.target.value,
+                        });
+                      }}
                       value={userInformation.phone}
+                    />
+                    <label htmlFor="country">Pais</label>
+                    <Field
+                      type="text"
+                      id="country"
+                      name="country"
+                      className="form-input"
+                      onChange={(e) => {
+                        setUserInformation({
+                          ...userInformation,
+                          country: e.target.value,
+                        });
+                      }}
+                      value={userInformation.country}
+                    />
+                    <label htmlFor="canton">Cantón</label>
+                    <Field
+                      type="text"
+                      id="canton"
+                      name="canton"
+                      className="form-input"
+                      onChange={(e) => {
+                        setUserInformation({
+                          ...userInformation,
+                          canton: e.target.value,
+                        });
+                      }}
+                      value={userInformation.canton}
+                    />
+                    <label htmlFor="addressLine2">Direccion 2</label>
+                    <Field
+                      type="text"
+                      id="addressLine2"
+                      name="addressLine2"
+                      placeholder="Direccion 2"
+                      className="form-input"
+                      onChange={(e) => {
+                        setUserInformation({
+                          ...userInformation,
+                          addressLine2: e.target.value,
+                        });
+                      }}
+                      value={userInformation.addressLine2}
+                    />
+                  </section>
+                  <section className="w-2/4 flex flex-col p-2">
+                    <label htmlFor="lastName">Apellidos</label>
+                    <Field
+                      type="text"
+                      id="lastName"
+                      name="lastName"
+                      placeholder="Apellidos"
+                      className="form-input"
+                      onChange={(e) => {
+                        setUserInformation({
+                          ...userInformation,
+                          lastName: e.target.value,
+                        });
+                      }}
+                      value={userInformation.lastName}
+                    />
+                    <label htmlFor="postCode">Código Postal</label>
+                    <Field
+                      type="text"
+                      id="postCode"
+                      name="postCode"
+                      className="form-input"
+                      onChange={(e) => {
+                        setUserInformation({
+                          ...userInformation,
+                          postCode: e.target.value,
+                        });
+                      }}
+                      value={userInformation.postCode}
                     />
                     <label htmlFor="province">Provincia</label>
                     <Field
@@ -318,8 +353,28 @@ const AddressForm = () => {
                       name="province"
                       placeholder="Provincia"
                       className="form-input"
-                      onChange={Formik.handleChange}
+                      onChange={(e) => {
+                        setUserInformation({
+                          ...userInformation,
+                          province: e.target.value,
+                        });
+                      }}
                       value={userInformation.province}
+                    />
+                    <label htmlFor="addressLine2">Direccion 1</label>
+                    <Field
+                      type="text"
+                      id="addressLine1"
+                      name="addressLine1"
+                      placeholder="Direccion 1"
+                      className="form-input"
+                      onChange={(e) => {
+                        setUserInformation({
+                          ...userInformation,
+                          addressLine1: e.target.value,
+                        });
+                      }}
+                      value={userInformation.addressLine2}
                     />
                   </section>
                 </div>
