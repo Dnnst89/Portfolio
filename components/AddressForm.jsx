@@ -57,6 +57,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddressForm = () => {
+  let userInfoExist = false; //esta bandera me indica si debo actualizar o crear la informacion para el usuario
   const { user } = useStorage(); //me trae el usuario autorizado
   const id = user?.id;
   const [userInformation, setUserInformation] = useState({
@@ -84,37 +85,30 @@ const AddressForm = () => {
   const { data } = useQuery(GET_USER_PAYMENT_INFO, {
     variables: { id: id },
   });
+
+  userInfoExist = !!data?.usersPermissionsUser?.data?.attributes?.users_address; // si user_address existe se guarda en true, si no en false
   useEffect(() => {
     // Check if data is available and set userInformation
     if (data && data.usersPermissionsUser) {
       setUserInformation({
-        firstName: data.usersPermissionsUser.data.attributes.firstName,
-        lastName: data.usersPermissionsUser.data.attributes.lastName,
-        phone: data.usersPermissionsUser.data.attributes.phoneNumber,
+        firstName: data?.usersPermissionsUser?.data?.attributes?.firstName,
+        lastName: data?.usersPermissionsUser?.data?.attributes?.lastName,
+        phone: data?.usersPermissionsUser?.data?.attributes?.phoneNumber,
 
-        postCode:
-          data.usersPermissionsUser.data.attributes.users_address.data
-            .attributes.postCode,
-        country:
-          data.usersPermissionsUser.data.attributes.users_address.data
-            .attributes.country,
-        addressLine1:
-          data.usersPermissionsUser.data.attributes.users_address.data
-            .attributes.addressLine1,
-        addressLine2:
-          data.usersPermissionsUser.data.attributes.users_address.data
-            .attributes.addressLine2,
-        province:
-          data.usersPermissionsUser.data.attributes.users_address.data
-            .attributes.province,
-        canton:
-          data.usersPermissionsUser.data.attributes.users_address.data
-            .attributes.canton,
-        idNumber: data.usersPermissionsUser.data.attributes.idCard.idNumber,
-        idType: data.usersPermissionsUser.data.attributes.idCard.idType,
+        postCode: data?.usersPermissionsUser?.data?.attributes?.users_address?.data?.attributes?.postCode,
+        country: data?.usersPermissionsUser?.data?.attributes?.users_address?.data?.attributes?.country,
+        addressLine1: data?.usersPermissionsUser?.data?.attributes?.users_address?.data?.attributes?.addressLine1,
+        addressLine2: data?.usersPermissionsUser?.data?.attributes?.users_address?.data?.attributes?.addressLine2,
+        province: data?.usersPermissionsUser?.data?.attributes?.users_address?.data?.attributes?.province,
+        canton: data?.usersPermissionsUser?.data?.attributes?.users_address?.data?.attributes?.canton,
+        idNumber: data?.usersPermissionsUser?.data?.attributes?.idCard?.idNumber,
+        idType: data?.usersPermissionsUser?.data?.attributes?.idCard?.idType,
       });
+
     }
   }, [data]);
+
+  console.log(userInfoExist)
   const initialValues = {
     firstName: "",
     lastName: "",
