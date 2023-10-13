@@ -27,13 +27,16 @@ export default function DetailComponent({ id }) {
           sku={data?.product.data.attributes.sku}
           variants={data?.product.data.attributes.variants.data}
           materials={data?.product.data.attributes.materials.data}
+
         />
         <ProductDetailSecondary
           id={data?.product.data.id}
           description={data?.product.data.attributes.description}
           reviews={data?.product.data.attributes.reviews.data}
         />
-        <RelatedItems /></div>
+        <RelatedItems
+          categories={data?.product.data.attributes.categories.data}
+        /></div>
       }
     </div>
   );

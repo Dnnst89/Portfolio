@@ -9,6 +9,7 @@ import useCartSummary from "@/hooks/useCartSummary";
 import useStorage from "@/hooks/useStorage";
 
 function ProductDetail({ name, brand, description, sku, variants, materials }) {
+
   const [quantity, setQuantity] = useState(1);
   let shortDescrption = "";
   let images = 0;
