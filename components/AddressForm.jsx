@@ -135,15 +135,16 @@ const AddressForm = () => {
               ?.attributes?.canton || "",
           idNumber:
             data?.usersPermissionsUser?.data?.attributes?.idCard?.idNumber ||
-            "",
+            0,
           idType:
             data?.usersPermissionsUser?.data?.attributes?.idCard?.idType || "",
-          checkBox: Boolean(
+          checkbox: Boolean(
             data?.usersPermissionsUser?.data?.attributes?.idCard?.idNumber ||
-              false
+            false
           ),
         });
       }
+      console.log(userInformation)
     } catch (error) {
       console.log("error de cargar : " + error);
     }
@@ -151,21 +152,7 @@ const AddressForm = () => {
   useEffect(() => {
     cargaDatos();
   }, []);
-  // const initialValues = {
-  //   firstName: "",
-  //   lastName: "",
-  //   email: "",
-  //   phone: "",
-  //   postCode: "",
-  //   country: "",
-  //   addressLine1: "",
-  //   addressLine2: "",
-  //   province: "",
-  //   canton: "",
-  //   checkbox: false,
-  //   idNumber: 0,
-  //   idType: "",
-  // };
+
 
   const createNewAddress = async (userId, userInformation) => {
     try {
@@ -216,26 +203,31 @@ const AddressForm = () => {
           id: userId,
         },
       });
-      if (userInformation.checkbox) {
-        const { isIdCardUpdated } = await updateIdCard({
-          variables: {
-            id: userId,
-            idNumber: parseInt(userInformation.idNumber),
-            idType: userInformation.idType,
-          },
-        });
-        console.log("updating id card :", isIdCardUpdated);
-      }
-      console.log("updating address :", isUserInfoUpdated);
+
     } catch (error) {
       console.error("error updating user information :", error);
+    }
+
+  };
+  const updatingUserCardInfo = async (userId, userInformation) => {
+
+    try {
+      const { isIdCardUpdated } = await updateIdCard({
+        variables: {
+          id: userId,
+          idNumber: parseInt(userInformation.idNumber),
+          idType: userInformation.idType,
+        },
+      });
+      console.log("updating id card :", isIdCardUpdated);
+    } catch (error) {
+      console.error("error updating card information :", error);
     }
   };
 
   const handleSubmit = async () => {
-    console.log("-----------", userInformation);
-
     updatingUserInfo(userId, userInformation);
+    updatingUserCardInfo(userId, userInformation);
     userInfoExist
       ? updatingAddress(userInformation)
       : createNewAddress(userId, userInformation);
@@ -390,7 +382,7 @@ const AddressForm = () => {
                 </div>
                 <div className="flex justify-center">
                   <section className="w-1/4 flex p-2">
-                    <label htmlFor="checkBox">Factura Electrónica</label>
+                    <label htmlFor="checkbox">Factura Electrónica</label>
                     <Field
                       type="checkbox"
                       id="checkbox"
@@ -418,8 +410,9 @@ const AddressForm = () => {
 
                   <section className="w-1/4 flex p-2"></section>
                 </div>
-                <div className="flex justify-center">
-                  <section className="w-1/4 flex flex-col p-2  ">
+                <div className="flex justify-center" >
+
+                  <section className="w-1/4 flex flex-col p-2  " >
                     <label htmlFor="idType">Tipo De Cédula</label>
                     <Field
                       type="text"
@@ -427,6 +420,14 @@ const AddressForm = () => {
                       name="idType"
                       placeholder="Tipo De Cédula"
                       className="form-input"
+                      onChange={(e) => {
+                        setUserInformation({
+                          ...userInformation,
+                          idType: e.target.value,
+                        });
+                      }}
+                      value={userInformation.idType}
+
                     />
                   </section>
                   <section className="w-1/4 flex flex-col p-2">
@@ -437,13 +438,22 @@ const AddressForm = () => {
                       name="idNumber"
                       placeholder="Tipo De Cédula"
                       className="form-input"
+                      onChange={(e) => {
+                        setUserInformation({
+                          ...userInformation,
+                          idNumber: e.target.value,
+                        });
+                      }}
+                      value={userInformation.idNumber}
+
                     />
                   </section>
+
                   <button
                     type="submit"
                     className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
                   >
-                    Continuar
+                    Guardar
                   </button>
                 </div>
               </section>
