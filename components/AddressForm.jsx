@@ -13,6 +13,7 @@ import useStorage from "@/hooks/useStorage";
 import InputForm from "./InputForm";
 import { UPDATE_USER_INFORMATION } from "@/src/graphQl/queries/updateUserInformation";
 import { GET_USER_PAYMENT_INFO } from "@/src/graphQl/queries/getUserPaymentInfo";
+import { UPDATE_ID_CARD } from "@/src/graphQl/queries/updateIdCard";
 const validationSchema = Yup.object().shape({
   firstName: Yup.string()
     .min(2, "Nombre muy corto")
@@ -67,7 +68,7 @@ const AddressForm = () => {
     firstName: "",
     lastName: "",
     email: "",
-    phone: "",
+    phone: 0,
     postCode: "",
     country: "",
     addressLine1: "",
@@ -83,7 +84,7 @@ const AddressForm = () => {
 
   const [updateUserInformation] = useMutation(UPDATE_USER_INFORMATION);
   const [updateAddress] = useMutation(UPDATE_ADDRESS);
-  // const [UpdateIdCard] = useMutation(UPDATE_ID_CARD);
+  const [updateIdCard] = useMutation(UPDATE_ID_CARD);
 
   const [getUserInfo] = useLazyQuery(GET_USER_PAYMENT_INFO);
   //get the id of the addresses user
@@ -108,31 +109,39 @@ const AddressForm = () => {
         );
 
         setUserInformation({
-          firstName: data?.usersPermissionsUser?.data?.attributes?.firstName,
-          lastName: data?.usersPermissionsUser?.data?.attributes?.lastName,
-          phone: data?.usersPermissionsUser?.data?.attributes?.phoneNumber,
-
+          ...userInformation,
+          firstName:
+            data?.usersPermissionsUser?.data?.attributes?.firstName || "",
+          lastName:
+            data?.usersPermissionsUser?.data?.attributes?.lastName || "",
+          phone: data?.usersPermissionsUser?.data?.attributes?.phoneNumber || 0,
           postCode:
             data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-              ?.attributes?.postCode,
+              ?.attributes?.postCode || "",
           country:
             data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-              ?.attributes?.country,
+              ?.attributes?.country || "",
           addressLine1:
             data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-              ?.attributes?.addressLine1,
+              ?.attributes?.addressLine1 || "",
           addressLine2:
             data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-              ?.attributes?.addressLine2,
+              ?.attributes?.addressLine2 || "",
           province:
             data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-              ?.attributes?.province,
+              ?.attributes?.province || "",
           canton:
             data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-              ?.attributes?.canton,
+              ?.attributes?.canton || "",
           idNumber:
-            data?.usersPermissionsUser?.data?.attributes?.idCard?.idNumber,
-          idType: data?.usersPermissionsUser?.data?.attributes?.idCard?.idType,
+            data?.usersPermissionsUser?.data?.attributes?.idCard?.idNumber ||
+            "",
+          idType:
+            data?.usersPermissionsUser?.data?.attributes?.idCard?.idType || "",
+          checkBox: Boolean(
+            data?.usersPermissionsUser?.data?.attributes?.idCard?.idNumber ||
+              false
+          ),
         });
       }
     } catch (error) {
@@ -190,6 +199,7 @@ const AddressForm = () => {
           id: addressId,
         },
       });
+
       console.log("updating address :", isAddressUpdated);
     } catch (error) {
       console.error("error updating user adress :", error);
@@ -202,10 +212,20 @@ const AddressForm = () => {
         variables: {
           firstName: userInformation.firstName,
           lastName: userInformation.lastName,
-          phone: userInformation.phone,
+          phone: parseInt(userInformation.phone),
           id: userId,
         },
       });
+      if (userInformation.checkbox) {
+        const { isIdCardUpdated } = await updateIdCard({
+          variables: {
+            id: userId,
+            idNumber: parseInt(userInformation.idNumber),
+            idType: userInformation.idType,
+          },
+        });
+        console.log("updating id card :", isIdCardUpdated);
+      }
       console.log("updating address :", isUserInfoUpdated);
     } catch (error) {
       console.error("error updating user information :", error);
@@ -370,26 +390,36 @@ const AddressForm = () => {
                 </div>
                 <div className="flex justify-center">
                   <section className="w-1/4 flex p-2">
-                    <p className="mr-4 whitespace-nowrap">
-                      Factura Electrónica
-                    </p>
-                    <label className="switch">
-                      <input type="checkbox" />
-                      <span className="slider round"></span>
-                    </label>
+                    <label htmlFor="checkBox">Factura Electrónica</label>
+                    <Field
+                      type="checkbox"
+                      id="checkbox"
+                      name="checkbox"
+                      placeholder="Factura Electronica"
+                      className="form-input"
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setUserInformation({
+                            ...userInformation,
+                            checkbox: false,
+                          });
+                        } else {
+                          setUserInformation({
+                            ...userInformation,
+                            checkbox: true,
+                          });
+                        }
+                        console.log(userInformation.checkbox);
+                        console.log(e.target.checked);
+                      }}
+                      checked={!userInformation.checkbox}
+                    />
                   </section>
+
                   <section className="w-1/4 flex p-2"></section>
                 </div>
                 <div className="flex justify-center">
                   <section className="w-1/4 flex flex-col p-2  ">
-                    <label htmlFor="idNumber">Cédula</label>
-                    <Field
-                      type="text"
-                      id="idNumber"
-                      name="idNumber"
-                      placeholder="Tipo De Cédula"
-                      className="form-input"
-                    />
                     <label htmlFor="idType">Tipo De Cédula</label>
                     <Field
                       type="text"
@@ -400,10 +430,13 @@ const AddressForm = () => {
                     />
                   </section>
                   <section className="w-1/4 flex flex-col p-2">
-                    <InputForm
-                      label={"Cédula Comercial"}
-                      htmlFor={"businessid"}
-                      id={"businessid"}
+                    <label htmlFor="idNumber">Cédula</label>
+                    <Field
+                      type="text"
+                      id="idNumber"
+                      name="idNumber"
+                      placeholder="Tipo De Cédula"
+                      className="form-input"
                     />
                   </section>
                   <button
