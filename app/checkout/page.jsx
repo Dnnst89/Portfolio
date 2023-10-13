@@ -1,6 +1,6 @@
 "use client";
 import CheckOutForm1 from "@/components/CheckOutForm1";
-import CheckOutForm2 from "@/components/CheckOutForm2";
+
 import CheckOutHeader from "@/components/CheckoutHeader";
 
 const CheckOut = () => {
@@ -8,7 +8,7 @@ const CheckOut = () => {
     <div>
       <CheckOutHeader regresar={"/cart"} />
       <CheckOutForm1 isCheckout />
-      <CheckOutForm2 />
+
     </div>
   );
 };

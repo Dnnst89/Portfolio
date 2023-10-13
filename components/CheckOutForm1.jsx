@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
 import useStorage from "@/hooks/useStorage";
 import { useState } from "react";
+import CheckOutForm2 from "@/components/CheckOutForm2";
 import AddressForm from "./AddressForm";
 export default function CheckOutForm1({ isCheckout = false }) {
   const router = useRouter();
@@ -31,10 +32,7 @@ export default function CheckOutForm1({ isCheckout = false }) {
     localStorage.setItem("createdOrder", orderNumber);
     router.push("/proceedPayment");
   };
-  /**
-   *
-   * @param {Object} data
-   */
+
   const handleChange = (data) => {
     setAmount(data);
   };
@@ -52,7 +50,7 @@ export default function CheckOutForm1({ isCheckout = false }) {
           publishedAt: isoDate,
         },
       });
-      console.log(data);
+
       // if the order not exist we create one
       // After create an order now we can get that pending order
       const orderNumber = await data?.createOrderDetail?.data?.id;
@@ -97,6 +95,7 @@ export default function CheckOutForm1({ isCheckout = false }) {
           Continuar
         </button>
       </div>
+      <CheckOutForm2 />
     </div>
   );
 }
