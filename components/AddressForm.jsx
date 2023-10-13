@@ -134,17 +134,16 @@ const AddressForm = () => {
             data?.usersPermissionsUser?.data?.attributes?.users_address?.data
               ?.attributes?.canton || "",
           idNumber:
-            data?.usersPermissionsUser?.data?.attributes?.idCard?.idNumber ||
-            0,
+            data?.usersPermissionsUser?.data?.attributes?.idCard?.idNumber || 0,
           idType:
             data?.usersPermissionsUser?.data?.attributes?.idCard?.idType || "",
           checkbox: Boolean(
             data?.usersPermissionsUser?.data?.attributes?.idCard?.idNumber ||
-            false
+              false
           ),
         });
       }
-      console.log(userInformation)
+      console.log(userInformation);
     } catch (error) {
       console.log("error de cargar : " + error);
     }
@@ -152,7 +151,6 @@ const AddressForm = () => {
   useEffect(() => {
     cargaDatos();
   }, []);
-
 
   const createNewAddress = async (userId, userInformation) => {
     try {
@@ -203,14 +201,11 @@ const AddressForm = () => {
           id: userId,
         },
       });
-
     } catch (error) {
       console.error("error updating user information :", error);
     }
-
   };
   const updatingUserCardInfo = async (userId, userInformation) => {
-
     try {
       const { isIdCardUpdated } = await updateIdCard({
         variables: {
@@ -251,6 +246,9 @@ const AddressForm = () => {
                       name="firstName"
                       id="firstName"
                       className="form-input"
+                      minLength="3"
+                      maxLength="20"
+                      required
                       onChange={(e) => {
                         setUserInformation({
                           ...userInformation,
@@ -261,11 +259,13 @@ const AddressForm = () => {
                     />
                     <label htmlFor="phone">Teléfono</label>
                     <Field
-                      type="text"
+                      type="number"
                       id="phone"
                       name="phone"
                       placeholder="Teléfono"
                       className="form-input"
+                      min="11111111"
+                      max="99999999"
                       onChange={(e) => {
                         setUserInformation({
                           ...userInformation,
@@ -274,12 +274,20 @@ const AddressForm = () => {
                       }}
                       value={userInformation.phone}
                     />
+                    <ErrorMessage name="phone">
+                      {(message = "ssss") => (
+                        <div className="error">{message}</div>
+                      )}
+                    </ErrorMessage>
                     <label htmlFor="country">Pais</label>
                     <Field
                       type="text"
                       id="country"
                       name="country"
                       className="form-input"
+                      minLength="3"
+                      maxLength="20"
+                      required
                       onChange={(e) => {
                         setUserInformation({
                           ...userInformation,
@@ -294,6 +302,9 @@ const AddressForm = () => {
                       id="canton"
                       name="canton"
                       className="form-input"
+                      minLength="3"
+                      maxLength="20"
+                      required
                       onChange={(e) => {
                         setUserInformation({
                           ...userInformation,
@@ -309,6 +320,8 @@ const AddressForm = () => {
                       name="addressLine2"
                       placeholder="Direccion 2"
                       className="form-input"
+                      minLength="3"
+                      maxLength="250"
                       onChange={(e) => {
                         setUserInformation({
                           ...userInformation,
@@ -326,6 +339,9 @@ const AddressForm = () => {
                       name="lastName"
                       placeholder="Apellidos"
                       className="form-input"
+                      minLength="3"
+                      maxLength="20"
+                      required
                       onChange={(e) => {
                         setUserInformation({
                           ...userInformation,
@@ -340,6 +356,9 @@ const AddressForm = () => {
                       id="postCode"
                       name="postCode"
                       className="form-input"
+                      minLength="3"
+                      maxLength="20"
+                      required
                       onChange={(e) => {
                         setUserInformation({
                           ...userInformation,
@@ -355,6 +374,9 @@ const AddressForm = () => {
                       name="province"
                       placeholder="Provincia"
                       className="form-input"
+                      minLength="3"
+                      maxLength="20"
+                      required
                       onChange={(e) => {
                         setUserInformation({
                           ...userInformation,
@@ -370,6 +392,9 @@ const AddressForm = () => {
                       name="addressLine1"
                       placeholder="Direccion 1"
                       className="form-input"
+                      minLength="3"
+                      maxLength="20"
+                      required
                       onChange={(e) => {
                         setUserInformation({
                           ...userInformation,
@@ -410,9 +435,8 @@ const AddressForm = () => {
 
                   <section className="w-1/4 flex p-2"></section>
                 </div>
-                <div className="flex justify-center" >
-
-                  <section className="w-1/4 flex flex-col p-2  " >
+                <div className="flex justify-center">
+                  <section className="w-1/4 flex flex-col p-2  ">
                     <label htmlFor="idType">Tipo De Cédula</label>
                     <Field
                       type="text"
@@ -420,6 +444,8 @@ const AddressForm = () => {
                       name="idType"
                       placeholder="Tipo De Cédula"
                       className="form-input"
+                      minLength="3"
+                      maxLength="20"
                       onChange={(e) => {
                         setUserInformation({
                           ...userInformation,
@@ -427,17 +453,17 @@ const AddressForm = () => {
                         });
                       }}
                       value={userInformation.idType}
-
                     />
                   </section>
                   <section className="w-1/4 flex flex-col p-2">
                     <label htmlFor="idNumber">Cédula</label>
                     <Field
-                      type="text"
+                      type="number"
                       id="idNumber"
                       name="idNumber"
                       placeholder="Tipo De Cédula"
                       className="form-input"
+                      min="0"
                       onChange={(e) => {
                         setUserInformation({
                           ...userInformation,
@@ -445,7 +471,6 @@ const AddressForm = () => {
                         });
                       }}
                       value={userInformation.idNumber}
-
                     />
                   </section>
 
