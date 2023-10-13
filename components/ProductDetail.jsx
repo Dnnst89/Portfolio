@@ -81,9 +81,10 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
             {images
               ? images.map((item) => {
                 return (
-                  <div className="carousel-item mx-2">
+                  <div key={item.id} className="carousel-item mx-2">
                     <ProductImage
                       key={item.id}
+                      id={item.id}
                       url={item.attributes.url}
                       width={"125"}
                       height={"100"}
@@ -116,7 +117,7 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
                 priority={true}
                 width="50"
                 height="50"
-                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/undefined_eb8416869d.png`}
+                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
                 alt="tailwind logo"
                 className="rounded-xl mr-3"
               />
@@ -130,7 +131,7 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
                 priority={true}
                 width="50"
                 height="50"
-                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/undefined_eb8416869d.png`}
+                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
                 alt="tailwind logo"
                 className="rounded-xl mr-3"
               />
@@ -147,7 +148,7 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
                 priority={true}
                 width="50"
                 height="50"
-                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/undefined_eb8416869d.png`}
+                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
                 alt="tailwind logo"
                 className="rounded-xl mr-3"
               />
@@ -165,7 +166,7 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
                 priority={true}
                 width="50"
                 height="50"
-                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/undefined_eb8416869d.png`}
+                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
                 alt="tailwind logo"
                 className="rounded-xl mr-3"
               />
@@ -183,7 +184,7 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
                 priority={true}
                 width="50"
                 height="50"
-                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/undefined_eb8416869d.png`}
+                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
                 alt="tailwind logo"
                 className="rounded-xl mr-3"
               />
@@ -199,7 +200,7 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
                 priority={true}
                 width="50"
                 height="50"
-                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/undefined_eb8416869d.png`}
+                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
                 alt="tailwind logo"
                 className="rounded-xl mr-3"
               />
