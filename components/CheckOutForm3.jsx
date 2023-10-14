@@ -37,7 +37,7 @@ export default function CheckOutForm3() {
           phoneNumber,
           order_details,
         } = userData;
-        const total = order_details?.data[0].attributes?.total;
+        const total = order_details?.data[0]?.attributes?.total;
         // the next step is to send the data to the request
         // we load data into the state
         if (userData) {
