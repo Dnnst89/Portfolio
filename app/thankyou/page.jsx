@@ -6,6 +6,11 @@ import { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { UPDATE_ORDER_DETAILS_STATUS } from "@/src/graphQl/queries/updateOrderDetailsStatus";
 import { logo } from "../assets/images";
+import useStorage from "@/hooks/useStorage";
+import { useLazyQuery, useQuery } from "@apollo/client";
+import GET_CART_ITEMS_LIST_SHOPPING_SESSION from "@/src/graphQl/queries/getCartItemsByShoppingSession";
+import GET_SHOPPING_SESSION_BY_USER from "@/src/graphQl/queries/getShoppingSessionByUser";
+import DELETE_CART_ITEM_MUTATION from "@/src/graphQl/queries/deleteCartItem";
 /*
   recives the Tilopay response , based on the returns params 
   redirects to an certain page.
@@ -19,9 +24,18 @@ export default function ThankYouMessage(params) {
   const [description, setDescription] = useState("");
   const [code, setCode] = useState("");
   const [order, setOrder] = useState("");
+
+  const [getSession] = useLazyQuery(GET_SHOPPING_SESSION_BY_USER);
+  const [getCart] = useLazyQuery(GET_CART_ITEMS_LIST_SHOPPING_SESSION, {
+    fetchPolicy: "network-only", // Forzar la consulta directa al servidor
+  });
+
+  const { user } = useStorage();
+  const { id } = user || {};
+
   //calling the mutation
   const [updateOrderDetailsStatus] = useMutation(UPDATE_ORDER_DETAILS_STATUS);
-
+  const [deleteCarItem] = useMutation(DELETE_CART_ITEM_MUTATION);
   useEffect(() => {
     handleTilopayResponse();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -47,6 +61,95 @@ export default function ThankYouMessage(params) {
               newStatus: "A", // Approved
             },
           });
+
+          try {
+            const { data } = await getSession({
+              //llamo la query para traer la shopping session
+              variables: { userId: id },
+            });
+
+            if (data) {
+              // Si existe la sesión
+              const shoppingSession = data.shoppingSessions.data[0];
+              let currentPage = 1;
+              let pageSize = 25;
+              let fetchedData = []; // para ir juntando los datos de cada pagina
+              let pageCount = 1;
+
+              do {
+                console.log(shoppingSession);
+                //debemos hacer un primer recorrido ya que el dato paeCount de la consulta es incierto
+                const { data: cartItemsData } = await getCart({
+                  variables: {
+                    shoppingSessionId: shoppingSession.id,
+                    page: currentPage,
+                    pageSize,
+                  },
+                });
+
+                const cartItems = cartItemsData.cartItems;
+                fetchedData = fetchedData.concat(cartItems.data);
+                pageCount = cartItems.meta.pagination.pageCount;
+                currentPage++;
+              } while (currentPage <= pageCount);
+              //}
+
+              // Ahora,se procesa los datos recopilados
+              const total = fetchedData.reduce((accumulator, item) => {
+                if (
+                  item.attributes.variant.data &&
+                  item.attributes.variant.data.attributes.product.data
+                ) {
+                  //debe existir un producto con su respectiva variante
+                  return (
+                    accumulator +
+                    item.attributes.variant.data.attributes.price *
+                      item.attributes.quantity
+                  );
+                }
+                return accumulator;
+              }, 0);
+
+              console.log("first");
+              fetchedData.map((item) => {
+                if (
+                  item.attributes.variant.data &&
+                  item.attributes.variant.data.attributes.product.data
+                ) {
+                  //debe existir un producto con su respectiva variante
+
+                  const quant = parseInt(item.attributes.quantity);
+                  const stock = parseInt(
+                    item.attributes.variant.data.attributes.stock
+                  );
+                  const newStock = stock - quant;
+
+                  /* 
+                
+                
+                try {
+                    const cartItemId = item.id;
+                    const { data } = deleteCarItem({
+                      variables: {
+                        id: cartItemId,
+                      },
+                    });
+                  } catch (error) {}
+                 */
+
+                  console.log("cantidad", quant);
+                  console.log("stock", stock);
+                  console.log("nuevo stock", newStock);
+                }
+                return null; // lo asigno null para filtrarlo luego y no agregarlo a los items
+              });
+            }
+          } catch (error) {
+            //Manejo de errores
+            setError(true);
+          } finally {
+          }
+
           /*
             get rid of the cart session and delete carts items from database
             after that create a new empty cart session
