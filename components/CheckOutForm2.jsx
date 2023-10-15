@@ -2,7 +2,6 @@
 import Image from "next/image";
 import moovin from "../app/assets/moovin.png";
 import logo from "../app/assets/tk-logo.png";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CREATE_ORDER } from "@/src/graphQl/queries/createUserOrder";
 import { useMutation, useQuery } from "@apollo/client";
@@ -11,9 +10,7 @@ import useStorage from "@/hooks/useStorage";
 import CheckOutForm3 from "./CheckOutForm3";
 
 export default function CheckOutForm2({ amount }) {
-  const router = useRouter();
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
-  const [finalPrice, setFinalPrice] = useState({ amount });
   const [createOrder] = useMutation(CREATE_ORDER);
   const { user } = useStorage();
   const { id } = user || {};
@@ -32,7 +29,6 @@ export default function CheckOutForm2({ amount }) {
   };
 
   const handleCreateOrder = async () => {
-    console.log("----");
     const isoDate = new Date().toISOString();
     const { total, subTotal, taxes } = amount;
     try {
