@@ -146,7 +146,7 @@ const CheckOutForm1 = () => {
             data?.usersPermissionsUser?.data?.attributes?.idCard?.idType || "",
           checkbox: Boolean(
             data?.usersPermissionsUser?.data?.attributes?.idCard?.idNumber ||
-              false
+            false
           ),
         });
       }
@@ -242,273 +242,281 @@ const CheckOutForm1 = () => {
       {({ errors, touched }) => {
         return (
           <>
-            <div className="flex w-3/4 justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
-              <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
-                1
-              </div>
-              <h1 className="text-xl">Información de envío</h1>
-            </div>
-            <div className=" bg-resene rounded-sm w-1/4 h-[350px] ml-[25px] mt-[-80px]">
-              <div className="flex flex-col space-y-3 ">
-                <CartDetail
-                  detailTitle={"Detalle del carrito"}
-                  isCheckout
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-            {!checkoutForm1Visible ? (
-              <Form onSubmit={handleSubmit}>
-                <div
-                  className="mt-[40px] mx-[30px]
+            <div className="w-full max-w-screen-xl m-auto grid grid-cols-12">
+              
+              <div className="col-span-9">
+                <div className="flex  justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
+                  <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
+                    1
+                  </div>
+                  <h1 className="text-xl">Información de envío</h1>
+                </div>
+
+                {!checkoutForm1Visible ? (
+                  <Form onSubmit={handleSubmit}>
+                    <div
+                      className="mt-[40px] mx-[30px]
                 
                 "
-                >
-                  <main className="flex ">
-                    <section className="w-3/4">
-                      <div className="flex justify-center">
-                        <section className="w-1/4 flex flex-col p-2">
-                          <label htmlFor="name">Nombre</label>
-                          <Field
-                            type="text"
-                            name="firstName"
-                            id="firstName"
-                            className="form-input"
-                            onChange={(e) => {
-                              setUserInformation({
-                                ...userInformation,
-                                firstName: e.target.value,
-                              });
-                            }}
-                            value={userInformation.firstName}
-                          />
-                          {errors.firstName && touched.firstName ? (
-                            <ErrorForm>{errors.firstName}</ErrorForm>
-                          ) : null}
-                          <label htmlFor="phone">Teléfono</label>
-                          <Field
-                            type="text"
-                            id="phone"
-                            name="phone"
-                            placeholder="Teléfono"
-                            className="form-input"
-                            onChange={(e) => {
-                              setUserInformation({
-                                ...userInformation,
-                                phone: e.target.value,
-                              });
-                            }}
-                            value={userInformation.phone}
-                          />
-                          {errors.phone && touched.phone ? (
-                            <ErrorForm>{errors.phone}</ErrorForm>
-                          ) : null}
-                          <label htmlFor="country">Pais</label>
-                          <Field
-                            type="text"
-                            id="country"
-                            name="country"
-                            className="form-input"
-                            onChange={(e) => {
-                              setUserInformation({
-                                ...userInformation,
-                                country: e.target.value,
-                              });
-                            }}
-                            value={userInformation.country}
-                          />
-                          {errors.country && touched.country ? (
-                            <ErrorForm>{errors.country}</ErrorForm>
-                          ) : null}
-                          <label htmlFor="canton">Cantón</label>
-                          <Field
-                            type="text"
-                            id="canton"
-                            name="canton"
-                            className="form-input"
-                            onChange={(e) => {
-                              setUserInformation({
-                                ...userInformation,
-                                canton: e.target.value,
-                              });
-                            }}
-                            value={userInformation.canton}
-                          />
-                          {errors.canton && touched.canton ? (
-                            <ErrorForm>{errors.canton}</ErrorForm>
-                          ) : null}
-                          <label htmlFor="addressLine2">Direccion 2</label>
-                          <Field
-                            type="text"
-                            id="addressLine2"
-                            name="addressLine2"
-                            placeholder="Direccion 2"
-                            className="form-input"
-                            onChange={(e) => {
-                              setUserInformation({
-                                ...userInformation,
-                                addressLine2: e.target.value,
-                              });
-                            }}
-                            value={userInformation.addressLine2}
-                          />
-                          {errors.addressLine2 && touched.addressLine2 ? (
-                            <ErrorForm>{errors.addressLine2}</ErrorForm>
-                          ) : null}
-                        </section>
-                        <section className="w-2/4 flex flex-col p-2">
-                          <label htmlFor="lastName">Apellidos</label>
-                          <Field
-                            type="text"
-                            id="lastName"
-                            name="lastName"
-                            placeholder="Apellidos"
-                            className="form-input"
-                            onChange={(e) => {
-                              setUserInformation({
-                                ...userInformation,
-                                lastName: e.target.value,
-                              });
-                            }}
-                            value={userInformation.lastName}
-                          />
-                          {errors.lastName && touched.lastName ? (
-                            <ErrorForm>{errors.lastName}</ErrorForm>
-                          ) : null}
-                          <label htmlFor="postCode">Código Postal</label>
-                          <Field
-                            type="text"
-                            id="postCode"
-                            name="postCode"
-                            className="form-input"
-                            onChange={(e) => {
-                              setUserInformation({
-                                ...userInformation,
-                                postCode: e.target.value,
-                              });
-                            }}
-                            value={userInformation.postCode}
-                          />
-                          {errors.postCode && touched.postCode ? (
-                            <ErrorForm>{errors.postCode}</ErrorForm>
-                          ) : null}
-                          <label htmlFor="province">Provincia</label>
-                          <Field
-                            type="text"
-                            id="province"
-                            name="province"
-                            placeholder="Provincia"
-                            className="form-input"
-                            onChange={(e) => {
-                              setUserInformation({
-                                ...userInformation,
-                                province: e.target.value,
-                              });
-                            }}
-                            value={userInformation.province}
-                          />
-                          {errors.province && touched.province ? (
-                            <ErrorForm>{errors.province}</ErrorForm>
-                          ) : null}
-                          <label htmlFor="addressLine1">Direccion 1</label>
-                          <Field
-                            type="text"
-                            id="addressLine1"
-                            name="addressLine1"
-                            placeholder="Direccion 1"
-                            className="form-input"
-                            onChange={(e) => {
-                              setUserInformation({
-                                ...userInformation,
-                                addressLine1: e.target.value,
-                              });
-                            }}
-                            value={userInformation.addressLine1}
-                          />
-                          {errors.addressLine1 && touched.addressLine1 ? (
-                            <ErrorForm>{errors.addressLine1}</ErrorForm>
-                          ) : null}
-                        </section>
-                      </div>
-                      <div className="flex justify-center">
-                        <section className="w-1/4 flex p-2">
-                          <label htmlFor="checkbox">Factura Electrónica</label>
-                          <Field
-                            type="checkbox"
-                            id="checkbox"
-                            name="checkbox"
-                            placeholder="Factura Electronica"
-                            className="form-input"
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                setUserInformation({
-                                  ...userInformation,
-                                  checkbox: false,
-                                });
-                              } else {
-                                setUserInformation({
-                                  ...userInformation,
-                                  checkbox: true,
-                                });
-                              }
-                            }}
-                            checked={!userInformation.checkbox}
-                          />
-                        </section>
-
-                        <section className="w-1/4 flex p-2"></section>
-                      </div>
-                      <div className="flex justify-center">
-                        <section className="w-1/4 flex flex-col p-2  ">
-                          <label htmlFor="idType">Tipo De Cédula</label>
-                          <Field
-                            type="text"
-                            id="idType"
-                            name="idType"
-                            placeholder="Tipo De Cédula"
-                            className="form-input"
-                            onChange={(e) => {
-                              setUserInformation({
-                                ...userInformation,
-                                idType: e.target.value,
-                              });
-                            }}
-                            value={userInformation.idType}
-                          />
-                        </section>
-                        <section className="w-1/4 flex flex-col p-2">
-                          <label htmlFor="idNumber">Cédula</label>
-                          <Field
-                            type="text"
-                            id="idNumber"
-                            name="idNumber"
-                            placeholder="Tipo De Cédula"
-                            className="form-input"
-                            onChange={(e) => {
-                              setUserInformation({
-                                ...userInformation,
-                                idNumber: e.target.value,
-                              });
-                            }}
-                            value={userInformation.idNumber}
-                          />
-                        </section>
-                      </div>
-                    </section>
-                  </main>
-                  <div className="flex justify-center mt-8 mb-8 w-3/4 ">
-                    <button
-                      type="submit"
-                      className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
                     >
-                      Continuar
-                    </button>
-                  </div>
+                      <main className="flex ">
+                        <section className="w-3/4">
+                          <div className="flex justify-center">
+                            <section className="w-1/4 flex flex-col p-2">
+                              <label htmlFor="name">Nombre</label>
+                              <Field
+                                type="text"
+                                name="firstName"
+                                id="firstName"
+                                className="form-input"
+                                onChange={(e) => {
+                                  setUserInformation({
+                                    ...userInformation,
+                                    firstName: e.target.value,
+                                  });
+                                }}
+                                value={userInformation.firstName}
+                              />
+                              {errors.firstName && touched.firstName ? (
+                                <ErrorForm>{errors.firstName}</ErrorForm>
+                              ) : null}
+                              <label htmlFor="phone">Teléfono</label>
+                              <Field
+                                type="text"
+                                id="phone"
+                                name="phone"
+                                placeholder="Teléfono"
+                                className="form-input"
+                                onChange={(e) => {
+                                  setUserInformation({
+                                    ...userInformation,
+                                    phone: e.target.value,
+                                  });
+                                }}
+                                value={userInformation.phone}
+                              />
+                              {errors.phone && touched.phone ? (
+                                <ErrorForm>{errors.phone}</ErrorForm>
+                              ) : null}
+                              <label htmlFor="country">Pais</label>
+                              <Field
+                                type="text"
+                                id="country"
+                                name="country"
+                                className="form-input"
+                                onChange={(e) => {
+                                  setUserInformation({
+                                    ...userInformation,
+                                    country: e.target.value,
+                                  });
+                                }}
+                                value={userInformation.country}
+                              />
+                              {errors.country && touched.country ? (
+                                <ErrorForm>{errors.country}</ErrorForm>
+                              ) : null}
+                              <label htmlFor="canton">Cantón</label>
+                              <Field
+                                type="text"
+                                id="canton"
+                                name="canton"
+                                className="form-input"
+                                onChange={(e) => {
+                                  setUserInformation({
+                                    ...userInformation,
+                                    canton: e.target.value,
+                                  });
+                                }}
+                                value={userInformation.canton}
+                              />
+                              {errors.canton && touched.canton ? (
+                                <ErrorForm>{errors.canton}</ErrorForm>
+                              ) : null}
+                              <label htmlFor="addressLine2">Direccion 2</label>
+                              <Field
+                                type="text"
+                                id="addressLine2"
+                                name="addressLine2"
+                                placeholder="Direccion 2"
+                                className="form-input"
+                                onChange={(e) => {
+                                  setUserInformation({
+                                    ...userInformation,
+                                    addressLine2: e.target.value,
+                                  });
+                                }}
+                                value={userInformation.addressLine2}
+                              />
+                              {errors.addressLine2 && touched.addressLine2 ? (
+                                <ErrorForm>{errors.addressLine2}</ErrorForm>
+                              ) : null}
+                            </section>
+                            <section className="w-2/4 flex flex-col p-2">
+                              <label htmlFor="lastName">Apellidos</label>
+                              <Field
+                                type="text"
+                                id="lastName"
+                                name="lastName"
+                                placeholder="Apellidos"
+                                className="form-input"
+                                onChange={(e) => {
+                                  setUserInformation({
+                                    ...userInformation,
+                                    lastName: e.target.value,
+                                  });
+                                }}
+                                value={userInformation.lastName}
+                              />
+                              {errors.lastName && touched.lastName ? (
+                                <ErrorForm>{errors.lastName}</ErrorForm>
+                              ) : null}
+                              <label htmlFor="postCode">Código Postal</label>
+                              <Field
+                                type="text"
+                                id="postCode"
+                                name="postCode"
+                                className="form-input"
+                                onChange={(e) => {
+                                  setUserInformation({
+                                    ...userInformation,
+                                    postCode: e.target.value,
+                                  });
+                                }}
+                                value={userInformation.postCode}
+                              />
+                              {errors.postCode && touched.postCode ? (
+                                <ErrorForm>{errors.postCode}</ErrorForm>
+                              ) : null}
+                              <label htmlFor="province">Provincia</label>
+                              <Field
+                                type="text"
+                                id="province"
+                                name="province"
+                                placeholder="Provincia"
+                                className="form-input"
+                                onChange={(e) => {
+                                  setUserInformation({
+                                    ...userInformation,
+                                    province: e.target.value,
+                                  });
+                                }}
+                                value={userInformation.province}
+                              />
+                              {errors.province && touched.province ? (
+                                <ErrorForm>{errors.province}</ErrorForm>
+                              ) : null}
+                              <label htmlFor="addressLine1">Direccion 1</label>
+                              <Field
+                                type="text"
+                                id="addressLine1"
+                                name="addressLine1"
+                                placeholder="Direccion 1"
+                                className="form-input"
+                                onChange={(e) => {
+                                  setUserInformation({
+                                    ...userInformation,
+                                    addressLine1: e.target.value,
+                                  });
+                                }}
+                                value={userInformation.addressLine1}
+                              />
+                              {errors.addressLine1 && touched.addressLine1 ? (
+                                <ErrorForm>{errors.addressLine1}</ErrorForm>
+                              ) : null}
+                            </section>
+                          </div>
+                          <div className="flex justify-center">
+                            <section className="w-1/4 flex p-2">
+                              <label htmlFor="checkbox">Factura Electrónica</label>
+                              <Field
+                                type="checkbox"
+                                id="checkbox"
+                                name="checkbox"
+                                placeholder="Factura Electronica"
+                                className="form-input"
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                    setUserInformation({
+                                      ...userInformation,
+                                      checkbox: false,
+                                    });
+                                  } else {
+                                    setUserInformation({
+                                      ...userInformation,
+                                      checkbox: true,
+                                    });
+                                  }
+                                }}
+                                checked={!userInformation.checkbox}
+                              />
+                            </section>
+
+                            <section className="w-1/4 flex p-2"></section>
+                          </div>
+                          <div className="flex justify-center">
+                            <section className="w-1/4 flex flex-col p-2  ">
+                              <label htmlFor="idType">Tipo De Cédula</label>
+                              <Field
+                                type="text"
+                                id="idType"
+                                name="idType"
+                                placeholder="Tipo De Cédula"
+                                className="form-input"
+                                onChange={(e) => {
+                                  setUserInformation({
+                                    ...userInformation,
+                                    idType: e.target.value,
+                                  });
+                                }}
+                                value={userInformation.idType}
+                              />
+                            </section>
+                            <section className="w-1/4 flex flex-col p-2">
+                              <label htmlFor="idNumber">Cédula</label>
+                              <Field
+                                type="text"
+                                id="idNumber"
+                                name="idNumber"
+                                placeholder="Tipo De Cédula"
+                                className="form-input"
+                                onChange={(e) => {
+                                  setUserInformation({
+                                    ...userInformation,
+                                    idNumber: e.target.value,
+                                  });
+                                }}
+                                value={userInformation.idNumber}
+                              />
+                            </section>
+                          </div>
+                        </section>
+                      </main>
+                      <div className="flex justify-center mt-8 mb-8 w-3/4 ">
+                        <button
+                          type="submit"
+                          className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
+                        >
+                          Continuar
+                        </button>
+                      </div>
+                    </div>
+                  </Form>
+                ) : (
+                  <CheckOutForm2 amount={amount} />
+                )}
+              </div>
+              <div className=" bg-resene rounded-sm col-span-3 h-fit">
+                <div className="flex flex-col space-y-3 ">
+                  <CartDetail
+                    detailTitle={"Detalle del carrito"}
+                    isCheckout
+                    onChange={handleChange}
+                  />
                 </div>
-              </Form>
-            ) : (
-              <CheckOutForm2 amount={amount} />
-            )}
+              </div>
+
+            </div>
+
           </>
         );
       }}
