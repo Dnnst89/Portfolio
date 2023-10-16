@@ -10,7 +10,7 @@ const useProtectionRoute = (toLogin = false) => {
         if (!userData?.user?.id && !toLogin) {
             return router.push("/");
         }
-        if (user?.id && toLogin) {
+        if (userData?.user?.id && toLogin) {
             return router.push("/");
         }
     }, [router]);
