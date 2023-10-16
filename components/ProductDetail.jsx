@@ -7,12 +7,15 @@ import AddItemBtn from "./AddItemBtn";
 import ProductImage from "./ProductImage";
 import useCartSummary from "@/hooks/useCartSummary";
 import useStorage from "@/hooks/useStorage";
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 function ProductDetail({ name, brand, description, sku, variants, materials }) {
 
   const [quantity, setQuantity] = useState(1);
+  const [image, setImage] = useState(null);
   let shortDescrption = "";
-  let images = 0;
+  let images = [];
   const { user } = useStorage();
   const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
 
@@ -57,46 +60,26 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
     shortDescrption = description.split(" ").splice(0, 20).join(" ");
   }
 
+  const chanceImage = (image) => {
+    setImage(image)
+  };
+
   return (
     <>
       <div className="bg-floralwhite max-w-screen-xl grid grid-cols-12 m-auto p-5" target="_blank" rel="noopener noreferrer">
 
         {/* Columna de imagenes */}
         <div className="mb-10 col-span-12 md:col-span-6">
-          {/* imagen principal grande */}
           <div className="m-auto w-full flex justify-center">
-            {images.length > 0 ? (
-              <ProductImage
-                key={variants[0].attributes.images.data[0].id}
-                url={images[0].attributes.url}
-                width={"450"}
-                height={"800"}
-                className={"rounded-xl mx-2"}
-              />
-            ) : null}
+            <Carousel showArrows={false} showStatus={false} showThumbs={true}>
+              {images.map((image, index) => (
+                <div key={index}>
+                  <img src={image.attributes.url} alt={"image"} />
+                </div>
+              ))}
+
+            </Carousel>
           </div>
-          {/* //imagenes debajo de la principal */}
-          <div className="carousel carousel-center flex h-32 md:w-12/12 pt-5 justify-center ">
-
-            {images
-              ? images.map((item) => {
-                return (
-                  <div key={item.id} className="carousel-item mx-2">
-                    <ProductImage
-                      key={item.id}
-                      id={item.id}
-                      url={item.attributes.url}
-                      width={"125"}
-                      height={"100"}
-                      className={"rounded-xl"}
-                    />
-                  </div>
-                );
-              })
-              : null}
-
-          </div>
-
         </div>
 
         {/* Sección con los detalles del producto*/}
