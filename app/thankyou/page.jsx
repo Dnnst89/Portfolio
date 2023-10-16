@@ -82,41 +82,43 @@ export default function ThankYouMessage(params) {
   */
 
   const handleUpdate = async () => {
-    items.map((item) => {
-      if (
-        item.attributes.variant.data &&
-        item.attributes.variant.data.attributes.product.data
-      ) {
-        console.log("ss", item);
-        const quant = parseInt(item.attributes.quantity);
-        const stock = parseInt(item.attributes.variant.data.attributes.stock);
-        const newStock = stock - quant;
-        const variant = item.attributes.variant.data.id;
-        const cartItemId = item.id;
-        console.log(cartItemId);
+    if (params?.searchParams?.code === 1) {
+      items.map((item) => {
+        if (
+          item.attributes.variant.data &&
+          item.attributes.variant.data.attributes.product.data
+        ) {
+          console.log("ss", item);
+          const quant = parseInt(item.attributes.quantity);
+          const stock = parseInt(item.attributes.variant.data.attributes.stock);
+          const newStock = stock - quant;
+          const variant = item.attributes.variant.data.id;
+          const cartItemId = item.id;
+          console.log(cartItemId);
 
-        try {
-          deleteCarItem({
-            variables: {
-              id: cartItemId,
-            },
-          });
-        } catch (error) {}
+          try {
+            deleteCarItem({
+              variables: {
+                id: cartItemId,
+              },
+            });
+          } catch (error) {}
 
-        try {
-          updateVariantStock({
-            variables: {
-              id: variant,
-              stock: newStock,
-            },
-          });
-        } catch (error) {
-          console.log("error");
+          try {
+            updateVariantStock({
+              variables: {
+                id: variant,
+                stock: newStock,
+              },
+            });
+          } catch (error) {
+            console.log("error");
+          }
         }
-      }
-    });
+      });
 
-    router.push("/");
+      router.push("/");
+    }
   };
 
   useEffect(() => {
@@ -206,6 +208,7 @@ export default function ThankYouMessage(params) {
                   <p className="text-grey-100">N° de pedido</p>
                   <p>{order}</p>
                 </div>
+
                 <button
                   onClick={handleUpdate} // Specify the URL to which you want to navigate
                   className="bg-pink-200 text-white rounded-sm p-2 w-[150px]"
