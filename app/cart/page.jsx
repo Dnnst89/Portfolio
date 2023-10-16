@@ -4,8 +4,11 @@ import ProductCard from "@/components/ProductCard";
 import CartDetail from "@/components/CartDetail";
 import CartProceedPayment from "@/components/CartProceedPayment";
 import CartContainer from "@/components/CartContainer";
-
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import useProtectionRoute from "@/hooks/useProtectionRoute";
 export default function CartView() {
+  useProtectionRoute()
   return (
     <div className="bg-floralwhite ">
       <div className="flex justify-center mt-3">
