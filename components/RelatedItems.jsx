@@ -35,9 +35,13 @@ function RelatedItems({ categories, productId }) {
 
   const aux = [];
   for (let i = 0; i <= 3; i++) {
-    const random = myArray[i]
-    if (data?.products.data[random].id != productId) {
-      aux.push(data?.products.data[random]);
+    if (i < myArray.length) {
+      const random = myArray[i]
+      if (data?.products.data[random].id != productId) {
+        aux.push(data?.products.data[random]);
+      } else if (myArray.length > 4) {
+        aux.push(data?.products.data[myArray[4]]);
+      }
     }
   }
 
