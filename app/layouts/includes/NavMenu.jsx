@@ -40,12 +40,15 @@ const NavMenu = () => {
           
           <div className="flex items-center sm:items-stretch sm:justify-start w-full">
             <div className="flex-shrink-0  md:pr-7 items-center">
-              <Image
+            <Link href={`/`}> 
+            <Image
                 src={img2}
                 alt="Detinmarin"
                 width={120}
                 height={50}
               />
+            </Link>
+              
             </div>
             <div className="hidden sm:ml-1 items-center justify-between sm:flex md:w-full">
               <div className="flex space-x-4 w-full">

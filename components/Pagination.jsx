@@ -10,8 +10,6 @@ const Pagination = ({
   for (let index = 1; index <= nbPages; index++) {
     noPages.push(index);
   }
-  
-  console.log("🚀 ~ file: Pagination.jsx:9 ~ noPages:", noPages)
   const onPreviusPage = () => {
     setCurrentPage(currentPage - 1);
   };
@@ -28,7 +26,7 @@ const Pagination = ({
   return (
     <div className="flex flex-wrap max-w-screen-xl m-auto justify-center py-10">
       <nav aria-label="">
-        <ul className="list-style-none flex ">
+        <ul className="list-style-none flex">
           <li>
             <button
               className="relative min-w-[90px] block rounded bg-[#484848] mr-2 px-3 py-1.5 text-sm text-white transition-all duration-300 dark:text-neutral-400 pr-3"

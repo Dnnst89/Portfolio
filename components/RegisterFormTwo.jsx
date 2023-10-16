@@ -200,7 +200,7 @@ const RegisterFormTwo = () => {
 
                       <button
                         type="submit"
-                        className="bg-blue-500 hover:bg-blue-300 text-whitetext-base rounded-lg py-2 px-5 transition-colors text-lg text-white bg-pink-200 disabled:opacity-50 flex justify-center mx-auto mt-5"
+                        className="bg-blue-500 hover:bg-blue-300 text-whitetext-base rounded-lg py-2 px-5 transition-colors text-lg text-white bg-pink-200 disabled:opacity-50 flex justify-center mx-auto mt-5 my-4"
                         disabled={
                           (Object.keys(errors).length &&
                             Object.keys(touched).length) ||
