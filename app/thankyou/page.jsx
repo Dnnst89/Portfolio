@@ -68,7 +68,7 @@ export default function ThankYouMessage(params) {
               newStatus: "C", //Cancelled
             },
           });
-
+          localStorage.removeItem("createdOrder");
           // Continue with other actions you want to perform on failure
         } catch (error) {
           console.error("Error updating order status:", error);
@@ -76,7 +76,7 @@ export default function ThankYouMessage(params) {
       }
     }
   };
-  localStorage.removeItem("createdOrder");
+
   return code ? (
     <div className="bg-floralwhite p-[100px] flex justify-center">
       <main className="bg-resene border-2 border-dashed border-grey-200 flex flex-col justify-center h-auto p-10">

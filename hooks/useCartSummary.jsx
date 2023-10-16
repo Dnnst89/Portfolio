@@ -44,9 +44,10 @@ const useCartSummary = ({ userId }) => {
           let currentPage = 1;
           let pageSize = 25;
           let fetchedData = []; // para ir juntando los datos de cada pagina
-          let pageCount = 1
+          let pageCount = 1;
 
-          do {//debemos hacer un primer recorrido ya que el dato paeCount de la consulta es incierto
+          do {
+            //debemos hacer un primer recorrido ya que el dato paeCount de la consulta es incierto
             const { data: cartItemsData } = await getCart({
               variables: {
                 shoppingSessionId: shoppingSession.id,
@@ -64,18 +65,25 @@ const useCartSummary = ({ userId }) => {
 
           // Ahora,se procesa los datos recopilados
           const total = fetchedData.reduce((accumulator, item) => {
-            if (item.attributes.variant.data && item.attributes.variant.data.attributes.product.data) {
+            if (
+              item.attributes.variant.data &&
+              item.attributes.variant.data.attributes.product.data
+            ) {
               //debe existir un producto con su respectiva variante
               return (
                 accumulator +
-                item.attributes.variant.data.attributes.price * item.attributes.quantity
+                item.attributes.variant.data.attributes.price *
+                  item.attributes.quantity
               );
             }
             return accumulator;
           }, 0);
 
           const quantity = fetchedData.reduce((accumulator, item) => {
-            if (item.attributes.variant.data && item.attributes.variant.data.attributes.product.data) {
+            if (
+              item.attributes.variant.data &&
+              item.attributes.variant.data.attributes.product.data
+            ) {
               //debe existir un producto con su respectiva variante
               return accumulator + item.attributes.quantity;
             }
@@ -83,11 +91,15 @@ const useCartSummary = ({ userId }) => {
           }, 0);
 
           const items = fetchedData.map((item) => {
-            if (item.attributes.variant.data && item.attributes.variant.data.attributes.product.data) {
+            if (
+              item.attributes.variant.data &&
+              item.attributes.variant.data.attributes.product.data
+            ) {
               //debe existir un producto con su respectiva variante
               return {
                 totalItemPrice:
-                  item.attributes.variant.data.attributes.price * item.attributes.quantity,
+                  item.attributes.variant.data.attributes.price *
+                  item.attributes.quantity,
                 quantity: item.attributes.quantity,
                 ...item,
               };
@@ -102,9 +114,6 @@ const useCartSummary = ({ userId }) => {
             quantity,
             items: items.filter(Boolean), // Filtra elementos nulos
           });
-
-
-
         }
       } catch (error) {
         //Manejo de errores

@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import paymentRequest from "@/api/tilopay/paymentRequest";
-import Spinner from "./Spinner";
 import { useRouter } from "next/navigation";
 import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
 import { useQuery } from "@apollo/client";
@@ -9,24 +8,22 @@ import { paymentDataForm } from "@/app/data/tilopay/transactionData";
 import useStorage from "@/hooks/useStorage";
 
 export default function CheckOutForm3() {
-  const userInSession = useStorage();
   const router = useRouter();
   const [formData, setFormData] = useState(paymentDataForm);
   const { user } = useStorage();
   const { id, email } = user || {};
   // total final to pay , WE NEED TO GET IT FROM FACTURAZEN
-  const total = parseFloat(0.1);
   //RETRIEVE STATUS
   // get the order retrieved or created
   const storedOrder = localStorage.getItem("createdOrder");
   // Retrieve user data
   const { loading, error, data } = useQuery(GET_PAYMENT_DETAILS, {
-    variables: { userId: id },
+    variables: { userId: id, status: "P" },
   });
-
   useEffect(() => {
     if (!loading && !error) {
       const userData = data?.usersPermissionsUser?.data?.attributes;
+
       if (userData) {
         const {
           firstName,
@@ -35,7 +32,9 @@ export default function CheckOutForm3() {
             data: { attributes: userAddressAttributes },
           },
           phoneNumber,
+          order_details,
         } = userData;
+        const total = order_details?.data[0]?.attributes?.total;
         // the next step is to send the data to the request
         // we load data into the state
         if (userData) {
@@ -58,7 +57,6 @@ export default function CheckOutForm3() {
         }
       }
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, loading, error]);
   // The data is ready to send it to the object that will be
