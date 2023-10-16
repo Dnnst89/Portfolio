@@ -40,7 +40,7 @@ function RelatedItems({ categories, productId }) {
       if (data?.products.data[random].id != productId) {
         aux.push(data?.products.data[random]);
       } else if (myArray.length > 4) {
-        aux.push(data?.products.data[myArray[5]]);
+        aux.push(data?.products.data[myArray[4]]);
       }
     }
   }
