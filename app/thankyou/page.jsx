@@ -82,7 +82,7 @@ export default function ThankYouMessage(params) {
   */
 
   const handleUpdate = async () => {
-    if (params?.searchParams?.code === 1) {
+    if (params?.searchParams?.code == 1) {
       items.map((item) => {
         if (
           item.attributes.variant.data &&
