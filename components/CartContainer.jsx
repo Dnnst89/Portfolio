@@ -10,10 +10,11 @@ import { useSelector } from "react-redux";
 
 const CartContainer = () => {
     const { user } = useStorage(); //me trae el usuario de local storage
-
     const { total, items, quantity, error, loading } = useCartSummary({
         userId: user?.id,
     });
+
+
 
     return (
         <>
