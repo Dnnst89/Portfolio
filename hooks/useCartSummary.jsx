@@ -73,7 +73,7 @@ const useCartSummary = ({ userId }) => {
               return (
                 accumulator +
                 item.attributes.variant.data.attributes.price *
-                  item.attributes.quantity
+                item.attributes.quantity
               );
             }
             return accumulator;
@@ -97,8 +97,8 @@ const useCartSummary = ({ userId }) => {
             ) {
               //debe existir un producto con su respectiva variante
               if (item.attributes.quantity > item.attributes.variant.data.attributes.stock) {//se agrega validacion ITEM <= STOCK
-                setError(item.attributes.variant.data)
-              } else { setError(null) }
+                setError(item?.attributes?.variant?.data)
+              }
               return {
                 totalItemPrice:
                   item.attributes.variant.data.attributes.price *
