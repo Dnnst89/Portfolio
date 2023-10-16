@@ -36,8 +36,8 @@ const CartItem = ({ cartItemId, idVariant, productName, brand, description, colo
                 </div>
             </section>
             {error?.id == idVariant ? <p className="animate-shake-x text-red-500 text-orange">
-                * Stock Insuficiente {error?.id}
-            </p> : <p>no error</p>}
+                * Stock Insuficiente
+            </p> : null}
             <div className="mt-4" >
                 <CartQuantityBtn quantityCartItem={quantityCartItem} stock={stockVariant} idCartItem={cartItemId} loading={loading} /> {/* Puedes ajustar el límite según tus necesidades */}
             </div>
