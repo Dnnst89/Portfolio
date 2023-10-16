@@ -36,6 +36,7 @@ export default function DetailComponent({ id }) {
         />
         <RelatedItems
           categories={data?.product.data.attributes.categories.data}
+          productId={data?.product.data.id}
         /></div>
       }
     </div>

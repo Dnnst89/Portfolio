@@ -4,9 +4,9 @@ import ProductsByCategory from "@/src/graphQl/queries/getProductsByCategory";
 import { useQuery } from "@apollo/client";
 import AgeProductCard from "./AgeProductCard";
 
-const RelatedItems = (categories) => {
+function RelatedItems({ categories, productId }) {
 
-  const category = categories.categories[0].attributes.name
+  const category = categories[0].attributes.name
   const { loading, error, data } = useQuery(ProductsByCategory, {
     variables: { category },
   });
@@ -16,14 +16,29 @@ const RelatedItems = (categories) => {
     autoClose: 5000
   })
 
-  function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-  }
 
   const max = data?.products.data.length
+  const myArray = []
+  while (myArray.length < max) {
+    var num = Math.floor(Math.random() * max);
+    var exist = false;
+    for (var i = 0; i < myArray.length; i++) {
+      if (myArray[i] == num) {
+        exist = true;
+        break;
+      }
+    }
+    if (!exist) {
+      myArray[myArray.length] = num;
+    }
+  }
+
   const aux = [];
-  for (let i = 1; i <= 4; i++) {
-    aux.push(data?.products.data[getRandomInt(max)]);
+  for (let i = 0; i <= 3; i++) {
+    const random = myArray[i]
+    if (data?.products.data[random].id != productId) {
+      aux.push(data?.products.data[random]);
+    }
   }
 
 
