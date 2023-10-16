@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { UPDATE_ORDER_DETAILS_STATUS } from "@/src/graphQl/queries/updateOrderDetailsStatus";
 import { logo } from "../assets/images";
+import useProtectionRoute from "@/hooks/useProtectionRoute";
 /*
   recives the Tilopay response , based on the returns params 
   redirects to an certain page.
@@ -21,7 +22,7 @@ export default function ThankYouMessage(params) {
   const [order, setOrder] = useState("");
   //calling the mutation
   const [updateOrderDetailsStatus] = useMutation(UPDATE_ORDER_DETAILS_STATUS);
-
+  useProtectionRoute();
   useEffect(() => {
     handleTilopayResponse();
     // eslint-disable-next-line react-hooks/exhaustive-deps

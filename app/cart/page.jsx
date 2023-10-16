@@ -3,8 +3,11 @@ import ShoppingCart from "@/components/ShoppingCart";
 import ProductCard from "@/components/ProductCard";
 
 import CartContainer from "@/components/CartContainer";
-
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import useProtectionRoute from "@/hooks/useProtectionRoute";
 export default function CartView() {
+  useProtectionRoute()
   return (
     <div className="bg-floralwhite flex flex-wrap max-w-screen-xl m-auto justify-center">
       <div className="flex justify-center mt-3">
