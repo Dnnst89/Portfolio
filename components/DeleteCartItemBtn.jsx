@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import toast, { Toaster } from 'react-hot-toast';
 import useStorage from '@/hooks/useStorage';
 import useCartSummary from '@/hooks/useCartSummary';
+import { MdOutlineDeleteForever } from "react-icons/md";
 
 const DeleteCartItemBtn = ({ idItem, qtyItem }) => {
   const dispatch = useDispatch()
@@ -36,9 +37,9 @@ const DeleteCartItemBtn = ({ idItem, qtyItem }) => {
   };
   return (
     <><Toaster />
-      <button className="ml-3 text-3xl col-span-6 center" onClick={handleDelete}>
+      <button className="ml-3 text-3xl col-span-6 grid content-center justify-center" onClick={handleDelete}>
         {/* <BiX /> */}
-        🗑
+        <MdOutlineDeleteForever color="#FB82AF" size={40}></MdOutlineDeleteForever>
       </button> </>
 
 

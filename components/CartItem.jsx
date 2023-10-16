@@ -10,16 +10,17 @@ import CarouselImages from './CarouselImages';
 
 const CartItem = ({ cartItemId, idVariant, productName, brand, description, color, price, totalPrice, ageRange, size, weight, images, stockVariant, quantityCartItem, loading }) => {
     return (<>
-        <div className="grid grid-cols-12 w-full py-3 border-dashed border-[#787878] border-b-[2px]">
+        <div className="grid grid-cols-12 w-full py-3 border-dashed border-grey-200 border-b-[2px]">
             <section className="grid grid-cols-12 col-span-4">
                 <div className="grid grid-cols-12 col-span-12 items-center">
                     {images.length > 0 ?
-                        <CarouselImages  images={images} widthImg={140} heightImg={140} classStyle={'rounded-2xl'} />
+                        <CarouselImages  images={images} widthImg={140} heightImg={140} classStyle={'rounded-2xl col-span-6'} />
                         : (
                             <Image
                                 src={test}
                                 alt= {productName}
                                 style={{ width: "140px", height: "140px" }}
+                                className='col-span-6'
                             />
                         )}
 
