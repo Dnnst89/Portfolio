@@ -6,6 +6,15 @@ import { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { UPDATE_ORDER_DETAILS_STATUS } from "@/src/graphQl/queries/updateOrderDetailsStatus";
 import { logo } from "../assets/images";
+import useStorage from "@/hooks/useStorage";
+import { useLazyQuery, useQuery } from "@apollo/client";
+import GET_CART_ITEMS_LIST_SHOPPING_SESSION from "@/src/graphQl/queries/getCartItemsByShoppingSession";
+import GET_SHOPPING_SESSION_BY_USER from "@/src/graphQl/queries/getShoppingSessionByUser";
+import DELETE_CART_ITEM_MUTATION from "@/src/graphQl/queries/deleteCartItem";
+import UPDATE_VARIANT_STOCK from "@/src/graphQl/queries/updateVariantStock";
+import useCartSummary from "@/hooks/useCartSummary";
+
+import useProtectionRoute from "@/hooks/useProtectionRoute";
 /*
   recives the Tilopay response , based on the returns params 
   redirects to an certain page.
@@ -19,8 +28,96 @@ export default function ThankYouMessage(params) {
   const [description, setDescription] = useState("");
   const [code, setCode] = useState("");
   const [order, setOrder] = useState("");
+
+  const [getSession] = useLazyQuery(GET_SHOPPING_SESSION_BY_USER);
+  const [getCart] = useLazyQuery(GET_CART_ITEMS_LIST_SHOPPING_SESSION, {
+    fetchPolicy: "network-only", // Forzar la consulta directa al servidor
+  });
+
   //calling the mutation
   const [updateOrderDetailsStatus] = useMutation(UPDATE_ORDER_DETAILS_STATUS);
+  const [deleteCarItem] = useMutation(DELETE_CART_ITEM_MUTATION);
+  const [updateVariantStock] = useMutation(UPDATE_VARIANT_STOCK);
+  const { user } = useStorage();
+  const { id } = user || {};
+  const { items } = useCartSummary({
+    userId: user?.id,
+  });
+  /*
+  items.map((item) => {
+    if (
+      item.attributes.variant.data &&
+      item.attributes.variant.data.attributes.product.data
+    ) {
+      console.log("ss", item);
+      const quant = parseInt(item.attributes.quantity);
+      const stock = parseInt(
+        item.attributes.variant.data.attributes.stock
+      );
+      const newStock = stock - quant;
+      const variant = item.attributes.variant.data.id;
+      const cartItemId = item.id;
+      console.log(cartItemId);
+
+      try {
+        deleteCarItem({
+          variables: {
+            id: cartItemId,
+          },
+        });
+      } catch (error) {}
+
+      try {
+        updateVariantStock({
+          variables: {
+            id: variant,
+            stock: newStock,
+          },
+        });
+      } catch (error) {
+        console.log("error");
+      }
+    }
+  });
+  */
+
+  const handleUpdate = async () => {
+    items.map((item) => {
+      if (
+        item.attributes.variant.data &&
+        item.attributes.variant.data.attributes.product.data
+      ) {
+        console.log("ss", item);
+        const quant = parseInt(item.attributes.quantity);
+        const stock = parseInt(item.attributes.variant.data.attributes.stock);
+        const newStock = stock - quant;
+        const variant = item.attributes.variant.data.id;
+        const cartItemId = item.id;
+        console.log(cartItemId);
+
+        try {
+          deleteCarItem({
+            variables: {
+              id: cartItemId,
+            },
+          });
+        } catch (error) {}
+
+        try {
+          updateVariantStock({
+            variables: {
+              id: variant,
+              stock: newStock,
+            },
+          });
+        } catch (error) {
+          console.log("error");
+        }
+      }
+    });
+
+    router.push("/");
+  };
 
   useEffect(() => {
     handleTilopayResponse();
@@ -47,6 +144,14 @@ export default function ThankYouMessage(params) {
               newStatus: "A", // Approved
             },
           });
+
+          try {
+          } catch (error) {
+            //Manejo de errores
+            setError(true);
+          } finally {
+          }
+
           /*
             get rid of the cart session and delete carts items from database
             after that create a new empty cart session
@@ -68,7 +173,7 @@ export default function ThankYouMessage(params) {
               newStatus: "C", //Cancelled
             },
           });
-
+          localStorage.removeItem("createdOrder");
           // Continue with other actions you want to perform on failure
         } catch (error) {
           console.error("Error updating order status:", error);
@@ -76,7 +181,7 @@ export default function ThankYouMessage(params) {
       }
     }
   };
-  localStorage.removeItem("createdOrder");
+
   return code ? (
     <div className="bg-floralwhite p-[100px] flex justify-center">
       <main className="bg-resene border-2 border-dashed border-grey-200 flex flex-col justify-center h-auto p-10">
@@ -102,7 +207,7 @@ export default function ThankYouMessage(params) {
                   <p>{order}</p>
                 </div>
                 <button
-                  onClick={() => router.push("/")} // Specify the URL to which you want to navigate
+                  onClick={handleUpdate} // Specify the URL to which you want to navigate
                   className="bg-pink-200 text-white rounded-sm p-2 w-[150px]"
                 >
                   Volver

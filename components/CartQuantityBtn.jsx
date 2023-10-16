@@ -25,10 +25,6 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem, loading }) => {
                     // Manejar errores de la mutación aquí
                     toast.error('Ha sucedido un error');
                 });
-
-
-            console.log(newQuantity)
-
         }
     };
 
@@ -46,8 +42,6 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem, loading }) => {
                     // Manejar errores de la mutación aquí
                     toast.error('Ha sucedido un error');
                 });
-
-            console.log(newQuantity)
 
         }
     };

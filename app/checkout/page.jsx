@@ -1,15 +1,13 @@
 "use client";
-import AddresForm from "@/components/AddressForm";
-import CheckOutForm1 from "@/components/CheckOutForm1";
-import CheckOutForm2 from "@/components/CheckOutForm2";
 import CheckOutHeader from "@/components/CheckoutHeader";
-
+import CheckOutform1 from "../../components/CheckOutform1";
+import useProtectionRoute from "@/hooks/useProtectionRoute";
 const CheckOut = () => {
+  useProtectionRoute()
   return (
     <div>
       <CheckOutHeader regresar={"/cart"} />
-      <CheckOutForm1 isCheckout />
-      <CheckOutForm2 />
+      <CheckOutform1 />
     </div>
   );
 };
