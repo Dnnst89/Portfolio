@@ -8,10 +8,13 @@ import { useMutation, useQuery } from "@apollo/client";
 import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
 import useStorage from "@/hooks/useStorage";
 import CheckOutForm3 from "./CheckOutForm3";
+import { UPDATE_ORDER } from "@/src/graphQl/queries/updateTotal";
 
 export default function CheckOutForm2({ amount }) {
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
+  const { total, subTotal, taxes } = amount;
   const [createOrder] = useMutation(CREATE_ORDER);
+  const [updateOrder] = useMutation(UPDATE_ORDER);
   const { user } = useStorage();
   const { id } = user || {};
   // retrieving pending order if exist
@@ -22,15 +25,33 @@ export default function CheckOutForm2({ amount }) {
   const status = data?.orderDetails?.data[0]?.attributes?.status;
   // an order might not exist
   const orderNumber = data?.orderDetails?.data[0]?.id;
-  const resentPendingOrder = () => {
+  const resentPendingOrder = async () => {
     // storing ordernumber if exist
+    /**
+     * if the order exist we need to update the
+     * amount of the order everytime the user
+     * decides to change the order
+     */
+    try {
+      await updateOrder({
+        variables: {
+          order_Id: orderNumber,
+          total: total,
+          subTotal: subTotal,
+          taxes: taxes,
+        },
+      });
+      console.log("order updated");
+    } catch (error) {
+      console.error("Error updating order:", error);
+    }
+
     localStorage.setItem("createdOrder", orderNumber);
     setChecktOutForm2Visible(true);
   };
 
   const handleCreateOrder = async () => {
     const isoDate = new Date().toISOString();
-    const { total, subTotal, taxes } = amount;
     try {
       const { data } = await createOrder({
         variables: {
