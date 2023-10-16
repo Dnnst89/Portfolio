@@ -7,12 +7,15 @@ import AddItemBtn from "./AddItemBtn";
 import ProductImage from "./ProductImage";
 import useCartSummary from "@/hooks/useCartSummary";
 import useStorage from "@/hooks/useStorage";
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
-const baseURL = "http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337";
-function ProductDetail({ name, description, sku, variants, materials }) {
+function ProductDetail({ name, brand, description, sku, variants, materials }) {
+
   const [quantity, setQuantity] = useState(1);
+  const [image, setImage] = useState(null);
   let shortDescrption = "";
-  let images = 0;
+  let images = [];
   const { user } = useStorage();
   const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
 
@@ -57,47 +60,32 @@ function ProductDetail({ name, description, sku, variants, materials }) {
     shortDescrption = description.split(" ").splice(0, 20).join(" ");
   }
 
+  const chanceImage = (image) => {
+    setImage(image)
+  };
+
   return (
     <>
       <div className="bg-floralwhite max-w-screen-xl grid grid-cols-12 m-auto p-5" target="_blank" rel="noopener noreferrer">
 
         {/* Columna de imagenes */}
         <div className="mb-10 col-span-12 md:col-span-6">
-          {/* imagen principal grande */}
           <div className="m-auto w-full flex justify-center">
-            {images.length > 0 ? (
-              <ProductImage
-                key={variants[0].attributes.images.data[0].id}
-                url={images[0].attributes.url}
-                width={"450"}
-                height={"800"}
-                className={"rounded-xl mx-2"}
-              />
-            ) : null}
-          </div>
-          {/* //imagenes debajo de la principal */}
-          <div className="flex h-32 md:w-12/12 pt-5 justify-center">
-            {images
-              ? images.map((item) => {
-                  return (
-                    <ProductImage
-                      key={item.id}
-                      url={item.attributes.url}
-                      width={"125"}
-                      height={"100"}
-                      className={"rounded-xl mx-2"}
-                    />
-                  );
-                })
-              : null}
-          </div>
+            <Carousel showArrows={false} showStatus={false} showThumbs={true}>
+              {images.map((image, index) => (
+                <div key={index}>
+                  <img src={image.attributes.url} alt={"image"} />
+                </div>
+              ))}
 
+            </Carousel>
+          </div>
         </div>
 
         {/* Sección con los detalles del producto*/}
         <div className="mb-10 col-span-12 md:col-span-6 m-auto">
           <h2 className="flex justify-end text-sm">Ref {sku}</h2>
-          <h1 className="mb-3 text-xl">{name}</h1>
+          <h1 className="mb-3 text-xl font-bold">{name}</h1>
           <p>{shortDescrption}...</p>
           <a onClick={() => handleClick()}>
             <button className="flex justify-start text-lightblue mb-3 bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
@@ -112,7 +100,7 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                 priority={true}
                 width="50"
                 height="50"
-                src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
+                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
                 alt="tailwind logo"
                 className="rounded-xl mr-3"
               />
@@ -126,7 +114,7 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                 priority={true}
                 width="50"
                 height="50"
-                src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
+                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
                 alt="tailwind logo"
                 className="rounded-xl mr-3"
               />
@@ -143,7 +131,7 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                 priority={true}
                 width="50"
                 height="50"
-                src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
+                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
                 alt="tailwind logo"
                 className="rounded-xl mr-3"
               />
@@ -161,7 +149,7 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                 priority={true}
                 width="50"
                 height="50"
-                src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
+                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
                 alt="tailwind logo"
                 className="rounded-xl mr-3"
               />
@@ -179,7 +167,7 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                 priority={true}
                 width="50"
                 height="50"
-                src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
+                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
                 alt="tailwind logo"
                 className="rounded-xl mr-3"
               />
@@ -195,7 +183,7 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                 priority={true}
                 width="50"
                 height="50"
-                src={`${baseURL}/uploads/Asset_4_2_f88170fa82.png`}
+                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
                 alt="tailwind logo"
                 className="rounded-xl mr-3"
               />
@@ -214,11 +202,11 @@ function ProductDetail({ name, description, sku, variants, materials }) {
 
           </div>
           {/* precio, cantidad y carrito */}
-          <div className="col-span-12 flex justify-between items-center p-4">
-            <span className="font-bold">
+          <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between  p-4">
+            <span className="col-span-5 font-bold">
               ₡ {variants.length > 0 ? variants[0].attributes.price : null}
             </span>
-            <div className="flex flex-col items-end p-3">
+            <div className="col-span-7 md:flex md:flex-col items-end md:items-end p-3">
               <div className="flex items-center mb-2 ">
                 <span className="text-grey">Cantidad:</span>
                 <div className="bg-resene rounded-full m-3 w-[120px] flex items-center justify-center p-2 space-x-4">
@@ -231,10 +219,10 @@ function ProductDetail({ name, description, sku, variants, materials }) {
                   </button>
                 </div>
               </div>
-              <div className="bg-aquamarine rounded-sm p-3  mx-4">
+              <div className="bg-aquamarine rounded-sm p-2 md:p-3  md:mx-4">
                 <AddItemBtn
                   quantityItem={quantity}
-                  idVariant={variants[0]?.id}
+                  variant={variants[0]}//momentaneamente solo le enviamos una variante
                   cartItems={cartSummary.items}
                   cartQuantity={cartSummary.quantity}
                   sessionId={cartSummary.sessionId}

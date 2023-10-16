@@ -17,21 +17,27 @@ export default function DetailComponent({ id }) {
   })
 
   return (
+
     <div className={loading ? "grid place-items-center" : " max-w-screen-xl m-auto"}>
       {loading ? <Spinner /> : <div> <Toaster />
         <ProductDetail
           name={data?.product.data.attributes.name}
+          brand={data?.product.data.attributes.brand}
           description={data?.product.data.attributes.description}
           sku={data?.product.data.attributes.sku}
           variants={data?.product.data.attributes.variants.data}
           materials={data?.product.data.attributes.materials.data}
+
         />
         <ProductDetailSecondary
           id={data?.product.data.id}
           description={data?.product.data.attributes.description}
           reviews={data?.product.data.attributes.reviews.data}
         />
-        <RelatedItems /></div>
+        <RelatedItems
+          categories={data?.product.data.attributes.categories.data}
+          productId={data?.product.data.id}
+        /></div>
       }
     </div>
   );

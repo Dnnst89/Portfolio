@@ -8,23 +8,16 @@ const ProductDetailSecondary = ({ id, description, reviews }) => {
     <main className="bg-resene" id="detail-table">
       <section className="grid md:flex md:items-baseline mx-auto gap-5 w-10/12 md:w-8/12 pt-10">
         <h1 className="w:full text-xl">Descripción</h1>
-        <p className="w-full md:w-8/12 text-sm text-grey-100">{description}</p>
+        <p className="w-full md:w-12/12 text-sm text-grey-100">{description}</p>
       </section>
       {reviews.length > 0 ? (
         <section className="grid md:flex md:items-baseline mx-auto gap-5 w-10/12 md:w-8/12 pt-10">
           <h1 className="text-xl mr-2">Reseñas</h1>
-          <table className="w-7/12">
-            <tr className="border-b-2 border-grey-200/50 flex">
-              <th className="px-4 py-2 w-1/3 text-left whitespace-nowrap">
-                Nombre de usuario
-              </th>
-              <th className="px-4 py-2 w-1/3 text-left">Puntuación</th>
-              <th className="px-4 py-2 w-2/3 text-left text-grey-100">
-                Comentario
-              </th>
-            </tr>
-            {showAllReviews
-              ? reviews.map((item) => (
+          <div className="w-12/12">
+            <div>
+
+              {showAllReviews
+                ? reviews.map((item) => (
                   <ProductReview
                     key={item.id}
                     comment={item.attributes.comment}
@@ -35,7 +28,7 @@ const ProductDetailSecondary = ({ id, description, reviews }) => {
                     }
                   />
                 ))
-              : reviews
+                : reviews
                   .slice(0, 3)
                   .map((item) => (
                     <ProductReview
@@ -48,10 +41,11 @@ const ProductDetailSecondary = ({ id, description, reviews }) => {
                       }
                     />
                   ))}
-          </table>
+            </div>
+          </div>
         </section>
       ) : (
-        <p className="mt-10 tflex w-full m-auto  text-center">
+        <p className="mt-10 tflex w-full m-auto my-5 text-center">
           Aún no hay reseñas de este producto
         </p>
       )}

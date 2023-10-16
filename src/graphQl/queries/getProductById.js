@@ -2,67 +2,75 @@ import { gql } from '@apollo/client';
 
 const ProductDetailQuery = gql`
 query GetProducts($id: ID){
-    product(id:$id) {
-      data{
-        id,
-        attributes{
-          name,
-          description,
-          sku,
-          materials{
-            data{
-              id,
-              attributes{
-                name
-              }
+  product(id:$id) {
+    data{
+      id,
+      attributes{
+        name,
+        brand,
+        description,
+        sku,
+        materials{
+          data{
+            id,
+            attributes{
+              name
             }
           }
-          variants{
-            data{
-              id
-              attributes{
-                size,
-                color,
-                price,
-                weight{
+        }
+        categories{
+          data{
+            attributes{
+              name
+            }
+          }
+        }
+        variants{
+          data{
+            id
+            attributes{
+              size,
+              color,
+              price,
+              weight{
+                id,
+                unitWeight,
+                weight
+              },
+              stock,
+              ageRange,
+              images{
+                data{
                   id,
-                  unitWeight,
-                  weight
-                },
-                stock,
-                ageRange,
-                images{
-                  data{
-                    id,
-                    attributes{
-                      url,
-                    }
+                  attributes{
+                    url,
                   }
                 }
               }
             }
-          },
-          reviews{
-              data{
-              id,
-              attributes{
-                users_permissions_user{
-                  data{
-                    id,
-                    attributes{
-                      username
-                    }
+          }
+        },
+        reviews{
+            data{
+            id,
+            attributes{
+              users_permissions_user{
+                data{
+                  id,
+                  attributes{
+                    username
                   }
-                },
-                score,
-                comment
-              }
+                }
+              },
+              score,
+              comment
             }
           }
         }
       }
     }
-  }  
+  }
+}   
 `;
 
 export default ProductDetailQuery;

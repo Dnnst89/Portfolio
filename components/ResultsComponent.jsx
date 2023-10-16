@@ -47,7 +47,11 @@ const ResultsComponent = ({ query = "" }) => {
   }, [currentPage, query]);
 
   return (
-    <div> <Toaster />
+    <div>
+      <div className="flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
+        <h1>Resultados de "{decodeURIComponent(query)}"</h1>
+      </div>
+      <Toaster />
       <ProductContainer
         result={result}
         hitsPerPage={hitsPerPage}

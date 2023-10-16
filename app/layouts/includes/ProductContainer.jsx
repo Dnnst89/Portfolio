@@ -11,10 +11,10 @@ const ProductContainer = ({
   setCurrentPage,
 }) => {
   const { hits } = result;
-
+  
   return (
     <>
-      <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 w-full">
+      <div className="flex flex-wrap max-w-screen-xl m-auto justify-center">
         {hits
           ? hits.map((item) => {
               return (

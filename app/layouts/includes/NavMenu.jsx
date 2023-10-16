@@ -13,6 +13,7 @@ import useCartSummary from "@/hooks/useCartSummary";
 import useStorage from "@/hooks/useStorage";
 import { Toaster, toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
+import NavCategories from "@/app/layouts/includes/NavCategories";
 import { updateCartItems, updateQtyItems } from "@/redux/features/cart-slice";
 const NavMenu = () => {
   const dispatch = useDispatch();
@@ -39,12 +40,15 @@ const NavMenu = () => {
           
           <div className="flex items-center sm:items-stretch sm:justify-start w-full">
             <div className="flex-shrink-0  md:pr-7 items-center">
-              <Image
+            <Link href={`/`}> 
+            <Image
                 src={img2}
                 alt="Detinmarin"
                 width={120}
                 height={50}
               />
+            </Link>
+              
             </div>
             <div className="hidden sm:ml-1 items-center justify-between sm:flex md:w-full">
               <div className="flex space-x-4 w-full">
@@ -103,6 +107,7 @@ const NavMenu = () => {
           </div>
         </div>
       </div>
+      <NavCategories />
     </header>
 
   );

@@ -1,16 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import paymentRequest from "@/api/tilopay/paymentRequest";
-import Spinner from "./Spinner";
 import { useRouter } from "next/navigation";
 import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
 import { useQuery } from "@apollo/client";
 import { paymentDataForm } from "@/app/data/tilopay/transactionData";
 import useStorage from "@/hooks/useStorage";
-import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
 
 export default function CheckOutForm3() {
-  const userInSession = useStorage();
   const router = useRouter();
   const [formData, setFormData] = useState(paymentDataForm);
   const { user } = useStorage();
@@ -37,7 +34,7 @@ export default function CheckOutForm3() {
           phoneNumber,
           order_details,
         } = userData;
-        const total = order_details?.data[0].attributes?.total;
+        const total = order_details?.data[0]?.attributes?.total;
         // the next step is to send the data to the request
         // we load data into the state
         if (userData) {
@@ -60,7 +57,6 @@ export default function CheckOutForm3() {
         }
       }
     }
-    console.log(formData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, loading, error]);
   // The data is ready to send it to the object that will be

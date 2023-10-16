@@ -14,6 +14,7 @@ import DELETE_CART_ITEM_MUTATION from "@/src/graphQl/queries/deleteCartItem";
 import UPDATE_VARIANT_STOCK from "@/src/graphQl/queries/updateVariantStock";
 import useCartSummary from "@/hooks/useCartSummary";
 
+import useProtectionRoute from "@/hooks/useProtectionRoute";
 /*
   recives the Tilopay response , based on the returns params 
   redirects to an certain page.

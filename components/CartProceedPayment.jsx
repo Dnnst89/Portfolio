@@ -1,8 +1,9 @@
 "use client";
 import Link from "next/link";
-export default function CartProceedPayment({ textButton, page }) {
+export default function CartProceedPayment({ textButton, page, error }) {
   return (
     <div className="flex flex-col p-4 space-y-3">
+
       <div className="flex justify-between ">
         <p>Entrega Estimada:</p>
         <p className="text-grey-100">DD/MM/AA</p>
@@ -10,11 +11,18 @@ export default function CartProceedPayment({ textButton, page }) {
       <p className="flex justify-center text-sm text-grey-100 whitespace-nowrap">
         *Detalle acerca de la fecha de entrega*
       </p>
-      <Link className="flex justify-center" href={page}>
-        <button className="bg-pink-200 text-white rounded-sm p-2 w-[200px] whitespace-nowrap">
+
+      <Link href={page}>
+        <button
+          className={`bg-pink-200 text-white rounded-sm p-2 w-[200px] whitespace-nowrap ${error ? 'cursor-not-allowed' : 'cursor-pointer'
+            }`}
+          disabled={error}
+        >
           {textButton}
         </button>
       </Link>
+      {error ? <p className={`text-orange`}>Hay un problema en tu carrito</p> : <p>Listo para proceder el pago</p>}
+
     </div>
   );
 }
