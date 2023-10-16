@@ -11,6 +11,9 @@ import { useLazyQuery, useQuery } from "@apollo/client";
 import GET_CART_ITEMS_LIST_SHOPPING_SESSION from "@/src/graphQl/queries/getCartItemsByShoppingSession";
 import GET_SHOPPING_SESSION_BY_USER from "@/src/graphQl/queries/getShoppingSessionByUser";
 import DELETE_CART_ITEM_MUTATION from "@/src/graphQl/queries/deleteCartItem";
+import UPDATE_VARIANT_STOCK from "@/src/graphQl/queries/updateVariantStock";
+import useCartSummary from "@/hooks/useCartSummary";
+
 /*
   recives the Tilopay response , based on the returns params 
   redirects to an certain page.
@@ -30,12 +33,91 @@ export default function ThankYouMessage(params) {
     fetchPolicy: "network-only", // Forzar la consulta directa al servidor
   });
 
-  const { user } = useStorage();
-  const { id } = user || {};
-
   //calling the mutation
   const [updateOrderDetailsStatus] = useMutation(UPDATE_ORDER_DETAILS_STATUS);
   const [deleteCarItem] = useMutation(DELETE_CART_ITEM_MUTATION);
+  const [updateVariantStock] = useMutation(UPDATE_VARIANT_STOCK);
+  const { user } = useStorage();
+  const { id } = user || {};
+  const { items } = useCartSummary({
+    userId: user?.id,
+  });
+  /*
+  items.map((item) => {
+    if (
+      item.attributes.variant.data &&
+      item.attributes.variant.data.attributes.product.data
+    ) {
+      console.log("ss", item);
+      const quant = parseInt(item.attributes.quantity);
+      const stock = parseInt(
+        item.attributes.variant.data.attributes.stock
+      );
+      const newStock = stock - quant;
+      const variant = item.attributes.variant.data.id;
+      const cartItemId = item.id;
+      console.log(cartItemId);
+
+      try {
+        deleteCarItem({
+          variables: {
+            id: cartItemId,
+          },
+        });
+      } catch (error) {}
+
+      try {
+        updateVariantStock({
+          variables: {
+            id: variant,
+            stock: newStock,
+          },
+        });
+      } catch (error) {
+        console.log("error");
+      }
+    }
+  });
+  */
+
+  const handleUpdate = async () => {
+    items.map((item) => {
+      if (
+        item.attributes.variant.data &&
+        item.attributes.variant.data.attributes.product.data
+      ) {
+        console.log("ss", item);
+        const quant = parseInt(item.attributes.quantity);
+        const stock = parseInt(item.attributes.variant.data.attributes.stock);
+        const newStock = stock - quant;
+        const variant = item.attributes.variant.data.id;
+        const cartItemId = item.id;
+        console.log(cartItemId);
+
+        try {
+          deleteCarItem({
+            variables: {
+              id: cartItemId,
+            },
+          });
+        } catch (error) {}
+
+        try {
+          updateVariantStock({
+            variables: {
+              id: variant,
+              stock: newStock,
+            },
+          });
+        } catch (error) {
+          console.log("error");
+        }
+      }
+    });
+
+    router.push("/");
+  };
+
   useEffect(() => {
     handleTilopayResponse();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -63,87 +145,6 @@ export default function ThankYouMessage(params) {
           });
 
           try {
-            const { data } = await getSession({
-              //llamo la query para traer la shopping session
-              variables: { userId: id },
-            });
-
-            if (data) {
-              // Si existe la sesión
-              const shoppingSession = data.shoppingSessions.data[0];
-              let currentPage = 1;
-              let pageSize = 25;
-              let fetchedData = []; // para ir juntando los datos de cada pagina
-              let pageCount = 1;
-
-              do {
-                console.log(shoppingSession);
-                //debemos hacer un primer recorrido ya que el dato paeCount de la consulta es incierto
-                const { data: cartItemsData } = await getCart({
-                  variables: {
-                    shoppingSessionId: shoppingSession.id,
-                    page: currentPage,
-                    pageSize,
-                  },
-                });
-
-                const cartItems = cartItemsData.cartItems;
-                fetchedData = fetchedData.concat(cartItems.data);
-                pageCount = cartItems.meta.pagination.pageCount;
-                currentPage++;
-              } while (currentPage <= pageCount);
-              //}
-
-              // Ahora,se procesa los datos recopilados
-              const total = fetchedData.reduce((accumulator, item) => {
-                if (
-                  item.attributes.variant.data &&
-                  item.attributes.variant.data.attributes.product.data
-                ) {
-                  //debe existir un producto con su respectiva variante
-                  return (
-                    accumulator +
-                    item.attributes.variant.data.attributes.price *
-                      item.attributes.quantity
-                  );
-                }
-                return accumulator;
-              }, 0);
-
-              console.log("first");
-              fetchedData.map((item) => {
-                if (
-                  item.attributes.variant.data &&
-                  item.attributes.variant.data.attributes.product.data
-                ) {
-                  //debe existir un producto con su respectiva variante
-
-                  const quant = parseInt(item.attributes.quantity);
-                  const stock = parseInt(
-                    item.attributes.variant.data.attributes.stock
-                  );
-                  const newStock = stock - quant;
-
-                  /* 
-                
-                
-                try {
-                    const cartItemId = item.id;
-                    const { data } = deleteCarItem({
-                      variables: {
-                        id: cartItemId,
-                      },
-                    });
-                  } catch (error) {}
-                 */
-
-                  console.log("cantidad", quant);
-                  console.log("stock", stock);
-                  console.log("nuevo stock", newStock);
-                }
-                return null; // lo asigno null para filtrarlo luego y no agregarlo a los items
-              });
-            }
           } catch (error) {
             //Manejo de errores
             setError(true);
@@ -205,7 +206,7 @@ export default function ThankYouMessage(params) {
                   <p>{order}</p>
                 </div>
                 <button
-                  onClick={() => router.push("/")} // Specify the URL to which you want to navigate
+                  onClick={handleUpdate} // Specify the URL to which you want to navigate
                   className="bg-pink-200 text-white rounded-sm p-2 w-[150px]"
                 >
                   Volver
