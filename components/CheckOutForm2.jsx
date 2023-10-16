@@ -29,10 +29,9 @@ export default function CheckOutForm2({ amount }) {
     // storing ordernumber if exist
     /**
      * if the order exist we need to update the
-     * amount of the order everytime we verify
-     * if order exist
+     * amount of the order everytime the user
+     * decides to change the order
      */
-    console.log(orderNumber, total, subTotal, taxes);
     try {
       await updateOrder({
         variables: {
