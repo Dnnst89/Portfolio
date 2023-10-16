@@ -6,11 +6,11 @@ import React from "react";
 const CartLayout = ({ children }) => {
   return (
     <>
-      <ProtectedRoutes>
-        <BodyComponent>
-          <main>{children}</main>
-        </BodyComponent>
-      </ProtectedRoutes>
+
+      <BodyComponent>
+        <main>{children}</main>
+      </BodyComponent>
+
     </>
   );
 };
