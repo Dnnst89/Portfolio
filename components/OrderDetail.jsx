@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Pagination from "./Pagination";
 import AgePagination from "./AgePagination";
+import Spinner from "@/components/Spinner";
 export default function OrderDetail() {
   const [page, setPage] = useState(1);
   const [nbPages, setNbPages] = useState();
@@ -48,12 +49,10 @@ export default function OrderDetail() {
           },
         });
         if (data) {
-          console.log(data);
-          const pagination = data.orderDetails.meta.pagination; //es un objeto con la informacion de paginacion
-          setNbPages(pagination.pageCount);
-          const info = data.orderDetails.data;
-          const userInfo =
-            info[0].attributes.users_permissions_user.data.attributes; //solo guardo los datos del user con el primer dato del array
+          const pagination = data.orderDetails.meta.pagination //es un objeto con la informacion de paginacion
+          setNbPages(pagination.pageCount)
+          const info = data.orderDetails.data
+          const userInfo = info[0].attributes.users_permissions_user.data.attributes //solo guardo los datos del user con el primer dato del array
           setUserData((prev) => ({
             ...prev,
             user: {
@@ -86,10 +85,22 @@ export default function OrderDetail() {
     }
     console.log(userData);
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, [page])
+
+  //estados de ordenes pending,cancelled, approved
+  const transformState = (state) => {
+    const STATES = {
+      P: "Pending",
+      C: "Cancelled",
+      A: "Approved",
+    }
+    const STATE_DEFAULT = "Approved"
+    let option = STATES[state] || STATE_DEFAULT
+    return option
+  }
 
   if (loading) {
-    return <p>loading</p>;
+    return <div><Spinner /></div>;
   }
 
   return (
@@ -109,7 +120,7 @@ export default function OrderDetail() {
                 </div>
                 <div>Provincia: {userData.address.province}</div>
                 <div>Ciudad: {userData.address.canton}</div>
-                <div>Estado: {order.status}</div>
+                <div>Estado: {transformState(order.status)}</div>
               </div>
               <Link
                 href={{
