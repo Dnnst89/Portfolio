@@ -18,7 +18,7 @@ const CartItem = ({ cartItemId, idVariant, productName, brand, description, colo
             <section className="grid grid-cols-12 col-span-4">
                 <div className="grid grid-cols-12 col-span-12 items-center">
                     {images.length > 0 ?
-                        <CarouselImages  images={images} widthImg={140} heightImg={140} classStyle={'rounded-2xl col-span-6'} />
+                        <CarouselImages images={images} widthImg={140} heightImg={140} classStyle={'rounded-2xl col-span-6'} />
                         : (
                             <Image
                                 src={test}
@@ -35,12 +35,15 @@ const CartItem = ({ cartItemId, idVariant, productName, brand, description, colo
                     </div>
                 </div>
             </section>
-            {error?.id == idVariant ? <p className="animate-shake-x text-red-500 text-orange">
-                * Stock Insuficiente
-            </p> : null}
-            <div className="mt-4" >
-                <CartQuantityBtn quantityCartItem={quantityCartItem} stock={stockVariant} idCartItem={cartItemId} loading={loading} /> {/* Puedes ajustar el límite según tus necesidades */}
+            <div className='col-span-3'>
+                {error?.id == idVariant ? <p className="animate-shake-x text-red-500 text-orange">
+                    * Stock Insuficiente
+                </p> : null}
+                <div className="mt-4" >
+                    <CartQuantityBtn quantityCartItem={quantityCartItem} stock={stockVariant} idCartItem={cartItemId} loading={loading} /> {/* Puedes ajustar el límite según tus necesidades */}
+                </div>
             </div>
+
             <section className="grid grid-cols-12 col-span-5 ">
                 <div className='grid grid-cols-6 col-span-6 place-content-center '>
                     <span className='text-xs mx-2 col-start-2 col-span-6'>Precio Unitario: ${price.toFixed(2)}</span>
