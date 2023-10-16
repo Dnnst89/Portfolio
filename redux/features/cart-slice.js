@@ -17,9 +17,9 @@ export const cart = createSlice({
         },
         reduceQtyItems: (state) => {
             // Reduce la cantidad de items de manera inmutable
-            if (state.quantity > 0) {
-                state.quantity -= 1;
-            }
+
+            state.quantity -= 1;
+
         },
         updateQtyItems: (state, action) => {
             // Inicializa la cantidad de items

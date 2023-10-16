@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image';
 import test from "../app/assets/heart.png";
 
@@ -6,19 +6,23 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import CartQuantityBtn from './CartQuantityBtn';
 import DeleteCartItemBtn from './DeleteCartItemBtn';
 import CarouselImages from './CarouselImages';
+import { useSelector } from 'react-redux';
 
 
-const CartItem = ({ cartItemId, idVariant, productName, brand, description, color, price, totalPrice, ageRange, size, weight, images, stockVariant, quantityCartItem, loading }) => {
+const CartItem = ({ cartItemId, idVariant, productName, brand, description, color, price, totalPrice, ageRange, size, weight, images, stockVariant, quantityCartItem, loading, error }) => {
+
+
+
     return (<>
         <div className="grid grid-cols-12 w-full py-3 border-dashed border-[#787878] border-b-[2px]">
             <section className="grid grid-cols-12 col-span-4">
                 <div className="grid grid-cols-12 col-span-12 items-center">
                     {images.length > 0 ?
-                        <CarouselImages  images={images} widthImg={140} heightImg={140} classStyle={'rounded-2xl'} />
+                        <CarouselImages images={images} widthImg={140} heightImg={140} classStyle={'rounded-2xl'} />
                         : (
                             <Image
                                 src={test}
-                                alt= {productName}
+                                alt={productName}
                                 style={{ width: "140px", height: "140px" }}
                             />
                         )}
@@ -30,19 +34,22 @@ const CartItem = ({ cartItemId, idVariant, productName, brand, description, colo
                     </div>
                 </div>
             </section>
-            <div className="col-span-3 flex items-center" >
+            {error?.id == idVariant ? <p className="animate-shake-x text-red-500 text-orange">
+                * Stock Insuficiente
+            </p> : null}
+            <div className="mt-4" >
                 <CartQuantityBtn quantityCartItem={quantityCartItem} stock={stockVariant} idCartItem={cartItemId} loading={loading} /> {/* Puedes ajustar el límite según tus necesidades */}
             </div>
             <section className="grid grid-cols-12 col-span-5 ">
                 <div className='grid grid-cols-6 col-span-6 place-content-center '>
                     <span className='text-xs mx-2 col-start-2 col-span-6'>Precio Unitario: ${price.toFixed(2)}</span>
-                    
-                    <span className='mx-2 font-bold col-start-2 col-span-6'>Precio Total: ${totalPrice.toFixed(2)}</span>   
+
+                    <span className='mx-2 font-bold col-start-2 col-span-6'>Precio Total: ${totalPrice.toFixed(2)}</span>
                 </div>
                 {/* Botón para eliminar el producto del carrito */}
                 <DeleteCartItemBtn
                     idItem={cartItemId}
-                    qtyItem={quantityCartItem}/>
+                    qtyItem={quantityCartItem} />
             </section>
 
         </div>

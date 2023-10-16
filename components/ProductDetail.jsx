@@ -222,7 +222,7 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
               <div className="bg-aquamarine rounded-sm p-2 md:p-3  md:mx-4">
                 <AddItemBtn
                   quantityItem={quantity}
-                  idVariant={variants[0]?.id}
+                  variant={variants[0]}//momentaneamente solo le enviamos una variante
                   cartItems={cartSummary.items}
                   cartQuantity={cartSummary.quantity}
                   sessionId={cartSummary.sessionId}

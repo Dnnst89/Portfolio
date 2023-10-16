@@ -14,14 +14,14 @@ import { useDispatch, useSelector } from "react-redux";
 //         quantity: number,
 //     }
 const useCartSummary = ({ userId }) => {
-  const state = useSelector((x) => x.cart);
+  const cartQuantity = useSelector((state) => state.cart.quantity);
   const [cartData, setCartData] = useState({
     total: 0,
     items: [],
     quantity: 0,
     sessionId: null,
   });
-  const [error, setError] = useState(false);
+  const [error, setError] = useState();
   const [loading, setLoading] = useState(true);
   const [getSession] = useLazyQuery(GET_SHOPPING_SESSION_BY_USER);
   const [getCart] = useLazyQuery(GET_CART_ITEMS_LIST_SHOPPING_SESSION, {
@@ -96,6 +96,9 @@ const useCartSummary = ({ userId }) => {
               item.attributes.variant.data.attributes.product.data
             ) {
               //debe existir un producto con su respectiva variante
+              if (item.attributes.quantity > item.attributes.variant.data.attributes.stock) {//se agrega validacion ITEM <= STOCK
+                setError(item.attributes.variant.data)
+              } else { setError(null) }
               return {
                 totalItemPrice:
                   item.attributes.variant.data.attributes.price *
@@ -103,6 +106,9 @@ const useCartSummary = ({ userId }) => {
                 quantity: item.attributes.quantity,
                 ...item,
               };
+
+              //se agrega validacion ITEM >= STOCK
+
             }
             return null; // lo asigno null para filtrarlo luego y no agregarlo a los items
           });
@@ -117,7 +123,7 @@ const useCartSummary = ({ userId }) => {
         }
       } catch (error) {
         //Manejo de errores
-        setError(true);
+        setError(error);
       } finally {
         setLoading(false);
       }
@@ -126,7 +132,7 @@ const useCartSummary = ({ userId }) => {
       getCartSession();
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId, state.quantity]);
+  }, [userId, cartQuantity]);
 
   return {
     total: cartData.total,
