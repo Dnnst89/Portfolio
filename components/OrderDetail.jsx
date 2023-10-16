@@ -104,14 +104,14 @@ export default function OrderDetail() {
   }
 
   return (
-    <div>
-      <h1 className="flex justify-center mt-3 text-xl">Tus pedidos</h1>
-      <div className="p-4 h-auto grid grid-cols-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-5">
+    <div className="bg-resene  flex flex-col items-center pb-[50px]  mx-3  md:col-span-6">
+      <h1 className="flex justify-center mt-3 text-xl  md:col-span-12">Tus pedidos</h1>
+      <div className="p-4 h-auto grid grid-cols-12 gap-4 pt-5 w-full">
         {userData.order.map((order) => (
-          <div key={order.ref} className="bg-resene w-full ">
+          <div key={order.ref} className="bg-resene col-span-4 w-full ">
             <section
               className="bg-floralwhite flex flex-col items-center border-2 border-dashed 
-            border-grey-200 rounded-2xl h-[250px] w-full px-2"
+            border-grey-200 rounded-2xl h-[250px] w-full px-2 col-span-3"
             >
               <h2 className="font-semibold mt-8">N° {order.ref}</h2>
               <div className="text-sm space-y-2 pt-3">
@@ -136,11 +136,14 @@ export default function OrderDetail() {
           </div>
         ))}
       </div>
+      <div className="col-span-12">
       <AgePagination
         nbPages={nbPages}
         currentPage={page}
         setCurrentPage={setPage}
       />
+      </div>
+      
     </div>
   );
 }

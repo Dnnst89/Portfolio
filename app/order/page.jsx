@@ -6,7 +6,7 @@ import BodyComponent from "@/components/BodyComponent";
 export default function Order() {
   return (
     <BodyComponent>
-      <div className="sm:block md:flex lg:flex sm:space-x-0 md:space-x-4 lg:space-x-4  justify-center p-10">
+      <div className="max-w-screen-xl mt-5 md:mt-20 grid grid-cols-12 m-auto">
         <NavigationMenu />
         <OrderDetail />
       </div>

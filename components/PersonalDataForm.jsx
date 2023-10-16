@@ -1,51 +1,42 @@
 import React from "react";
 import Link from "next/link";
+import { useSelector, useDispatch } from "react-redux";
 
-export default function PersonalDataForm() {
+
+const PersonalDataForm = () => {
+
+  const authUser = useSelector((state) => state.auth.user);
+
   return (
-    <div className="bg-resene w-6/12 flex flex-col items-center pb-[50px]">
-      <h1 className="text-xl  m-2">Tus datos</h1>
+    <div className="bg-resene  flex flex-col items-center pb-[50px] col-span-12 mx-3  md:col-span-6">
+      <h1 className="m-2">Tus datos</h1>
       <div className="flex justify-center w-11/12">
-        <section className="w-6/12 p-5 space-y-2">
-          <div className="mb-4">
+        <section className="w-full p-5 grid grid-cols-6 gap-3">
+          <div className="col-span-6 md:col-span-3">
             <label>Nombre de usuario:</label>
-            <input
-              className="py-1 w-full rounded-lg border-2 border-grey-300/40 outline-none bg-grey-400 mb-3"
-              placeholder="este espacio no se edita"
+            {authUser && <input
+              className="py-1 w-full rounded-lg border-2 border-grey-300/40 outline-none bg-grey-400 mb-3  px-2"
+              placeholder={authUser.username}
               readOnly
-            />
+            />}
           </div>
-          <div>
-            <label htmlFor="password">Contraseña:</label>
-            <input
-              className="py-1 w-full rounded-lg border-2 border-grey-300/40 outline-pink-200/30"
-              id="password"
-            />
-          </div>
-        </section>
-        <section className="w-6/12 p-5 space-y-2">
-          <div className="mb-4">
+          <div className="col-span-6 md:col-span-3">
             <label>Correo Electrónico:</label>
-            <input
-              className="py-1 w-full rounded-lg border-2 border-grey-300/40 outline-none bg-grey-400 mb-3"
-              placeholder="este espacio no se edita"
+            {authUser && <input
+              className="py-1 w-full rounded-lg border-2 border-grey-300/40 outline-none bg-grey-400 mb-3  px-2"
+              placeholder={authUser.email}
               readOnly
-            />
+            />}
           </div>
-          <div>
-            <label htmlFor="resetpassword">Nueva contraseña:</label>
-            <input
-              className="py-1 w-full rounded-lg border-2 border-grey-300/40 outline-pink-200/30"
-              id="resetpassword"
-            />
+          <div className="col-span-6">
+            <p className="text-center text-sm hover:underline cursor-pointer text-lightblue mb-3 grid col-span-12 md:col-span-12 w-2/4 m-auto">
+              <Link href="/forgotPassword">Cambiar contraseña</Link>
+            </p>
           </div>
         </section>
       </div>
-      <div className="flex justify-center relative top-200p">
-        <button className="flex justify-center rounded-lg py-2 px-5 transition-colors text-white bg-pink-200">
-          Guardar
-        </button>
-      </div>
+      
     </div>
   );
 }
+export default PersonalDataForm;

@@ -29,7 +29,7 @@ const WelcomeUser = () => {
   };
   return (
     <BodyComponent>
-      <main className=" flex flex-col items-center ">
+      <main className=" flex flex-col items-center max-w-screen-xl m-auto">
         <div className="text-xl">
           {authUser && <p className="mt-10">Bienvenido {authUser.username}</p>}
         </div>
@@ -39,7 +39,7 @@ const WelcomeUser = () => {
             image={datosUsuario}
             alt={"datos de usuario"}
             description={"Datos de usuario"}
-            link={""}
+            link={"/personalData"}
           />
           <ProfileUserCard
             image={pedidos}
