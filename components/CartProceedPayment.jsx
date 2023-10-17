@@ -23,7 +23,10 @@ export default function CartProceedPayment({ textButton, page, error }) {
         </Link>
       </div>
 
-      {error ? <p className={`text-orange w-full text-center`}>Hay un problema en tu carrito</p> : <p className={`text-green w-full text-center`}>Listo para proceder el pago</p>}
+      {error ? <p className={`text-orange w-full text-center`}>Hay un problema en tu carrito</p>
+        : null
+        //  <p className={`text-green w-full text-center`}>Listo para proceder el pago</p>
+      }
 
     </div>
   );

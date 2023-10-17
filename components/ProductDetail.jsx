@@ -249,7 +249,7 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
           {/* precio, cantidad y carrito */}
           <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between  p-4">
             <span className="col-span-5 font-bold">
-              ₡ {variants.length > 0 ? variants[0].attributes.price : null}
+              $ {variants.length > 0 ? variants[0].attributes.price : null}
             </span>
             <div className="col-span-7 md:flex md:flex-col items-end md:items-end p-3">
               <div className="flex items-center mb-2 ">

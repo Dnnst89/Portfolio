@@ -79,12 +79,16 @@ const CartContainer = () => {
             </div>
             <div className=" bg-resene rounded-sm col-span-4 p-4 h-[500px]">
                 <CartDetail detailTitle={"Detalle del carrito"} />
-
-                <CartProceedPayment
+                {items.length > 0 ? <CartProceedPayment
                     textButton={"Proceder al pago"}
                     page={"/checkout"}
                     error={error}
-                />
+                /> :
+                    <div className="p-3 space-y-3 border-l-4 border-lightblue">
+                        <h1>Tu carrito esta vacio</h1>
+                    </div>
+                }
+
             </div>
         </>
     );

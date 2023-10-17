@@ -4,20 +4,27 @@ import moovin from "../app/assets/moovin.png";
 import logo from "../app/assets/tk-logo.png";
 import { useState } from "react";
 import { CREATE_ORDER } from "@/src/graphQl/queries/createUserOrder";
+import CREATE_ORDER_ITEM_MUTATION from "@/src/graphQl/queries/createOrderItem";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
 import useStorage from "@/hooks/useStorage";
 import CheckOutForm3 from "./CheckOutForm3";
 import { UPDATE_ORDER } from "@/src/graphQl/queries/updateTotal";
+import useCartSummary from "@/hooks/useCartSummary";
 import { generateOrderId } from "@/helpers/generateOrderId";
 export default function CheckOutForm2({ amount }) {
   console.log("order number ", generateOrderId());
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
   const { total, subTotal, taxes } = amount;
   const [createOrder] = useMutation(CREATE_ORDER);
+  const [createOrderItem] = useMutation(CREATE_ORDER_ITEM_MUTATION);
   const [updateOrder] = useMutation(UPDATE_ORDER);
   const { user } = useStorage();
   const { id } = user || {};
+  //me traigo los items de carrito para crear los items de la orden
+  const { items } = useCartSummary({
+    userId: id,
+  });
   // retrieving pending order if exist
   const { data } = useQuery(GET_PENDING_ORDER, {
     variables: { userId: id, status: "P" },
@@ -51,6 +58,30 @@ export default function CheckOutForm2({ amount }) {
     setChecktOutForm2Visible(true);
   };
 
+  const creatingOrderItems = (orderId) => {
+    const isoDate = new Date().toISOString();
+    try {
+      items.map(async (item) => {
+        const variant = item.attributes.variant.data; // Desestructuración aquí
+        const variantAtt = variant.attributes;
+        console.log(variantAtt.quantity)
+        const { data } = await createOrderItem(
+          {
+            variables: {
+              quantity: item.attributes.quantity,
+              variantId: variant.id,
+              publishedAt: isoDate,
+              orderDetailId: orderId
+            }
+          }
+        )
+      })
+    } catch (error) {
+      console.log("Error creating: ", error)
+    }
+
+  }
+
   const handleCreateOrder = async () => {
     const isoDate = new Date().toISOString();
     try {
@@ -71,6 +102,7 @@ export default function CheckOutForm2({ amount }) {
       // Store the orderNumber in localStorage
       localStorage.setItem("createdOrder", orderNumber);
       setChecktOutForm2Visible(true);
+      creatingOrderItems(orderNumber);
     } catch (error) {
       console.error("Error creating order:", error);
     }
