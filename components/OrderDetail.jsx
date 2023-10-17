@@ -3,10 +3,13 @@ import GET_USER_ORDERS from "@/src/graphQl/queries/getUserOrders";
 import { useLazyQuery } from "@apollo/client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import useStorage from "@/hooks/useStorage";
 import Pagination from "./Pagination";
 import AgePagination from "./AgePagination";
 import Spinner from "@/components/Spinner";
 export default function OrderDetail() {
+
+
   const [page, setPage] = useState(1);
   const [nbPages, setNbPages] = useState();
   const pageSize = 3;
@@ -30,16 +33,19 @@ export default function OrderDetail() {
     ],
   });
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [getOrders] = useLazyQuery(GET_USER_ORDERS);
+  const [loading, setLoading] = useState(false);
+  const [getOrders] = useLazyQuery(GET_USER_ORDERS, {
+    fetchPolicy: "network-only", // Forzar la consulta directa al servidor
+  });
   useEffect(() => {
-    const { user } = JSON.parse(localStorage.getItem("userData"));
-
+    const userStorage = JSON.parse(localStorage.getItem("userData"));
+    const userId = userStorage?.user?.id;
+    console.log(userId)
     const getOrdersInfo = async (id, page, pageSize) => {
+
       try {
         //me trae las ordenes e informacion del usuario
         setLoading(true);
-
         const { data } = await getOrders({
           //llamo la query para traer la shopping session
           variables: {
@@ -48,7 +54,9 @@ export default function OrderDetail() {
             pageSize,
           },
         });
+        console.log("data: ", data)
         if (data) {
+
           const pagination = data.orderDetails.meta.pagination //es un objeto con la informacion de paginacion
           setNbPages(pagination.pageCount)
           const info = data.orderDetails.data
@@ -74,16 +82,19 @@ export default function OrderDetail() {
             }),
           }));
         }
+
       } catch (error) {
+        console.log("ERROR: ", error)
         setError(error);
       } finally {
         setLoading(false);
       }
     };
-    if (user) {
-      getOrdersInfo(user.id, page, pageSize);
+    if (userStorage) {
+      getOrdersInfo(userId, page, pageSize);
     }
-    console.log(userData);
+
+
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page])
 
@@ -107,7 +118,7 @@ export default function OrderDetail() {
     <div className="bg-resene  flex flex-col items-center pb-[50px]  mx-3  md:col-span-6">
       <h1 className="flex justify-center mt-3 text-xl  md:col-span-12">Tus pedidos</h1>
       <div className="p-4 h-auto grid grid-cols-12 gap-4 pt-5 w-full">
-        {userData.order.map((order) => (
+        {userData.order[0].ref !== 0 ? userData.order.map((order) => (
           <div key={order.ref} className="bg-resene col-span-4 w-full ">
             <section
               className="bg-floralwhite flex flex-col items-center border-2 border-dashed 
@@ -134,16 +145,17 @@ export default function OrderDetail() {
               </Link>
             </section>
           </div>
-        ))}
+        )) :
+          <h1 className="flex justify-center mt-3 text-xl  md:col-span-12">No tienes ordenes, realiza tu primera compra</h1>}
       </div>
       <div className="col-span-12">
-      <AgePagination
-        nbPages={nbPages}
-        currentPage={page}
-        setCurrentPage={setPage}
-      />
+        <AgePagination
+          nbPages={nbPages}
+          currentPage={page}
+          setCurrentPage={setPage}
+        />
       </div>
-      
+
     </div>
   );
 }

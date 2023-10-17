@@ -86,14 +86,15 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
                 width={"450"}
                 height={"800"}
                 className={"rounded-xl mx-2"}
+                atlText={name}
               />
             ) : null}
           </div>
           {/* //imagenes debajo de la principal */}
-          <div >
+          <div  className="md:w-4/6 m-auto mt-2">
             <Swiper
               modules={[Navigation, A11y]}
-              spaceBetween={2}
+              spaceBetween={1}
               slidesPerView={3}
               navigation
               onSwiper={(swiper) => console.log(swiper)}
@@ -111,7 +112,7 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
                             width={"125"}
                             height={"100"}
                             className={"rounded-xl"}
-                            alt="detinmarin-image"
+                            alt={name}
                           />
                         </button>
                       </SwiperSlide>
@@ -248,7 +249,7 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
           {/* precio, cantidad y carrito */}
           <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between  p-4">
             <span className="col-span-5 font-bold">
-              ₡ {variants.length > 0 ? variants[0].attributes.price : null}
+              $ {variants.length > 0 ? variants[0].attributes.price : null}
             </span>
             <div className="col-span-7 md:flex md:flex-col items-end md:items-end p-3">
               <div className="flex items-center mb-2 ">

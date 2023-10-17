@@ -41,7 +41,7 @@ const ProductCard = ({ id, name, defaultPrice, coverImage, brand, url }) => {
 
         <div className="bg-aquamarine text-xs md:text-lg rounded-b-[15px] font-bold flex justify-center absolute bottom-0 left-0 right-0">
           <button className="hover:underline text-white p-1">
-            ₡ {defaultPrice}
+            $ {defaultPrice}
           </button>
         </div>
       </div>

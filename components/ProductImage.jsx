@@ -1,15 +1,16 @@
 import React from "react";
 import Image from "next/image";
 
-function ProductImage({ url, width, height, className }) {
+function ProductImage({ url, width, height, className, altText}) {
   return (
     <Image
       priority={true}
       width={width}
       height={height}
       src={`${url}`}
-      alt="tailwind logo"
+      alt={altText}
       className={className}
+
     />
   );
 }
