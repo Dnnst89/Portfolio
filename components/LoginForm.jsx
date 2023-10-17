@@ -137,9 +137,7 @@ const LoginForm = () => {
             {({ errors, touched, values }) => {
               return (
                 <Form className="max-w-screen-xl items-center mt-20 grid grid-cols-12 m-auto">
-                  <h1
-                    className=" text-3xl flex justify-center items-center mb-10 col-span-12 "
-                  >
+                  <h1 className=" text-3xl flex justify-center items-center mb-10 col-span-12 ">
                     Iniciar sesión
                   </h1>
                   <div className="bg-resene  pt-10 w-full flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-3 col-span-8">
@@ -180,7 +178,9 @@ const LoginForm = () => {
                           ) : (
                             <button
                               type="button"
-                              onClick={() => setPasswordVisible(!passwordVisible)}
+                              onClick={() =>
+                                setPasswordVisible(!passwordVisible)
+                              }
                               className="absolute right-6 top-11 cursor-pointer "
                             >
                               {passwordVisible ? (
@@ -192,7 +192,9 @@ const LoginForm = () => {
                           )}
                         </div>
                         <p className="text-center text-sm hover:underline cursor-pointer text-lightblue mb-3 grid col-span-12 md:col-span-12 w-2/4 m-auto">
-                          <Link href="/forgotPassword">Recuperar contraseña</Link>
+                          <Link href="http://detinmarin.s3-website-us-west-2.amazonaws.com/forgotPassword/">
+                            Recuperar contraseña
+                          </Link>
                         </p>
                         <button
                           type="submit"
@@ -205,7 +207,8 @@ const LoginForm = () => {
                           Iniciar Sesión
                         </button>
                       </section>
-                    </div></div>
+                    </div>
+                  </div>
                 </Form>
               );
             }}
