@@ -7,7 +7,8 @@ import { useQuery } from "@apollo/client";
 import { paymentDataForm } from "@/app/data/tilopay/transactionData";
 import useStorage from "@/hooks/useStorage";
 
-export default function CheckOutForm3() {
+export default function CheckOutForm3({ myOrderNumber }) {
+  console.log("checkout3 :", myOrderNumber);
   const router = useRouter();
   const [formData, setFormData] = useState(paymentDataForm);
   const { user } = useStorage();
@@ -15,14 +16,6 @@ export default function CheckOutForm3() {
   // total final to pay , WE NEED TO GET IT FROM FACTURAZEN
   //RETRIEVE STATUS
   // get the order retrieved or created
-
-  if (typeof localStorage !== 'undefined') {
-    // You can safely use localStorage here
-    const storedOrder = localStorage.getItem("createdOrder");
-    console.log(storedOrder);
-  } else {
-    console.error("localStorage is not available in this browser.");
-  }
   // Retrieve user data
   const { loading, error, data } = useQuery(GET_PAYMENT_DETAILS, {
     variables: { userId: id, status: "P" },
@@ -56,7 +49,7 @@ export default function CheckOutForm3() {
             billToZipPostCode: userAddressAttributes.postCode,
             billToTelephone: phoneNumber,
             billToEmail: email,
-            orderNumber: storedOrder,
+            orderNumber: myOrderNumber,
           });
         } else {
           // Handle the case where the specific order is not found

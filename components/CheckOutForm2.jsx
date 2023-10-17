@@ -2,16 +2,16 @@
 import Image from "next/image";
 import moovin from "../app/assets/moovin.png";
 import logo from "../app/assets/tk-logo.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CREATE_ORDER } from "@/src/graphQl/queries/createUserOrder";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
 import useStorage from "@/hooks/useStorage";
 import CheckOutForm3 from "./CheckOutForm3";
 import { UPDATE_ORDER } from "@/src/graphQl/queries/updateTotal";
-import { generateOrderId } from "@/helpers/generateOrderId";
 export default function CheckOutForm2({ amount }) {
-  console.log("order number ", generateOrderId());
+  const [myOrderNumber, setMyOrderNumber] = useState(null);
+  let retrievedOrderNumber = null;
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
   const { total, subTotal, taxes } = amount;
   const [createOrder] = useMutation(CREATE_ORDER);
@@ -34,7 +34,7 @@ export default function CheckOutForm2({ amount }) {
      * decides to change the order
      */
     try {
-      await updateOrder({
+      const { data } = await updateOrder({
         variables: {
           order_Id: orderNumber,
           total: total,
@@ -42,13 +42,15 @@ export default function CheckOutForm2({ amount }) {
           taxes: taxes,
         },
       });
-      console.log("order updated");
+      retrievedOrderNumber = data?.updateOrderDetail?.data?.id;
+      console.log("order updated", retrievedOrderNumber);
+      // Now that you have the updated order number
+      setMyOrderNumber(retrievedOrderNumber);
+      //localStorage.setItem("createdOrder", orderNumber);
+      setChecktOutForm2Visible(true);
     } catch (error) {
       console.error("Error updating order:", error);
     }
-
-    localStorage.setItem("createdOrder", orderNumber);
-    setChecktOutForm2Visible(true);
   };
 
   const handleCreateOrder = async () => {
@@ -68,8 +70,7 @@ export default function CheckOutForm2({ amount }) {
       // if the order not exist we create one
       // After create an order now we can get that pending order
       const orderNumber = await data?.createOrderDetail?.data?.id;
-      // Store the orderNumber in localStorage
-      localStorage.setItem("createdOrder", orderNumber);
+      setMyOrderNumber(orderNumber);
       setChecktOutForm2Visible(true);
     } catch (error) {
       console.error("Error creating order:", error);
@@ -141,7 +142,7 @@ export default function CheckOutForm2({ amount }) {
           </div>
         </>
       ) : (
-        <CheckOutForm3 />
+        <CheckOutForm3 myOrderNumber={myOrderNumber} />
       )}
     </div>
   );
