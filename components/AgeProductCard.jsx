@@ -1,16 +1,21 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from 'next/navigation';
 
 const loader = ({ src }) => {
   return `http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337${src}`;
 };
 
 const AgeProductCard = ({ id, name, defaultPrice, coverImage, brand }) => {
+  const router = useRouter();
+  const productChange = () => {
+    router.push(`/detail${id}`); // Reemplaza '/nueva-pagina' con la ruta de la página a la que deseas navegar.
+  };
 
   return (
     <Link href={{ pathname: "/detail", query: { id } }}>
-      <div className="m-4 max-w-sm rounded-[15px] drop-shadow-card w-[145px] h-[225px] md:w-[240px] md:h-[360px] transition-transform transform hover:scale-105 hover:bg-floralwhite bg-resene duration-1000 hover:cursor-pointer">
+      <div onClick={productChange} className="m-4 max-w-sm rounded-[15px] drop-shadow-card w-[145px] h-[225px] md:w-[240px] md:h-[360px] transition-transform transform hover:scale-105 hover:bg-floralwhite bg-resene duration-1000 hover:cursor-pointer">
         <div className="w-full mx-auto p-1 md:p-2">
           <div href="#">
             <Image
