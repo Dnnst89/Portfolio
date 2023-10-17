@@ -47,8 +47,10 @@ export default function OrderDetailSecondary({ orderId }) {
           //llamo la query para traer la shopping session
           variables: { orderId: id },
         });
+        console.log(data)
         if (data) {
-          const orderInfo = data.orderDetail.data
+          const orderInfo = data?.orderDetail?.data
+          console.log("orderInfo: ", orderInfo)
           setOrderData((prev) => ({
             ...prev,
             order: {
@@ -90,7 +92,8 @@ export default function OrderDetailSecondary({ orderId }) {
     </div>
   }
 
-  orderData.orderItems.map((item) => { console.log(item.images) })
+  console.log(orderData)
+
 
   return (
     <div className="bg-resene">
