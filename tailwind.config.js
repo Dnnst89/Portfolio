@@ -19,6 +19,7 @@ module.exports = {
     colors: {
       aquamarine: "#67C3AD",
       lightblue: "#76bae2",
+      green: "rgb(52 211 153)",
       pink: { 100: "#ff49db", 200: "#FB82AF" },
       orange: "#ff7849",
       resene: "#F6EEE2",

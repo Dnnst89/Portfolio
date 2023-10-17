@@ -9,6 +9,12 @@ import useCartSummary from "@/hooks/useCartSummary";
 import useStorage from "@/hooks/useStorage";
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 
 function ProductDetail({ name, brand, description, sku, variants, materials }) {
 
@@ -70,16 +76,54 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
 
         {/* Columna de imagenes */}
         <div className="mb-10 col-span-12 md:col-span-6">
+          {/* imagen principal grande */}
           <div className="m-auto w-full flex justify-center">
-            <Carousel showArrows={false} showStatus={false} showThumbs={true}>
-              {images.map((image, index) => (
-                <div key={index}>
-                  <Image src={image.attributes.url} alt={"image"} width={"150"} height={"200"} />
-                </div>
-              ))}
-
-            </Carousel>
+            {images.length > 0 ? (
+              <ProductImage
+                {...image == null ? setImage(images[0].attributes.url) : null}
+                key={variants[0].attributes.images.data[0].id}
+                url={image}
+                width={"450"}
+                height={"800"}
+                className={"rounded-xl mx-2"}
+              />
+            ) : null}
           </div>
+          {/* //imagenes debajo de la principal */}
+          <div >
+            <Swiper
+              modules={[Navigation, A11y]}
+              spaceBetween={2}
+              slidesPerView={3}
+              navigation
+              onSwiper={(swiper) => console.log(swiper)}
+              onSlideChange={() => console.log('slide change')}
+
+            >
+              {images
+                ? images.map((item) => {
+                  return (
+                    <div key={item.id}>
+                      <SwiperSlide key={item.id}>
+                        <button onClick={() => chanceImage(item.attributes.url)}>
+                          <Image
+                            src={item.attributes.url}
+                            width={"125"}
+                            height={"100"}
+                            className={"rounded-xl"}
+                            alt="detinmarin-image"
+                          />
+                        </button>
+                      </SwiperSlide>
+                    </div>
+                  );
+                })
+                : null}
+            </Swiper>
+
+
+          </div>
+
         </div>
 
         {/* Sección con los detalles del producto*/}

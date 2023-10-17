@@ -15,7 +15,14 @@ export default function CheckOutForm3() {
   // total final to pay , WE NEED TO GET IT FROM FACTURAZEN
   //RETRIEVE STATUS
   // get the order retrieved or created
-  const storedOrder = localStorage.getItem("createdOrder");
+
+  if (typeof localStorage !== 'undefined') {
+    // You can safely use localStorage here
+    const storedOrder = localStorage.getItem("createdOrder");
+    console.log(storedOrder);
+  } else {
+    console.error("localStorage is not available in this browser.");
+  }
   // Retrieve user data
   const { loading, error, data } = useQuery(GET_PAYMENT_DETAILS, {
     variables: { userId: id, status: "P" },
@@ -89,15 +96,15 @@ export default function CheckOutForm3() {
       console.error("Promise rejected with error:", error);
     });
   return (
-    <div className="mt-[40px] mx-[30px]">
-      <div className="flex w-3/4 justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
+    <div className="w-full">
+      <div className="flex w-full justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
         <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
           3
         </div>
         <h1 className="text-xl">Formulario de pago</h1>
       </div>
 
-      <div className="flex justify-center mt-8 mb-8 w-3/4">
+      <div className="flex justify-center m-auto mt-8 mb-8 w-3/4">
         <button
           onClick={() => router.push(paymentUrl)}
           className="bg-pink-200 text-white rounded-sm p-2 w-[200px] whitespace-nowrap"
