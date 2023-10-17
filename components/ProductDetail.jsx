@@ -86,14 +86,15 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
                 width={"450"}
                 height={"800"}
                 className={"rounded-xl mx-2"}
+                atlText={name}
               />
             ) : null}
           </div>
           {/* //imagenes debajo de la principal */}
-          <div >
+          <div  className="md:w-4/6 m-auto mt-2">
             <Swiper
               modules={[Navigation, A11y]}
-              spaceBetween={2}
+              spaceBetween={1}
               slidesPerView={3}
               navigation
               onSwiper={(swiper) => console.log(swiper)}
@@ -111,7 +112,7 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
                             width={"125"}
                             height={"100"}
                             className={"rounded-xl"}
-                            alt="detinmarin-image"
+                            alt={name}
                           />
                         </button>
                       </SwiperSlide>
