@@ -9,7 +9,7 @@ import AgePagination from "./AgePagination";
 import Spinner from "@/components/Spinner";
 export default function OrderDetail() {
 
-  const userStorage = JSON.parse(localStorage.getItem("userData"));
+
   const [page, setPage] = useState(1);
   const [nbPages, setNbPages] = useState();
   const pageSize = 3;
@@ -38,6 +38,7 @@ export default function OrderDetail() {
     fetchPolicy: "network-only", // Forzar la consulta directa al servidor
   });
   useEffect(() => {
+    const userStorage = JSON.parse(localStorage.getItem("userData"));
     const userId = userStorage?.user?.id;
     console.log(userId)
     const getOrdersInfo = async (id, page, pageSize) => {
