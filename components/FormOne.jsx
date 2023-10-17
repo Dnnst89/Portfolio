@@ -242,9 +242,8 @@ const CheckOutForm1 = () => {
       {({ errors, touched }) => {
         return (
           <>
-            <div className="w-full max-w-screen-xl m-auto grid grid-cols-12">
-              
-              <div className="col-span-9">
+            <div className="w-full max-w-screen-xl m-auto grid grid-cols-12 mt-10">
+              <div className="col-span-9 md:pr-2">
                 <div className="flex  justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
                   <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
                     1
@@ -260,174 +259,195 @@ const CheckOutForm1 = () => {
                 "
                     >
                       <main className="flex ">
-                        <section className="w-3/4">
+                        <section className="w-full">
                           <div className="flex justify-center">
-                            <section className="w-1/4 flex flex-col p-2">
-                              <label htmlFor="name">Nombre</label>
-                              <Field
-                                type="text"
-                                name="firstName"
-                                id="firstName"
-                                className="form-input"
-                                onChange={(e) => {
-                                  setUserInformation({
-                                    ...userInformation,
-                                    firstName: e.target.value,
-                                  });
-                                }}
-                                value={userInformation.firstName}
-                              />
-                              {errors.firstName && touched.firstName ? (
-                                <ErrorForm>{errors.firstName}</ErrorForm>
-                              ) : null}
-                              <label htmlFor="phone">Teléfono</label>
-                              <Field
-                                type="text"
-                                id="phone"
-                                name="phone"
-                                placeholder="Teléfono"
-                                className="form-input"
-                                onChange={(e) => {
-                                  setUserInformation({
-                                    ...userInformation,
-                                    phone: e.target.value,
-                                  });
-                                }}
-                                value={userInformation.phone}
-                              />
-                              {errors.phone && touched.phone ? (
-                                <ErrorForm>{errors.phone}</ErrorForm>
-                              ) : null}
-                              <label htmlFor="country">Pais</label>
-                              <Field
-                                type="text"
-                                id="country"
-                                name="country"
-                                className="form-input"
-                                onChange={(e) => {
-                                  setUserInformation({
-                                    ...userInformation,
-                                    country: e.target.value,
-                                  });
-                                }}
-                                value={userInformation.country}
-                              />
-                              {errors.country && touched.country ? (
-                                <ErrorForm>{errors.country}</ErrorForm>
-                              ) : null}
-                              <label htmlFor="canton">Cantón</label>
-                              <Field
-                                type="text"
-                                id="canton"
-                                name="canton"
-                                className="form-input"
-                                onChange={(e) => {
-                                  setUserInformation({
-                                    ...userInformation,
-                                    canton: e.target.value,
-                                  });
-                                }}
-                                value={userInformation.canton}
-                              />
-                              {errors.canton && touched.canton ? (
-                                <ErrorForm>{errors.canton}</ErrorForm>
-                              ) : null}
-                              <label htmlFor="addressLine2">Direccion 2</label>
-                              <Field
-                                type="text"
-                                id="addressLine2"
-                                name="addressLine2"
-                                placeholder="Direccion 2"
-                                className="form-input"
-                                onChange={(e) => {
-                                  setUserInformation({
-                                    ...userInformation,
-                                    addressLine2: e.target.value,
-                                  });
-                                }}
-                                value={userInformation.addressLine2}
-                              />
-                              {errors.addressLine2 && touched.addressLine2 ? (
-                                <ErrorForm>{errors.addressLine2}</ErrorForm>
-                              ) : null}
-                            </section>
-                            <section className="w-2/4 flex flex-col p-2">
-                              <label htmlFor="lastName">Apellidos</label>
-                              <Field
-                                type="text"
-                                id="lastName"
-                                name="lastName"
-                                placeholder="Apellidos"
-                                className="form-input"
-                                onChange={(e) => {
-                                  setUserInformation({
-                                    ...userInformation,
-                                    lastName: e.target.value,
-                                  });
-                                }}
-                                value={userInformation.lastName}
-                              />
-                              {errors.lastName && touched.lastName ? (
-                                <ErrorForm>{errors.lastName}</ErrorForm>
-                              ) : null}
-                              <label htmlFor="postCode">Código Postal</label>
-                              <Field
-                                type="text"
-                                id="postCode"
-                                name="postCode"
-                                className="form-input"
-                                onChange={(e) => {
-                                  setUserInformation({
-                                    ...userInformation,
-                                    postCode: e.target.value,
-                                  });
-                                }}
-                                value={userInformation.postCode}
-                              />
-                              {errors.postCode && touched.postCode ? (
-                                <ErrorForm>{errors.postCode}</ErrorForm>
-                              ) : null}
-                              <label htmlFor="province">Provincia</label>
-                              <Field
-                                type="text"
-                                id="province"
-                                name="province"
-                                placeholder="Provincia"
-                                className="form-input"
-                                onChange={(e) => {
-                                  setUserInformation({
-                                    ...userInformation,
-                                    province: e.target.value,
-                                  });
-                                }}
-                                value={userInformation.province}
-                              />
-                              {errors.province && touched.province ? (
-                                <ErrorForm>{errors.province}</ErrorForm>
-                              ) : null}
-                              <label htmlFor="addressLine1">Direccion 1</label>
-                              <Field
-                                type="text"
-                                id="addressLine1"
-                                name="addressLine1"
-                                placeholder="Direccion 1"
-                                className="form-input"
-                                onChange={(e) => {
-                                  setUserInformation({
-                                    ...userInformation,
-                                    addressLine1: e.target.value,
-                                  });
-                                }}
-                                value={userInformation.addressLine1}
-                              />
-                              {errors.addressLine1 && touched.addressLine1 ? (
-                                <ErrorForm>{errors.addressLine1}</ErrorForm>
-                              ) : null}
+                            <section className="md:w-4/6 grid grid-cols-12 gap-4">
+                              <div className="col-span-6 grid">
+                                <label htmlFor="name">Nombre</label>
+                                <Field
+                                  type="text"
+                                  name="firstName"
+                                  id="firstName"
+                                  className="form-input"
+                                  onChange={(e) => {
+                                    setUserInformation({
+                                      ...userInformation,
+                                      firstName: e.target.value,
+                                    });
+                                  }}
+                                  value={userInformation.firstName}
+                                />
+                                {errors.firstName && touched.firstName ? (
+                                  <ErrorForm>{errors.firstName}</ErrorForm>
+                                ) : null}
+                              </div>
+                              <div className="col-span-6 grid">
+                                <label htmlFor="lastName">Apellidos</label>
+                                <Field
+                                  type="text"
+                                  id="lastName"
+                                  name="lastName"
+                                  placeholder="Apellidos"
+                                  className="form-input"
+                                  onChange={(e) => {
+                                    setUserInformation({
+                                      ...userInformation,
+                                      lastName: e.target.value,
+                                    });
+                                  }}
+                                  value={userInformation.lastName}
+                                />
+                                {errors.lastName && touched.lastName ? (
+                                  <ErrorForm>{errors.lastName}</ErrorForm>
+                                ) : null}
+                              </div>
+                              <div className="col-span-6 grid">
+                                <label htmlFor="phone">Teléfono</label>
+                                <Field
+                                  type="text"
+                                  id="phone"
+                                  name="phone"
+                                  placeholder="Teléfono"
+                                  className="form-input"
+                                  onChange={(e) => {
+                                    setUserInformation({
+                                      ...userInformation,
+                                      phone: e.target.value,
+                                    });
+                                  }}
+                                  value={userInformation.phone}
+                                />
+                                {errors.phone && touched.phone ? (
+                                  <ErrorForm>{errors.phone}</ErrorForm>
+                                ) : null}
+                              </div>
+                              <div className="col-span-6 grid">
+                                <label htmlFor="postCode">Código Postal</label>
+                                <Field
+                                  type="text"
+                                  id="postCode"
+                                  name="postCode"
+                                  className="form-input"
+                                  onChange={(e) => {
+                                    setUserInformation({
+                                      ...userInformation,
+                                      postCode: e.target.value,
+                                    });
+                                  }}
+                                  value={userInformation.postCode}
+                                />
+                                {errors.postCode && touched.postCode ? (
+                                  <ErrorForm>{errors.postCode}</ErrorForm>
+                                ) : null}
+                              </div>
+                              <div className="col-span-6 grid">
+                                <label htmlFor="country">Pais</label>
+                                <Field
+                                  type="text"
+                                  id="country"
+                                  name="country"
+                                  className="form-input"
+                                  onChange={(e) => {
+                                    setUserInformation({
+                                      ...userInformation,
+                                      country: e.target.value,
+                                    });
+                                  }}
+                                  value={userInformation.country}
+                                />
+                                {errors.country && touched.country ? (
+                                  <ErrorForm>{errors.country}</ErrorForm>
+                                ) : null}
+                              </div>
+                              <div className="col-span-6 grid">
+                                <label htmlFor="province">Provincia</label>
+                                <Field
+                                  type="text"
+                                  id="province"
+                                  name="province"
+                                  placeholder="Provincia"
+                                  className="form-input"
+                                  onChange={(e) => {
+                                    setUserInformation({
+                                      ...userInformation,
+                                      province: e.target.value,
+                                    });
+                                  }}
+                                  value={userInformation.province}
+                                />
+                                {errors.province && touched.province ? (
+                                  <ErrorForm>{errors.province}</ErrorForm>
+                                ) : null}
+                              </div>
+                              <div className="col-span-6 grid">
+                                <label htmlFor="canton">Cantón</label>
+                                <Field
+                                  type="text"
+                                  id="canton"
+                                  name="canton"
+                                  className="form-input"
+                                  onChange={(e) => {
+                                    setUserInformation({
+                                      ...userInformation,
+                                      canton: e.target.value,
+                                    });
+                                  }}
+                                  value={userInformation.canton}
+                                />
+                                {errors.canton && touched.canton ? (
+                                  <ErrorForm>{errors.canton}</ErrorForm>
+                                ) : null}
+                              </div>
+
+                              <div className="col-span-6 grid">
+                                <label htmlFor="addressLine1">Direccion 1</label>
+                                <Field
+                                  type="text"
+                                  id="addressLine1"
+                                  name="addressLine1"
+                                  placeholder="Direccion 1"
+                                  className="form-input"
+                                  onChange={(e) => {
+                                    setUserInformation({
+                                      ...userInformation,
+                                      addressLine1: e.target.value,
+                                    });
+                                  }}
+                                  value={userInformation.addressLine1}
+                                />
+                                {errors.addressLine1 && touched.addressLine1 ? (
+                                  <ErrorForm>{errors.addressLine1}</ErrorForm>
+                                ) : null}
+                              </div>
+
+                              <div className="col-span-6 grid">
+                                <label htmlFor="addressLine2">Direccion 2</label>
+                                <Field
+                                  type="text"
+                                  id="addressLine2"
+                                  name="addressLine2"
+                                  placeholder="Direccion 2"
+                                  className="form-input"
+                                  onChange={(e) => {
+                                    setUserInformation({
+                                      ...userInformation,
+                                      addressLine2: e.target.value,
+                                    });
+                                  }}
+                                  value={userInformation.addressLine2}
+                                />
+                                {errors.addressLine2 && touched.addressLine2 ? (
+                                  <ErrorForm>{errors.addressLine2}</ErrorForm>
+                                ) : null}
+                              </div>
+
                             </section>
                           </div>
-                          <div className="flex justify-center">
-                            <section className="w-1/4 flex p-2">
-                              <label htmlFor="checkbox">Factura Electrónica</label>
+                          <div className="flex justify-center w-full">
+                            <section className="w-2/4 m-auto mt-10 mb-5">
+                              <label htmlFor="checkbox" className="mr-3">
+                                Factura Electrónica
+                              </label>
                               <Field
                                 type="checkbox"
                                 id="checkbox"
@@ -454,8 +474,9 @@ const CheckOutForm1 = () => {
                             <section className="w-1/4 flex p-2"></section>
                           </div>
                           <div className="flex justify-center">
-                            <section className="w-1/4 flex flex-col p-2  ">
-                              <label htmlFor="idType">Tipo De Cédula</label>
+                            <section className="md:w-4/6 grid grid-cols-12 gap-4">
+                            <div className="col-span-6 grid">
+                            <label htmlFor="idType">Tipo De Cédula</label>
                               <Field
                                 type="text"
                                 id="idType"
@@ -470,9 +491,9 @@ const CheckOutForm1 = () => {
                                 }}
                                 value={userInformation.idType}
                               />
-                            </section>
-                            <section className="w-1/4 flex flex-col p-2">
-                              <label htmlFor="idNumber">Cédula</label>
+                            </div>
+                            <div className="col-span-6 grid">
+                            <label htmlFor="idNumber">Cédula</label>
                               <Field
                                 type="text"
                                 id="idNumber"
@@ -487,11 +508,13 @@ const CheckOutForm1 = () => {
                                 }}
                                 value={userInformation.idNumber}
                               />
+                            </div>
+                              
                             </section>
                           </div>
                         </section>
                       </main>
-                      <div className="flex justify-center mt-8 mb-8 w-3/4 ">
+                      <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
                         <button
                           type="submit"
                           className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
@@ -514,9 +537,7 @@ const CheckOutForm1 = () => {
                   />
                 </div>
               </div>
-
             </div>
-
           </>
         );
       }}

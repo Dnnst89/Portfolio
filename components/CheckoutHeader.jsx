@@ -8,8 +8,8 @@ import { BiArrowBack } from "react-icons/bi";
 export default function CheckOutHeader({ regresar }) {
   return (
     <>
-      <div className="bg-resene">
-        <div className="w-full p-2 flex justify-center absolute left-10 top-5">
+      <div className="bg-resene w-full  grid grid-cols-12 py-3">
+        <div className="w-full max-w-screen-xl m-auto col-span-3 flex justify-center ">
           <Link href={regresar} className=" p-2 ">
             <button className="bg-aquamarine text-white rounded-sm p-2 flex items-center">
               <BiArrowBack className="mr-2" />
@@ -17,7 +17,10 @@ export default function CheckOutHeader({ regresar }) {
             </button>
           </Link>
         </div>
-        <Image src={logo} alt="" style={{ width: "180px", height: "80px" }} />
+        <div className="col-span-6 flex justify-center">
+        <Image src={logo} alt="" style={{ width: "auto", height: "80px" }} />
+        </div>
+        
       </div>
     </>
   );

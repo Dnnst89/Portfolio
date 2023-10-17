@@ -76,8 +76,8 @@ export default function CheckOutForm2({ amount }) {
   };
 
   return (
-    <div className="mt-[40px] mx-[30px]">
-      <div className="flex w-3/4 justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
+    <div className="w-full">
+      <div className="flex justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
         <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
           2
         </div>
@@ -85,7 +85,7 @@ export default function CheckOutForm2({ amount }) {
       </div>
       {!checktOutForm2Visible ? (
         <>
-          <div className="w-3/4 flex flex-col items-center mt-5 space-y-10">
+          <div className="w-full flex flex-col items-center mt-5 space-y-10">
             <section className="bg-white w-3/4 flex  rounded-t-3xl drop-shadow-lg text-xl">
               <div className=" border-r-2 border-dashed border-grey-200  w-[100px] flex justify-center items-center ml-[10px]">
                 <input
@@ -101,8 +101,8 @@ export default function CheckOutForm2({ amount }) {
                 <Image
                   src={moovin}
                   alt=""
-                  style={{ width: "230px", height: "65px" }}
-                  className="ml-10"
+                  style={{ width: "auto", height: "65px" }}
+                  className="ml-10 py-2"
                 />
               </div>
             </section>
@@ -114,6 +114,7 @@ export default function CheckOutForm2({ amount }) {
                   name="del_method"
                   value="MOOVIN"
                   className="w-5 h-5"
+                  defaultChecked
                 />
               </div>
               <div className="flex  items-center  pl-[90px]">
@@ -121,13 +122,13 @@ export default function CheckOutForm2({ amount }) {
                 <Image
                   src={logo}
                   alt=""
-                  style={{ width: "150px", height: "65px" }}
-                  className="ml-20"
+                  style={{ width: "auto", height: "65px" }}
+                  className="ml-20 py-2"
                 />
               </div>
             </section>
           </div>
-          <div className="flex justify-center mt-8 mb-8 w-3/4 ">
+          <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
             <button
               onClick={() => {
                 status === "P" ? resentPendingOrder() : handleCreateOrder();
