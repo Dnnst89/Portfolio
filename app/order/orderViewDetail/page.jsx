@@ -2,12 +2,12 @@
 import BodyComponent from "@/components/BodyComponent";
 import NavigationMenu from "@/components/NavigationMenu";
 import OrderDetailSecondary from "@/components/OrderDetailSecondary";
-
+import useProtectionRoute from "@/hooks/useProtectionRoute";
 import { useState } from "react";
 import { useEffect } from "react";
 export default function OrderDetail({ params }) {
   const [orderId, setOrderId] = useState()
-
+  useProtectionRoute();
   useEffect(() => {
     setOrderId(window.location.search.split("=")[1])
 

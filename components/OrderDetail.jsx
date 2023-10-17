@@ -3,10 +3,12 @@ import GET_USER_ORDERS from "@/src/graphQl/queries/getUserOrders";
 import { useLazyQuery } from "@apollo/client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import useStorage from "@/hooks/useStorage";
 import Pagination from "./Pagination";
 import AgePagination from "./AgePagination";
 import Spinner from "@/components/Spinner";
 export default function OrderDetail() {
+  const { user } = useStorage();
   const [page, setPage] = useState(1);
   const [nbPages, setNbPages] = useState();
   const pageSize = 3;
@@ -33,7 +35,7 @@ export default function OrderDetail() {
   const [loading, setLoading] = useState(true);
   const [getOrders] = useLazyQuery(GET_USER_ORDERS);
   useEffect(() => {
-    const { user } = JSON.parse(localStorage.getItem("userData"));
+
 
     const getOrdersInfo = async (id, page, pageSize) => {
       try {
@@ -81,7 +83,7 @@ export default function OrderDetail() {
       }
     };
     if (user) {
-      getOrdersInfo(user.id, page, pageSize);
+      getOrdersInfo(user?.id, page, pageSize);
     }
     console.log(userData);
     //eslint-disable-next-line react-hooks/exhaustive-deps
@@ -137,13 +139,13 @@ export default function OrderDetail() {
         ))}
       </div>
       <div className="col-span-12">
-      <AgePagination
-        nbPages={nbPages}
-        currentPage={page}
-        setCurrentPage={setPage}
-      />
+        <AgePagination
+          nbPages={nbPages}
+          currentPage={page}
+          setCurrentPage={setPage}
+        />
       </div>
-      
+
     </div>
   );
 }
