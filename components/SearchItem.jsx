@@ -29,7 +29,7 @@ function SearchItem({ hit, components }) {
           </div>
 
           <div className="flex-1">
-          <p className="text-xl font-semibold text-right">₡{hit.defaultPrice}</p>
+          <p className="text-xl font-semibold text-right">${hit.defaultPrice}</p>
           </div>
 
         </div>
