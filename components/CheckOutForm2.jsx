@@ -11,7 +11,6 @@ import useStorage from "@/hooks/useStorage";
 import CheckOutForm3 from "./CheckOutForm3";
 import { UPDATE_ORDER } from "@/src/graphQl/queries/updateTotal";
 import useCartSummary from "@/hooks/useCartSummary";
-import { generateOrderId } from "@/helpers/generateOrderId";
 export default function CheckOutForm2({ amount }) {
   const [myOrderNumber, setMyOrderNumber] = useState(null);
   let retrievedOrderNumber = null;
