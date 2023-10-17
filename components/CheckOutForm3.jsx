@@ -15,7 +15,14 @@ export default function CheckOutForm3() {
   // total final to pay , WE NEED TO GET IT FROM FACTURAZEN
   //RETRIEVE STATUS
   // get the order retrieved or created
-  const storedOrder = localStorage.getItem("createdOrder");
+
+  if (typeof localStorage !== 'undefined') {
+    // You can safely use localStorage here
+    const storedOrder = localStorage.getItem("createdOrder");
+    console.log(storedOrder);
+  } else {
+    console.error("localStorage is not available in this browser.");
+  }
   // Retrieve user data
   const { loading, error, data } = useQuery(GET_PAYMENT_DETAILS, {
     variables: { userId: id, status: "P" },
