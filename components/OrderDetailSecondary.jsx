@@ -34,7 +34,7 @@ export default function OrderDetailSecondary({ orderId }) {
     }
   )
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [getOrderItems] = useLazyQuery(GET_ORDER_ITEMS_BY_ORDER_ID);
 
   useEffect(() => {
@@ -55,11 +55,11 @@ export default function OrderDetailSecondary({ orderId }) {
             ...prev,
             order: {
               orderRef: id,
-              subtotal: orderInfo.attributes.subTotal,
-              taxes: orderInfo.attributes.taxes,
-              total: orderInfo.attributes.total,
+              subtotal: orderInfo?.attributes?.subTotal,
+              taxes: orderInfo?.attributes?.taxes,
+              total: orderInfo?.attributes?.total,
             },
-            orderItems: orderInfo.attributes.order_items.data.map((item) => {
+            orderItems: orderInfo?.attributes?.order_items?.data?.map((item) => {
               return {
                 itemRef: item.id,
                 quantity: item.attributes.quantity,
@@ -92,7 +92,7 @@ export default function OrderDetailSecondary({ orderId }) {
     </div>
   }
 
-  console.log(orderData)
+  console.log(orderData.orderItems)
 
 
   return (
