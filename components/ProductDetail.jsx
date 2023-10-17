@@ -74,7 +74,7 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
             <Carousel showArrows={false} showStatus={false} showThumbs={true}>
               {images.map((image, index) => (
                 <div key={index}>
-                  <img src={image.attributes.url} alt={"image"} />
+                  <Image src={image.attributes.url} alt={"image"} width={"150"} height={"200"} />
                 </div>
               ))}
 

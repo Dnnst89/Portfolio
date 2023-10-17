@@ -29,7 +29,11 @@ export default function ThankYouMessage() {
                   Tu correo se ha confirmado satisfactoriamente{" "}
                 </p>
                 <button
-                  onClick={() => router.push("/login")} // Specify the URL to which you want to navigate
+                  onClick={() =>
+                    router.push(
+                      "http://detinmarin.s3-website-us-west-2.amazonaws.com/login/"
+                    )
+                  } // Specify the URL to which you want to navigate
                   className="bg-pink-200 text-white rounded-sm p-2 w-[150px]"
                 >
                   Volver
