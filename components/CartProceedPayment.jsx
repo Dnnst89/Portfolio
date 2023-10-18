@@ -14,15 +14,15 @@ export default function CartProceedPayment({ textButton, page, error }) {
       <div className="m-auto">
         <Link href={page}>
           <button
-            className={`bg-pink-200 text-white rounded-sm p-2 w-[200px] whitespace-nowrap ${error.length > 0 ? 'cursor-not-allowed' : 'cursor-pointer'//si el arreglo de errores tiene algun id d eun item que este provocando errores
+            className={`bg-pink-200 text-white rounded-sm p-2 w-[200px] whitespace-nowrap ${error?.length > 0 ? 'cursor-not-allowed' : 'cursor-pointer'//si el arreglo de errores tiene algun id d eun item que este provocando errores
               }`}
-            disabled={error.length > 0}
+            disabled={error?.length > 0}
           >
             {textButton}
           </button>
         </Link>
       </div>
-      {error.length > 0 ? ( //si el arreglo de errores tiene algun id deun item que este provocando errores
+      {error?.length > 0 ? ( //si el arreglo de errores tiene algun id deun item que este provocando errores
         <p className={`text-orange w-full text-center`}>Hay un problema en tu carrito</p>
       ) : null}
 
