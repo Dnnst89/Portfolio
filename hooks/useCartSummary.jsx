@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 //         total: number
 //         items: array,
 //         quantity: number,
+//         sessionId
 //     }
 const useCartSummary = ({ userId }) => {
   const cartQuantity = useSelector((state) => state.cart.quantity);
@@ -21,7 +22,10 @@ const useCartSummary = ({ userId }) => {
     quantity: 0,
     sessionId: null,
   });
-  const [error, setError] = useState();
+  const [errors, setErrors] = useState({
+    errorStock: [],
+    errorQueries: null,
+  });
   const [loading, setLoading] = useState(true);
   const [getSession] = useLazyQuery(GET_SHOPPING_SESSION_BY_USER);
   const [getCart] = useLazyQuery(GET_CART_ITEMS_LIST_SHOPPING_SESSION, {
@@ -84,6 +88,7 @@ const useCartSummary = ({ userId }) => {
               item.attributes.variant.data &&
               item.attributes.variant.data.attributes.product.data
             ) {
+
               //debe existir un producto con su respectiva variante
               return accumulator + item.attributes.quantity;
             }
@@ -96,9 +101,22 @@ const useCartSummary = ({ userId }) => {
               item.attributes.variant.data.attributes.product.data
             ) {
               //debe existir un producto con su respectiva variante
-              if (item.attributes.quantity > item.attributes.variant.data.attributes.stock) {//se agrega validacion ITEM <= STOCK
-                setError(item?.attributes?.variant?.data)
+              // Elimina idVariant del arreglo error si ya no hay error
+              if (errors.errorStock.includes(item.attributes.variant.data.id)) {
+                setErrors((prevErrors) => ({
+                  ...prevErrors,
+                  errorStock: prevErrors.errorStock.filter((errorId) => errorId !== item.attributes.variant.data.id),
+                }));
               }
+              if (item.attributes.quantity > item.attributes.variant.data.attributes.stock) {
+                // Almacena el objeto completo en un arreglo en Error si lleva mas cantidad de lo que hay en stock
+                setErrors((prevErrors) => ({
+                  ...prevErrors,
+                  errorStock: [...prevErrors.errorStock, item.attributes.variant.data.id],
+                }));
+
+              }
+
               return {
                 totalItemPrice:
                   item.attributes.variant.data.attributes.price *
@@ -123,7 +141,10 @@ const useCartSummary = ({ userId }) => {
         }
       } catch (error) {
         //Manejo de errores
-        setError(error);
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          errorQueries: error
+        }));
       } finally {
         setLoading(false);
       }
@@ -134,11 +155,12 @@ const useCartSummary = ({ userId }) => {
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, cartQuantity]);
 
+
   return {
     total: cartData.total,
     items: cartData.items,
     quantity: cartData.quantity,
-    error,
+    errors,
     sessionId: cartData.sessionId,
     loading,
   };
