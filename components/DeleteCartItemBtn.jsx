@@ -16,7 +16,7 @@ const DeleteCartItemBtn = ({ idItem, qtyItem }) => {
   const {
     items,
     quantity,
-    error,
+    errors,
     sessionId } = useCartSummary({ userId: user?.id });
 
   const [deleteCartItem] = useMutation(DELETE_CART_ITEM_MUTATION, {

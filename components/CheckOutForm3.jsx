@@ -18,6 +18,7 @@ export default function CheckOutForm3({ myOrderNumber }) {
   const cartSummary = useCartSummary({
     userId: user?.id,
   });
+  console.log(cartSummary.errors.errorStock.length)
   // total final to pay , WE NEED TO GET IT FROM FACTURAZEN
   //RETRIEVE STATUS
   // get the order retrieved or created
@@ -94,8 +95,9 @@ export default function CheckOutForm3({ myOrderNumber }) {
       console.error("Promise rejected with error:", error);
     });
 
-  const handleVerification = () => {
-    if (cartSummary.error) {
+  const handleVerification = () => {//verifica que no haya ningun error de stock con la cantidad de productos que lleva
+    if (cartSummary.errors.errorStock.length > 0) {
+
       toast.custom((t) => (<AlertNotAuth t={t} msj={"Lo sentimos ha sucedido un error con tu compra, verifica tus productos"} newRoute={"/cart"} />))
     } else {
       router.push(paymentUrl)

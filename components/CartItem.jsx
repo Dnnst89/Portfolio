@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image';
 import test from "../app/assets/heart.png";
 
@@ -12,6 +12,10 @@ import { useSelector } from 'react-redux';
 const CartItem = ({ cartItemId, idVariant, productName, brand, description, color, price, totalPrice, ageRange, size, weight, images, stockVariant, quantityCartItem, loading, error }) => {
 
 
+    // error.map((item) => {
+    //     if (item === idVariant) {
+
+    //     })
 
     return (<>
         <div className="grid grid-cols-12 w-full py-3 border-dashed border-grey-200 border-b-[2px]">
@@ -36,9 +40,11 @@ const CartItem = ({ cartItemId, idVariant, productName, brand, description, colo
                 </div>
             </section>
             <div className='col-span-3'>
-                {error?.id == idVariant ? <p className="animate-shake-x text-red-500 text-orange">
-                    * Stock Insuficiente
-                </p> : null}
+                {error.some((item) => item === idVariant) ? (
+                    <p className="animate-shake-x text-red-500 text-orange">
+                        * Stock Insuficiente
+                    </p>
+                ) : null}
                 <div className="mt-4" >
                     <CartQuantityBtn quantityCartItem={quantityCartItem} stock={stockVariant} idCartItem={cartItemId} loading={loading} /> {/* Puedes ajustar el límite según tus necesidades */}
                 </div>
