@@ -144,6 +144,10 @@ const CheckOutForm1 = () => {
             data?.usersPermissionsUser?.data?.attributes?.idCard?.idNumber || 0,
           idType:
             data?.usersPermissionsUser?.data?.attributes?.idCard?.idType || "",
+          checkbox: Boolean(
+            data?.usersPermissionsUser?.data?.attributes?.idCard?.checkbox ||
+              false
+          ),
         });
       }
     } catch (error) {
@@ -152,6 +156,7 @@ const CheckOutForm1 = () => {
   };
   useEffect(() => {
     cargaDatos();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const createNewAddress = async (userId, userInformation) => {

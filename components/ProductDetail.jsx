@@ -16,7 +16,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 
-function ProductDetail({ name, brand, description, sku, variants, materials }) {
+function ProductDetail({ name, brand, description, variants, materials }) {
 
   const [quantity, setQuantity] = useState(1);
   const [image, setImage] = useState(null);
@@ -91,7 +91,7 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
             ) : null}
           </div>
           {/* //imagenes debajo de la principal */}
-          <div  className="md:w-4/6 m-auto mt-2">
+          <div className="md:w-4/6 m-auto mt-2">
             <Swiper
               modules={[Navigation, A11y]}
               spaceBetween={1}
@@ -108,6 +108,7 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
                       <SwiperSlide key={item.id}>
                         <button onClick={() => chanceImage(item.attributes.url)}>
                           <Image
+                            priority={true}
                             src={item.attributes.url}
                             width={"125"}
                             height={"100"}
@@ -129,7 +130,7 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
 
         {/* Sección con los detalles del producto*/}
         <div className="mb-10 col-span-12 md:col-span-6 m-auto">
-          <h2 className="flex justify-end text-sm">Ref {sku}</h2>
+          <h2 className="flex justify-end text-sm">Ref {variants[0].attributes.sku}</h2>
           <h1 className="mb-3 text-xl font-bold">{name}</h1>
           <p>{shortDescrption}...</p>
           <a onClick={() => handleClick()}>

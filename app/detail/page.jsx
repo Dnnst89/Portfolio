@@ -11,8 +11,6 @@ export default function GetDetail() {
     const id = window?.location?.search?.split("=")[1];
     setDetailId(id);
   }, []);
-
-  console.log(detailId)
   return (
     <main>
       <DetailComponent id={detailId} />
