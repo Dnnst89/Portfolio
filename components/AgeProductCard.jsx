@@ -9,9 +9,11 @@ const AgeProductCard = ({ id, name, defaultPrice, coverImage, brand }) => {
     router.push(`/detail${id}`); // Reemplaza '/nueva-pagina' con la ruta de la página a la que deseas navegar.
   };
 
+  // onClick={productChange}
+
   return (
     <Link href={{ pathname: "/detail", query: { id } }}>
-      <div onClick={productChange} className="m-4 max-w-sm rounded-[15px] drop-shadow-card w-[145px] h-[225px] md:w-[240px] md:h-[360px] transition-transform transform hover:scale-105 hover:bg-floralwhite bg-resene duration-1000 hover:cursor-pointer">
+      <div className="m-4 max-w-sm rounded-[15px] drop-shadow-card w-[145px] h-[225px] md:w-[240px] md:h-[360px] transition-transform transform hover:scale-105 hover:bg-floralwhite bg-resene duration-1000 hover:cursor-pointer">
         <div className="w-full mx-auto p-1 md:p-2">
           <div href="#">
             <Image
