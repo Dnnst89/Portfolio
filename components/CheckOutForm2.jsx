@@ -11,6 +11,7 @@ import useStorage from "@/hooks/useStorage";
 import CheckOutForm3 from "./CheckOutForm3";
 import { UPDATE_ORDER } from "@/src/graphQl/queries/updateTotal";
 import useCartSummary from "@/hooks/useCartSummary";
+import { FaArrowAltCircleDown } from "react-icons/fa";
 export default function CheckOutForm2({ amount }) {
   const [myOrderNumber, setMyOrderNumber] = useState(null);
   let retrievedOrderNumber = null;
@@ -50,7 +51,6 @@ export default function CheckOutForm2({ amount }) {
         },
       });
       retrievedOrderNumber = data?.updateOrderDetail?.data?.id;
-      console.log("order updated", retrievedOrderNumber);
       // Now that you have the updated order number
       setMyOrderNumber(retrievedOrderNumber);
       //localStorage.setItem("createdOrder", orderNumber);
@@ -113,6 +113,21 @@ export default function CheckOutForm2({ amount }) {
           2
         </div>
         <h1 className="text-xl">Método de envío</h1>
+        {checktOutForm2Visible ? (
+          <div>
+            <button
+              className="ml-8"
+              onClick={() => setChecktOutForm2Visible(false)}
+            >
+              <FaArrowAltCircleDown
+                style={{
+                  color: "orange",
+                }}
+                size={35}
+              />
+            </button>
+          </div>
+        ) : null}
       </div>
       {!checktOutForm2Visible ? (
         <>

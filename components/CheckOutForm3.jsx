@@ -8,7 +8,6 @@ import { paymentDataForm } from "@/app/data/tilopay/transactionData";
 import useStorage from "@/hooks/useStorage";
 
 export default function CheckOutForm3({ myOrderNumber }) {
-  console.log("checkout3 :", myOrderNumber);
   const router = useRouter();
   const [formData, setFormData] = useState(paymentDataForm);
   const { user } = useStorage();
