@@ -2,7 +2,7 @@ export const paymentDataForm = {
   redirect: "http://localhost:3000/thankyou", // Fix the URL format
   key: process.env.NEXT_PUBLIC_TILOPAY_API_KEY,
   amount: "",
-  currency: "CRC",
+  currency: "USD",
   billToFirstName: "",
   billToLastName: "",
   billToAddress: "",

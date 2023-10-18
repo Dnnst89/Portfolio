@@ -5,7 +5,7 @@ const initialState = {
   redirect: "https://localhost:3000/checkout", // Fix the URL format
   key: process.env.NEXT_PUBLIC_TILOPAY_API_KEY,
   amount: 0,
-  currency: "CRC",
+  currency: "USD",
   billToFirstName: "",
   billToLastName: "",
   billToAddress: "",

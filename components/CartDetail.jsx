@@ -15,7 +15,7 @@ const CartDetail = ({
   const [amounts, setAmounts] = useState({
     total: 0,
     tax: 0,
-    currencyType: "CRC",
+    currencyType: "USD",
   });
   const {
     loading,
