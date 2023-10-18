@@ -86,7 +86,6 @@ const CheckOutForm1 = () => {
     idNumber: 0,
     idType: "",
   });
-
   const [createAddress] = useMutation(CREATE_ADDRESS);
 
   const [updateUserInformation] = useMutation(UPDATE_USER_INFORMATION);
@@ -145,10 +144,6 @@ const CheckOutForm1 = () => {
             data?.usersPermissionsUser?.data?.attributes?.idCard?.idNumber || 0,
           idType:
             data?.usersPermissionsUser?.data?.attributes?.idCard?.idType || "",
-          checkbox: Boolean(
-            data?.usersPermissionsUser?.data?.attributes?.idCard?.idNumber ||
-              false
-          ),
         });
       }
     } catch (error) {
@@ -234,7 +229,6 @@ const CheckOutForm1 = () => {
       : createNewAddress(userId, userInformation);
     setCheckoutForm1Visible(true);
   };
-
   return (
     <Formik
       validationSchema={validationSchema} // Agrega tu esquema de validación
@@ -467,65 +461,69 @@ const CheckOutForm1 = () => {
                                 type="checkbox"
                                 id="checkbox"
                                 name="checkbox"
+                                checked={userInformation.checkbox}
                                 placeholder="Factura Electronica"
                                 className="form-input"
                                 onChange={(e) => {
                                   if (e.target.checked) {
                                     setUserInformation({
                                       ...userInformation,
-                                      checkbox: false,
+                                      checkbox: true,
                                     });
                                   } else {
                                     setUserInformation({
                                       ...userInformation,
-                                      checkbox: true,
+                                      checkbox: false,
                                     });
                                   }
                                 }}
-                                checked={!userInformation.checkbox}
                               />
                             </section>
 
                             <section className="w-1/4 flex p-2"></section>
                           </div>
-                          <div className="flex justify-center">
-                            <section className="md:w-4/6 grid grid-cols-12 gap-4">
-                              <div className="col-span-6 grid">
-                                <label htmlFor="idType">Tipo De Cédula</label>
-                                <Field
-                                  type="text"
-                                  id="idType"
-                                  name="idType"
-                                  placeholder="Tipo De Cédula"
-                                  className="form-input"
-                                  onChange={(e) => {
-                                    setUserInformation({
-                                      ...userInformation,
-                                      idType: e.target.value,
-                                    });
-                                  }}
-                                  value={userInformation.idType}
-                                />
-                              </div>
-                              <div className="col-span-6 grid">
-                                <label htmlFor="idNumber">Cédula</label>
-                                <Field
-                                  type="text"
-                                  id="idNumber"
-                                  name="idNumber"
-                                  placeholder="Tipo De Cédula"
-                                  className="form-input"
-                                  onChange={(e) => {
-                                    setUserInformation({
-                                      ...userInformation,
-                                      idNumber: e.target.value,
-                                    });
-                                  }}
-                                  value={userInformation.idNumber}
-                                />
-                              </div>
-                            </section>
-                          </div>
+                          {userInformation.checkbox ? (
+                            <div className="flex justify-center">
+                              <section className="md:w-4/6 grid grid-cols-12 gap-4">
+                                <div className="col-span-6 grid">
+                                  <label htmlFor="idType">Tipo De Cédula</label>
+                                  <Field
+                                    type="text"
+                                    id="idType"
+                                    name="idType"
+                                    placeholder="Tipo De Cédula"
+                                    className="form-input"
+                                    onChange={(e) => {
+                                      setUserInformation({
+                                        ...userInformation,
+                                        idType: e.target.value,
+                                      });
+                                    }}
+                                    value={userInformation.idType}
+                                  />
+                                </div>
+                                <div className="col-span-6 grid">
+                                  <label htmlFor="idNumber">Cédula</label>
+                                  <Field
+                                    type="text"
+                                    id="idNumber"
+                                    name="idNumber"
+                                    placeholder="Tipo De Cédula"
+                                    className="form-input"
+                                    onChange={(e) => {
+                                      setUserInformation({
+                                        ...userInformation,
+                                        idNumber: e.target.value,
+                                      });
+                                    }}
+                                    value={userInformation.idNumber}
+                                  />
+                                </div>
+                              </section>
+                            </div>
+                          ) : (
+                            ""
+                          )}
                         </section>
                       </main>
                       <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
