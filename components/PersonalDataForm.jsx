@@ -8,7 +8,7 @@ const PersonalDataForm = () => {
   const authUser = useSelector((state) => state.auth.user);
 
   return (
-    <div className="bg-resene  flex flex-col items-center pb-[50px] col-span-12 mx-3  md:col-span-6">
+    <div className="bg-resene  flex flex-col items-center h-fit col-span-12 mx-3  md:col-span-6">
       <h1 className="m-2">Tus datos</h1>
       <div className="flex justify-center w-11/12">
         <section className="w-full p-5 grid grid-cols-6 gap-3">
