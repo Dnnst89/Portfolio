@@ -85,7 +85,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                 width={"450"}
                 height={"800"}
                 className={"rounded-xl mx-2"}
-                atlText={name}
+                alt={name}
               />
             ) : null}
           </div>
@@ -96,8 +96,6 @@ function ProductDetail({ name, brand, description, variants, materials }) {
               spaceBetween={1}
               slidesPerView={3}
               navigation
-              onSwiper={(swiper) => console.log(swiper)}
-              onSlideChange={() => console.log('slide change')}
 
             >
               {images
