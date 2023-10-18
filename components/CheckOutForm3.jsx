@@ -8,6 +8,7 @@ import { paymentDataForm } from "@/app/data/tilopay/transactionData";
 import useStorage from "@/hooks/useStorage";
 import useCartSummary from "@/hooks/useCartSummary";
 import AlertNotAuth from "./AlertNotAuth";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function CheckOutForm3({ myOrderNumber }) {
   const router = useRouter();
@@ -103,7 +104,9 @@ export default function CheckOutForm3({ myOrderNumber }) {
 
 
   return (
+
     <div className="w-full">
+      <div><Toaster /></div>
       <div className="flex w-full justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
         <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
           3
