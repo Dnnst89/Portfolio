@@ -6,12 +6,17 @@ import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
 import { useQuery } from "@apollo/client";
 import { paymentDataForm } from "@/app/data/tilopay/transactionData";
 import useStorage from "@/hooks/useStorage";
+import useCartSummary from "@/hooks/useCartSummary";
+import AlertNotAuth from "./AlertNotAuth";
 
 export default function CheckOutForm3({ myOrderNumber }) {
   const router = useRouter();
   const [formData, setFormData] = useState(paymentDataForm);
   const { user } = useStorage();
   const { id, email } = user || {};
+  const cartSummary = useCartSummary({
+    userId: user?.id,
+  });
   // total final to pay , WE NEED TO GET IT FROM FACTURAZEN
   //RETRIEVE STATUS
   // get the order retrieved or created
@@ -87,6 +92,16 @@ export default function CheckOutForm3({ myOrderNumber }) {
     .catch((error) => {
       console.error("Promise rejected with error:", error);
     });
+
+  const handleVerification = () => {
+    if (cartSummary.error) {
+      toast.custom((t) => (<AlertNotAuth t={t} msj={"Lo sentimos ha sucedido un error con tu compra, verifica tus productos"} newRoute={"/cart"} />))
+    } else {
+      router.push(paymentUrl)
+    }
+  }
+
+
   return (
     <div className="w-full">
       <div className="flex w-full justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
@@ -98,7 +113,7 @@ export default function CheckOutForm3({ myOrderNumber }) {
 
       <div className="flex justify-center m-auto mt-8 mb-8 w-3/4">
         <button
-          onClick={() => router.push(paymentUrl)}
+          onClick={handleVerification}
           className="bg-pink-200 text-white rounded-sm p-2 w-[200px] whitespace-nowrap"
         >
           Proceder al pago
