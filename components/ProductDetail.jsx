@@ -90,11 +90,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
             ) : null}
           </div>
           {/* //imagenes debajo de la principal */}
-<<<<<<< Updated upstream
-          <div >
-=======
           <div className="md:w-4/6 m-auto mt-2">
->>>>>>> Stashed changes
             <Swiper
               modules={[Navigation, A11y]}
               spaceBetween={2}
