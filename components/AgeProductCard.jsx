@@ -3,10 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 
-const loader = ({ src }) => {
-  return `http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337${src}`;
-};
-
 const AgeProductCard = ({ id, name, defaultPrice, coverImage, brand }) => {
   const router = useRouter();
   const productChange = () => {
@@ -19,7 +15,6 @@ const AgeProductCard = ({ id, name, defaultPrice, coverImage, brand }) => {
         <div className="w-full mx-auto p-1 md:p-2">
           <div href="#">
             <Image
-              loader={loader}
               priority={true}
               width="235"
               height="235"
