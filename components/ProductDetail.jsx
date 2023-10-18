@@ -79,14 +79,13 @@ function ProductDetail({ name, brand, description, variants, materials }) {
           {/* imagen principal grande */}
           <div className="m-auto w-full flex justify-center">
             {images.length > 0 ? (
-              <ProductImage
+              <Image
                 {...image == null ? setImage(images[0].attributes.url) : null}
-                key={variants[0].attributes.images.data[0].id}
-                url={image}
+                src={image}
                 width={"450"}
                 height={"800"}
                 className={"rounded-xl mx-2"}
-                atlText={name}
+                alt={name}
               />
             ) : null}
           </div>
@@ -97,8 +96,6 @@ function ProductDetail({ name, brand, description, variants, materials }) {
               spaceBetween={1}
               slidesPerView={3}
               navigation
-              onSwiper={(swiper) => console.log(swiper)}
-              onSlideChange={() => console.log('slide change')}
 
             >
               {images
