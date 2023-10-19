@@ -13,7 +13,6 @@ import GET_SHOPPING_SESSION_BY_USER from "@/src/graphQl/queries/getShoppingSessi
 import DELETE_CART_ITEM_MUTATION from "@/src/graphQl/queries/deleteCartItem";
 import UPDATE_VARIANT_STOCK from "@/src/graphQl/queries/updateVariantStock";
 import useCartSummary from "@/hooks/useCartSummary";
-
 import useProtectionRoute from "@/hooks/useProtectionRoute";
 /*
   recives the Tilopay response , based on the returns params 
@@ -28,7 +27,7 @@ export default function ThankYouMessage(params) {
   const [description, setDescription] = useState("");
   const [code, setCode] = useState("");
   const [order, setOrder] = useState("");
-
+  //setCode(window?.location?.search?.split("=")[1]);
   const [getSession] = useLazyQuery(GET_SHOPPING_SESSION_BY_USER);
   const [getCart] = useLazyQuery(GET_CART_ITEMS_LIST_SHOPPING_SESSION, {
     fetchPolicy: "network-only", // Forzar la consulta directa al servidor
@@ -137,7 +136,6 @@ export default function ThankYouMessage(params) {
       // Handle the payment data as needed
       if (code === "1") {
         // Payment was successful
-        console.log("Pago exitoso ");
         // I need to change the status of ther order to approved
         try {
           const { data } = await updateOrderDetailsStatus({
@@ -165,7 +163,6 @@ export default function ThankYouMessage(params) {
       } else {
         // Payment failed
         // Render the description when code is not "1"
-        console.log("No se ha podido realizar el pago");
         // I need to change the status of ther order to rejected
         try {
           // Update the order status for rejected payments
@@ -219,7 +216,7 @@ export default function ThankYouMessage(params) {
             </>
           ) : (
             <>
-              <OrderFailed description={description} />
+              <OrderFailed />
             </>
           )}
         </section>

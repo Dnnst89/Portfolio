@@ -2,7 +2,7 @@
 import Image from "next/image";
 import moovin from "../app/assets/moovin.png";
 import logo from "../app/assets/tk-logo.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CREATE_ORDER } from "@/src/graphQl/queries/createUserOrder";
 import CREATE_ORDER_ITEM_MUTATION from "@/src/graphQl/queries/createOrderItem";
 import { useMutation, useQuery } from "@apollo/client";
@@ -11,9 +11,10 @@ import useStorage from "@/hooks/useStorage";
 import CheckOutForm3 from "./CheckOutForm3";
 import { UPDATE_ORDER } from "@/src/graphQl/queries/updateTotal";
 import useCartSummary from "@/hooks/useCartSummary";
-import { generateOrderId } from "@/helpers/generateOrderId";
+import { FaArrowAltCircleDown } from "react-icons/fa";
 export default function CheckOutForm2({ amount }) {
-  console.log("order number ", generateOrderId());
+  const [myOrderNumber, setMyOrderNumber] = useState(null);
+  let retrievedOrderNumber = null;
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
   const { total, subTotal, taxes } = amount;
   const [createOrder] = useMutation(CREATE_ORDER);
@@ -41,7 +42,7 @@ export default function CheckOutForm2({ amount }) {
      * decides to change the order
      */
     try {
-      await updateOrder({
+      const { data } = await updateOrder({
         variables: {
           order_Id: orderNumber,
           total: total,
@@ -49,13 +50,14 @@ export default function CheckOutForm2({ amount }) {
           taxes: taxes,
         },
       });
-      console.log("order updated");
+      retrievedOrderNumber = data?.updateOrderDetail?.data?.id;
+      // Now that you have the updated order number
+      setMyOrderNumber(retrievedOrderNumber);
+      //localStorage.setItem("createdOrder", orderNumber);
+      setChecktOutForm2Visible(true);
     } catch (error) {
       console.error("Error updating order:", error);
     }
-
-    localStorage.setItem("createdOrder", orderNumber);
-    setChecktOutForm2Visible(true);
   };
 
   const creatingOrderItems = (orderId) => {
@@ -64,23 +66,20 @@ export default function CheckOutForm2({ amount }) {
       items.map(async (item) => {
         const variant = item.attributes.variant.data; // Desestructuración aquí
         const variantAtt = variant.attributes;
-        console.log(variantAtt.quantity)
-        const { data } = await createOrderItem(
-          {
-            variables: {
-              quantity: item.attributes.quantity,
-              variantId: variant.id,
-              publishedAt: isoDate,
-              orderDetailId: orderId
-            }
-          }
-        )
-      })
+        console.log(variantAtt.quantity);
+        const { data } = await createOrderItem({
+          variables: {
+            quantity: item.attributes.quantity,
+            variantId: variant.id,
+            publishedAt: isoDate,
+            orderDetailId: orderId,
+          },
+        });
+      });
     } catch (error) {
-      console.log("Error creating: ", error)
+      console.log("Error creating: ", error);
     }
-
-  }
+  };
 
   const handleCreateOrder = async () => {
     const isoDate = new Date().toISOString();
@@ -99,8 +98,7 @@ export default function CheckOutForm2({ amount }) {
       // if the order not exist we create one
       // After create an order now we can get that pending order
       const orderNumber = await data?.createOrderDetail?.data?.id;
-      // Store the orderNumber in localStorage
-      localStorage.setItem("createdOrder", orderNumber);
+      setMyOrderNumber(orderNumber);
       setChecktOutForm2Visible(true);
       creatingOrderItems(orderNumber);
     } catch (error) {
@@ -115,6 +113,21 @@ export default function CheckOutForm2({ amount }) {
           2
         </div>
         <h1 className="text-xl">Método de envío</h1>
+        {checktOutForm2Visible ? (
+          <div>
+            <button
+              className="ml-8"
+              onClick={() => setChecktOutForm2Visible(false)}
+            >
+              <FaArrowAltCircleDown
+                style={{
+                  color: "orange",
+                }}
+                size={35}
+              />
+            </button>
+          </div>
+        ) : null}
       </div>
       {!checktOutForm2Visible ? (
         <>
@@ -173,7 +186,7 @@ export default function CheckOutForm2({ amount }) {
           </div>
         </>
       ) : (
-        <CheckOutForm3 />
+        <CheckOutForm3 myOrderNumber={myOrderNumber} />
       )}
     </div>
   );

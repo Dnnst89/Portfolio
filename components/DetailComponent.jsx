@@ -24,7 +24,6 @@ export default function DetailComponent({ id }) {
           name={data?.product.data.attributes.name}
           brand={data?.product.data.attributes.brand}
           description={data?.product.data.attributes.description}
-          sku={data?.product.data.attributes.sku}
           variants={data?.product.data.attributes.variants.data}
           materials={data?.product.data.attributes.materials.data}
 
