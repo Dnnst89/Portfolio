@@ -2,22 +2,30 @@
 import Image from "next/image";
 import moovin from "../app/assets/moovin.png";
 import logo from "../app/assets/tk-logo.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CREATE_ORDER } from "@/src/graphQl/queries/createUserOrder";
+import CREATE_ORDER_ITEM_MUTATION from "@/src/graphQl/queries/createOrderItem";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
 import useStorage from "@/hooks/useStorage";
 import CheckOutForm3 from "./CheckOutForm3";
 import { UPDATE_ORDER } from "@/src/graphQl/queries/updateTotal";
-import { generateOrderId } from "@/helpers/generateOrderId";
+import useCartSummary from "@/hooks/useCartSummary";
+import { FaArrowAltCircleDown } from "react-icons/fa";
 export default function CheckOutForm2({ amount }) {
-  console.log("order number ", generateOrderId());
+  const [myOrderNumber, setMyOrderNumber] = useState(null);
+  let retrievedOrderNumber = null;
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
   const { total, subTotal, taxes } = amount;
   const [createOrder] = useMutation(CREATE_ORDER);
+  const [createOrderItem] = useMutation(CREATE_ORDER_ITEM_MUTATION);
   const [updateOrder] = useMutation(UPDATE_ORDER);
   const { user } = useStorage();
   const { id } = user || {};
+  //me traigo los items de carrito para crear los items de la orden
+  const { items } = useCartSummary({
+    userId: id,
+  });
   // retrieving pending order if exist
   const { data } = useQuery(GET_PENDING_ORDER, {
     variables: { userId: id, status: "P" },
@@ -34,7 +42,7 @@ export default function CheckOutForm2({ amount }) {
      * decides to change the order
      */
     try {
-      await updateOrder({
+      const { data } = await updateOrder({
         variables: {
           order_Id: orderNumber,
           total: total,
@@ -42,13 +50,35 @@ export default function CheckOutForm2({ amount }) {
           taxes: taxes,
         },
       });
-      console.log("order updated");
+      retrievedOrderNumber = data?.updateOrderDetail?.data?.id;
+      // Now that you have the updated order number
+      setMyOrderNumber(retrievedOrderNumber);
+      //localStorage.setItem("createdOrder", orderNumber);
+      setChecktOutForm2Visible(true);
     } catch (error) {
       console.error("Error updating order:", error);
     }
+  };
 
-    localStorage.setItem("createdOrder", orderNumber);
-    setChecktOutForm2Visible(true);
+  const creatingOrderItems = (orderId) => {
+    const isoDate = new Date().toISOString();
+    try {
+      items.map(async (item) => {
+        const variant = item.attributes.variant.data; // Desestructuración aquí
+        const variantAtt = variant.attributes;
+        console.log(variantAtt.quantity);
+        const { data } = await createOrderItem({
+          variables: {
+            quantity: item.attributes.quantity,
+            variantId: variant.id,
+            publishedAt: isoDate,
+            orderDetailId: orderId,
+          },
+        });
+      });
+    } catch (error) {
+      console.log("Error creating: ", error);
+    }
   };
 
   const handleCreateOrder = async () => {
@@ -68,25 +98,40 @@ export default function CheckOutForm2({ amount }) {
       // if the order not exist we create one
       // After create an order now we can get that pending order
       const orderNumber = await data?.createOrderDetail?.data?.id;
-      // Store the orderNumber in localStorage
-      localStorage.setItem("createdOrder", orderNumber);
+      setMyOrderNumber(orderNumber);
       setChecktOutForm2Visible(true);
+      creatingOrderItems(orderNumber);
     } catch (error) {
       console.error("Error creating order:", error);
     }
   };
 
   return (
-    <div className="mt-[40px] mx-[30px]">
-      <div className="flex w-3/4 justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
+    <div className="w-full">
+      <div className="flex justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
         <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
           2
         </div>
         <h1 className="text-xl">Método de envío</h1>
+        {checktOutForm2Visible ? (
+          <div>
+            <button
+              className="ml-8"
+              onClick={() => setChecktOutForm2Visible(false)}
+            >
+              <FaArrowAltCircleDown
+                style={{
+                  color: "orange",
+                }}
+                size={35}
+              />
+            </button>
+          </div>
+        ) : null}
       </div>
       {!checktOutForm2Visible ? (
         <>
-          <div className="w-3/4 flex flex-col items-center mt-5 space-y-10">
+          <div className="w-full flex flex-col items-center mt-5 space-y-10">
             <section className="bg-white w-3/4 flex  rounded-t-3xl drop-shadow-lg text-xl">
               <div className=" border-r-2 border-dashed border-grey-200  w-[100px] flex justify-center items-center ml-[10px]">
                 <input
@@ -102,8 +147,8 @@ export default function CheckOutForm2({ amount }) {
                 <Image
                   src={moovin}
                   alt=""
-                  style={{ width: "230px", height: "65px" }}
-                  className="ml-10"
+                  style={{ width: "auto", height: "65px" }}
+                  className="ml-10 py-2"
                 />
               </div>
             </section>
@@ -115,6 +160,7 @@ export default function CheckOutForm2({ amount }) {
                   name="del_method"
                   value="MOOVIN"
                   className="w-5 h-5"
+                  defaultChecked
                 />
               </div>
               <div className="flex  items-center  pl-[90px]">
@@ -122,13 +168,13 @@ export default function CheckOutForm2({ amount }) {
                 <Image
                   src={logo}
                   alt=""
-                  style={{ width: "150px", height: "65px" }}
-                  className="ml-20"
+                  style={{ width: "auto", height: "65px" }}
+                  className="ml-20 py-2"
                 />
               </div>
             </section>
           </div>
-          <div className="flex justify-center mt-8 mb-8 w-3/4 ">
+          <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
             <button
               onClick={() => {
                 status === "P" ? resentPendingOrder() : handleCreateOrder();
@@ -140,7 +186,7 @@ export default function CheckOutForm2({ amount }) {
           </div>
         </>
       ) : (
-        <CheckOutForm3 />
+        <CheckOutForm3 myOrderNumber={myOrderNumber} />
       )}
     </div>
   );

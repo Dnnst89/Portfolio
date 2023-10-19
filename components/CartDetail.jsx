@@ -15,7 +15,7 @@ const CartDetail = ({
   const [amounts, setAmounts] = useState({
     total: 0,
     tax: 0,
-    currencyType: "CRC",
+    currencyType: "USD",
   });
   const {
     loading,
@@ -61,7 +61,7 @@ const CartDetail = ({
   };
 
   return (
-    <div className="p-3 space-y-3">
+    <div className="p-3 space-y-3 border-l-4 border-lightblue">
       {!loading ? (
         <>
           <h1 className=" flex justify-center">{detailTitle}</h1>

@@ -9,8 +9,14 @@ import useCartSummary from "@/hooks/useCartSummary";
 import useStorage from "@/hooks/useStorage";
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 
-function ProductDetail({ name, brand, description, sku, variants, materials }) {
+function ProductDetail({ name, brand, description, variants, materials }) {
 
   const [quantity, setQuantity] = useState(1);
   const [image, setImage] = useState(null);
@@ -70,21 +76,58 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
 
         {/* Columna de imagenes */}
         <div className="mb-10 col-span-12 md:col-span-6">
+          {/* imagen principal grande */}
           <div className="m-auto w-full flex justify-center">
-            <Carousel showArrows={false} showStatus={false} showThumbs={true}>
-              {images.map((image, index) => (
-                <div key={index}>
-                  <Image src={image.attributes.url} alt={"image"} width={"150"} height={"200"} />
-                </div>
-              ))}
-
-            </Carousel>
+            {images.length > 0 ? (
+              <Image
+                {...image == null ? setImage(images[0].attributes.url) : null}
+                src={image}
+                width={"450"}
+                height={"800"}
+                className={"rounded-xl mx-2"}
+                alt={name}
+              />
+            ) : null}
           </div>
+          {/* //imagenes debajo de la principal */}
+          <div className="md:w-4/6 m-auto mt-2">
+            <Swiper
+              modules={[Navigation, A11y]}
+              spaceBetween={1}
+              slidesPerView={3}
+              navigation
+
+            >
+              {images
+                ? images.map((item) => {
+                  return (
+                    <div key={item.id}>
+                      <SwiperSlide key={item.id}>
+                        <button onClick={() => chanceImage(item.attributes.url)}>
+                          <Image
+                            priority={true}
+                            src={item.attributes.url}
+                            width={"125"}
+                            height={"100"}
+                            className={"rounded-xl"}
+                            alt={name}
+                          />
+                        </button>
+                      </SwiperSlide>
+                    </div>
+                  );
+                })
+                : null}
+            </Swiper>
+
+
+          </div>
+
         </div>
 
         {/* Sección con los detalles del producto*/}
         <div className="mb-10 col-span-12 md:col-span-6 m-auto">
-          <h2 className="flex justify-end text-sm">Ref {sku}</h2>
+          <h2 className="flex justify-end text-sm">Ref {variants[0]?.attributes?.sku}</h2>
           <h1 className="mb-3 text-xl font-bold">{name}</h1>
           <p>{shortDescrption}...</p>
           <a onClick={() => handleClick()}>
@@ -204,7 +247,7 @@ function ProductDetail({ name, brand, description, sku, variants, materials }) {
           {/* precio, cantidad y carrito */}
           <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between  p-4">
             <span className="col-span-5 font-bold">
-              ₡ {variants.length > 0 ? variants[0].attributes.price : null}
+              $ {variants.length > 0 ? variants[0].attributes.price : null}
             </span>
             <div className="col-span-7 md:flex md:flex-col items-end md:items-end p-3">
               <div className="flex items-center mb-2 ">

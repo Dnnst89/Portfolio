@@ -13,7 +13,6 @@ import GET_SHOPPING_SESSION_BY_USER from "@/src/graphQl/queries/getShoppingSessi
 import DELETE_CART_ITEM_MUTATION from "@/src/graphQl/queries/deleteCartItem";
 import UPDATE_VARIANT_STOCK from "@/src/graphQl/queries/updateVariantStock";
 import useCartSummary from "@/hooks/useCartSummary";
-
 import useProtectionRoute from "@/hooks/useProtectionRoute";
 /*
   recives the Tilopay response , based on the returns params 
@@ -23,12 +22,18 @@ import useProtectionRoute from "@/hooks/useProtectionRoute";
   clean after response
 */
 
-export default function ThankYouMessage(params) {
+export default function ThankYouMessage() {
   const router = useRouter();
-  const [description, setDescription] = useState("");
   const [code, setCode] = useState("");
   const [order, setOrder] = useState("");
 
+  useEffect(() => {
+    handleTilopayResponse();
+    setCode(window?.location?.search?.split("=")[1]?.split("&")[0]);
+    setOrder(window?.location?.search?.split("=")[4]?.split("&")[0]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [code]);
+  console.log("code :", code);
   const [getSession] = useLazyQuery(GET_SHOPPING_SESSION_BY_USER);
   const [getCart] = useLazyQuery(GET_CART_ITEMS_LIST_SHOPPING_SESSION, {
     fetchPolicy: "network-only", // Forzar la consulta directa al servidor
@@ -82,7 +87,7 @@ export default function ThankYouMessage(params) {
   */
 
   const handleUpdate = async () => {
-    if (params?.searchParams?.code == 1) {
+    if (code == 1) {
       items.map((item) => {
         if (
           item.attributes.variant.data &&
@@ -102,7 +107,7 @@ export default function ThankYouMessage(params) {
                 id: cartItemId,
               },
             });
-          } catch (error) {}
+          } catch (error) { }
 
           try {
             updateVariantStock({
@@ -121,23 +126,11 @@ export default function ThankYouMessage(params) {
     }
   };
 
-  useEffect(() => {
-    handleTilopayResponse();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params?.searchParams]);
-
   const handleTilopayResponse = async () => {
-    if (params?.searchParams?.code) {
-      // Get query parameters from the URL
-      const { code, description, auth, order } = params.searchParams;
-      // Set the description in the component state
-      setDescription(description);
-      setCode(code);
-      setOrder(order);
+    if (code) {
       // Handle the payment data as needed
       if (code === "1") {
         // Payment was successful
-        console.log("Pago exitoso ");
         // I need to change the status of ther order to approved
         try {
           const { data } = await updateOrderDetailsStatus({
@@ -165,7 +158,6 @@ export default function ThankYouMessage(params) {
       } else {
         // Payment failed
         // Render the description when code is not "1"
-        console.log("No se ha podido realizar el pago");
         // I need to change the status of ther order to rejected
         try {
           // Update the order status for rejected payments
@@ -219,7 +211,7 @@ export default function ThankYouMessage(params) {
             </>
           ) : (
             <>
-              <OrderFailed description={description} />
+              <OrderFailed />
             </>
           )}
         </section>

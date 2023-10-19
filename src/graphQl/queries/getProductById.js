@@ -9,7 +9,6 @@ query GetProducts($id: ID){
         name,
         brand,
         description,
-        sku,
         materials{
           data{
             id,
@@ -30,6 +29,7 @@ query GetProducts($id: ID){
             id
             attributes{
               size,
+              sku,
               color,
               price,
               weight{
@@ -70,7 +70,7 @@ query GetProducts($id: ID){
       }
     }
   }
-}   
+}    
 `;
 
 export default ProductDetailQuery;

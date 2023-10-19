@@ -28,6 +28,7 @@ const FeaturedProducts = () => {
               id={item.id}
               url={"/uploads/juguete4_36d71de373.jpg"}
               coverImage={item.attributes.coverImage.data}
+              brand={item.attributes.brand}
             />
           </div>
         ))}

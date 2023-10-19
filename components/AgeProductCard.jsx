@@ -1,12 +1,15 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-
-const loader = ({ src }) => {
-  return `http://ec2-54-189-90-96.us-west-2.compute.amazonaws.com:1337${src}`;
-};
+import { useRouter } from 'next/navigation';
 
 const AgeProductCard = ({ id, name, defaultPrice, coverImage, brand }) => {
+  const router = useRouter();
+  const productChange = () => {
+    router.push(`/detail${id}`); // Reemplaza '/nueva-pagina' con la ruta de la página a la que deseas navegar.
+  };
+
+  // onClick={productChange}
 
   return (
     <Link href={{ pathname: "/detail", query: { id } }}>
@@ -14,7 +17,6 @@ const AgeProductCard = ({ id, name, defaultPrice, coverImage, brand }) => {
         <div className="w-full mx-auto p-1 md:p-2">
           <div href="#">
             <Image
-              loader={loader}
               priority={true}
               width="235"
               height="235"
@@ -45,7 +47,7 @@ const AgeProductCard = ({ id, name, defaultPrice, coverImage, brand }) => {
 
         <div className="bg-aquamarine text-xs md:text-lg rounded-b-[15px] font-bold flex justify-center absolute bottom-0 left-0 right-0">
           <button className="hover:underline text-white p-1">
-            ₡ {defaultPrice}
+            $ {defaultPrice}
           </button>
         </div>
       </div>

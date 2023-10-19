@@ -69,12 +69,6 @@ const RegisterFormTwo = () => {
       const { data } = await createUser({
         variables: { username, email, password },
       });
-      router.push("/");
-      createElement("userData", JSON.stringify(data.register));
-      document.cookie = `userData=${JSON.stringify({
-        user: data.register.user,
-        isAuthenticated: true,
-      })}`;
       dispatch(setUser(data.register.user));
       const { data: dataSession } = await createShoppingSession({
         //query para crear la session al user
@@ -84,12 +78,18 @@ const RegisterFormTwo = () => {
         },
       });
       toast.success(
-        "Registro exitoso, hemos enviado un correo de confirmación."
+        "Registro exitoso, hemos enviado un correo de confirmación.",
+        {
+          duration: 4000,
+        }
       );
       dispatch(updateShoppingSession(dataSession.createShoppingSession.data)); //ACTUALIZO LA SESSION CON LOS DATOS OBTENIDOS
     } catch (error) {
       toast.error(
-        "No se pudo registrar tu cuenta, por favor intentalo más tarde"
+        "No se pudo registrar tu cuenta, por favor intentalo más tarde",
+        {
+          duration: 4000,
+        }
       );
     } finally {
       setLoading(false);
@@ -156,10 +156,9 @@ const RegisterFormTwo = () => {
                               <ErrorForm>{errors.email}</ErrorForm>
                             ) : null}
                           </div>
-                          
                         </section>
                         <section className="p-3 w-10/12 m-auto grid grid-cols-12 gap-5">
-                        <div className="grid col-span-12 md:col-span-6">
+                          <div className="grid col-span-12 md:col-span-6">
                             <label htmlFor="password">
                               Constraseña
                               <span className="text-pink-200">*</span>
@@ -211,15 +210,7 @@ const RegisterFormTwo = () => {
                       </button>
                     </div>
                   </Form>
-                  <Toaster
-                    toastOptions={{
-                      style: {
-                        backgroundColor: "#be123d",
-                        color: "#FFF",
-                        fontSize: "14px",
-                      },
-                    }}
-                  />
+                  <Toaster />
                 </>
               );
             }}

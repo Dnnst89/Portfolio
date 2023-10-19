@@ -101,7 +101,7 @@ function ProductReviewForm({ idProduct }) {
             <div className="flex justify-end">
               {" "}
               <ReCAPTCHA
-                sitekey="6LfCrUYoAAAAAPgdh0MpvKzzHvhksbGTM3cP1prU"
+                sitekey="6LfFDLAoAAAAAJ25iZdqlICdDvwwkhxsDMZqdHs_"
                 ref={captchaRef}
               />
             </div>

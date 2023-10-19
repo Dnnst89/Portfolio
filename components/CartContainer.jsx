@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 
 const CartContainer = () => {
     const { user } = useStorage(); //me trae el usuario de local storage
-    const { total, items, quantity, error, loading } = useCartSummary({
+    const { total, items, quantity, errors, loading } = useCartSummary({
         userId: user?.id,
     });
 
@@ -69,7 +69,7 @@ const CartContainer = () => {
                                 weight={variantAtt.weight} //el weight es un objeto del peso y la unidad
                                 images={variantAtt.images.data.map(img => img.attributes.url)}//se mapea para obtener array de url
                                 loading={loading}
-                                error={error}
+                                error={errors.errorStock}
                             />
 
                         </div>
@@ -79,12 +79,16 @@ const CartContainer = () => {
             </div>
             <div className=" bg-resene rounded-sm col-span-4 p-4 h-[500px]">
                 <CartDetail detailTitle={"Detalle del carrito"} />
-
-                <CartProceedPayment
+                {items.length > 0 ? <CartProceedPayment
                     textButton={"Proceder al pago"}
                     page={"/checkout"}
-                    error={error}
-                />
+                    error={errors.errorStock}
+                /> :
+                    <div className="p-3 space-y-3 border-l-4 border-lightblue">
+                        <h1>Tu carrito esta vacio</h1>
+                    </div>
+                }
+
             </div>
         </>
     );

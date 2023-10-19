@@ -34,7 +34,7 @@ export default function OrderDetailSecondary({ orderId }) {
     }
   )
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [getOrderItems] = useLazyQuery(GET_ORDER_ITEMS_BY_ORDER_ID);
 
   useEffect(() => {
@@ -47,24 +47,26 @@ export default function OrderDetailSecondary({ orderId }) {
           //llamo la query para traer la shopping session
           variables: { orderId: id },
         });
+        console.log(data)
         if (data) {
-          const orderInfo = data.orderDetail.data
+          const orderInfo = data?.orderDetail?.data
+          console.log("orderInfo: ", orderInfo)
           setOrderData((prev) => ({
             ...prev,
             order: {
               orderRef: id,
-              subtotal: orderInfo.attributes.subTotal,
-              taxes: orderInfo.attributes.taxes,
-              total: orderInfo.attributes.total,
+              subtotal: orderInfo?.attributes?.subTotal,
+              taxes: orderInfo?.attributes?.taxes,
+              total: orderInfo?.attributes?.total,
             },
-            orderItems: orderInfo.attributes.order_items.data.map((item) => {
+            orderItems: orderInfo?.attributes?.order_items?.data?.map((item) => {
               return {
                 itemRef: item.id,
                 quantity: item.attributes.quantity,
-                name: item.attributes.product.data.attributes.name,
-                brand: item.attributes.product.data.attributes.brand,
-                price: item.attributes.product.data.attributes.variants.data[0].attributes.price, //se saca el precio de la unica variante que tiene
-                images: item.attributes.product.data.attributes.variants.data[0].attributes.images?.data.map(img => img.attributes.url),
+                name: item.attributes.variant.data.attributes.product.data.attributes.name,
+                brand: item.attributes.variant.data.attributes.product.data.attributes.brand,
+                price: item.attributes.variant.data.attributes.price, //se saca el precio de la unica variante que tiene
+                images: item.attributes.variant.data.attributes.images?.data.map(img => img.attributes.url),
               }
 
             })
@@ -90,7 +92,8 @@ export default function OrderDetailSecondary({ orderId }) {
     </div>
   }
 
-  orderData.orderItems.map((item) => { console.log(item.images) })
+  console.log(orderData.orderItems)
+
 
   return (
     <div className="bg-resene">
