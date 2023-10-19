@@ -1,5 +1,6 @@
 export const paymentDataForm = {
   redirect: "http://detinmarin.s3-website-us-west-2.amazonaws.com/thankyou", // Fix the URL format
+  // redirect: "http://localhost:3000/thankyou",
   key: process.env.NEXT_PUBLIC_TILOPAY_API_KEY,
   amount: "",
   currency: "USD",
