@@ -29,8 +29,8 @@ export default function ThankYouMessage() {
 
   useEffect(() => {
     handleTilopayResponse();
-    setCode(window?.location?.search?.split("=")[1].split("&")[0]);
-    setOrder(window?.location?.search?.split("=")[4].split("&")[0]);
+    setCode(window?.location?.search?.split("=")[1]?.split("&")[0]);
+    setOrder(window?.location?.search?.split("=")[4]?.split("&")[0]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code]);
   console.log("code :", code);
@@ -107,7 +107,7 @@ export default function ThankYouMessage() {
                 id: cartItemId,
               },
             });
-          } catch (error) {}
+          } catch (error) { }
 
           try {
             updateVariantStock({
