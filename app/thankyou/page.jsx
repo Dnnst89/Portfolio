@@ -29,11 +29,21 @@ export default function ThankYouMessage() {
 
   useEffect(() => {
     handleTilopayResponse();
-    setCode(window?.location?.search?.split("=")[1]?.split("&")[0]);
-    setOrder(window?.location?.search?.split("=")[4]?.split("&")[0]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [code]);
-  console.log("code :", code);
+    const searchParams = new URLSearchParams(window?.location?.search);
+
+    if (searchParams.has("code")) {
+      setCode(searchParams.get("code"));
+    }
+
+    if (searchParams.has("order")) { // Verificar si la URL tiene el parámetro "order"
+      setOrder(searchParams.get("order"));
+    }
+
+    console.log("code :", code);
+    console.log("order :", order);
+    // eslint-disablece en el enfoque react-hooks/exhaustive-deps
+  }, []);
+
   const [getSession] = useLazyQuery(GET_SHOPPING_SESSION_BY_USER);
   const [getCart] = useLazyQuery(GET_CART_ITEMS_LIST_SHOPPING_SESSION, {
     fetchPolicy: "network-only", // Forzar la consulta directa al servidor
