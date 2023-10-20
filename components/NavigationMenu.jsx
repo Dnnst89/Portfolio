@@ -16,7 +16,7 @@ const NavidationMenu = () => {
     }
   };
   return (
-    <div className="border-t-4 border-pink-200 p-3 space-y-4 bg-resene h-[250px] mb-5 col-start-2 col-span-10 md:col-start-3 md:col-span-3 md:mr-5">
+    <div className="border-t-4 border-pink-200 p-3 space-y-4 bg-resene h-[250px] mb-5 col-start-2 col-span-10 md:col-start-2 md:col-span-3 md:mr-5">
       <Link
         href={"/personalData"}
         className={`border-b-2 border-dashed border-grey-200 flex justify-between items-center ${

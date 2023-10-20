@@ -115,7 +115,7 @@ export default function OrderDetail() {
   }
 
   return (
-    <div className="bg-resene  flex flex-col items-center pb-[50px]  mx-3  md:col-span-6">
+    <div className="bg-resene  flex flex-col items-center h-fit col-span-12 mx-3  md:col-span-8">
       <h1 className="flex justify-center mt-3 text-xl  md:col-span-12">Tus pedidos</h1>
       <div className="p-4 h-auto grid grid-cols-12 gap-4 pt-5 w-full">
         {userData.order[0].ref !== 0 ? userData.order.map((order) => (
@@ -125,9 +125,9 @@ export default function OrderDetail() {
             border-grey-200 rounded-2xl h-[250px] w-full px-2 col-span-3"
             >
               <h2 className="font-semibold mt-8">N° {order.ref}</h2>
-              <div className="text-sm space-y-2 pt-3">
-                <div>
-                  Nombre: {userData.user.firstName} {userData.user.lastName}
+              <div className="text-sm space-y-2 pt-3 text-center">
+                <div className="">
+                  {userData.user.firstName} {userData.user.lastName}
                 </div>
                 <div>Provincia: {userData.address.province}</div>
                 <div>Ciudad: {userData.address.canton}</div>
@@ -139,7 +139,7 @@ export default function OrderDetail() {
                   query: { orderId: order.ref },
                 }}
               >
-                <button className="bg-aquamarine mt-3 p-1 rounded-sm text-floralwhite">
+                <button className="bg-aquamarine text-white p-2 sm:p-1 md:p-2 md:text-sm rounded-sm mt-5">
                   Ver detalle
                 </button>
               </Link>

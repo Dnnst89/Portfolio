@@ -114,7 +114,7 @@ const LoginForm = () => {
                             className="text-lg whitespace-nowrap"
                             htmlFor="identifier"
                           >
-                            Correo Electrónico
+                            Usuario o Correo Electrónico
                             <span className="text-pink-200 ml-1">*</span>
                           </label>
                           <Field

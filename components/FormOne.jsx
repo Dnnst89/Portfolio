@@ -545,7 +545,7 @@ const CheckOutForm1 = () => {
                   <CheckOutForm2 amount={amount} />
                 )}
               </div>
-              <div className=" bg-resene rounded-sm col-span-3 h-fit">
+              <div className=" bg-resene rounded-sm col-span-3 h-fit  border-l-4 border-lightblue">
                 <div className="flex flex-col space-y-3 ">
                   <CartDetail
                     detailTitle={"Detalle del carrito"}
