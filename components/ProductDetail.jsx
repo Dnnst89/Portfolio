@@ -127,7 +127,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
 
         {/* Sección con los detalles del producto*/}
         <div className="mb-10 col-span-12 md:col-span-6 m-auto">
-          <h2 className="flex justify-end text-sm">Ref {variants[0].attributes.sku}</h2>
+          <h2 className="flex justify-end text-sm">Ref {variants[0]?.attributes?.sku}</h2>
           <h1 className="mb-3 text-xl font-bold">{name}</h1>
           <p>{shortDescrption}...</p>
           <a onClick={() => handleClick()}>

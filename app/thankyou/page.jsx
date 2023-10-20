@@ -22,12 +22,28 @@ import useProtectionRoute from "@/hooks/useProtectionRoute";
   clean after response
 */
 
-export default function ThankYouMessage(params) {
+export default function ThankYouMessage() {
   const router = useRouter();
-  const [description, setDescription] = useState("");
   const [code, setCode] = useState("");
   const [order, setOrder] = useState("");
-  //setCode(window?.location?.search?.split("=")[1]);
+
+  useEffect(() => {
+    handleTilopayResponse();
+    const searchParams = new URLSearchParams(window?.location?.search);
+
+    if (searchParams.has("code")) {
+      setCode(searchParams.get("code"));
+    }
+
+    if (searchParams.has("order")) { // Verificar si la URL tiene el parámetro "order"
+      setOrder(searchParams.get("order"));
+    }
+
+    console.log("code :", code);
+    console.log("order :", order);
+    // eslint-disablece en el enfoque react-hooks/exhaustive-deps
+  }, []);
+
   const [getSession] = useLazyQuery(GET_SHOPPING_SESSION_BY_USER);
   const [getCart] = useLazyQuery(GET_CART_ITEMS_LIST_SHOPPING_SESSION, {
     fetchPolicy: "network-only", // Forzar la consulta directa al servidor
@@ -81,7 +97,7 @@ export default function ThankYouMessage(params) {
   */
 
   const handleUpdate = async () => {
-    if (params?.searchParams?.code == 1) {
+    if (code == 1) {
       items.map((item) => {
         if (
           item.attributes.variant.data &&
@@ -101,7 +117,7 @@ export default function ThankYouMessage(params) {
                 id: cartItemId,
               },
             });
-          } catch (error) {}
+          } catch (error) { }
 
           try {
             updateVariantStock({
@@ -120,19 +136,8 @@ export default function ThankYouMessage(params) {
     }
   };
 
-  useEffect(() => {
-    handleTilopayResponse();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params?.searchParams]);
-
   const handleTilopayResponse = async () => {
-    if (params?.searchParams?.code) {
-      // Get query parameters from the URL
-      const { code, description, auth, order } = params.searchParams;
-      // Set the description in the component state
-      setDescription(description);
-      setCode(code);
-      setOrder(order);
+    if (code) {
       // Handle the payment data as needed
       if (code === "1") {
         // Payment was successful

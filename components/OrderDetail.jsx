@@ -102,7 +102,7 @@ export default function OrderDetail() {
   const transformState = (state) => {
     const STATES = {
       P: "Pending",
-      C: "Cancelled",
+      C: "Rejected",
       A: "Approved",
     }
     const STATE_DEFAULT = "Approved"
