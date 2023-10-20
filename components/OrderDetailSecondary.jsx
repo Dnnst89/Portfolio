@@ -96,52 +96,48 @@ export default function OrderDetailSecondary({ orderId }) {
 
 
   return (
-    <div className="bg-resene col-span-8 grid grid-cols-12">
-      <h1 className="flex justify-center text-xl p-5 col-span-12">Pedido N°: {orderData.order.orderRef}</h1>
-      <div className="col-span-12 grid grid-cols-12">
+    <div className="bg-resene">
+      <h1 className="flex justify-center text-xl p-5">Pedido N°: {orderData.order.orderRef}</h1>
+      <div className=" lg:space-x-8 sm:pt- sm:block md:block lg:flex">
 
-        <div className="col-span-7 md:pr-2 md:pl-2">
+        <div >
           {orderData.orderItems.length > 0 ? orderData.orderItems?.map((item) => ( //si existen items
-            <div className="grid grid-cols-12 w-full py-3 border-dashed border-grey-200 border-b-[2px]">
-              <section className="grid grid-cols-12 col-span-8">
-                <div className="grid grid-cols-12 col-span-12 items-center">
-                  {item.images.length > 0 ?
-                    <CarouselImages images={item.images} widthImg={100} heightImg={100} classStyle={'rounded-2xl col-span-4'} />
-                    : (
-                      <Image
-                        src={test}
-                        alt="imagen de producto seleccionado"
-                        style={{ width: "100", height: "100" }}
-                        className="rounded-xl"
-                      />
-                    )}
-                    <div className="p-3 col-span-6 justify-left">
-                        <h1 className='text-lg'>{item.name} </h1>
-                        <p className='text-xs text-lightblue'>{item.brand}</p>
-                        <span className="text-xs text-grey">Ref {item.itemRef}</span>
-                    </div>
-                  
-                </div>
-              </section>
-              <div className='col-span-4 grid items-center'>
-                <div>
-                  <h1 className="sm:text-sm">N° artículos: {item.quantity} </h1>
-                  <p className="sm:text-sm ">${item.price}</p>
+            <section key={item.itemRef} className=" border-b-2 border-dashed border-grey-200 p-5 h-[125px]">
+              <div className="flex lg:space-x-3  sm:space-between">
+                {item.images.length > 0 ?
+                  <CarouselImages images={item.images} widthImg={100} heightImg={90} />
+                  : (
+                    <Image
+                      src={test}
+                      alt="imagen de producto seleccionado"
+                      style={{ width: "100px", height: "90px" }}
+                      className="rounded-xl"
+                    />
+                  )}
+                <div className="flex sm:items-center md:items-baseline lg:items-baseline justify-between sm:p-3  sm:w-full">
+                  <div className="pr-5">
+                    <h1 className="sm:text-sm">Nombre: {item.name} </h1>
+                    <h5 className="text-sm text-lightblue">Marca: {item.brand}</h5>
+                    <h5 className="text-sm">Ref 000000{item.itemRef}</h5>
+                  </div>
+                  <div>
+                    <h1 className="sm:text-sm">N° artículos: {item.quantity} </h1>
+                    <p className="sm:text-sm ">${item.price}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            </section>
 
           )) : <h1>vacio</h1>//si no existen items
-          }
-        </div>
+          }  </div>
 
-        <section className="lg:border-l-4 lg:border-lightblue  h-fit sm:border-0 col-span-5">
+        <section className="lg:border-l-4 lg:border-lightblue  h-[450px] p-3 sm:border-0">
           <OrderSummary detailTitle={"Detalle del pedido"} quantity={orderData.orderItems.reduce((accumulator, item) => {
             return accumulator + item.quantity;
           }, 0)} subTotal={orderData.order.subtotal} taxes={orderData.order.taxes} total={orderData.order.total} />
           <CartProceedPayment textButton={"Ver dirección"} page={""} />
         </section>
       </div>
-    </div >
+    </div>
   );
 }
