@@ -15,6 +15,7 @@ import CartDetail from "./CartDetail";
 import CheckOutForm2 from "./CheckOutForm2";
 import ErrorForm from "./ErrorForm";
 import { FaArrowAltCircleDown } from "react-icons/fa";
+import { data } from "autoprefixer";
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string()
@@ -87,18 +88,18 @@ const CheckOutForm1 = () => {
     idType: "",
   });
   const [createAddress] = useMutation(CREATE_ADDRESS);
-
   const [updateUserInformation] = useMutation(UPDATE_USER_INFORMATION);
   const [updateAddress] = useMutation(UPDATE_ADDRESS);
   const [updateIdCard] = useMutation(UPDATE_ID_CARD);
-
   const [getUserInfo] = useLazyQuery(GET_USER_PAYMENT_INFO);
   //get the id of the addresses user
   const [addressId, setAddressId] = useState();
   const [userInfoExist, setUserInfoExist] = useState(); //esta bandera me indica si debo actualizar o crear la informacion para el usuario
+
   const handleChange = (data) => {
     setAmount(data);
   };
+
   const cargaDatos = async () => {
     const userData = JSON.parse(localStorage.getItem("userData")); //datos de user
     const userDataId = userData.user.id;
@@ -106,7 +107,7 @@ const CheckOutForm1 = () => {
       const { data } = await getUserInfo({
         variables: { id: userDataId },
       });
-      console.log(data)
+      console.log(data);
       // Check if data is available and set userInformation
       if (data && data.usersPermissionsUser) {
         setAddressId(
@@ -147,7 +148,7 @@ const CheckOutForm1 = () => {
             data?.usersPermissionsUser?.data?.attributes?.idCard?.idType || "",
           checkbox: Boolean(
             data?.usersPermissionsUser?.data?.attributes?.idCard?.checkbox ||
-            false
+              false
           ),
         });
       }
@@ -282,8 +283,8 @@ const CheckOutForm1 = () => {
                                   id="firstName"
                                   className="form-input"
                                   onChange={(e) => {
-                                    console.log(e)
-                                    console.log(userInformation)
+                                    console.log(e);
+                                    console.log(userInformation);
                                     setUserInformation({
                                       ...userInformation,
                                       firstName: e.target.value,
@@ -291,7 +292,11 @@ const CheckOutForm1 = () => {
                                   }}
                                   value={userInformation.firstName}
                                 />
-                                {touched.firstName && errors.firstName && <div className="error">{errors.firstName}</div>}
+                                {touched.firstName && errors.firstName && (
+                                  <div className="error">
+                                    {errors.firstName}
+                                  </div>
+                                )}
                                 {/* {errors.firstName && touched.firstName ? (
                                   <ErrorForm>{errors.firstName}</ErrorForm>
                                 ) : null} */}
@@ -509,7 +514,6 @@ const CheckOutForm1 = () => {
                                         idType: e.target.value,
                                       });
                                     }}
-
                                   />
                                 </div>
                                 <div className="col-span-6 grid">
