@@ -55,9 +55,9 @@ export default function OrderDetailSecondary({ orderId }) {
             ...prev,
             order: {
               orderRef: id,
-              subtotal: orderInfo?.attributes?.subTotal,
-              taxes: orderInfo?.attributes?.taxes,
-              total: orderInfo?.attributes?.total,
+              subtotal: orderInfo?.attributes?.payment_detail?.data?.attributes?.subtotal,
+              taxes: orderInfo?.attributes?.payment_detail?.data?.attributes?.taxes,
+              total: orderInfo.attributes?.payment_detail?.data?.attributes?.total,
             },
             orderItems: orderInfo?.attributes?.order_items?.data?.map((item) => {
               return {
@@ -92,7 +92,7 @@ export default function OrderDetailSecondary({ orderId }) {
     </div>
   }
 
-  console.log(orderData.orderItems)
+  console.log(orderData.orderItems.images)
 
 
   return (
@@ -105,7 +105,7 @@ export default function OrderDetailSecondary({ orderId }) {
             <section key={item.itemRef} className=" border-b-2 border-dashed border-grey-200 p-5 h-[125px]">
               <div className="flex lg:space-x-3  sm:space-between">
                 {item.images.length > 0 ?
-                  <CarouselImages images={item.images} widthImg={100} heightImg={90} />
+                  <CarouselImages images={item.images} widthImg={100} heightImg={90} classStyle={"rounded-xl"} />
                   : (
                     <Image
                       src={test}
