@@ -12,8 +12,10 @@ import CREATE_PAYMENT_DETAIL from "@/src/graphQl/queries/createPaymentDetails";
 export default function CheckOutForm2({ amount }) {
   const isoDate = new Date().toISOString();
   const [paymentDetailId, setPaymentDetailId] = useState(null);
+  console.log("id", paymentDetailId);
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
   const { total, subTotal, taxes } = amount;
+  let paymentDetailResponseId = null;
   const [createPaymentDetail] = useMutation(CREATE_PAYMENT_DETAIL);
   const { user } = useStorage();
   const { id } = user || {};
@@ -32,15 +34,16 @@ export default function CheckOutForm2({ amount }) {
           publishedAt: isoDate,
         },
       });
-      console.log("data :", paymentDetailResponse);
-      setChecktOutForm2Visible(
-        paymentDetailResponse?.data?.createPaymentDetail
+      setPaymentDetailId(
+        paymentDetailResponse?.data?.createPaymentDetail?.data?.id
       );
+      setChecktOutForm2Visible(true);
     } catch (error) {
       console.error(error);
     }
   };
 
+  console.log("id", paymentDetailId);
   return (
     <div className="w-full">
       <div className="flex justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
