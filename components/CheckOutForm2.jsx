@@ -13,7 +13,6 @@ import Spinner from "./Spinner";
 export default function CheckOutForm2({ amount }) {
   const isoDate = new Date().toISOString();
   const [paymentDetailId, setPaymentDetailId] = useState(null);
-  console.log("id", paymentDetailId);
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
   const { total, subTotal, taxes } = amount;
   let paymentDetailResponseId = null;

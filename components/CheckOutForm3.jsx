@@ -11,7 +11,6 @@ import AlertNotAuth from "./AlertNotAuth";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function CheckOutForm3({ paymentDetailId }) {
-  console.log("-----------", paymentDetailId);
   const router = useRouter();
   const [formData, setFormData] = useState(paymentDataForm);
   const { user } = useStorage();
@@ -19,6 +18,8 @@ export default function CheckOutForm3({ paymentDetailId }) {
   const cartSummary = useCartSummary({
     userId: user?.id,
   });
+  // the url return an payment url to redirect the user to Tilopay payment.
+  let paymentUrl = "";
   // total final to pay , WE NEED TO GET IT FROM FACTURAZEN
   //RETRIEVE STATUS
   // get the order retrieved or created
@@ -85,8 +86,6 @@ export default function CheckOutForm3({ paymentDetailId }) {
   };
   handlePaymentProceed();
   const paymentUrlPromise = paymentRequest();
-  // the url return an payment url to redirect the user to Tilopay payment.
-  let paymentUrl = "";
   paymentUrlPromise
     .then((result) => {
       paymentUrl = result;
