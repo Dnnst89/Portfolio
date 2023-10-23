@@ -28,29 +28,21 @@ export default function ThankYouMessage() {
   const [order, setOrder] = useState("");
 
   useEffect(() => {
-
+    handleTilopayResponse();
     const searchParams = new URLSearchParams(window?.location?.search);
 
     if (searchParams.has("code")) {
       setCode(searchParams.get("code"));
-      console.log(searchParams.get("code"))
-    } else (
-      setCode(0)
-    )
+    }
 
     if (searchParams.has("order")) { // Verificar si la URL tiene el parámetro "order"
       setOrder(searchParams.get("order"));
-      console.log(searchParams.get("order"))
     }
-    handleTilopayResponse();
+
     console.log("code :", code);
     console.log("order :", order);
     // eslint-disablece en el enfoque react-hooks/exhaustive-deps
   }, []);
-
-
-  console.log("code :", code);
-  console.log("order :", order);
 
   const [getSession] = useLazyQuery(GET_SHOPPING_SESSION_BY_USER);
   const [getCart] = useLazyQuery(GET_CART_ITEMS_LIST_SHOPPING_SESSION, {
@@ -66,6 +58,43 @@ export default function ThankYouMessage() {
   const { items } = useCartSummary({
     userId: user?.id,
   });
+  /*
+  items.map((item) => {
+    if (
+      item.attributes.variant.data &&
+      item.attributes.variant.data.attributes.product.data
+    ) {
+      console.log("ss", item);
+      const quant = parseInt(item.attributes.quantity);
+      const stock = parseInt(
+        item.attributes.variant.data.attributes.stock
+      );
+      const newStock = stock - quant;
+      const variant = item.attributes.variant.data.id;
+      const cartItemId = item.id;
+      console.log(cartItemId);
+
+      try {
+        deleteCarItem({
+          variables: {
+            id: cartItemId,
+          },
+        });
+      } catch (error) {}
+
+      try {
+        updateVariantStock({
+          variables: {
+            id: variant,
+            stock: newStock,
+          },
+        });
+      } catch (error) {
+        console.log("error");
+      }
+    }
+  });
+  */
 
   const handleUpdate = async () => {
     if (code == 1) {
@@ -120,6 +149,14 @@ export default function ThankYouMessage() {
               newStatus: "A", // Approved
             },
           });
+
+          try {
+          } catch (error) {
+            //Manejo de errores
+            setError(true);
+          } finally {
+          }
+
           /*
             get rid of the cart session and delete carts items from database
             after that create a new empty cart session

@@ -106,7 +106,6 @@ const CheckOutForm1 = () => {
       const { data } = await getUserInfo({
         variables: { id: userDataId },
       });
-      console.log(data)
       // Check if data is available and set userInformation
       if (data && data.usersPermissionsUser) {
         setAddressId(
@@ -147,7 +146,7 @@ const CheckOutForm1 = () => {
             data?.usersPermissionsUser?.data?.attributes?.idCard?.idType || "",
           checkbox: Boolean(
             data?.usersPermissionsUser?.data?.attributes?.idCard?.checkbox ||
-            false
+              false
           ),
         });
       }
@@ -240,7 +239,7 @@ const CheckOutForm1 = () => {
       validationSchema={validationSchema} // Agrega tu esquema de validación
       initialValues={userInformation}
     >
-      {({ dirty, isValid, errors, touched }) => {
+      {({ errors, touched }) => {
         return (
           <>
             <div className="w-full max-w-screen-xl m-auto grid grid-cols-12 mt-10">
@@ -282,8 +281,6 @@ const CheckOutForm1 = () => {
                                   id="firstName"
                                   className="form-input"
                                   onChange={(e) => {
-                                    console.log(e)
-                                    console.log(userInformation)
                                     setUserInformation({
                                       ...userInformation,
                                       firstName: e.target.value,
@@ -291,10 +288,9 @@ const CheckOutForm1 = () => {
                                   }}
                                   value={userInformation.firstName}
                                 />
-                                {touched.firstName && errors.firstName && <div className="error">{errors.firstName}</div>}
-                                {/* {errors.firstName && touched.firstName ? (
+                                {errors.firstName && touched.firstName ? (
                                   <ErrorForm>{errors.firstName}</ErrorForm>
-                                ) : null} */}
+                                ) : null}
                               </div>
                               <div className="col-span-6 grid">
                                 <label htmlFor="lastName">Apellidos</label>
@@ -502,14 +498,13 @@ const CheckOutForm1 = () => {
                                     name="idType"
                                     placeholder="Tipo De Cédula"
                                     className="form-input"
-                                    value={userInformation.idType}
                                     onChange={(e) => {
                                       setUserInformation({
                                         ...userInformation,
                                         idType: e.target.value,
                                       });
                                     }}
-
+                                    value={userInformation.idType}
                                   />
                                 </div>
                                 <div className="col-span-6 grid">
@@ -539,7 +534,6 @@ const CheckOutForm1 = () => {
                       <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
                         <button
                           type="submit"
-                          disabled={!dirty || !isValid}
                           className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
                         >
                           Continuar
