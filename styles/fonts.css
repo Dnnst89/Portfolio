@@ -29,4 +29,11 @@ input[type=text], input[type=password],input[type=email] {
   border: 2px solid #B2B1C5;
   padding-left: 10px;
   border-radius: .5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  
+}
+
+.aa-Panel{
+  z-index: 99;
 }

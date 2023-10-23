@@ -368,6 +368,7 @@ function NewForm() {
                                                                 message: 'La información es muy grande, por favor utiliza la segunda linea',
                                                             },
                                                         })}
+                                                        className="h-20 resize-none"
                                                     ></textarea>
                                                     <p className="text-red text-xs">{errors.addressLine1?.message}</p>
                                                 </div>
@@ -389,6 +390,7 @@ function NewForm() {
                                                                 message: 'La información es muy grande, intenta reducirla',
                                                             },
                                                         })}
+                                                        className="h-20 resize-none"
                                                     ></textarea>
                                                     <p className="text-red text-xs">{errors.addressLine2?.message}</p>
                                                 </div>
