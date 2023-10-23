@@ -10,6 +10,7 @@ import direcciones from "../assets/direcciones.png";
 import { updateShoppingSession } from "@/redux/features/cart-slice";
 import { useRouter } from "next/navigation";
 
+
 const WelcomeUser = () => {
   const authUser = useSelector((state) => state.auth.user);
 

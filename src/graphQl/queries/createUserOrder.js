@@ -6,6 +6,7 @@ export const CREATE_ORDER = gql`
     $subTotal: Float
     $taxes: Float
     $total: Float
+    $paymentId: ID!
     $publishedAt: DateTime!
   ) {
     createOrderDetail(
@@ -15,6 +16,7 @@ export const CREATE_ORDER = gql`
         subTotal: $subTotal
         taxes: $taxes
         total: $total
+        payment_detail: $paymentId
         users_permissions_user: $user_id
       }
     ) {

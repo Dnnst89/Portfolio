@@ -72,7 +72,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
 
   return (
     <>
-      <div className="bg-floralwhite max-w-screen-xl grid grid-cols-12 m-auto p-5" target="_blank" rel="noopener noreferrer">
+      <div className="bg-floralwhite max-w-screen-xl grid grid-cols-12 m-auto p-5 z-0" target="_blank" rel="noopener noreferrer">
 
         {/* Columna de imagenes */}
         <div className="mb-10 col-span-12 md:col-span-6">
@@ -90,7 +90,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
             ) : null}
           </div>
           {/* //imagenes debajo de la principal */}
-          <div className="md:w-4/6 m-auto mt-2">
+          <div className="md:w-4/6 m-auto mt-2 ">
             <Swiper
               modules={[Navigation, A11y]}
               spaceBetween={1}
