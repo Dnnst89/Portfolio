@@ -11,7 +11,7 @@ import { FaArrowAltCircleDown } from "react-icons/fa";
 import CREATE_PAYMENT_DETAIL from "@/src/graphQl/queries/createPaymentDetails";
 export default function CheckOutForm2({ amount }) {
   const isoDate = new Date().toISOString();
-  const [myOrderNumber, setMyOrderNumber] = useState(null);
+  const [paymentDetailId, setPaymentDetailId] = useState(null);
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
   const { total, subTotal, taxes } = amount;
   const [createPaymentDetail] = useMutation(CREATE_PAYMENT_DETAIL);
@@ -23,7 +23,7 @@ export default function CheckOutForm2({ amount }) {
   });
   const handleCreatePaymentDetail = async () => {
     try {
-      const data = await createPaymentDetail({
+      const paymentDetailResponse = await createPaymentDetail({
         variables: {
           status: "Inicial",
           subTotal: subTotal,
@@ -32,7 +32,10 @@ export default function CheckOutForm2({ amount }) {
           publishedAt: isoDate,
         },
       });
-      console.log("data :", data);
+      console.log("data :", paymentDetailResponse);
+      setChecktOutForm2Visible(
+        paymentDetailResponse?.data?.createPaymentDetail
+      );
     } catch (error) {
       console.error(error);
     }
@@ -118,7 +121,7 @@ export default function CheckOutForm2({ amount }) {
           </div>
         </>
       ) : (
-        <CheckOutForm3 myOrderNumber={myOrderNumber} />
+        <CheckOutForm3 myOrderNumber={paymentDetailId} />
       )}
     </div>
   );
