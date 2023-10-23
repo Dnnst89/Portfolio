@@ -28,26 +28,23 @@ export default function ThankYouMessage() {
   const [order, setOrder] = useState("");
 
   useEffect(() => {
-
     const searchParams = new URLSearchParams(window?.location?.search);
 
     if (searchParams.has("code")) {
       setCode(searchParams.get("code"));
-      console.log(searchParams.get("code"))
-    } else (
-      setCode(0)
-    )
+      console.log(searchParams.get("code"));
+    } else setCode(0);
 
-    if (searchParams.has("order")) { // Verificar si la URL tiene el parámetro "order"
+    if (searchParams.has("order")) {
+      // Verificar si la URL tiene el parámetro "order"
       setOrder(searchParams.get("order"));
-      console.log(searchParams.get("order"))
+      console.log(searchParams.get("order"));
     }
     handleTilopayResponse();
     console.log("code :", code);
     console.log("order :", order);
     // eslint-disablece en el enfoque react-hooks/exhaustive-deps
   }, []);
-
 
   console.log("code :", code);
   console.log("order :", order);
@@ -88,7 +85,7 @@ export default function ThankYouMessage() {
                 id: cartItemId,
               },
             });
-          } catch (error) { }
+          } catch (error) {}
 
           try {
             updateVariantStock({

@@ -3,106 +3,38 @@ import Image from "next/image";
 import moovin from "../app/assets/moovin.png";
 import logo from "../app/assets/tk-logo.png";
 import { useEffect, useState } from "react";
-import { CREATE_ORDER } from "@/src/graphQl/queries/createUserOrder";
-import CREATE_ORDER_ITEM_MUTATION from "@/src/graphQl/queries/createOrderItem";
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_PENDING_ORDER } from "@/src/graphQl/queries/isOrderPending";
 import useStorage from "@/hooks/useStorage";
 import CheckOutForm3 from "./CheckOutForm3";
-import { UPDATE_ORDER } from "@/src/graphQl/queries/updateTotal";
 import useCartSummary from "@/hooks/useCartSummary";
 import { FaArrowAltCircleDown } from "react-icons/fa";
+import CREATE_PAYMENT_DETAIL from "@/src/graphQl/queries/createPaymentDetails";
 export default function CheckOutForm2({ amount }) {
+  const isoDate = new Date().toISOString();
   const [myOrderNumber, setMyOrderNumber] = useState(null);
-  let retrievedOrderNumber = null;
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
   const { total, subTotal, taxes } = amount;
-  const [createOrder] = useMutation(CREATE_ORDER);
-  const [createOrderItem] = useMutation(CREATE_ORDER_ITEM_MUTATION);
-  const [updateOrder] = useMutation(UPDATE_ORDER);
+  const [createPaymentDetail] = useMutation(CREATE_PAYMENT_DETAIL);
   const { user } = useStorage();
   const { id } = user || {};
   //me traigo los items de carrito para crear los items de la orden
   const { items } = useCartSummary({
     userId: id,
   });
-  // retrieving pending order if exist
-  const { data } = useQuery(GET_PENDING_ORDER, {
-    variables: { userId: id, status: "P" },
-  });
-  // getting pending order
-  const status = data?.orderDetails?.data[0]?.attributes?.status;
-  // an order might not exist
-  const orderNumber = data?.orderDetails?.data[0]?.id;
-  const resentPendingOrder = async () => {
-    // storing ordernumber if exist
-    /**
-     * if the order exist we need to update the
-     * amount of the order everytime the user
-     * decides to change the order
-     */
+  const handleCreatePaymentDetail = async () => {
     try {
-      const { data } = await updateOrder({
+      const data = await createPaymentDetail({
         variables: {
-          order_Id: orderNumber,
-          total: total,
+          status: "Inicial",
           subTotal: subTotal,
           taxes: taxes,
-        },
-      });
-      retrievedOrderNumber = data?.updateOrderDetail?.data?.id;
-      // Now that you have the updated order number
-      setMyOrderNumber(retrievedOrderNumber);
-      //localStorage.setItem("createdOrder", orderNumber);
-      setChecktOutForm2Visible(true);
-    } catch (error) {
-      console.error("Error updating order:", error);
-    }
-  };
-
-  const creatingOrderItems = (orderId) => {
-    const isoDate = new Date().toISOString();
-    try {
-      items.map(async (item) => {
-        const variant = item.attributes.variant.data; // Desestructuración aquí
-        const variantAtt = variant.attributes;
-        console.log(variantAtt.quantity);
-        const { data } = await createOrderItem({
-          variables: {
-            quantity: item.attributes.quantity,
-            variantId: variant.id,
-            publishedAt: isoDate,
-            orderDetailId: orderId,
-          },
-        });
-      });
-    } catch (error) {
-      console.log("Error creating: ", error);
-    }
-  };
-
-  const handleCreateOrder = async () => {
-    const isoDate = new Date().toISOString();
-    try {
-      const { data } = await createOrder({
-        variables: {
-          user_id: id,
           total: total,
-          subTotal: subTotal,
-          taxes: taxes,
-          status: "P", // Pending
           publishedAt: isoDate,
         },
       });
-
-      // if the order not exist we create one
-      // After create an order now we can get that pending order
-      const orderNumber = await data?.createOrderDetail?.data?.id;
-      setMyOrderNumber(orderNumber);
-      setChecktOutForm2Visible(true);
-      creatingOrderItems(orderNumber);
+      console.log("data :", data);
     } catch (error) {
-      console.error("Error creating order:", error);
+      console.error(error);
     }
   };
 
@@ -177,7 +109,7 @@ export default function CheckOutForm2({ amount }) {
           <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
             <button
               onClick={() => {
-                status === "P" ? resentPendingOrder() : handleCreateOrder();
+                handleCreatePaymentDetail();
               }}
               className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
             >
