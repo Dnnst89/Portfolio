@@ -2,6 +2,7 @@
 import NavigationMenu from "@/components/NavigationMenu.jsx";
 import PersonalDataForm from "../../components/PersonalDataForm";
 import useProtectionRoute from "@/hooks/useProtectionRoute";
+import "../../styles/fonts.css";
 export default function PersonalData() {
   useProtectionRoute()
   return (
