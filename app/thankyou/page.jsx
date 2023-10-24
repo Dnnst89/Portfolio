@@ -30,7 +30,7 @@ export default function ThankYouMessage() {
   const [code, setCode] = useState("");
   const [paymentId, setPaymentId] = useState();
   const [orderId, setOrderId] = useState();
-
+  const [description, setDescription] = useState();
   useEffect(() => {
     //guardo los datos que responde tilopay en orden
     const searchParams = new URLSearchParams(window?.location?.search);
@@ -42,13 +42,23 @@ export default function ThankYouMessage() {
       setCode(0)
     )
 
+    if (searchParams.has("description")) {
+      //code 1 satisfactorio
+      setDescription(searchParams.get("description"));
+    } else (
+      setCode(0)
+    )
+
     if (searchParams.has("order")) {
       // Verificar si la URL tiene el parámetro "order" que es el id del paymentDetail
       setPaymentId(searchParams.get("order"));
     }
+
     handleTilopayResponse();
     // eslint-disablece en el enfoque react-hooks/exhaustive-deps
-  }, []);
+  }, [code]);
+
+
 
   //calling the mutation
   const [updateOrderDetailsStatus] = useMutation(UPDATE_ORDER_DETAILS_STATUS);
@@ -139,7 +149,7 @@ export default function ThankYouMessage() {
       });
       const orderNumber = await data?.createOrderDetail?.data?.id;
       creatingOrderItems(orderNumber);
-      setOrderId(data?.id)
+      setOrderId(orderNumber)
     } catch (error) {
       console.error("Error creating order:", error);
     }
@@ -162,22 +172,20 @@ export default function ThankYouMessage() {
 
 
   const handleTilopayResponse = async () => {
-    if (code) {
-      // Handle the payment data as needed
-      if (code === "1") {
-        // Payment was successful
-        handleCreateOrder("A")
-        handleUpdatePayment("A")
-        handleCartItmes()// me vacia el carrito y me modifica el stock
-      } else {
-        // Payment failed
-        // Render the description when code is not "1"
-        // I need to change the status of ther Payment to failed
-        handleUpdatePayment("F")
-      }
+
+    // Handle the payment data as needed
+    if (code === "1") {
+      // Payment was successful
+      handleCreateOrder("A")
+      handleUpdatePayment("A")
+      handleCartItmes()// me vacia el carrito y me modifica el stock
     } else {
-      //if payment is rejected
+      // Payment failed
+      // Render the description when code is not "1"
+      // I need to change the status of ther Payment to failed
+      handleUpdatePayment("F")
     }
+
   };
 
   return code ? (
@@ -202,7 +210,7 @@ export default function ThankYouMessage() {
                 </div>
                 <div className="bg-white w-[250px] p-3 flex flex-col items-center ml-[20px] rounded-md">
                   <p className="text-grey-100">N° de pedido</p>
-                  <p>{paymentId}</p>
+                  <p>{orderId}</p>
                 </div>
 
                 <button
@@ -215,7 +223,7 @@ export default function ThankYouMessage() {
             </>
           ) : (
             <>
-              <OrderFailed />
+              <OrderFailed description={description} />
             </>
           )}
         </section>
