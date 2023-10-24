@@ -57,27 +57,27 @@ export default function OrderDetail() {
         console.log("data: ", data)
         if (data) {
 
-          const pagination = data.orderDetails.meta.pagination //es un objeto con la informacion de paginacion
+          const pagination = data?.orderDetails?.meta.pagination //es un objeto con la informacion de paginacion
           setNbPages(pagination.pageCount)
-          const info = data.orderDetails.data
-          const userInfo = info[0].attributes.users_permissions_user.data.attributes //solo guardo los datos del user con el primer dato del array
+          const info = data.orderDetails?.data
+          const userInfo = info[0]?.attributes?.users_permissions_user?.data?.attributes //solo guardo los datos del user con el primer dato del array
           setUserData((prev) => ({
             ...prev,
             user: {
-              firstName: userInfo.firstName,
-              lastName: userInfo.lastName,
+              firstName: userInfo?.firstName,
+              lastName: userInfo?.lastName,
             },
             address: {
-              province: userInfo.users_address.data.attributes.province,
-              canton: userInfo.users_address.data.attributes.canton,
+              province: userInfo?.users_address?.data?.attributes?.province,
+              canton: userInfo?.users_address?.data?.attributes?.canton,
             },
             order: info.map((item) => {
               return {
-                ref: item.id,
-                status: item.attributes.status,
-                subTotal: item.attributes.subTotal,
-                taxes: item.attributes.taxes,
-                total: item.attributes.total,
+                ref: item?.id,
+                status: item?.attributes?.status,
+                subTotal: item?.attributes?.payment_detail?.data?.attributes?.subTotal,
+                taxes: item?.attributes?.payment_detail?.data?.attributes?.taxes,
+                total: item?.attributes?.payment_detail?.data?.attributes?.total,
               };
             }),
           }));
