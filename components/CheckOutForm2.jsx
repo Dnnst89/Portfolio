@@ -9,7 +9,6 @@ import CheckOutForm3 from "./CheckOutForm3";
 import useCartSummary from "@/hooks/useCartSummary";
 import { FaArrowAltCircleDown } from "react-icons/fa";
 import CREATE_PAYMENT_DETAIL from "@/src/graphQl/queries/createPaymentDetails";
-import Spinner from "./Spinner";
 export default function CheckOutForm2({ amount }) {
   const isoDate = new Date().toISOString();
   const [paymentDetailId, setPaymentDetailId] = useState(null);
@@ -123,7 +122,7 @@ export default function CheckOutForm2({ amount }) {
           </div>
         </>
       ) : (
-        <CheckOutForm3 paymentDetailId={paymentDetailId} />
+        <CheckOutForm3 paymentDetailId={paymentDetailId} total={total} />
       )}
     </div>
   );

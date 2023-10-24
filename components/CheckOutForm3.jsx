@@ -10,7 +10,7 @@ import useCartSummary from "@/hooks/useCartSummary";
 import AlertNotAuth from "./AlertNotAuth";
 import toast, { Toaster } from "react-hot-toast";
 
-export default function CheckOutForm3({ paymentDetailId }) {
+export default function CheckOutForm3({ paymentDetailId, total }) {
   const router = useRouter();
   const [formData, setFormData] = useState(paymentDataForm);
   const { user } = useStorage();
@@ -25,7 +25,7 @@ export default function CheckOutForm3({ paymentDetailId }) {
   // get the order retrieved or created
   // Retrieve user data
   const { loading, error, data } = useQuery(GET_PAYMENT_DETAILS, {
-    variables: { userId: id, status: "P" },
+    variables: { userId: id },
   });
   useEffect(() => {
     if (!loading && !error) {
@@ -39,9 +39,7 @@ export default function CheckOutForm3({ paymentDetailId }) {
             data: { attributes: userAddressAttributes },
           },
           phoneNumber,
-          order_details,
         } = userData;
-        const total = order_details?.data[0]?.attributes?.total;
         // the next step is to send the data to the request
         // we load data into the state
         if (userData) {
@@ -84,7 +82,9 @@ export default function CheckOutForm3({ paymentDetailId }) {
 
     // You can proceed with the payment logic here
   };
+
   handlePaymentProceed();
+
   const paymentUrlPromise = paymentRequest();
   paymentUrlPromise
     .then((result) => {
