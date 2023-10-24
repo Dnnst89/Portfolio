@@ -9,10 +9,12 @@ import useStorage from "@/hooks/useStorage";
 import useCartSummary from "@/hooks/useCartSummary";
 import AlertNotAuth from "./AlertNotAuth";
 import toast, { Toaster } from "react-hot-toast";
+import Spinner from "./Spinner";
 
 export default function CheckOutForm3({ paymentDetailId, total }) {
   const router = useRouter();
   const [formData, setFormData] = useState(paymentDataForm);
+  const [loadingBtn, setLoadingBtn] = useState(false);
   const { user } = useStorage();
   const { id, email } = user || {};
   const cartSummary = useCartSummary({
@@ -85,14 +87,6 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
 
   handlePaymentProceed();
 
-  // paymentUrlPromise
-  //   .then((result) => {
-  //     paymentUrl = result;
-  //   })
-  //   .catch((error) => {
-  //     console.error("Promise rejected with error:", error);
-  //   });
-
   const handleVerification = async () => {
     const paymentUrl = await paymentRequest();
     //verifica que no haya ningun error de stock con la cantidad de productos que lleva
@@ -107,6 +101,7 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
         />
       ));
     } else {
+      setLoadingBtn(true);
       router.push(paymentUrl);
     }
   };
@@ -127,8 +122,9 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
         <button
           onClick={handleVerification}
           className="bg-pink-200 text-white rounded-sm p-2 w-[200px] whitespace-nowrap"
+          disabled={loadingBtn} // Disable the button when loading
         >
-          Proceder al pago
+          {loadingBtn ? <Spinner /> : "Proceder al pago"}
         </button>
       </div>
     </div>
