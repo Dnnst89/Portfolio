@@ -174,21 +174,26 @@ export default function ThankYouMessage() {
   const handleTilopayResponse = async () => {
 
     // Handle the payment data as needed
-    if (code === "1") {
-      // Payment was successful
-      handleCreateOrder("A")
-      handleUpdatePayment("A")
-      handleCartItmes()// me vacia el carrito y me modifica el stock
+    if (code) {
+      if (code === "1") {
+        // Payment was successful
+        handleCreateOrder("A")
+        handleUpdatePayment("Approved")
+        handleCartItmes()// me vacia el carrito y me modifica el stock
+      } else {
+        // Payment failed
+        // Render the description when code is not "1"
+        // I need to change the status of ther Payment to failed
+        handleUpdatePayment("Failed")
+      }
     } else {
-      // Payment failed
-      // Render the description when code is not "1"
-      // I need to change the status of ther Payment to failed
-      handleUpdatePayment("F")
+      handleUpdatePayment("Cancelled")
     }
+
 
   };
 
-  return code ? (
+  return (
     <div className="bg-floralwhite p-[100px] flex justify-center">
       <main className="bg-resene border-2 border-dashed border-grey-200 flex flex-col justify-center h-auto p-10">
         <section className="flex justify-center">
@@ -223,11 +228,11 @@ export default function ThankYouMessage() {
             </>
           ) : (
             <>
-              <OrderFailed description={description} />
+              <OrderFailed description={description ? "Fondos insuficientes" : "Orden cancelada"} />
             </>
           )}
         </section>
       </main>
     </div>
-  ) : null;
+  );
 }
