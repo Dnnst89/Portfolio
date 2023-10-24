@@ -56,13 +56,13 @@ function ProductReviewForm({ idProduct }) {
   return (
     <>
       {sessionData && (
-        <form onSubmit={onSubmit} className="p-5 w-5/12 ">
+        <form onSubmit={onSubmit} className="md:p-5 w-full col-start-2 col-span-10 md:col-start-4 md:col-span-6 m-auto">
           <div>
             <Toaster />
           </div>
 
-          <div className="text-center">
-            <label htmlFor="message" className="">
+          <div className="space-y-3 w-full">
+            <label htmlFor="message" className="text-lg w-full">
               Danos tu opinión del producto
             </label>
             <textarea
@@ -105,7 +105,7 @@ function ProductReviewForm({ idProduct }) {
                 ref={captchaRef}
               />
             </div>
-            <div className="flex justify-end">
+            <div className="flex justify-end pb-5">
               <button
                 type="submit"
                 className="bg-aquamarine p-2 rounded-md text-white mt-5 mr-10"

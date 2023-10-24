@@ -13,7 +13,7 @@ const ProductDetailSecondary = ({ id, description, reviews }) => {
       {reviews.length > 0 ? (
         <section className="grid md:flex md:items-baseline mx-auto gap-5 w-10/12 md:w-8/12 pt-10">
           <h1 className="text-xl mr-2">Reseñas</h1>
-          <div className="w-12/12">
+          <div className="w-full">
             <div>
 
               {showAllReviews
@@ -60,7 +60,7 @@ const ProductDetailSecondary = ({ id, description, reviews }) => {
         ""
       )}
 
-      <div className="flex justify-center">
+      <div className=" w-full grid grid-cols-12 justify-center  m-auto">
         <ProductReviewForm idProduct={id} />
       </div>
     </main>
