@@ -39,7 +39,7 @@ const CartContainer = () => {
                 }}
             />
 
-            <div className="flex flex-col col-span-8 ">
+            <div className="flex flex-col md:col-span-8 col-span-12">
 
                 {items?.map((item, index) => {
                     const variant = item.attributes.variant.data; // Desestructuración aquí
@@ -77,7 +77,7 @@ const CartContainer = () => {
                 })}
 
             </div>
-            <div className=" bg-resene rounded-sm col-span-4 p-4 h-[500px]  border-l-4 border-lightblue">
+            <div className=" bg-resene rounded-sm col-span-12 md:col-span-4 p-4 h-[500px]  border-l-4 border-lightblue">
                 <CartDetail detailTitle={"Detalle del carrito"} />
                 {items.length > 0 ? <CartProceedPayment
                     textButton={"Proceder al pago"}

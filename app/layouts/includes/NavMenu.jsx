@@ -82,18 +82,24 @@ const NavMenu = () => {
               </Link>
             </div>
             <Toaster
-              toastOptions={{
-                success: {
-                  style: {
-                    background: "#67C3AD",
-                  },
-                },
-                error: {
-                  style: {
-                    background: "#f87171",
-                  },
-                },
-              }}
+                containerStyle={{
+                    top: 150,
+                    left: 20,
+                    bottom: 20,
+                    right: 20,
+                }}
+                toastOptions={{
+                    success: {
+                        style: {
+                            background: "#67C3AD",
+                        },
+                    },
+                    error: {
+                        style: {
+                            background: "#f87171",
+                        },
+                    },
+                }}
             />
           </div>
         </div>
