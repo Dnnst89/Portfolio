@@ -57,9 +57,7 @@ function ProductReviewForm({ idProduct }) {
     <>
       {sessionData && (
         <form onSubmit={onSubmit} className="md:p-5 w-full col-start-2 col-span-10 md:col-start-4 md:col-span-6 m-auto">
-          <div>
-            <Toaster />
-          </div>
+
 
           <div className="space-y-3 w-full">
             <label htmlFor="message" className="text-lg w-full">

@@ -36,8 +36,8 @@ const DeleteCartItemBtn = ({ idItem, qtyItem }) => {
       });
   };
   return (
-    <><Toaster />
-      <button className="ml-3 text-3xl col-span-6 grid content-center justify-center" onClick={handleDelete}>
+    <>
+      <button className="ml-3 text-3xl md:col-span-6 grid content-center justify-center" onClick={handleDelete}>
         {/* <BiX /> */}
         <MdOutlineDeleteForever color="#FB82AF" size={40}></MdOutlineDeleteForever>
       </button> </>

@@ -87,20 +87,7 @@ const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId,
     return (
         <div>
             {" "}
-            <Toaster
-                toastOptions={{
-                    success: {
-                        style: {
-                            background: "#67C3AD",
-                        },
-                    },
-                    error: {
-                        style: {
-                            background: "#f87171",
-                        },
-                    },
-                }}
-            />
+            
             <button className="text-white text-sm" onClick={handleAdd}>
                 Agregar al carrito
             </button>
