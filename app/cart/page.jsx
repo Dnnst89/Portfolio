@@ -21,10 +21,10 @@ export default function CartView() {
       </main>
       {/* ///////////LOS SIGUIENTES DATOS ESTAN QUEMADOS */}
       <div>
-        <h1 className="flex justify-center text-xl">
+        <h1 className="flex justify-center text-xl text-center">
           Descubre nuestros productos estrella
         </h1>
-        <div className="flex justify-center pt-5">
+        <div className="flex justify-center pt-5 grid grid-cols-12 w-full">
           <ProductCard />
           <ProductCard />
           <ProductCard />

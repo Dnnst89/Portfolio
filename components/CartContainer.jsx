@@ -18,26 +18,7 @@ const CartContainer = () => {
 
     return (
         <>
-            <Toaster
-                containerStyle={{
-                    top: 150,
-                    left: 20,
-                    bottom: 20,
-                    right: 20,
-                }}
-                toastOptions={{
-                    success: {
-                        style: {
-                            background: "#67C3AD",
-                        },
-                    },
-                    error: {
-                        style: {
-                            background: "#f87171",
-                        },
-                    },
-                }}
-            />
+            
 
             <div className="flex flex-col md:col-span-8 col-span-12">
 
