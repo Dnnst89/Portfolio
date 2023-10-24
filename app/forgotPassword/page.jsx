@@ -46,7 +46,7 @@ const ForgotPassword = () => {
       <div className="flex flex-col items-center max-w-screen-xl m-auto mt-10">
 
         <div className="bg-resene  p-5 w-2/4 flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-3 col-span-8 space-y-5">
-          <h1>Password Reset</h1>
+          <h1>Cambiar contraseña</h1>
           <Formik
             initialValues={{ email: "" }}
             validationSchema={ResetPasswordSchema}

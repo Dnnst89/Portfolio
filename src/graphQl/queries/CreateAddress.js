@@ -5,7 +5,7 @@ export const CREATE_ADDRESS = gql`
     $postCode: String!
     $country: String!
     $addressLine1: String!
-    $addressLine2: String
+    $addressLine2: String!
     $province: String!
     $canton: String!
     $publishedAt: DateTime!

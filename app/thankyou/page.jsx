@@ -38,16 +38,12 @@ export default function ThankYouMessage() {
     if (searchParams.has("code")) {
       //code 1 satisfactorio
       setCode(searchParams.get("code"));
-    } else (
-      setCode(0)
-    )
+    } else setCode(0);
 
     if (searchParams.has("description")) {
       //code 1 satisfactorio
       setDescription(searchParams.get("description"));
-    } else (
-      setCode(0)
-    )
+    } else setCode(0);
 
     if (searchParams.has("order")) {
       // Verificar si la URL tiene el parámetro "order" que es el id del paymentDetail
@@ -57,8 +53,6 @@ export default function ThankYouMessage() {
     handleTilopayResponse();
     // eslint-disablece en el enfoque react-hooks/exhaustive-deps
   }, [code]);
-
-
 
   //calling the mutation
   const [updateOrderDetailsStatus] = useMutation(UPDATE_ORDER_DETAILS_STATUS);
@@ -72,7 +66,6 @@ export default function ThankYouMessage() {
   const { items } = useCartSummary({
     userId: user?.id,
   });
-
 
   const handleCartItmes = async () => {
     //se elimina los items de carrito y se actualizan los stocks de los productos
@@ -94,7 +87,7 @@ export default function ThankYouMessage() {
               id: cartItemId,
             },
           });
-        } catch (error) { }
+        } catch (error) {}
 
         try {
           updateVariantStock({
@@ -108,9 +101,7 @@ export default function ThankYouMessage() {
         }
       }
     });
-
   };
-
 
   ////////////////////////////funciones para crear orden, orderItems y acutalizar paymentDetail/////////
 
@@ -145,11 +136,10 @@ export default function ThankYouMessage() {
           paymentId: paymentId,
           publishedAt: isoDate,
         },
-
       });
       const orderNumber = await data?.createOrderDetail?.data?.id;
       creatingOrderItems(orderNumber);
-      setOrderId(orderNumber)
+      setOrderId(orderNumber);
     } catch (error) {
       console.error("Error creating order:", error);
     }
@@ -167,73 +157,72 @@ export default function ThankYouMessage() {
     } catch (error) {
       console.error("Error updating order status:", error);
     }
-  }
+  };
   ////////////////////////////////FUNCION PARA MANEJAR LA RESPUESTA DE TILOPAY//////////////////////////////
 
-
   const handleTilopayResponse = async () => {
-
     // Handle the payment data as needed
     if (code) {
       if (code === "1") {
         // Payment was successful
-        handleCreateOrder("A")
-        handleUpdatePayment("Approved")
-        handleCartItmes()// me vacia el carrito y me modifica el stock
+        handleCreateOrder("A");
+        handleUpdatePayment("Approved");
+        handleCartItmes(); // me vacia el carrito y me modifica el stock
       } else {
         // Payment failed
         // Render the description when code is not "1"
         // I need to change the status of ther Payment to failed
-        handleUpdatePayment("Failed")
+        handleUpdatePayment("Failed");
       }
     } else {
-      handleUpdatePayment("Cancelled")
+      handleUpdatePayment("Cancelled");
     }
-
-
   };
 
-  return (
-    paymentId ?
-      <div className="bg-floralwhite p-[100px] flex justify-center">
-        <main className="bg-resene border-2 border-dashed border-grey-200 flex flex-col justify-center h-auto p-10">
-          <section className="flex justify-center">
-            <figure>
-              <Image
-                src={logo}
-                alt="Detinmarin logo"
-                style={{ width: "390px", height: "170px" }}
-              />
-            </figure>
+  return paymentId ? (
+    <div className="bg-floralwhite p-[100px] flex justify-center">
+      <main className="bg-resene border-2 border-dashed border-grey-200 flex flex-col justify-center h-auto p-10">
+        <section className="flex justify-center">
+          <figure>
+            <Image
+              src={logo}
+              alt="Detinmarin logo"
+              style={{ width: "390px", height: "170px" }}
+            />
+          </figure>
 
-            {parseInt(code) === 1 ? (
-              <>
-                <div className="flex flex-col items-end justify-center space-y-3">
-                  <div className="flex flex-col items-center space-y-1 ml-3">
-                    <h1 className="text-xl bold">¡Gracias por tu compra!</h1>
-                    <p className="text-sm">Transacción Aprovada</p>
-                    <p className="text-sm">Ya estamos preparando tu pedido</p>
-                  </div>
-                  <div className="bg-white w-[250px] p-3 flex flex-col items-center ml-[20px] rounded-md">
-                    <p className="text-grey-100">N° de pedido</p>
-                    <p>{orderId}</p>
-                  </div>
-
-                  <button
-                    onClick={() => router.push("/")} // Specify the URL to which you want to navigate
-                    className="bg-pink-200 text-white rounded-sm p-2 w-[150px]"
-                  >
-                    Volver
-                  </button>
+          {parseInt(code) === 1 ? (
+            <>
+              <div className="flex flex-col items-end justify-center space-y-3">
+                <div className="flex flex-col items-center space-y-1 ml-3">
+                  <h1 className="text-xl bold">¡Gracias por tu compra!</h1>
+                  <p className="text-sm">Transacción Aprovada</p>
+                  <p className="text-sm">Ya estamos preparando tu pedido</p>
                 </div>
-              </>
-            ) : (
-              <>
-                <OrderFailed description={description ? "Fondos insuficientes" : "Orden cancelada"} />
-              </>
-            )}
-          </section>
-        </main>
-      </div> : null
-  );
+                <div className="bg-white w-[250px] p-3 flex flex-col items-center ml-[20px] rounded-md">
+                  <p className="text-grey-100">N° de pedido</p>
+                  <p>{orderId}</p>
+                </div>
+
+                <button
+                  onClick={() => router.push("/")} // Specify the URL to which you want to navigate
+                  className="bg-pink-200 text-white rounded-sm p-2 w-[150px]"
+                >
+                  Volver
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <OrderFailed
+                description={
+                  description ? "Fondos insuficientes" : "Orden cancelada"
+                }
+              />
+            </>
+          )}
+        </section>
+      </main>
+    </div>
+  ) : null;
 }

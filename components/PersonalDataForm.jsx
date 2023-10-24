@@ -7,6 +7,8 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import ErrorForm from "./ErrorForm";
+import useStorage from "@/hooks/useStorage";
+
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { UPDATE_USER_INFORMATION } from "@/src/graphQl/queries/updateUserInformation";
 import { GET_USER_PAYMENT_INFO } from "@/src/graphQl/queries/getUserPaymentInfo";
@@ -26,6 +28,9 @@ const validationSchema = Yup.object().shape({
     .required("Este campo es requerido"),
 });
 const PersonalDataForm = () => {
+  const { user } = useStorage(); //me trae el usuario autorizado
+  const userId = user?.id;
+  const { id } = user || {};
   const authUser = useSelector((state) => state.auth.user);
   const [userInformation, setUserInformation] = useState({ 
     firstName: "",
@@ -53,10 +58,6 @@ const PersonalDataForm = () => {
   const handleSubmit = async () => {
     updatingUserInfo(userId, userInformation);
 
-    userInfoExist
-      ? updatingAddress(userInformation)
-      : createNewAddress(userId, userInformation);
-    setCheckoutForm1Visible(true);
   };
 
   const cargaDatos = async () => {
@@ -198,7 +199,7 @@ const PersonalDataForm = () => {
                               type="submit"
                               className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
                             >
-                              Continuar
+                              Guardar
                             </button>
                           </div>
                         </div>
