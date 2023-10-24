@@ -9,7 +9,7 @@ import CheckOutForm3 from "./CheckOutForm3";
 import useCartSummary from "@/hooks/useCartSummary";
 import { FaArrowAltCircleDown } from "react-icons/fa";
 import CREATE_PAYMENT_DETAIL from "@/src/graphQl/queries/createPaymentDetails";
-export default function CheckOutForm2({ amount }) {
+export default function CheckOutForm2({ amount, checkbox }) {
   const isoDate = new Date().toISOString();
   const [paymentDetailId, setPaymentDetailId] = useState(null);
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
@@ -30,6 +30,7 @@ export default function CheckOutForm2({ amount }) {
           subTotal: subTotal,
           taxes: taxes,
           total: total,
+          invoiceRequired: checkbox,
           publishedAt: isoDate,
         },
       });

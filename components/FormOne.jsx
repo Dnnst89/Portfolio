@@ -580,7 +580,7 @@ function FormOne() {
               </div>
             </form>
           ) : (
-            <CheckOutForm2 amount={amount} />
+            <CheckOutForm2 amount={amount} checkbox={checkbox} />
           )}
         </div>
         <div className=" bg-resene rounded-sm col-span-3 h-fit  border-l-4 border-lightblue">

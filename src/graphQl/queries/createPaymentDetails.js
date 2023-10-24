@@ -6,6 +6,7 @@ const CREATE_PAYMENT_DETAIL = gql`
     $subTotal: Float
     $taxes: Float
     $total: Float
+    $invoiceRequired: Boolean
     $publishedAt: DateTime
   ) {
     createPaymentDetail(
@@ -14,6 +15,7 @@ const CREATE_PAYMENT_DETAIL = gql`
         subtotal: $subTotal
         taxes: $taxes
         total: $total
+        invoiceRequired: $invoiceRequired
         publishedAt: $publishedAt
       }
     ) {
@@ -24,6 +26,7 @@ const CREATE_PAYMENT_DETAIL = gql`
           status
           subtotal
           taxes
+          invoiceRequired
           publishedAt
         }
       }
