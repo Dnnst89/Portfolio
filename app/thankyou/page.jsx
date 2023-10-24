@@ -55,7 +55,6 @@ export default function ThankYouMessage() {
   }, [code]);
 
   //calling the mutation
-  const [updateOrderDetailsStatus] = useMutation(UPDATE_ORDER_DETAILS_STATUS);
   const [updatePaymentDetailStatus] = useMutation(UPDATE_PAYMENT_DETAIL_STATUS);
   const [deleteCarItem] = useMutation(DELETE_CART_ITEM_MUTATION);
   const [updateVariantStock] = useMutation(UPDATE_VARIANT_STOCK);
@@ -69,6 +68,7 @@ export default function ThankYouMessage() {
 
   const handleCartItmes = async () => {
     //se elimina los items de carrito y se actualizan los stocks de los productos
+    console.log(items)
     items.map((item) => {
       if (
         item.attributes.variant.data &&
@@ -87,7 +87,7 @@ export default function ThankYouMessage() {
               id: cartItemId,
             },
           });
-        } catch (error) {}
+        } catch (error) { }
 
         try {
           updateVariantStock({
@@ -101,6 +101,7 @@ export default function ThankYouMessage() {
         }
       }
     });
+    router.push("/")
   };
 
   ////////////////////////////funciones para crear orden, orderItems y acutalizar paymentDetail/////////
@@ -155,7 +156,7 @@ export default function ThankYouMessage() {
         },
       });
     } catch (error) {
-      console.error("Error updating order status:", error);
+      console.error("Error updating payment status:", error);
     }
   };
   ////////////////////////////////FUNCION PARA MANEJAR LA RESPUESTA DE TILOPAY//////////////////////////////
@@ -165,17 +166,17 @@ export default function ThankYouMessage() {
     if (code) {
       if (code === "1") {
         // Payment was successful
-        handleCreateOrder("A");
-        handleUpdatePayment("Approved");
-        handleCartItmes(); // me vacia el carrito y me modifica el stock
+        await handleCreateOrder("A");
+        await handleUpdatePayment("Approved");
+        //await handleCartItmes(); // me vacia el carrito y me modifica el stock
       } else {
         // Payment failed
         // Render the description when code is not "1"
         // I need to change the status of ther Payment to failed
-        handleUpdatePayment("Failed");
+        await handleUpdatePayment("Failed");
       }
     } else {
-      handleUpdatePayment("Cancelled");
+      await handleUpdatePayment("Cancelled");
     }
   };
 
@@ -196,7 +197,7 @@ export default function ThankYouMessage() {
               <div className="flex flex-col items-end justify-center space-y-3">
                 <div className="flex flex-col items-center space-y-1 ml-3">
                   <h1 className="text-xl bold">¡Gracias por tu compra!</h1>
-                  <p className="text-sm">Transacción Aprovada</p>
+                  <p className="text-sm">Transacción Aprobada</p>
                   <p className="text-sm">Ya estamos preparando tu pedido</p>
                 </div>
                 <div className="bg-white w-[250px] p-3 flex flex-col items-center ml-[20px] rounded-md">
@@ -205,7 +206,7 @@ export default function ThankYouMessage() {
                 </div>
 
                 <button
-                  onClick={() => router.push("/")} // Specify the URL to which you want to navigate
+                  onClick={handleCartItmes} // Specify the URL to which you want to navigate
                   className="bg-pink-200 text-white rounded-sm p-2 w-[150px]"
                 >
                   Volver
