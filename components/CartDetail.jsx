@@ -61,7 +61,7 @@ const CartDetail = ({
   };
 
   return (
-    <div className="p-3 space-y-3 border-l-4 border-lightblue">
+    <div className="p-3 md:space-y-3">
       {!loading ? (
         <>
           <h1 className=" flex justify-center">{detailTitle}</h1>

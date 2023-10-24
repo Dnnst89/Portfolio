@@ -5,7 +5,7 @@ import Button from "@/components/Button";
 import Link from "next/link";
 export default function UserDataCard(props) {
   return (
-    <div className="bg-resene w-12/12 sm:w-3/6 md:w-3/6 lg:w-6/12">
+    <div className="bg-resene  flex flex-col items-center h-fit col-span-12 mx-3  md:col-span-7">
       <h1 className=" flex justify-center mt-3 text-xl">{props.title}</h1>
       <div className=" p-4 h-auto grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-5">
         <section className="bg-floralwhite flex flex-col items-center border-2 border-dashed border-grey-200 rounded-2xl h-[250px] w-[200px]">

@@ -7,9 +7,15 @@ query GetOrderItemsByOrderId($orderId: ID!) {
     data {
       id
       attributes {
-        subTotal
-        taxes
-        total
+        payment_detail {
+          data {
+            attributes {
+              subtotal
+              taxes
+              total
+            }
+          }
+        }
         status
       }
       attributes {
@@ -23,13 +29,12 @@ query GetOrderItemsByOrderId($orderId: ID!) {
                   id
                   attributes {
                     price
-                    product{
-                      data{
+                    product {
+                      data {
                         id
-                        attributes{
+                        attributes {
                           name
                           brand
-                          
                         }
                       }
                     }
@@ -51,6 +56,7 @@ query GetOrderItemsByOrderId($orderId: ID!) {
     }
   }
 }
+
 
 
 `;
