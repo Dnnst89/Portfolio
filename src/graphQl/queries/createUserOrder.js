@@ -1,37 +1,30 @@
 import { gql } from "@apollo/client";
 export const CREATE_ORDER = gql`
-  mutation CreateOrderDetail(
-    $user_id: ID!
-    $status: String!
-    $subTotal: Float
-    $taxes: Float
-    $total: Float
-    $publishedAt: DateTime!
+mutation CreateOrderDetail(
+  $user_id: ID!
+  $status: String!
+  $paymentId: ID!
+  $publishedAt: DateTime!
+) {
+  createOrderDetail(
+    data: {
+      publishedAt: $publishedAt
+      status: $status
+      payment_detail: $paymentId
+      users_permissions_user: $user_id
+    }
   ) {
-    createOrderDetail(
-      data: {
-        publishedAt: $publishedAt
-        status: $status
-        subTotal: $subTotal
-        taxes: $taxes
-        total: $total
-        users_permissions_user: $user_id
-      }
-    ) {
-      data {
-        id
-        attributes {
-          status
-          subTotal
-          taxes
-          total
-          users_permissions_user {
-            data {
-              id
-            }
+    data {
+      id
+      attributes {
+        status
+        users_permissions_user {
+          data {
+            id
           }
         }
       }
     }
   }
+}
 `;

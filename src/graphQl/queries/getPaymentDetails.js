@@ -5,7 +5,6 @@ export const GET_PAYMENT_DETAILS = gql`
     usersPermissionsUser(id: $userId) {
       data {
         id
-
         attributes {
           firstName
           lastName
@@ -15,15 +14,6 @@ export const GET_PAYMENT_DETAILS = gql`
               attributes {
                 province
                 canton
-              }
-            }
-          }
-          order_details(filters: { status: { eq: "P" } }) {
-            data {
-              id
-              attributes {
-                total
-                status
               }
             }
           }

@@ -16,7 +16,6 @@ function RelatedItems({ categories, productId }) {
     autoClose: 5000
   })
 
-
   const max = data?.products.data.length
   const myArray = []
   while (myArray.length < max) {

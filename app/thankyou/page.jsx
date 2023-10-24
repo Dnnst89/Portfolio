@@ -14,6 +14,9 @@ import DELETE_CART_ITEM_MUTATION from "@/src/graphQl/queries/deleteCartItem";
 import UPDATE_VARIANT_STOCK from "@/src/graphQl/queries/updateVariantStock";
 import useCartSummary from "@/hooks/useCartSummary";
 import useProtectionRoute from "@/hooks/useProtectionRoute";
+import { CREATE_ORDER } from "@/src/graphQl/queries/createUserOrder";
+import CREATE_ORDER_ITEM_MUTATION from "@/src/graphQl/queries/createOrderItem";
+import { UPDATE_PAYMENT_DETAIL_STATUS } from "@/src/graphQl/queries/updatePaymentDetailStatus";
 /*
   recives the Tilopay response , based on the returns params 
   redirects to an certain page.
@@ -25,168 +28,158 @@ import useProtectionRoute from "@/hooks/useProtectionRoute";
 export default function ThankYouMessage() {
   const router = useRouter();
   const [code, setCode] = useState("");
-  const [order, setOrder] = useState("");
-
+  const [paymentId, setPaymentId] = useState();
+  const [orderId, setOrderId] = useState();
+  const [description, setDescription] = useState();
   useEffect(() => {
-    handleTilopayResponse();
+    //guardo los datos que responde tilopay en orden
     const searchParams = new URLSearchParams(window?.location?.search);
 
     if (searchParams.has("code")) {
+      //code 1 satisfactorio
       setCode(searchParams.get("code"));
+    } else setCode(0);
+
+    if (searchParams.has("description")) {
+      //code 1 satisfactorio
+      setDescription(searchParams.get("description"));
+    } else setCode(0);
+
+    if (searchParams.has("order")) {
+      // Verificar si la URL tiene el parámetro "order" que es el id del paymentDetail
+      setPaymentId(searchParams.get("order"));
     }
 
-    if (searchParams.has("order")) { // Verificar si la URL tiene el parámetro "order"
-      setOrder(searchParams.get("order"));
-    }
-
-    console.log("code :", code);
-    console.log("order :", order);
+    handleTilopayResponse();
     // eslint-disablece en el enfoque react-hooks/exhaustive-deps
-  }, []);
-
-  const [getSession] = useLazyQuery(GET_SHOPPING_SESSION_BY_USER);
-  const [getCart] = useLazyQuery(GET_CART_ITEMS_LIST_SHOPPING_SESSION, {
-    fetchPolicy: "network-only", // Forzar la consulta directa al servidor
-  });
+  }, [code]);
 
   //calling the mutation
   const [updateOrderDetailsStatus] = useMutation(UPDATE_ORDER_DETAILS_STATUS);
+  const [updatePaymentDetailStatus] = useMutation(UPDATE_PAYMENT_DETAIL_STATUS);
   const [deleteCarItem] = useMutation(DELETE_CART_ITEM_MUTATION);
   const [updateVariantStock] = useMutation(UPDATE_VARIANT_STOCK);
+  const [createOrder] = useMutation(CREATE_ORDER);
+  const [createOrderItem] = useMutation(CREATE_ORDER_ITEM_MUTATION);
   const { user } = useStorage();
   const { id } = user || {};
   const { items } = useCartSummary({
     userId: user?.id,
   });
-  /*
-  items.map((item) => {
-    if (
-      item.attributes.variant.data &&
-      item.attributes.variant.data.attributes.product.data
-    ) {
-      console.log("ss", item);
-      const quant = parseInt(item.attributes.quantity);
-      const stock = parseInt(
-        item.attributes.variant.data.attributes.stock
-      );
-      const newStock = stock - quant;
-      const variant = item.attributes.variant.data.id;
-      const cartItemId = item.id;
-      console.log(cartItemId);
 
-      try {
-        deleteCarItem({
-          variables: {
-            id: cartItemId,
-          },
-        });
-      } catch (error) {}
+  const handleCartItmes = async () => {
+    //se elimina los items de carrito y se actualizan los stocks de los productos
+    items.map((item) => {
+      if (
+        item.attributes.variant.data &&
+        item.attributes.variant.data.attributes.product.data
+      ) {
+        const quant = parseInt(item.attributes.quantity);
+        const stock = parseInt(item.attributes.variant.data.attributes.stock);
+        const newStock = stock - quant;
+        const variant = item.attributes.variant.data.id;
+        const cartItemId = item.id;
+        console.log(cartItemId);
 
-      try {
-        updateVariantStock({
-          variables: {
-            id: variant,
-            stock: newStock,
-          },
-        });
-      } catch (error) {
-        console.log("error");
-      }
-    }
-  });
-  */
+        try {
+          deleteCarItem({
+            variables: {
+              id: cartItemId,
+            },
+          });
+        } catch (error) {}
 
-  const handleUpdate = async () => {
-    if (code == 1) {
-      items.map((item) => {
-        if (
-          item.attributes.variant.data &&
-          item.attributes.variant.data.attributes.product.data
-        ) {
-          console.log("ss", item);
-          const quant = parseInt(item.attributes.quantity);
-          const stock = parseInt(item.attributes.variant.data.attributes.stock);
-          const newStock = stock - quant;
-          const variant = item.attributes.variant.data.id;
-          const cartItemId = item.id;
-          console.log(cartItemId);
-
-          try {
-            deleteCarItem({
-              variables: {
-                id: cartItemId,
-              },
-            });
-          } catch (error) { }
-
-          try {
-            updateVariantStock({
-              variables: {
-                id: variant,
-                stock: newStock,
-              },
-            });
-          } catch (error) {
-            console.log("error");
-          }
+        try {
+          updateVariantStock({
+            variables: {
+              id: variant,
+              stock: newStock,
+            },
+          });
+        } catch (error) {
+          console.log("error");
         }
-      });
+      }
+    });
+  };
 
-      router.push("/");
+  ////////////////////////////funciones para crear orden, orderItems y acutalizar paymentDetail/////////
+
+  const creatingOrderItems = (orderId) => {
+    const isoDate = new Date().toISOString();
+    try {
+      items.map(async (item) => {
+        const variant = item.attributes.variant.data; // Desestructuración aquí
+        const variantAtt = variant.attributes;
+        console.log(variantAtt.quantity);
+        const { data } = await createOrderItem({
+          variables: {
+            quantity: item.attributes.quantity,
+            variantId: variant.id,
+            publishedAt: isoDate,
+            orderDetailId: orderId,
+          },
+        });
+      });
+    } catch (error) {
+      console.log("Error creating: ", error);
     }
   };
 
+  const handleCreateOrder = async (status) => {
+    const isoDate = new Date().toISOString();
+    try {
+      const { data } = await createOrder({
+        variables: {
+          user_id: id,
+          status: status,
+          paymentId: paymentId,
+          publishedAt: isoDate,
+        },
+      });
+      const orderNumber = await data?.createOrderDetail?.data?.id;
+      creatingOrderItems(orderNumber);
+      setOrderId(orderNumber);
+    } catch (error) {
+      console.error("Error creating order:", error);
+    }
+  };
+
+  const handleUpdatePayment = async (status) => {
+    try {
+      // Update the order status for rejected payments
+      const { data } = await updatePaymentDetailStatus({
+        variables: {
+          id: paymentId,
+          newStatus: status,
+        },
+      });
+    } catch (error) {
+      console.error("Error updating order status:", error);
+    }
+  };
+  ////////////////////////////////FUNCION PARA MANEJAR LA RESPUESTA DE TILOPAY//////////////////////////////
+
   const handleTilopayResponse = async () => {
+    // Handle the payment data as needed
     if (code) {
-      // Handle the payment data as needed
       if (code === "1") {
         // Payment was successful
-        // I need to change the status of ther order to approved
-        try {
-          const { data } = await updateOrderDetailsStatus({
-            variables: {
-              id: order,
-              newStatus: "A", // Approved
-            },
-          });
-
-          try {
-          } catch (error) {
-            //Manejo de errores
-            setError(true);
-          } finally {
-          }
-
-          /*
-            get rid of the cart session and delete carts items from database
-            after that create a new empty cart session
-            DC-161 
-          */
-        } catch (error) {
-          console.error("Error updating order status:", error);
-        }
+        handleCreateOrder("A");
+        handleUpdatePayment("Approved");
+        handleCartItmes(); // me vacia el carrito y me modifica el stock
       } else {
         // Payment failed
         // Render the description when code is not "1"
-        // I need to change the status of ther order to rejected
-        try {
-          // Update the order status for rejected payments
-          const { data } = await updateOrderDetailsStatus({
-            variables: {
-              id: order,
-              newStatus: "C", //Cancelled
-            },
-          });
-          localStorage.removeItem("createdOrder");
-          // Continue with other actions you want to perform on failure
-        } catch (error) {
-          console.error("Error updating order status:", error);
-        }
+        // I need to change the status of ther Payment to failed
+        handleUpdatePayment("Failed");
       }
+    } else {
+      handleUpdatePayment("Cancelled");
     }
   };
 
-  return code ? (
+  return paymentId ? (
     <div className="bg-floralwhite p-[100px] flex justify-center">
       <main className="bg-resene border-2 border-dashed border-grey-200 flex flex-col justify-center h-auto p-10">
         <section className="flex justify-center">
@@ -208,11 +201,11 @@ export default function ThankYouMessage() {
                 </div>
                 <div className="bg-white w-[250px] p-3 flex flex-col items-center ml-[20px] rounded-md">
                   <p className="text-grey-100">N° de pedido</p>
-                  <p>{order}</p>
+                  <p>{orderId}</p>
                 </div>
 
                 <button
-                  onClick={handleUpdate} // Specify the URL to which you want to navigate
+                  onClick={() => router.push("/")} // Specify the URL to which you want to navigate
                   className="bg-pink-200 text-white rounded-sm p-2 w-[150px]"
                 >
                   Volver
@@ -221,7 +214,11 @@ export default function ThankYouMessage() {
             </>
           ) : (
             <>
-              <OrderFailed />
+              <OrderFailed
+                description={
+                  description ? "Fondos insuficientes" : "Orden cancelada"
+                }
+              />
             </>
           )}
         </section>
