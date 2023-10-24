@@ -85,16 +85,16 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
 
   handlePaymentProceed();
 
-  const paymentUrlPromise = paymentRequest();
-  paymentUrlPromise
-    .then((result) => {
-      paymentUrl = result;
-    })
-    .catch((error) => {
-      console.error("Promise rejected with error:", error);
-    });
+  // paymentUrlPromise
+  //   .then((result) => {
+  //     paymentUrl = result;
+  //   })
+  //   .catch((error) => {
+  //     console.error("Promise rejected with error:", error);
+  //   });
 
-  const handleVerification = () => {
+  const handleVerification = async () => {
+    const paymentUrl = await paymentRequest();
     //verifica que no haya ningun error de stock con la cantidad de productos que lleva
     if (cartSummary.errors.errorStock.length > 0) {
       toast.custom((t) => (
