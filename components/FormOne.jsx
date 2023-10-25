@@ -59,58 +59,64 @@ function FormOne() {
   };
 
   const cargaDatos = async () => {
-    const userData = JSON.parse(localStorage.getItem("userData")); //datos de user
-    const userDataId = userData.user.id;
+    try {
+      const userData = JSON.parse(localStorage.getItem("userData")); //datos de user
+      const userDataId = userData.user.id;
 
-    const { data, error, loading } = await getUserInfo({
-      variables: { id: userDataId },
-    });
+      const { data, error, loading } = await getUserInfo({
+        variables: { id: userDataId },
+      });
 
-    if (error)
-      return toast.error(
-        "Lo sentimos, ha ocurrido un error al cargar los datos",
-        {
-          autoClose: 5000,
-        }
-      );
-
-    if (data && data.usersPermissionsUser) {
-      if (data.usersPermissionsUser.data.attributes.users_address.data) {
-        setUserInfoExist(true);
-        setAddressId(
-          data?.usersPermissionsUser?.data?.attributes?.users_address?.data?.id
+      if (error)
+        return toast.error(
+          "Lo sentimos, ha ocurrido un error al cargar los datos",
+          {
+            autoClose: 5000,
+          }
         );
-      } else {
-        setUserInfoExist(false);
+
+      if (data && data.usersPermissionsUser) {
+        if (data.usersPermissionsUser.data.attributes.users_address.data) {
+          setUserInfoExist(true);
+          setAddressId(
+            data?.usersPermissionsUser?.data?.attributes?.users_address?.data?.id
+          );
+        } else {
+          setUserInfoExist(false);
+        }
+        setUserInformation({
+          ...userInformation,
+          firstName:
+            data?.usersPermissionsUser?.data?.attributes?.firstName || "",
+          lastName: data?.usersPermissionsUser?.data?.attributes?.lastName || "",
+          phone: data?.usersPermissionsUser?.data?.attributes?.phoneNumber || "",
+          postCode:
+            data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+              ?.attributes?.postCode || "",
+          country:
+            data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+              ?.attributes?.country || "",
+          addressLine1:
+            data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+              ?.attributes?.addressLine1 || "",
+          addressLine2:
+            data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+              ?.attributes?.addressLine2 || "",
+          province:
+            data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+              ?.attributes?.province || "",
+          canton:
+            data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+              ?.attributes?.canton || "",
+          idNumber: "",
+          idType:
+            data?.usersPermissionsUser?.data?.attributes?.idCard?.idType ||
+            "Física",
+        });
       }
-      setUserInformation({
-        ...userInformation,
-        firstName:
-          data?.usersPermissionsUser?.data?.attributes?.firstName || "",
-        lastName: data?.usersPermissionsUser?.data?.attributes?.lastName || "",
-        phone: data?.usersPermissionsUser?.data?.attributes?.phoneNumber || "",
-        postCode:
-          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-            ?.attributes?.postCode || "",
-        country:
-          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-            ?.attributes?.country || "",
-        addressLine1:
-          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-            ?.attributes?.addressLine1 || "",
-        addressLine2:
-          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-            ?.attributes?.addressLine2 || "",
-        province:
-          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-            ?.attributes?.province || "",
-        canton:
-          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-            ?.attributes?.canton || "",
-        idNumber: "",
-        idType:
-          data?.usersPermissionsUser?.data?.attributes?.idCard?.idType ||
-          "Física",
+    } catch (error) {
+      toast.error(error.message, {
+        autoClose: 5000,
       });
     }
   };
@@ -126,49 +132,80 @@ function FormOne() {
   }, [userInformation]);
 
   const onSubmit = handleSubmit(async (dataForm) => {
-    setCheckoutForm1Visible(true);
+    console.log(dataForm)
+    try {
+      setCheckoutForm1Visible(true);
 
-    const { data, error, loading } = await updateUserInformation({
-      variables: {
-        firstName: dataForm.firstName,
-        lastName: dataForm.lastName,
-        phone: parseInt(dataForm.phone),
-        idType: dataForm.idType,
-        idNumber: parseInt(dataForm.idNumber),
-        id: userId,
-      },
-    });
-
-    if (userInfoExist) {
-      const { data, error, loading } = await updateAddress({
+      const { data: userData, error: userError, loading: userLoading } = await updateUserInformation({
         variables: {
-          country: dataForm.country,
-          postCode: dataForm.postCode,
-          province: dataForm.province,
-          addressLine1: dataForm.addressLine1,
-          addressLine2: dataForm.addressLine2,
-          canton: dataForm.canton,
-          id: addressId,
-        },
-      });
-    } else {
-      const { data, error, loading } = await createAddress({
-        variables: {
-          postCode: dataForm.postCode,
-          country: dataForm.country,
-          addressLine1: dataForm.addressLine1,
-          addressLine2: dataForm.addressLine2,
-          province: dataForm.province,
-          canton: dataForm.canton,
-          publishedAt: isoDate,
+          firstName: dataForm.firstName,
+          lastName: dataForm.lastName,
+          phone: parseInt(dataForm.phone),
+          idType: dataForm.idType,
+          idNumber: parseInt(dataForm.idNumber),
           id: userId,
         },
       });
-      const newAddress = data.createUsersAddress.data.id;
-      setAddressId(newAddress);
-      setUserInfoExist(true);
+
+      if (userError) return toast.error(
+        "Error al ingresar la información del usuario",
+        {
+          autoClose: 5000,
+        }
+      );
+
+      if (userInfoExist) {
+        const { data: addressData, error: addressError, loading: addressLoading } = await updateAddress({
+          variables: {
+            country: dataForm.country,
+            postCode: dataForm.postCode,
+            province: dataForm.province,
+            addressLine1: dataForm.addressLine1,
+            addressLine2: dataForm.addressLine2,
+            canton: dataForm.canton,
+            id: addressId,
+          },
+        });
+
+        if (addressError) return toast.error(
+          "Error al actualizar la dirección",
+          {
+            autoClose: 5000,
+          }
+        );
+
+      } else {
+        const { data: createAddressData, error: createAddressError, loading: createAddressLoading } = await createAddress({
+          variables: {
+            postCode: dataForm.postCode,
+            country: dataForm.country,
+            addressLine1: dataForm.addressLine1,
+            addressLine2: dataForm.addressLine2,
+            province: dataForm.province,
+            canton: dataForm.canton,
+            publishedAt: isoDate,
+            id: userId,
+          },
+        });
+
+        if (createAddressError) return toast.error(
+          "Error al crear la dirección",
+          {
+            autoClose: 5000,
+          }
+        );
+
+        const newAddress = createAddressData.createUsersAddress.data.id;
+        setAddressId(newAddress);
+        setUserInfoExist(true);
+      }
+    } catch (error) {
+      toast.error(error.message, {
+        autoClose: 5000,
+      });
     }
   });
+
   return (
     <div>
       <Toaster />
@@ -488,7 +525,7 @@ function FormOne() {
                               <select
                                 {...register("idType", {
                                   onChange: (e) => {
-                                    const selectedValue = e.target.value; // Obtiene el valor seleccionado
+                                    const selectedValue = e.target.value;
                                     if (selectedValue === "Física") {
                                       setFisica(true);
                                     } else {
