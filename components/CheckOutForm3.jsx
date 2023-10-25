@@ -4,11 +4,9 @@ import paymentRequest from "@/api/tilopay/paymentRequest";
 import { useRouter } from "next/navigation";
 import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
 import { useQuery } from "@apollo/client";
-import { paymentDataForm } from "@/app/data/tilopay/transactionData";
 import useStorage from "@/hooks/useStorage";
 import useCartSummary from "@/hooks/useCartSummary";
 import AlertNotAuth from "./AlertNotAuth";
-import toast, { Toaster } from "react-hot-toast";
 import Spinner from "./Spinner";
 
 export default function CheckOutForm3({ paymentDetailId, total }) {
@@ -78,7 +76,6 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
   }, [data]);
   const handleVerification = async () => {
     setLoadingBtn(true);
-
     try {
       paymentUrl = await paymentRequest(formData);
       //verifica que no haya ningun error de stock con la cantidad de productos que lleva
@@ -93,20 +90,18 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
           />
         ));
       } else {
-        //router.push(paymentUrl);
-        console.log("url :", paymentUrl);
+        router.push(paymentUrl);
       }
     } catch (error) {
-    } finally {
-      setLoadingBtn(true);
+      console.error(error);
     }
+    // } finally {
+    //   setLoadingBtn(false);
+    // }
   };
-
   return (
     <div className="w-full">
-      <div>
-        <Toaster />
-      </div>
+      <div></div>
       <div className="flex w-full justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
         <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
           3
