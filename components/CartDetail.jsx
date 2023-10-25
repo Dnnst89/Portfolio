@@ -16,6 +16,7 @@ const CartDetail = ({
     total: 0,
     tax: 0,
     currencyType: "USD",
+    loading: false,
   });
   const {
     loading,
@@ -30,42 +31,54 @@ const CartDetail = ({
     getTaxCost();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [items?.length]);
+  }, [quantity]);
 
   const getTaxCost = async () => {
-    if (!items.length) return;
-    const token = await getAccessToken();
-    const formatedItems = formatTaxData(items);
-    const body = {
-      serviceDetail: {
-        lineDetails: [...formatedItems],
-      },
-    };
-    const { data } = await facturationInstace.post(
-      `/utils/get-detail-line?access_token=${token}`,
-      body
-    );
-
     setAmounts((prev) => ({
+      //mientras obtiene los taxes pone a cargar el loading
       ...prev,
-      total: data?.billSummary?.totalDocument,
-      tax: data?.billSummary?.totalTax,
+      loading: true,
     }));
-    if (isCheckout) {
-      onChange({
+    try {
+      if (!items.length) return;
+      const token = await getAccessToken();
+      const formatedItems = formatTaxData(items);
+      const body = {
+        serviceDetail: {
+          lineDetails: [...formatedItems],
+        },
+      };
+      const { data } = await facturationInstace.post(
+        `/utils/get-detail-line?access_token=${token}`,
+        body
+      );
+      setAmounts((prev) => ({
+        ...prev,
         total: data?.billSummary?.totalDocument,
-        taxes: data?.billSummary?.totalTax,
-        subTotal,
-      });
+        tax: data?.billSummary?.totalTax,
+      }));
+      if (isCheckout) {
+        onChange({
+          total: data?.billSummary?.totalDocument,
+          taxes: data?.billSummary?.totalTax,
+          subTotal,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setAmounts((prev) => ({
+        ...prev,
+        loading: false,
+      }));
     }
   };
 
   return (
     <div className="p-3 md:space-y-3">
-      {!loading ? (
+      <h1 className=" flex justify-center">{detailTitle}</h1>
+      {!loading && !amounts.loading ? (
         <>
-          <h1 className=" flex justify-center">{detailTitle}</h1>
-
           <div className="flex justify-between ">
             <p className="whitespace-nowrap ">N° artículos</p>
             <p className="text-grey-100">{quantity}</p>
@@ -105,6 +118,7 @@ const CartDetail = ({
         </>
       ) : (
         <div className="flex justify-center">
+          <p>Calculando costos</p>
           <Spinner />
         </div>
       )}

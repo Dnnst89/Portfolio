@@ -47,7 +47,7 @@ export default function ThankYouMessage() {
 
   // const { user } = useStorage();
   // const { id } = user || {};
-  const { items } = useCartSummary({
+  const { items, loading } = useCartSummary({
     //me traigo los items que hay en carrito con el hook
     userId: userId,
   });
@@ -78,14 +78,12 @@ export default function ThankYouMessage() {
       setPaymentId(searchParams.get("order"));
     }
     handleTilopayResponse();
-    // eslint-disablece en el enfoque react-hooks/exhaustive-deps
 
-    //creacion de factura
-  }, [code]);
+    // eslint-disablece en el enfoque react-hooks/exhaustive-deps
+  }, [loading]);
 
   const handleCartItems = async () => {
     //se elimina los items de carrito y se actualizan los stocks de los productos
-    console.log(items);
     items.map((item) => {
       if (
         item.attributes.variant.data &&
@@ -96,7 +94,6 @@ export default function ThankYouMessage() {
         const newStock = stock - quant;
         const variant = item.attributes.variant.data.id;
         const cartItemId = item.id;
-        console.log(cartItemId);
 
         try {
           deleteCarItem({
@@ -118,7 +115,6 @@ export default function ThankYouMessage() {
         }
       }
     });
-    router.push("/");
   };
 
   ////////////////////////////funciones para crear orden, orderItems y acutalizar paymentDetail/////////
@@ -127,14 +123,18 @@ export default function ThankYouMessage() {
     const isoDate = new Date().toISOString();
     try {
       const paymentinfo = await getPaymentDetail({
+        //obtengo el paymentDetails, para que cuando refresque la pagina no cree mas ordenes
         variables: { paymentId },
       });
-      console.log(paymentinfo);
-      const paymentStatus =
+      const orderStatus =
         paymentinfo?.data?.paymentDetail?.data?.attributes?.status;
-      if (paymentStatus === "Inicial") {
+      const orderPayment =
+        paymentinfo?.data?.paymentDetail?.data?.attributes?.order_detail?.data; //me da la orden asociada al pago
+      if (orderPayment === null && orderStatus === "Inicial") {
+        // si no tiene orden le asigno una
         try {
           const { data } = await createOrder({
+            //creo la orden asociada la payment
             variables: {
               user_id: userId,
               status: status,
@@ -144,31 +144,32 @@ export default function ThankYouMessage() {
           });
           const orderNumber = data?.createOrderDetail?.data?.id;
           setOrderId(orderNumber);
-          if (items.length > 0) {
-            await creatingOrderItems();
-          }
+          await creatingOrderItems(orderNumber);
+          handleCartItems();
         } catch (error) {
           console.error("Error creating order:", error);
         }
+      } else {
+        //no creo otra orden, asigno la que ya tiene
+        setOrderId(orderPayment.id);
       }
     } catch (error) {
       console.log("Error getting paymentDetail: ", error);
     }
   };
 
-  const creatingOrderItems = async () => {
+  const creatingOrderItems = async (orderId) => {
+    // me trae los items del carrito y los almaceno en la orden
     const isoDate = new Date().toISOString();
-    console.log(items);
     if (orderId) {
-      items?.map(async (item) => {
+      items.map(async (item) => {
         try {
-          const variant = item.attributes.variant.data; // Desestructuración aquí
-          const variantAtt = variant.attributes;
-          console.log(variantAtt.quantity);
+          const variant = item?.attributes?.variant?.data; // Desestructuración aquí
+          const variantAtt = variant?.attributes;
           const { data } = await createOrderItem({
             variables: {
-              quantity: item.attributes.quantity,
-              variantId: variant.id,
+              quantity: item?.attributes?.quantity,
+              variantId: variant?.id,
               publishedAt: isoDate,
               orderDetailId: orderId,
             },
@@ -182,7 +183,7 @@ export default function ThankYouMessage() {
 
   const handleUpdatePayment = async (status) => {
     try {
-      // Update the order status for rejected payments
+      // actualiza el estado del payment
       const { data } = await updatePaymentDetailStatus({
         variables: {
           id: paymentId,
@@ -205,14 +206,12 @@ export default function ThankYouMessage() {
         //await handleCartItmes(); // me vacia el carrito y me modifica el stock
       } else {
         // Payment failed
-        // Render the description when code is not "1"
         // I need to change the status of ther Payment to failed
         await handleUpdatePayment("Failed");
       }
     } else {
       await handleUpdatePayment("Cancelled");
     }
-    createInvoice();
   };
   ////////////////////////////////FUNCION PARA CREAR LA FACTURA ELECTRONICA//////////////////////////////
   const createInvoice = async () => {
@@ -253,11 +252,13 @@ export default function ThankYouMessage() {
                 </div>
                 <div className="bg-white w-[250px] p-3 flex flex-col items-center ml-[20px] rounded-md">
                   <p className="text-grey-100">N° de pedido</p>
-                  <p>{orderId ? orderId : "Su orden ya fue procesada"}</p>
+                  <p>{orderId}</p>
                 </div>
 
                 <button
-                  onClick={handleCartItems} // Specify the URL to which you want to navigate
+                  onClick={() => {
+                    router.push("/");
+                  }} // Specify the URL to which you want to navigate
                   className="bg-pink-200 text-white rounded-sm p-2 w-[150px]"
                 >
                   Volver
