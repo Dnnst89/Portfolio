@@ -3,14 +3,15 @@ import OrderFailed from "@/components/OrderFailed";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { UPDATE_ORDER_DETAILS_STATUS } from "@/src/graphQl/queries/updateOrderDetailsStatus";
 import { logo } from "../assets/images";
 import useStorage from "@/hooks/useStorage";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import GET_CART_ITEMS_LIST_SHOPPING_SESSION from "@/src/graphQl/queries/getCartItemsByShoppingSession";
 import GET_SHOPPING_SESSION_BY_USER from "@/src/graphQl/queries/getShoppingSessionByUser";
 import DELETE_CART_ITEM_MUTATION from "@/src/graphQl/queries/deleteCartItem";
+import { GET_PAYMENT_DETAIL } from "@/src/graphQl/queries/getPaymentDetail";
 import UPDATE_VARIANT_STOCK from "@/src/graphQl/queries/updateVariantStock";
 import useCartSummary from "@/hooks/useCartSummary";
 import useProtectionRoute from "@/hooks/useProtectionRoute";
@@ -27,14 +28,35 @@ import { UPDATE_PAYMENT_DETAIL_STATUS } from "@/src/graphQl/queries/updatePaymen
 
 export default function ThankYouMessage() {
   const router = useRouter();
+  //states
   const [code, setCode] = useState("");
   const [paymentId, setPaymentId] = useState();
   const [orderId, setOrderId] = useState();
+  const [userId, setUserId] = useState();
   const [description, setDescription] = useState();
+  //calling the mutation
+  const [updatePaymentDetailStatus] = useMutation(UPDATE_PAYMENT_DETAIL_STATUS);
+  const [deleteCarItem] = useMutation(DELETE_CART_ITEM_MUTATION);
+  const [updateVariantStock] = useMutation(UPDATE_VARIANT_STOCK);
+  const [createOrder] = useMutation(CREATE_ORDER);
+  const [createOrderItem] = useMutation(CREATE_ORDER_ITEM_MUTATION);
+  const [getPaymentDetail] = useLazyQuery(GET_PAYMENT_DETAIL);
+
+  // const { user } = useStorage();
+  // const { id } = user || {};
+  const { items } = useCartSummary({//me traigo los items que hay en carrito con el hook
+    userId: userId,
+  });
+  console.log(items)
   useEffect(() => {
     //guardo los datos que responde tilopay en orden
     const searchParams = new URLSearchParams(window?.location?.search);
 
+    const userData = JSON.parse(localStorage.getItem("userData")); //datos de user
+    const userDataId = userData?.user?.id;
+    if (userDataId) {
+      setUserId(userDataId)
+    }
     if (searchParams.has("code")) {
       //code 1 satisfactorio
       setCode(searchParams.get("code"));
@@ -54,19 +76,11 @@ export default function ThankYouMessage() {
     // eslint-disablece en el enfoque react-hooks/exhaustive-deps
   }, [code]);
 
-  //calling the mutation
-  const [updatePaymentDetailStatus] = useMutation(UPDATE_PAYMENT_DETAIL_STATUS);
-  const [deleteCarItem] = useMutation(DELETE_CART_ITEM_MUTATION);
-  const [updateVariantStock] = useMutation(UPDATE_VARIANT_STOCK);
-  const [createOrder] = useMutation(CREATE_ORDER);
-  const [createOrderItem] = useMutation(CREATE_ORDER_ITEM_MUTATION);
-  const { user } = useStorage();
-  const { id } = user || {};
-  const { items } = useCartSummary({
-    userId: user?.id,
-  });
 
-  const handleCartItmes = async () => {
+
+
+
+  const handleCartItems = async () => {
     //se elimina los items de carrito y se actualizan los stocks de los productos
     console.log(items)
     items.map((item) => {
@@ -106,45 +120,68 @@ export default function ThankYouMessage() {
 
   ////////////////////////////funciones para crear orden, orderItems y acutalizar paymentDetail/////////
 
-  const creatingOrderItems = (orderId) => {
-    const isoDate = new Date().toISOString();
-    try {
-      items.map(async (item) => {
-        const variant = item.attributes.variant.data; // Desestructuración aquí
-        const variantAtt = variant.attributes;
-        console.log(variantAtt.quantity);
-        const { data } = await createOrderItem({
-          variables: {
-            quantity: item.attributes.quantity,
-            variantId: variant.id,
-            publishedAt: isoDate,
-            orderDetailId: orderId,
-          },
-        });
-      });
-    } catch (error) {
-      console.log("Error creating: ", error);
-    }
-  };
-
   const handleCreateOrder = async (status) => {
     const isoDate = new Date().toISOString();
     try {
-      const { data } = await createOrder({
-        variables: {
-          user_id: id,
-          status: status,
-          paymentId: paymentId,
-          publishedAt: isoDate,
-        },
+      const paymentinfo = await getPaymentDetail({
+        variables: { paymentId },
       });
-      const orderNumber = await data?.createOrderDetail?.data?.id;
-      creatingOrderItems(orderNumber);
-      setOrderId(orderNumber);
+      console.log(paymentinfo)
+      const paymentStatus = paymentinfo?.data?.paymentDetail?.data?.attributes?.status
+      if (paymentStatus === "Inicial") {
+        try {
+          const { data } = await createOrder({
+            variables: {
+              user_id: userId,
+              status: status,
+              paymentId: paymentId,
+              publishedAt: isoDate,
+            },
+          });
+          const orderNumber = data?.createOrderDetail?.data?.id;
+          setOrderId(orderNumber);
+          if (items.length > 0) {
+            await creatingOrderItems();
+          }
+        } catch (error) {
+          console.error("Error creating order:", error);
+        }
+      }
+
     } catch (error) {
-      console.error("Error creating order:", error);
+      console.log("Error getting paymentDetail: ", error)
     }
+
+
+
   };
+
+  const creatingOrderItems = async () => {
+    const isoDate = new Date().toISOString();
+    console.log(items);
+    if (orderId) {
+      items?.map(async (item) => {
+        try {
+          const variant = item.attributes.variant.data; // Desestructuración aquí
+          const variantAtt = variant.attributes;
+          console.log(variantAtt.quantity);
+          const { data } = await createOrderItem({
+            variables: {
+              quantity: item.attributes.quantity,
+              variantId: variant.id,
+              publishedAt: isoDate,
+              orderDetailId: orderId,
+            },
+          });
+        } catch (error) {
+          console.log("Error creating orderItem: ", error);
+        }
+      });
+    }
+
+
+  };
+
 
   const handleUpdatePayment = async (status) => {
     try {
@@ -202,11 +239,11 @@ export default function ThankYouMessage() {
                 </div>
                 <div className="bg-white w-[250px] p-3 flex flex-col items-center ml-[20px] rounded-md">
                   <p className="text-grey-100">N° de pedido</p>
-                  <p>{orderId}</p>
+                  <p>{orderId ? orderId : "Su orden ya fue procesada"}</p>
                 </div>
 
                 <button
-                  onClick={handleCartItmes} // Specify the URL to which you want to navigate
+                  onClick={handleCartItems} // Specify the URL to which you want to navigate
                   className="bg-pink-200 text-white rounded-sm p-2 w-[150px]"
                 >
                   Volver
@@ -217,7 +254,7 @@ export default function ThankYouMessage() {
             <>
               <OrderFailed
                 description={
-                  description ? "Fondos insuficientes" : "Orden cancelada"
+                  description ? description : "Orden cancelada"
                 }
               />
             </>
