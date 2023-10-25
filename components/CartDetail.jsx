@@ -45,7 +45,7 @@ const CartDetail = ({
       `/utils/get-detail-line?access_token=${token}`,
       body
     );
-    useInvoiceDetail();
+
     setAmounts((prev) => ({
       ...prev,
       total: data?.billSummary?.totalDocument,

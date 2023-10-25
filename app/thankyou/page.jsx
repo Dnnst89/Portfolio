@@ -47,18 +47,21 @@ export default function ThankYouMessage() {
 
   // const { user } = useStorage();
   // const { id } = user || {};
-  const { items } = useCartSummary({//me traigo los items que hay en carrito con el hook
+  const { items } = useCartSummary({
+    //me traigo los items que hay en carrito con el hook
     userId: userId,
   });
-  console.log(items)
+  console.log(items);
+
   useEffect(() => {
+    console.log("first");
     //guardo los datos que responde tilopay en orden
     const searchParams = new URLSearchParams(window?.location?.search);
 
     const userData = JSON.parse(localStorage.getItem("userData")); //datos de user
     const userDataId = userData?.user?.id;
     if (userDataId) {
-      setUserId(userDataId)
+      setUserId(userDataId);
     }
     if (searchParams.has("code")) {
       //code 1 satisfactorio
@@ -74,18 +77,15 @@ export default function ThankYouMessage() {
       // Verificar si la URL tiene el parámetro "order" que es el id del paymentDetail
       setPaymentId(searchParams.get("order"));
     }
-
     handleTilopayResponse();
     // eslint-disablece en el enfoque react-hooks/exhaustive-deps
+
+    //creacion de factura
   }, [code]);
-
-
-
-
 
   const handleCartItems = async () => {
     //se elimina los items de carrito y se actualizan los stocks de los productos
-    console.log(items)
+    console.log(items);
     items.map((item) => {
       if (
         item.attributes.variant.data &&
@@ -104,7 +104,7 @@ export default function ThankYouMessage() {
               id: cartItemId,
             },
           });
-        } catch (error) { }
+        } catch (error) {}
 
         try {
           updateVariantStock({
@@ -118,7 +118,7 @@ export default function ThankYouMessage() {
         }
       }
     });
-    router.push("/")
+    router.push("/");
   };
 
   ////////////////////////////funciones para crear orden, orderItems y acutalizar paymentDetail/////////
@@ -129,8 +129,9 @@ export default function ThankYouMessage() {
       const paymentinfo = await getPaymentDetail({
         variables: { paymentId },
       });
-      console.log(paymentinfo)
-      const paymentStatus = paymentinfo?.data?.paymentDetail?.data?.attributes?.status
+      console.log(paymentinfo);
+      const paymentStatus =
+        paymentinfo?.data?.paymentDetail?.data?.attributes?.status;
       if (paymentStatus === "Inicial") {
         try {
           const { data } = await createOrder({
@@ -150,13 +151,9 @@ export default function ThankYouMessage() {
           console.error("Error creating order:", error);
         }
       }
-
     } catch (error) {
-      console.log("Error getting paymentDetail: ", error)
+      console.log("Error getting paymentDetail: ", error);
     }
-
-
-
   };
 
   const creatingOrderItems = async () => {
@@ -181,10 +178,7 @@ export default function ThankYouMessage() {
         }
       });
     }
-
-
   };
-
 
   const handleUpdatePayment = async (status) => {
     try {
@@ -218,10 +212,22 @@ export default function ThankYouMessage() {
     } else {
       await handleUpdatePayment("Cancelled");
     }
+    createInvoice();
   };
   ////////////////////////////////FUNCION PARA CREAR LA FACTURA ELECTRONICA//////////////////////////////
-  const createInvoice = async (status) => {
-    if (status) {
+  const createInvoice = async () => {
+    try {
+      const { data } = await getPaymentDetail({
+        variables: {
+          paymentId: paymentId,
+        },
+      });
+      const required = data.paymentDetail.data.attributes.invoiceRequired;
+      if (required) {
+        console.log("ss", required);
+      }
+    } catch (error) {
+      console.log("error crear factura", error);
     }
   };
 
@@ -261,9 +267,7 @@ export default function ThankYouMessage() {
           ) : (
             <>
               <OrderFailed
-                description={
-                  description ? description : "Orden cancelada"
-                }
+                description={description ? description : "Orden cancelada"}
               />
             </>
           )}
