@@ -17,6 +17,9 @@ import useProtectionRoute from "@/hooks/useProtectionRoute";
 import { CREATE_ORDER } from "@/src/graphQl/queries/createUserOrder";
 import CREATE_ORDER_ITEM_MUTATION from "@/src/graphQl/queries/createOrderItem";
 import { UPDATE_PAYMENT_DETAIL_STATUS } from "@/src/graphQl/queries/updatePaymentDetailStatus";
+import { getAccessToken, formatTaxData } from "@/helpers";
+import { facturationInstace } from "@/src/axios/algoliaIntance/config";
+
 /*
   recives the Tilopay response , based on the returns params 
   redirects to an certain page.
@@ -176,6 +179,11 @@ export default function ThankYouMessage() {
       }
     } else {
       handleUpdatePayment("Cancelled");
+    }
+  };
+  ////////////////////////////////FUNCION PARA CREAR LA FACTURA ELECTRONICA//////////////////////////////
+  const createInvoice = async (status) => {
+    if (status) {
     }
   };
 
