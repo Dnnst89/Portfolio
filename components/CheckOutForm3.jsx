@@ -4,16 +4,14 @@ import paymentRequest from "@/api/tilopay/paymentRequest";
 import { useRouter } from "next/navigation";
 import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
 import { useQuery } from "@apollo/client";
-import { paymentDataForm } from "@/app/data/tilopay/transactionData";
 import useStorage from "@/hooks/useStorage";
 import useCartSummary from "@/hooks/useCartSummary";
 import AlertNotAuth from "./AlertNotAuth";
-import toast, { Toaster } from "react-hot-toast";
 import Spinner from "./Spinner";
 
 export default function CheckOutForm3({ paymentDetailId, total }) {
   const router = useRouter();
-  const [formData, setFormData] = useState(paymentDataForm);
+  const [formData, setFormData] = useState({});
   const [loadingBtn, setLoadingBtn] = useState(false);
   const { user } = useStorage();
   const { id, email } = user || {};
@@ -22,9 +20,7 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
   });
   // the url return an payment url to redirect the user to Tilopay payment.
   let paymentUrl = "";
-  // total final to pay , WE NEED TO GET IT FROM FACTURAZEN
-  //RETRIEVE STATUS
-  // get the order retrieved or created
+
   // Retrieve user data
   const { loading, error, data } = useQuery(GET_PAYMENT_DETAILS, {
     variables: { userId: id },
@@ -46,7 +42,13 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
         // we load data into the state
         if (userData) {
           setFormData({
+            redirect:
+              process.env.NODE_ENV === "development"
+                ? "http://localhost:3000/thankyou"
+                : "http://detinmarin.s3-website-us-west-2.amazonaws.com/thankyou",
+            key: process.env.NEXT_PUBLIC_TILOPAY_API_KEY,
             amount: total,
+            currency: "USD",
             billToFirstName: firstName,
             billToLastName: lastName,
             billToAddress: userAddressAttributes.addressLine1,
@@ -54,9 +56,15 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
             billToCity: userAddressAttributes.canton,
             billToState: userAddressAttributes.province,
             billToZipPostCode: userAddressAttributes.postCode,
+            billToCountry: "CR",
             billToTelephone: phoneNumber,
             billToEmail: email,
             orderNumber: paymentDetailId,
+            capture: "1",
+            subscription: "1",
+            platform: "api",
+            returnData: "dXNlcl9pZD0xMg==",
+            hashVersion: "V2",
           });
         } else {
           // Handle the case where the specific order is not found
@@ -65,52 +73,35 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, loading, error]);
-  // The data is ready to send it to the object that will be
-  // called by the request method.
-  const handlePaymentProceed = () => {
-    // Update paymentDataForm with the values from formData
-    paymentDataForm.amount = formData.amount;
-    paymentDataForm.billToFirstName = formData.billToFirstName;
-    paymentDataForm.billToLastName = formData.billToLastName;
-    paymentDataForm.billToAddress = formData.billToAddress;
-    paymentDataForm.billToAddress2 = formData.billToAddress2;
-    paymentDataForm.billToCity = formData.billToCity;
-    paymentDataForm.billToState = formData.billToState;
-    paymentDataForm.billToZipPostCode = formData.billToZipPostCode;
-    paymentDataForm.billToTelephone = formData.billToTelephone;
-    paymentDataForm.billToEmail = formData.billToEmail;
-    paymentDataForm.orderNumber = formData.orderNumber;
-
-    // You can proceed with the payment logic here
-  };
-
-  handlePaymentProceed();
-
+  }, [data]);
   const handleVerification = async () => {
-    const paymentUrl = await paymentRequest();
-    //verifica que no haya ningun error de stock con la cantidad de productos que lleva
-    if (cartSummary.errors.errorStock.length > 0) {
-      toast.custom((t) => (
-        <AlertNotAuth
-          t={t}
-          msj={
-            "Lo sentimos ha sucedido un error con tu compra, verifica tus productos"
-          }
-          newRoute={"/cart"}
-        />
-      ));
-    } else {
-      setLoadingBtn(true);
-      router.push(paymentUrl);
+    setLoadingBtn(true);
+    try {
+      paymentUrl = await paymentRequest(formData);
+      //verifica que no haya ningun error de stock con la cantidad de productos que lleva
+      if (cartSummary.errors.errorStock.length > 0) {
+        toast.custom((t) => (
+          <AlertNotAuth
+            t={t}
+            msj={
+              "Lo sentimos ha sucedido un error con tu compra, verifica tus productos"
+            }
+            newRoute={"/cart"}
+          />
+        ));
+      } else {
+        router.push(paymentUrl);
+      }
+    } catch (error) {
+      console.error(error);
     }
+    // } finally {
+    //   setLoadingBtn(false);
+    // }
   };
-
   return (
     <div className="w-full">
-      <div>
-        <Toaster />
-      </div>
+      <div></div>
       <div className="flex w-full justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
         <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
           3

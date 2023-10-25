@@ -1,8 +1,9 @@
 export const paymentDataForm = {
   // redirect: "http://detinmarin.s3-website-us-west-2.amazonaws.com/thankyou", // Fix the URL format
-  redirect: process.env.NODE_ENV === 'development'
-    ? "http://localhost:3000/thankyou/"
-    : "http://detinmarin.s3-website-us-west-2.amazonaws.com/thankyou/",
+  redirect:
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000/thankyou"
+      : "http://detinmarin.s3-website-us-west-2.amazonaws.com/thankyou",
   key: process.env.NEXT_PUBLIC_TILOPAY_API_KEY,
   amount: "",
   currency: "USD",
@@ -23,4 +24,3 @@ export const paymentDataForm = {
   returnData: "dXNlcl9pZD0xMg==",
   hashVersion: "V2",
 };
-//http://detinmarin.s3-website-us-west-2.amazonaws.com/thankyou
