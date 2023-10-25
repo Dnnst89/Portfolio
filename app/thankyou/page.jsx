@@ -127,26 +127,28 @@ export default function ThankYouMessage() {
         variables: { paymentId },
       });
       console.log(paymentinfo)
-      const paymentStatus = paymentinfo?.data?.paymentDetail?.data?.attributes?.status
-      if (paymentStatus === "Inicial") {
-        try {
-          const { data } = await createOrder({
-            variables: {
-              user_id: userId,
-              status: status,
-              paymentId: paymentId,
-              publishedAt: isoDate,
-            },
-          });
-          const orderNumber = data?.createOrderDetail?.data?.id;
-          setOrderId(orderNumber);
-          if (items.length > 0) {
-            await creatingOrderItems();
-          }
-        } catch (error) {
-          console.error("Error creating order:", error);
+      // const paymentStatus = paymentinfo?.data?.paymentDetail?.data?.attributes?.status
+      // if (paymentStatus === "Inicial") {
+      const orderPayment = paymentinfo?.data?.paymentDetail?.data?.attributes?.order_detail?.data //me da la orden asociada al pago
+      //if (orderPayment === null) {// si no tiene orden le asigno una
+      try {
+        const { data } = await createOrder({
+          variables: {
+            user_id: userId,
+            status: status,
+            paymentId: paymentId,
+            publishedAt: isoDate,
+          },
+        });
+        const orderNumber = data?.createOrderDetail?.data?.id;
+        setOrderId(orderNumber);
+        if (items.length > 0) {
+          await creatingOrderItems();
         }
+      } catch (error) {
+        console.error("Error creating order:", error);
       }
+      //}
 
     } catch (error) {
       console.log("Error getting paymentDetail: ", error)
