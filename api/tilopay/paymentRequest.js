@@ -1,8 +1,8 @@
 import { login } from "@/api/tilopay/login";
-import { paymentDataForm } from "@/app/data/tilopay/transactionData";
 const PAYMENT_URL = process.env.NEXT_PUBLIC_TILOPAY_PROCESS_TO_PAYMENT;
 
-export const paymentRequest = async () => {
+export const paymentRequest = async (formData) => {
+  console.log("paymentRequest data : ", formData);
   try {
     const access_token = await login();
     const headers = {
@@ -14,7 +14,7 @@ export const paymentRequest = async () => {
     const response = await fetch(PAYMENT_URL, {
       method: "POST",
       headers,
-      body: JSON.stringify(paymentDataForm), // Convert the request body to JSON
+      body: JSON.stringify(formData), // Convert the request body to JSON
     });
 
     if (response.ok) {
