@@ -1,7 +1,5 @@
-import { refreshToken } from "./getToken";
+import { getToken } from "./getToken";
 
-const accessToken = refreshToken();
-console.log("getAcess :", accessToken);
 const data = {
   pointCollect: {
     latitude: 9.929652,
@@ -38,6 +36,7 @@ const data = {
  * Function the request the shipment estimation from Moovin
  */
 export async function requestEstimation() {
+  const accessToken = await getToken();
   const estimationResponsde = await fetch(
     process.env.NEXT_PUBLIC_MOOVIN_ESTIMATION,
     {
