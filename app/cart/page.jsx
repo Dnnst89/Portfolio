@@ -1,11 +1,13 @@
 "use client";
 import ShoppingCart from "@/components/ShoppingCart";
-import ProductCard from "@/components/ProductCard";
+import FeaturedProducts from "@/components/FeaturedProducts";
 
 import CartContainer from "@/components/CartContainer";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import useProtectionRoute from "@/hooks/useProtectionRoute";
+import "../../styles/fonts.css";
+
 export default function CartView() {
   useProtectionRoute()
   return (
@@ -24,11 +26,8 @@ export default function CartView() {
         <h1 className="flex justify-center text-xl text-center">
           Descubre nuestros productos estrella
         </h1>
-        <div className="flex justify-center pt-5 grid grid-cols-12 w-full">
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
+        <div className="flex flex-wrap max-w-screen-xl m-auto justify-center">
+        <FeaturedProducts />
         </div>
       </div>
     </div>
