@@ -12,7 +12,6 @@ import { MdOutlineDeleteForever } from "react-icons/md";
 const DeleteCartItemBtn = ({ idItem, qtyItem }) => {
   const dispatch = useDispatch()
   const { user } = useStorage();
-
   const {
     items,
     quantity,
@@ -21,19 +20,25 @@ const DeleteCartItemBtn = ({ idItem, qtyItem }) => {
 
   const [deleteCartItem] = useMutation(DELETE_CART_ITEM_MUTATION, {
   });
+  // se hace este dispatch para que el useCartSummary sepa cuanta cantidad hay, y si cambia vuelva a renderizar
+  dispatch(updateQtyItems(quantity))
 
   const handleDelete = () => {
     deleteCartItem({ variables: { id: idItem } })
       .then((response) => {
         // Manejar la respuesta de la mutación aquí, si es necesario
-        dispatch(updateQtyItems(quantity - qtyItem))//actualiza la cantidad de items en el state
+        dispatch(updateQtyItems(quantity - qtyItem))//actualiza la cantidad de items en el state para que useCartSummary vuelva arenderizar
 
         toast.success('Se ha eliminado un producto');
+        console.log(qtyItem)
       })
       .catch((error) => {
         // Manejar errores de la mutación aquí
         toast.error('Ha sucedido un error');
       });
+
+
+
   };
   return (
     <>
