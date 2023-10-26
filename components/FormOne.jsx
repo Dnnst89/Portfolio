@@ -10,7 +10,7 @@ import { FaArrowAltCircleDown } from "react-icons/fa";
 import CheckOutForm2 from "./CheckOutForm2";
 import useStorage from "@/hooks/useStorage";
 import toast, { Toaster } from "react-hot-toast";
-
+import { getToken } from "@/api/moovin/getToken";
 function FormOne() {
   const {
     register,
@@ -31,6 +31,9 @@ function FormOne() {
   const [addressId, setAddressId] = useState();
   const [userInfoExist, setUserInfoExist] = useState();
   const isoDate = new Date().toISOString();
+
+  const token = getToken();
+  console.log("the token from moovin : ", token);
 
   const [userInformation, setUserInformation] = useState({
     //campos de formulario
@@ -79,7 +82,8 @@ function FormOne() {
         if (data.usersPermissionsUser.data.attributes.users_address.data) {
           setUserInfoExist(true);
           setAddressId(
-            data?.usersPermissionsUser?.data?.attributes?.users_address?.data?.id
+            data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+              ?.id
           );
         } else {
           setUserInfoExist(false);
@@ -88,8 +92,10 @@ function FormOne() {
           ...userInformation,
           firstName:
             data?.usersPermissionsUser?.data?.attributes?.firstName || "",
-          lastName: data?.usersPermissionsUser?.data?.attributes?.lastName || "",
-          phone: data?.usersPermissionsUser?.data?.attributes?.phoneNumber || "",
+          lastName:
+            data?.usersPermissionsUser?.data?.attributes?.lastName || "",
+          phone:
+            data?.usersPermissionsUser?.data?.attributes?.phoneNumber || "",
           postCode:
             data?.usersPermissionsUser?.data?.attributes?.users_address?.data
               ?.attributes?.postCode || "",
@@ -132,11 +138,15 @@ function FormOne() {
   }, [userInformation]);
 
   const onSubmit = handleSubmit(async (dataForm) => {
-    console.log(dataForm)
+    console.log(dataForm);
     try {
       setCheckoutForm1Visible(true);
 
-      const { data: userData, error: userError, loading: userLoading } = await updateUserInformation({
+      const {
+        data: userData,
+        error: userError,
+        loading: userLoading,
+      } = await updateUserInformation({
         variables: {
           firstName: dataForm.firstName,
           lastName: dataForm.lastName,
@@ -147,15 +157,17 @@ function FormOne() {
         },
       });
 
-      if (userError) return toast.error(
-        "Error al ingresar la información del usuario",
-        {
+      if (userError)
+        return toast.error("Error al ingresar la información del usuario", {
           autoClose: 5000,
-        }
-      );
+        });
 
       if (userInfoExist) {
-        const { data: addressData, error: addressError, loading: addressLoading } = await updateAddress({
+        const {
+          data: addressData,
+          error: addressError,
+          loading: addressLoading,
+        } = await updateAddress({
           variables: {
             country: dataForm.country,
             postCode: dataForm.postCode,
@@ -167,15 +179,16 @@ function FormOne() {
           },
         });
 
-        if (addressError) return toast.error(
-          "Error al actualizar la dirección",
-          {
+        if (addressError)
+          return toast.error("Error al actualizar la dirección", {
             autoClose: 5000,
-          }
-        );
-
+          });
       } else {
-        const { data: createAddressData, error: createAddressError, loading: createAddressLoading } = await createAddress({
+        const {
+          data: createAddressData,
+          error: createAddressError,
+          loading: createAddressLoading,
+        } = await createAddress({
           variables: {
             postCode: dataForm.postCode,
             country: dataForm.country,
@@ -188,12 +201,10 @@ function FormOne() {
           },
         });
 
-        if (createAddressError) return toast.error(
-          "Error al crear la dirección",
-          {
+        if (createAddressError)
+          return toast.error("Error al crear la dirección", {
             autoClose: 5000,
-          }
-        );
+          });
 
         const newAddress = createAddressData.createUsersAddress.data.id;
         setAddressId(newAddress);
