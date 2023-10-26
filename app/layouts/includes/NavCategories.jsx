@@ -14,6 +14,9 @@ const NavCategories = () => {
     );
     setMenuItems(data.hits);
   };
+  const categoryChange = (name) => {
+    window.location.href = `/results/?query=${name}`;
+  };
 
   useEffect(() => {
     getData();
@@ -39,7 +42,7 @@ const NavCategories = () => {
                 key={item.id}
                 className="px-3 hover:underline font-bold cursor-grab flex justify-center items-center"
               >
-                <a href={`/results?query=${item.name}`}> {item.name}</a>
+                <a onClick={() => categoryChange(item.name)}>{item.name}</a>
               </li>
             ))}
         </ul>

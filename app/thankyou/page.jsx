@@ -20,6 +20,7 @@ import CREATE_ORDER_ITEM_MUTATION from "@/src/graphQl/queries/createOrderItem";
 import { UPDATE_PAYMENT_DETAIL_STATUS } from "@/src/graphQl/queries/updatePaymentDetailStatus";
 import { getAccessToken, formatTaxData } from "@/helpers";
 import { facturationInstace } from "@/src/axios/algoliaIntance/config";
+import GET_ORDER_ITEMS_BY_ORDER_ID from "@/src/graphQl/queries/getOrderItemsByOrderId";
 
 /*
   recives the Tilopay response , based on the returns params 
@@ -44,6 +45,7 @@ export default function ThankYouMessage() {
   const [createOrder] = useMutation(CREATE_ORDER);
   const [createOrderItem] = useMutation(CREATE_ORDER_ITEM_MUTATION);
   const [getPaymentDetail] = useLazyQuery(GET_PAYMENT_DETAIL);
+  const [getOrderItemsByOrderId] = useLazyQuery(GET_ORDER_ITEMS_BY_ORDER_ID);
 
   // const { user } = useStorage();
   // const { id } = user || {};
@@ -54,7 +56,6 @@ export default function ThankYouMessage() {
   console.log(items);
 
   useEffect(() => {
-    console.log("first");
     //guardo los datos que responde tilopay en orden
     const searchParams = new URLSearchParams(window?.location?.search);
 
@@ -78,7 +79,6 @@ export default function ThankYouMessage() {
       setPaymentId(searchParams.get("order"));
     }
     handleTilopayResponse();
-
     // eslint-disablece en el enfoque react-hooks/exhaustive-deps
   }, [loading]);
 
@@ -144,6 +144,7 @@ export default function ThankYouMessage() {
           });
           const orderNumber = data?.createOrderDetail?.data?.id;
           setOrderId(orderNumber);
+          console.log("tttt", orderId);
           await creatingOrderItems(orderNumber);
           handleCartItems();
         } catch (error) {
@@ -212,6 +213,7 @@ export default function ThankYouMessage() {
     } else {
       await handleUpdatePayment("Cancelled");
     }
+    createInvoice();
   };
   ////////////////////////////////FUNCION PARA CREAR LA FACTURA ELECTRONICA//////////////////////////////
   const createInvoice = async () => {
@@ -223,7 +225,17 @@ export default function ThankYouMessage() {
       });
       const required = data.paymentDetail.data.attributes.invoiceRequired;
       if (required) {
-        console.log("ss", required);
+        console.log("aaa", orderId);
+        try {
+          const { data } = await getOrderItemsByOrderId({
+            variables: {
+              orderId: orderId,
+            },
+          });
+          console.log("ssaf", data);
+        } catch (error) {
+          console.log("error crear factura", error);
+        }
       }
     } catch (error) {
       console.log("error crear factura", error);
