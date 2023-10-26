@@ -5,41 +5,41 @@ import { useQuery } from "@apollo/client";
 import AgeProductCard from "./AgeProductCard";
 
 function RelatedItems({ categories, productId }) {
+  const aux = [];
+  if (categories.length > 0) {
+    const category = categories[0].attributes.name
+    const { loading, error, data } = useQuery(ProductsByCategory, {
+      variables: { category },
+    });
 
-  const category = categories[0].attributes.name
-  const { loading, error, data } = useQuery(ProductsByCategory, {
-    variables: { category },
-  });
+    if (loading) return 'Cargando...'
+    if (error) return toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
+      autoClose: 5000
+    })
 
-  if (loading) return 'Loading...'
-  if (error) return toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
-    autoClose: 5000
-  })
-
-  const max = data?.products.data.length
-  const myArray = []
-  while (myArray.length < max) {
-    var num = Math.floor(Math.random() * max);
-    var exist = false;
-    for (var i = 0; i < myArray.length; i++) {
-      if (myArray[i] == num) {
-        exist = true;
-        break;
+    const max = data?.products.data.length
+    const myArray = []
+    while (myArray.length < max) {
+      var num = Math.floor(Math.random() * max);
+      var exist = false;
+      for (var i = 0; i < myArray.length; i++) {
+        if (myArray[i] == num) {
+          exist = true;
+          break;
+        }
+      }
+      if (!exist) {
+        myArray[myArray.length] = num;
       }
     }
-    if (!exist) {
-      myArray[myArray.length] = num;
-    }
-  }
-
-  const aux = [];
-  for (let i = 0; i <= 3; i++) {
-    if (i < myArray.length) {
-      const random = myArray[i]
-      if (data?.products.data[random].id != productId) {
-        aux.push(data?.products.data[random]);
-      } else if (myArray.length > 4) {
-        aux.push(data?.products.data[myArray[4]]);
+    for (let i = 0; i <= 3; i++) {
+      if (i < myArray.length) {
+        const random = myArray[i]
+        if (data?.products.data[random].id != productId) {
+          aux.push(data?.products.data[random]);
+        } else if (myArray.length > 4) {
+          aux.push(data?.products.data[myArray[4]]);
+        }
       }
     }
   }
