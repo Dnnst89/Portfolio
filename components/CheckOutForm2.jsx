@@ -9,6 +9,7 @@ import CheckOutForm3 from "./CheckOutForm3";
 import useCartSummary from "@/hooks/useCartSummary";
 import { FaArrowAltCircleDown } from "react-icons/fa";
 import CREATE_PAYMENT_DETAIL from "@/src/graphQl/queries/createPaymentDetails";
+import Spinner from "./Spinner";
 export default function CheckOutForm2({ amount, checkbox }) {
   const isoDate = new Date().toISOString();
   const [paymentDetailId, setPaymentDetailId] = useState(null);
@@ -116,9 +117,10 @@ export default function CheckOutForm2({ amount, checkbox }) {
               onClick={() => {
                 handleCreatePaymentDetail();
               }}
+              disabled={total === 0}
               className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
             >
-              Continuar
+              {total <= 0 ? <Spinner /> : "Continuar"}
             </button>
           </div>
         </>

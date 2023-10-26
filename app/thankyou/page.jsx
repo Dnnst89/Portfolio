@@ -3,14 +3,15 @@ import OrderFailed from "@/components/OrderFailed";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { UPDATE_ORDER_DETAILS_STATUS } from "@/src/graphQl/queries/updateOrderDetailsStatus";
 import { logo } from "../assets/images";
 import useStorage from "@/hooks/useStorage";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import GET_CART_ITEMS_LIST_SHOPPING_SESSION from "@/src/graphQl/queries/getCartItemsByShoppingSession";
 import GET_SHOPPING_SESSION_BY_USER from "@/src/graphQl/queries/getShoppingSessionByUser";
 import DELETE_CART_ITEM_MUTATION from "@/src/graphQl/queries/deleteCartItem";
+import { GET_PAYMENT_DETAIL } from "@/src/graphQl/queries/getPaymentDetail";
 import UPDATE_VARIANT_STOCK from "@/src/graphQl/queries/updateVariantStock";
 import useCartSummary from "@/hooks/useCartSummary";
 import useProtectionRoute from "@/hooks/useProtectionRoute";
@@ -27,14 +28,35 @@ import { UPDATE_PAYMENT_DETAIL_STATUS } from "@/src/graphQl/queries/updatePaymen
 
 export default function ThankYouMessage() {
   const router = useRouter();
+  //states
   const [code, setCode] = useState("");
   const [paymentId, setPaymentId] = useState();
   const [orderId, setOrderId] = useState();
+  const [userId, setUserId] = useState();
   const [description, setDescription] = useState();
+  //calling the mutation
+  const [updatePaymentDetailStatus] = useMutation(UPDATE_PAYMENT_DETAIL_STATUS);
+  const [deleteCarItem] = useMutation(DELETE_CART_ITEM_MUTATION);
+  const [updateVariantStock] = useMutation(UPDATE_VARIANT_STOCK);
+  const [createOrder] = useMutation(CREATE_ORDER);
+  const [createOrderItem] = useMutation(CREATE_ORDER_ITEM_MUTATION);
+  const [getPaymentDetail] = useLazyQuery(GET_PAYMENT_DETAIL);
+
+  // const { user } = useStorage();
+  // const { id } = user || {};
+  const { items, loading } = useCartSummary({//me traigo los items que hay en carrito con el hook
+    userId: userId,
+  });
+  console.log(items)
   useEffect(() => {
     //guardo los datos que responde tilopay en orden
     const searchParams = new URLSearchParams(window?.location?.search);
 
+    const userData = JSON.parse(localStorage.getItem("userData")); //datos de user
+    const userDataId = userData?.user?.id;
+    if (userDataId) {
+      setUserId(userDataId)
+    }
     if (searchParams.has("code")) {
       //code 1 satisfactorio
       setCode(searchParams.get("code"));
@@ -51,23 +73,12 @@ export default function ThankYouMessage() {
     }
 
     handleTilopayResponse();
+
     // eslint-disablece en el enfoque react-hooks/exhaustive-deps
-  }, [code]);
+  }, [loading]);
 
-  //calling the mutation
-  const [updateOrderDetailsStatus] = useMutation(UPDATE_ORDER_DETAILS_STATUS);
-  const [updatePaymentDetailStatus] = useMutation(UPDATE_PAYMENT_DETAIL_STATUS);
-  const [deleteCarItem] = useMutation(DELETE_CART_ITEM_MUTATION);
-  const [updateVariantStock] = useMutation(UPDATE_VARIANT_STOCK);
-  const [createOrder] = useMutation(CREATE_ORDER);
-  const [createOrderItem] = useMutation(CREATE_ORDER_ITEM_MUTATION);
-  const { user } = useStorage();
-  const { id } = user || {};
-  const { items } = useCartSummary({
-    userId: user?.id,
-  });
 
-  const handleCartItmes = async () => {
+  const handleCartItems = async () => {
     //se elimina los items de carrito y se actualizan los stocks de los productos
     items.map((item) => {
       if (
@@ -79,7 +90,6 @@ export default function ThankYouMessage() {
         const newStock = stock - quant;
         const variant = item.attributes.variant.data.id;
         const cartItemId = item.id;
-        console.log(cartItemId);
 
         try {
           deleteCarItem({
@@ -87,7 +97,7 @@ export default function ThankYouMessage() {
               id: cartItemId,
             },
           });
-        } catch (error) {}
+        } catch (error) { }
 
         try {
           updateVariantStock({
@@ -101,53 +111,76 @@ export default function ThankYouMessage() {
         }
       }
     });
+
   };
 
   ////////////////////////////funciones para crear orden, orderItems y acutalizar paymentDetail/////////
 
-  const creatingOrderItems = (orderId) => {
-    const isoDate = new Date().toISOString();
-    try {
-      items.map(async (item) => {
-        const variant = item.attributes.variant.data; // Desestructuración aquí
-        const variantAtt = variant.attributes;
-        console.log(variantAtt.quantity);
-        const { data } = await createOrderItem({
-          variables: {
-            quantity: item.attributes.quantity,
-            variantId: variant.id,
-            publishedAt: isoDate,
-            orderDetailId: orderId,
-          },
-        });
-      });
-    } catch (error) {
-      console.log("Error creating: ", error);
-    }
-  };
-
   const handleCreateOrder = async (status) => {
     const isoDate = new Date().toISOString();
     try {
-      const { data } = await createOrder({
-        variables: {
-          user_id: id,
-          status: status,
-          paymentId: paymentId,
-          publishedAt: isoDate,
-        },
+      const paymentinfo = await getPaymentDetail({ //obtengo el paymentDetails, para que cuando refresque la pagina no cree mas ordenes
+        variables: { paymentId },
       });
-      const orderNumber = await data?.createOrderDetail?.data?.id;
-      creatingOrderItems(orderNumber);
-      setOrderId(orderNumber);
+      const orderStatus = paymentinfo?.data?.paymentDetail?.data?.attributes?.status
+      const orderPayment = paymentinfo?.data?.paymentDetail?.data?.attributes?.order_detail?.data //me da la orden asociada al pago
+      if (orderPayment === null && orderStatus === "Inicial") {// si no tiene orden le asigno una
+        try {
+          const { data } = await createOrder({//creo la orden asociada la payment
+            variables: {
+              user_id: userId,
+              status: status,
+              paymentId: paymentId,
+              publishedAt: isoDate,
+            },
+          });
+          const orderNumber = data?.createOrderDetail?.data?.id;
+          setOrderId(orderNumber);
+          await creatingOrderItems(orderNumber);
+          handleCartItems()
+        } catch (error) {
+          console.error("Error creating order:", error);
+        }
+      } else {//no creo otra orden, asigno la que ya tiene
+        setOrderId(orderPayment.id)
+      }
+
     } catch (error) {
-      console.error("Error creating order:", error);
+      console.log("Error getting paymentDetail: ", error)
     }
+
+
+
   };
+
+  const creatingOrderItems = async (orderId) => {// me trae los items del carrito y los almaceno en la orden
+    const isoDate = new Date().toISOString();
+    if (orderId) {
+      items.map(async (item) => {
+        try {
+          const variant = item?.attributes?.variant?.data; // Desestructuración aquí
+          const variantAtt = variant?.attributes;
+          const { data } = await createOrderItem({
+            variables: {
+              quantity: item?.attributes?.quantity,
+              variantId: variant?.id,
+              publishedAt: isoDate,
+              orderDetailId: orderId,
+            },
+          });
+        } catch (error) {
+          console.log("Error creating orderItem: ", error);
+        }
+      });
+    }
+
+
+  };
+
 
   const handleUpdatePayment = async (status) => {
     try {
-      // Update the order status for rejected payments
+      // actualiza el estado del payment
       const { data } = await updatePaymentDetailStatus({
         variables: {
           id: paymentId,
@@ -155,7 +188,7 @@ export default function ThankYouMessage() {
         },
       });
     } catch (error) {
-      console.error("Error updating order status:", error);
+      console.error("Error updating payment status:", error);
     }
   };
   ////////////////////////////////FUNCION PARA MANEJAR LA RESPUESTA DE TILOPAY//////////////////////////////
@@ -165,17 +198,17 @@ export default function ThankYouMessage() {
     if (code) {
       if (code === "1") {
         // Payment was successful
-        handleCreateOrder("A");
-        handleUpdatePayment("Approved");
-        handleCartItmes(); // me vacia el carrito y me modifica el stock
+        await handleCreateOrder("A");
+        await handleUpdatePayment("Approved");
+        //await handleCartItmes(); // me vacia el carrito y me modifica el stock
       } else {
         // Payment failed
-        // Render the description when code is not "1"
         // I need to change the status of ther Payment to failed
-        handleUpdatePayment("Failed");
+        await handleUpdatePayment("Failed");
+
       }
     } else {
-      handleUpdatePayment("Cancelled");
+      await handleUpdatePayment("Cancelled");
     }
   };
 
@@ -196,7 +229,7 @@ export default function ThankYouMessage() {
               <div className="flex flex-col items-end justify-center space-y-3">
                 <div className="flex flex-col items-center space-y-1 ml-3">
                   <h1 className="text-xl bold">¡Gracias por tu compra!</h1>
-                  <p className="text-sm">Transacción Aprovada</p>
+                  <p className="text-sm">Transacción Aprobada</p>
                   <p className="text-sm">Ya estamos preparando tu pedido</p>
                 </div>
                 <div className="bg-white w-[250px] p-3 flex flex-col items-center ml-[20px] rounded-md">
@@ -205,7 +238,7 @@ export default function ThankYouMessage() {
                 </div>
 
                 <button
-                  onClick={() => router.push("/")} // Specify the URL to which you want to navigate
+                  onClick={() => { router.push("/") }} // Specify the URL to which you want to navigate
                   className="bg-pink-200 text-white rounded-sm p-2 w-[150px]"
                 >
                   Volver
@@ -216,7 +249,7 @@ export default function ThankYouMessage() {
             <>
               <OrderFailed
                 description={
-                  description ? "Fondos insuficientes" : "Orden cancelada"
+                  description ? description : "Orden cancelada"
                 }
               />
             </>
