@@ -10,8 +10,12 @@ import { FaArrowAltCircleDown } from "react-icons/fa";
 import CheckOutForm2 from "./CheckOutForm2";
 import useStorage from "@/hooks/useStorage";
 import toast, { Toaster } from "react-hot-toast";
-import { getToken } from "@/api/moovin/getToken";
+import { requestEstimation } from "@/api/moovin/estimation";
+import { getToken, refreshToken } from "@/api/moovin/getToken";
 function FormOne() {
+  const { data } = requestEstimation();
+  console.log("moovin :", data);
+
   const {
     register,
     handleSubmit,
@@ -31,9 +35,6 @@ function FormOne() {
   const [addressId, setAddressId] = useState();
   const [userInfoExist, setUserInfoExist] = useState();
   const isoDate = new Date().toISOString();
-
-  const token = getToken();
-  console.log("the token from moovin : ", token);
 
   const [userInformation, setUserInformation] = useState({
     //campos de formulario
