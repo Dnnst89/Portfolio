@@ -20,8 +20,12 @@ const DeleteCartItemBtn = ({ idItem, qtyItem }) => {
 
   const [deleteCartItem] = useMutation(DELETE_CART_ITEM_MUTATION, {
   });
-  // se hace este dispatch para que el useCartSummary sepa cuanta cantidad hay, y si cambia vuelva a renderizar
-  dispatch(updateQtyItems(quantity))
+
+  useEffect(() => {
+    dispatch(updateQtyItems(quantity - qtyItem))// se hace este dispatch para que el useCartSummary sepa cuanta cantidad hay, y si cambia vuelva a renderizar
+  }, [])
+
+
 
   const handleDelete = () => {
     deleteCartItem({ variables: { id: idItem } })
