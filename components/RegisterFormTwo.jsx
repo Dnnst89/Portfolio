@@ -83,7 +83,7 @@ const RegisterFormTwo = () => {
           duration: 4000,
         }
       );
-      dispatch(updateShoppingSession(dataSession.createShoppingSession.data)); //ACTUALIZO LA SESSION CON LOS DATOS OBTENIDOS
+      //dispatch(updateShoppingSession(dataSession.createShoppingSession.data)); //ACTUALIZO LA SESSION CON LOS DATOS OBTENIDOS
     } catch (error) {
       toast.error(
         "No se pudo registrar tu cuenta, por favor intentalo más tarde",
