@@ -31,7 +31,7 @@ const validationSchema = Yup.object().shape({
     .max(50, "Nombre de usuario muy largo")
     .required("Este campo es requerido"),
   email: Yup.string()
-    .email("Correo inválido")
+    .email("el correo no es válido")
     .required("Este campo es requerido"),
   password: Yup.string()
     .required("Este campo es requerido")
@@ -53,7 +53,7 @@ const RegisterFormTwo = () => {
   const [createUser] = useMutation(RegisterUser);
   const [createShoppingSession] = useMutation(CREATE_SHOPPING_SESSION_MUTATION);
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values, { resetForm }) => {
     const dataValues = Object.keys(values).map((el) => {
       return values[el];
     });
@@ -93,6 +93,7 @@ const RegisterFormTwo = () => {
       );
     } finally {
       setLoading(false);
+      resetForm();
     }
   };
   useSession();
