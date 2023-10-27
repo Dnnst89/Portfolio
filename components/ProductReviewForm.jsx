@@ -72,7 +72,7 @@ function ProductReviewForm({ idProduct }) {
             <textarea
               id="message"
               rows="4"
-              className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+              className="resize-none block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
               placeholder="Escribe aquí tu opinión..."
               {...register("comment", {
                 required: {
@@ -80,7 +80,7 @@ function ProductReviewForm({ idProduct }) {
                   message: "Debes ingresar el comentario",
                 },
                 maxLength: {
-                  value: 800,
+                  value: 3000,
                   message:
                     "El comentario es muy extenso",
                 },

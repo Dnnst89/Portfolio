@@ -14,6 +14,9 @@ const NavCategories = () => {
     );
     setMenuItems(data.hits);
   };
+  const categoryChange = (name) => {
+    window.location.href = `/results/?query=${name}`;
+  };
 
   useEffect(() => {
     getData();
