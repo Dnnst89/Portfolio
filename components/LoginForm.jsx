@@ -128,7 +128,7 @@ const LoginForm = () => {
                             <ErrorForm>{errors.identifier}</ErrorForm>
                           ) : null}
                         </div>
-                        <div className="grid col-span-12 md:col-span-12 w-2/4 m-auto">
+                        <div className="relative grid col-span-12 md:col-span-12 w-2/4 m-auto">
                           <label className="text-lg" htmlFor="password">
                             Contraseña
                             <span className="text-pink-200 ml-1">*</span>
@@ -147,7 +147,7 @@ const LoginForm = () => {
                               onClick={() =>
                                 setPasswordVisible(!passwordVisible)
                               }
-                              className="absolute right-6 top-11 cursor-pointer "
+                              className="absolute right-6 top-10 cursor-pointer "
                             >
                               {passwordVisible ? (
                                 <FaEye color="#FB82AF" />
