@@ -18,6 +18,9 @@ import useProtectionRoute from "@/hooks/useProtectionRoute";
 import { CREATE_ORDER } from "@/src/graphQl/queries/createUserOrder";
 import CREATE_ORDER_ITEM_MUTATION from "@/src/graphQl/queries/createOrderItem";
 import { UPDATE_PAYMENT_DETAIL_STATUS } from "@/src/graphQl/queries/updatePaymentDetailStatus";
+import { CREATE_ORDER_EMAIL } from "@/src/graphQl/queries/sendEmail";
+import { GET_USER_ADDRESS } from "@/src/graphQl/queries/getUserAddress"
+
 /*
   recives the Tilopay response , based on the returns params 
   redirects to an certain page.
@@ -33,6 +36,8 @@ export default function ThankYouMessage() {
   const [paymentId, setPaymentId] = useState();
   const [orderId, setOrderId] = useState();
   const [userId, setUserId] = useState();
+  const [userName, setUserName] = useState();
+  const [userEmail, setUserEmail] = useState();
   const [description, setDescription] = useState();
   //calling the mutation
   const [updatePaymentDetailStatus] = useMutation(UPDATE_PAYMENT_DETAIL_STATUS);
@@ -41,21 +46,30 @@ export default function ThankYouMessage() {
   const [createOrder] = useMutation(CREATE_ORDER);
   const [createOrderItem] = useMutation(CREATE_ORDER_ITEM_MUTATION);
   const [getPaymentDetail] = useLazyQuery(GET_PAYMENT_DETAIL);
+  const [createOrderEmail] = useMutation(CREATE_ORDER_EMAIL);
+  const [getUserAddress] = useLazyQuery(GET_USER_ADDRESS);
 
   // const { user } = useStorage();
   // const { id } = user || {};
-  const { items, loading } = useCartSummary({//me traigo los items que hay en carrito con el hook
+  const { items, loading, quantity } = useCartSummary({//me traigo los items que hay en carrito con el hook
     userId: userId,
   });
-  console.log(items)
   useEffect(() => {
     //guardo los datos que responde tilopay en orden
     const searchParams = new URLSearchParams(window?.location?.search);
 
     const userData = JSON.parse(localStorage.getItem("userData")); //datos de user
     const userDataId = userData?.user?.id;
+    const userDataName = userData?.user?.username;
+    const userDataEmail = userData?.user?.email;
     if (userDataId) {
       setUserId(userDataId)
+    }
+    if (userDataName) {
+      setUserName(userDataName)
+    }
+    if (userDataEmail) {
+      setUserEmail(userDataEmail)
     }
     if (searchParams.has("code")) {
       //code 1 satisfactorio
@@ -122,8 +136,25 @@ export default function ThankYouMessage() {
       const paymentinfo = await getPaymentDetail({ //obtengo el paymentDetails, para que cuando refresque la pagina no cree mas ordenes
         variables: { paymentId },
       });
+      const { data: userAddress, error: addressError } = await getUserAddress({
+        variables: {
+          id: userId,
+        },
+      });
+
+      if (addressError) return console.log("Lo sentimos, ha ocurrido un error al cargar los datos")
+
+      const province = userAddress.usersPermissionsUser.data.attributes.users_address.data.attributes.province
+      const canton = userAddress.usersPermissionsUser.data.attributes.users_address.data.attributes.canton
+      const addressLine1 = userAddress.usersPermissionsUser.data.attributes.users_address.data.attributes.addressLine1
+
+      const total = paymentinfo?.data?.paymentDetail?.data?.attributes?.total
+      const tax = paymentinfo?.data?.paymentDetail?.data?.attributes?.taxes
+      const subtotal = paymentinfo?.data?.paymentDetail?.data?.attributes?.subtotal
       const orderStatus = paymentinfo?.data?.paymentDetail?.data?.attributes?.status
       const orderPayment = paymentinfo?.data?.paymentDetail?.data?.attributes?.order_detail?.data //me da la orden asociada al pago
+
+
       if (orderPayment === null && orderStatus === "Inicial") {// si no tiene orden le asigno una
         try {
           const { data } = await createOrder({//creo la orden asociada la payment
@@ -137,6 +168,7 @@ export default function ThankYouMessage() {
           const orderNumber = data?.createOrderDetail?.data?.id;
           setOrderId(orderNumber);
           await creatingOrderItems(orderNumber);
+          sendOrderEmail(total, tax, subtotal, orderNumber, quantity, userName, province, canton, addressLine1, userEmail)
           handleCartItems()
         } catch (error) {
           console.error("Error creating order:", error);
@@ -148,9 +180,35 @@ export default function ThankYouMessage() {
     } catch (error) {
       console.log("Error getting paymentDetail: ", error)
     }
+  };
 
+  const sendOrderEmail = async (total, tax, subtotal, orderNumber, totalProducts, userName, province, canton, addressLine1, email) => {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth() + 1; // Los meses comienzan desde 0, por lo que sumamos 1.
+    const day = currentDate.getDate();
+    const formattedDate = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+    const shipping = 0.0
 
-
+    const { data: emailInfo, error: sendEmailError } = await createOrderEmail({
+      variables: {
+        userName: userName,
+        email: email,
+        orderNumber: orderNumber,
+        date: formattedDate,
+        totalProducts: totalProducts,
+        subtotal: subtotal,
+        tax: tax,
+        shipping: shipping,
+        total: total,
+        province: province,
+        canton: canton,
+        addressLine1: addressLine1,
+      }
+    });
+    if (sendEmailError) return toast.error("Lo sentimos, ha ocurrido un error al enviar el correo", {
+      autoClose: 5000
+    })
   };
 
   const creatingOrderItems = async (orderId) => {// me trae los items del carrito y los almaceno en la orden
@@ -200,6 +258,7 @@ export default function ThankYouMessage() {
         // Payment was successful
         await handleCreateOrder("A");
         await handleUpdatePayment("Approved");
+        // await sendOrderEmail()
         //await handleCartItmes(); // me vacia el carrito y me modifica el stock
       } else {
         // Payment failed

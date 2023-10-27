@@ -5,7 +5,10 @@ query GetPaymentDetail($paymentId: ID!) {
         data{
           attributes{
             invoiceRequired
-            status
+            status,
+            total,
+            taxes,
+            subtotal
             order_detail{
               data{
                 id
