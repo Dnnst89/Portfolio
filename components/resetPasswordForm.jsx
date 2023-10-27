@@ -31,7 +31,7 @@ const validationSchema = Yup.object().shape({
     .oneOf([Yup.ref("password"), null], "Las contraseñas no coinciden"),
 });
 
-const ResetPasswordForm = ({ code }) => {
+const ResetPasswordForm = ({ code, resetForm }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   // Call mutation
@@ -51,9 +51,10 @@ const ResetPasswordForm = ({ code }) => {
 
       // Dispatch user and update shopping session
       dispatch(setUser(data.resetPassword.user));
-      router.push("/login");
     } catch (error) {
       toast.error("No fue posible actualizar tu contraseña");
+    } finally {
+      resetForm();
     }
   };
 
@@ -128,15 +129,7 @@ const ResetPasswordForm = ({ code }) => {
                       </button>
                     </div>
                   </Form>
-                  <Toaster
-                    toastOptions={{
-                      style: {
-                        backgroundColor: "#be123d",
-                        color: "#FFF",
-                        fontSize: "14px",
-                      },
-                    }}
-                  />
+                  <Toaster />
                 </>
               );
             }}

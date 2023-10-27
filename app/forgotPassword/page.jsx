@@ -16,7 +16,7 @@ const ForgotPassword = () => {
   const router = useRouter();
   const [resetPassword, { loading, error, data }] = useMutation(RESET_PASSWORD);
 
-  const handleSubmit = async (values, { setSubmitting }) => {
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
       // Call the RESET_PASSWORD mutation here
       const response = await resetPassword({
@@ -27,7 +27,6 @@ const ForgotPassword = () => {
       if (response.data && response.data.forgotPassword.ok) {
         // Password reset was successful
         console.log("Password reset successful");
-        router.push("/login");
       } else {
         // Password reset failed, handle the error
         console.error("Password reset failed");
@@ -35,16 +34,15 @@ const ForgotPassword = () => {
     } catch (error) {
       console.error("Error occurred during password reset:", error);
     } finally {
+      resetForm();
       setSubmitting(false);
     }
   };
 
   return (
     <div>
-
       <CheckOutHeader regresar={"/personalData"} />
       <div className="flex flex-col items-center max-w-screen-xl m-auto mt-10">
-
         <div className="bg-resene  p-5 w-2/4 flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-3 col-span-8 space-y-5">
           <h1>Cambiar contraseña</h1>
           <Formik
@@ -70,10 +68,8 @@ const ForgotPassword = () => {
             )}
           </Formik>
         </div>
-
       </div>
     </div>
-
   );
 };
 
