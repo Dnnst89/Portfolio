@@ -6,7 +6,8 @@ import toast, { Toaster } from "react-hot-toast";
 import useStorage from "@/hooks/useStorage";
 import CartDetail from "@/components/CartDetail";
 import CartProceedPayment from "@/components/CartProceedPayment";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateQtyItems } from "@/redux/features/cart-slice";
 
 const CartContainer = () => {
     const { user } = useStorage(); //me trae el usuario de local storage
@@ -14,11 +15,11 @@ const CartContainer = () => {
         userId: user?.id,
     });
 
-
+    const dispatch = useDispatch();
 
     return (
         <>
-            
+
 
             <div className="flex flex-col md:col-span-8 col-span-12">
 

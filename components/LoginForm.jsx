@@ -2,9 +2,8 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { LOGIN_MUTATION } from "@/src/graphQl/queries/LoginSession";
 import { useMutation, useQuery } from "@apollo/client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
 import { setUser } from "@/redux/features/authSlice";
 import ErrorForm from "./ErrorForm";
 import toast, { Toaster } from "react-hot-toast";
@@ -20,7 +19,6 @@ const SignupSchema = Yup.object().shape({
 const LoginForm = () => {
   const dispatch = useDispatch();
   const authUser = useSelector((state) => state.auth.user);
-  const router = useRouter();
   const [loginMutation, { data: loginData }] = useMutation(LOGIN_MUTATION);
   const [passwordVisible, setPasswordVisible] = useState(false); // State to track password visibility
 
@@ -53,13 +51,12 @@ const LoginForm = () => {
           isAuthenticated: true,
         })}`;
 
-        toast.success("Ingreso exitoso!", {
+        toast.success("Inicio de cesión exitoso!", {
           duration: 4000,
         });
-        router.push("/");
       }
     } catch (error) {
-      toast.error(`Credenciales incorrectas, intenta nuevamente.`, {
+      toast.error(`Credenciales incorrectas, intentalo nuevamente.`, {
         duration: 4000,
       });
     } finally {
@@ -71,26 +68,7 @@ const LoginForm = () => {
     <div className="h-screen ">
       <CheckOutHeader regresar={"/"} />
       <div className=" flex justify-center items-center">
-        <Toaster
-          containerStyle={{
-            top: 150,
-            left: 20,
-            bottom: 20,
-            right: 20,
-          }}
-          toastOptions={{
-            success: {
-              style: {
-                background: "#67C3AD",
-              },
-            },
-            error: {
-              style: {
-                background: "#f87171",
-              },
-            },
-          }}
-        />
+        <Toaster />
         <div className="w-full">
           <Formik
             initialValues={{
