@@ -6,6 +6,7 @@ import { useMutation } from "@apollo/client";
 import CheckOutHeader from "@/components/CheckoutHeader";
 import { RESET_PASSWORD } from "../../src/graphQl/queries/resetPassword";
 import { Toaster, toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 const ResetPasswordSchema = Yup.object().shape({
   email: Yup.string()
     .email("El formato del correo no es el correcto.")
@@ -13,6 +14,7 @@ const ResetPasswordSchema = Yup.object().shape({
 });
 
 const ForgotPassword = () => {
+  const router = useRouter();
   const [resetPassword, { loading, error, data }] = useMutation(RESET_PASSWORD);
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
@@ -31,6 +33,9 @@ const ForgotPassword = () => {
             duration: 4000,
           }
         );
+        setTimeout(() => {
+          router.push("/");
+        }, 4000);
       } else {
         // Password reset failed, handle the error
         toast.error("No fue posible reestablecer tu contraseña", {

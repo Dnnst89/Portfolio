@@ -53,11 +53,11 @@ const LoginForm = () => {
         })}`;
 
         toast.success("Inicio de sesión exitoso!", {
-          duration: 4000,
+          duration: 3000,
         });
         setTimeout(() => {
           router.push("/");
-        }, 4000);
+        }, 3000);
       }
     } catch (error) {
       toast.error(`Credenciales incorrectas, intentalo nuevamente.`, {
