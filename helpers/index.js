@@ -116,7 +116,11 @@ const formatBillSumary = (billSummary, exchangeRate, currencyCode) => {
   };
 };
 
-const createConsecutiveNumber = (number) => {
+const createConsecutiveNumber = (param) => {
+  const parame = param.slice(-8);
+  console.log("entro", parame);
+  const number = parseInt(parame) + 1;
+  console.log("actualizado", number);
   var consecutiveNumber = "0010000101";
   var validateFormat = "0000000001";
   if (number < 10 && number > 0) {

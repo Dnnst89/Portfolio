@@ -348,11 +348,11 @@ export default function ThankYouMessage() {
               const InvoiceNumber =
                 number?.data?.electronicInvoices?.data[0]?.attributes
                   ?.consecutive;
-              //console.log("number consecutive", InvoiceNumber);
+              console.log("number consecutivesss", InvoiceNumber);
               console.log("store", store);
               const key = createKey(InvoiceNumber, store.IdNumber);
-              const consecutive = createConsecutiveNumber();
-
+              const consecutive = createConsecutiveNumber(InvoiceNumber);
+              console.log("consecutivo", consecutive);
               const bodyInvoice = {
                 accountId: store.accountId,
                 document: {
@@ -385,7 +385,7 @@ export default function ThankYouMessage() {
               );
 
               console.log("last", InvoiceResult);
-              console.log("code", store.activityCode);
+              // console.log("code", store.activityCode);
               try {
                 const isoDate = new Date().toISOString();
                 const resulta = await getStoreInformation({
@@ -397,15 +397,15 @@ export default function ThankYouMessage() {
                   resulta?.data?.storeInformation?.data?.attributes
                     ?.ActivityCode
                 );
-                const keyInvoiceNumber = parseInt(key);
-                console.log("second", keyInvoiceNumber);
 
                 console.log("acasa", activity);
+                console.log("date", isoDate);
+
                 const invoiceId = await createElectronicInvoice({
                   variables: {
-                    order: parseInt(orderId),
-                    consecutive: parseFloat(consecutive),
-                    keyInvoice: parseFloat(key),
+                    order: orderId,
+                    consecutive: consecutive,
+                    keyInvoice: key,
                     activityCode: activity,
                     publishedAt: isoDate,
                   },

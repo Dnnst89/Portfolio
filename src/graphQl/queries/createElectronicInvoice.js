@@ -2,9 +2,9 @@ import { gql } from "@apollo/client";
 
 export const CREATE_ELECTRONIC_INVOICE = gql`
   mutation createElectronicInvoice(
-    $order: Int!
-    $consecutive: Long!
-    $keyInvoice: Long!
+    $order: String!
+    $consecutive: String!
+    $keyInvoice: String!
     $activityCode: Int!
     $publishedAt: DateTime!
   ) {
