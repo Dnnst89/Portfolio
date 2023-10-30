@@ -54,6 +54,7 @@ export default function ThankYouMessage() {
   const { items, loading, quantity } = useCartSummary({//me traigo los items que hay en carrito con el hook
     userId: userId,
   });
+
   useEffect(() => {
     //guardo los datos que responde tilopay en orden
     const searchParams = new URLSearchParams(window?.location?.search);
@@ -168,7 +169,11 @@ export default function ThankYouMessage() {
           const orderNumber = data?.createOrderDetail?.data?.id;
           setOrderId(orderNumber);
           await creatingOrderItems(orderNumber);
-          sendOrderEmail(total, tax, subtotal, orderNumber, quantity, userName, province, canton, addressLine1, userEmail)
+          const jsonString = JSON.stringify(items)
+          const jsonData = JSON.parse(jsonString);
+          // jsonData es ahora un objeto JavaScript que puedes usar
+          console.log(jsonData);
+          sendOrderEmail(total, tax, subtotal, orderNumber, quantity, userName, province, canton, addressLine1, userEmail, jsonData)
           handleCartItems()
         } catch (error) {
           console.error("Error creating order:", error);
@@ -182,7 +187,7 @@ export default function ThankYouMessage() {
     }
   };
 
-  const sendOrderEmail = async (total, tax, subtotal, orderNumber, totalProducts, userName, province, canton, addressLine1, email) => {
+  const sendOrderEmail = async (total, tax, subtotal, orderNumber, totalProducts, userName, province, canton, addressLine1, email, products) => {
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1; // Los meses comienzan desde 0, por lo que sumamos 1.
@@ -204,6 +209,7 @@ export default function ThankYouMessage() {
         province: province,
         canton: canton,
         addressLine1: addressLine1,
+        products: products
       }
     });
     if (sendEmailError) return toast.error("Lo sentimos, ha ocurrido un error al enviar el correo", {
