@@ -252,7 +252,7 @@ function FormOne() {
                                 message: "El nombre es requerido",
                               },
                               minLength: {
-                                value: 3,
+                                value: 2,
                                 message:
                                   "La información es insuficiente, por favor pon tu nombre completo",
                               },
@@ -278,7 +278,7 @@ function FormOne() {
                                 message: "El apellido es requerido",
                               },
                               minLength: {
-                                value: 5,
+                                value: 2,
                                 message:
                                   "La información es insuficiente, por favor pon tu apellido completo",
                               },
@@ -364,9 +364,9 @@ function FormOne() {
                                 message: "El país es requerido",
                               },
                               minLength: {
-                                value: 5,
+                                value: 2,
                                 message:
-                                  "El país no puede tener menos de 5 letras",
+                                  "El país no puede tener menos de 2 letras",
                               },
                               maxLength: {
                                 value: 20,
@@ -394,9 +394,9 @@ function FormOne() {
                                 message: "La provincia es requerida",
                               },
                               minLength: {
-                                value: 5,
+                                value: 2,
                                 message:
-                                  "La provincia no puede tener menos de 5 letras",
+                                  "La provincia no puede tener menos de 2 letras",
                               },
                               maxLength: {
                                 value: 20,
@@ -424,9 +424,9 @@ function FormOne() {
                                 message: "El cantón es requerido",
                               },
                               minLength: {
-                                value: 5,
+                                value: 2,
                                 message:
-                                  "El cantón no puede tener menos de 5 letras",
+                                  "El cantón no puede tener menos de 2 letras",
                               },
                               maxLength: {
                                 value: 20,
