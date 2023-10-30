@@ -8,8 +8,10 @@ import CartDetail from "./CartDetail";
 import { useEffect, useState } from "react";
 import { FaArrowAltCircleDown } from "react-icons/fa";
 import CheckOutForm2 from "./CheckOutForm2";
+import GoogleMapWrapper from "./Map";
 import useStorage from "@/hooks/useStorage";
 import toast, { Toaster } from "react-hot-toast";
+
 
 function FormOne() {
   const {
@@ -494,6 +496,11 @@ function FormOne() {
                           <p className="text-red text-xs">
                             {errors.addressLine2?.message}
                           </p>
+                        </div>
+
+                        <div className="col-span-6 grid">
+                          <GoogleMapWrapper  />
+ 
                         </div>
                       </section>
                     </div>
