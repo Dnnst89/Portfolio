@@ -38,7 +38,7 @@ const NavMenu = () => {
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           
-          <div className="flex items-center sm:items-stretch sm:justify-start w-full">
+          <div className="flex sm:justify-start w-fit md:w-full">
             <div className="flex-shrink-0  md:pr-7 items-center">
             <Link href={`/`}> 
             <Image
@@ -58,9 +58,9 @@ const NavMenu = () => {
               </div>
             </div>
           </div>
-          <div className="flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <div className="grid grid-cols-2 justify-center items-center  order-2 sm:order-3 col-span-1 sm:col-span-1">
-              <div className="">
+          <div className="flex justify-end items-center pr-2 max-w-[220px] md:min-w-[250px] md:pr-0">
+            <div className="grid grid-cols-6 justify-end items-center  order-2 sm:order-3">
+              <div className="col-span-4">
                 <span className=" flex justify-center items-center ">
                   <AccountDropodown />
                 </span>
@@ -68,15 +68,16 @@ const NavMenu = () => {
               <Link
                 onClick={showAlert}
                 href={user?.id && isAuthenticated ? "/cart" : "/"}
+                className="col-span-2 max-w-[100px] pl-2"
               >
-                <div className="flex justify-center items-center ">
+                <div className="flex justify-center md:justify-start items-center ">
                   <BsCart4 size={30} color="#67C3AD" />
                   {info ? (
-                    <p className="bg-aquamarine rounded-full px-2 text-white">
+                    <p className="bg-aquamarine rounded-full w-2/6 text-white text-center">
                       {info.quantity}
                     </p>
                   ) : (
-                    <p className="bg-aquamarine rounded-full px-2 text-white">0</p>
+                    <p className="bg-aquamarine rounded-full w-2/6 text-white text-center">0</p>
                   )}
                 </div>
               </Link>
