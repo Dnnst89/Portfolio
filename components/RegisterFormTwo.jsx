@@ -108,12 +108,12 @@ const RegisterFormTwo = () => {
             {({ errors, touched }) => {
               return (
                 <>
-                  <Form className=" max-w-screen-xl items-center mt-20 grid grid-cols-12">
+                  <Form className=" max-w-screen-xl items-center mt-10 grid grid-cols-12">
                     <h1 className=" text-3xl flex justify-center items-center mb-10 col-span-12">
                       Registrate
                     </h1>
 
-                    <div className="bg-resene  pt-10 w-full flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-3 col-span-8">
+                    <div className="bg-resene  pt-10 w-full flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-2 col-span-10 md:col-start-3 md:col-span-8">
                       <div className="flex grid w-full">
                         <section className="p-3 w-10/12 m-auto grid grid-cols-12 gap-5">
                           <div className="grid col-span-12 md:col-span-6">
