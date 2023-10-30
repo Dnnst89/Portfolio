@@ -29,7 +29,7 @@ const Pagination = ({
         <ul className="list-style-none flex">
           <li>
             <button
-              className="relative min-w-[90px] block rounded bg-[#484848] mr-2 px-3 py-1.5 text-sm text-white transition-all duration-300 dark:text-neutral-400 pr-3"
+              className="relative min-w-[90px] block rounded bg-[#484848] mr-2 px-3 py-1.5 text-sm text-white transition-all duration-300 pr-3"
               disabled={currentPage === 0 ? true : false}
               onClick={onPreviusPage}
             >
@@ -50,7 +50,7 @@ const Pagination = ({
           <li>
             <button
               href="#"
-              className={`relative min-w-[90px] block rounded bg-[#484848] px-3 py-1.5 text-sm text-white transition-all duration-300 dark:text-neutral-400 pl-3 ml-2 ${currentPage === noPages - 1 ? "bg-black" : ""}`}
+              className={`relative min-w-[90px] block rounded bg-[#484848] px-3 py-1.5 text-sm text-white transition-all duration-300 pl-3 ml-2 ${currentPage === noPages - 1 ? "bg-black" : ""}`}
               disabled={currentPage === noPages.length - 1 ? true : false}
               onClick={onNextPage}
             >

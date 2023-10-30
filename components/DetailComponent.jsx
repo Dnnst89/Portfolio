@@ -19,7 +19,7 @@ export default function DetailComponent({ id }) {
   return (
 
     <div className={loading ? "grid place-items-center" : " max-w-screen-xl m-auto"}>
-      {loading ? <Spinner /> : <div> <Toaster />
+      {loading ? <Spinner /> : <div> 
         <ProductDetail
           name={data?.product.data.attributes.name}
           brand={data?.product.data.attributes.brand}

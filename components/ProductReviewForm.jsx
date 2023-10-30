@@ -62,19 +62,17 @@ function ProductReviewForm({ idProduct }) {
   return (
     <>
       {sessionData && (
-        <form onSubmit={onSubmit} className="p-5 w-5/12 ">
-          <div>
-            <Toaster />
-          </div>
+        <form onSubmit={onSubmit} className="md:p-5 w-full col-start-2 col-span-10 md:col-start-4 md:col-span-6 m-auto">
 
-          <div className="text-center">
-            <label htmlFor="message" className="">
+
+          <div className="space-y-3 w-full">
+            <label htmlFor="message" className="text-lg w-full">
               Danos tu opinión del producto
             </label>
             <textarea
               id="message"
               rows="4"
-              className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="resize-none block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
               placeholder="Escribe aquí tu opinión..."
               {...register("comment", {
                 required: {
@@ -82,7 +80,7 @@ function ProductReviewForm({ idProduct }) {
                   message: "Debes ingresar el comentario",
                 },
                 maxLength: {
-                  value: 800,
+                  value: 3000,
                   message:
                     "El comentario es muy extenso",
                 },
@@ -127,7 +125,7 @@ function ProductReviewForm({ idProduct }) {
                 ref={captchaRef}
               />
             </div>
-            <div className="flex justify-end">
+            <div className="flex justify-end pb-5">
               <button
                 type="submit"
                 className="bg-aquamarine p-2 rounded-md text-white mt-5 mr-10"

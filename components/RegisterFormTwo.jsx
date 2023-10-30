@@ -31,7 +31,7 @@ const validationSchema = Yup.object().shape({
     .max(50, "Nombre de usuario muy largo")
     .required("Este campo es requerido"),
   email: Yup.string()
-    .email("Correo inválido")
+    .email("el correo no es válido")
     .required("Este campo es requerido"),
   password: Yup.string()
     .required("Este campo es requerido")
@@ -53,7 +53,7 @@ const RegisterFormTwo = () => {
   const [createUser] = useMutation(RegisterUser);
   const [createShoppingSession] = useMutation(CREATE_SHOPPING_SESSION_MUTATION);
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values, { resetForm }) => {
     const dataValues = Object.keys(values).map((el) => {
       return values[el];
     });
@@ -69,7 +69,7 @@ const RegisterFormTwo = () => {
       const { data } = await createUser({
         variables: { username, email, password },
       });
-      dispatch(setUser(data.register.user));
+      //dispatch(setUser(data.register.user));
       const { data: dataSession } = await createShoppingSession({
         //query para crear la session al user
         variables: {
@@ -77,12 +77,9 @@ const RegisterFormTwo = () => {
           userId: data.register.user.id,
         },
       });
-      toast.success(
-        "Registro exitoso, hemos enviado un correo de confirmación.",
-        {
-          duration: 4000,
-        }
-      );
+      toast.success(`Hemos enviado un correo electrónico de confirmación.`, {
+        duration: 5000,
+      });
       dispatch(updateShoppingSession(dataSession.createShoppingSession.data)); //ACTUALIZO LA SESSION CON LOS DATOS OBTENIDOS
     } catch (error) {
       toast.error(
@@ -93,6 +90,7 @@ const RegisterFormTwo = () => {
       );
     } finally {
       setLoading(false);
+      resetForm();
     }
   };
   useSession();
@@ -110,12 +108,12 @@ const RegisterFormTwo = () => {
             {({ errors, touched }) => {
               return (
                 <>
-                  <Form className=" max-w-screen-xl items-center mt-20 grid grid-cols-12">
+                  <Form className=" max-w-screen-xl items-center mt-10 grid grid-cols-12">
                     <h1 className=" text-3xl flex justify-center items-center mb-10 col-span-12">
                       Registrate
                     </h1>
 
-                    <div className="bg-resene  pt-10 w-full flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-3 col-span-8">
+                    <div className="bg-resene  pt-10 w-full flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-2 col-span-10 md:col-start-3 md:col-span-8">
                       <div className="flex grid w-full">
                         <section className="p-3 w-10/12 m-auto grid grid-cols-12 gap-5">
                           <div className="grid col-span-12 md:col-span-6">

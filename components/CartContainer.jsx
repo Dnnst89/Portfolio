@@ -6,7 +6,8 @@ import toast, { Toaster } from "react-hot-toast";
 import useStorage from "@/hooks/useStorage";
 import CartDetail from "@/components/CartDetail";
 import CartProceedPayment from "@/components/CartProceedPayment";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateQtyItems } from "@/redux/features/cart-slice";
 
 const CartContainer = () => {
     const { user } = useStorage(); //me trae el usuario de local storage
@@ -14,32 +15,13 @@ const CartContainer = () => {
         userId: user?.id,
     });
 
-
+    const dispatch = useDispatch();
 
     return (
         <>
-            <Toaster
-                containerStyle={{
-                    top: 150,
-                    left: 20,
-                    bottom: 20,
-                    right: 20,
-                }}
-                toastOptions={{
-                    success: {
-                        style: {
-                            background: "#67C3AD",
-                        },
-                    },
-                    error: {
-                        style: {
-                            background: "#f87171",
-                        },
-                    },
-                }}
-            />
 
-            <div className="flex flex-col col-span-8 ">
+
+            <div className="flex flex-col md:col-span-8 col-span-12">
 
                 {items?.map((item, index) => {
                     const variant = item.attributes.variant.data; // Desestructuración aquí
@@ -77,7 +59,7 @@ const CartContainer = () => {
                 })}
 
             </div>
-            <div className=" bg-resene rounded-sm col-span-4 p-4 h-[500px]  border-l-4 border-lightblue">
+            <div className=" bg-resene rounded-sm col-span-12 md:col-span-4 p-4 h-[500px]  border-l-4 border-lightblue">
                 <CartDetail detailTitle={"Detalle del carrito"} />
                 {items.length > 0 ? <CartProceedPayment
                     textButton={"Proceder al pago"}

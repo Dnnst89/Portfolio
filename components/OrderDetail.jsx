@@ -33,14 +33,13 @@ export default function OrderDetail() {
     ],
   });
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [getOrders] = useLazyQuery(GET_USER_ORDERS, {
     fetchPolicy: "network-only", // Forzar la consulta directa al servidor
   });
   useEffect(() => {
     const userStorage = JSON.parse(localStorage.getItem("userData"));
     const userId = userStorage?.user?.id;
-    console.log(userId)
     const getOrdersInfo = async (id, page, pageSize) => {
 
       try {
@@ -54,7 +53,6 @@ export default function OrderDetail() {
             pageSize,
           },
         });
-        console.log("data: ", data)
         if (data) {
 
           const pagination = data?.orderDetails?.meta.pagination //es un objeto con la informacion de paginacion
@@ -111,14 +109,18 @@ export default function OrderDetail() {
   }
 
   if (loading) {
-    return <div><Spinner /></div>;
+    return <div className="  flex flex-col items-center h-fit col-span-12 mx-3  md:col-span-8">
+      <h1 className="flex justify-center mt-3 text-xl  md:col-span-12">Cargando</h1>
+      <Spinner />
+    </div>;
   }
 
   return (
     <div className="bg-resene  flex flex-col items-center h-fit col-span-12 mx-3  md:col-span-8">
+
       <h1 className="flex justify-center mt-3 text-xl  md:col-span-12">Tus pedidos</h1>
       <div className="p-4 h-auto grid grid-cols-12 gap-4 pt-5 w-full">
-        {userData.order[0].ref !== 0 ? userData.order.map((order) => (
+        {userData.order.length > 0 ? userData.order.map((order) => (
           <div key={order.ref} className="bg-resene col-span-4 w-full ">
             <section
               className="bg-floralwhite flex flex-col items-center border-2 border-dashed 

@@ -12,7 +12,6 @@ import { MdOutlineDeleteForever } from "react-icons/md";
 const DeleteCartItemBtn = ({ idItem, qtyItem }) => {
   const dispatch = useDispatch()
   const { user } = useStorage();
-
   const {
     items,
     quantity,
@@ -22,22 +21,32 @@ const DeleteCartItemBtn = ({ idItem, qtyItem }) => {
   const [deleteCartItem] = useMutation(DELETE_CART_ITEM_MUTATION, {
   });
 
+  useEffect(() => {
+    dispatch(updateQtyItems(quantity - qtyItem))// se hace este dispatch para que el useCartSummary sepa cuanta cantidad hay, y si cambia vuelva a renderizar
+  }, [])
+
+
+
   const handleDelete = () => {
     deleteCartItem({ variables: { id: idItem } })
       .then((response) => {
         // Manejar la respuesta de la mutación aquí, si es necesario
-        dispatch(updateQtyItems(quantity - qtyItem))//actualiza la cantidad de items en el state
+        dispatch(updateQtyItems(quantity - qtyItem))//actualiza la cantidad de items en el state para que useCartSummary vuelva arenderizar
 
         toast.success('Se ha eliminado un producto');
+        console.log(qtyItem)
       })
       .catch((error) => {
         // Manejar errores de la mutación aquí
         toast.error('Ha sucedido un error');
       });
+
+
+
   };
   return (
-    <><Toaster />
-      <button className="ml-3 text-3xl col-span-6 grid content-center justify-center" onClick={handleDelete}>
+    <>
+      <button className="ml-3 text-3xl md:col-span-6 grid content-center justify-center" onClick={handleDelete}>
         {/* <BiX /> */}
         <MdOutlineDeleteForever color="#FB82AF" size={40}></MdOutlineDeleteForever>
       </button> </>

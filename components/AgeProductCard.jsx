@@ -30,7 +30,7 @@ const AgeProductCard = ({ id, name, defaultPrice, coverImage, brand }) => {
       </div>
 
       <div className="px-4 pb-5">
-        <h5 className="md:h-[40px]   text-[10px] md:text-base   font-semibold  leading-3 tracking-normal mt-2 tracking-tight text-[#484848] dark:text-white w-6/7"
+        <h5 className="md:h-[40px]   text-[10px] md:text-base   font-semibold  leading-3 tracking-normal mt-2 tracking-tight text-[#484848] w-6/7"
         >
           {name}
         </h5>

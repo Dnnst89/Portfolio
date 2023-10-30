@@ -28,6 +28,7 @@ const CartDetail = ({
   });
 
   useEffect(() => {
+    console.log(quantity)
     getTaxCost();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -40,7 +41,13 @@ const CartDetail = ({
       loading: true,
     }));
     try {
-      if (!items.length) return;
+      if (!items.length) {// si no hay items se pone por default todo en 0
+        setAmounts((prev) => ({
+          ...prev,
+          total: 0,
+          tax: 0,
+        }));
+      };
       const token = await getAccessToken();
       const formatedItems = formatTaxData(items);
       const body = {
@@ -54,13 +61,13 @@ const CartDetail = ({
       );
       setAmounts((prev) => ({
         ...prev,
-        total: data?.billSummary?.totalDocument,
-        tax: data?.billSummary?.totalTax,
+        total: parseFloat(data?.billSummary?.totalDocument.toFixed(2)),
+        tax: parseFloat(data?.billSummary?.totalTax.toFixed(2)),
       }));
       if (isCheckout) {
         onChange({
-          total: data?.billSummary?.totalDocument,
-          taxes: data?.billSummary?.totalTax,
+          total: parseFloat(data?.billSummary?.totalDocument.toFixed(2)),
+          taxes: parseFloat(data?.billSummary?.totalTax.toFixed(2)),
           subTotal,
         });
       }
@@ -93,7 +100,7 @@ const CartDetail = ({
         </div> */}
           <div className="flex justify-between ">
             <p>Subtotal:</p>
-            <p className="text-grey-100">${subTotal}</p>
+            <p className="text-grey-100">${subTotal.toFixed(2)}</p>
           </div>
           <div className="flex justify-between border-dashed border-grey-200 border-b-[2px] pb-3">
             <p>Costo de envío:</p>

@@ -48,7 +48,7 @@ const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId,
                         .catch((error) => {
                             // Manejar errores de la mutación aquí
                             console.log(error)
-                            toast.error('Ha sucedido un error:' + error);
+                            toast.error('Ha sucedido un error');
                         });
                 }
 
@@ -73,7 +73,7 @@ const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId,
                         })
                         .catch((error) => {
                             // Manejar errores de la mutación aquí
-                            toast.error("Ha sucedido un error: " + error);
+                            toast.error("Ha sucedido un error");
                         });
                 } else {
                     toast.error("Lo sentimos, no tenemos suficiente stock para este producto")
@@ -87,20 +87,7 @@ const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId,
     return (
         <div>
             {" "}
-            <Toaster
-                toastOptions={{
-                    success: {
-                        style: {
-                            background: "#67C3AD",
-                        },
-                    },
-                    error: {
-                        style: {
-                            background: "#f87171",
-                        },
-                    },
-                }}
-            />
+
             <button className="text-white text-sm" onClick={handleAdd}>
                 Agregar al carrito
             </button>

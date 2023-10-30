@@ -11,7 +11,7 @@ function RelatedItems({ categories, productId }) {
     variables: { category },
   });
 
-  if (loading) return 'Loading...'
+  if (loading) return 'Cargando...'
   if (error) return toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
     autoClose: 5000
   })

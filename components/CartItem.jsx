@@ -19,7 +19,7 @@ const CartItem = ({ cartItemId, idVariant, productName, brand, description, colo
 
     return (<>
         <div className="grid grid-cols-12 w-full py-3 border-dashed border-grey-200 border-b-[2px]">
-            <section className="grid grid-cols-12 col-span-4">
+            <section className="grid grid-cols-12 col-span-12 md:col-span-4">
                 <div className="grid grid-cols-12 col-span-12 items-center">
                     {images.length > 0 ?
                         <CarouselImages images={images} widthImg={140} heightImg={140} classStyle={'rounded-2xl col-span-6'} />
@@ -39,7 +39,7 @@ const CartItem = ({ cartItemId, idVariant, productName, brand, description, colo
                     </div>
                 </div>
             </section>
-            <div className='col-span-3'>
+            <div className='col-span-12 m-auto md:col-span-3'>
                 {error.some((item) => item === idVariant) ? (
                     <p className="animate-shake-x text-red-500 text-orange">
                         * Stock Insuficiente
@@ -49,9 +49,8 @@ const CartItem = ({ cartItemId, idVariant, productName, brand, description, colo
                     <CartQuantityBtn quantityCartItem={quantityCartItem} stock={stockVariant} idCartItem={cartItemId} loading={loading} /> {/* Puedes ajustar el límite según tus necesidades */}
                 </div>
             </div>
-
-            <section className="grid grid-cols-12 col-span-5 ">
-                <div className='grid grid-cols-6 col-span-6 place-content-center '>
+            <section className="grid grid-cols-12 col-span-12 md:col-span-5 ">
+                <div className='grid grid-cols-6 col-span-10 md:col-span-6 place-content-center '>
                     <span className='text-xs mx-2 col-start-2 col-span-6'>Precio Unitario: ${price.toFixed(2)}</span>
 
                     <span className='mx-2 font-bold col-start-2 col-span-6'>Precio Total: ${totalPrice.toFixed(2)}</span>

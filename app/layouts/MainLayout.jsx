@@ -40,27 +40,27 @@ const MainLayout = ({ children }) => {
             }
           />
           <GiftIdeasCard
-            ageRange={"2-4"}
+            ageRange={"2-3"}
             image={wood}
-            age={"De 2 a 4 años"}
+            age={"De 2 a 3 años"}
             button={"bg-lightblue rounded-lg text-white p-2 font-['GrandStander'] text-sm md:text-xl pr-4 pl-4 mb-5"}
             border={
               "bg-white rounded-[15px] transition-transform transform hover:scale-105 duration-1000 hover:cursor-pointer border-2 border-lightblue"
             }
           />
           <GiftIdeasCard
-            ageRange={"4-6"}
+            ageRange={"4-5"}
             image={brush}
-            age={"De 4 a 6 años"}
+            age={"De 4 a 5 años"}
             button={"bg-yellow-200 rounded-lg text-white p-2 font-['GrandStander'] text-sm md:text-xl pr-4 pl-4 mb-5"}
             border={
               "bg-white rounded-[15px] transition-transform transform hover:scale-105 duration-1000 hover:cursor-pointer border-2 border-yellow-200"
             }
           />
           <GiftIdeasCard
-            ageRange={"6-8"}
+            ageRange={"6-7"}
             image={guitar}
-            age={"De 6 a 8 años"}
+            age={"De 6 a 7 años"}
             button={"bg-pink-200 rounded-lg text-white p-2 font-['GrandStander'] text-sm md:text-xl pr-4 pl-4 mb-5"}
             border={
               "bg-white rounded-[15px] transition-transform transform hover:scale-105 duration-1000 hover:cursor-pointer border-2 border-pink-200"

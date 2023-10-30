@@ -2,25 +2,24 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { LOGIN_MUTATION } from "@/src/graphQl/queries/LoginSession";
 import { useMutation, useQuery } from "@apollo/client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
 import { setUser } from "@/redux/features/authSlice";
 import ErrorForm from "./ErrorForm";
 import toast, { Toaster } from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import CheckOutHeader from "./CheckoutHeader";
 import Link from "next/link";
-
+import { useRouter } from "next/navigation";
 const SignupSchema = Yup.object().shape({
   identifier: Yup.string().required("Este campo es requerido"),
   password: Yup.string().required("Este campo es requerido"),
 });
 
 const LoginForm = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const authUser = useSelector((state) => state.auth.user);
-  const router = useRouter();
   const [loginMutation, { data: loginData }] = useMutation(LOGIN_MUTATION);
   const [passwordVisible, setPasswordVisible] = useState(false); // State to track password visibility
 
@@ -53,13 +52,15 @@ const LoginForm = () => {
           isAuthenticated: true,
         })}`;
 
-        toast.success("Ingreso exitoso!", {
-          duration: 4000,
+        toast.success("Inicio de sesión exitoso!", {
+          duration: 3000,
         });
-        router.push("/");
+        setTimeout(() => {
+          router.push("/");
+        }, 3000);
       }
     } catch (error) {
-      toast.error(`Credenciales incorrectas, intenta nuevamente.`, {
+      toast.error(`Credenciales incorrectas, intentalo nuevamente.`, {
         duration: 4000,
       });
     } finally {
@@ -71,26 +72,7 @@ const LoginForm = () => {
     <div className="h-screen ">
       <CheckOutHeader regresar={"/"} />
       <div className=" flex justify-center items-center">
-        <Toaster
-          containerStyle={{
-            top: 150,
-            left: 20,
-            bottom: 20,
-            right: 20,
-          }}
-          toastOptions={{
-            success: {
-              style: {
-                background: "#67C3AD",
-              },
-            },
-            error: {
-              style: {
-                background: "#f87171",
-              },
-            },
-          }}
-        />
+        <Toaster />
         <div className="w-full">
           <Formik
             initialValues={{
@@ -106,12 +88,12 @@ const LoginForm = () => {
                   <h1 className=" text-3xl flex justify-center items-center mb-10 col-span-12 ">
                     Iniciar sesión
                   </h1>
-                  <div className="bg-resene  pt-10 w-full flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-3 col-span-8">
+                  <div className="bg-resene  pt-10 w-full flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-2 col-span-10 md:col-start-3 md:col-span-8">
                     <div className="flex grid w-full">
-                      <section className="p-3 w-10/12 m-auto grid grid-cols-12 gap-5">
-                        <div className="grid col-span-12 md:col-span-12 w-2/4 m-auto">
+                      <section className="p-3 md:w-10/12 m-auto grid grid-cols-12 gap-5">
+                        <div className="grid col-span-12 md:col-start-4 md:col-span-6 md:w-full">
                           <label
-                            className="text-lg whitespace-nowrap"
+                            className="text-lg whitespace-nowrap w-full"
                             htmlFor="identifier"
                           >
                             Usuario o Correo Electrónico
@@ -128,8 +110,8 @@ const LoginForm = () => {
                             <ErrorForm>{errors.identifier}</ErrorForm>
                           ) : null}
                         </div>
-                        <div className="grid col-span-12 md:col-span-12 w-2/4 m-auto">
-                          <label className="text-lg" htmlFor="password">
+                        <div className="grid col-span-12 md:col-start-4 md:col-span-6 md:w-full">
+                          <label className="text-lg whitespace-nowrap w-full" htmlFor="password">
                             Contraseña
                             <span className="text-pink-200 ml-1">*</span>
                           </label>
@@ -137,7 +119,8 @@ const LoginForm = () => {
                             type={passwordVisible ? "text" : "password"}
                             id="password"
                             name="password"
-                            className="focus:border-blue-500 outline-none w-full px-6 py-2 mb-2 border-2 border-grey-200 flex rounded-xl "
+                            className="focus:border-blue-500 outline-none w-full px-6 py-2
+                            rounded-xl border-2 border-grey-200"
                           />
                           {values.password.trim() === "" ? (
                             ""
@@ -147,7 +130,7 @@ const LoginForm = () => {
                               onClick={() =>
                                 setPasswordVisible(!passwordVisible)
                               }
-                              className="absolute right-6 top-11 cursor-pointer "
+                              className="absolute right-6 top-10 cursor-pointer "
                             >
                               {passwordVisible ? (
                                 <FaEye color="#FB82AF" />
@@ -157,14 +140,14 @@ const LoginForm = () => {
                             </button>
                           )}
                         </div>
-                        <p className="text-center text-sm hover:underline cursor-pointer text-lightblue mb-3 grid col-span-12 md:col-span-12 w-2/4 m-auto">
+                        <p className="text-center text-sm hover:underline cursor-pointer text-lightblue mb-3 grid col-span-12 md:col-span-12 md:w-2/4 m-auto">
                           <Link href="http://detinmarin.s3-website-us-west-2.amazonaws.com/forgotPassword/">
                             Recuperar contraseña
                           </Link>
                         </p>
                         <button
                           type="submit"
-                          className="rounded-lg py-2 px-5 flex justify-center mx-auto transition-colors w-1/3 text-lg text-white bg-pink-200 disabled:opacity-50 whitespace-nowrap mb-5 grid col-span-12 md:col-span-12 w-1/4 m-auto"
+                          className="rounded-lg py-2 px-5 flex justify-center mx-auto transition-colors md:w-1/3 text-lg text-white bg-pink-200 disabled:opacity-50 whitespace-nowrap mb-5 grid col-span-12 md:col-span-12 md:w-1/4 m-auto"
                           disabled={
                             Object.keys(errors).length &&
                             Object.keys(touched).length
