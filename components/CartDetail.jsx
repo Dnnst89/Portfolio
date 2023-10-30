@@ -103,7 +103,7 @@ const CartDetail = ({
         </div> */}
           <div className="flex justify-between ">
             <p>Subtotal:</p>
-            <p className="text-grey-100">${subTotal}</p>
+            <p className="text-grey-100">${subTotal.toFixed(2)}</p>
           </div>
           <div className="flex justify-between border-dashed border-grey-200 border-b-[2px] pb-3">
             <p>Costo de envío:</p>
