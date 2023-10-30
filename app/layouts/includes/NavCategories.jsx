@@ -42,7 +42,10 @@ const NavCategories = () => {
                 key={item.id}
                 className="px-3 hover:underline font-bold cursor-grab flex justify-center items-center"
               >
-                <a href={`/results?query=${item.name}`} className="w-max"> {item.name}</a>
+                <a href={`/results?query=${item.name}`} className="w-max">
+                  {" "}
+                  {item.name}
+                </a>
               </li>
             ))}
         </ul>

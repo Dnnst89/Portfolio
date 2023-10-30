@@ -35,7 +35,8 @@ const CartDetail = ({
   }, [quantity]);
 
   const getTaxCost = async () => {
-    setAmounts((prev) => ({ //mientras obtiene los taxes pone a cargar el loading
+    setAmounts((prev) => ({
+      //mientras obtiene los taxes pone a cargar el loading
       ...prev,
       loading: true,
     }));
@@ -71,24 +72,20 @@ const CartDetail = ({
         });
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     } finally {
       setAmounts((prev) => ({
         ...prev,
         loading: false,
       }));
     }
-
   };
-
 
   return (
     <div className="p-3 md:space-y-3">
       <h1 className=" flex justify-center">{detailTitle}</h1>
       {!loading && !amounts.loading ? (
         <>
-
-
           <div className="flex justify-between ">
             <p className="whitespace-nowrap ">N° artículos</p>
             <p className="text-grey-100">{quantity}</p>
