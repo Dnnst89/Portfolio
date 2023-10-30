@@ -273,13 +273,13 @@ export default function ThankYouMessage() {
 
   return paymentId ? (
     <div className="bg-floralwhite p-[100px] flex justify-center">
-      <main className="bg-resene border-2 border-dashed border-grey-200 flex flex-col justify-center h-auto p-10">
-        <section className="flex justify-center">
+      <main className="bg-resene border-2 border-dashed border-grey-200 grid md:flex md:flex-col justify-center h-auto p-10">
+        <section className="grid md:flex justify-center ">
           <figure>
             <Image
               src={logo}
               alt="Detinmarin logo"
-              style={{ width: "390px", height: "170px" }}
+              style={{ width: "auto", height: "170px" }}
             />
           </figure>
 
