@@ -69,7 +69,7 @@ const RegisterFormTwo = () => {
       const { data } = await createUser({
         variables: { username, email, password },
       });
-      dispatch(setUser(data.register.user));
+      //dispatch(setUser(data.register.user));
       const { data: dataSession } = await createShoppingSession({
         //query para crear la session al user
         variables: {
@@ -77,12 +77,9 @@ const RegisterFormTwo = () => {
           userId: data.register.user.id,
         },
       });
-      toast.success(
-        "Registro exitoso, hemos enviado un correo de confirmación.",
-        {
-          duration: 4000,
-        }
-      );
+      toast.success(`Hemos enviado un correo electrónico de confirmación.`, {
+        duration: 5000,
+      });
       dispatch(updateShoppingSession(dataSession.createShoppingSession.data)); //ACTUALIZO LA SESSION CON LOS DATOS OBTENIDOS
     } catch (error) {
       toast.error(

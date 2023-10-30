@@ -10,13 +10,14 @@ import toast, { Toaster } from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import CheckOutHeader from "./CheckoutHeader";
 import Link from "next/link";
-
+import { useRouter } from "next/navigation";
 const SignupSchema = Yup.object().shape({
   identifier: Yup.string().required("Este campo es requerido"),
   password: Yup.string().required("Este campo es requerido"),
 });
 
 const LoginForm = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const authUser = useSelector((state) => state.auth.user);
   const [loginMutation, { data: loginData }] = useMutation(LOGIN_MUTATION);
@@ -51,9 +52,12 @@ const LoginForm = () => {
           isAuthenticated: true,
         })}`;
 
-        toast.success("Inicio de cesión exitoso!", {
-          duration: 4000,
+        toast.success("Inicio de sesión exitoso!", {
+          duration: 3000,
         });
+        setTimeout(() => {
+          router.push("/");
+        }, 3000);
       }
     } catch (error) {
       toast.error(`Credenciales incorrectas, intentalo nuevamente.`, {
