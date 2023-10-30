@@ -12,6 +12,8 @@ import GET_CART_ITEMS_LIST_SHOPPING_SESSION from "@/src/graphQl/queries/getCartI
 import GET_SHOPPING_SESSION_BY_USER from "@/src/graphQl/queries/getShoppingSessionByUser";
 import DELETE_CART_ITEM_MUTATION from "@/src/graphQl/queries/deleteCartItem";
 import { GET_PAYMENT_DETAIL } from "@/src/graphQl/queries/getPaymentDetail";
+import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
+//import { GET_CONSECUTIVE_NUMBER } from "@/src/graphQl/queries/getConsecutiveNumber";
 import UPDATE_VARIANT_STOCK from "@/src/graphQl/queries/updateVariantStock";
 import useCartSummary from "@/hooks/useCartSummary";
 import useProtectionRoute from "@/hooks/useProtectionRoute";
@@ -24,9 +26,11 @@ import {
   formatItemInvoice,
   createKey,
   createConsecutiveNumber,
-  createConsecutiveKey,
   InvoiceInformation,
+  validateID,
+  formatBillSumary,
 } from "@/helpers";
+
 import { facturationInstace } from "@/src/axios/algoliaIntance/config";
 import GET_ORDER_ITEMS_BY_ORDER_ID from "@/src/graphQl/queries/getOrderItemsByOrderId";
 import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
@@ -52,8 +56,10 @@ export default function ThankYouMessage() {
   const [deleteCarItem] = useMutation(DELETE_CART_ITEM_MUTATION);
   const [updateVariantStock] = useMutation(UPDATE_VARIANT_STOCK);
   const [createOrder] = useMutation(CREATE_ORDER);
+  // const [getConsecutiveNumber] = useMutation(GET_CONSECUTIVE_NUMBER);
   const [createOrderItem] = useMutation(CREATE_ORDER_ITEM_MUTATION);
   const [getPaymentDetail] = useLazyQuery(GET_PAYMENT_DETAIL);
+  const [getPaymentDetails] = useLazyQuery(GET_PAYMENT_DETAILS);
   const [getOrderItemsByOrderId] = useLazyQuery(GET_ORDER_ITEMS_BY_ORDER_ID);
   const [getStoreInformation] = useLazyQuery(GET_STORE_INFO);
 
@@ -155,7 +161,6 @@ export default function ThankYouMessage() {
           });
           const orderNumber = data?.createOrderDetail?.data?.id;
           setOrderId(orderNumber);
-          console.log("tttt", orderId);
           const orderItems = await creatingOrderItems(orderNumber);
           handleCartItems();
           await createInvoice(orderNumber, orderItems);
@@ -231,16 +236,23 @@ export default function ThankYouMessage() {
   };
   ////////////////////////////////FUNCION PARA CREAR LA FACTURA ELECTRONICA//////////////////////////////
   const createInvoice = async (orderId) => {
-    const key = createKey(1, "3101491212");
+    //  const key = createKey(1, "3101491212");
     try {
       const PaymentDetail = await getPaymentDetail({
         variables: {
           paymentId: paymentId,
         },
       });
-      // console.log("first", data);
+
       const required =
         PaymentDetail.data.paymentDetail.data.attributes.invoiceRequired;
+      const billSummary = {
+        total: PaymentDetail?.data?.paymentDetail?.data?.attributes?.total,
+        subtotal:
+          PaymentDetail?.data?.paymentDetail?.data?.attributes?.subtotal,
+        taxes: PaymentDetail?.data?.paymentDetail?.data?.attributes?.taxes,
+      };
+      //console.log("iiiiiiiii", billSummary);
       if (required) {
         try {
           const { data } = await getOrderItemsByOrderId({
@@ -248,6 +260,7 @@ export default function ThankYouMessage() {
               orderId: orderId,
             },
           });
+
           const resultado =
             data?.orderDetail?.data?.attributes.order_items?.data;
 
@@ -267,8 +280,9 @@ export default function ThankYouMessage() {
 
             const imp = feeResult?.data?.serviceDetail?.lineDetails;
             const inv = formatItemInvoice(resultado, imp);
+
             try {
-              /* const store = {
+              /*const store = {
                 accountId: "de7a8bf8-63d4-427e-99ce-5870c2ffc338",
                 name: "Félix Ojeda Ortiz",
                 type: "03",
@@ -281,27 +295,81 @@ export default function ThankYouMessage() {
                 otherSigns: "Monserrat",
                 email: "yoloyulios@gmail.com",
                 ActivityCode: "721001",
-              };*/
+              };
+              */
               const result = await getStoreInformation({
                 variables: {
                   id: 1,
                 },
               });
+
+              const paymentUser = await getPaymentDetails({
+                variables: {
+                  userId: userId,
+                },
+              });
+
+              const cliente =
+                paymentUser?.data?.usersPermissionsUser?.data?.attributes
+                  ?.email;
+
+              const client = {
+                name:
+                  paymentUser?.data?.usersPermissionsUser?.data?.attributes
+                    ?.firstName +
+                  " " +
+                  paymentUser?.data?.usersPermissionsUser?.data?.attributes
+                    ?.lastName,
+                idType: validateID(
+                  paymentUser?.data?.usersPermissionsUser?.data?.attributes
+                    ?.idCard?.idType
+                ),
+                idNumber:
+                  paymentUser?.data?.usersPermissionsUser?.data?.attributes
+                    ?.idCard?.idNumber,
+                email:
+                  paymentUser?.data?.usersPermissionsUser?.data?.attributes
+                    ?.email,
+              };
+              console.log("client", cliente);
+              console.log("client", client);
               const store = result?.data?.storeInformation?.data?.attributes;
-              //  console.log("store", store);
-              const key = createKey(1);
-              const consecutive = createConsecutiveNumber(1);
-              const formatedInvoice = InvoiceInformation(
-                store,
-                client,
-                key,
-                consecutive
-              );
+              //const number = await getConsecutiveNumber();
+              console.log("store", store);
+              const key = createKey(5, store.IdNumber);
+              const consecutive = createConsecutiveNumber(5);
+
               const bodyInvoice = {
                 accountId: store.accountId,
-                document: { formatedInvoice },
+                document: {
+                  ...InvoiceInformation(store, client, key, consecutive),
+                  serviceDetail: {
+                    lineDetails: [...inv],
+                  },
+                  otherCharges: [],
+                  billSummary: {
+                    ...formatBillSumary(billSummary, "1.000", "CRC"),
+                  },
+                  referenceInformation: [],
+                  others: {
+                    textOthers: [],
+                  },
+                },
+                posTicket: false,
+                additionalInfo: {
+                  nameDoc: "Factura Electrónica",
+                  legendFooter:
+                    "Emitida conforme a lo establecido en la resolución de Facturación Electrónica, No.\\nDGT-R-033-2019 del 27 de junio de 2019 de la Dirección General de Tributación.",
+                  fileName: "155822450521-FE-" + consecutive,
+                },
+                returnCompleteAnswer: false,
               };
-              console.log("inv", formatedInvoice);
+              console.log("inv", bodyInvoice);
+              const InvoiceResult = await facturationInstace.post(
+                `document/electronic-invoice?access_token=${token}`,
+                bodyInvoice
+              );
+              console.log("last", InvoiceResult);
             } catch (error) {}
           } catch (error) {}
         } catch (error) {

@@ -80,6 +80,31 @@ const createKey = (number, id) => {
     return key;
   }
 };
+const validateID = (tipo) => {
+  if (tipo === "Física") {
+    return "1";
+  } else return "3";
+};
+const formatBillSumary = (billSummary, exchangeRate, currencyCode) => {
+  return {
+    codeTypeCurrency: {
+      currencyCode: currencyCode,
+      exchangeRate: exchangeRate,
+    },
+
+    totalTaxedServices: "" + billSummary.taxes,
+    totalExentServices: "0.00000",
+    totalTaxedMerch: "0.00000",
+    totalExentMerch: "0.00000",
+    totalTaxed: "" + billSummary.taxes,
+    totalExent: "0.00000",
+    totalSale: "51172.00000",
+    totalDiscount: "0.00000",
+    totalNetSale: "" + billSummary.subTotal,
+    totalTax: "" + billSummary.taxes,
+    totalDocument: "" + billSummary.total,
+  };
+};
 
 const createConsecutiveNumber = (number) => {
   var consecutiveNumber = "0010000101";
@@ -112,41 +137,47 @@ const createConsecutiveNumber = (number) => {
 
 const formatItemInvoice = (items, imp) => {
   var cont = -1;
-  console.log("gggg", imp[0].taxes[0]);
-  console.log("tttt", imp[1].taxes[0]);
   console.log("items", items);
   console.log("imp", imp);
   if (!items?.length) return [];
   return items?.map((item) => {
-    console.log("sasdfasf");
     console.log("cont", cont);
     cont = cont + 1;
     return {
       lineNumber: cont + 1,
-      code: item?.attributes?.variant?.data?.attributes?.product?.data?.attributes?.cabys?.toString(),
-      qty: item?.attributes?.quantity,
+      code:
+        "" +
+        item?.attributes?.variant?.data?.attributes?.product?.data?.attributes?.cabys?.toString(),
+      qty: "" + item?.attributes?.quantity,
       measurementUnit: "Sp",
       commercialMeasurementUnit: "SP",
       detail: "Servicios Postales",
-      unitaryPrice: item?.attributes?.variant?.data?.attributes?.price,
-      totalAmount: 2,
-      subTotal: 1,
+      unitaryPrice: "" + item?.attributes?.variant?.data?.attributes?.price,
+      totalAmount:
+        "" +
+        item?.attributes?.quantity *
+          item?.attributes?.variant?.data?.attributes?.price,
+      subTotal:
+        "" +
+        item?.attributes?.quantity *
+          item?.attributes?.variant?.data?.attributes?.price,
       taxes: [
         {
-          code: imp[cont].taxes[0].code,
-          codeFee: imp[cont].taxes[0].codeFee,
-          fee: imp[cont].taxes[0].fee,
-          VATFactor: imp[cont].taxes[0].vatfactor,
-          amount: imp[cont].taxes[0].amount,
+          code: "" + imp[cont].taxes[0].code,
+          codeFee: "" + imp[cont].taxes[0].codeFee,
+          fee: "" + imp[cont].taxes[0].fee,
+          VATFactor: "" + imp[cont].taxes[0].vatfactor,
+          amount: "" + imp[cont].taxes[0].amount,
         },
       ],
-      netTax: imp[cont].taxes[0].amount,
-      lineTotalAmount: imp[cont].lineTotalAmount,
+      netTax: "" + imp[cont].taxes[0].amount,
+      lineTotalAmount: "" + imp[cont].lineTotalAmount,
     };
   });
 };
 const InvoiceInformation = (store, client, key, consecutive) => {
   const isoDate = new Date().toISOString();
+  console.log("first");
   return {
     key: key,
     activityCode: store.ActivityCode,
@@ -155,8 +186,8 @@ const InvoiceInformation = (store, client, key, consecutive) => {
     issuer: {
       name: store.name,
       id: {
-        type: store.idType,
-        number: store.idNumber,
+        type: "" + store.IdType,
+        number: "" + store.IdNumber,
       },
       commercialName: store.ComercialName,
       address: {
@@ -172,9 +203,9 @@ const InvoiceInformation = (store, client, key, consecutive) => {
       name: client.name,
       id: {
         type: client.idType,
-        number: client.idNumber,
+        number: "" + client.idNumber,
       },
-      email: client,
+      email: client.email,
     },
     saleCondition: "01",
     creditTerm: "0",
@@ -190,4 +221,6 @@ export {
   createConsecutiveKey,
   createKey,
   InvoiceInformation,
+  validateID,
+  formatBillSumary,
 };
