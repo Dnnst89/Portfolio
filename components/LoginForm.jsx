@@ -88,12 +88,12 @@ const LoginForm = () => {
                   <h1 className=" text-3xl flex justify-center items-center mb-10 col-span-12 ">
                     Iniciar sesión
                   </h1>
-                  <div className="bg-resene  pt-10 w-full flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-3 col-span-8">
+                  <div className="bg-resene  pt-10 w-full flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-2 col-span-10 md:col-start-3 md:col-span-8">
                     <div className="flex grid w-full">
-                      <section className="p-3 w-10/12 m-auto grid grid-cols-12 gap-5">
-                        <div className="grid col-span-12 md:col-span-12 w-2/4 m-auto">
+                      <section className="p-3 md:w-10/12 m-auto grid grid-cols-12 gap-5">
+                        <div className="grid col-span-12 md:col-start-4 md:col-span-6 md:w-full">
                           <label
-                            className="text-lg whitespace-nowrap"
+                            className="text-lg whitespace-nowrap w-full"
                             htmlFor="identifier"
                           >
                             Usuario o Correo Electrónico
@@ -110,8 +110,8 @@ const LoginForm = () => {
                             <ErrorForm>{errors.identifier}</ErrorForm>
                           ) : null}
                         </div>
-                        <div className="relative grid col-span-12 md:col-span-12 w-2/4 m-auto">
-                          <label className="text-lg" htmlFor="password">
+                        <div className="grid col-span-12 md:col-start-4 md:col-span-6 md:w-full">
+                          <label className="text-lg whitespace-nowrap w-full" htmlFor="password">
                             Contraseña
                             <span className="text-pink-200 ml-1">*</span>
                           </label>
@@ -119,7 +119,8 @@ const LoginForm = () => {
                             type={passwordVisible ? "text" : "password"}
                             id="password"
                             name="password"
-                            className="focus:border-blue-500 outline-none w-full px-6 py-2 mb-2 border-2 border-grey-200 flex rounded-xl "
+                            className="focus:border-blue-500 outline-none w-full px-6 py-2
+                            rounded-xl border-2 border-grey-200"
                           />
                           {values.password.trim() === "" ? (
                             ""
@@ -139,14 +140,14 @@ const LoginForm = () => {
                             </button>
                           )}
                         </div>
-                        <p className="text-center text-sm hover:underline cursor-pointer text-lightblue mb-3 grid col-span-12 md:col-span-12 w-2/4 m-auto">
+                        <p className="text-center text-sm hover:underline cursor-pointer text-lightblue mb-3 grid col-span-12 md:col-span-12 md:w-2/4 m-auto">
                           <Link href="http://detinmarin.s3-website-us-west-2.amazonaws.com/forgotPassword/">
                             Recuperar contraseña
                           </Link>
                         </p>
                         <button
                           type="submit"
-                          className="rounded-lg py-2 px-5 flex justify-center mx-auto transition-colors w-1/3 text-lg text-white bg-pink-200 disabled:opacity-50 whitespace-nowrap mb-5 grid col-span-12 md:col-span-12 w-1/4 m-auto"
+                          className="rounded-lg py-2 px-5 flex justify-center mx-auto transition-colors md:w-1/3 text-lg text-white bg-pink-200 disabled:opacity-50 whitespace-nowrap mb-5 grid col-span-12 md:col-span-12 md:w-1/4 m-auto"
                           disabled={
                             Object.keys(errors).length &&
                             Object.keys(touched).length
