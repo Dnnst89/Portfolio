@@ -31,31 +31,37 @@ const formatTaxData = (items) => {
   });
 };
 
-const createConsecutiveKey = (number) => {
+const createConsecutiveKey = () => {
   var validateFormat = "00000001";
-  if (number < 10 && number > 0) {
-    validateFormat = "0000000" + number;
-  } else if (number < 100 && number > 9) {
-    validateFormat = "000000" + number;
-  } else if (number < 1000 && number > 99) {
-    validateFormat = "00000" + number;
-  } else if (number < 10000 && number > 999) {
-    validateFormat = "0000" + number;
-  } else if (number < 100000 && number > 9999) {
-    validateFormat = "000" + number;
-  } else if (number < 1000000 && number > 99999) {
-    validateFormat = "00" + number;
-  } else if (number < 10000000 && number > 999999) {
-    validateFormat = "0" + number;
+  const number = Math.round(Math.random() * 100000000);
+  const random = parseInt(number);
+  if (random < 10 && random > 0) {
+    validateFormat = "0000000" + random;
+  } else if (random < 100 && random > 9) {
+    validateFormat = "000000" + random;
+  } else if (random < 1000 && random > 99) {
+    validateFormat = "00000" + random;
+  } else if (random < 10000 && random > 999) {
+    validateFormat = "0000" + random;
+  } else if (random < 100000 && random > 9999) {
+    validateFormat = "000" + random;
+  } else if (number < 1000000 && random > 99999) {
+    validateFormat = "00" + random;
+  } else if (random < 10000000 && random > 999999) {
+    validateFormat = "0" + random;
   } else {
-    validateFormat = "" + number;
+    validateFormat = "" + random;
   }
+
+  console.log("consecutiveKey", validateFormat);
+
   if (number != null) {
     return validateFormat;
   } else return "00000001";
 };
 
 const createKey = (number, id) => {
+  // console.log("security", securityCode());
   if (number != null) {
     const date = new Date();
     var day = "";
@@ -72,11 +78,15 @@ const createKey = (number, id) => {
     }
     const isoDate = new Date().getFullYear().toString();
     const year = isoDate.slice(-2);
-    const clave = createConsecutiveKey(number);
+    const clave = createConsecutiveKey();
     const consecutive = createConsecutiveNumber(number);
     const situation = "1";
+    console.log("clave", clave);
     const key =
-      "506" + day + month + year + "00" + id + consecutive + situation + clave;
+      "506" + day + month + year + id + consecutive + situation + clave;
+    //console.log("keys", keys);
+    //const key = "50611052315582245052100200001010000001158183568230";
+
     return key;
   }
 };
@@ -100,7 +110,7 @@ const formatBillSumary = (billSummary, exchangeRate, currencyCode) => {
     totalExent: "0.00000",
     totalSale: "51172.00000",
     totalDiscount: "0.00000",
-    totalNetSale: "" + billSummary.subTotal,
+    totalNetSale: "" + billSummary.subtotal,
     totalTax: "" + billSummary.taxes,
     totalDocument: "" + billSummary.total,
   };

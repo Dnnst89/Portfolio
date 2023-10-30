@@ -13,6 +13,7 @@ import GET_SHOPPING_SESSION_BY_USER from "@/src/graphQl/queries/getShoppingSessi
 import DELETE_CART_ITEM_MUTATION from "@/src/graphQl/queries/deleteCartItem";
 import { GET_PAYMENT_DETAIL } from "@/src/graphQl/queries/getPaymentDetail";
 import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
+import { GET_CONSECUTIVE_NUMBER } from "@/src/graphQl/queries/getConsecutiveNumber";
 //import { GET_CONSECUTIVE_NUMBER } from "@/src/graphQl/queries/getConsecutiveNumber";
 import UPDATE_VARIANT_STOCK from "@/src/graphQl/queries/updateVariantStock";
 import useCartSummary from "@/hooks/useCartSummary";
@@ -34,6 +35,7 @@ import {
 import { facturationInstace } from "@/src/axios/algoliaIntance/config";
 import GET_ORDER_ITEMS_BY_ORDER_ID from "@/src/graphQl/queries/getOrderItemsByOrderId";
 import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
+import { CREATE_ELECTRONIC_INVOICE } from "@/src/graphQl/queries/createElectronicInvoice";
 
 /*
   recives the Tilopay response , based on the returns params 
@@ -56,7 +58,9 @@ export default function ThankYouMessage() {
   const [deleteCarItem] = useMutation(DELETE_CART_ITEM_MUTATION);
   const [updateVariantStock] = useMutation(UPDATE_VARIANT_STOCK);
   const [createOrder] = useMutation(CREATE_ORDER);
-  // const [getConsecutiveNumber] = useMutation(GET_CONSECUTIVE_NUMBER);
+  const [createElectronicInvoice] = useMutation(CREATE_ELECTRONIC_INVOICE);
+
+  const [getConsecutiveNumber] = useLazyQuery(GET_CONSECUTIVE_NUMBER);
   const [createOrderItem] = useMutation(CREATE_ORDER_ITEM_MUTATION);
   const [getPaymentDetail] = useLazyQuery(GET_PAYMENT_DETAIL);
   const [getPaymentDetails] = useLazyQuery(GET_PAYMENT_DETAILS);
@@ -94,8 +98,8 @@ export default function ThankYouMessage() {
       // Verificar si la URL tiene el parámetro "order" que es el id del paymentDetail
       setPaymentId(searchParams.get("order"));
     }
-    createInvoice(551);
-    // handleTilopayResponse();
+    // createInvoice(551);
+    handleTilopayResponse();
     // eslint-disablece en el enfoque react-hooks/exhaustive-deps
   }, [loading]);
 
@@ -252,7 +256,7 @@ export default function ThankYouMessage() {
           PaymentDetail?.data?.paymentDetail?.data?.attributes?.subtotal,
         taxes: PaymentDetail?.data?.paymentDetail?.data?.attributes?.taxes,
       };
-      //console.log("iiiiiiiii", billSummary);
+      // console.log("iiiiiiiii", billSummary);
       if (required) {
         try {
           const { data } = await getOrderItemsByOrderId({
@@ -334,10 +338,20 @@ export default function ThankYouMessage() {
               console.log("client", cliente);
               console.log("client", client);
               const store = result?.data?.storeInformation?.data?.attributes;
-              //const number = await getConsecutiveNumber();
+
+              const number = await getConsecutiveNumber({
+                variables: {
+                  page: 1,
+                  pageSize: 1,
+                },
+              });
+              const InvoiceNumber =
+                number?.data?.electronicInvoices?.data[0]?.attributes
+                  ?.consecutive;
+              //console.log("number consecutive", InvoiceNumber);
               console.log("store", store);
-              const key = createKey(5, store.IdNumber);
-              const consecutive = createConsecutiveNumber(5);
+              const key = createKey(InvoiceNumber, store.IdNumber);
+              const consecutive = createConsecutiveNumber();
 
               const bodyInvoice = {
                 accountId: store.accountId,
@@ -369,7 +383,37 @@ export default function ThankYouMessage() {
                 `document/electronic-invoice?access_token=${token}`,
                 bodyInvoice
               );
+
               console.log("last", InvoiceResult);
+              console.log("code", store.activityCode);
+              try {
+                const isoDate = new Date().toISOString();
+                const resulta = await getStoreInformation({
+                  variables: {
+                    id: 1,
+                  },
+                });
+                const activity = parseInt(
+                  resulta?.data?.storeInformation?.data?.attributes
+                    ?.ActivityCode
+                );
+                const keyInvoiceNumber = parseInt(key);
+                console.log("second", keyInvoiceNumber);
+
+                console.log("acasa", activity);
+                const invoiceId = await createElectronicInvoice({
+                  variables: {
+                    order: parseInt(orderId),
+                    consecutive: parseFloat(consecutive),
+                    keyInvoice: parseFloat(key),
+                    activityCode: activity,
+                    publishedAt: isoDate,
+                  },
+                });
+                console.log("idFactura", invoiceId);
+              } catch (error) {
+                console.log("firstssss", error);
+              }
             } catch (error) {}
           } catch (error) {}
         } catch (error) {
