@@ -18,9 +18,18 @@ import useProtectionRoute from "@/hooks/useProtectionRoute";
 import { CREATE_ORDER } from "@/src/graphQl/queries/createUserOrder";
 import CREATE_ORDER_ITEM_MUTATION from "@/src/graphQl/queries/createOrderItem";
 import { UPDATE_PAYMENT_DETAIL_STATUS } from "@/src/graphQl/queries/updatePaymentDetailStatus";
-import { getAccessToken, formatTaxData } from "@/helpers";
+import {
+  getAccessToken,
+  formatTaxData,
+  formatItemInvoice,
+  createKey,
+  createConsecutiveNumber,
+  createConsecutiveKey,
+  InvoiceInformation,
+} from "@/helpers";
 import { facturationInstace } from "@/src/axios/algoliaIntance/config";
 import GET_ORDER_ITEMS_BY_ORDER_ID from "@/src/graphQl/queries/getOrderItemsByOrderId";
+import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 
 /*
   recives the Tilopay response , based on the returns params 
@@ -46,6 +55,7 @@ export default function ThankYouMessage() {
   const [createOrderItem] = useMutation(CREATE_ORDER_ITEM_MUTATION);
   const [getPaymentDetail] = useLazyQuery(GET_PAYMENT_DETAIL);
   const [getOrderItemsByOrderId] = useLazyQuery(GET_ORDER_ITEMS_BY_ORDER_ID);
+  const [getStoreInformation] = useLazyQuery(GET_STORE_INFO);
 
   // const { user } = useStorage();
   // const { id } = user || {};
@@ -78,7 +88,8 @@ export default function ThankYouMessage() {
       // Verificar si la URL tiene el parámetro "order" que es el id del paymentDetail
       setPaymentId(searchParams.get("order"));
     }
-    handleTilopayResponse();
+    createInvoice(551);
+    // handleTilopayResponse();
     // eslint-disablece en el enfoque react-hooks/exhaustive-deps
   }, [loading]);
 
@@ -145,8 +156,9 @@ export default function ThankYouMessage() {
           const orderNumber = data?.createOrderDetail?.data?.id;
           setOrderId(orderNumber);
           console.log("tttt", orderId);
-          await creatingOrderItems(orderNumber);
+          const orderItems = await creatingOrderItems(orderNumber);
           handleCartItems();
+          await createInvoice(orderNumber, orderItems);
         } catch (error) {
           console.error("Error creating order:", error);
         }
@@ -163,7 +175,7 @@ export default function ThankYouMessage() {
     // me trae los items del carrito y los almaceno en la orden
     const isoDate = new Date().toISOString();
     if (orderId) {
-      items.map(async (item) => {
+      let orderItems = items.map(async (item) => {
         try {
           const variant = item?.attributes?.variant?.data; // Desestructuración aquí
           const variantAtt = variant?.attributes;
@@ -175,10 +187,13 @@ export default function ThankYouMessage() {
               orderDetailId: orderId,
             },
           });
+          return data?.OrderItemEntity?.data;
         } catch (error) {
           console.log("Error creating orderItem: ", error);
         }
       });
+      console.log(orderItems);
+      return orderItems;
     }
   };
 
@@ -213,26 +228,82 @@ export default function ThankYouMessage() {
     } else {
       await handleUpdatePayment("Cancelled");
     }
-    createInvoice();
   };
   ////////////////////////////////FUNCION PARA CREAR LA FACTURA ELECTRONICA//////////////////////////////
-  const createInvoice = async () => {
+  const createInvoice = async (orderId) => {
+    const key = createKey(1, "3101491212");
     try {
-      const { data } = await getPaymentDetail({
+      const PaymentDetail = await getPaymentDetail({
         variables: {
           paymentId: paymentId,
         },
       });
-      const required = data.paymentDetail.data.attributes.invoiceRequired;
+      // console.log("first", data);
+      const required =
+        PaymentDetail.data.paymentDetail.data.attributes.invoiceRequired;
       if (required) {
-        console.log("aaa", orderId);
         try {
           const { data } = await getOrderItemsByOrderId({
             variables: {
               orderId: orderId,
             },
           });
-          console.log("ssaf", data);
+          const resultado =
+            data?.orderDetail?.data?.attributes.order_items?.data;
+
+          try {
+            if (!resultado.length) return;
+            const token = await getAccessToken();
+            const formatedItems = formatTaxData(items);
+            const body = {
+              serviceDetail: {
+                lineDetails: [...formatedItems],
+              },
+            };
+            const feeResult = await facturationInstace.post(
+              `/utils/get-detail-line?access_token=${token}`,
+              body
+            );
+
+            const imp = feeResult?.data?.serviceDetail?.lineDetails;
+            const inv = formatItemInvoice(resultado, imp);
+            try {
+              /* const store = {
+                accountId: "de7a8bf8-63d4-427e-99ce-5870c2ffc338",
+                name: "Félix Ojeda Ortiz",
+                type: "03",
+                number: "155822450521",
+                commercialName: "",
+                province: "2",
+                country: "01",
+                district: "01",
+                neighborhood: "01",
+                otherSigns: "Monserrat",
+                email: "yoloyulios@gmail.com",
+                ActivityCode: "721001",
+              };*/
+              const result = await getStoreInformation({
+                variables: {
+                  id: 1,
+                },
+              });
+              const store = result?.data?.storeInformation?.data?.attributes;
+              //  console.log("store", store);
+              const key = createKey(1);
+              const consecutive = createConsecutiveNumber(1);
+              const formatedInvoice = InvoiceInformation(
+                store,
+                client,
+                key,
+                consecutive
+              );
+              const bodyInvoice = {
+                accountId: store.accountId,
+                document: { formatedInvoice },
+              };
+              console.log("inv", formatedInvoice);
+            } catch (error) {}
+          } catch (error) {}
         } catch (error) {
           console.log("error crear factura", error);
         }

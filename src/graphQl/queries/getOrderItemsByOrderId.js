@@ -1,48 +1,49 @@
-
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 const GET_ORDER_ITEMS_BY_ORDER_ID = gql`
-query GetOrderItemsByOrderId($orderId: ID!) {
-  orderDetail(id: $orderId) {
-    data {
-      id
-      attributes {
-        payment_detail {
-          data {
-            attributes {
-              subtotal
-              taxes
-              total
+  query GetOrderItemsByOrderId($orderId: ID!) {
+    orderDetail(id: $orderId) {
+      data {
+        id
+        attributes {
+          payment_detail {
+            data {
+              attributes {
+                subtotal
+                taxes
+                total
+              }
             }
           }
+          status
         }
-        status
-      }
-      attributes {
-        order_items {
-          data {
-            id
-            attributes {
-              quantity
-              variant {
-                data {
-                  id
-                  attributes {
-                    price
-                    product {
-                      data {
-                        id
-                        attributes {
-                          name
-                          brand
+        attributes {
+          order_items {
+            data {
+              id
+              attributes {
+                quantity
+                variant {
+                  data {
+                    id
+                    attributes {
+                      price
+                      product {
+                        data {
+                          id
+                          attributes {
+                            name
+                            brand
+                            cabys
+                          }
                         }
                       }
-                    }
-                    images {
-                      data {
-                        id
-                        attributes {
-                          url
+                      images {
+                        data {
+                          id
+                          attributes {
+                            url
+                          }
                         }
                       }
                     }
@@ -55,10 +56,6 @@ query GetOrderItemsByOrderId($orderId: ID!) {
       }
     }
   }
-}
-
-
-
 `;
 
 export default GET_ORDER_ITEMS_BY_ORDER_ID;
