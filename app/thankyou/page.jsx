@@ -226,8 +226,9 @@ export default function ThankYouMessage() {
             userEmail,
             jsonData
           );
-          await createInvoice(orderNumber, orderItems);
+
           handleCartItems();
+          createInvoice(orderNumber);
         } catch (error) {
           console.error("Error creating order:", error);
         }
