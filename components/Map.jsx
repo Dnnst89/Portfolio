@@ -1,31 +1,24 @@
-'use client'
+"use client";
 
-import { Map, GoogleApiWrapper, Marker } from "google-maps-react"
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+const KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY;
+const Map = ({ latitude, longitude, zoom }) => {
+  const mapContainerStyle = {
+    width: "100%",
+    height: "400px",
+  };
 
-const mapStyles = {
-    width: '100%',
-    height: '50%'
+  return (
+    <LoadScript googleMapsApiKey={`${KEY}`}>
+      <GoogleMap
+        mapContainerStyle={mapContainerStyle}
+        center={{ lat: latitude, lng: longitude }}
+        zoom={zoom}
+      >
+        <Marker position={{ lat: latitude, lng: longitude }} />
+      </GoogleMap>
+    </LoadScript>
+  );
 };
 
-const GoogleMap= () => {
-
-    return (
-        //The <Map></Map> need the following props
-        //initialCenter={} will be the center on the Map
-        <Map
-            google={window.google}
-            zoom={17}
-            style={mapStyles}
-            initialCenter={
-                {
-                    lat: 19.020145856138136, 
-                    lng: -98.24006775697993
-                }
-            }
-        >
-           
-        </Map>
-    )
-}
-
-export default GoogleMap
+export default Map;

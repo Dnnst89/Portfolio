@@ -11,7 +11,7 @@ import CheckOutForm2 from "./CheckOutForm2";
 import GoogleMapWrapper from "./Map";
 import useStorage from "@/hooks/useStorage";
 import toast, { Toaster } from "react-hot-toast";
-
+import Map from "./Map";
 
 function FormOne() {
   const {
@@ -81,7 +81,8 @@ function FormOne() {
         if (data.usersPermissionsUser.data.attributes.users_address.data) {
           setUserInfoExist(true);
           setAddressId(
-            data?.usersPermissionsUser?.data?.attributes?.users_address?.data?.id
+            data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+              ?.id
           );
         } else {
           setUserInfoExist(false);
@@ -90,8 +91,10 @@ function FormOne() {
           ...userInformation,
           firstName:
             data?.usersPermissionsUser?.data?.attributes?.firstName || "",
-          lastName: data?.usersPermissionsUser?.data?.attributes?.lastName || "",
-          phone: data?.usersPermissionsUser?.data?.attributes?.phoneNumber || "",
+          lastName:
+            data?.usersPermissionsUser?.data?.attributes?.lastName || "",
+          phone:
+            data?.usersPermissionsUser?.data?.attributes?.phoneNumber || "",
           postCode:
             data?.usersPermissionsUser?.data?.attributes?.users_address?.data
               ?.attributes?.postCode || "",
@@ -134,11 +137,15 @@ function FormOne() {
   }, [userInformation]);
 
   const onSubmit = handleSubmit(async (dataForm) => {
-    console.log(dataForm)
+    console.log(dataForm);
     try {
       setCheckoutForm1Visible(true);
 
-      const { data: userData, error: userError, loading: userLoading } = await updateUserInformation({
+      const {
+        data: userData,
+        error: userError,
+        loading: userLoading,
+      } = await updateUserInformation({
         variables: {
           firstName: dataForm.firstName,
           lastName: dataForm.lastName,
@@ -149,15 +156,17 @@ function FormOne() {
         },
       });
 
-      if (userError) return toast.error(
-        "Error al ingresar la información del usuario",
-        {
+      if (userError)
+        return toast.error("Error al ingresar la información del usuario", {
           autoClose: 5000,
-        }
-      );
+        });
 
       if (userInfoExist) {
-        const { data: addressData, error: addressError, loading: addressLoading } = await updateAddress({
+        const {
+          data: addressData,
+          error: addressError,
+          loading: addressLoading,
+        } = await updateAddress({
           variables: {
             country: dataForm.country,
             postCode: dataForm.postCode,
@@ -169,15 +178,16 @@ function FormOne() {
           },
         });
 
-        if (addressError) return toast.error(
-          "Error al actualizar la dirección",
-          {
+        if (addressError)
+          return toast.error("Error al actualizar la dirección", {
             autoClose: 5000,
-          }
-        );
-
+          });
       } else {
-        const { data: createAddressData, error: createAddressError, loading: createAddressLoading } = await createAddress({
+        const {
+          data: createAddressData,
+          error: createAddressError,
+          loading: createAddressLoading,
+        } = await createAddress({
           variables: {
             postCode: dataForm.postCode,
             country: dataForm.country,
@@ -190,12 +200,10 @@ function FormOne() {
           },
         });
 
-        if (createAddressError) return toast.error(
-          "Error al crear la dirección",
-          {
+        if (createAddressError)
+          return toast.error("Error al crear la dirección", {
             autoClose: 5000,
-          }
-        );
+          });
 
         const newAddress = createAddressData.createUsersAddress.data.id;
         setAddressId(newAddress);
@@ -499,8 +507,11 @@ function FormOne() {
                         </div>
 
                         <div className="col-span-6 grid">
-                          <GoogleMapWrapper  />
- 
+                          <Map
+                            latitude={9.748917}
+                            longitude={-83.753428}
+                            zoom={10}
+                          />
                         </div>
                       </section>
                     </div>
