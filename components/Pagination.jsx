@@ -25,11 +25,12 @@ const Pagination = ({
 
   return (
     <div className="flex flex-wrap max-w-screen-xl m-auto justify-center py-10">
+{noPages.length > 1 && (
       <nav aria-label="">
         <ul className="list-style-none flex">
           <li>
             <button
-              className="relative min-w-[90px] block rounded bg-[#484848] mr-2 px-3 py-1.5 text-sm text-white transition-all duration-300 pr-3"
+              className={`relative min-w-[90px] block rounded  px-3 py-1.5 text-sm text-white transition-all duration-300 pl-3 ml-2 ${currentPage === 0 ? "bg-[#484848]" : "bg-black"}`}
               disabled={currentPage === 0 ? true : false}
               onClick={onPreviusPage}
             >
@@ -50,7 +51,7 @@ const Pagination = ({
           <li>
             <button
               href="#"
-              className={`relative min-w-[90px] block rounded bg-[#484848] px-3 py-1.5 text-sm text-white transition-all duration-300 pl-3 ml-2 ${currentPage === noPages - 1 ? "bg-black" : ""}`}
+              className={`relative min-w-[90px] block rounded  px-3 py-1.5 text-sm text-white transition-all duration-300 pl-3 ml-2 ${currentPage === noPages.length - 1 ? "bg-[#484848]" : "bg-black"}`}
               disabled={currentPage === noPages.length - 1 ? true : false}
               onClick={onNextPage}
             >
@@ -59,6 +60,7 @@ const Pagination = ({
           </li>
         </ul>
       </nav>
+)}
     </div>
   );
 };

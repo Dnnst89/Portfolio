@@ -5,7 +5,7 @@ const AgePagination = ({
   currentPage,
   setCurrentPage,
 }) => {
-  const pagesToShow = 5; 
+  const pagesToShow = 3; 
   const halfPagesToShow = Math.floor(pagesToShow / 2);
 
   const firstPage = Math.max(1, currentPage - halfPagesToShow);
@@ -28,12 +28,14 @@ const AgePagination = ({
   };
 
   return (
+    
     <div className="flex flex-wrap max-w-screen-xl m-auto justify-center py-10">
+      {nbPages > 0 && (
       <nav aria-label="">
         <ul className="list-style-none flex">
           <li>
             <button
-              className="relative min-w-[90px] block rounded bg-[#484848] mr-2 px-3 py-1.5 text-sm text-white transition-all duration-300 pr-3"
+              className={`relative min-w-[90px] block rounded bg-[#484848] px-3 py-1.5 text-sm text-white transition-all duration-300 pl-3 ml-2 ${currentPage ===  1 ? "bg-[#484840]" : "bg-black"}`}
               disabled={currentPage === 1}
               onClick={onPreviusPage}
             >
@@ -54,7 +56,7 @@ const AgePagination = ({
           ))}
           <li>
             <button
-              className="relative min-w-[90px] block rounded bg-[#484848] px-3 py-1.5 text-sm text-white transition-all duration-300 pl-3 ml-2"
+              className={`relative min-w-[90px] block rounded  px-3 py-1.5 text-sm text-white transition-all duration-300 pl-3 ml-2 ${currentPage === nbPages  ? "bg-[#484848]" : "bg-black"}`}
               disabled={currentPage === nbPages}
               onClick={onNextPage}
             >
@@ -63,6 +65,7 @@ const AgePagination = ({
           </li>
         </ul>
       </nav>
+      )}
     </div>
   );
 };
