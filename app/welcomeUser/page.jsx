@@ -30,12 +30,12 @@ const WelcomeUser = () => {
   };
   return (
     <BodyComponent>
-      <main className=" flex flex-col items-center max-w-screen-xl m-auto">
-        <div className="text-xl">
-          {authUser && <h1 className="mt-10">Bienvenido {authUser.username}</h1>}
+      <main className=" grid grid-cols-12 items-center max-w-screen-xl m-auto">
+        <div className="text-xl col-span-12">
+          {authUser && <h1 className="mt-10 text-center">Bienvenido {authUser.username}</h1>}
         </div>
 
-        <div className="grid grid-cols-3 w-34/6 ">
+        <div className="col-span-12 flex flex-wrap max-w-screen-xl m-auto justify-center pt-5">
           <ProfileUserCard
             image={datosUsuario}
             alt={"datos de usuario"}
@@ -55,7 +55,7 @@ const WelcomeUser = () => {
             link={""}
           />
         </div>
-        <div className="flex justify-center">
+        <div className="flex justify-center col-span-12">
           <button
             className="bg-pink-200 text-white p-3 sm:p-1 md:p-1 md:text-sm lg:text-sm lg:p-3 rounded-sm mt-10"
             onClick={() => handleLogout()}

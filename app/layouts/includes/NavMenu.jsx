@@ -72,13 +72,11 @@ const NavMenu = () => {
               >
                 <div className="flex justify-center md:justify-start items-center ">
                   <BsCart4 size={30} color="#67C3AD" />
-                  {info ? (
-                    <p className="bg-aquamarine rounded-full w-2/6 text-white text-center">
-                      {info.quantity}
+                  
+                    <p className="bg-aquamarine rounded-full w-2/5 md:w-2/6 text-white text-center">
+                    {info ? ( <span>{info.quantity}</span> ) : ( <span>0</span>)}
                     </p>
-                  ) : (
-                    <p className="bg-aquamarine rounded-full w-2/6 text-white text-center">0</p>
-                  )}
+                  
                 </div>
               </Link>
             </div>
