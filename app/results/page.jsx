@@ -9,7 +9,6 @@ const GetResults = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    debugger;
     setQuerySearch(window?.location?.search?.split("=")[1]);
     setLoading(false);
   }, []);
