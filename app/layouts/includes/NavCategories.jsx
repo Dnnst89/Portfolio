@@ -19,7 +19,6 @@ const NavCategories = () => {
 
   useEffect(() => {
     getData();
-    console.log("sssssdfadf", menuItems);
   }, []);
 
   const handleItemClick = (item) => {
@@ -32,7 +31,7 @@ const NavCategories = () => {
     console.log(window.location.pathname, "pathname");
     console.log(window.location.search, "search");
 
-    window.location.search = `?query=${item.name}`;
+    return (window.location.href = `/results/?query=${item.name}`);
   };
 
   return (
