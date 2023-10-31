@@ -110,8 +110,11 @@ const LoginForm = () => {
                             <ErrorForm>{errors.identifier}</ErrorForm>
                           ) : null}
                         </div>
-                        <div className="grid col-span-12 md:col-start-4 md:col-span-6 md:w-full">
-                          <label className="text-lg whitespace-nowrap w-full" htmlFor="password">
+                        <div className="relative grid col-span-12 md:col-start-4 md:col-span-6 md:w-full">
+                          <label
+                            className="text-lg whitespace-nowrap w-full"
+                            htmlFor="password"
+                          >
                             Contraseña
                             <span className="text-pink-200 ml-1">*</span>
                           </label>
