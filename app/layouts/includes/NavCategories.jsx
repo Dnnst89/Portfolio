@@ -2,33 +2,37 @@
 import { useState, useEffect } from "react";
 import { algoliaInstace } from "@/src/axios/algoliaIntance/config";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const NavCategories = () => {
   const [clickedItem, setClickedItem] = useState(null);
 
   const [menuItems, setMenuItems] = useState([]);
-
+  const router = useRouter();
   const getData = async () => {
     const { data } = await algoliaInstace.get(
       "development_api::category.category/"
     );
     setMenuItems(data.hits);
-  };
-  const categoryChange = (name) => {
-    window.location.href = `/results/?query=${name}`;
+    console.log("ssdfadf", menuItems);
   };
 
   useEffect(() => {
     getData();
+    console.log("sssssdfadf", menuItems);
   }, []);
 
-  const handleItemClick = (id) => {
-    if (clickedItem === id) {
-      // Si se hace clic nuevamente en el mismo elemento, deselecciona
-      setClickedItem(null);
-    } else {
-      setClickedItem(id);
-    }
+  const handleItemClick = (item) => {
+    // if (clickedItem === id) {
+    //   // Si se hace clic nuevamente en el mismo elemento, deselecciona
+    //   setClickedItem(null);
+    // } else {
+    //   setClickedItem(id);
+    // }
+    console.log(window.location.pathname, "pathname");
+    console.log(window.location.search, "search");
+
+    window.location.search = `?query=${item.name}`;
   };
 
   return (
@@ -37,17 +41,26 @@ const NavCategories = () => {
         <ul className="flex md:justify-center content-center text-[#333333]  overflow-y-scroll scrollbar scrollbar-none">
           {menuItems &&
             menuItems.length &&
-            menuItems.map((item) => (
-              <li
-                key={item.id}
-                className="px-3 hover:underline font-bold cursor-grab flex justify-center items-center"
-              >
-                <a href={`/results?query=${item.name}`} className="w-max">
-                  {" "}
-                  {item.name}
-                </a>
-              </li>
-            ))}
+            menuItems.map((item, index) => {
+              return (
+                <li
+                  key={item.id}
+                  className="px-3 hover:underline font-bold cursor-grab flex justify-center items-center"
+                >
+                  <button
+                    id={index}
+                    // href={{ pathname: "/results", query: { query: item.name } }}
+                    onClick={() => {
+                      handleItemClick(item);
+                    }}
+                    className="w-max"
+                  >
+                    {" "}
+                    {item.name}
+                  </button>
+                </li>
+              );
+            })}
         </ul>
       </div>
     </>
