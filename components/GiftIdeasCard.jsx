@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 function GiftIdeasCard({ ageRange, image, age, button, border }) {
-  console.log(ageRange)
   const router = useRouter();
   return (
     //  <Link href={{ pathname: "/resultsByAge", query: { ageRange } }}>
