@@ -123,7 +123,7 @@ const PersonalDataForm = () => {
                             <section className="w-full">
                               <div className="flex justify-center">
                                 <section className="w-full grid grid-cols-12 gap-4">
-                                  <div className="col-span-12 md:col-span-6 grid">
+                                  <div className="col-span-12 md:col-span-6 grid content-baseline">
                                     <label htmlFor="name">Nombre</label>
                                     <Field
                                       type="text"
@@ -142,7 +142,7 @@ const PersonalDataForm = () => {
                                       <ErrorForm>{errors.firstName}</ErrorForm>
                                     ) : null}
                                   </div>
-                                  <div className="col-span-12 md:col-span-6 grid">
+                                  <div className="col-span-12 md:col-span-6 grid content-baseline">
                                     <label htmlFor="lastName">Apellidos</label>
                                     <Field
                                       type="text"
@@ -162,7 +162,7 @@ const PersonalDataForm = () => {
                                       <ErrorForm>{errors.lastName}</ErrorForm>
                                     ) : null}
                                   </div>
-                                  <div className="col-span-12 md:col-span-6 grid">
+                                  <div className="col-span-12 md:col-span-6 grid content-baseline">
                                     <label htmlFor="phone">Teléfono</label>
                                     <Field
                                       type="text"
