@@ -10,7 +10,6 @@ import direcciones from "../assets/direcciones.png";
 import { updateShoppingSession } from "@/redux/features/cart-slice";
 import { useRouter } from "next/navigation";
 
-
 const WelcomeUser = () => {
   const authUser = useSelector((state) => state.auth.user);
 
@@ -32,7 +31,11 @@ const WelcomeUser = () => {
     <BodyComponent>
       <main className=" grid grid-cols-12 items-center max-w-screen-xl m-auto">
         <div className="text-xl col-span-12">
-          {authUser && <h1 className="mt-10 text-center">Bienvenido {authUser.username}</h1>}
+          {authUser && (
+            <h1 className="mt-10 text-center">
+              Bienvenido {authUser.username}
+            </h1>
+          )}
         </div>
 
         <div className="col-span-12 flex flex-wrap max-w-screen-xl m-auto justify-center pt-5">
@@ -52,7 +55,7 @@ const WelcomeUser = () => {
             image={direcciones}
             alt={"datos de usuario"}
             description={"Direcciones"}
-            link={""}
+            link={"/address"}
           />
         </div>
         <div className="flex justify-center col-span-12">

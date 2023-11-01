@@ -32,7 +32,7 @@ const PersonalDataForm = () => {
   const userId = user?.id;
   const { id } = user || {};
   const authUser = useSelector((state) => state.auth.user);
-  const [userInformation, setUserInformation] = useState({ 
+  const [userInformation, setUserInformation] = useState({
     firstName: "",
     lastName: "",
     phone: "",
@@ -102,7 +102,7 @@ const PersonalDataForm = () => {
             )}
           </div>
           <div className="col-span-6 md:col-span-3 space-y-1">
-          <h2 className="font-bold">Correo Electrónico:</h2>
+            <h2 className="font-bold">Correo Electrónico:</h2>
             {authUser && (
               <label className="">{authUser.email}</label>
             )}
@@ -148,7 +148,6 @@ const PersonalDataForm = () => {
                                       type="text"
                                       id="lastName"
                                       name="lastName"
-                                      placeholder="Apellidos"
                                       className="form-input"
                                       onChange={(e) => {
                                         setUserInformation({
@@ -168,7 +167,6 @@ const PersonalDataForm = () => {
                                       type="text"
                                       id="phone"
                                       name="phone"
-                                      placeholder="Teléfono"
                                       className="form-input"
                                       onChange={(e) => {
                                         setUserInformation({

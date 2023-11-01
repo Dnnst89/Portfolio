@@ -27,7 +27,7 @@ const Footer = () => {
           <div className="ml-5 md:ml-10 text-sm">
             <ul className="list-disc space-y-2">
               <li className="w-auto">
-                Costa Rica, San Jose, Escazu, San Rafael,{<br />} Plaza Maynar Local
+                Costa Rica, San José, Escazú, San Rafael,{<br />} Plaza Maynar Local
                 #20
               </li>
               <li>
@@ -43,11 +43,11 @@ const Footer = () => {
                   href={"tel:+506-8771-6588"}
                   className="hover:underline"
                 >
-                  <span className="underline">(506) 8771-6588</span>
+                  <span className="underline">(+506) 8771-6588</span>
                 </Link>
               </li>
               <li>
-                Horario: Lunes a Sabado de 10am-7pm {<br />}y domingos de 11am-5pm
+                Horario: Lunes a Sábado de 10am-7pm {<br />}y domingos de 11am-5pm
               </li>
             </ul>
           </div>
