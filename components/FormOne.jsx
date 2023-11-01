@@ -114,9 +114,7 @@ function FormOne() {
             data?.usersPermissionsUser?.data?.attributes?.users_address?.data
               ?.attributes?.canton || "",
           idNumber: "",
-          idType:
-            data?.usersPermissionsUser?.data?.attributes?.idCard?.idType ||
-            "Física",
+          idType: "Física",
         });
       }
     } catch (error) {
@@ -222,30 +220,30 @@ function FormOne() {
       <div className="w-full max-w-screen-xl m-auto grid grid-cols-12 mt-10">
         <div className="col-span-12 md:col-span-9 md:pr-2">
           <div className="flex  justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200 min-w-3[375px] justify-between">
-          <div className="flex justify-center items-center min-w-[375px]  max-w-[375px] m-auto  justify-between  px-3">
-          <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
-              1
+            <div className="flex justify-center items-center min-w-[375px]  max-w-[375px] m-auto  justify-between  px-3">
+              <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
+                1
+              </div>
+              <h1 className="text-xl min-w-[210px]">Información de envío</h1>
+              {checkoutForm1Visible && (
+                <>
+                  <div>
+                    <button
+                      className="ml-8"
+                      onClick={() => setCheckoutForm1Visible(false)}
+                    >
+                      <AiOutlineEdit
+                        style={{
+                          color: "orange",
+                        }}
+                        size={35}
+                      />
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
-            <h1 className="text-xl min-w-[210px]">Información de envío</h1>
-            {checkoutForm1Visible && (
-              <>
-                <div>
-                  <button
-                    className="ml-8"
-                    onClick={() => setCheckoutForm1Visible(false)}
-                  >
-                    <AiOutlineEdit
-                      style={{
-                        color: "orange",
-                      }}
-                      size={35}
-                    />
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-            
+
           </div>
           {!checkoutForm1Visible ? (
             <form onSubmit={onSubmit}>
@@ -429,7 +427,7 @@ function FormOne() {
                         <div className="col-span-12 md:col-span-6 grid">
                           <label htmlFor="canton">Cantón</label>
                           <input
-                          className="max-h-[40px]"
+                            className="max-h-[40px]"
                             type="text"
                             id="canton"
                             {...register("canton", {
@@ -521,7 +519,7 @@ function FormOne() {
                       <section className="w-3/4 m-auto mt-10 mb-5 flex items-center space-x-5">
                         <label htmlFor="idType">Factura Electrónica</label>
                         <input
-                        className="p-3"
+                          className="p-3"
                           type="checkbox"
                           id="checkbox"
                           {...register("checkbox", {
@@ -535,7 +533,7 @@ function FormOne() {
                           })}
                         ></input>
                       </section>
-                      
+
                     </div>
                     {checkbox && (
                       <>
