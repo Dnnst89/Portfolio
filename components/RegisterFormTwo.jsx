@@ -116,7 +116,7 @@ const RegisterFormTwo = () => {
                     <div className="bg-resene  pt-10 w-full flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-2 col-span-10 md:col-start-3 md:col-span-8">
                       <div className="flex grid w-full">
                         <section className="p-3 w-10/12 m-auto grid grid-cols-12 gap-5">
-                          <div className="grid col-span-12 md:col-span-6">
+                          <div className="grid col-span-12 md:col-span-6 content-baseline">
                             <label
                               className="whitespace-nowrap"
                               htmlFor="username"
@@ -135,7 +135,7 @@ const RegisterFormTwo = () => {
                               <ErrorForm>{errors.username}</ErrorForm>
                             ) : null}
                           </div>
-                          <div className="grid col-span-12 md:col-span-6">
+                          <div className="grid col-span-12 md:col-span-6 content-baseline">
                             <label
                               className="whitespace-nowrap"
                               htmlFor="email"
@@ -156,7 +156,7 @@ const RegisterFormTwo = () => {
                           </div>
                         </section>
                         <section className="p-3 w-10/12 m-auto grid grid-cols-12 gap-5">
-                          <div className="grid col-span-12 md:col-span-6">
+                          <div className="grid col-span-12 md:col-span-6 content-baseline">
                             <label htmlFor="password">
                               Constraseña
                               <span className="text-pink-200">*</span>
@@ -172,7 +172,7 @@ const RegisterFormTwo = () => {
                               <ErrorForm>{errors.password}</ErrorForm>
                             ) : null}
                           </div>
-                          <div className="grid col-span-12 md:col-span-6">
+                          <div className="grid col-span-12 md:col-span-6 content-baseline">
                             <label
                               className="whitespace-nowrap w-[100px]"
                               htmlFor="confirmPassword"
