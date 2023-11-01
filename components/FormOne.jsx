@@ -11,7 +11,7 @@ import CheckOutForm2 from "./CheckOutForm2";
 import GoogleMapWrapper from "./Map";
 import useStorage from "@/hooks/useStorage";
 import toast, { Toaster } from "react-hot-toast";
-import Map from "./Map";
+//import Map from "./Map";
 
 function FormOne() {
   const {
@@ -243,7 +243,6 @@ function FormOne() {
                 </>
               )}
             </div>
-
           </div>
           {!checkoutForm1Visible ? (
             <form onSubmit={onSubmit}>
@@ -506,13 +505,7 @@ function FormOne() {
                           </p>
                         </div>
 
-                        <div className="col-span-6 grid">
-                          <Map
-                            latitude={9.748917}
-                            longitude={-83.753428}
-                            zoom={10}
-                          />
-                        </div>
+                        <div className="col-span-6 grid"></div>
                       </section>
                     </div>
                     <div className="flex justify-center w-full">
@@ -533,7 +526,6 @@ function FormOne() {
                           })}
                         ></input>
                       </section>
-
                     </div>
                     {checkbox && (
                       <>
