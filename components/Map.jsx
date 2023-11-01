@@ -5,7 +5,7 @@ const KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY;
 const Map = ({ latitude, longitude, zoom }) => {
   const mapContainerStyle = {
     width: "100%",
-    height: "400px",
+    height: "300px",
   };
 
   return (

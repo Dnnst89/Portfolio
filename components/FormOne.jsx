@@ -254,7 +254,7 @@ function FormOne() {
                   <section className="w-full">
                     <div className="flex justify-center">
                       <section className="md:w-4/6 grid grid-cols-12 gap-4">
-                        <div className="col-span-12 md:col-span-6 grid">
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <label htmlFor="name">Nombre</label>
                           <input
                             type="text"
@@ -280,7 +280,7 @@ function FormOne() {
                             {errors.firstName?.message}
                           </p>
                         </div>
-                        <div className="col-span-12 md:col-span-6 grid">
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <label htmlFor="lastName">Apellidos</label>
                           <input
                             type="text"
@@ -306,7 +306,7 @@ function FormOne() {
                             {errors.lastName?.message}
                           </p>
                         </div>
-                        <div className="col-span-12 md:col-span-6 grid">
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <label htmlFor="phone">Teléfono</label>
                           <input
                             type="text"
@@ -336,7 +336,7 @@ function FormOne() {
                             {errors.phone?.message}
                           </p>
                         </div>
-                        <div className="col-span-12 md:col-span-6 grid">
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <label htmlFor="postCode">Código Postal</label>
                           <input
                             type="text"
@@ -366,7 +366,7 @@ function FormOne() {
                             {errors.postCode?.message}
                           </p>
                         </div>
-                        <div className="col-span-12 md:col-span-6 grid">
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <label htmlFor="country">País</label>
                           <input
                             type="text"
@@ -396,7 +396,7 @@ function FormOne() {
                             {errors.country?.message}
                           </p>
                         </div>
-                        <div className="col-span-12 md:col-span-6 grid">
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <label htmlFor="province">Provincia</label>
                           <input
                             type="text"
@@ -426,7 +426,7 @@ function FormOne() {
                             {errors.province?.message}
                           </p>
                         </div>
-                        <div className="col-span-12 md:col-span-6 grid">
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <label htmlFor="canton">Cantón</label>
                           <input
                           className="max-h-[40px]"
@@ -457,7 +457,7 @@ function FormOne() {
                             {errors.canton?.message}
                           </p>
                         </div>
-                        <div className="col-span-12 md:col-span-6 grid">
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <label htmlFor="addressLine1">Direccion 1</label>
                           <textarea
                             // type="text"
@@ -484,7 +484,7 @@ function FormOne() {
                             {errors.addressLine1?.message}
                           </p>
                         </div>
-                        <div className="col-span-12 md:col-span-6 grid">
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <label htmlFor="addressLine2">Direccion 2</label>
                           <textarea
                             //type="text"
@@ -508,7 +508,7 @@ function FormOne() {
                           </p>
                         </div>
 
-                        <div className="col-span-6 grid">
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <Map
                             latitude={9.748917}
                             longitude={-83.753428}
