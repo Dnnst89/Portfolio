@@ -50,15 +50,15 @@ const AccountDropdown = () => {
         border-r-2 border-b-0 border-dashed border-grey-200 pr-2">
           <div className="min-w-[100px] flex justify-end">
             {authUser ? (
-              <lavel className="font-bold leading-none text-green 
+              <label className="font-bold leading-none text-green 
               text-end max-w-[90px] ml-3 text-clip overflow-hidden">Hola,<br />
                 <span className="font-thin text-xs text-clip">{authUser.username}</span>
-              </lavel>
+              </label>
             ) : (
-              <lavel className="font-bold leading-none text-green 
+              <label className="font-bold leading-none text-green 
               text-end max-w-[90px] ml-3 text-clip overflow-hidden">Iniciar <br />
                 <span className=" font-thin text-xs">Sesión</span>
-              </lavel>
+              </label>
             )}
           </div>
 

@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 function GiftIdeasCard({ ageRange, image, age, button, border }) {
+  console.log(ageRange)
   return (
     <Link href={{ pathname: "/resultsByAge", query: { ageRange } }}>
       <div className=" m-4">
@@ -14,7 +15,7 @@ function GiftIdeasCard({ ageRange, image, age, button, border }) {
               className="rounded-[10px] w-[140px] md:w-[220px]"
             />
             <div className="flex justify-center m-auto mt-5">
-              <h1  className="text-xs md:text-xl ">{age}</h1>
+              <h1 className="text-xs md:text-xl ">{age}</h1>
             </div>
             <div className="flex justify-center m-auto mt-5">
               <button className={button}> A EXPLORAR</button>
