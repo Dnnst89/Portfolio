@@ -25,6 +25,9 @@ export default function AgeResultsComponent({ ageRange }) {
   return (
     <div className={loading ? "flex flex-wrap max-w-screen-xl m-auto justify-center my-10" : ""}>
       {loading ? <Spinner /> : <div> <Toaster />
+        {/* <div className="flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
+          <h1>Resultados de productos para niños de {initialAge === 8 ? `${initialAge} o más años` : `${initialAge} - ${finalAge} años`}</h1>
+        </div> */}
         <ProductFilterContainer
           result={data.products}
           currentPage={currentPage}

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import paymentRequest from "@/api/tilopay/paymentRequest";
 import { useRouter } from "next/navigation";
 import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
@@ -8,8 +8,11 @@ import useStorage from "@/hooks/useStorage";
 import useCartSummary from "@/hooks/useCartSummary";
 import AlertNotAuth from "./AlertNotAuth";
 import Spinner from "./Spinner";
+import ReCAPTCHA from "react-google-recaptcha";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function CheckOutForm3({ paymentDetailId, total }) {
+  const captchaRef = useRef(null);
   const router = useRouter();
   const [formData, setFormData] = useState({});
   const [loadingBtn, setLoadingBtn] = useState(false);
@@ -75,22 +78,33 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
   const handleVerification = async () => {
-    setLoadingBtn(true);
+
+    const token = captchaRef.current.getValue();
+    paymentUrl = await paymentRequest(formData);
+
     try {
-      paymentUrl = await paymentRequest(formData);
-      //verifica que no haya ningun error de stock con la cantidad de productos que lleva
-      if (cartSummary.errors.errorStock.length > 0) {
-        toast.custom((t) => (
-          <AlertNotAuth
-            t={t}
-            msj={
-              "Lo sentimos ha sucedido un error con tu compra, verifica tus productos"
-            }
-            newRoute={"/cart"}
-          />
-        ));
+      if (token) {
+        setLoadingBtn(true);
+        //verifica que no haya ningun error de stock con la cantidad de productos que lleva
+        if (cartSummary.errors.errorStock.length > 0) {
+          toast.custom((t) => (
+            <AlertNotAuth
+              t={t}
+              msj={
+                "Lo sentimos ha sucedido un error con tu compra, verifica tus productos"
+              }
+              newRoute={"/cart"}
+            />
+          ));
+        } else {
+          router.push(paymentUrl);
+        }
+
       } else {
-        router.push(paymentUrl);
+        setLoadingBtn(false);
+        toast.error("Por favor selecciona la casilla de verificación", {
+          autoClose: 5000,
+        });
       }
     } catch (error) {
       console.error(error);
@@ -109,7 +123,17 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
         <h1 className="text-xl">Formulario de pago</h1>
       </div>
 
+      {" "}
+      <div className="flex justify-center m-auto mt-8 mb-8 ">
+        <ReCAPTCHA
+          sitekey="6LfFDLAoAAAAAJ25iZdqlICdDvwwkhxsDMZqdHs_"
+          //sitekey="6LfCrUYoAAAAAPgdh0MpvKzzHvhksbGTM3cP1prU"
+          ref={captchaRef}
+        />
+      </div>
+
       <div className="flex justify-center m-auto mt-8 mb-8 w-3/4">
+
         <button
           onClick={handleVerification}
           className="bg-pink-200 text-white rounded-sm p-2 w-[200px] whitespace-nowrap"
@@ -118,6 +142,7 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
           {loadingBtn ? <Spinner /> : "Proceder al pago"}
         </button>
       </div>
+
     </div>
   );
 }
