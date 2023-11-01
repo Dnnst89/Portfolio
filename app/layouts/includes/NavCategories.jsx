@@ -14,7 +14,6 @@ const NavCategories = () => {
       "development_api::category.category/"
     );
     setMenuItems(data.hits);
-    console.log("ssdfadf", menuItems);
   };
 
   useEffect(() => {

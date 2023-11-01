@@ -371,7 +371,6 @@ export default function ThankYouMessage() {
           PaymentDetail?.data?.paymentDetail?.data?.attributes?.subtotal,
         taxes: PaymentDetail?.data?.paymentDetail?.data?.attributes?.taxes,
       };
-      // console.log("iiiiiiiii", billSummary);
       if (required) {
         try {
           const { data } = await getOrderItemsByOrderId({
@@ -450,8 +449,6 @@ export default function ThankYouMessage() {
                   paymentUser?.data?.usersPermissionsUser?.data?.attributes
                     ?.email,
               };
-              console.log("client", cliente);
-              console.log("client", client);
               const store = result?.data?.storeInformation?.data?.attributes;
 
               const number = await getConsecutiveNumber({
@@ -463,11 +460,8 @@ export default function ThankYouMessage() {
               const InvoiceNumber =
                 number?.data?.electronicInvoices?.data[0]?.attributes
                   ?.consecutive;
-              console.log("number consecutivesss", InvoiceNumber);
-              console.log("store", store);
               const key = createKey(InvoiceNumber, store.IdNumber);
               const consecutive = createConsecutiveNumber(InvoiceNumber);
-              console.log("consecutivo", consecutive);
               const bodyInvoice = {
                 accountId: store.accountId,
                 document: {
@@ -493,14 +487,12 @@ export default function ThankYouMessage() {
                 },
                 returnCompleteAnswer: false,
               };
-              console.log("inv", bodyInvoice);
               const InvoiceResult = await facturationInstace.post(
                 `document/electronic-invoice?access_token=${token}`,
                 bodyInvoice
               );
 
-              console.log("last", InvoiceResult);
-              // console.log("code", store.activityCode);
+              console.log("respuesta factura", InvoiceResult);
               try {
                 const isoDate = new Date().toISOString();
                 const resulta = await getStoreInformation({
@@ -513,9 +505,6 @@ export default function ThankYouMessage() {
                     ?.ActivityCode
                 );
 
-                console.log("acasa", activity);
-                console.log("date", isoDate);
-
                 const invoiceId = await createElectronicInvoice({
                   variables: {
                     order: orderId,
@@ -525,9 +514,8 @@ export default function ThankYouMessage() {
                     publishedAt: isoDate,
                   },
                 });
-                console.log("idFactura", invoiceId);
               } catch (error) {
-                console.log("firstssss", error);
+                console.log("error", error);
               }
             } catch (error) {}
           } catch (error) {}

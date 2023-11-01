@@ -53,8 +53,6 @@ const createConsecutiveKey = () => {
     validateFormat = "" + random;
   }
 
-  console.log("consecutiveKey", validateFormat);
-
   if (number != null) {
     return validateFormat;
   } else return "00000001";
@@ -118,9 +116,7 @@ const formatBillSumary = (billSummary, exchangeRate, currencyCode) => {
 
 const createConsecutiveNumber = (param) => {
   const parame = param.slice(-8);
-  console.log("entro", parame);
   const number = parseInt(parame) + 1;
-  console.log("actualizado", number);
   var consecutiveNumber = "0010000101";
   var validateFormat = "0000000001";
   if (number < 10 && number > 0) {
@@ -151,11 +147,8 @@ const createConsecutiveNumber = (param) => {
 
 const formatItemInvoice = (items, imp) => {
   var cont = -1;
-  console.log("items", items);
-  console.log("imp", imp);
   if (!items?.length) return [];
   return items?.map((item) => {
-    console.log("cont", cont);
     cont = cont + 1;
     return {
       lineNumber: cont + 1,
@@ -191,7 +184,6 @@ const formatItemInvoice = (items, imp) => {
 };
 const InvoiceInformation = (store, client, key, consecutive) => {
   const isoDate = new Date().toISOString();
-  console.log("first");
   return {
     key: key,
     activityCode: store.ActivityCode,
