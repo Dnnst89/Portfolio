@@ -71,11 +71,11 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem, loading }) => {
             <div className="flex items-center mb-2">
                 <span className="text-grey">Cantidad:</span>
                 <div className="bg-resene rounded-full m-3 w-[120px] flex items-center justify-center p-2 space-x-4">
-                    <button className="bg-grey-200 rounded-full text-white" disabled={loading} onClick={handleDecrement}>
+                    <button aria-label='Disminuir cantidad producto' className="bg-grey-200 rounded-full text-white" disabled={loading} onClick={handleDecrement}>
                         <BiMinus />
                     </button>
                     <span>{quantity}/{stock}</span>
-                    <button className="bg-grey-200 rounded-full text-white" disabled={loading} onClick={handleIncrement}>
+                    <button aria-label='Aumentar cantidad producto' className="bg-grey-200 rounded-full text-white" disabled={loading} onClick={handleIncrement}>
                         <BiPlus />
                     </button>
                 </div>

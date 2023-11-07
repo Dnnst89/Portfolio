@@ -19,20 +19,20 @@ const ProductCard = ({ id, name, defaultPrice, coverImage, brand, url }) => {
                   : `https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/undefined_76582dee58.png`
               }
               alt={altTextDesc}
-              className="rounded-[15px] md:h-[225px]"
+              className="rounded-[15px] h-[137px] md:h-[225px]"
             />
           </div>
         </div>
 
         <div className="px-4 pb-5">
-          <h2 className="md:h-[40px]   text-[10px] md:text-base   font-semibold  leading-3 tracking-normal mt-2 tracking-tight text-[#484848] w-6/7"
+          <h2 className="h-[25px] md:h-[40px] text-[10px] md:text-base   font-semibold  leading-3 tracking-normal mt-2 tracking-tight text-[#484848] w-6/7"
           >
             {name}
           </h2>
 
           <div className=" rounded-lg">
             <h3 className="flex justify-end  relative">
-              <div href="#" className="px-1 pt-1 text-[7px] md:text-xs  text-[#282828]">
+              <div href="#" className="px-1 pt-1 text-[9px] md:text-xs  text-[#282828]">
                 {brand}
               </div>
             </h3>

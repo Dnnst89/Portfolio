@@ -83,12 +83,12 @@ const CartDetail = ({
 
   return (
     <div className="p-3 md:space-y-3">
-      <h1 className=" flex justify-center">{detailTitle}</h1>
+      <h2 className="tittle flex justify-center">{detailTitle}</h2>
       {!loading && !amounts.loading ? (
         <>
           <div className="flex justify-between ">
-            <p className="whitespace-nowrap ">N° artículos</p>
-            <p className="text-grey-100">{quantity}</p>
+            <p className="whitespace-nowrap">N° artículos</p>
+            <p className="whitespace-nowrap">{quantity}</p>
           </div>
           {/* input de codigo promocional comentado en caso de que se quiera usr en elfuturo ===> */}
           {/* <div className="flex justify-center">
@@ -100,23 +100,23 @@ const CartDetail = ({
         </div> */}
           <div className="flex justify-between ">
             <p>Subtotal:</p>
-            <p className="text-grey-100">${subTotal.toFixed(2)}</p>
+            <p className="whitespace-nowrap">${subTotal.toFixed(2)}</p>
           </div>
           <div className="flex justify-between border-dashed border-grey-200 border-b-[2px] pb-3">
             <p>Costo de envío:</p>
-            <p className="text-grey-100">$0,000.00</p>
+            <p className="whitespace-nowrap">$0,000.00</p>
           </div>
 
           <>
             <div className="flex justify-between ">
               <p>Impuestos:</p>
-              <p className="text-grey-100">
+              <p className="whitespace-nowrap">
                 {amounts.tax} {amounts.currencyType}
               </p>
             </div>
             <div className="flex flex-col p-4 space-y-3">
               <p className="flex justify-center">Costo Total(IVA Incluido)</p>
-              <p className="flex justify-center text-grey-100">
+              <p className="flex justify-center whitespace-nowrap">
                 {amounts?.total}
                 {amounts.currencyType}
               </p>

@@ -6,14 +6,14 @@ export default function CartProceedPayment({ textButton, page, error }) {
 
       <div className="flex justify-between ">
         <p>Entrega Estimada:</p>
-        <p className="text-grey-100">DD/MM/AA</p>
+        <p className="whitespace-nowrap">DD/MM/AA</p>
       </div>
-      <p className="flex justify-center text-sm text-grey-100 whitespace-nowrap">
+      <p className="flex justify-center text-sm whitespace-nowrap">
         *Detalle acerca de la fecha de entrega*
       </p>
       <div className="m-auto">
-        <Link href={page}>
-          <button
+        <Link role="button" href={page}>
+          <button role="button"
             className={`bg-pink-200 text-white rounded-sm p-2 w-[200px] whitespace-nowrap ${error?.length > 0 ? 'cursor-not-allowed' : 'cursor-pointer'//si el arreglo de errores tiene algun id d eun item que este provocando errores
               }`}
             disabled={error?.length > 0}

@@ -19,10 +19,7 @@ const CartContainer = () => {
 
     return (
         <>
-
-
             <div className="flex flex-col md:col-span-8 col-span-12">
-
                 {items?.map((item, index) => {
                     const variant = item.attributes.variant.data; // Desestructuración aquí
                     const variantAtt = variant.attributes;
@@ -30,10 +27,8 @@ const CartContainer = () => {
                     if (typeof item == "undefined") {
                         return (<div key={index}> <p>error, uno de sus productos agregados ha sido eliminado</p></div>)
                     }
-
                     return (
                         <div key={item.id}>
-
                             <CartItem
                                 key={item.id}
                                 cartItemId={item.id}
@@ -53,11 +48,9 @@ const CartContainer = () => {
                                 loading={loading}
                                 error={errors.errorStock}
                             />
-
                         </div>
                     );
                 })}
-
             </div>
             <div className=" bg-resene rounded-sm col-span-12 md:col-span-4 p-4 h-[500px]  border-l-4 border-lightblue">
                 <CartDetail detailTitle={"Detalle del carrito"} />
@@ -70,7 +63,6 @@ const CartContainer = () => {
                         <h1>Tu carrito esta vacio</h1>
                     </div>
                 }
-
             </div>
         </>
     );

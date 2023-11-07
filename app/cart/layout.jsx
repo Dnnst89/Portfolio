@@ -8,7 +8,7 @@ const CartLayout = ({ children }) => {
     <>
 
       <BodyComponent>
-        <main>{children}</main>
+        <section>{children}</section>
       </BodyComponent>
 
     </>
