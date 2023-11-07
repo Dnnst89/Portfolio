@@ -25,7 +25,7 @@ const AgeProductCard = ({ id, name, defaultPrice, coverImage, brand }) => {
                 : `https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/undefined_76582dee58.png`
             }
             alt={altTextDesc}
-            className="rounded-[15px] h-[225px]"
+            className="rounded-[15px] md:h-[225px]"
           />
         </div>
       </div>
