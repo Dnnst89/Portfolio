@@ -5,7 +5,7 @@ import ProductReviewForm from "./ProductReviewForm";
 const ProductDetailSecondary = ({ id, description, reviews }) => {
   const [showAllReviews, setShowAllReviews] = useState(false);
   return (
-    <main className="bg-resene" id="detail-table">
+    <section className="bg-resene" id="detail-table">
       <section className="grid md:flex md:items-baseline mx-auto gap-5 w-10/12 md:w-8/12 pt-10">
         <h1 className="w:full text-xl">Descripción</h1>
         <p className="w-full md:w-12/12 text-sm text-grey-100">{description}</p>
@@ -63,7 +63,7 @@ const ProductDetailSecondary = ({ id, description, reviews }) => {
       <div className=" w-full grid grid-cols-12 justify-center  m-auto">
         <ProductReviewForm idProduct={id} />
       </div>
-    </main>
+    </section>
   );
 };
 export default ProductDetailSecondary;

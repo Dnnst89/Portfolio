@@ -8,6 +8,7 @@ import { BiArrowBack } from "react-icons/bi";
 export default function CheckOutHeader({ regresar }) {
   return (
     <>
+    <header>
       <div className="bg-resene w-full  grid grid-cols-12 py-3 m-auto">
         <div className="w-full max-w-screen-xl m-auto col-span-4 md:col-span-3 flex justify-center ">
           <Link href={regresar} className=" p-2 ">
@@ -18,13 +19,14 @@ export default function CheckOutHeader({ regresar }) {
           </Link>
         </div>
         <div className="col-span-6 flex justify-center">
-        <Link href={"/"} className="">
+        <Link href={"/"} aria-label="Volver a página principal" className="">
         <Image src={logo} alt="" style={{ width: "auto", height: "80px" }} />
         </Link>
         
         </div>
         
       </div>
+      </header>
     </>
   );
 }
