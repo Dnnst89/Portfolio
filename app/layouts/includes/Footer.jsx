@@ -39,8 +39,9 @@ const Footer = () => {
                     <span className="underline">hola@detinmarin.cr</span>
                   </Link>
                 </li>
-                <li>
-                  Correo: <Link
+                <li >
+                  Teléfono: <Link
+                   aria-label="Teléfono de contacto +506-8771-6588"
                     href={"tel:+506-8771-6588"}
                     className="hover:underline"
                   >

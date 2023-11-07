@@ -22,14 +22,14 @@ export default function CartView() {
 
       </section>
       {/* ///////////LOS SIGUIENTES DATOS ESTAN QUEMADOS */}
-      <div>
+      <section>
         <h1 className="flex justify-center text-center pt-10">
           Descubre nuestros productos estrella
         </h1>
         <div className="flex flex-wrap max-w-screen-xl m-auto justify-center">
         <FeaturedProducts />
         </div>
-      </div>
+      </section>
     </div>
   );
 }

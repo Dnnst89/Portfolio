@@ -73,7 +73,7 @@ const NavMenu = () => {
                 <div className="flex justify-center md:justify-start items-center ">
                   <BsCart4 size={30} color="#67C3AD" />
                   
-                    <p className="bg-aquamarine rounded-full w-2/5 md:w-2/6 text-white text-center">
+                    <p aria-label={`Cantidad de productos ${info.quantity}, botón de carrito`} className="bg-aquamarine rounded-full w-2/5 md:w-2/6 text-white text-center">
                     {info ? ( <span>{info.quantity}</span> ) : ( <span>0</span>)}
                     </p>
                   

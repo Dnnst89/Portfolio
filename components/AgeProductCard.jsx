@@ -12,7 +12,7 @@ const AgeProductCard = ({ id, name, defaultPrice, coverImage, brand }) => {
 
   return (
 
-    <div onClick={productChange} className="m-4 max-w-sm rounded-[15px] drop-shadow-card w-[145px] h-[225px] md:w-[240px] md:h-[360px] transition-transform transform hover:scale-105 hover:bg-floralwhite bg-resene duration-1000 hover:cursor-pointer">
+    <div role="button" onClick={productChange} className="m-4 max-w-sm rounded-[15px] drop-shadow-card w-[145px] h-[225px] md:w-[240px] md:h-[360px] transition-transform transform hover:scale-105 hover:bg-floralwhite bg-resene duration-1000 hover:cursor-pointer">
       <div className="w-full mx-auto p-1 md:p-2">
         <div href="#">
           <Image

@@ -12,7 +12,7 @@ export default function CartProceedPayment({ textButton, page, error }) {
         *Detalle acerca de la fecha de entrega*
       </p>
       <div className="m-auto">
-        <Link role="button" href={page}>
+        <Link href={page}>
           <button role="button"
             className={`bg-pink-200 text-white rounded-sm p-2 w-[200px] whitespace-nowrap ${error?.length > 0 ? 'cursor-not-allowed' : 'cursor-pointer'//si el arreglo de errores tiene algun id d eun item que este provocando errores
               }`}
