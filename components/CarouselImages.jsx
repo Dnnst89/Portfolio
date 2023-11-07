@@ -6,7 +6,6 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css'; // Asegúrate de
 
 
 function CarouselImages({ altText, images, widthImg, heightImg, classStyle }) {
-console.log("🚀 ~ file: CarouselImages.jsx:9 ~ CarouselImages ~ altText:", altText)
 
     return (
         <Carousel className={"col-span-6"} showArrows={true} showThumbs={false} showStatus={false}>
