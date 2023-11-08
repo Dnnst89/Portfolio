@@ -35,32 +35,33 @@ const NavCategories = () => {
 
   return (
     <>
-      <div className="grid grid-cols-1 h-[50px] mt-[0.5px] bg-resene">
-        <ul className="flex md:justify-center content-center text-[#333333]  overflow-y-scroll scrollbar scrollbar-none">
-          {menuItems &&
-            menuItems.length &&
-            menuItems.map((item, index) => {
-              return (
-                <li
-                  key={item.id}
-                  className="px-3 hover:underline font-bold cursor-grab flex justify-center items-center"
-                >
-                  <button
-                    id={index}
-                    // href={{ pathname: "/results", query: { query: item.name } }}
-                    onClick={() => {
-                      handleItemClick(item);
-                    }}
-                    className="w-max"
+
+        <nav aria-label="Menú categorías" role="navigation" className="grid grid-cols-1 h-[50px] mt-[0.5px] bg-resene">
+          <ul className="flex md:justify-center content-center text-[#333333]  overflow-y-scroll scrollbar scrollbar-none">
+            {menuItems &&
+              menuItems.length &&
+              menuItems.map((item, index) => {
+                return (
+                  <li
+                    key={item.id}
+                    className="px-3 hover:underline font-bold cursor-grab flex justify-center items-center"
                   >
-                    {" "}
-                    {item.name}
-                  </button>
-                </li>
-              );
-            })}
-        </ul>
-      </div>
+                    <button
+                      id={index}
+                      // href={{ pathname: "/results", query: { query: item.name } }}
+                      onClick={() => {
+                        handleItemClick(item);
+                      }}
+                      className="w-max"
+                    >
+                      {" "}
+                      {item.name}
+                    </button>
+                  </li>
+                );
+              })}
+          </ul>
+        </nav>
     </>
   );
 };

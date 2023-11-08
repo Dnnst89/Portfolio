@@ -117,7 +117,7 @@ function ProductReviewForm({ idProduct }) {
               </div>
             </div>
             {errors.rating && <span className="text-red text-xs">Debes ingresar una calificación</span>}
-            <div className="flex justify-end">
+            <div className="flex justify-start">
               {" "}
               <ReCAPTCHA
                 sitekey="6LfFDLAoAAAAAJ25iZdqlICdDvwwkhxsDMZqdHs_"
@@ -125,7 +125,7 @@ function ProductReviewForm({ idProduct }) {
                 ref={captchaRef}
               />
             </div>
-            <div className="flex justify-end pb-5">
+            <div className="flex justify-start pb-5">
               <button
                 type="submit"
                 className="bg-aquamarine p-2 rounded-md text-white mt-5 mr-10"

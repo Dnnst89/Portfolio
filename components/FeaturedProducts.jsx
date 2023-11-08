@@ -33,7 +33,7 @@ const FeaturedProducts = () => {
     }
   }
 
-//tomamos los primeros cuatro resultados del random anterior
+  //tomamos los primeros cuatro resultados del random anterior
   const aux = [];
   for (let i = 0; i <= 3; i++) {
     if (i < myArray.length) {
@@ -46,16 +46,16 @@ const FeaturedProducts = () => {
     <>
       {aux
         ? aux.map((item) => {
-          return <div className="flex  justify-center pt-2" key={item.id}>
-            <AgeProductCard 
-            key={item.id} 
-            id={item.id} 
-            name={item.attributes.name} 
-            coverImage={item.attributes.coverImage.data} 
-            defaultPrice={item.attributes.defaultPrice} 
-            brand={item.attributes.brand} 
-            /> 
-            </div>;
+          return <div role="link" className="flex  justify-center pt-2" key={item.id}>
+            <AgeProductCard
+              key={item.id}
+              id={item.id}
+              name={item.attributes.name}
+              coverImage={item.attributes.coverImage.data}
+              defaultPrice={item.attributes.defaultPrice}
+              brand={item.attributes.brand}
+            />
+          </div>;
         })
         : null}
     </>

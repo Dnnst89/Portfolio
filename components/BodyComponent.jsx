@@ -7,8 +7,10 @@ const BodyComponent = ({ children }) => {
   return (
     <>
       <NavMenu />
+      <main>
       {/* <NavCategories /> */}
       {children}
+      </main>
       <Footer />
     </>
   );

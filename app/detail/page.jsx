@@ -12,8 +12,8 @@ export default function GetDetail() {
     setDetailId(id);
   }, []);
   return (
-    <main>
+    <section>
       <DetailComponent id={detailId} />
-    </main>
+    </section>
   );
 }

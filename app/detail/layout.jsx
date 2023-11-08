@@ -4,7 +4,7 @@ const detailLayout = ({ children }) => {
   return (
     <>
       <BodyComponent>
-        <main>{children}</main>
+        <section>{children}</section>
       </BodyComponent>
     </>
   );

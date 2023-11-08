@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-function GiftIdeasCard({ ageRange, image, age, button, border }) {
+function GiftIdeasCard({ ageRange, image, age, button, border, alt }) {
   const router = useRouter();
   return (
     //  <Link href={{ pathname: "/resultsByAge", query: { ageRange } }}>
@@ -13,7 +13,7 @@ function GiftIdeasCard({ ageRange, image, age, button, border }) {
           <div className={border}>
             <Image
               src={image}
-              alt="heart image"
+              alt={alt}
               className="rounded-[10px] w-[140px] md:w-[220px]"
             />
             <div className="flex justify-center m-auto mt-5">
