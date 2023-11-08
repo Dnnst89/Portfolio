@@ -65,14 +65,11 @@ export default function OrderDetailSecondary({ orderId }) {
                 return {
                   itemRef: item.id,
                   quantity: item.attributes.quantity,
-                  name: item.attributes.variant.data.attributes.product.data
-                    .attributes.name,
-                  brand:
-                    item.attributes.variant.data.attributes.product.data
-                      .attributes.brand,
-                  price: item.attributes.variant.data.attributes.price, //se saca el precio de la unica variante que tiene
+                  name: item.attributes.name,
+                  brand: item.attributes.brand,
+                  price: item.attributes.price, //se saca el precio de la unica variante que tiene
                   images:
-                    item.attributes.variant.data.attributes.images?.data.map(
+                    item.attributes.images?.data.map(
                       (img) => img.attributes.url
                     ),
                 };

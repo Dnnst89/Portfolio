@@ -1,52 +1,38 @@
 import { gql } from "@apollo/client";
 
 const GET_ORDER_ITEMS_BY_ORDER_ID = gql`
-  query GetOrderItemsByOrderId($orderId: ID!) {
-    orderDetail(id: $orderId) {
-      data {
-        id
-        attributes {
-          payment_detail {
-            data {
-              attributes {
-                subtotal
-                taxes
-                total
-              }
+query GetOrderItemsByOrderId($orderId: ID!) {
+  orderDetail(id: $orderId) {
+    data {
+      id
+      attributes {
+        payment_detail {
+          data {
+            attributes {
+              subtotal
+              taxes
+              total
             }
           }
-          status
         }
-        attributes {
-          order_items {
-            data {
-              id
-              attributes {
-                quantity
-                variant {
-                  data {
-                    id
-                    attributes {
-                      price
-                      product {
-                        data {
-                          id
-                          attributes {
-                            name
-                            brand
-                            cabys
-                          }
-                        }
-                      }
-                      images {
-                        data {
-                          id
-                          attributes {
-                            url
-                          }
-                        }
-                      }
-                    }
+        status
+      }
+      attributes {
+        order_items {
+          data {
+            id
+            attributes {
+              variantId
+              quantity
+              price
+              name
+              brand
+              cabys
+              images {
+                data {
+                  id
+                  attributes {
+                    url
                   }
                 }
               }
@@ -56,6 +42,8 @@ const GET_ORDER_ITEMS_BY_ORDER_ID = gql`
       }
     }
   }
+}
+
 `;
 
 export default GET_ORDER_ITEMS_BY_ORDER_ID;

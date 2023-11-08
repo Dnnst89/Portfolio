@@ -83,35 +83,36 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
     paymentUrl = await paymentRequest(formData);
 
     try {
-      if (token) {
-        setLoadingBtn(true);
-        //verifica que no haya ningun error de stock con la cantidad de productos que lleva
-        if (cartSummary.errors.errorStock.length > 0) {
-          toast.custom((t) => (
-            <AlertNotAuth
-              t={t}
-              msj={
-                "Lo sentimos ha sucedido un error con tu compra, verifica tus productos"
-              }
-              newRoute={"/cart"}
-            />
-          ));
-        } else {
-          router.push(paymentUrl);
-        }
-
+      // if (token) {
+      setLoadingBtn(true);
+      //verifica que no haya ningun error de stock con la cantidad de productos que lleva
+      if (cartSummary.errors.errorStock.length > 0) {
+        toast.custom((t) => (
+          <AlertNotAuth
+            t={t}
+            msj={
+              "Lo sentimos ha sucedido un error con tu compra, verifica tus productos"
+            }
+            newRoute={"/cart"}
+          />
+        ));
       } else {
-        setLoadingBtn(false);
-        toast.error("Por favor selecciona la casilla de verificación", {
-          autoClose: 5000,
-        });
+        router.push(paymentUrl);
       }
+
+      // } else {
+      //   setLoadingBtn(false);
+      //   toast.error("Por favor selecciona la casilla de verificación", {
+      //     autoClose: 5000,
+      //   });
+      // }
     } catch (error) {
       console.error(error);
     }
-    // } finally {
-    //   setLoadingBtn(false);
-    // }
+    // } 
+    finally {
+      setLoadingBtn(false);
+    }
   };
   return (
     <div className="w-full">

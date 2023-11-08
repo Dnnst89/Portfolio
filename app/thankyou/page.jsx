@@ -139,7 +139,7 @@ export default function ThankYouMessage() {
               id: cartItemId,
             },
           });
-        } catch (error) {}
+        } catch (error) { }
 
         try {
           updateVariantStock({
@@ -305,9 +305,14 @@ export default function ThankYouMessage() {
           const { data } = await createOrderItem({
             variables: {
               quantity: item?.attributes?.quantity,
-              variantId: variant?.id,
+              variantId: parseInt(variant?.id), //este dato es un INT no un ID
               publishedAt: isoDate,
               orderDetailId: orderId,
+              price: variantAtt.price,
+              name: variantAtt.product.data.attributes.name,
+              brand: variantAtt.product.data.attributes.brand,
+              cabys: variantAtt.product.data.attributes.cabys,
+              imagesIds: variantAtt.images.data.map(img => img.id)
             },
           });
           return data?.OrderItemEntity?.data;
@@ -517,8 +522,8 @@ export default function ThankYouMessage() {
               } catch (error) {
                 console.log("error", error);
               }
-            } catch (error) {}
-          } catch (error) {}
+            } catch (error) { }
+          } catch (error) { }
         } catch (error) {
           console.log("error crear factura", error);
         }
