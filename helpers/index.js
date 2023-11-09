@@ -199,6 +199,7 @@ const InvoiceInformation = (store, client, key, consecutive) => {
       address: {
         province: store.province,
         country: store.country,
+        canton: store.canton,
         district: store.district,
         neighborhood: store.neighborhood,
         otherSigns: store.otherSigns,
