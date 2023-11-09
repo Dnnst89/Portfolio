@@ -5,6 +5,7 @@ import { BiPlus, BiMinus } from "react-icons/bi";
 import Link from "next/link";
 import AddItemBtn from "./AddItemBtn";
 import ProductImage from "./ProductImage";
+import ProductFeatures from "./ProductFeatures"
 import useCartSummary from "@/hooks/useCartSummary";
 import useStorage from "@/hooks/useStorage";
 import { Carousel } from 'react-responsive-carousel';
@@ -136,6 +137,11 @@ function ProductDetail({ name, brand, description, variants, materials }) {
               Leer mas
             </button>
           </a>
+          {/* Sección seleccion del producto*/}
+          <section>
+                <ProductFeatures></ProductFeatures>
+          </section>
+
           {/* imagenes iconos y caracteristicas */}
           <div className="flex grid grid-cols-12 gap-2 w-full justify-items-stretch ">
 
@@ -247,7 +253,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
           </div>
           {/* precio, cantidad y carrito */}
           <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between  p-4">
-            <span className="col-span-5 font-bold">
+            <span className="col-span-5 font-bold md:text-[30px]">
               $ {variants.length > 0 ? variants[0].attributes.price : null}
             </span>
             <div className="col-span-7 md:flex md:flex-col items-end md:items-end p-3">
