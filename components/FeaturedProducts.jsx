@@ -1,6 +1,6 @@
 "use client";
 
-import AgeProductCard from "./AgeProductCard";
+import FilterProductCard from "./FilterProductCard";
 //GQL
 import { useQuery } from "@apollo/client";
 import GET_FEATURED_PRODUCTS from "@/src/graphQl/queries/getFeaturedProducts";
@@ -47,7 +47,7 @@ const FeaturedProducts = () => {
       {aux
         ? aux.map((item) => {
           return <div role="link" className="flex  justify-center pt-2" key={item.id}>
-            <AgeProductCard
+            <FilterProductCard
               key={item.id}
               id={item.id}
               name={item.attributes.name}

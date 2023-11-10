@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import useStorage from "@/hooks/useStorage";
 import Pagination from "./Pagination";
-import AgePagination from "./AgePagination";
+import FilterPagination from "./FilterPagination";
 import Spinner from "@/components/Spinner";
 export default function OrderDetail() {
 
@@ -151,7 +151,7 @@ export default function OrderDetail() {
           <h1 className="flex justify-center mt-3 text-xl  md:col-span-12">No tienes ordenes, realiza tu primera compra</h1>}
       </div>
       <div className="col-span-12">
-        <AgePagination
+        <FilterPagination
           nbPages={nbPages}
           currentPage={page}
           setCurrentPage={setPage}

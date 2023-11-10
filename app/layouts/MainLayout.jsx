@@ -12,9 +12,6 @@ import FeaturedProducts from "@/components/FeaturedProducts";
 import "../../styles/fonts.css";
 import toast from "react-hot-toast";
 const MainLayout = ({ children }) => {
-  const name = "Juguete";
-  const defaultPrice = 8900;
-  const url = "/uploads/juguete4_36d71de373.jpg";
 
   return (
     <>

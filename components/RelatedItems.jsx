@@ -2,7 +2,7 @@
 import ProductCard from "./ProductCard";
 import ProductsByCategory from "@/src/graphQl/queries/getProductsByCategory";
 import { useQuery } from "@apollo/client";
-import AgeProductCard from "./AgeProductCard";
+import FilterProductCard from "./FilterProductCard";
 
 function RelatedItems({ categories, productId }) {
 
@@ -55,7 +55,7 @@ function RelatedItems({ categories, productId }) {
       <section className="flex flex-wrap max-w-screen-xl m-auto justify-center">
         {aux
           ? aux.map((item) => {
-            return <AgeProductCard key={item.id} id={item.id} name={item.attributes.name} coverImage={item.attributes.coverImage.data} defaultPrice={item.attributes.defaultPrice} brand={item.attributes.brand} />;
+            return <FilterProductCard key={item.id} id={item.id} name={item.attributes.name} coverImage={item.attributes.coverImage.data} defaultPrice={item.attributes.defaultPrice} brand={item.attributes.brand} />;
           })
           : null}
       </section>
