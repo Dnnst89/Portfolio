@@ -213,10 +213,7 @@ export default function ThankYouMessage() {
           const orderNumber = data?.createOrderDetail?.data?.id;
           setOrderId(orderNumber);
           await creatingOrderItems(orderNumber);
-          await sendOrderEmail(
-            quantity,
-            orderNumber
-          );
+          await sendOrderEmail(quantity, orderNumber);
 
           handleCartItems();
           createInvoice(orderNumber);
@@ -232,11 +229,7 @@ export default function ThankYouMessage() {
     }
   };
 
-  const sendOrderEmail = async (
-    totalProducts,
-    orderDetail
-
-  ) => {
+  const sendOrderEmail = async (totalProducts, orderDetail) => {
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1; // Los meses comienzan desde 0, por lo que sumamos 1.
@@ -255,7 +248,7 @@ export default function ThankYouMessage() {
       variables: {
         date: formattedDate,
         totalProducts: totalProducts,
-        order_detail: orderDetail
+        order_detail: orderDetail,
       },
     });
     if (sendEmailError)
@@ -375,6 +368,8 @@ export default function ThankYouMessage() {
             );
 
             const imp = feeResult?.data?.serviceDetail?.lineDetails;
+            console.log("sasimp", imp);
+            console.log("resultado", resultado);
             const inv = formatItemInvoice(resultado, imp);
 
             try {
@@ -463,7 +458,7 @@ export default function ThankYouMessage() {
                     "Emitida conforme a lo establecido en la resolución de Facturación Electrónica, No.\\nDGT-R-033-2019 del 27 de junio de 2019 de la Dirección General de Tributación.",
                   fileName: "155822450521-FE-" + consecutive,
                 },
-                returnCompleteAnswer: false,
+                returnCompleteAnswer: true,
               };
               console.log("cuerpo json", bodyInvoice);
               const InvoiceResult = await facturationInstace.post(
