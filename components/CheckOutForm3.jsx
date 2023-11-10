@@ -12,7 +12,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function CheckOutForm3({ paymentDetailId, total }) {
-  const captchaRef = useRef(null);
+  const captchaRef = useRef(true);
   const router = useRouter();
   const [formData, setFormData] = useState({});
   const [loadingBtn, setLoadingBtn] = useState(false);
@@ -78,8 +78,7 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
   const handleVerification = async () => {
-
-    const token = captchaRef.current.getValue();
+    const token = true;
     paymentUrl = await paymentRequest(formData);
 
     try {
@@ -108,9 +107,8 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
       // }
     } catch (error) {
       console.error(error);
-    }
-    // } 
-    finally {
+    } finally {
+      // }
       setLoadingBtn(false);
     }
   };
@@ -122,19 +120,8 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
           3
         </div>
         <h1 className="text-xl">Formulario de pago</h1>
-      </div>
-
-      {" "}
-      <div className="flex justify-center m-auto mt-8 mb-8 ">
-        <ReCAPTCHA
-          sitekey="6LfFDLAoAAAAAJ25iZdqlICdDvwwkhxsDMZqdHs_"
-          //sitekey="6LfCrUYoAAAAAPgdh0MpvKzzHvhksbGTM3cP1prU"
-          ref={captchaRef}
-        />
-      </div>
-
+      </div>{" "}
       <div className="flex justify-center m-auto mt-8 mb-8 w-3/4">
-
         <button
           onClick={handleVerification}
           className="bg-pink-200 text-white rounded-sm p-2 w-[200px] whitespace-nowrap"
@@ -143,7 +130,6 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
           {loadingBtn ? <Spinner /> : "Proceder al pago"}
         </button>
       </div>
-
     </div>
   );
 }

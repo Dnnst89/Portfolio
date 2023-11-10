@@ -139,7 +139,7 @@ export default function ThankYouMessage() {
               id: cartItemId,
             },
           });
-        } catch (error) { }
+        } catch (error) {}
 
         try {
           updateVariantStock({
@@ -174,7 +174,11 @@ export default function ThankYouMessage() {
         return console.log(
           "Lo sentimos, ha ocurrido un error al cargar los datos"
         );
-
+      console.log(
+        "first",
+        userAddress.usersPermissionsUser.data.attributes.users_address.data
+          .attributes
+      );
       const province =
         userAddress.usersPermissionsUser.data.attributes.users_address.data
           .attributes.province;
@@ -312,7 +316,7 @@ export default function ThankYouMessage() {
               name: variantAtt.product.data.attributes.name,
               brand: variantAtt.product.data.attributes.brand,
               cabys: variantAtt.product.data.attributes.cabys,
-              imagesIds: variantAtt.images.data.map(img => img.id)
+              imagesIds: variantAtt.images.data.map((img) => img.id),
             },
           });
           return data?.OrderItemEntity?.data;
@@ -492,6 +496,7 @@ export default function ThankYouMessage() {
                 },
                 returnCompleteAnswer: false,
               };
+              console.log("cuerpo json", bodyInvoice);
               const InvoiceResult = await facturationInstace.post(
                 `document/electronic-invoice?access_token=${token}`,
                 bodyInvoice
@@ -522,8 +527,8 @@ export default function ThankYouMessage() {
               } catch (error) {
                 console.log("error", error);
               }
-            } catch (error) { }
-          } catch (error) { }
+            } catch (error) {}
+          } catch (error) {}
         } catch (error) {
           console.log("error crear factura", error);
         }
