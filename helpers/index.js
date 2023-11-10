@@ -147,7 +147,7 @@ const createConsecutiveNumber = (param) => {
 
 const formatItemInvoice = (items, imp) => {
   var cont = -1;
-  console.log("totalamount", imp);
+
   if (!items?.length) return [];
   return items?.map((item) => {
     cont = cont + 1;

@@ -368,8 +368,7 @@ export default function ThankYouMessage() {
             );
 
             const imp = feeResult?.data?.serviceDetail?.lineDetails;
-            console.log("sasimp", imp);
-            console.log("resultado", resultado);
+
             const inv = formatItemInvoice(resultado, imp);
 
             try {
