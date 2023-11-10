@@ -213,22 +213,9 @@ export default function ThankYouMessage() {
           const orderNumber = data?.createOrderDetail?.data?.id;
           setOrderId(orderNumber);
           await creatingOrderItems(orderNumber);
-          const jsonString = JSON.stringify(items);
-          const jsonData = JSON.parse(jsonString);
-          // jsonData es ahora un objeto JavaScript que puedes usar
-          console.log(jsonData);
-          sendOrderEmail(
-            total,
-            tax,
-            subtotal,
-            orderNumber,
+          await sendOrderEmail(
             quantity,
-            userName,
-            province,
-            canton,
-            addressLine1,
-            userEmail,
-            jsonData
+            orderNumber
           );
 
           handleCartItems();
@@ -246,17 +233,9 @@ export default function ThankYouMessage() {
   };
 
   const sendOrderEmail = async (
-    total,
-    tax,
-    subtotal,
-    orderNumber,
     totalProducts,
-    userName,
-    province,
-    canton,
-    addressLine1,
-    email,
-    products
+    orderDetail
+
   ) => {
     const currentDate = new Date();
     const year = currentDate.getFullYear();
@@ -274,19 +253,9 @@ export default function ThankYouMessage() {
 
     const { data: emailInfo, error: sendEmailError } = await createOrderEmail({
       variables: {
-        userName: userName,
-        email: email,
-        orderNumber: orderNumber,
         date: formattedDate,
         totalProducts: totalProducts,
-        subtotal: subtotal,
-        tax: tax,
-        shipping: shipping,
-        total: total,
-        province: province,
-        canton: canton,
-        addressLine1: addressLine1,
-        products: products,
+        order_detail: orderDetail
       },
     });
     if (sendEmailError)

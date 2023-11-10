@@ -7,7 +7,7 @@ function GiftIdeasCard({ ageRange, image, age, button, border, alt }) {
   const router = useRouter();
   return (
     //  <Link href={{ pathname: "/resultsByAge", query: { ageRange } }}>
-    <div onClick={() => { return router.push(`/resultsByAge/?query=${ageRange}`) }}>
+    <div onClick={() => { return router.push(`/filtersResults/?query=${ageRange}`) }}>
       <div className=" m-4">
         <section className="mt-5 ">
           <div className={border}>

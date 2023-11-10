@@ -1,7 +1,8 @@
 "use client";
-import AgeResultsComponent from "@/components/AgeResultsComponent";
+import FiltersResultsComponent from "@/components/FiltersResultsComponent";
 import BodyComponent from "@/components/BodyComponent";
 import { useEffect, useState } from "react";
+import "../../styles/fonts.css";
 
 const Page = () => {
   const [querySearch, setQuerySearch] = useState("");
@@ -12,7 +13,7 @@ const Page = () => {
   }, []);
   return (
     <BodyComponent>
-      <AgeResultsComponent ageRange={querySearch} />
+      <FiltersResultsComponent ageRange={querySearch} />
     </BodyComponent>
   );
 };

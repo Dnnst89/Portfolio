@@ -3,8 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 
-const AgeProductCard = ({ id, name, defaultPrice, coverImage, brand }) => {
-  const altTextDesc="Imagen Producto " + name
+const FilterProductCard = ({ id, name, defaultPrice, coverImage, brand }) => {
+  const altTextDesc = "Imagen Producto " + name
   const router = useRouter();
   const productChange = () => {
     window.location.href = `/detail/?id=${id}`
@@ -45,12 +45,12 @@ const AgeProductCard = ({ id, name, defaultPrice, coverImage, brand }) => {
       </div>
 
       <div className="bg-aquamarine text-xs md:text-lg rounded-b-[15px] font-bold flex justify-center absolute bottom-0 left-0 right-0 hover:underline text-white p-1">
-        
-          $ {defaultPrice}
-        
+
+        $ {defaultPrice}
+
       </div>
     </div>
   );
 };
 
-export default AgeProductCard;
+export default FilterProductCard;
