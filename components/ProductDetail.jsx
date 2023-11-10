@@ -23,13 +23,11 @@ function ProductDetail({ name, brand, description, variants, materials }) {
   const [quantity, setQuantity] = useState(1);
   const [image, setImage] = useState(null);
   let shortDescrption = "";
-  let images = [];
+  const [images, setImages] = useState(variants.length > 0 ? variants[0].attributes.images.data : null);
   const { user } = useStorage();
   const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
 
-  if (variants.length > 0) {
-    images = variants[0].attributes.images.data;
-  }
+
 
   const decreaseCounter = () => {
     if (quantity === 1) return;
@@ -139,7 +137,11 @@ function ProductDetail({ name, brand, description, variants, materials }) {
           </a>
           {/* Sección seleccion del producto*/}
           <section>
-                <ProductFeatures></ProductFeatures>
+                <ProductFeatures
+                variantsList={variants}
+                setImages={setImages}
+                setImage={setImage}
+                />
           </section>
 
           {/* imagenes iconos y caracteristicas */}

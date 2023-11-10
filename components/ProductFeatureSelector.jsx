@@ -16,7 +16,7 @@ const ProductFeatureSelector = ({ featureName, featureList, onSelect }) => {
     };
   
     return (
-      <div className='py-3 space-y-2 w-full h-fit border-t grid'>
+        <div className='py-3 space-y-2 w-full h-fit border-t grid'>
         <h3 className='font-bold'>{featureName}</h3>
         <select
           id={generateUniqueId(featureName)}
@@ -24,11 +24,11 @@ const ProductFeatureSelector = ({ featureName, featureList, onSelect }) => {
           onChange={handleChange}
         >
           <option value="" disabled>
-            Select {featureName}
+            Selecciona {featureName}
           </option>
-          {featureList.map((feature, index) => (
-            <option key={index} value={feature}>
-              {feature}
+          {Object.entries(featureList).map(([key, value], index) => (
+            <option key={index} value={value}>
+              {key}
             </option>
           ))}
         </select>
