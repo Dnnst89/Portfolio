@@ -44,6 +44,7 @@ export default function CheckOutForm2({ amount, checkbox }) {
           total: total,
           invoiceRequired: checkbox,
           deliveryMethod: data.deliveryMethod,
+          paymentMethod: "Tarjeta Crédito/ Débito",
           publishedAt: isoDate,
         },
       });
