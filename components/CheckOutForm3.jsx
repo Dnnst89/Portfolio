@@ -127,8 +127,8 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
       {" "}
       <div className="flex justify-center m-auto mt-8 mb-8 ">
         <ReCAPTCHA
-          sitekey="6LfFDLAoAAAAAJ25iZdqlICdDvwwkhxsDMZqdHs_"
-          //sitekey="6LfCrUYoAAAAAPgdh0MpvKzzHvhksbGTM3cP1prU"
+          //sitekey="6LfFDLAoAAAAAJ25iZdqlICdDvwwkhxsDMZqdHs_"
+          sitekey="6LfCrUYoAAAAAPgdh0MpvKzzHvhksbGTM3cP1prU"
           ref={captchaRef}
         />
       </div>
