@@ -25,15 +25,14 @@ const ProductFeatures = ({variantsList, setImages, setImage}) => {
 
   const [featureList, setFeatureList] = useState([resultado]);
 
+  //obtenemos las imagenes de la variante seleccionada
   const getImagesById = (id, variants) => {
     const variant = variants.find(variant => {
-      
       return variant.id === id
     })
     if (variant) {
       return variant.attributes.images.data;
     }
-  
     return [];
   };
   
@@ -43,7 +42,7 @@ const ProductFeatures = ({variantsList, setImages, setImage}) => {
     let variantImages=getImagesById(selectedValue, variantsList);
     setImages(variantImages);  
     setImage(variantImages[0].attributes.url)
-    //handleAddFeature();
+    handleAddFeature();
   };
 
   //agregar el nuevo feature de selección

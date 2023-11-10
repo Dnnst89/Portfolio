@@ -27,8 +27,6 @@ function ProductDetail({ name, brand, description, variants, materials }) {
   const { user } = useStorage();
   const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
 
-
-
   const decreaseCounter = () => {
     if (quantity === 1) return;
     setQuantity((prev) => --prev);
