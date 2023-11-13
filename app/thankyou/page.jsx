@@ -459,7 +459,7 @@ export default function ThankYouMessage() {
                   },
                   otherCharges: [],
                   billSummary: {
-                    ...formatBillSumary(billSummary, "1.000", "CRC"),
+                    ...formatBillSumary(billSummary, "1.000", store.currency),
                   },
                   referenceInformation: [],
                   others: {
