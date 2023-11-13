@@ -17,6 +17,7 @@ const GET_STORE_INFO = gql`
           otherSigns
           email
           neighborhood
+          currency
         }
       }
     }
