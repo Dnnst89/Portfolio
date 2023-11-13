@@ -5,6 +5,8 @@ import Spinner from "./Spinner";
 import { getAccessToken, formatTaxData } from "@/helpers";
 import { useCallback, useEffect, useState } from "react";
 import { facturationInstace } from "@/src/axios/algoliaIntance/config";
+import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
+import { useQuery } from "@apollo/client";
 
 const CartDetail = ({
   isCheckout = false,
@@ -12,10 +14,25 @@ const CartDetail = ({
   onChange,
 }) => {
   const { user } = useStorage();
+  const { data: storeInformation, error: storeInformationError } = useQuery(GET_STORE_INFO, {
+    variables: {
+      id: 1,
+    },
+  });
+  if (storeInformationError)
+    return toast.error(
+      "Lo sentimos, ha ocurrido un error al cargar los datos",
+      {
+        autoClose: 5000,
+      }
+    );
+
+  const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
+
   const [amounts, setAmounts] = useState({
     total: 0,
     tax: 0,
-    currencyType: "USD",
+    currencyType: currency,
     loading: false,
   });
   const {
@@ -117,8 +134,8 @@ const CartDetail = ({
             <div className="flex flex-col p-4 space-y-3">
               <p className="flex justify-center">Costo Total(IVA Incluido)</p>
               <p className="flex justify-center whitespace-nowrap">
-                {amounts?.total}
-                {amounts.currencyType}
+                {amounts?.total} {amounts.currencyType}
+
               </p>
             </div>
           </>

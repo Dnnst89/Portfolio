@@ -10,6 +10,7 @@ import AlertNotAuth from "./AlertNotAuth";
 import Spinner from "./Spinner";
 import ReCAPTCHA from "react-google-recaptcha";
 import toast, { Toaster } from "react-hot-toast";
+import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 
 export default function CheckOutForm3({ paymentDetailId, total }) {
   const captchaRef = useRef(true);
@@ -28,6 +29,22 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
   const { loading, error, data } = useQuery(GET_PAYMENT_DETAILS, {
     variables: { userId: id },
   });
+
+  const { data: storeInformation, error: storeInformationError } = useQuery(GET_STORE_INFO, {
+    variables: {
+      id: 1,
+    },
+  });
+  if (storeInformationError)
+    return toast.error(
+      "Lo sentimos, ha ocurrido un error al cargar los datos",
+      {
+        autoClose: 5000,
+      }
+    );
+
+  const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
+
   useEffect(() => {
     if (!loading && !error) {
       const userData = data?.usersPermissionsUser?.data?.attributes;
@@ -51,7 +68,7 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
                 : "http://detinmarin.s3-website-us-west-2.amazonaws.com/thankyou/",
             key: process.env.NEXT_PUBLIC_TILOPAY_API_KEY,
             amount: total,
-            currency: "USD",
+            currency: currency,
             billToFirstName: firstName,
             billToLastName: lastName,
             billToAddress: userAddressAttributes.addressLine1,

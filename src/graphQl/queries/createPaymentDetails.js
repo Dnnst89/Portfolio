@@ -7,6 +7,8 @@ const CREATE_PAYMENT_DETAIL = gql`
     $taxes: Float
     $total: Float
     $invoiceRequired: Boolean
+    $deliveryMethod: String
+    $paymentMethod: String
     $publishedAt: DateTime
   ) {
     createPaymentDetail(
@@ -16,6 +18,8 @@ const CREATE_PAYMENT_DETAIL = gql`
         taxes: $taxes
         total: $total
         invoiceRequired: $invoiceRequired
+        deliveryMethod: $deliveryMethod
+        paymentMethod: $paymentMethod
         publishedAt: $publishedAt
       }
     ) {
@@ -27,6 +31,8 @@ const CREATE_PAYMENT_DETAIL = gql`
           subtotal
           taxes
           invoiceRequired
+          deliveryMethod
+          paymentMethod
           publishedAt
         }
       }

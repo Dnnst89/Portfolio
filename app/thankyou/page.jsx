@@ -139,7 +139,7 @@ export default function ThankYouMessage() {
               id: cartItemId,
             },
           });
-        } catch (error) {}
+        } catch (error) { }
 
         try {
           updateVariantStock({
@@ -242,13 +242,28 @@ export default function ThankYouMessage() {
       "-" +
       (day < 10 ? "0" : "") +
       day;
-    const shipping = 0.0;
+
+    const { data: storeInformation, error: storeInformationError } = await getStoreInformation({
+      variables: {
+        id: 1,
+      },
+    });
+    if (storeInformationError)
+      return toast.error(
+        "Lo sentimos, ha ocurrido un error al cargar los datos",
+        {
+          autoClose: 5000,
+        }
+      );
+
+    const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
 
     const { data: emailInfo, error: sendEmailError } = await createOrderEmail({
       variables: {
         date: formattedDate,
         totalProducts: totalProducts,
         order_detail: orderDetail,
+        currency: currency
       },
     });
     if (sendEmailError)
@@ -286,7 +301,6 @@ export default function ThankYouMessage() {
           console.log("Error creating orderItem: ", error);
         }
       });
-      console.log(orderItems);
       return orderItems;
     }
   };
@@ -443,7 +457,7 @@ export default function ThankYouMessage() {
                   },
                   otherCharges: [],
                   billSummary: {
-                    ...formatBillSumary(billSummary, "1.000", "CRC"),
+                    ...formatBillSumary(billSummary, "1.000", store.currency),
                   },
                   referenceInformation: [],
                   others: {
@@ -464,8 +478,6 @@ export default function ThankYouMessage() {
                 `document/electronic-invoice?access_token=${token}`,
                 bodyInvoice
               );
-
-              console.log("respuesta factura", InvoiceResult);
               try {
                 const isoDate = new Date().toISOString();
                 const resulta = await getStoreInformation({
@@ -490,8 +502,8 @@ export default function ThankYouMessage() {
               } catch (error) {
                 console.log("error", error);
               }
-            } catch (error) {}
-          } catch (error) {}
+            } catch (error) { }
+          } catch (error) { }
         } catch (error) {
           console.log("error crear factura", error);
         }
