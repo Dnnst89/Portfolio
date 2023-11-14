@@ -65,14 +65,11 @@ export default function OrderDetailSecondary({ orderId }) {
                 return {
                   itemRef: item.id,
                   quantity: item.attributes.quantity,
-                  name: item.attributes.variant.data.attributes.product.data
-                    .attributes.name,
-                  brand:
-                    item.attributes.variant.data.attributes.product.data
-                      .attributes.brand,
-                  price: item.attributes.variant.data.attributes.price, //se saca el precio de la unica variante que tiene
+                  name: item.attributes.name,
+                  brand: item.attributes.brand,
+                  price: item.attributes.price, //se saca el precio de la unica variante que tiene
                   images:
-                    item.attributes.variant.data.attributes.images?.data.map(
+                    item.attributes.images?.data.map(
                       (img) => img.attributes.url
                     ),
                 };
@@ -102,12 +99,12 @@ export default function OrderDetailSecondary({ orderId }) {
   console.log(orderData.orderItems.images);
 
   return (
-    <div className="bg-resene col-span-8 grid grid-cols-12">
+    <div className="bg-resene col-span-12 md:col-span-8 grid grid-cols-12">
       <h1 className="flex justify-center text-xl p-5 col-span-12">
         Pedido N°: {orderData.order.orderRef}
       </h1>
       <div className="col-span-12 grid grid-cols-12">
-        <div className="col-span-7 md:pr-2 md:pl-2">
+        <div className="col-span-12 md:col-span-7 md:pr-2 md:pl-2">
           {
             orderData.orderItems.length > 0 ? (
               orderData.orderItems?.map(
@@ -147,7 +144,7 @@ export default function OrderDetailSecondary({ orderId }) {
                     </section>
                     <div className="col-span-4 grid items-center">
                       <div>
-                        <h1 className="sm:text-sm">
+                        <h1 className="text-sm md:text-xl">
                           N° artículos: {item.quantity}{" "}
                         </h1>
                         <p className="sm:text-sm ">${item.price}</p>
@@ -161,7 +158,7 @@ export default function OrderDetailSecondary({ orderId }) {
             ) //si no existen items
           }
         </div>
-        <section className="lg:border-l-4 lg:border-lightblue  h-fit sm:border-0 col-span-5">
+        <section className="lg:border-l-4 lg:border-lightblue  h-fit sm:border-0 col-span-12 md:col-span-5">
           <OrderSummary
             detailTitle={"Detalle del pedido"}
             quantity={orderData.orderItems.reduce((accumulator, item) => {

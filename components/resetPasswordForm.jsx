@@ -31,9 +31,9 @@ const validationSchema = Yup.object().shape({
     .oneOf([Yup.ref("password"), null], "Las contraseñas no coinciden"),
 });
 
-const ResetPasswordForm = ({ code }) => {
-  const dispatch = useDispatch();
+const ResetPasswordForm = ({ code, resetForm }) => {
   const router = useRouter();
+  //const dispatch = useDispatch();
   // Call mutation
   const [updatePassword] = useMutation(UPDATE_PASSWORD);
   //pass the input values
@@ -47,13 +47,21 @@ const ResetPasswordForm = ({ code }) => {
       });
 
       // Handle the response here store the JWT token
-      toast.success("Contraseña actualizada correctamente.");
+      toast.success("Contraseña actualizada correctamente.", {
+        duration: 4000,
+      });
+      setTimeout(() => {
+        router.push("login");
+      }, 4000);
 
       // Dispatch user and update shopping session
-      dispatch(setUser(data.resetPassword.user));
-      router.push("/login");
+      // dispatch(setUser(data.resetPassword.user));
     } catch (error) {
-      toast.error("No fue posible actualizar tu contraseña");
+      toast.error("No fue posible actualizar tu contraseña", {
+        duration: 4000,
+      });
+    } finally {
+      resetForm();
     }
   };
 
@@ -128,15 +136,7 @@ const ResetPasswordForm = ({ code }) => {
                       </button>
                     </div>
                   </Form>
-                  <Toaster
-                    toastOptions={{
-                      style: {
-                        backgroundColor: "#be123d",
-                        color: "#FFF",
-                        fontSize: "14px",
-                      },
-                    }}
-                  />
+                  <Toaster />
                 </>
               );
             }}

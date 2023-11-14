@@ -1,10 +1,13 @@
 import { gql } from "@apollo/client";
 
 const GET_CART_ITEMS_LIST_SHOPPING_SESSION = gql`
-query GetCartItemsBySession($shoppingSessionId: ID!, $page: Int!, $pageSize: Int!) {
+query GetCartItemsBySession(
+  $shoppingSessionId: ID!
+  $page: Int!
+  $pageSize: Int!
+) {
   cartItems(
-    filters: {
-      shopping_sessions: { id: { eq: $shoppingSessionId } }}
+    filters: { shopping_sessions: { id: { eq: $shoppingSessionId } } }
     pagination: { page: $page, pageSize: $pageSize }
   ) {
     meta {
@@ -39,6 +42,16 @@ query GetCartItemsBySession($shoppingSessionId: ID!, $page: Int!, $pageSize: Int
                     brand
                     description
                     cabys
+                    coverImage {
+                      data {
+                        id
+                        attributes {
+                          width
+                          height
+                          url
+                        }
+                      }
+                    }
                   }
                 }
               }

@@ -31,7 +31,7 @@ const validationSchema = Yup.object().shape({
     .max(50, "Nombre de usuario muy largo")
     .required("Este campo es requerido"),
   email: Yup.string()
-    .email("Correo inválido")
+    .email("el correo no es válido")
     .required("Este campo es requerido"),
   password: Yup.string()
     .required("Este campo es requerido")
@@ -53,7 +53,7 @@ const RegisterFormTwo = () => {
   const [createUser] = useMutation(RegisterUser);
   const [createShoppingSession] = useMutation(CREATE_SHOPPING_SESSION_MUTATION);
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values, { resetForm }) => {
     const dataValues = Object.keys(values).map((el) => {
       return values[el];
     });
@@ -69,7 +69,7 @@ const RegisterFormTwo = () => {
       const { data } = await createUser({
         variables: { username, email, password },
       });
-      dispatch(setUser(data.register.user));
+      //dispatch(setUser(data.register.user));
       const { data: dataSession } = await createShoppingSession({
         //query para crear la session al user
         variables: {
@@ -77,12 +77,9 @@ const RegisterFormTwo = () => {
           userId: data.register.user.id,
         },
       });
-      toast.success(
-        "Registro exitoso, hemos enviado un correo de confirmación.",
-        {
-          duration: 4000,
-        }
-      );
+      toast.success(`Hemos enviado un correo electrónico de confirmación.`, {
+        duration: 5000,
+      });
       dispatch(updateShoppingSession(dataSession.createShoppingSession.data)); //ACTUALIZO LA SESSION CON LOS DATOS OBTENIDOS
     } catch (error) {
       toast.error(
@@ -93,132 +90,135 @@ const RegisterFormTwo = () => {
       );
     } finally {
       setLoading(false);
+      resetForm();
     }
   };
   useSession();
 
   return (
-    <div className="h-screen">
-      <CheckOutHeader regresar={"/"} />
-      <div className="flex justify-center items-center w-full max-w-screen-xl  m-auto">
-        <div className="w-full">
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-          >
-            {({ errors, touched }) => {
-              return (
-                <>
-                  <Form className=" max-w-screen-xl items-center mt-20 grid grid-cols-12">
-                    <h1 className=" text-3xl flex justify-center items-center mb-10 col-span-12">
-                      Registrate
-                    </h1>
+    <main>
+      <div className="h-screen">
+        <CheckOutHeader regresar={"/"} />
+        <div className="flex justify-center items-center w-full max-w-screen-xl  m-auto">
+          <div className="w-full">
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={handleSubmit}
+            >
+              {({ errors, touched }) => {
+                return (
+                  <>
+                    <Form className=" max-w-screen-xl items-center mt-10 grid grid-cols-12">
+                      <h1 className=" text-3xl flex justify-center items-center mb-10 col-span-12">
+                        Registrate
+                      </h1>
 
-                    <div className="bg-resene  pt-10 w-full flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-3 col-span-8">
-                      <div className="flex grid w-full">
-                        <section className="p-3 w-10/12 m-auto grid grid-cols-12 gap-5">
-                          <div className="grid col-span-12 md:col-span-6">
-                            <label
-                              className="whitespace-nowrap"
-                              htmlFor="username"
-                            >
-                              Nombre de usuario
-                              <span className="text-pink-200">*</span>
-                            </label>
-                            <Field
-                              type="text"
-                              id="username"
-                              name="username"
-                              className="focus:border-blue-500 outline-none px-6 py-2 mb-2 rounded-lg border-2 border-grey-200"
-                              autoFocus={true}
-                            />
-                            {errors.username && touched.username ? (
-                              <ErrorForm>{errors.username}</ErrorForm>
-                            ) : null}
-                          </div>
-                          <div className="grid col-span-12 md:col-span-6">
-                            <label
-                              className="whitespace-nowrap"
-                              htmlFor="email"
-                            >
-                              Correo electrónico
-                              <span className="text-pink-200">*</span>
-                            </label>
-                            <Field
-                              type="email"
-                              id="email"
-                              name="email"
-                              className="focus:border-blue-500 outline-none px-6 py-2 mb-2 rounded-lg border-2 border-grey-200"
-                              autoFocus={true}
-                            />
-                            {errors.email && touched.email ? (
-                              <ErrorForm>{errors.email}</ErrorForm>
-                            ) : null}
-                          </div>
-                        </section>
-                        <section className="p-3 w-10/12 m-auto grid grid-cols-12 gap-5">
-                          <div className="grid col-span-12 md:col-span-6">
-                            <label htmlFor="password">
-                              Constraseña
-                              <span className="text-pink-200">*</span>
-                            </label>
-                            <Field
-                              type="password"
-                              id="password"
-                              name="password"
-                              className="focus:border-blue-500 outline-none  px-6 py-2 mb-2 border-2 border-grey-200 rounded-lg "
-                              autoFocus={true}
-                            />
-                            {errors.password && touched.password ? (
-                              <ErrorForm>{errors.password}</ErrorForm>
-                            ) : null}
-                          </div>
-                          <div className="grid col-span-12 md:col-span-6">
-                            <label
-                              className="whitespace-nowrap w-[100px]"
-                              htmlFor="confirmPassword"
-                            >
-                              Confirmar contraseña
-                              <span className="text-pink-200">*</span>
-                            </label>
-                            <Field
-                              type="password"
-                              id="confirmPassword"
-                              name="confirmPassword"
-                              className="focus:border-blue-500 outline-none  px-6 py-2 mb-2 rounded-lg border-2 border-grey-200"
-                              autoFocus={true}
-                            />
-                            {errors.confirmPassword &&
-                            touched.confirmPassword ? (
-                              <ErrorForm>{errors.confirmPassword}</ErrorForm>
-                            ) : null}
-                          </div>
-                        </section>
+                      <div className="bg-resene  pt-10 w-full flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-2 col-span-10 md:col-start-3 md:col-span-8">
+                        <div className="flex grid w-full">
+                          <section className="p-3 w-10/12 m-auto grid grid-cols-12 gap-5">
+                            <div className="grid col-span-12 md:col-span-6 content-baseline">
+                              <label
+                                className="whitespace-nowrap"
+                                htmlFor="username"
+                              >
+                                Nombre de usuario
+                                <span className="text-pink-200">*</span>
+                              </label>
+                              <Field
+                                type="text"
+                                id="username"
+                                name="username"
+                                className="focus:border-blue-500 outline-none px-6 py-2 mb-2 rounded-lg border-2 border-grey-200"
+                                autoFocus={true}
+                              />
+                              {errors.username && touched.username ? (
+                                <ErrorForm>{errors.username}</ErrorForm>
+                              ) : null}
+                            </div>
+                            <div className="grid col-span-12 md:col-span-6 content-baseline">
+                              <label
+                                className="whitespace-nowrap"
+                                htmlFor="email"
+                              >
+                                Correo electrónico
+                                <span className="text-pink-200">*</span>
+                              </label>
+                              <Field
+                                type="email"
+                                id="email"
+                                name="email"
+                                className="focus:border-blue-500 outline-none px-6 py-2 mb-2 rounded-lg border-2 border-grey-200"
+                                autoFocus={true}
+                              />
+                              {errors.email && touched.email ? (
+                                <ErrorForm>{errors.email}</ErrorForm>
+                              ) : null}
+                            </div>
+                          </section>
+                          <section className="p-3 w-10/12 m-auto grid grid-cols-12 gap-5">
+                            <div className="grid col-span-12 md:col-span-6 content-baseline">
+                              <label htmlFor="password">
+                                Constraseña
+                                <span className="text-pink-200">*</span>
+                              </label>
+                              <Field
+                                type="password"
+                                id="password"
+                                name="password"
+                                className="focus:border-blue-500 outline-none  px-6 py-2 mb-2 border-2 border-grey-200 rounded-lg "
+                                autoFocus={true}
+                              />
+                              {errors.password && touched.password ? (
+                                <ErrorForm>{errors.password}</ErrorForm>
+                              ) : null}
+                            </div>
+                            <div className="grid col-span-12 md:col-span-6 content-baseline">
+                              <label
+                                className="whitespace-nowrap w-[100px]"
+                                htmlFor="confirmPassword"
+                              >
+                                Confirmar contraseña
+                                <span className="text-pink-200">*</span>
+                              </label>
+                              <Field
+                                type="password"
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                className="focus:border-blue-500 outline-none  px-6 py-2 mb-2 rounded-lg border-2 border-grey-200"
+                                autoFocus={true}
+                              />
+                              {errors.confirmPassword &&
+                                touched.confirmPassword ? (
+                                <ErrorForm>{errors.confirmPassword}</ErrorForm>
+                              ) : null}
+                            </div>
+                          </section>
+                        </div>
+
+                        <button
+                          type="submit"
+                          className="bg-blue-500 hover:bg-blue-300 text-whitetext-base rounded-lg py-2 px-5 transition-colors text-lg text-white bg-pink-200 disabled:opacity-50 flex justify-center mx-auto mt-5 my-4"
+                          disabled={
+                            (Object.keys(errors).length &&
+                              Object.keys(touched).length) ||
+                            loading
+                          }
+                        >
+                          {loading ? <Spinner /> : "Registrar"}
+                        </button>
                       </div>
-
-                      <button
-                        type="submit"
-                        className="bg-blue-500 hover:bg-blue-300 text-whitetext-base rounded-lg py-2 px-5 transition-colors text-lg text-white bg-pink-200 disabled:opacity-50 flex justify-center mx-auto mt-5 my-4"
-                        disabled={
-                          (Object.keys(errors).length &&
-                            Object.keys(touched).length) ||
-                          loading
-                        }
-                      >
-                        {loading ? <Spinner /> : "Registrar"}
-                      </button>
-                    </div>
-                  </Form>
-                  <Toaster />
-                </>
-              );
-            }}
-          </Formik>
-          {/* <SocialMediaRegistry /> */}
+                    </Form>
+                    <Toaster />
+                  </>
+                );
+              }}
+            </Formik>
+            {/* <SocialMediaRegistry /> */}
+          </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

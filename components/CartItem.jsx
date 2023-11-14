@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 const CartItem = ({ cartItemId, idVariant, productName, brand, description, color, price, totalPrice, ageRange, size, weight, images, stockVariant, quantityCartItem, loading, error }) => {
 
 
+
     // error.map((item) => {
     //     if (item === idVariant) {
 
@@ -22,7 +23,7 @@ const CartItem = ({ cartItemId, idVariant, productName, brand, description, colo
             <section className="grid grid-cols-12 col-span-12 md:col-span-4">
                 <div className="grid grid-cols-12 col-span-12 items-center">
                     {images.length > 0 ?
-                        <CarouselImages images={images} widthImg={140} heightImg={140} classStyle={'rounded-2xl col-span-6'} />
+                        <CarouselImages altText={productName} images={images} widthImg={140} heightImg={140} classStyle={'rounded-2xl col-span-6'} />
                         : (
                             <Image
                                 src={test}

@@ -32,7 +32,7 @@ const PersonalDataForm = () => {
   const userId = user?.id;
   const { id } = user || {};
   const authUser = useSelector((state) => state.auth.user);
-  const [userInformation, setUserInformation] = useState({ 
+  const [userInformation, setUserInformation] = useState({
     firstName: "",
     lastName: "",
     phone: "",
@@ -95,24 +95,16 @@ const PersonalDataForm = () => {
       <h1 className="m-2">Tus datos</h1>
       <div className="flex justify-center w-11/12">
         <section className="w-full p-5 grid grid-cols-6 gap-3">
-          <div className="col-span-6 md:col-span-3">
-            <label>Nombre de usuario:</label>
+          <div className="col-span-6 md:col-span-3 space-y-1">
+            <h2 className="font-bold">Nombre de usuario:</h2>
             {authUser && (
-              <input
-                className="py-1 w-full rounded-lg border-2 border-grey-300/40 outline-none bg-grey-400 mb-3  px-2"
-                placeholder={authUser.username}
-                readOnly
-              />
+              <label className="">{authUser.username}</label>
             )}
           </div>
-          <div className="col-span-6 md:col-span-3">
-            <label>Correo Electrónico:</label>
+          <div className="col-span-6 md:col-span-3 space-y-1">
+            <h2 className="font-bold">Correo Electrónico:</h2>
             {authUser && (
-              <input
-                className="py-1 w-full rounded-lg border-2 border-grey-300/40 outline-none bg-grey-400 mb-3  px-2"
-                placeholder={authUser.email}
-                readOnly
-              />
+              <label className="">{authUser.email}</label>
             )}
           </div>
 
@@ -131,7 +123,7 @@ const PersonalDataForm = () => {
                             <section className="w-full">
                               <div className="flex justify-center">
                                 <section className="w-full grid grid-cols-12 gap-4">
-                                  <div className="col-span-6 grid">
+                                  <div className="col-span-12 md:col-span-6 grid content-baseline">
                                     <label htmlFor="name">Nombre</label>
                                     <Field
                                       type="text"
@@ -150,13 +142,12 @@ const PersonalDataForm = () => {
                                       <ErrorForm>{errors.firstName}</ErrorForm>
                                     ) : null}
                                   </div>
-                                  <div className="col-span-6 grid">
+                                  <div className="col-span-12 md:col-span-6 grid content-baseline">
                                     <label htmlFor="lastName">Apellidos</label>
                                     <Field
                                       type="text"
                                       id="lastName"
                                       name="lastName"
-                                      placeholder="Apellidos"
                                       className="form-input"
                                       onChange={(e) => {
                                         setUserInformation({
@@ -170,13 +161,12 @@ const PersonalDataForm = () => {
                                       <ErrorForm>{errors.lastName}</ErrorForm>
                                     ) : null}
                                   </div>
-                                  <div className="col-span-6 grid">
+                                  <div className="col-span-12 md:col-span-6 grid content-baseline">
                                     <label htmlFor="phone">Teléfono</label>
                                     <Field
                                       type="text"
                                       id="phone"
                                       name="phone"
-                                      placeholder="Teléfono"
                                       className="form-input"
                                       onChange={(e) => {
                                         setUserInformation({

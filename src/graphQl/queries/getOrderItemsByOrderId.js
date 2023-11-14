@@ -1,5 +1,4 @@
-
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 const GET_ORDER_ITEMS_BY_ORDER_ID = gql`
 query GetOrderItemsByOrderId($orderId: ID!) {
@@ -23,29 +22,17 @@ query GetOrderItemsByOrderId($orderId: ID!) {
           data {
             id
             attributes {
+              variantId
               quantity
-              variant {
+              price
+              name
+              brand
+              cabys
+              images {
                 data {
                   id
                   attributes {
-                    price
-                    product {
-                      data {
-                        id
-                        attributes {
-                          name
-                          brand
-                        }
-                      }
-                    }
-                    images {
-                      data {
-                        id
-                        attributes {
-                          url
-                        }
-                      }
-                    }
+                    url
                   }
                 }
               }
@@ -56,8 +43,6 @@ query GetOrderItemsByOrderId($orderId: ID!) {
     }
   }
 }
-
-
 
 `;
 

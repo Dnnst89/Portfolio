@@ -9,6 +9,11 @@ export const GET_PAYMENT_DETAILS = gql`
           firstName
           lastName
           phoneNumber
+          email
+          idCard {
+            idType
+            idNumber
+          }
           users_address {
             data {
               attributes {

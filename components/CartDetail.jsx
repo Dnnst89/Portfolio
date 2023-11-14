@@ -5,6 +5,8 @@ import Spinner from "./Spinner";
 import { getAccessToken, formatTaxData } from "@/helpers";
 import { useCallback, useEffect, useState } from "react";
 import { facturationInstace } from "@/src/axios/algoliaIntance/config";
+import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
+import { useQuery } from "@apollo/client";
 
 const CartDetail = ({
   isCheckout = false,
@@ -12,10 +14,18 @@ const CartDetail = ({
   onChange,
 }) => {
   const { user } = useStorage();
+  const { data: storeInformation, error: storeInformationError } = useQuery(GET_STORE_INFO, {
+    variables: {
+      id: 1,
+    },
+  });
+
+  const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
+
   const [amounts, setAmounts] = useState({
     total: 0,
     tax: 0,
-    currencyType: "USD",
+    currencyType: currency,
     loading: false,
   });
   const {
@@ -28,18 +38,26 @@ const CartDetail = ({
   });
 
   useEffect(() => {
+    console.log(quantity)
     getTaxCost();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quantity]);
 
   const getTaxCost = async () => {
-    setAmounts((prev) => ({ //mientras obtiene los taxes pone a cargar el loading
+    setAmounts((prev) => ({
+      //mientras obtiene los taxes pone a cargar el loading
       ...prev,
       loading: true,
     }));
     try {
-      if (!items.length) return;
+      if (!items.length) {// si no hay items se pone por default todo en 0
+        setAmounts((prev) => ({
+          ...prev,
+          total: 0,
+          tax: 0,
+        }));
+      };
       const token = await getAccessToken();
       const formatedItems = formatTaxData(items);
       const body = {
@@ -53,38 +71,34 @@ const CartDetail = ({
       );
       setAmounts((prev) => ({
         ...prev,
-        total: data?.billSummary?.totalDocument,
-        tax: data?.billSummary?.totalTax,
+        total: parseFloat(data?.billSummary?.totalDocument.toFixed(2)),
+        tax: parseFloat(data?.billSummary?.totalTax.toFixed(2)),
       }));
       if (isCheckout) {
         onChange({
-          total: data?.billSummary?.totalDocument,
-          taxes: data?.billSummary?.totalTax,
+          total: parseFloat(data?.billSummary?.totalDocument.toFixed(2)),
+          taxes: parseFloat(data?.billSummary?.totalTax.toFixed(2)),
           subTotal,
         });
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     } finally {
       setAmounts((prev) => ({
         ...prev,
         loading: false,
       }));
     }
-
   };
-
 
   return (
     <div className="p-3 md:space-y-3">
-      <h1 className=" flex justify-center">{detailTitle}</h1>
+      <h2 className="tittle flex justify-center">{detailTitle}</h2>
       {!loading && !amounts.loading ? (
         <>
-
-
           <div className="flex justify-between ">
-            <p className="whitespace-nowrap ">N° artículos</p>
-            <p className="text-grey-100">{quantity}</p>
+            <p className="whitespace-nowrap">N° artículos</p>
+            <p className="whitespace-nowrap">{quantity}</p>
           </div>
           {/* input de codigo promocional comentado en caso de que se quiera usr en elfuturo ===> */}
           {/* <div className="flex justify-center">
@@ -96,25 +110,25 @@ const CartDetail = ({
         </div> */}
           <div className="flex justify-between ">
             <p>Subtotal:</p>
-            <p className="text-grey-100">${subTotal}</p>
+            <p className="whitespace-nowrap">${subTotal.toFixed(2)}</p>
           </div>
           <div className="flex justify-between border-dashed border-grey-200 border-b-[2px] pb-3">
             <p>Costo de envío:</p>
-            <p className="text-grey-100">$0,000.00</p>
+            <p className="whitespace-nowrap">$0,000.00</p>
           </div>
 
           <>
             <div className="flex justify-between ">
               <p>Impuestos:</p>
-              <p className="text-grey-100">
+              <p className="whitespace-nowrap">
                 {amounts.tax} {amounts.currencyType}
               </p>
             </div>
             <div className="flex flex-col p-4 space-y-3">
               <p className="flex justify-center">Costo Total(IVA Incluido)</p>
-              <p className="flex justify-center text-grey-100">
-                {amounts?.total}
-                {amounts.currencyType}
+              <p className="flex justify-center whitespace-nowrap">
+                {amounts?.total} {amounts.currencyType}
+
               </p>
             </div>
           </>

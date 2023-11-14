@@ -18,6 +18,7 @@ import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 
 function ProductDetail({ name, brand, description, variants, materials }) {
 
+  const altText= "Imagen de producto" + name
   const [quantity, setQuantity] = useState(1);
   const [image, setImage] = useState(null);
   let shortDescrption = "";
@@ -72,10 +73,10 @@ function ProductDetail({ name, brand, description, variants, materials }) {
 
   return (
     <>
-      <div className="bg-floralwhite max-w-screen-xl grid grid-cols-12 m-auto p-5 z-0" target="_blank" rel="noopener noreferrer">
+      <section aria-label="Descripción del producto" className="bg-floralwhite max-w-screen-xl grid grid-cols-12 m-auto p-5 z-0" target="_blank" rel="noopener noreferrer">
 
         {/* Columna de imagenes */}
-        <div className="mb-10 col-span-12 md:col-span-6">
+        <section aria-label="Imágenes del producto" className="mb-10 col-span-12 md:col-span-6">
           {/* imagen principal grande */}
           <div className="m-auto w-full flex justify-center">
             {images.length > 0 ? (
@@ -85,7 +86,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                 width={"450"}
                 height={"800"}
                 className={"rounded-xl mx-2"}
-                alt={name}
+                alt={altText}
               />
             ) : null}
           </div>
@@ -123,12 +124,12 @@ function ProductDetail({ name, brand, description, variants, materials }) {
 
           </div>
 
-        </div>
+        </section>
 
         {/* Sección con los detalles del producto*/}
-        <div className="mb-10 col-span-12 md:col-span-6 m-auto">
-          <h2 className="flex justify-end text-sm">Ref {variants[0]?.attributes?.sku}</h2>
-          <h1 className="mb-3 text-xl font-bold">{name}</h1>
+        <section aria-label="Detalles del producto" className="mb-10 col-span-12 md:col-span-6 m-auto">
+          <h2 aria-label={`Referencia del producto ${variants[0]?.attributes?.sku}`} className="flex justify-end text-sm">Ref {variants[0]?.attributes?.sku}</h2>
+          <h1 aria-label={`Nombre del producto ${name}`} className="mb-3 text-xl font-bold">{name}</h1>
           <p>{shortDescrption}...</p>
           <a onClick={() => handleClick()}>
             <button className="flex justify-start text-lightblue mb-3 bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
@@ -253,11 +254,11 @@ function ProductDetail({ name, brand, description, variants, materials }) {
               <div className="flex items-center mb-2 ">
                 <span className="text-grey">Cantidad:</span>
                 <div className="bg-resene rounded-full m-3 w-[120px] flex items-center justify-center p-2 space-x-4">
-                  <button className=" bg-grey-100 rounded-full text-white">
+                  <button aria-label="Disminuir cantidad de produto" className=" bg-grey-100 rounded-full text-white">
                     <BiMinus onClick={decreaseCounter} />
                   </button>
                   <span>{quantity}</span>
-                  <button className=" bg-grey-100 rounded-full  text-white">
+                  <button aria-label="Aumentar cantidad de produto" className=" bg-grey-100 rounded-full  text-white">
                     <BiPlus onClick={increaseCounter} />
                   </button>
                 </div>
@@ -274,11 +275,11 @@ function ProductDetail({ name, brand, description, variants, materials }) {
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
 
 
-      </div>
+      </section>
     </>
   );
 }

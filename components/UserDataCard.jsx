@@ -9,9 +9,9 @@ export default function UserDataCard(props) {
       <h1 className=" flex justify-center mt-3 text-xl">{props.title}</h1>
       <div className=" p-4 h-auto grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-5">
         <section className="bg-floralwhite flex flex-col items-center border-2 border-dashed border-grey-200 rounded-2xl h-[250px] w-[200px]">
-          <h2 className="font-semibold mt-8">Nombre apellido{props.name} </h2>
+          <h2 className="font-semibold mt-8">Nombre{props.name} </h2>
           <div className="text-sm space-y-2 pt-3 flex flex-col items-center">
-            <div>telefono:{props.phone}</div>
+            <div>Teléfono:{props.phone}</div>
             <div>Provincia:{props.province}</div>
             <div>Ciudad:{props.city}</div>
             <div>Factura E: Sí/No:{props.bill} </div>

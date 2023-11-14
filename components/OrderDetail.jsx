@@ -5,14 +5,14 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import useStorage from "@/hooks/useStorage";
 import Pagination from "./Pagination";
-import AgePagination from "./AgePagination";
+import FilterPagination from "./FilterPagination";
 import Spinner from "@/components/Spinner";
 export default function OrderDetail() {
 
 
   const [page, setPage] = useState(1);
   const [nbPages, setNbPages] = useState();
-  const pageSize = 3;
+  const pageSize = 6;
   const [userData, setUserData] = useState({
     user: {
       firstName: "",
@@ -33,14 +33,13 @@ export default function OrderDetail() {
     ],
   });
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [getOrders] = useLazyQuery(GET_USER_ORDERS, {
     fetchPolicy: "network-only", // Forzar la consulta directa al servidor
   });
   useEffect(() => {
     const userStorage = JSON.parse(localStorage.getItem("userData"));
     const userId = userStorage?.user?.id;
-    console.log(userId)
     const getOrdersInfo = async (id, page, pageSize) => {
 
       try {
@@ -54,7 +53,6 @@ export default function OrderDetail() {
             pageSize,
           },
         });
-        console.log("data: ", data)
         if (data) {
 
           const pagination = data?.orderDetails?.meta.pagination //es un objeto con la informacion de paginacion
@@ -111,27 +109,31 @@ export default function OrderDetail() {
   }
 
   if (loading) {
-    return <div><Spinner /></div>;
+    return <div className="  flex flex-col items-center h-fit col-span-12 mx-3  md:col-span-8">
+      <h1 className="flex justify-center mt-3 text-xl  md:col-span-12">Cargando</h1>
+      <Spinner />
+    </div>;
   }
 
   return (
     <div className="bg-resene  flex flex-col items-center h-fit col-span-12 mx-3  md:col-span-8">
+
       <h1 className="flex justify-center mt-3 text-xl  md:col-span-12">Tus pedidos</h1>
       <div className="p-4 h-auto grid grid-cols-12 gap-4 pt-5 w-full">
-        {userData.order[0].ref !== 0 ? userData.order.map((order) => (
-          <div key={order.ref} className="bg-resene col-span-4 w-full ">
+        {userData.order.length > 0 ? userData.order.map((order) => (
+          <div key={order.ref} className="bg-resene col-span-6 md:col-span-4  w-full ">
             <section
               className="bg-floralwhite flex flex-col items-center border-2 border-dashed 
-            border-grey-200 rounded-2xl h-[250px] w-full px-2 col-span-3"
+            border-grey-200 rounded-2xl min-h-[275px] md:min-h-[250px] w-full px-2 col-span-12 md:col-span-3"
             >
               <h2 className="font-semibold mt-8">N° {order.ref}</h2>
               <div className="text-sm space-y-2 pt-3 text-center">
-                <div className="">
+                <div className="font-semibold text-orange">
                   {userData.user.firstName} {userData.user.lastName}
                 </div>
-                <div>Provincia: {userData.address.province}</div>
-                <div>Ciudad: {userData.address.canton}</div>
-                <div>Estado: {transformState(order.status)}</div>
+                <div > <span className="font-semibold">Provincia:</span>  <span className="font-light">{userData.address.province}</span> </div>
+                <div><span className="font-semibold">Ciudad:</span> <span className="font-light">{userData.address.canton}</span> </div>
+                <div> <span className="font-semibold">Estado:</span> <span className="font-light">{transformState(order.status)}</span> </div>
               </div>
               <Link
                 href={{
@@ -149,7 +151,7 @@ export default function OrderDetail() {
           <h1 className="flex justify-center mt-3 text-xl  md:col-span-12">No tienes ordenes, realiza tu primera compra</h1>}
       </div>
       <div className="col-span-12">
-        <AgePagination
+        <FilterPagination
           nbPages={nbPages}
           currentPage={page}
           setCurrentPage={setPage}

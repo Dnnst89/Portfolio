@@ -16,7 +16,11 @@ h1 {
   font-size: x-large;
   color: #484848;
 }
-
+.tittle {
+  font-family: "Grandstander", sans-serif;
+  font-size: x-large;
+  color: #484848;
+}
 p {
   color: #484848;
 }
@@ -25,15 +29,16 @@ label {
   color: #484848;
 }
 
-input[type=text], input[type=password],input[type=email] {
+input[type=text], input[type=password],input[type=email], textarea {
   border: 2px solid #B2B1C5;
   padding-left: 10px;
   border-radius: .5rem;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
-  
 }
-
+input[type=text], input[type=password],input[type=email]{
+  max-height: 35px;
+}
 .aa-Panel{
   z-index: 99;
 }

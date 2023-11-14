@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
-import AgeProductCard from "./AgeProductCard";
-import AgePagination from "./AgePagination";
+import FilterProductCard from "./FilterProductCard";
+import FilterPagination from "./FilterPagination";
 
 const ProductFilterContainer = ({ result, currentPage, setCurrentPage }) => {
 
@@ -11,11 +11,11 @@ const ProductFilterContainer = ({ result, currentPage, setCurrentPage }) => {
             <div className="flex flex-wrap max-w-screen-xl m-auto justify-center">
                 {data
                     ? data.map((item) => {
-                        return <AgeProductCard key={item.id} id={item.id} name={item.attributes.name} coverImage={item.attributes.coverImage.data} defaultPrice={item.attributes.defaultPrice} brand={item.attributes.brand} />;
+                        return <FilterProductCard key={item.id} id={item.id} name={item.attributes.name} coverImage={item.attributes.coverImage.data} defaultPrice={item.attributes.defaultPrice} brand={item.attributes.brand} />;
                     })
                     : null}
             </div>
-            <AgePagination
+            <FilterPagination
                 nbPages={result.meta.pagination.pageCount}
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}

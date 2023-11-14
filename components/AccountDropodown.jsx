@@ -46,26 +46,40 @@ const AccountDropdown = () => {
   return (
     <>
       <div className="flex space-x-2 p-2">
+        <button onClick={toggleDropdown} className="flex space-x-3  items-center 
+        border-r-2 border-b-0 border-dashed border-grey-200 pr-2">
+          <div className="min-w-[100px] flex justify-end">
+            {authUser ? (
+              <label className="font-bold leading-none text-green 
+              text-end max-w-[90px] ml-3 text-clip overflow-hidden">Hola,<br />
+                <span className="font-thin text-xs text-clip">{authUser.username}</span>
+              </label>
+            ) : (
+              <label className="font-bold leading-none text-green 
+              text-end max-w-[90px] ml-3 text-clip overflow-hidden">Iniciar <br />
+                <span className=" font-thin text-xs">Sesión</span>
+              </label>
+            )}
+          </div>
 
-        <button onClick={toggleDropdown} className="">
           <BiSolidUserCircle size={30} color="#67C3AD" className="mr-10" />
         </button>
 
         {isOpen && (
           <div
-            className="bg-floralwhite rounded-lg py-2 shadow-md z-10 absolute top-12"
+            className="bg-floralwhite rounded-lg py-2 shadow-md z-10 absolute top-12 min-w-[130px]"
             ref={wrapperRef}
           >
             {authUser ? (
               <>
                 <Link
                   href={"/welcomeUser"}
-                  className="block px-4 py-2 hover:bg-resene text-orange"
+                  className="block px-4 py-2 hover:bg-resene text-start text-orange w-full"
                 >
                   Mi perfil
                 </Link>
                 <button
-                  className="block px-4 py-2 hover:bg-resene text-orange"
+                  className="block px-4 py-2 hover:bg-resene text-start text-orange w-full"
                   onClick={handleLogout}
                 >
                   Salir
@@ -74,13 +88,13 @@ const AccountDropdown = () => {
             ) : (
               <>
                 <Link
-                  className="block px-4 py-2 hover:bg-resene text-orange"
+                  className="block px-4 py-2 hover:bg-resene text-orange w-full"
                   href="/register/signemail"
                 >
                   Registrarme
                 </Link>
                 <Link
-                  className="block px-4 py-2 hover:bg-resene text-orange"
+                  className="block px-4 py-2 hover:bg-resene text-orange w-full"
                   href="/login"
                 >
                   Ingresar

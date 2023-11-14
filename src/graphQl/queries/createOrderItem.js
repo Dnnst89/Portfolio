@@ -1,60 +1,52 @@
 import { gql } from "@apollo/client";
 
 const CREATE_ORDER_ITEM_MUTATION = gql`
-mutation CreateOrderItem($quantity: Int!, $variantId: ID!, $orderDetailId: ID!,$publishedAt: DateTime!) {
-    createOrderItem(
-      data: {
-        quantity: $quantity
-        variant: $variantId
-        publishedAt: $publishedAt
-        order_details: [$orderDetailId]
-      }
-    ) {
-        data{
-          id,
-          attributes{
-            quantity,
-            variant{
-              data{
-                id,
-                attributes{
-                  stock,
-                  product{
-                    data{
-                      id,
-                      attributes{
-                        name,
-                        brand,
-                        description
-                      }
-                    }
-                  },
-                  color,
-                  price,
-                  ageRange,
-                  size,
-                  weight{
-                  weight,
-                  unitWeight
-                  }
-                  images{
-                    data{
-                      id,
-                      attributes{
-                        width,
-                        height,
-                        url
-                      }
-                    }
-                  }
-                }
-              }
+mutation CreateOrderItem(
+  $imagesIds: [ID],
+  $quantity: Int!,
+  $variantId: Int!,
+  $price: Float!,
+  $name: String!,
+  $brand: String!,
+  $cabys: Long!,
+  $orderDetailId: ID!,
+  $publishedAt: DateTime!,
+) {
+  createOrderItem(
+    data: {
+      quantity: $quantity,
+      variantId: $variantId,
+      price: $price,
+      name: $name,
+      brand: $brand,
+      cabys: $cabys,
+      images: $imagesIds,
+      order_details: [$orderDetailId],
+      publishedAt: $publishedAt,
+    }
+  ) {
+    data {
+      id
+      attributes {
+        quantity
+        name
+        brand
+        price
+        cabys
+        variantId
+        images {
+          data {
+            id
+            attributes {
+              url
             }
           }
-          
         }
       }
     }
+  }
+}
+
 `;
 
 export default CREATE_ORDER_ITEM_MUTATION

@@ -6,12 +6,15 @@ import { CREATE_ADDRESS } from "@/src/graphQl/queries/createAddress";
 import { useForm } from "react-hook-form";
 import CartDetail from "./CartDetail";
 import { useEffect, useState } from "react";
-import { FaArrowAltCircleDown } from "react-icons/fa";
+import { AiOutlineEdit } from "react-icons/ai";
 import CheckOutForm2 from "./CheckOutForm2";
+import GoogleMapWrapper from "./Map";
 import useStorage from "@/hooks/useStorage";
 import toast, { Toaster } from "react-hot-toast";
 import { requestEstimation } from "@/api/moovin/estimation";
 import { getToken, refreshToken } from "@/api/moovin/getToken";
+import Map from "./Map";
+
 function FormOne() {
   const { data } = requestEstimation();
   console.log("moovin :", data);
@@ -222,29 +225,31 @@ function FormOne() {
     <div>
       <Toaster />
       <div className="w-full max-w-screen-xl m-auto grid grid-cols-12 mt-10">
-        <div className="col-span-9 md:pr-2">
-          <div className="flex  justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200">
-            <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
-              1
+        <div className="col-span-12 md:col-span-9 md:pr-2">
+          <div className="flex  justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200 min-w-3[375px] justify-between">
+            <div className="flex justify-center items-center min-w-[375px]  max-w-[375px] m-auto  justify-between  px-3">
+              <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
+                1
+              </div>
+              <h1 className="text-xl min-w-[210px]">Información de envío</h1>
+              {checkoutForm1Visible && (
+                <>
+                  <div>
+                    <button
+                      className="ml-8"
+                      onClick={() => setCheckoutForm1Visible(false)}
+                    >
+                      <AiOutlineEdit
+                        style={{
+                          color: "orange",
+                        }}
+                        size={35}
+                      />
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
-            <h1 className="text-xl">Información de envío</h1>
-            {checkoutForm1Visible && (
-              <>
-                <div>
-                  <button
-                    className="ml-8"
-                    onClick={() => setCheckoutForm1Visible(false)}
-                  >
-                    <FaArrowAltCircleDown
-                      style={{
-                        color: "orange",
-                      }}
-                      size={35}
-                    />
-                  </button>
-                </div>
-              </>
-            )}
           </div>
           {!checkoutForm1Visible ? (
             <form onSubmit={onSubmit}>
@@ -253,7 +258,7 @@ function FormOne() {
                   <section className="w-full">
                     <div className="flex justify-center">
                       <section className="md:w-4/6 grid grid-cols-12 gap-4">
-                        <div className="col-span-6 grid">
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <label htmlFor="name">Nombre</label>
                           <input
                             type="text"
@@ -264,14 +269,14 @@ function FormOne() {
                                 message: "El nombre es requerido",
                               },
                               minLength: {
-                                value: 3,
+                                value: 2,
                                 message:
                                   "La información es insuficiente, por favor pon tu nombre completo",
                               },
                               maxLength: {
                                 value: 30,
                                 message:
-                                  "El nomnre no puede tener más de 30 caracteres",
+                                  "El nombre no puede tener más de 30 caracteres",
                               },
                             })}
                           ></input>
@@ -279,7 +284,7 @@ function FormOne() {
                             {errors.firstName?.message}
                           </p>
                         </div>
-                        <div className="col-span-6 grid">
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <label htmlFor="lastName">Apellidos</label>
                           <input
                             type="text"
@@ -290,7 +295,7 @@ function FormOne() {
                                 message: "El apellido es requerido",
                               },
                               minLength: {
-                                value: 5,
+                                value: 2,
                                 message:
                                   "La información es insuficiente, por favor pon tu apellido completo",
                               },
@@ -305,7 +310,7 @@ function FormOne() {
                             {errors.lastName?.message}
                           </p>
                         </div>
-                        <div className="col-span-6 grid">
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <label htmlFor="phone">Teléfono</label>
                           <input
                             type="text"
@@ -335,7 +340,7 @@ function FormOne() {
                             {errors.phone?.message}
                           </p>
                         </div>
-                        <div className="col-span-6 grid">
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <label htmlFor="postCode">Código Postal</label>
                           <input
                             type="text"
@@ -365,7 +370,7 @@ function FormOne() {
                             {errors.postCode?.message}
                           </p>
                         </div>
-                        <div className="col-span-6 grid">
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <label htmlFor="country">País</label>
                           <input
                             type="text"
@@ -376,9 +381,9 @@ function FormOne() {
                                 message: "El país es requerido",
                               },
                               minLength: {
-                                value: 5,
+                                value: 2,
                                 message:
-                                  "El país no puede tener menos de 5 letras",
+                                  "El país no puede tener menos de 2 letras",
                               },
                               maxLength: {
                                 value: 20,
@@ -395,7 +400,7 @@ function FormOne() {
                             {errors.country?.message}
                           </p>
                         </div>
-                        <div className="col-span-6 grid">
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <label htmlFor="province">Provincia</label>
                           <input
                             type="text"
@@ -406,9 +411,9 @@ function FormOne() {
                                 message: "La provincia es requerida",
                               },
                               minLength: {
-                                value: 5,
+                                value: 2,
                                 message:
-                                  "La provincia no puede tener menos de 5 letras",
+                                  "La provincia no puede tener menos de 2 letras",
                               },
                               maxLength: {
                                 value: 20,
@@ -425,9 +430,10 @@ function FormOne() {
                             {errors.province?.message}
                           </p>
                         </div>
-                        <div className="col-span-6 grid">
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <label htmlFor="canton">Cantón</label>
                           <input
+                            className="max-h-[40px]"
                             type="text"
                             id="canton"
                             {...register("canton", {
@@ -436,9 +442,9 @@ function FormOne() {
                                 message: "El cantón es requerido",
                               },
                               minLength: {
-                                value: 5,
+                                value: 2,
                                 message:
-                                  "El cantón no puede tener menos de 5 letras",
+                                  "El cantón no puede tener menos de 2 letras",
                               },
                               maxLength: {
                                 value: 20,
@@ -455,8 +461,7 @@ function FormOne() {
                             {errors.canton?.message}
                           </p>
                         </div>
-
-                        <div className="col-span-6 grid">
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <label htmlFor="addressLine1">Direccion 1</label>
                           <textarea
                             // type="text"
@@ -483,8 +488,7 @@ function FormOne() {
                             {errors.addressLine1?.message}
                           </p>
                         </div>
-
-                        <div className="col-span-6 grid">
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <label htmlFor="addressLine2">Direccion 2</label>
                           <textarea
                             //type="text"
@@ -507,12 +511,21 @@ function FormOne() {
                             {errors.addressLine2?.message}
                           </p>
                         </div>
+
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
+                          <Map
+                            latitude={9.748917}
+                            longitude={-83.753428}
+                            zoom={10}
+                          />
+                        </div>
                       </section>
                     </div>
                     <div className="flex justify-center w-full">
-                      <section className="w-2/4 m-auto mt-10 mb-5">
+                      <section className="w-3/4 m-auto mt-10 mb-5 flex items-center space-x-5">
                         <label htmlFor="idType">Factura Electrónica</label>
                         <input
+                          className="p-3"
                           type="checkbox"
                           id="checkbox"
                           {...register("checkbox", {
@@ -526,13 +539,12 @@ function FormOne() {
                           })}
                         ></input>
                       </section>
-                      <section className="w-1/4 flex p-2"></section>
                     </div>
                     {checkbox && (
                       <>
                         <div className="flex justify-center">
                           <section className="md:w-4/6 grid grid-cols-12 gap-4">
-                            <div className="col-span-6 grid">
+                            <div className="col-span-12 md:col-span-6 grid">
                               <label htmlFor="idType">Tipo De Cédula</label>
                               <select
                                 {...register("idType", {
@@ -551,7 +563,7 @@ function FormOne() {
                               </select>
                             </div>
                             {fisica ? (
-                              <div className="col-span-6 grid">
+                              <div className="col-span-12 md:col-span-6 grid">
                                 <label htmlFor="idNumber">Cédula</label>
                                 <input
                                   type="text"
@@ -632,7 +644,7 @@ function FormOne() {
             <CheckOutForm2 amount={amount} checkbox={checkbox} />
           )}
         </div>
-        <div className=" bg-resene rounded-sm col-span-3 h-fit  border-l-4 border-lightblue">
+        <div className=" bg-resene rounded-sm col-span-12 md:col-span-3 h-fit  border-l-4 border-lightblue order-1">
           <div className="flex flex-col space-y-3 ">
             <CartDetail
               detailTitle={"Detalle del carrito"}

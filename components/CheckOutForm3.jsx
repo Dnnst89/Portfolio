@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import paymentRequest from "@/api/tilopay/paymentRequest";
 import { useRouter } from "next/navigation";
 import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
@@ -8,8 +8,12 @@ import useStorage from "@/hooks/useStorage";
 import useCartSummary from "@/hooks/useCartSummary";
 import AlertNotAuth from "./AlertNotAuth";
 import Spinner from "./Spinner";
+import ReCAPTCHA from "react-google-recaptcha";
+import toast, { Toaster } from "react-hot-toast";
+import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 
 export default function CheckOutForm3({ paymentDetailId, total }) {
+  const captchaRef = useRef(true);
   const router = useRouter();
   const [formData, setFormData] = useState({});
   const [loadingBtn, setLoadingBtn] = useState(false);
@@ -25,6 +29,14 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
   const { loading, error, data } = useQuery(GET_PAYMENT_DETAILS, {
     variables: { userId: id },
   });
+
+  const { data: storeInformation, error: storeInformationError } = useQuery(GET_STORE_INFO, {
+    variables: {
+      id: 1,
+    },
+  });
+  const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
+
   useEffect(() => {
     if (!loading && !error) {
       const userData = data?.usersPermissionsUser?.data?.attributes;
@@ -48,7 +60,7 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
                 : "http://detinmarin.s3-website-us-west-2.amazonaws.com/thankyou/",
             key: process.env.NEXT_PUBLIC_TILOPAY_API_KEY,
             amount: total,
-            currency: "USD",
+            currency: currency,
             billToFirstName: firstName,
             billToLastName: lastName,
             billToAddress: userAddressAttributes.addressLine1,
@@ -75,9 +87,12 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
   const handleVerification = async () => {
-    setLoadingBtn(true);
+    const token = true;
+    paymentUrl = await paymentRequest(formData);
+
     try {
-      paymentUrl = await paymentRequest(formData);
+      // if (token) {
+      setLoadingBtn(true);
       //verifica que no haya ningun error de stock con la cantidad de productos que lleva
       if (cartSummary.errors.errorStock.length > 0) {
         toast.custom((t) => (
@@ -92,12 +107,19 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
       } else {
         router.push(paymentUrl);
       }
+
+      // } else {
+      //   setLoadingBtn(false);
+      //   toast.error("Por favor selecciona la casilla de verificación", {
+      //     autoClose: 5000,
+      //   });
+      // }
     } catch (error) {
       console.error(error);
+    } finally {
+      // }
+      setLoadingBtn(false);
     }
-    // } finally {
-    //   setLoadingBtn(false);
-    // }
   };
   return (
     <div className="w-full">
@@ -107,8 +129,7 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
           3
         </div>
         <h1 className="text-xl">Formulario de pago</h1>
-      </div>
-
+      </div>{" "}
       <div className="flex justify-center m-auto mt-8 mb-8 w-3/4">
         <button
           onClick={handleVerification}
