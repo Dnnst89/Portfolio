@@ -10,6 +10,8 @@ import useCartSummary from "@/hooks/useCartSummary";
 import { AiOutlineEdit } from "react-icons/ai";
 import CREATE_PAYMENT_DETAIL from "@/src/graphQl/queries/createPaymentDetails";
 import Spinner from "./Spinner";
+import { useForm } from "react-hook-form";
+
 export default function CheckOutForm2({ amount, checkbox }) {
   const isoDate = new Date().toISOString();
   const [paymentDetailId, setPaymentDetailId] = useState(null);
@@ -23,7 +25,16 @@ export default function CheckOutForm2({ amount, checkbox }) {
   const { items } = useCartSummary({
     userId: id,
   });
-  const handleCreatePaymentDetail = async () => {
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+
+  const onSubmit = handleSubmit(async (data) => {
+    console.log(data.deliveryMethod)
     try {
       const paymentDetailResponse = await createPaymentDetail({
         variables: {
@@ -32,6 +43,8 @@ export default function CheckOutForm2({ amount, checkbox }) {
           taxes: taxes,
           total: total,
           invoiceRequired: checkbox,
+          deliveryMethod: data.deliveryMethod,
+          paymentMethod: "Tarjeta Crédito/ Débito",
           publishedAt: isoDate,
         },
       });
@@ -42,8 +55,7 @@ export default function CheckOutForm2({ amount, checkbox }) {
     } catch (error) {
       console.error(error);
     }
-  };
-
+  });
   return (
     <div className="w-full">
       <div className="flex justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200 min-w-[375px]">
@@ -72,7 +84,7 @@ export default function CheckOutForm2({ amount, checkbox }) {
 
       </div>
       {!checktOutForm2Visible ? (
-        <>
+        <form onSubmit={onSubmit}>
           <div className="w-full flex flex-col items-center mt-5 space-y-10">
             <section className="bg-white w-3/4 flex  rounded-t-3xl drop-shadow-lg text-xl">
               <div className=" border-r-2 border-dashed border-grey-200  w-[100px] flex justify-center items-center ml-[10px]">
@@ -80,9 +92,10 @@ export default function CheckOutForm2({ amount, checkbox }) {
                   type="radio"
                   id="moovin"
                   name="del_method"
-                  value="MOOVIN"
+                  value="Recoger en tienda"
                   className="w-5 h-5"
                   defaultChecked
+                  {...register("deliveryMethod")}
                 />
               </div>
               <div className="items-center pl-5 md:pl-[90px] md:flex">
@@ -101,8 +114,9 @@ export default function CheckOutForm2({ amount, checkbox }) {
                   type="radio"
                   id="moovin"
                   name="del_method"
-                  value="MOOVIN"
+                  value="Envío a través de MOOVIN"
                   className="w-5 h-5"
+                  {...register("deliveryMethod")}
                 />
               </div>
               <div className="items-center pl-5 md:pl-[90px] md:flex">
@@ -119,16 +133,17 @@ export default function CheckOutForm2({ amount, checkbox }) {
           </div>
           <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
             <button
-              onClick={() => {
-                handleCreatePaymentDetail();
-              }}
+              // onClick={() => {
+              //   handleCreatePaymentDetail();
+              // }}
+              type="submit"
               disabled={total === 0}
               className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
             >
               {total <= 0 ? <Spinner /> : "Continuar"}
             </button>
           </div>
-        </>
+        </form>
       ) : (
         <CheckOutForm3 paymentDetailId={paymentDetailId} total={total} />
       )}

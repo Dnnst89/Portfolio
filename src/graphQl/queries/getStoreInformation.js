@@ -13,10 +13,12 @@ const GET_STORE_INFO = gql`
           ComercialName
           country
           province
+          canton
           district
           otherSigns
           email
           neighborhood
+          currency
         }
       }
     }
