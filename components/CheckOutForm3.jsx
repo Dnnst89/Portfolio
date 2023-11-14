@@ -37,6 +37,12 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
   });
   const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
 
+
+  const key = process.env.NODE_ENV === "development" ?
+    "6LfCrUYoAAAAAPgdh0MpvKzzHvhksbGTM3cP1prU" :
+    "6LfFDLAoAAAAAJ25iZdqlICdDvwwkhxsDMZqdHs_"
+
+
   useEffect(() => {
     if (!loading && !error) {
       const userData = data?.usersPermissionsUser?.data?.attributes;
@@ -133,9 +139,10 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
       </div>
       {" "}
       <div className="flex justify-center m-auto mt-8 mb-8 ">
+
+
         <ReCAPTCHA
-          sitekey="6LfFDLAoAAAAAJ25iZdqlICdDvwwkhxsDMZqdHs_"
-          //sitekey="6LfCrUYoAAAAAPgdh0MpvKzzHvhksbGTM3cP1prU"
+          sitekey={key}
           ref={captchaRef}
         />
       </div>
