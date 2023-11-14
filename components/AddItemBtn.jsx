@@ -9,7 +9,7 @@ import { updateCartItems, updateQtyItems } from "@/redux/features/cart-slice";
 import useStorage from "@/hooks/useStorage";
 import UPDATE_CART_ITEM_QUANTITY_MUTATION from "@/src/graphQl/queries/updateCartItemQuantity";
 
-const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId, user }) => {
+const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId, user, features }) => {
     const dispatch = useDispatch();
     const { isAuthenticated } = useSelector((x) => x.auth);
     const [createCartItem] = useMutation(CREATE_CART_ITEM_MUTATION, {});
@@ -22,7 +22,7 @@ const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId,
         } else {
 
 
-            const itemFiltrado = cartItems.find((item) => item.attributes.variant.data.id === variant?.id);
+            const itemFiltrado = cartItems.find((item) => item.attributes.variant.data.id === variant);
             const fechaActual = new Date();
             const fechaFormateada = fechaActual.toISOString();
             console.log(itemFiltrado)
@@ -59,7 +59,8 @@ const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId,
                     createCartItem({ //se crea un nuevo item en el carrito
                         variables: {
                             quantity: quantityItem,
-                            variantId: variant.id,
+                            variantId: variant,
+                            features: features,
                             shoppingSessionId: sessionId,
                             publishedAt: fechaFormateada,
                         },

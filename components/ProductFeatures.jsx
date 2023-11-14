@@ -4,7 +4,7 @@ import FeatureSelector from "./ProductFeatureSelector";
 import { useLazyQuery, useQuery } from "@apollo/client";
 import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
 
-const ProductFeatures = ({ variantsList, setImages, setImage }) => {
+const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected }) => {
 
   const [featureCount, setFeatureCount] = useState(1);
   const [variantInfo, setVariantInfo] = useState(variantsList);// objeto con las variantes hijas de la seleccion actual
@@ -42,7 +42,8 @@ const ProductFeatures = ({ variantsList, setImages, setImage }) => {
   const [featureList, setFeatureList] = useState([result]);//lista de caracteristicas que se van renderizando en componentes
   useEffect(() => {
     //console.log("🚀 ~ file: ProductFeatures.jsx:151 ~ removeFeaturesFromIndex ~ featureList:", featureList)
-    console.log("🚀 ~ file: ProductFeatures.jsx:102 ~ addKeyValuePair ~ jsonObject:", featureObject)
+    //console.log("🚀 ~ file: ProductFeatures.jsx:102 ~ addKeyValuePair ~ jsonObject:", featureObject)
+    //console.log("🚀 ~ file: ProductFeatures.jsx:47 ~ useEffect ~ variantInfo:", variantInfo)
   }, [featureObject]);
 
 /**
@@ -87,7 +88,7 @@ const ProductFeatures = ({ variantsList, setImages, setImage }) => {
   }
 
   
-  const addFeaturetoObject = (key, value) => {
+  const addFeaturetoObject = (key, value, selectedValue) => {
     // Crear una copia del objeto JSON existente
     const updatedFeatureObject = { ...featureObject };
 
@@ -96,6 +97,11 @@ const ProductFeatures = ({ variantsList, setImages, setImage }) => {
 
     // Actualizar el estado con el nuevo objeto JSON
     setFeatureObject(updatedFeatureObject);
+    let variant={
+      variantId: selectedValue,
+      features: updatedFeatureObject
+    }
+    setvariantSelected(variant);
     
   };
 
@@ -122,7 +128,7 @@ const ProductFeatures = ({ variantsList, setImages, setImage }) => {
       //handleAddFeature();
       removeFeaturesFromIndex(selectedBox);
       chanceImages(selectedValue);
-      addFeaturetoObject(featureName, selectedFeatureValue)
+      addFeaturetoObject(featureName, selectedFeatureValue, selectedValue)
     } catch (error) {
       console.log(error);
     }
