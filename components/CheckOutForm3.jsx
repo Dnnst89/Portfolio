@@ -129,7 +129,15 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
           3
         </div>
         <h1 className="text-xl">Formulario de pago</h1>
-      </div>{" "}
+      </div>
+      {" "}
+      <div className="flex justify-center m-auto mt-8 mb-8 ">
+        <ReCAPTCHA
+          sitekey="6LfFDLAoAAAAAJ25iZdqlICdDvwwkhxsDMZqdHs_"
+          //sitekey="6LfCrUYoAAAAAPgdh0MpvKzzHvhksbGTM3cP1prU"
+          ref={captchaRef}
+        />
+      </div>
       <div className="flex justify-center m-auto mt-8 mb-8 w-3/4">
         <button
           onClick={handleVerification}
