@@ -10,6 +10,9 @@ import useStorage from "@/hooks/useStorage";
 import UPDATE_CART_ITEM_QUANTITY_MUTATION from "@/src/graphQl/queries/updateCartItemQuantity";
 
 const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId, user, features }) => {
+console.log("🚀 ~ file: AddItemBtn.jsx:13 ~ AddItemBtn ~ variant:", variant)
+console.log("🚀 ~ file: AddItemBtn.jsx:13 ~ AddItemBtn ~ features:", features)
+
     const dispatch = useDispatch();
     const { isAuthenticated } = useSelector((x) => x.auth);
     const [createCartItem] = useMutation(CREATE_CART_ITEM_MUTATION, {});
@@ -22,7 +25,7 @@ const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId,
         } else {
 
 
-            const itemFiltrado = cartItems.find((item) => item.attributes.variant.data.id === variant);
+            const itemFiltrado = cartItems.find((item) => item.attributes.variant.data.id === variant?.id);
             const fechaActual = new Date();
             const fechaFormateada = fechaActual.toISOString();
             console.log(itemFiltrado)
@@ -54,13 +57,13 @@ const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId,
 
 
             } else {//si el item nunca se ha agregado al carrito
-                console.log(variant);
+                console.log(quantityItem, variant.id);
+
                 if (variant?.attributes?.stock > 0) {//si el stock del item es 0
                     createCartItem({ //se crea un nuevo item en el carrito
                         variables: {
                             quantity: quantityItem,
-                            variantId: variant,
-                            features: features,
+                            variantId: variant.id,
                             shoppingSessionId: sessionId,
                             publishedAt: fechaFormateada,
                         },

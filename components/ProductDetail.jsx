@@ -26,7 +26,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
   const [images, setImages] = useState(variants.length > 0 ? variants[0].attributes.images.data : null);
   const { user } = useStorage();
   const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
-  const [variantSelected, setvariantSelected] = useState({variantId : variants[0].attributes, });
+  const [variantSelected, setvariantSelected] =useState(null);
 
   const decreaseCounter = () => {
     if (quantity === 1) return;
@@ -99,7 +99,6 @@ function ProductDetail({ name, brand, description, variants, materials }) {
             >
               {images
                 ? images.map((item) => {
-                  console.log("🚀 ~ file: ProductDetail.jsx:103 ~ ?images.map ~ variantSelected:", variantSelected.features)
                   return (
                     <div key={item.id}>
                       <SwiperSlide key={item.id}>
@@ -273,10 +272,14 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                 </div>
               </div>
               <div className="bg-aquamarine rounded-sm p-2 md:p-3  md:mx-4">
+                
                 <AddItemBtn
                   quantityItem={quantity}
-                  variant={variantSelected.variantId}//momentaneamente solo le enviamos una variante
-                  features={variantSelected.features}//Caracteristicas de la variante elegida
+                  variant={variantSelected && variantSelected.variant.variant.data? variantSelected.variant.variant.data
+                    : variants[0]}//Se envía la ultima variante seleccionada
+                  features={variantSelected && variantSelected.features
+                    ? variantSelected.features
+                    : {}}
                   cartItems={cartSummary.items}
                   cartQuantity={cartSummary.quantity}
                   sessionId={cartSummary.sessionId}

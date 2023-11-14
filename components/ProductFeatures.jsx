@@ -88,7 +88,7 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
   }
 
   
-  const addFeaturetoObject = (key, value, selectedValue) => {
+  const addFeaturetoObject = (key, value, variantObject) => {
     // Crear una copia del objeto JSON existente
     const updatedFeatureObject = { ...featureObject };
 
@@ -98,7 +98,7 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
     // Actualizar el estado con el nuevo objeto JSON
     setFeatureObject(updatedFeatureObject);
     let variant={
-      variantId: selectedValue,
+      variant: variantObject,
       features: updatedFeatureObject
     }
     setvariantSelected(variant);
@@ -128,7 +128,7 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
       //handleAddFeature();
       removeFeaturesFromIndex(selectedBox);
       chanceImages(selectedValue);
-      addFeaturetoObject(featureName, selectedFeatureValue, selectedValue)
+      addFeaturetoObject(featureName, selectedFeatureValue, data)
     } catch (error) {
       console.log(error);
     }
