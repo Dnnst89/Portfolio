@@ -8,6 +8,7 @@ import Spinner from "@/components/Spinner";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function DetailComponent({ id }) {
+  
   const { loading, error, data } = useQuery(ProductDetailQuery, {
     variables: { id },
   });

@@ -2,13 +2,15 @@
 
 import React, { useState } from 'react';
 
-const ProductFeatureSelector = ({ featureName, featureList, onSelect }) => {
+const ProductFeatureSelector = ({featureId, featureName, featureList, onSelect }) => {
     const [selectedValue, setSelectedValue] = useState('');
   
     const handleChange = (event) => {
       const selectedFeature = event.target.value;
+      const selectedFeatureValue = event.target.options[event.target.selectedIndex].text; // Cambiado a text
+      const selectedBox = event.target.id;
       setSelectedValue(selectedFeature);
-      onSelect(featureName, selectedFeature);
+      onSelect(selectedFeature,selectedBox, selectedFeatureValue,featureName);
     };
   
     const generateUniqueId = (name) => {
@@ -19,7 +21,7 @@ const ProductFeatureSelector = ({ featureName, featureList, onSelect }) => {
         <div className='py-3 space-y-2 w-full h-fit border-t grid'>
         <h3 className='font-bold'>{featureName}</h3>
         <select
-          id={generateUniqueId(featureName)}
+          id={featureId}
           value={selectedValue}
           onChange={handleChange}
         >
