@@ -139,7 +139,7 @@ export default function ThankYouMessage() {
               id: cartItemId,
             },
           });
-        } catch (error) { }
+        } catch (error) {}
 
         try {
           updateVariantStock({
@@ -243,11 +243,12 @@ export default function ThankYouMessage() {
       (day < 10 ? "0" : "") +
       day;
 
-    const { data: storeInformation, error: storeInformationError } = await getStoreInformation({
-      variables: {
-        id: 1,
-      },
-    });
+    const { data: storeInformation, error: storeInformationError } =
+      await getStoreInformation({
+        variables: {
+          id: 1,
+        },
+      });
     if (storeInformationError)
       return toast.error(
         "Lo sentimos, ha ocurrido un error al cargar los datos",
@@ -256,14 +257,15 @@ export default function ThankYouMessage() {
         }
       );
 
-    const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
+    const currency =
+      storeInformation?.storeInformation?.data?.attributes?.currency;
 
     const { data: emailInfo, error: sendEmailError } = await createOrderEmail({
       variables: {
         date: formattedDate,
         totalProducts: totalProducts,
         order_detail: orderDetail,
-        currency: currency
+        currency: currency,
       },
     });
     if (sendEmailError)
@@ -471,7 +473,7 @@ export default function ThankYouMessage() {
                     "Emitida conforme a lo establecido en la resolución de Facturación Electrónica, No.\\nDGT-R-033-2019 del 27 de junio de 2019 de la Dirección General de Tributación.",
                   fileName: "155822450521-FE-" + consecutive,
                 },
-                returnCompleteAnswer: true,
+                returnCompleteAnswer: false,
               };
               console.log("cuerpo json", bodyInvoice);
               const InvoiceResult = await facturationInstace.post(
@@ -479,6 +481,7 @@ export default function ThankYouMessage() {
                 bodyInvoice
               );
               try {
+                console.log("factura electronica", InvoiceResult);
                 const isoDate = new Date().toISOString();
                 const resulta = await getStoreInformation({
                   variables: {
@@ -502,8 +505,8 @@ export default function ThankYouMessage() {
               } catch (error) {
                 console.log("error", error);
               }
-            } catch (error) { }
-          } catch (error) { }
+            } catch (error) {}
+          } catch (error) {}
         } catch (error) {
           console.log("error crear factura", error);
         }
