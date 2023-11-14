@@ -26,7 +26,10 @@ function ProductDetail({ name, brand, description, variants, materials }) {
   const [images, setImages] = useState(variants.length > 0 ? variants[0].attributes.images.data : null);
   const { user } = useStorage();
   const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
-  const [variantSelected, setvariantSelected] =useState(null);
+  const [variantSelected, setvariantSelected] =useState(null); //guarda la variante que actualmente se seleccionó{features:{}, variant:{object}}
+  console.log("🚀 ~ file: ProductDetail.jsx:30 ~ ProductDetail ~ variantSelected:", variantSelected)
+  const [price, setPrice] = useState(variants.length > 0 ? variants[0].attributes.price : null);//precio inicial dado por primer variante
+  const [enableButton, setEnableButton] = useState(false);
 
   const decreaseCounter = () => {
     if (quantity === 1) return;
@@ -141,6 +144,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                 setImages={setImages}
                 setImage={setImage}
                 setvariantSelected={setvariantSelected}
+                setPrice={setPrice}
                 />
           </section>
 
@@ -256,7 +260,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
           {/* precio, cantidad y carrito */}
           <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between  p-4">
             <span className="col-span-5 font-bold md:text-[30px]">
-              $ {variants.length > 0 ? variants[0].attributes.price : null}
+              $ {price}
             </span>
             <div className="col-span-7 md:flex md:flex-col items-end md:items-end p-3">
               <div className="flex items-center mb-2 ">
@@ -284,6 +288,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                   cartQuantity={cartSummary.quantity}
                   sessionId={cartSummary.sessionId}
                   user={user}
+                  enableButton={enableButton}
                 />
               </div>
             </div>

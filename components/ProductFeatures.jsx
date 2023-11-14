@@ -4,7 +4,7 @@ import FeatureSelector from "./ProductFeatureSelector";
 import { useLazyQuery, useQuery } from "@apollo/client";
 import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
 
-const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected }) => {
+const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected, setPrice }) => {
 
   const [featureCount, setFeatureCount] = useState(1);
   const [variantInfo, setVariantInfo] = useState(variantsList);// objeto con las variantes hijas de la seleccion actual
@@ -41,9 +41,10 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
 
   const [featureList, setFeatureList] = useState([result]);//lista de caracteristicas que se van renderizando en componentes
   useEffect(() => {
-    //console.log("🚀 ~ file: ProductFeatures.jsx:151 ~ removeFeaturesFromIndex ~ featureList:", featureList)
-    //console.log("🚀 ~ file: ProductFeatures.jsx:102 ~ addKeyValuePair ~ jsonObject:", featureObject)
-    //console.log("🚀 ~ file: ProductFeatures.jsx:47 ~ useEffect ~ variantInfo:", variantInfo)
+    console.log("--------------------------------------------");
+    console.log("🚀 ~ file: ProductFeatures.jsx:151 ~ removeFeaturesFromIndex ~ featureList:", featureList)
+    console.log("🚀 ~ file: ProductFeatures.jsx:102 ~ addKeyValuePair ~ jsonObject:", featureObject)
+    console.log("🚀 ~ file: ProductFeatures.jsx:47 ~ useEffect ~ variantInfo:", variantInfo)
   }, [featureObject]);
 
 /**
@@ -102,13 +103,18 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
       features: updatedFeatureObject
     }
     setvariantSelected(variant);
-    
+    setPrice(variant.variant.data.attributes.price);
   };
 
   //Aqui va lo que vamos a hacer con lo que se seleccionó
   const handleFeatureSelect = async (selectedValue, selectedBox, selectedFeatureValue, featureName) => {
     
     try {
+
+      
+      removeFeaturesFromIndex(selectedBox);
+      chanceImages(selectedValue);
+
       const { data } = await getVariant({
         //llamo la query para traer la shopping session
         variables: { id: selectedValue },
@@ -126,9 +132,8 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
         //setFeatureCount((prevCount) => prevCount + 1);
       }
       //handleAddFeature();
-      removeFeaturesFromIndex(selectedBox);
-      chanceImages(selectedValue);
       addFeaturetoObject(featureName, selectedFeatureValue, data)
+      
     } catch (error) {
       console.log(error);
     }
@@ -156,7 +161,8 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
     if (index < featureList.length-1) {// si el identificador del select es menor a la cantidad de items en featureList
       console.log("Borrando")
       // Actualiza la lista de características desde el índice dado en adelante
-      const trimmedList = featureList.slice(0, index + 1);
+      let end = Number(index) + 1;
+      const trimmedList = featureList.slice(0, end);
       // Actualiza el estado de la lista de características y el contador
       setFeatureList(trimmedList);
       //setFeatureCount(index); // Ajusta el contador según el índice eliminado
