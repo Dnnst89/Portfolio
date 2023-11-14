@@ -2,32 +2,25 @@ import { getToken } from "./getToken";
 
 const data = {
   pointCollect: {
-    latitude: 9.929652,
-    longitude: -84.134719,
+    latitude: 9.949798,
+    longitude: -84.194217,
   },
   pointDelivery: {
-    latitude: 9.969548,
-    longitude: -84.123881,
+    latitude: 9.94793,
+    longitude: -84.162222,
   },
-
   listProduct: [
     {
-      quantity: 1,
-      nameProduct: "Samsumg",
-      description: "Galaxy S7",
+      quantity: 3,
+      nameProduct: "Matcha Suri (Costa Rica)",
+      description: "",
       size: "S",
+      length: 5,
+      width: 4.5,
+      high: 12,
       weight: 0.4,
-      price: 200000,
-      codeProduct: "234234234234",
-    },
-    {
-      quantity: 1,
-      nameProduct: "clock",
-      description: "LG color Rojo",
-      size: "S",
-      weight: 0.1,
       price: 12000,
-      codeProduct: "234234234234",
+      codeProduct: "247",
     },
   ],
   ensure: true,
@@ -48,5 +41,6 @@ export async function requestEstimation() {
       body: JSON.stringify(data),
     }
   );
-  console.log("estimationResponsde: ", estimationResponsde);
+  const estimation = await estimationResponsde.json();
+  console.log("estimationResponsde: ", estimation);
 }
