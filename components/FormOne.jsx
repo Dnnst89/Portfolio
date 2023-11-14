@@ -517,7 +517,7 @@ function FormOne() {
                             latitude={9.748917}
                             longitude={-83.753428}
                             zoom={10}
-                          />
+                          ></Map>
                         </div>
                       </section>
                     </div>

@@ -79,10 +79,20 @@ const createKey = (number, id) => {
     const clave = createConsecutiveKey();
     const consecutive = createConsecutiveNumber(number);
     const situation = "1";
+    const refill = "00";
     console.log("clave", clave);
     const key =
-      "506" + day + month + year + id + consecutive + situation + clave;
-    //console.log("keys", keys);
+      "506" +
+      day +
+      month +
+      year +
+      id +
+      refill +
+      consecutive +
+      situation +
+      clave;
+    //
+    console.log("keys", key);
     //const key = "50611052315582245052100200001010000001158183568230";
 
     return key;
@@ -117,6 +127,9 @@ const formatBillSumary = (billSummary, exchangeRate, currencyCode) => {
 const createConsecutiveNumber = (param) => {
   const parame = param.slice(-8);
   const number = parseInt(parame) + 1;
+
+  console.log("sss", number);
+
   var consecutiveNumber = "0010000101";
   var validateFormat = "0000000001";
   if (number < 10 && number > 0) {
@@ -140,6 +153,8 @@ const createConsecutiveNumber = (param) => {
   } else {
     validateFormat = "" + number;
   }
+  console.log("ssaaff", consecutiveNumber + validateFormat);
+
   if (number != null) {
     return consecutiveNumber + validateFormat;
   } else return "00100001010000000001";
