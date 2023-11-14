@@ -1,12 +1,13 @@
 import { gql } from "@apollo/client";
 
 const CREATE_CART_ITEM_MUTATION = gql`
-mutation CreateCartItem($quantity: Int!, $variantId: ID!, $shoppingSessionId: ID!,$publishedAt: DateTime!) {
+mutation CreateCartItem($quantity: Int!, $variantId: ID!, $shoppingSessionId: ID!,$publishedAt: DateTime!, $features: JSON! ) {
   createCartItem(
     data: {
       quantity: $quantity
       variant: $variantId
       publishedAt: $publishedAt
+      features: $features
       shopping_sessions: [$shoppingSessionId]
     }
   ) {
@@ -14,6 +15,7 @@ mutation CreateCartItem($quantity: Int!, $variantId: ID!, $shoppingSessionId: ID
         id,
         attributes{
           quantity,
+          features,
           variant{
             data{
               id,

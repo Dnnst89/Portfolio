@@ -10,8 +10,7 @@ import useStorage from "@/hooks/useStorage";
 import UPDATE_CART_ITEM_QUANTITY_MUTATION from "@/src/graphQl/queries/updateCartItemQuantity";
 
 const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId, user, features }) => {
-console.log("🚀 ~ file: AddItemBtn.jsx:13 ~ AddItemBtn ~ variant:", variant)
-console.log("🚀 ~ file: AddItemBtn.jsx:13 ~ AddItemBtn ~ features:", features)
+
 
     const dispatch = useDispatch();
     const { isAuthenticated } = useSelector((x) => x.auth);
@@ -51,7 +50,7 @@ console.log("🚀 ~ file: AddItemBtn.jsx:13 ~ AddItemBtn ~ features:", features)
                         .catch((error) => {
                             // Manejar errores de la mutación aquí
                             console.log(error)
-                            toast.error('Ha sucedido un error');
+                            toast.error('Ha sucedido un error ');
                         });
                 }
 
@@ -63,6 +62,7 @@ console.log("🚀 ~ file: AddItemBtn.jsx:13 ~ AddItemBtn ~ features:", features)
                     createCartItem({ //se crea un nuevo item en el carrito
                         variables: {
                             quantity: quantityItem,
+                            features: features,
                             variantId: variant.id,
                             shoppingSessionId: sessionId,
                             publishedAt: fechaFormateada,
@@ -77,7 +77,7 @@ console.log("🚀 ~ file: AddItemBtn.jsx:13 ~ AddItemBtn ~ features:", features)
                         })
                         .catch((error) => {
                             // Manejar errores de la mutación aquí
-                            toast.error("Ha sucedido un error");
+                            toast.error("Ha sucedido un error ", error);
                         });
                 } else {
                     toast.error("Lo sentimos, no tenemos suficiente stock para este producto")
