@@ -19,13 +19,6 @@ const CartDetail = ({
       id: 1,
     },
   });
-  if (storeInformationError)
-    return toast.error(
-      "Lo sentimos, ha ocurrido un error al cargar los datos",
-      {
-        autoClose: 5000,
-      }
-    );
 
   const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
 
