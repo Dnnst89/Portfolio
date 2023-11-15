@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { BiPlus, BiMinus } from "react-icons/bi";
 import Link from "next/link";
@@ -18,18 +18,16 @@ import 'swiper/css/scrollbar';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 
 function ProductDetail({ name, brand, description, variants, materials }) {
-
-  const altText= "Imagen de producto" + name
+  const altText = "Imagen de producto" + name
   const [quantity, setQuantity] = useState(1);
   const [image, setImage] = useState(null);
   let shortDescrption = "";
   const [images, setImages] = useState(variants.length > 0 ? variants[0].attributes.images.data : null);
   const { user } = useStorage();
   const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
-  const [variantSelected, setvariantSelected] =useState(null); //guarda la variante que actualmente se seleccionó{features:{}, variant:{object}}
-  console.log("🚀 ~ file: ProductDetail.jsx:30 ~ ProductDetail ~ variantSelected:", variantSelected)
+  const [variantSelected, setvariantSelected] = useState(); //guarda la variante que actualmente se seleccionó{features:{}, variant:{object}}
   const [price, setPrice] = useState(variants.length > 0 ? variants[0].attributes.price : null);//precio inicial dado por primer variante
-  const [enableButton, setEnableButton] = useState(false);
+  const [enableButton, setEnableButton] = useState(variants.length <= 1);
 
   const decreaseCounter = () => {
     if (quantity === 1) return;
@@ -72,6 +70,18 @@ function ProductDetail({ name, brand, description, variants, materials }) {
     setImage(image)
   };
 
+  const variantItems = variants.map(variant => {
+    const { size, price, color, stock, ageRange } = variant.attributes;
+    return { size, ageRange, color, stock };
+  });
+  const keyTranslations = {
+    size: 'Tamaño',
+    price: 'Precio',
+    color: 'Color',
+    stock: 'Existencias',
+    ageRange: 'Rango de edad',
+  };
+  const variantItem = variantItems[0];
   return (
     <>
       <section aria-label="Descripción del producto" className="bg-floralwhite max-w-screen-xl grid grid-cols-12 m-auto p-5 z-0" target="_blank" rel="noopener noreferrer">
@@ -128,7 +138,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
         </section>
 
         {/* Sección con los detalles del producto*/}
-        <section aria-label="Detalles del producto" className="mb-10 col-span-12 md:col-span-6 m-auto">
+        <section aria-label="Detalles del producto" className="mb-10 col-span-12 md:col-span-6 m-auto m-0">
           <h2 aria-label={`Referencia del producto ${variants[0]?.attributes?.sku}`} className="flex justify-end text-sm">Ref {variants[0]?.attributes?.sku}</h2>
           <h1 aria-label={`Nombre del producto ${name}`} className="mb-3 text-xl font-bold">{name}</h1>
           <p>{shortDescrption}...</p>
@@ -139,19 +149,19 @@ function ProductDetail({ name, brand, description, variants, materials }) {
           </a>
           {/* Sección seleccion del producto*/}
           <section>
-                <ProductFeatures
-                variantsList={variants}
-                setImages={setImages}
-                setImage={setImage}
-                setvariantSelected={setvariantSelected}
-                setPrice={setPrice}
-                />
+            <ProductFeatures
+              variantsList={variants}
+              setImages={setImages}
+              setImage={setImage}
+              setvariantSelected={setvariantSelected}
+              setPrice={setPrice}
+              setEnableButton={setEnableButton}
+            />
           </section>
 
           {/* imagenes iconos y caracteristicas */}
           <div className="flex grid grid-cols-12 gap-2 w-full justify-items-stretch ">
-
-            <div className="col-span-6 flex mt-5 items-center">
+          <div className="col-span-6 flex mt-5 items-center">
               <Image
                 priority={true}
                 width="50"
@@ -164,99 +174,52 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                 Tipo de material : <br />
                 {materials.length > 0 ? materials[0].attributes.name : null}
               </p>
-            </div>
-            <div className="col-span-6 flex mt-5 items-center">
-              <Image
-                priority={true}
-                width="50"
-                height="50"
-                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
-                alt="tailwind logo"
-                className="rounded-xl mr-3"
-              />
-              <p className="text-sm md:text-base">
-                Rango de edades:
-                <br />
-                {variants.length > 0
-                  ? variants[0].attributes.ageRange
-                  : null}
-              </p>
-            </div>
-            <div className="col-span-6 flex mt-5 items-center">
-              <Image
-                priority={true}
-                width="50"
-                height="50"
-                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
-                alt="tailwind logo"
-                className="rounded-xl mr-3"
-              />
-              <p className="text-sm md:text-base">
-                Color:
-                <span className="m-2">
-                  {variants.length > 0
-                    ? variants[0].attributes.color
-                    : null}
-                </span>
-              </p>
-            </div>
-            <div className="col-span-6 flex mt-5 items-center">
-              <Image
-                priority={true}
-                width="50"
-                height="50"
-                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
-                alt="tailwind logo"
-                className="rounded-xl mr-3"
-              />
-              <p className="text-sm md:text-base">
-                Stock:
-                <span className="m-2">
-                  {variants.length > 0
-                    ? variants[0].attributes.stock
-                    : null}
-                </span>
-              </p>
-            </div>
-            <div className="col-span-6 flex mt-5 items-center">
-              <Image
-                priority={true}
-                width="50"
-                height="50"
-                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
-                alt="tailwind logo"
-                className="rounded-xl mr-3"
-              />
-              <p className="text-sm md:text-base">
-                Tamaño:
-                <span className="m-2">
-                  {variants.length > 0 ? variants[0].attributes.size : null}
-                </span>
-              </p>
-            </div>
-            <div className="col-span-6 flex mt-5 items-center">
-              <Image
-                priority={true}
-                width="50"
-                height="50"
-                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
-                alt="tailwind logo"
-                className="rounded-xl mr-3"
-              />
-              <p className="text-sm md:text-base">
-                Peso:
-                <span className="m-2">
-                  {variants.length > 0 &&
-                    variants[0].attributes.weight != null
-                    ? variants[0].attributes.weight.weight + " " +
-                    variants[0].attributes.weight.unitWeight
-                    : null}
-                </span>
-              </p>
-            </div>
-
-
+            </div>            
+            {variantSelected ? 
+              variantSelected.attributes.map((item) => {
+                return (
+                  <div className="col-span-6 flex mt-5 items-center">
+                  <Image
+                    priority={true}
+                    width="50"
+                    height="50"
+                    src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
+                    alt="tailwind logo"
+                    className="rounded-xl mr-3"
+                  />
+                  <p className="text-sm md:text-base">
+                    Tipo de material : <br />
+                    {materials.length > 0 ? materials[0].attributes.name : null}
+                  </p>
+                </div>
+                  );
+              })
+              :
+              Object.entries(variantItem).map(([key, value]) => {
+                // Obtén la traducción de la clave en español
+                const translatedKey = keyTranslations[key] || key;
+                if(value!=null){
+                  return (
+                    <div className="col-span-6 flex mt-5 items-center">
+                      <Image
+                        priority={true}
+                        width="50"
+                        height="50"
+                        src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
+                        alt="tailwind logo"
+                        className="rounded-xl mr-3"
+                      />
+                      <p className="text-sm md:text-base">
+                      {translatedKey}: <br />
+                      {value}
+                      </p>
+                    </div>
+                  );
+                }
+                
+              })}
           </div>
+
           {/* precio, cantidad y carrito */}
           <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between  p-4">
             <span className="col-span-5 font-bold md:text-[30px]">
@@ -275,11 +238,11 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                   </button>
                 </div>
               </div>
-              <div className="bg-aquamarine rounded-sm p-2 md:p-3  md:mx-4">
-                
+              <div className={`${enableButton ? 'bg-aquamarine' : 'bg-grey-200'} rounded-sm p-2 md:p-3  md:mx-4"`}>
+
                 <AddItemBtn
                   quantityItem={quantity}
-                  variant={variantSelected && variantSelected.variant.variant.data? variantSelected.variant.variant.data
+                  variant={variantSelected && variantSelected.variant.variant.data ? variantSelected.variant.variant.data
                     : variants[0]}//Se envía la ultima variante seleccionada
                   features={variantSelected && variantSelected.features
                     ? variantSelected.features
