@@ -10,7 +10,6 @@ query GetVariantById($id: ID) {
         typeValue
         size
         sku
-        color
         price
         weight {
           id

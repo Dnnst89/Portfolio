@@ -32,7 +32,6 @@ const ProductDetailQuery = gql`
                 typeValue
                 size
                 sku
-                color
                 price
                 weight {
                   id
