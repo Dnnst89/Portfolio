@@ -142,7 +142,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
         <section aria-label="Detalles del producto" className="mb-10 col-span-12 md:col-span-6 m-auto m-0">
           <div className="grid grid-cols-12 md:col-span-12">
             <div className="col-span-12 md:col-span-6">
-            <h2 aria-label={`Referencia del producto ${variantSelected?.variant?.data?.attributes?.sku}`} className="flex justify-start text-sm text-lightblue"> {variantSelected ? variantSelected?.variant?.data?.attributes?.sku : brand}</h2>
+            <h2 aria-label={`Marca ${brand}`} className="flex justify-start text-sm text-lightblue"> {brand}</h2>
             </div>
 
             <div className="col-span-12 md:col-span-6">
