@@ -48,6 +48,7 @@ import { GET_USER_ADDRESS } from "@/src/graphQl/queries/getUserAddress";
 */
 
 export default function ThankYouMessage() {
+  useProtectionRoute();
   const router = useRouter();
   //states
   const [code, setCode] = useState("");
