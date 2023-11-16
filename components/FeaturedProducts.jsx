@@ -4,6 +4,14 @@ import FilterProductCard from "./FilterProductCard";
 //GQL
 import { useQuery } from "@apollo/client";
 import GET_FEATURED_PRODUCTS from "@/src/graphQl/queries/getFeaturedProducts";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+import { EffectCoverflow } from 'swiper/modules';
 
 const FeaturedProducts = () => {
 
@@ -33,9 +41,9 @@ const FeaturedProducts = () => {
     }
   }
 
-  //tomamos los primeros cuatro resultados del random anterior
+  //tomamos los primeros veinte resultados del random anterior
   const aux = [];
-  for (let i = 0; i <= 3; i++) {
+  for (let i = 0; i <= 20; i++) {
     if (i < myArray.length) {
       const random = myArray[i]
       aux.push(data?.products.data[random]);
@@ -44,20 +52,50 @@ const FeaturedProducts = () => {
 
   return (
     <>
-      {aux
-        ? aux.map((item) => {
-          return <div role="link" className="flex  justify-center pt-2" key={item.id}>
-            <FilterProductCard
-              key={item.id}
-              id={item.id}
-              name={item.attributes.name}
-              coverImage={item.attributes.coverImage.data}
-              defaultPrice={item.attributes.defaultPrice}
-              brand={item.attributes.brand}
-            />
-          </div>;
-        })
-        : null}
+      <Swiper
+        modules={[EffectCoverflow, Navigation, A11y]}
+        effect="coverflow"
+        //slidesPerView={4}
+        //spaceBetween={-200}
+        navigation
+        coverflowEffect={{
+          rotate: -15,
+          //stretch: 0,
+          depth: 50,
+          slideShadows: false
+        }}
+        breakpoints={{
+          300: {
+            slidesPerView: 2,
+            //spaceBetween: 1000
+          },
+          768: {
+            slidesPerView: 3,
+            //spaceBetween: 30
+          },
+          1024: {
+            slidesPerView: 4,
+            //spaceBetween: 40
+          }
+        }}
+      >
+        {aux
+          ? aux.map((item) => {
+            return <div role="link" key={item.id} style={{ pointerEvents: "auto" }}>
+              <SwiperSlide key={item.id}>
+                <FilterProductCard
+                  key={item.id}
+                  id={item.id}
+                  name={item.attributes.name}
+                  coverImage={item.attributes.coverImage.data}
+                  defaultPrice={item.attributes.defaultPrice}
+                  brand={item.attributes.brand}
+                />
+              </SwiperSlide>
+            </div>;
+          })
+          : null}
+      </Swiper>
     </>
   );
 };

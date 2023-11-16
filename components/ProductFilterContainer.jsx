@@ -2,8 +2,14 @@
 import Image from "next/image";
 import FilterProductCard from "./FilterProductCard";
 import FilterPagination from "./FilterPagination";
+import { useEffect, useState } from "react";
 
 const ProductFilterContainer = ({ result, currentPage, setCurrentPage }) => {
+
+    useEffect(() => {
+        // Desplaza la página al inicio al cargar el componente
+        window.scrollTo(0, 0);
+    }, [currentPage]);
 
     const { data } = result
     return (
