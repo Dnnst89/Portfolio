@@ -74,7 +74,6 @@ export default function ThankYouMessage() {
   // const { id } = user || {};
 
   const [createOrderEmail] = useMutation(CREATE_ORDER_EMAIL);
-  const [getUserAddress] = useLazyQuery(GET_USER_ADDRESS);
 
   // const { user } = useStorage();
   // const { id } = user || {};

@@ -4,15 +4,15 @@ import UserDataCard from "@/components/UserDataCard";
 import UserAddress from "@/src/graphQl/queries/getUserAddress";
 import { useQuery } from "@apollo/client";
 import { GET_USER_ADDRESS } from "@/src/graphQl/queries/getUserAddress";
-import useStorage from "@/hooks/useStorage";
 
 export default function Address() {
 
-  const { user } = useStorage();
-  const userId = user?.id;
+
+  // const sessionData = JSON.parse(localStorage.getItem("userData"));
+  // const id = sessionData.user.id;
   const { data, error } = useQuery(GET_USER_ADDRESS, {
     variables: {
-      id: userId,
+      id: 175,
     },
   });
 
