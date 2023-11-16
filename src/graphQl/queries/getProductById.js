@@ -24,7 +24,7 @@ const ProductDetailQuery = gql`
               }
             }
           }
-          variants {
+          variants(filters:{parentVariant:{id:{eq:null}}}) {
             data {
               id
               attributes {

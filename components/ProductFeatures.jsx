@@ -97,18 +97,22 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
    */
   const addFeaturetoObject = (key, value, variantObject) => {
     // Crear una copia del objeto JSON existente
-    const updatedFeatureObject = { ...featureObject };
+    console.log("variantObject ", variantObject)
+    console.log("key ", key)
+    console.log("value ", value)
+    //si la variante no tiene padre, el objeto de features se vacia, para eliminar features anteriores, aca va la logica para eliminar los features anteriores
+    const updatedFeatureObject = variantObject?.variant?.data?.attributes?.parentVariant.data == null ? {} : { ...featureObject };
     // Agregar el nuevo par clave-valor si ya existe se sobreescribe
     updatedFeatureObject[key] = value;
     // Actualizar el estado con el nuevo objeto JSON
     setFeatureObject(updatedFeatureObject);
     // Verificar si variantObject está definido y tiene la propiedad 'data'
-    if (variantObject && variantObject.data && variantObject.data.attributes) {
+
+    if (variantObject?.variant?.data?.attributes) {
       let variant = {
-        variant: variantObject,
+        variant: variantObject?.variant,
         features: updatedFeatureObject
       };
-      console.log("🚀 ~ file: ProductFeatures.jsx:111 ~ addFeaturetoObject ~ variant:", variant);
       setvariantSelected(variant);
       setPrice(variant.variant.data.attributes.price);
     } else {
@@ -144,6 +148,7 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
         ]);
         //setFeatureCount((prevCount) => prevCount + 1);
       }
+      console.log("data ", data)
       //handleAddFeature();
       addFeaturetoObject(featureName, selectedFeatureValue, data)
     } catch (error) {
@@ -175,7 +180,7 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
         const featureName = Object.keys(feature)[0]; // Obtén el nombre de la característica
         const featureOptions = feature[featureName].options; // Obtén las opciones de la característica
 
-        if (featureName!="null") {
+        if (featureName != "null") {
           return (
             <FeatureSelector
               key={index}
@@ -186,7 +191,7 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
             />
           );
         }
-        
+
       })}
     </div>
   );

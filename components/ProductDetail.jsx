@@ -29,6 +29,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
   const [price, setPrice] = useState(variants.length > 0 ? variants[0].attributes.price : null);//precio inicial dado por primer variante
   const [enableButton, setEnableButton] = useState(variants.length <= 1);
 
+
   const decreaseCounter = () => {
     if (quantity === 1) return;
     setQuantity((prev) => --prev);
@@ -70,14 +71,14 @@ function ProductDetail({ name, brand, description, variants, materials }) {
     setImage(image)
   };
 
+
+  //cuando el producto solo tiene una capa de variante, obtengo el variants[0]
   const variantItems = variants.map(variant => {
     const { size, price, color, stock, ageRange } = variant.attributes;
-    return { size, ageRange, color, stock };
+    return { size, ageRange };
   });
   const keyTranslations = {
     size: 'Tamaño',
-    price: 'Precio',
-    color: 'Color',
     stock: 'Existencias',
     ageRange: 'Rango de edad',
   };
@@ -139,7 +140,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
 
         {/* Sección con los detalles del producto*/}
         <section aria-label="Detalles del producto" className="mb-10 col-span-12 md:col-span-6 m-auto m-0">
-          <h2 aria-label={`Referencia del producto ${variants[0]?.attributes?.sku}`} className="flex justify-end text-sm">Ref {variants[0]?.attributes?.sku}</h2>
+          <h2 aria-label={`Referencia del producto ${variantSelected?.variant?.data?.attributes?.sku}`} className="flex justify-end text-sm">Ref {variantSelected ? variantSelected?.variant?.data?.attributes?.sku : variants[0]?.attributes?.sku}</h2>
           <h1 aria-label={`Nombre del producto ${name}`} className="mb-3 text-xl font-bold">{name}</h1>
           <p>{shortDescrption}...</p>
           <a onClick={() => handleClick()}>
@@ -159,9 +160,9 @@ function ProductDetail({ name, brand, description, variants, materials }) {
             />
           </section>
 
-          {/* imagenes iconos y caracteristicas */}
+          {/* INFORMACION E ICONOS DEL PRODUCTO, ESTATICOS*/}
           <div className="flex grid grid-cols-12 gap-2 w-full justify-items-stretch ">
-          <div className="col-span-6 flex mt-5 items-center">
+            <div className="col-span-6 flex mt-5 items-center">
               <Image
                 priority={true}
                 width="50"
@@ -172,13 +173,15 @@ function ProductDetail({ name, brand, description, variants, materials }) {
               />
               <p className="text-sm md:text-base">
                 Tipo de material : <br />
-                {materials.length > 0 ? materials[0].attributes.name : null}
+                {materials.length > 0 ? materials.map((material, index) => { return <p key={index}>{material.attributes.name}</p> }) : null}
               </p>
-            </div>            
-            {variantSelected ? 
-              variantSelected.attributes.map((item) => {
-                return (
-                  <div className="col-span-6 flex mt-5 items-center">
+            </div>
+
+
+            {/* INFORMACION E ICONOS DE LA VARIANTE, DINAMICOS*/}
+            {variantSelected ?
+              <>
+                <div className="col-span-6 flex mt-5 items-center">
                   <Image
                     priority={true}
                     width="50"
@@ -188,19 +191,41 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                     className="rounded-xl mr-3"
                   />
                   <p className="text-sm md:text-base">
-                    Tipo de material : <br />
-                    {materials.length > 0 ? materials[0].attributes.name : null}
+                    Tamaño: <br />
+                    {variantSelected?.variant?.data?.attributes?.size}
                   </p>
                 </div>
-                  );
-              })
-              :
-              Object.entries(variantItem).map(([key, value]) => {
-                // Obtén la traducción de la clave en español
-                const translatedKey = keyTranslations[key] || key;
-                if(value!=null){
+                <div className="col-span-6 flex mt-5 items-center">
+                  <Image
+                    priority={true}
+                    width="50"
+                    height="50"
+                    src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
+                    alt="tailwind logo"
+                    className="rounded-xl mr-3"
+                  />
+                  <p className="text-sm md:text-base">
+                    Rango de edad: <br />
+                    {variantSelected?.variant?.data?.attributes?.price}
+                  </p>
+                </div>
+                <div className="col-span-6 flex mt-5 items-center">
+                  <Image
+                    priority={true}
+                    width="50"
+                    height="50"
+                    src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
+                    alt="tailwind logo"
+                    className="rounded-xl mr-3"
+                  />
+                  <p className="text-sm md:text-base">
+                    Existencias: <br />
+                    {variantSelected?.variant?.data?.attributes?.stock === 0 ? "Agotados" : "Disponibles"}
+                  </p>
+                </div>
+                {Object.entries(variantSelected.features).map((feature, index) => { //feature[0] = key feature[1] = value
                   return (
-                    <div className="col-span-6 flex mt-5 items-center">
+                    <div key={index} className="col-span-6 flex mt-5 items-center">
                       <Image
                         priority={true}
                         width="50"
@@ -210,17 +235,43 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                         className="rounded-xl mr-3"
                       />
                       <p className="text-sm md:text-base">
-                      {translatedKey}: <br />
-                      {value}
+                        {feature[0]} : <br />
+                        {feature[1]}
+                      </p>
+                    </div>
+                  );
+                })}
+              </>
+
+              :
+              //cuando el producto solo tiene una capa de variante, obtengo el variants[0]
+              Object.entries(variantItem).map(([key, value, index]) => {
+                // Obtén la traducción de la clave en español
+                const translatedKey = keyTranslations[key] || key;
+                if (value != null) {
+                  return (
+                    <div key={index} className="col-span-6 flex mt-5 items-center">
+                      <Image
+                        priority={true}
+                        width="50"
+                        height="50"
+                        src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
+                        alt="tailwind logo"
+                        className="rounded-xl mr-3"
+                      />
+                      <p className="text-sm md:text-base">
+                        {translatedKey}: <br />
+                        {value}
                       </p>
                     </div>
                   );
                 }
-                
-              })}
+
+              })
+            }
           </div>
 
-          {/* precio, cantidad y carrito */}
+          {/* precio, cantidad de la variante */}
           <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between  p-4">
             <span className="col-span-5 font-bold md:text-[30px]">
               $ {price}
@@ -242,9 +293,9 @@ function ProductDetail({ name, brand, description, variants, materials }) {
 
                 <AddItemBtn
                   quantityItem={quantity}
-                  variant={variantSelected && variantSelected.variant.variant.data ? variantSelected.variant.variant.data
+                  variant={variantSelected?.variant?.data ? variantSelected.variant.data
                     : variants[0]}//Se envía la ultima variante seleccionada
-                  features={variantSelected && variantSelected.features
+                  features={variantSelected?.features
                     ? variantSelected.features
                     : {}}
                   cartItems={cartSummary.items}

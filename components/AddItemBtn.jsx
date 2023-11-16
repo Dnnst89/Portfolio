@@ -9,9 +9,9 @@ import { updateCartItems, updateQtyItems } from "@/redux/features/cart-slice";
 import useStorage from "@/hooks/useStorage";
 import UPDATE_CART_ITEM_QUANTITY_MUTATION from "@/src/graphQl/queries/updateCartItemQuantity";
 
-const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId, user, features,enableButton }) => {
-    
-    
+const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId, user, features, enableButton }) => {
+
+
     const dispatch = useDispatch();
     const { isAuthenticated } = useSelector((x) => x.auth);
     const [createCartItem] = useMutation(CREATE_CART_ITEM_MUTATION, {});
@@ -61,6 +61,7 @@ const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId,
                 if (variant?.attributes?.stock > 0) {//si el stock del item es 0
                     createCartItem({ //se crea un nuevo item en el carrito
                         variables: {
+                            features: features,
                             quantity: quantityItem,
                             variantId: variant.id,
                             shoppingSessionId: sessionId,
