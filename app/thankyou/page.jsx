@@ -47,6 +47,7 @@ import { CREATE_ORDER_EMAIL } from "@/src/graphQl/queries/sendEmail";
 */
 
 export default function ThankYouMessage() {
+  useProtectionRoute();
   const router = useRouter();
   //states
   const [code, setCode] = useState("");
