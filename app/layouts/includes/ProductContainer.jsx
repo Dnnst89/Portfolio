@@ -2,6 +2,7 @@
 import Image from "next/image";
 import ProductCard from "../../../components/ProductCard";
 import Pagination from "@/components/Pagination";
+import { useEffect, useState } from "react";
 const ProductContainer = ({
   result,
   hitsPerPage,
@@ -11,23 +12,28 @@ const ProductContainer = ({
   setCurrentPage,
 }) => {
   const { hits } = result;
-  
+
+  useEffect(() => {
+    // Desplaza la página al inicio al cargar el componente
+    window.scrollTo(0, 0);
+  }, [currentPage]);
+
   return (
     <>
       <div className="flex flex-wrap max-w-screen-xl m-auto justify-center">
         {hits
           ? hits.map((item) => {
-              return (
-                <ProductCard
-                  key={item.id}
-                  id={item.id}
-                  name={item.name}
-                  defaultPrice={item.defaultPrice}
-                  coverImage={item.coverImage}
-                  brand={item.brand}
-                />
-              );
-            })
+            return (
+              <ProductCard
+                key={item.id}
+                id={item.id}
+                name={item.name}
+                defaultPrice={item.defaultPrice}
+                coverImage={item.coverImage}
+                brand={item.brand}
+              />
+            );
+          })
           : null}
       </div>
       <Pagination

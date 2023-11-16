@@ -476,6 +476,8 @@ export default function ThankYouMessage() {
                 `document/electronic-invoice?access_token=${token}`,
                 bodyInvoice
               );
+
+              console.log("FaCtura ElEctronica", InvoiceResult)
               try {
                 console.log("factura electronica", InvoiceResult);
                 const isoDate = new Date().toISOString();

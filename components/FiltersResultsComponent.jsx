@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import Spinner from "./Spinner";
 import toast, { Toaster } from "react-hot-toast";
 
-export default function AgeResultsComponent({ ageRange }) {
+export default function FiltersResultsComponent({ ageRange }) {
 
   const [currentPage, setCurrentPage] = useState(1);
 
