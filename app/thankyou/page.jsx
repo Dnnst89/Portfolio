@@ -174,11 +174,7 @@ export default function ThankYouMessage() {
         return console.log(
           "Lo sentimos, ha ocurrido un error al cargar los datos"
         );
-      console.log(
-        "first",
-        userAddress.usersPermissionsUser.data.attributes.users_address.data
-          .attributes
-      );
+
       const province =
         userAddress.usersPermissionsUser.data.attributes.users_address.data
           .attributes.province;
@@ -473,7 +469,7 @@ export default function ThankYouMessage() {
                     "Emitida conforme a lo establecido en la resolución de Facturación Electrónica, No.\\nDGT-R-033-2019 del 27 de junio de 2019 de la Dirección General de Tributación.",
                   fileName: "155822450521-FE-" + consecutive,
                 },
-                returnCompleteAnswer: false,
+                returnCompleteAnswer: true,
               };
               console.log("cuerpo json", bodyInvoice);
               const InvoiceResult = await facturationInstace.post(

@@ -92,7 +92,6 @@ const createKey = (number, id) => {
       situation +
       clave;
     //
-    console.log("keys", key);
     //const key = "50611052315582245052100200001010000001158183568230";
 
     return key;
@@ -127,8 +126,6 @@ const formatBillSumary = (billSummary, exchangeRate, currencyCode) => {
 const createConsecutiveNumber = (param) => {
   const parame = param.slice(-8);
   const number = parseInt(parame) + 1;
-
-  console.log("sss", number);
 
   var consecutiveNumber = "0010000101";
   var validateFormat = "0000000001";

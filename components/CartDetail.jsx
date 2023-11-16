@@ -7,21 +7,27 @@ import { useCallback, useEffect, useState } from "react";
 import { facturationInstace } from "@/src/axios/algoliaIntance/config";
 import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { useQuery } from "@apollo/client";
-
+import { requestEstimation, createData } from "@/api/moovin/estimation";
 const CartDetail = ({
   isCheckout = false,
   detailTitle = "Detalle del carrito",
   onChange,
+  latitude,
+  longitude,
 }) => {
   const { user } = useStorage();
-  const { data: storeInformation, error: storeInformationError } = useQuery(GET_STORE_INFO, {
-    variables: {
-      id: 1,
-    },
-  });
+  const { data: storeInformation, error: storeInformationError } = useQuery(
+    GET_STORE_INFO,
+    {
+      variables: {
+        id: 1,
+      },
+    }
+  );
 
-  const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
-
+  const currency =
+    storeInformation?.storeInformation?.data?.attributes?.currency;
+  const [shipment, setShipment] = useState(0);
   const [amounts, setAmounts] = useState({
     total: 0,
     tax: 0,
@@ -36,9 +42,33 @@ const CartDetail = ({
   } = useCartSummary({
     userId: user?.id,
   });
+  useEffect(() => {
+    const fetchEstimation = async () => {
+      try {
+        const shipmentInfo = createData(items, latitude, longitude);
+        const estimation = await requestEstimation(shipmentInfo);
+        setShipment(estimation.amount);
+        if (amounts.total === subTotal + amounts.tax) {
+          console.log("11");
+        }
+        const newTotal = amounts.total + shipment;
+        setAmounts((prev) => ({
+          ...prev,
+          total: parseFloat(newTotal),
+        }));
+        console.log("atras", shipment);
+      } catch (error) {
+        console.error("Error al obtener los datos:", error);
+        // Puedes manejar el error según tus necesidades
+      }
+    };
+
+    fetchEstimation();
+  }, [latitude]); // El segundo argumento [] asegura que useEffect se ejecute solo una vez al montar el componente
 
   useEffect(() => {
-    console.log(quantity)
+    console.log("q", quantity);
+
     getTaxCost();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -51,13 +81,14 @@ const CartDetail = ({
       loading: true,
     }));
     try {
-      if (!items.length) {// si no hay items se pone por default todo en 0
+      if (!items.length) {
+        // si no hay items se pone por default todo en 0
         setAmounts((prev) => ({
           ...prev,
           total: 0,
           tax: 0,
         }));
-      };
+      }
       const token = await getAccessToken();
       const formatedItems = formatTaxData(items);
       const body = {
@@ -113,22 +144,21 @@ const CartDetail = ({
             <p className="whitespace-nowrap">${subTotal.toFixed(2)}</p>
           </div>
           <div className="flex justify-between border-dashed border-grey-200 border-b-[2px] pb-3">
-            <p>Costo de envío:</p>
-            <p className="whitespace-nowrap">$0,000.00</p>
+            <p>Impuestos:</p>
+            <p className="whitespace-nowrap">
+              {amounts.tax} {amounts.currencyType}
+            </p>
           </div>
 
           <>
             <div className="flex justify-between ">
-              <p>Impuestos:</p>
-              <p className="whitespace-nowrap">
-                {amounts.tax} {amounts.currencyType}
-              </p>
+              <p>Costo de envío:</p>
+              <p className="whitespace-nowrap">${shipment}</p>
             </div>
             <div className="flex flex-col p-4 space-y-3">
               <p className="flex justify-center">Costo Total(IVA Incluido)</p>
               <p className="flex justify-center whitespace-nowrap">
                 {amounts?.total} {amounts.currencyType}
-
               </p>
             </div>
           </>

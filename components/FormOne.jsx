@@ -8,17 +8,13 @@ import CartDetail from "./CartDetail";
 import { useEffect, useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
 import CheckOutForm2 from "./CheckOutForm2";
-import GoogleMapWrapper from "./Map";
 import useStorage from "@/hooks/useStorage";
 import toast, { Toaster } from "react-hot-toast";
-import { requestEstimation } from "@/api/moovin/estimation";
 import { getToken, refreshToken } from "@/api/moovin/getToken";
 import Map from "./Map";
+import { Marker } from "@react-google-maps/api";
 
 function FormOne() {
-  const { data } = requestEstimation();
-  console.log("moovin :", data);
-
   const {
     register,
     handleSubmit,
@@ -130,7 +126,18 @@ function FormOne() {
       });
     }
   };
+  const [selectedLat, setSelectedLat] = useState(9.924359845145645);
+  const [selectedLng, setSelectedLng] = useState(-84.13677104232991);
 
+  const handleMarkerChange = (markerPosition) => {
+    setSelectedLat(markerPosition.lat);
+    setSelectedLng(markerPosition.lng);
+  };
+  /* const estimationMoovin = () => {
+    const estimation = requestEstimation();
+    console.log("moovin :", estimation);
+  };
+*/
   useEffect(() => {
     cargaDatos();
     //eslint-disable-next-line react-hooks/exhaustive-deps
@@ -514,9 +521,10 @@ function FormOne() {
 
                         <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <Map
-                            latitude={9.748917}
-                            longitude={-83.753428}
-                            zoom={10}
+                            latitude={9.92421981523312}
+                            longitude={-84.13679786429938}
+                            zoom={15}
+                            onMarkerChange={handleMarkerChange}
                           ></Map>
                         </div>
                       </section>
@@ -650,6 +658,8 @@ function FormOne() {
               detailTitle={"Detalle del carrito"}
               isCheckout
               onChange={handleChange}
+              latitude={selectedLat}
+              longitude={selectedLng}
             />
           </div>
         </div>
