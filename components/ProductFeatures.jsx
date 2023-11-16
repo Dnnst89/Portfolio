@@ -97,9 +97,15 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
    */
   const addFeaturetoObject = (key, value, variantObject) => {
     // Crear una copia del objeto JSON existente
-    console.log("variantObject ", variantObject)
-    console.log("key ", key)
-    console.log("value ", value)
+    const position = Object.keys(featureObject).indexOf(key);
+    const keysArray = Object.keys(featureObject);
+    // Recorrer las claves y eliminar desde el índice especificado en adelante
+    if (position>=0) {
+      for (let i = position; i < keysArray.length; i++) {
+        const key = keysArray[i];
+        delete featureObject[key];
+      }
+    }
     //si la variante no tiene padre, el objeto de features se vacia, para eliminar features anteriores, aca va la logica para eliminar los features anteriores
     const updatedFeatureObject = variantObject?.variant?.data?.attributes?.parentVariant.data == null ? {} : { ...featureObject };
     // Agregar el nuevo par clave-valor si ya existe se sobreescribe
