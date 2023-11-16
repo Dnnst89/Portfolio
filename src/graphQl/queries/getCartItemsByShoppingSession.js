@@ -55,7 +55,6 @@ query GetCartItemsBySession(
                   }
                 }
               }
-              color
               price
               ageRange
               size

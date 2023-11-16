@@ -30,7 +30,6 @@ mutation CreateCartItem($quantity: Int!, $variantId: ID!, $shoppingSessionId: ID
                     }
                   }
                 },
-                color,
                 price,
                 ageRange,
                 size,
