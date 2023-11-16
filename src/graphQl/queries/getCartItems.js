@@ -21,7 +21,6 @@ const GET_CART_ITEMS_LIST = gql`
                         }
                       }
                     },
-                    color,
                     price,
                     stock,
                     ageRange,
