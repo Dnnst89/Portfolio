@@ -154,7 +154,6 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
         ]);
         //setFeatureCount((prevCount) => prevCount + 1);
       }
-      console.log("data ", data)
       //handleAddFeature();
       addFeaturetoObject(featureName, selectedFeatureValue, data)
     } catch (error) {
@@ -168,7 +167,6 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
      */
   const removeFeaturesFromIndex = (index) => {
     if (index < featureList.length - 1) {// si el identificador del select es menor a la cantidad de items en featureList
-      console.log("Borrando")
       // Actualiza la lista de características desde el índice dado en adelante
       let end = Number(index) + 1;
       const trimmedList = featureList.slice(0, end);

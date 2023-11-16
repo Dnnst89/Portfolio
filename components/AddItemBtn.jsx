@@ -27,10 +27,8 @@ const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId,
             const itemFiltrado = cartItems.find((item) => item.attributes.variant.data.id === variant?.id);
             const fechaActual = new Date();
             const fechaFormateada = fechaActual.toISOString();
-            console.log(itemFiltrado)
             if (itemFiltrado) {//si el item esta en carrito
                 const newQuantity = quantityItem + itemFiltrado.quantity
-                console.log(itemFiltrado.id + " " + newQuantity)
                 if (newQuantity > itemFiltrado.attributes.variant.data.attributes.stock) {
                     toast.error('No puedes agregar mas de este producto al carrito');
                 } else {
@@ -49,20 +47,17 @@ const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId,
                         })
                         .catch((error) => {
                             // Manejar errores de la mutación aquí
-                            console.log(error)
-                            toast.error('Ha sucedido un error');
+                            toast.error('Ha sucedido un error ');
                         });
                 }
 
 
             } else {//si el item nunca se ha agregado al carrito
-                console.log(quantityItem, variant.id);
-
                 if (variant?.attributes?.stock > 0) {//si el stock del item es 0
                     createCartItem({ //se crea un nuevo item en el carrito
                         variables: {
-                            features: features,
                             quantity: quantityItem,
+                            ...(Object.keys(features).length > 0 && { features }),
                             variantId: variant.id,
                             shoppingSessionId: sessionId,
                             publishedAt: fechaFormateada,
@@ -77,7 +72,7 @@ const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId,
                         })
                         .catch((error) => {
                             // Manejar errores de la mutación aquí
-                            toast.error("Ha sucedido un error");
+                            toast.error("Ha sucedido un error ", error);
                         });
                 } else {
                     toast.error("Lo sentimos, no tenemos suficiente stock para este producto")

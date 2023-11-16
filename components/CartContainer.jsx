@@ -11,12 +11,10 @@ import { updateQtyItems } from "@/redux/features/cart-slice";
 
 const CartContainer = () => {
     const { user } = useStorage(); //me trae el usuario de local storage
-    const { total, items, quantity, errors, loading } = useCartSummary({
+    const { total, items, quantity, errors, loading, sessionId } = useCartSummary({
         userId: user?.id,
     });
-
     const dispatch = useDispatch();
-
     return (
         <>
             <div className="flex flex-col md:col-span-8 col-span-12">

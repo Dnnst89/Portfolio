@@ -285,6 +285,7 @@ export default function ThankYouMessage() {
           const variantAtt = variant?.attributes;
           const { data } = await createOrderItem({
             variables: {
+              features: item?.attributes?.features,
               quantity: item?.attributes?.quantity,
               variantId: parseInt(variant?.id), //este dato es un INT no un ID
               publishedAt: isoDate,
