@@ -9,7 +9,7 @@ import { updateCartItems, updateQtyItems } from "@/redux/features/cart-slice";
 import useStorage from "@/hooks/useStorage";
 import UPDATE_CART_ITEM_QUANTITY_MUTATION from "@/src/graphQl/queries/updateCartItemQuantity";
 
-const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId, user, features }) => {
+const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId, user, features, enableButton }) => {
 
 
     const dispatch = useDispatch();
@@ -61,6 +61,7 @@ const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId,
                 if (variant?.attributes?.stock > 0) {//si el stock del item es 0
                     createCartItem({ //se crea un nuevo item en el carrito
                         variables: {
+                            features: features,
                             quantity: quantityItem,
                             features: features,
                             variantId: variant.id,
@@ -92,7 +93,7 @@ const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId,
         <div>
             {" "}
 
-            <button className="text-white text-sm" onClick={handleAdd}>
+            <button disabled={!enableButton} className="text-white text-sm" onClick={handleAdd}>
                 Agregar al carrito
             </button>
         </div>

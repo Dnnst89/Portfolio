@@ -147,27 +147,21 @@ const createConsecutiveNumber = (param) => {
 
 const formatItemInvoice = (items, imp) => {
   var cont = -1;
+
   if (!items?.length) return [];
   return items?.map((item) => {
     cont = cont + 1;
+    console.log("item", item?.attributes);
     return {
       lineNumber: cont + 1,
-      code:
-        "" +
-        item?.attributes?.variant?.data?.attributes?.product?.data?.attributes?.cabys?.toString(),
+      code: "" + item?.attributes?.cabys?.toString(),
       qty: "" + item?.attributes?.quantity,
       measurementUnit: "Sp",
       commercialMeasurementUnit: "SP",
       detail: "Servicios Postales",
-      unitaryPrice: "" + item?.attributes?.variant?.data?.attributes?.price,
-      totalAmount:
-        "" +
-        item?.attributes?.quantity *
-          item?.attributes?.variant?.data?.attributes?.price,
-      subTotal:
-        "" +
-        item?.attributes?.quantity *
-          item?.attributes?.variant?.data?.attributes?.price,
+      unitaryPrice: "" + item?.attributes?.price,
+      totalAmount: "" + item?.attributes?.quantity * item?.attributes?.price,
+      subTotal: "" + item?.attributes?.quantity * item?.attributes?.price,
       taxes: [
         {
           code: "" + imp[cont].taxes[0].code,
@@ -199,6 +193,7 @@ const InvoiceInformation = (store, client, key, consecutive) => {
       address: {
         province: store.province,
         country: store.country,
+        canton: store.canton,
         district: store.district,
         neighborhood: store.neighborhood,
         otherSigns: store.otherSigns,

@@ -174,7 +174,11 @@ export default function ThankYouMessage() {
         return console.log(
           "Lo sentimos, ha ocurrido un error al cargar los datos"
         );
-
+      console.log(
+        "first",
+        userAddress.usersPermissionsUser.data.attributes.users_address.data
+          .attributes
+      );
       const province =
         userAddress.usersPermissionsUser.data.attributes.users_address.data
           .attributes.province;
@@ -209,10 +213,7 @@ export default function ThankYouMessage() {
           const orderNumber = data?.createOrderDetail?.data?.id;
           setOrderId(orderNumber);
           await creatingOrderItems(orderNumber);
-          await sendOrderEmail(
-            quantity,
-            orderNumber
-          );
+          await sendOrderEmail(quantity, orderNumber);
 
           handleCartItems();
           createInvoice(orderNumber);
@@ -228,11 +229,7 @@ export default function ThankYouMessage() {
     }
   };
 
-  const sendOrderEmail = async (
-    totalProducts,
-    orderDetail
-
-  ) => {
+  const sendOrderEmail = async (totalProducts, orderDetail) => {
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1; // Los meses comienzan desde 0, por lo que sumamos 1.
@@ -245,13 +242,28 @@ export default function ThankYouMessage() {
       "-" +
       (day < 10 ? "0" : "") +
       day;
-    const shipping = 0.0;
+
+    const { data: storeInformation, error: storeInformationError } = await getStoreInformation({
+      variables: {
+        id: 1,
+      },
+    });
+    if (storeInformationError)
+      return toast.error(
+        "Lo sentimos, ha ocurrido un error al cargar los datos",
+        {
+          autoClose: 5000,
+        }
+      );
+
+    const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
 
     const { data: emailInfo, error: sendEmailError } = await createOrderEmail({
       variables: {
         date: formattedDate,
         totalProducts: totalProducts,
-        order_detail: orderDetail
+        order_detail: orderDetail,
+        currency: currency
       },
     });
     if (sendEmailError)
@@ -281,7 +293,7 @@ export default function ThankYouMessage() {
               name: variantAtt.product.data.attributes.name,
               brand: variantAtt.product.data.attributes.brand,
               cabys: variantAtt.product.data.attributes.cabys,
-              imagesIds: variantAtt.images.data.map(img => img.id)
+              imagesIds: variantAtt.images.data.map((img) => img.id),
             },
           });
           return data?.OrderItemEntity?.data;
@@ -289,7 +301,6 @@ export default function ThankYouMessage() {
           console.log("Error creating orderItem: ", error);
         }
       });
-      console.log(orderItems);
       return orderItems;
     }
   };
@@ -371,6 +382,7 @@ export default function ThankYouMessage() {
             );
 
             const imp = feeResult?.data?.serviceDetail?.lineDetails;
+
             const inv = formatItemInvoice(resultado, imp);
 
             try {
@@ -445,7 +457,7 @@ export default function ThankYouMessage() {
                   },
                   otherCharges: [],
                   billSummary: {
-                    ...formatBillSumary(billSummary, "1.000", "CRC"),
+                    ...formatBillSumary(billSummary, "1.000", store.currency),
                   },
                   referenceInformation: [],
                   others: {
@@ -459,14 +471,15 @@ export default function ThankYouMessage() {
                     "Emitida conforme a lo establecido en la resolución de Facturación Electrónica, No.\\nDGT-R-033-2019 del 27 de junio de 2019 de la Dirección General de Tributación.",
                   fileName: "155822450521-FE-" + consecutive,
                 },
-                returnCompleteAnswer: false,
+                returnCompleteAnswer: true,
               };
+              console.log("cuerpo json", bodyInvoice);
               const InvoiceResult = await facturationInstace.post(
                 `document/electronic-invoice?access_token=${token}`,
                 bodyInvoice
               );
 
-              console.log("respuesta factura", InvoiceResult);
+              console.log("FaCtura ElEctronica", InvoiceResult)
               try {
                 const isoDate = new Date().toISOString();
                 const resulta = await getStoreInformation({

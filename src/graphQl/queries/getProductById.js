@@ -24,7 +24,7 @@ const ProductDetailQuery = gql`
               }
             }
           }
-          variants {
+          variants(filters:{parentVariant:{id:{eq:null}}}) {
             data {
               id
               attributes {
@@ -32,7 +32,6 @@ const ProductDetailQuery = gql`
                 typeValue
                 size
                 sku
-                color
                 price
                 weight {
                   id

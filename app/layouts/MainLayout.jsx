@@ -11,6 +11,7 @@ import BodyComponent from "@/components/BodyComponent";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import "../../styles/fonts.css";
 import toast from "react-hot-toast";
+
 const MainLayout = ({ children }) => {
 
   return (
