@@ -15,7 +15,7 @@ const CartContainer = () => {
         userId: user?.id,
     });
     const dispatch = useDispatch();
-
+    console.log("items: ", items)
     return (
         <>
             <div className="flex flex-col md:col-span-8 col-span-12">

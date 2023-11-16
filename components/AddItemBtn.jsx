@@ -61,9 +61,8 @@ const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId,
                 if (variant?.attributes?.stock > 0) {//si el stock del item es 0
                     createCartItem({ //se crea un nuevo item en el carrito
                         variables: {
-                            features: features,
                             quantity: quantityItem,
-                            features: features,
+                            ...(Object.keys(features).length > 0 && { features }),
                             variantId: variant.id,
                             shoppingSessionId: sessionId,
                             publishedAt: fechaFormateada,
