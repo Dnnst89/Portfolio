@@ -6,13 +6,15 @@ query GetUserAddress($id: ID){
       data{
         id,
         attributes{
+          username
           users_address{
             data{
               id,
               attributes{
                 canton,
                 province,
-                addressLine1
+                addressLine1,
+                addressLine2
               }
               }
             }
