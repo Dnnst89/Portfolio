@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-
+import LocationSearchInput from "./LocationSearchInput";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 const KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY;
 
@@ -19,11 +19,19 @@ const Map = ({ onMarkerChange, latitude, longitude, zoom }) => {
     setMarkerPosition(newMarkerPosition);
     onMarkerChange(newMarkerPosition);
   };
+  const [selectedLocation, setSelectedLocation] = useState(null);
+
+  const handleLocationSelect = (latLng) => {
+    setSelectedLocation(latLng);
+    //alert("ss", selectedLocation);
+  };
+
   return (
-    <LoadScript googleMapsApiKey={`${KEY}`}>
+    <LoadScript googleMapsApiKey={`${KEY}`} libraries={["places"]}>
+      <LocationSearchInput onLocationSelect={handleLocationSelect} />
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
-        center={{ lat: latitude, lng: longitude }}
+        center={{ selectedLocation } || { lat: latitude, lng: longitude }}
         zoom={zoom}
         onClick={handleMapClick}
       >
