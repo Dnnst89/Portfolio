@@ -37,7 +37,6 @@ import GET_ORDER_ITEMS_BY_ORDER_ID from "@/src/graphQl/queries/getOrderItemsByOr
 import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { CREATE_ELECTRONIC_INVOICE } from "@/src/graphQl/queries/createElectronicInvoice";
 import { CREATE_ORDER_EMAIL } from "@/src/graphQl/queries/sendEmail";
-import { GET_USER_ADDRESS } from "@/src/graphQl/queries/getUserAddress";
 
 /*
   recives the Tilopay response , based on the returns params 
@@ -164,35 +163,7 @@ export default function ThankYouMessage() {
         //obtengo el paymentDetails, para que cuando refresque la pagina no cree mas ordenes
         variables: { paymentId },
       });
-      const { data: userAddress, error: addressError } = await getUserAddress({
-        variables: {
-          id: userId,
-        },
-      });
 
-      if (addressError)
-        return console.log(
-          "Lo sentimos, ha ocurrido un error al cargar los datos"
-        );
-      console.log(
-        "first",
-        userAddress.usersPermissionsUser.data.attributes.users_address.data
-          .attributes
-      );
-      const province =
-        userAddress.usersPermissionsUser.data.attributes.users_address.data
-          .attributes.province;
-      const canton =
-        userAddress.usersPermissionsUser.data.attributes.users_address.data
-          .attributes.canton;
-      const addressLine1 =
-        userAddress.usersPermissionsUser.data.attributes.users_address.data
-          .attributes.addressLine1;
-
-      const total = paymentinfo?.data?.paymentDetail?.data?.attributes?.total;
-      const tax = paymentinfo?.data?.paymentDetail?.data?.attributes?.taxes;
-      const subtotal =
-        paymentinfo?.data?.paymentDetail?.data?.attributes?.subtotal;
       const orderStatus =
         paymentinfo?.data?.paymentDetail?.data?.attributes?.status;
       const orderPayment =
