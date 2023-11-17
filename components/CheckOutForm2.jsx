@@ -113,6 +113,11 @@ export default function CheckOutForm2({
       }
     } else {
       try {
+        const finalAmount = {
+          total: parseFloat(subTotal + taxes),
+          subTotal: subTotal,
+          taxes: taxes,
+        };
         const paymentDetailResponse = await createPaymentDetail({
           variables: {
             status: "Inicial",
@@ -121,7 +126,7 @@ export default function CheckOutForm2({
             total: total,
             invoiceRequired: checkbox,
             deliveryPayment: parseFloat(0),
-            deliveryId: "0",
+            deliveryId: parseInt(0),
             deliveryMethod: data.deliveryMethod,
             paymentMethod: "Tarjeta Crédito/ Débito",
             publishedAt: isoDate,

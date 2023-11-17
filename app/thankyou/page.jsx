@@ -212,6 +212,41 @@ export default function ThankYouMessage() {
           setOrderId(orderNumber);
           await creatingOrderItems(orderNumber);
           await sendOrderEmail(quantity, orderNumber);
+
+          const paymentUser = await getPaymentDetails({
+            variables: {
+              userId: userId,
+            },
+          });
+
+          const client = {
+            name:
+              paymentUser?.data?.usersPermissionsUser?.data?.attributes
+                ?.firstName +
+              " " +
+              paymentUser?.data?.usersPermissionsUser?.data?.attributes
+                ?.lastName,
+            idType: validateID(
+              paymentUser?.data?.usersPermissionsUser?.data?.attributes?.idCard
+                ?.idType
+            ),
+            idNumber:
+              paymentUser?.data?.usersPermissionsUser?.data?.attributes?.idCard
+                ?.idNumber,
+            email:
+              paymentUser?.data?.usersPermissionsUser?.data?.attributes?.email,
+            phone:
+              paymentUser?.data?.usersPermissionsUser?.data?.attributes
+                ?.phoneNumber,
+          };
+          const result = await getStoreInformation({
+            variables: {
+              id: 1,
+            },
+          });
+          const store = result?.data?.storeInformation?.data?.attributes;
+          const shipmentInfo = createData(items, lat, lng);
+          const estimation = await requestEstimation(shipmentInfo);
           sssssssssssssssssssssssssssss;
           handleCartItems();
           createInvoice(orderNumber);
@@ -412,10 +447,6 @@ export default function ThankYouMessage() {
                   userId: userId,
                 },
               });
-
-              const cliente =
-                paymentUser?.data?.usersPermissionsUser?.data?.attributes
-                  ?.email;
 
               const client = {
                 name:

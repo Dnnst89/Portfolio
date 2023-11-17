@@ -42,8 +42,9 @@ const CartDetail = ({
     userId: user?.id,
   });
   useEffect(() => {
+    setShipment(0);
     //fetchEstimation();
-  }, [deliveryPayment]); // El segundo argumento [] asegura que useEffect se ejecute solo una vez al montar el componente
+  }, [shipment]); // El segundo argumento [] asegura que useEffect se ejecute solo una vez al montar el componente
 
   useEffect(() => {
     console.log("q", quantity);

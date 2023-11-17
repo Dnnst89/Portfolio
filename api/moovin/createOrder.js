@@ -87,11 +87,30 @@ const addProducts = (items) => {
   });
 };
 
-const createData = (items, latitude, longitude) => {
+const createData = (
+  store,
+  items,
+  order,
+  client,
+  estimation,
+  latitude,
+  longitude
+) => {
   console.log(items);
 
-  console.log("products", addProducts(items));
   const data = {
+    idEstimation: estimation,
+    idDelivery: 2,
+    idOrder: order,
+    email: store.email,
+    emailAccount: store.email,
+    pointCollect: {
+      latitude: 9.92421981523312,
+      longitude: -84.13679786429938,
+      name: store.name,
+      phone: "50688998899",
+      notes: store.otherSigns,
+    },
     pointCollect: {
       latitude: 9.92421981523312,
       longitude: -84.13679786429938,
@@ -105,4 +124,4 @@ const createData = (items, latitude, longitude) => {
   };
   return data;
 };
-export { requestEstimation, createData };
+export { CreateOrder, createData };
