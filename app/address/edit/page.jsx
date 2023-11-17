@@ -10,6 +10,10 @@ import { CREATE_BASIC_ADDRESS } from "@/src/graphQl/queries/createBasicAddress"
 
 export default function Edit() {
 
+  const redirect = () => {
+    window.location.href = `/address`
+  };
+
   const {
     register,
     handleSubmit,
@@ -29,10 +33,12 @@ export default function Edit() {
 
   const [userInformation, setUserInformation] = useState({
     //campos de formulario
+    country: "",
     addressLine1: "",
     addressLine2: "",
     province: "",
     canton: "",
+    postCode: ""
   });
 
   const cargaDatos = async () => {
@@ -64,6 +70,9 @@ export default function Edit() {
         }
         setUserInformation({
           ...userInformation,
+          country:
+            data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+              ?.attributes?.country || "",
           addressLine1:
             data?.usersPermissionsUser?.data?.attributes?.users_address?.data
               ?.attributes?.addressLine1 || "",
@@ -76,6 +85,9 @@ export default function Edit() {
           canton:
             data?.usersPermissionsUser?.data?.attributes?.users_address?.data
               ?.attributes?.canton || "",
+          postCode:
+            data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+              ?.attributes?.postCode || "",
         });
       }
     } catch (error) {
@@ -97,6 +109,7 @@ export default function Edit() {
     if (userInfoExist) {
       const { data, error, loading } = await updateAddress({
         variables: {
+          country: dataForm.country,
           province: dataForm.province,
           addressLine1: dataForm.addressLine1,
           addressLine2: dataForm.addressLine2,
@@ -113,10 +126,14 @@ export default function Edit() {
         toast.success("La infomación se ha actualizado con éxito", {
           autoClose: 5000
         })
+        setTimeout(() => {
+          redirect();
+        }, 2000);
       }
     } else {
       const { data, error, loading } = await createNewAddres({
         variables: {
+          country: dataForm.country,
           addressLine1: dataForm.addressLine1,
           addressLine2: dataForm.addressLine2,
           province: dataForm.province,
@@ -137,20 +154,54 @@ export default function Edit() {
         const newAddress = data.createUsersAddress.data.id;
         setAddressId(newAddress)
         setUserInfoExist(true)
+        setTimeout(() => {
+          redirect();
+        }, 2000);
       }
 
     }
   });
   return (
     <div>
-      <div className="w-full max-w-screen-xl m-auto grid grid-cols-12 mt-10">
+      <div className="w-full max-w-screen-xl m-auto grid grid-cols-8 mt-10">
         <div className="col-span-9 md:pr-2">
+          <h1 class="text-xl mx-auto text-center font-bold">Edita tu dirección</h1>
           <form onSubmit={onSubmit}>
             <div className="mt-[40px] mx-[30px]">
               <main className="flex ">
                 <section className="w-full">
                   <div className="flex justify-center">
                     <section className="md:w-4/6 grid grid-cols-12 gap-4">
+                      <div className="col-span-12 md:col-span-6 grid content-baseline">
+                        <label htmlFor="country">País</label>
+                        <input
+                          type="text"
+                          id="country"
+                          {...register("country", {
+                            required: {
+                              value: true,
+                              message: "El país es requerido",
+                            },
+                            minLength: {
+                              value: 2,
+                              message:
+                                "El país  no puede tener menos de 2 letras",
+                            },
+                            maxLength: {
+                              value: 20,
+                              message:
+                                "El país  no puede tener más de 20 letras",
+                            },
+                            pattern: {
+                              value: /^[^0-9]*$/, // Expresión regular que no permite números
+                              message: "No se permiten números en este campo",
+                            },
+                          })}
+                        ></input>
+                        <p className="text-red text-xs">
+                          {errors.country?.message}
+                        </p>
+                      </div>
                       <div className="col-span-12 md:col-span-6 grid content-baseline">
                         <label htmlFor="province">Provincia</label>
                         <input
@@ -213,6 +264,36 @@ export default function Edit() {
                         </p>
                       </div>
                       <div className="col-span-12 md:col-span-6 grid content-baseline">
+                        <label htmlFor="postCode">Código Postal</label>
+                        <input
+                          type="text"
+                          id="postCode"
+                          {...register("postCode", {
+                            required: {
+                              value: true,
+                              message: "El código postal es requerido",
+                            },
+                            minLength: {
+                              value: 5,
+                              message:
+                                "El código postal no puede tener menos de 5 dígitos",
+                            },
+                            maxLength: {
+                              value: 5,
+                              message:
+                                "El código postal no puede tener más de 5 dígitos",
+                            },
+                            pattern: {
+                              value: /^[0-9]*$/, // Expresión regular que solo permite números
+                              message: "Ingresa solo números",
+                            },
+                          })}
+                        ></input>
+                        <p className="text-red text-xs">
+                          {errors.postCode?.message}
+                        </p>
+                      </div>
+                      <div className="col-span-12 md:col-span-6 grid content-baseline">
                         <label htmlFor="addressLine1">Direccion 1</label>
                         <textarea
                           // type="text"
@@ -260,32 +341,6 @@ export default function Edit() {
                         ></textarea>
                         <p className="text-red text-xs">
                           {errors.addressLine2?.message}
-                        </p>
-                      </div>
-                      <div className="col-span-12 md:col-span-6 grid content-baseline">
-                        <label htmlFor="postCode">Código Postal</label>
-                        <input
-                          type="text"
-                          id="postCode"
-                          {...register("postCode", {
-                            minLength: {
-                              value: 5,
-                              message:
-                                "El código postal no puede tener menos de 5 dígitos",
-                            },
-                            maxLength: {
-                              value: 5,
-                              message:
-                                "El código postal no puede tener más de 5 dígitos",
-                            },
-                            pattern: {
-                              value: /^[0-9]*$/, // Expresión regular que solo permite números
-                              message: "Ingresa solo números",
-                            },
-                          })}
-                        ></input>
-                        <p className="text-red text-xs">
-                          {errors.postCode?.message}
                         </p>
                       </div>
                     </section>

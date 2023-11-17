@@ -30,6 +30,7 @@ export default function BasicAddressComponent({ id }) {
             <UserDataCard
                 title="Tu dirección"
                 username={user?.username}
+                country={user?.users_address?.data?.attributes?.country}
                 province={user?.users_address?.data?.attributes?.province}
                 canton={user?.users_address?.data?.attributes?.canton}
                 addressLine1={user?.users_address?.data?.attributes?.addressLine1}
