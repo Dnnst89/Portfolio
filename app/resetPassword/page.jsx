@@ -5,8 +5,10 @@
  */
 import { useEffect, useState } from "react";
 import ResetPasswordForm from "@/components/resetPasswordForm";
+import useProtectionRoute from "@/hooks/useProtectionRoute";
 //Get the url params
 const ResetPassword = () => {
+  useProtectionRoute()
   const [code, setCode] = useState(null);
 
   useEffect(() => {
