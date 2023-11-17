@@ -34,6 +34,7 @@ export default function BasicAddressComponent({ id }) {
                 canton={user?.users_address?.data?.attributes?.canton}
                 addressLine1={user?.users_address?.data?.attributes?.addressLine1}
                 addressLine2={user?.users_address?.data?.attributes?.addressLine2}
+                country={user?.users_address?.data?.attributes?.country}
             />
         </div>
     );

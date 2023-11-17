@@ -2,6 +2,7 @@ import { gql } from "@apollo/client";
 
 export const CREATE_BASIC_ADDRESS = gql`
   mutation addAdress(
+    $country: String
     $postCode: String
     $addressLine1: String!
     $addressLine2: String
@@ -12,6 +13,7 @@ export const CREATE_BASIC_ADDRESS = gql`
   ) {
     createUsersAddress(
       data: {
+        country: $country
         postCode: $postCode
         province: $province
         addressLine1: $addressLine1
