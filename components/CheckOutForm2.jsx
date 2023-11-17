@@ -11,8 +11,16 @@ import { AiOutlineEdit } from "react-icons/ai";
 import CREATE_PAYMENT_DETAIL from "@/src/graphQl/queries/createPaymentDetails";
 import Spinner from "./Spinner";
 import { useForm } from "react-hook-form";
+import { requestEstimation, createData } from "@/api/moovin/estimation";
 
-export default function CheckOutForm2({ amount, checkbox }) {
+export default function CheckOutForm2({
+  amount,
+  checkbox,
+  deliveryPayment,
+  setAmount,
+  lat,
+  lng,
+}) {
   const isoDate = new Date().toISOString();
   const [paymentDetailId, setPaymentDetailId] = useState(null);
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
@@ -25,16 +33,46 @@ export default function CheckOutForm2({ amount, checkbox }) {
   const { items } = useCartSummary({
     userId: id,
   });
+  const [deliveryMethod, setDeliveryMethod] = useState(null);
+  const [deliveryId, setDeliveryId] = useState(null);
 
+  const fetchEstimation = async () => {
+    // alert(shipment);
+    try {
+      const shipmentInfo = createData(items, lat, lng);
+      const estimation = await requestEstimation(shipmentInfo);
+      deliveryPayment(estimation.amount);
+      //   console.log("amount total", amounts.total);
+      const suma = parseFloat(subTotal + taxes);
+      const finalAmount = {
+        total: parseFloat(subTotal + taxes + estimation.amount),
+        subTotal: subTotal,
+        taxes: taxes,
+      };
+      console.log("final", finalAmount);
+      setAmount(finalAmount);
+      // console.log("suma", suma);
+    } catch (error) {
+      console.error("Error al obtener los datos:", error);
+      // Puedes manejar el error según tus necesidades
+    }
+  };
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm();
+  useEffect(() => {
+    //
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deliveryPayment]);
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data.deliveryMethod)
+    if (data.deliveryMethod != "Recoger en tienda") {
+      fetchEstimation();
+    }
+    console.log(data.deliveryMethod);
     try {
       const paymentDetailResponse = await createPaymentDetail({
         variables: {
@@ -79,9 +117,7 @@ export default function CheckOutForm2({ amount, checkbox }) {
               </button>
             </div>
           ) : null}
-
         </div>
-
       </div>
       {!checktOutForm2Visible ? (
         <form onSubmit={onSubmit}>
@@ -99,7 +135,9 @@ export default function CheckOutForm2({ amount, checkbox }) {
                 />
               </div>
               <div className="items-center pl-5 md:pl-[90px] md:flex">
-                <label className="text-sm md:text-xl md:tracking-wider">Recoger en tienda:</label>
+                <label className="text-sm md:text-xl md:tracking-wider">
+                  Recoger en tienda:
+                </label>
                 <Image
                   src={logo}
                   alt=""
@@ -120,7 +158,9 @@ export default function CheckOutForm2({ amount, checkbox }) {
                 />
               </div>
               <div className="items-center pl-5 md:pl-[90px] md:flex">
-                <label className="text-sm md:text-xl md:tracking-wider">Envío a través de:</label>
+                <label className="text-sm md:text-xl md:tracking-wider">
+                  Envío a través de:
+                </label>
                 <Image
                   src={moovin}
                   alt=""
@@ -129,7 +169,6 @@ export default function CheckOutForm2({ amount, checkbox }) {
                 />
               </div>
             </section>
-
           </div>
           <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
             <button
