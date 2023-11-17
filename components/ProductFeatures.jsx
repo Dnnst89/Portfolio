@@ -180,6 +180,7 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
 
   return (
     <div >
+      <h3 className="text-[#484848] text-lg underline font-bold pt-2 pb-5">Caracteristicas:</h3>
       {featureList.map((feature, index) => {
         const featureName = Object.keys(feature)[0]; // Obtén el nombre de la característica
         const featureOptions = feature[featureName].options; // Obtén las opciones de la característica

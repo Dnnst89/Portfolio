@@ -20,9 +20,9 @@ const ProductFeatureSelector = ({ featureId, featureName, featureList, onSelect 
   
   return (
     <div className='py-3 space-y-2 w-full h-fit border-dashed border-grey-200 border-t-2 grid grid-cols-12'>
-      <h2 className='text-grey-100 font-bold col-span-12'>{featureName}</h2>
+      <h3 className='text-grey-100 font-bold col-span-12'>{featureName}</h3>
       <select
-      className='col-span-6 text-white bg-lightblue font-bold  rounded-lg px-5 px-10 py-3 text-center inline-flex items-center  '
+      className='col-span-10 md:col-span-6 text-white bg-lightblue font-bold  rounded-lg px-5 px-10 py-3 text-center inline-flex items-center  '
         id={featureId}
         value={selectedValue}
         onChange={handleChange}
