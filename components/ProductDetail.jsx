@@ -142,15 +142,15 @@ function ProductDetail({ name, brand, description, variants, materials }) {
         <section aria-label="Detalles del producto" className="mb-10 col-span-12 md:col-span-6 m-auto m-0">
           <div className="grid grid-cols-12 md:col-span-12">
             <div className="col-span-12 md:col-span-6">
-            <h2 aria-label={`Marca ${brand}`} className="flex justify-start text-sm text-lightblue"> {brand}</h2>
+              <h2 aria-label={`Marca ${brand}`} className="flex justify-start text-sm text-lightblue"> {brand}</h2>
             </div>
 
             <div className="col-span-12 md:col-span-6">
-            <h2 aria-label={`Referencia del producto ${variantSelected?.variant?.data?.attributes?.sku}`} className="flex justify-end text-sm">Ref {variantSelected ? variantSelected?.variant?.data?.attributes?.sku : variants[0]?.attributes?.sku}</h2>
+              <h2 aria-label={`Referencia del producto ${variantSelected?.variant?.data?.attributes?.sku}`} className="flex justify-end text-sm">Ref {variantSelected ? variantSelected?.variant?.data?.attributes?.sku : variants[0]?.attributes?.sku}</h2>
             </div>
 
           </div>
-          
+
           <h1 aria-label={`Nombre del producto ${name}`} className="mb-3 text-xl font-bold">{name}</h1>
           <p>{shortDescrption}...</p>
           <a onClick={() => handleClick()}>
@@ -216,7 +216,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                   />
                   <p className="text-sm md:text-base">
                     Rango de edad: <br />
-                    {variantSelected?.variant?.data?.attributes?.price}
+                    {variantSelected?.variant?.data?.attributes?.ageRange}
                   </p>
                 </div>
                 <div className="col-span-6 flex mt-5 items-center">
@@ -255,7 +255,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
 
               :
               <>
-              
+
                 <div className="col-span-6 flex mt-5 items-center">
                   <Image
                     priority={true}
@@ -271,31 +271,31 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                   </p>
                 </div>
                 {Object.entries(variantItem).map(([key, value, index]) => {
-                // Obtén la traducción de la clave en español
-                const translatedKey = keyTranslations[key] || key;
-                if (value != null) {
-                  return (
-                    <div key={index} className="col-span-6 flex mt-5 items-center">
-                      <Image
-                        priority={true}
-                        width="50"
-                        height="50"
-                        src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
-                        alt="tailwind logo"
-                        className="rounded-xl mr-3"
-                      />
-                      <p className="text-sm md:text-base">
-                        {translatedKey}: <br />
-                        {value}
-                      </p>
-                    </div>
-                  );
-                }
+                  // Obtén la traducción de la clave en español
+                  const translatedKey = keyTranslations[key] || key;
+                  if (value != null) {
+                    return (
+                      <div key={index} className="col-span-6 flex mt-5 items-center">
+                        <Image
+                          priority={true}
+                          width="50"
+                          height="50"
+                          src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
+                          alt="tailwind logo"
+                          className="rounded-xl mr-3"
+                        />
+                        <p className="text-sm md:text-base">
+                          {translatedKey}: <br />
+                          {value}
+                        </p>
+                      </div>
+                    );
+                  }
 
-              })}
+                })}
               </>
               //cuando el producto solo tiene una capa de variante, obtengo el variants[0]
-              
+
             }
           </div>
 

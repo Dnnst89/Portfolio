@@ -348,7 +348,7 @@ export default function Edit() {
                 </section>
               </main>
               <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
-                <input className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap" type="submit" value={"Editar"}></input>
+                <input className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap" type="submit" value={"Guardar"}></input>
               </div>
             </div>
           </form>
