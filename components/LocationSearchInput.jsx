@@ -11,9 +11,9 @@ const LocationSearchInput = ({ onLocationSelect }) => {
     setAddress(address);
   };
 
-  const handleSelect = async (address) => {
+  const handleSelect = async (addres) => {
     try {
-      const results = await geocodeByAddress(address);
+      const results = await geocodeByAddress(addres);
       const latLng = await getLatLng(results[0]);
       onLocationSelect(latLng);
     } catch (error) {

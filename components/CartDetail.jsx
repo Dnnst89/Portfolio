@@ -7,13 +7,12 @@ import { useCallback, useEffect, useState } from "react";
 import { facturationInstace } from "@/src/axios/algoliaIntance/config";
 import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { useQuery } from "@apollo/client";
-import { requestEstimation, createData } from "@/api/moovin/estimation";
+
 const CartDetail = ({
   isCheckout = false,
   detailTitle = "Detalle del carrito",
+  deliveryPayment,
   onChange,
-  latitude,
-  longitude,
 }) => {
   const { user } = useStorage();
   const { data: storeInformation, error: storeInformationError } = useQuery(
@@ -43,31 +42,12 @@ const CartDetail = ({
     userId: user?.id,
   });
   useEffect(() => {
-    const fetchEstimation = async () => {
-      try {
-        const shipmentInfo = createData(items, latitude, longitude);
-        const estimation = await requestEstimation(shipmentInfo);
-        setShipment(estimation.amount);
-        if (amounts.total === subTotal + amounts.tax) {
-          console.log("11");
-        }
-        const newTotal = amounts.total + shipment;
-        setAmounts((prev) => ({
-          ...prev,
-          total: parseFloat(newTotal),
-        }));
-        console.log("atras", shipment);
-      } catch (error) {
-        console.error("Error al obtener los datos:", error);
-        // Puedes manejar el error según tus necesidades
-      }
-    };
-
-    fetchEstimation();
-  }, [latitude]); // El segundo argumento [] asegura que useEffect se ejecute solo una vez al montar el componente
+    //fetchEstimation();
+  }, [deliveryPayment]); // El segundo argumento [] asegura que useEffect se ejecute solo una vez al montar el componente
 
   useEffect(() => {
     console.log("q", quantity);
+    setShipment(0);
 
     getTaxCost();
 
@@ -153,7 +133,7 @@ const CartDetail = ({
           <>
             <div className="flex justify-between ">
               <p>Costo de envío:</p>
-              <p className="whitespace-nowrap">${shipment}</p>
+              <p className="whitespace-nowrap">${deliveryPayment}</p>
             </div>
             <div className="flex flex-col p-4 space-y-3">
               <p className="flex justify-center">Costo Total(IVA Incluido)</p>

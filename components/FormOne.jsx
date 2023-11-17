@@ -34,7 +34,7 @@ function FormOne() {
   const [addressId, setAddressId] = useState();
   const [userInfoExist, setUserInfoExist] = useState();
   const isoDate = new Date().toISOString();
-
+  const [provincia, setProvincia] = useState("");
   const [userInformation, setUserInformation] = useState({
     //campos de formulario
     firstName: "",
@@ -50,6 +50,19 @@ function FormOne() {
     idNumber: "",
     idType: "",
   });
+  const [deliveryPayment, setDeliveryPayment] = useState(0);
+  const handleDeliveryPayment = (data) => {
+    setDeliveryPayment(data);
+  };
+  const [lat, setLat] = useState(0);
+  const handleLat = (data) => {
+    setLat(data);
+  };
+
+  const [lng, setLng] = useState(0);
+  const handleLng = (data) => {
+    setLng(data);
+  };
 
   const [amount, setAmount] = useState({
     total: 0,
@@ -133,6 +146,7 @@ function FormOne() {
     setSelectedLat(markerPosition.lat);
     setSelectedLng(markerPosition.lng);
   };
+
   /* const estimationMoovin = () => {
     const estimation = requestEstimation();
     console.log("moovin :", estimation);
@@ -140,6 +154,7 @@ function FormOne() {
 */
   useEffect(() => {
     cargaDatos();
+    //console.log("pppp", dataForm.firstName);
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -147,9 +162,12 @@ function FormOne() {
     reset(userInformation);
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInformation]);
-
+  const handleInputBlur = (word) => {
+    // Recarga la página cuando se pierde el foco en cualquier input
+    //onSubmit();
+    //window.location.reload();
+  };
   const onSubmit = handleSubmit(async (dataForm) => {
-    console.log(dataForm);
     try {
       setCheckoutForm1Visible(true);
 
@@ -413,6 +431,13 @@ function FormOne() {
                             type="text"
                             id="province"
                             {...register("province", {
+                              onChange: (e) => {
+                                setProvincia({
+                                  province: e.target.value,
+                                });
+                                handleInputBlur(provincia);
+                                console.log("gggg", provincia);
+                              },
                               required: {
                                 value: true,
                                 message: "La provincia es requerida",
@@ -520,11 +545,16 @@ function FormOne() {
                         </div>
 
                         <div className="col-span-12 md:col-span-6 grid content-baseline">
+                          debbug
                           <Map
-                            latitude={9.92421981523312}
-                            longitude={-84.13679786429938}
                             zoom={15}
                             onMarkerChange={handleMarkerChange}
+                            province={userInformation.province}
+                            canton={userInformation.canton}
+                            address1={userInformation.addressLine1}
+                            address2={userInformation.addressLine2}
+                            handleLat={handleLat}
+                            handleLng={handleLng}
                           ></Map>
                         </div>
                       </section>
@@ -649,7 +679,14 @@ function FormOne() {
               </div>
             </form>
           ) : (
-            <CheckOutForm2 amount={amount} checkbox={checkbox} />
+            <CheckOutForm2
+              amount={amount}
+              checkbox={checkbox}
+              deliveryPayment={handleDeliveryPayment}
+              setAmount={handleChange}
+              lat={lat}
+              lng={lng}
+            />
           )}
         </div>
         <div className=" bg-resene rounded-sm col-span-12 md:col-span-3 h-fit  border-l-4 border-lightblue order-1">
@@ -658,8 +695,7 @@ function FormOne() {
               detailTitle={"Detalle del carrito"}
               isCheckout
               onChange={handleChange}
-              latitude={selectedLat}
-              longitude={selectedLng}
+              deliveryPayment={deliveryPayment}
             />
           </div>
         </div>
