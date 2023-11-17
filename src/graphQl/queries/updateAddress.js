@@ -8,8 +8,8 @@ export const UPDATE_ADDRESS = gql`
     $addressLine1: String!
     $addressLine2: String!
     $canton: String!
-    $latitude: String!
-    $longitude: String!
+    $latitude: Float!
+    $longitude: Float!
     $id: ID!
   ) {
     updateUsersAddress(

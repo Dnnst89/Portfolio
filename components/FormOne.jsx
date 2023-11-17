@@ -34,7 +34,10 @@ function FormOne() {
   const [addressId, setAddressId] = useState();
   const [userInfoExist, setUserInfoExist] = useState();
   const isoDate = new Date().toISOString();
-  const [provincia, setProvincia] = useState("");
+  const [province, setProvince] = useState("");
+  const [canton, setCanton] = useState("");
+  const [address1, setAddress1] = useState("");
+  const [address2, setAddress2] = useState("");
   const [userInformation, setUserInformation] = useState({
     //campos de formulario
     firstName: "",
@@ -56,11 +59,13 @@ function FormOne() {
   };
   const [lat, setLat] = useState(0);
   const handleLat = (data) => {
+    console.log("lat ", data)
     setLat(data);
   };
 
   const [lng, setLng] = useState(0);
   const handleLng = (data) => {
+    console.log("lng ", data)
     setLng(data);
   };
 
@@ -139,8 +144,8 @@ function FormOne() {
       });
     }
   };
-  const [selectedLat, setSelectedLat] = useState(9.924359845145645);
-  const [selectedLng, setSelectedLng] = useState(-84.13677104232991);
+  const [selectedLat, setSelectedLat] = useState();
+  const [selectedLng, setSelectedLng] = useState();
 
   const handleMarkerChange = (markerPosition) => {
     setSelectedLat(markerPosition.lat);
@@ -192,6 +197,8 @@ function FormOne() {
         });
 
       if (userInfoExist) {
+        console.log("update: lat", lat)
+        console.log("update: lng", lng)
         const {
           data: addressData,
           error: addressError,
@@ -203,8 +210,8 @@ function FormOne() {
             province: dataForm.province,
             addressLine1: dataForm.addressLine1,
             addressLine2: dataForm.addressLine2,
-            latitude: lat,
-            longitude: lng,
+            latitude: selectedLat !== undefined ? selectedLat : lat,
+            longitude: selectedLng !== undefined ? selectedLng : lng,
             canton: dataForm.canton,
             id: addressId,
           },
@@ -227,8 +234,8 @@ function FormOne() {
             addressLine2: dataForm.addressLine2,
             province: dataForm.province,
             canton: dataForm.canton,
-            latitude: lat,
-            longitude: lng,
+            latitude: selectedLat || lat,
+            longitude: selectedLng || lng,
             publishedAt: isoDate,
             id: userId,
           },
@@ -436,9 +443,9 @@ function FormOne() {
                             id="province"
                             {...register("province", {
                               onChange: (e) => {
-                                setProvincia({
-                                  province: e.target.value,
-                                });
+                                setProvince(
+                                  e.target.value,
+                                );
                                 //handleInputBlur(provincia);
                               },
                               required: {
@@ -472,6 +479,11 @@ function FormOne() {
                             type="text"
                             id="canton"
                             {...register("canton", {
+                              onChange: (e) => {
+                                setCanton(
+                                  e.target.value,
+                                );
+                              },
                               required: {
                                 value: true,
                                 message: "El cantón es requerido",
@@ -502,6 +514,11 @@ function FormOne() {
                             // type="text"
                             id="addressLine1"
                             {...register("addressLine1", {
+                              onChange: (e) => {
+                                setAddress1(
+                                  e.target.value,
+                                );
+                              },
                               required: {
                                 value: true,
                                 message: "La dirreción es requerida",
@@ -529,6 +546,11 @@ function FormOne() {
                             //type="text"
                             id="addressLine2"
                             {...register("addressLine2", {
+                              onChange: (e) => {
+                                setAddress2(
+                                  e.target.value,
+                                );
+                              },
                               minLength: {
                                 value: 5,
                                 message:
@@ -551,10 +573,10 @@ function FormOne() {
                           <Map
                             zoom={15}
                             onMarkerChange={handleMarkerChange}
-                            province={provincia}
-                            canton={userInformation.canton}
-                            address1={userInformation.addressLine1}
-                            address2={userInformation.addressLine2}
+                            province={province}
+                            canton={canton}
+                            address1={address1}
+                            address2={address2}
                             handleLat={handleLat}
                             handleLng={handleLng}
                           ></Map>

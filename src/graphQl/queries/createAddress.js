@@ -7,8 +7,8 @@ export const CREATE_ADDRESS = gql`
     $addressLine1: String!
     $addressLine2: String!
     $province: String!
-    $latitude: String!
-    $longitude: String!
+    $latitude: Float!
+    $longitude: Float!
     $canton: String!
     $publishedAt: DateTime!
     $id: ID!

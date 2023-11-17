@@ -25,13 +25,15 @@ const Map = ({
   };
 
   const [markerPosition, setMarkerPosition] = useState(null);
-  const add = province + "," + canton + "," + address1 + "," + address2;
+  const address = province + "," + canton + "," + address1 + "," + address2;
   //const [address, setAddress] = useState("Costa Rica, Perez Zeledon");
+
 
   const handleSelect = async (address) => {
     try {
       const results = await geocodeByAddress(address);
       const latLng = await getLatLng(results[0]);
+
       setLatitude(latLng.lat);
       setLongitude(latLng.lng);
       handleLat(latLng.lat);
@@ -48,27 +50,30 @@ const Map = ({
     setSelectedLocation(latLng);
   };
   useEffect(() => {
-    //  handleSelect(address);
-  }, [latitude]);
+    //handleSelect(address);
+  }, []);
 
   const handleMapClick = async (event) => {
     const newMarkerPosition = {
       lat: event.latLng.lat(),
       lng: event.latLng.lng(),
     };
-
+    setLatitude(event.latLng.lat());
+    setLongitude(event.latLng.lng());
+    handleLat(event.latLng.lat());
+    handleLng(event.latLng.lng());
     //alert("direccion", address);
     setMarkerPosition(newMarkerPosition);
     onMarkerChange(newMarkerPosition);
   };
-  //handleSelect(address);
+  handleSelect(address);
 
   return (
     <LoadScript googleMapsApiKey={`${KEY}`} libraries={LIBRARIES}>
       <LocationSearchInput onLocationSelect={handleLocationSelect} />
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
-        center={selectedLocation || { lat: 0, lng: 0 }}
+        center={{ lat: latitude, lng: longitude } || { lat: 0, lng: 0 }}
         zoom={zoom}
         onClick={handleMapClick}
       >
