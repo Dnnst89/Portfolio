@@ -70,29 +70,72 @@ export default function CheckOutForm2({
 
   const onSubmit = handleSubmit(async (data) => {
     if (data.deliveryMethod != "Recoger en tienda") {
-      fetchEstimation();
-    }
-    console.log(data.deliveryMethod);
-    try {
-      const paymentDetailResponse = await createPaymentDetail({
-        variables: {
-          status: "Inicial",
+      try {
+        const shipmentInfo = createData(items, lat, lng);
+        const estimation = await requestEstimation(shipmentInfo);
+        deliveryPayment(estimation.amount);
+        //   console.log("amount total", amounts.total);
+        const suma = parseFloat(subTotal + taxes);
+        const finalAmount = {
+          total: parseFloat(subTotal + taxes + estimation.amount),
           subTotal: subTotal,
           taxes: taxes,
-          total: total,
-          invoiceRequired: checkbox,
-          deliveryMethod: data.deliveryMethod,
-          paymentMethod: "Tarjeta Crédito/ Débito",
-          publishedAt: isoDate,
-        },
-      });
-      paymentDetailResponseId =
-        paymentDetailResponse?.data?.createPaymentDetail?.data?.id;
-      setPaymentDetailId(paymentDetailResponseId);
-      setChecktOutForm2Visible(true);
-    } catch (error) {
-      console.error(error);
+        };
+        console.log("estimacion", estimation);
+        console.log("final", finalAmount);
+        setAmount(finalAmount);
+        try {
+          const paymentDetailResponse = await createPaymentDetail({
+            variables: {
+              status: "Inicial",
+              subTotal: subTotal,
+              taxes: taxes,
+              total: total,
+              invoiceRequired: checkbox,
+              deliveryPayment: parseFloat(estimation.amount),
+              deliveryId: parseInt(estimation.id),
+              deliveryMethod: data.deliveryMethod,
+              paymentMethod: "Tarjeta Crédito/ Débito",
+              publishedAt: isoDate,
+            },
+          });
+          paymentDetailResponseId =
+            paymentDetailResponse?.data?.createPaymentDetail?.data?.id;
+          setPaymentDetailId(paymentDetailResponseId);
+          setChecktOutForm2Visible(true);
+        } catch (error) {
+          console.error(error);
+        }
+        // console.log("suma", suma);
+      } catch (error) {
+        console.error("Error al obtener los datos:", error);
+        // Puedes manejar el error según tus necesidades
+      }
+    } else {
+      try {
+        const paymentDetailResponse = await createPaymentDetail({
+          variables: {
+            status: "Inicial",
+            subTotal: subTotal,
+            taxes: taxes,
+            total: total,
+            invoiceRequired: checkbox,
+            deliveryPayment: parseFloat(0),
+            deliveryId: "0",
+            deliveryMethod: data.deliveryMethod,
+            paymentMethod: "Tarjeta Crédito/ Débito",
+            publishedAt: isoDate,
+          },
+        });
+        paymentDetailResponseId =
+          paymentDetailResponse?.data?.createPaymentDetail?.data?.id;
+        setPaymentDetailId(paymentDetailResponseId);
+        setChecktOutForm2Visible(true);
+      } catch (error) {
+        console.error(error);
+      }
     }
+    // console.log(data.deliveryMethod);
   });
   return (
     <div className="w-full">

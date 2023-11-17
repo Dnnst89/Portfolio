@@ -21,6 +21,7 @@ import useProtectionRoute from "@/hooks/useProtectionRoute";
 import { CREATE_ORDER } from "@/src/graphQl/queries/createUserOrder";
 import CREATE_ORDER_ITEM_MUTATION from "@/src/graphQl/queries/createOrderItem";
 import { UPDATE_PAYMENT_DETAIL_STATUS } from "@/src/graphQl/queries/updatePaymentDetailStatus";
+import { UPDATE_PAYMENT_DELIVERY_ID } from "@/src/graphQl/queries/updatePaymentDeliveryId";
 import {
   getAccessToken,
   formatTaxData,
@@ -59,6 +60,7 @@ export default function ThankYouMessage() {
   const [description, setDescription] = useState();
   //calling the mutation
   const [updatePaymentDetailStatus] = useMutation(UPDATE_PAYMENT_DETAIL_STATUS);
+  const [updatePaymentDeliveryId] = useMutation(UPDATE_PAYMENT_DELIVERY_ID);
   const [deleteCarItem] = useMutation(DELETE_CART_ITEM_MUTATION);
   const [updateVariantStock] = useMutation(UPDATE_VARIANT_STOCK);
   const [createOrder] = useMutation(CREATE_ORDER);
@@ -210,7 +212,7 @@ export default function ThankYouMessage() {
           setOrderId(orderNumber);
           await creatingOrderItems(orderNumber);
           await sendOrderEmail(quantity, orderNumber);
-
+          sssssssssssssssssssssssssssss;
           handleCartItems();
           createInvoice(orderNumber);
         } catch (error) {
@@ -477,7 +479,7 @@ export default function ThankYouMessage() {
                 bodyInvoice
               );
 
-              console.log("FaCtura ElEctronica", InvoiceResult)
+              console.log("FaCtura ElEctronica", InvoiceResult);
               try {
                 console.log("factura electronica", InvoiceResult);
                 const isoDate = new Date().toISOString();

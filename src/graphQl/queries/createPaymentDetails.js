@@ -20,9 +20,9 @@ const CREATE_PAYMENT_DETAIL = gql`
         taxes: $taxes
         total: $total
         invoiceRequired: $invoiceRequired
-        deliveryMethod: $deliveryPayment
-        deliveryPayment: $deliveryId
-        deliveryId: $deliveryMethod
+        deliveryMethod: $deliveryMethod
+        deliveryPayment: $deliveryPayment
+        deliveryId: $deliveryId
         paymentMethod: $paymentMethod
         publishedAt: $publishedAt
       }
@@ -37,6 +37,8 @@ const CREATE_PAYMENT_DETAIL = gql`
           invoiceRequired
           deliveryMethod
           paymentMethod
+          deliveryPayment
+          deliveryId
           publishedAt
         }
       }
