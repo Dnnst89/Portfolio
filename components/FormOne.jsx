@@ -2,7 +2,7 @@ import { GET_USER_PAYMENT_INFO } from "@/src/graphQl/queries/getUserPaymentInfo"
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { UPDATE_USER_INFORMATION } from "@/src/graphQl/queries/updateUserInformation";
 import { UPDATE_ADDRESS } from "@/src/graphQl/queries/updateAddress";
-import { CREATE_ADDRESS } from "@/src/graphQl/queries/createAddress";
+import { CREATE_ADDRESS } from "@/src/graphQl/queries/CreateAddress";
 import { useForm } from "react-hook-form";
 import CartDetail from "./CartDetail";
 import { useEffect, useState } from "react";
@@ -203,6 +203,8 @@ function FormOne() {
             province: dataForm.province,
             addressLine1: dataForm.addressLine1,
             addressLine2: dataForm.addressLine2,
+            latitude: lat,
+            longitude: lng,
             canton: dataForm.canton,
             id: addressId,
           },
@@ -225,6 +227,8 @@ function FormOne() {
             addressLine2: dataForm.addressLine2,
             province: dataForm.province,
             canton: dataForm.canton,
+            latitude: lat,
+            longitude: lng,
             publishedAt: isoDate,
             id: userId,
           },
@@ -435,8 +439,7 @@ function FormOne() {
                                 setProvincia({
                                   province: e.target.value,
                                 });
-                                handleInputBlur(provincia);
-                                console.log("gggg", provincia);
+                                //handleInputBlur(provincia);
                               },
                               required: {
                                 value: true,
@@ -548,7 +551,7 @@ function FormOne() {
                           <Map
                             zoom={15}
                             onMarkerChange={handleMarkerChange}
-                            province={userInformation.province}
+                            province={provincia}
                             canton={userInformation.canton}
                             address1={userInformation.addressLine1}
                             address2={userInformation.addressLine2}

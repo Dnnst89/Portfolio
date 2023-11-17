@@ -7,6 +7,8 @@ export const CREATE_ADDRESS = gql`
     $addressLine1: String!
     $addressLine2: String!
     $province: String!
+    $latitude: String!
+    $longitude: String!
     $canton: String!
     $publishedAt: DateTime!
     $id: ID!
@@ -18,6 +20,8 @@ export const CREATE_ADDRESS = gql`
         province: $province
         addressLine1: $addressLine1
         addressLine2: $addressLine2
+        longitude: $longitude
+        latitude: $latitude
         user: $id
         canton: $canton
         publishedAt: $publishedAt

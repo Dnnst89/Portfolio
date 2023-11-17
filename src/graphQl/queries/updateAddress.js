@@ -8,6 +8,8 @@ export const UPDATE_ADDRESS = gql`
     $addressLine1: String!
     $addressLine2: String!
     $canton: String!
+    $latitude: String!
+    $longitude: String!
     $id: ID!
   ) {
     updateUsersAddress(
@@ -18,6 +20,8 @@ export const UPDATE_ADDRESS = gql`
         province: $province
         addressLine1: $addressLine1
         addressLine2: $addressLine2
+        latitude: $latitude
+        longitude: $longitude
         canton: $canton
       }
     ) {

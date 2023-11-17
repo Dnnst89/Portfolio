@@ -25,7 +25,7 @@ const Map = ({
   };
 
   const [markerPosition, setMarkerPosition] = useState(null);
-  const address = province + "," + canton + "," + address1 + "," + address2;
+  const add = province + "," + canton + "," + address1 + "," + address2;
   //const [address, setAddress] = useState("Costa Rica, Perez Zeledon");
 
   const handleSelect = async (address) => {
@@ -42,9 +42,14 @@ const Map = ({
       console.error("Error al seleccionar la ubicación:", error);
     }
   };
+  const [selectedLocation, setSelectedLocation] = useState(null);
+
+  const handleLocationSelect = (latLng) => {
+    setSelectedLocation(latLng);
+  };
   useEffect(() => {
-    handleSelect(address);
-  }, []);
+    //  handleSelect(address);
+  }, [latitude]);
 
   const handleMapClick = async (event) => {
     const newMarkerPosition = {
@@ -56,14 +61,14 @@ const Map = ({
     setMarkerPosition(newMarkerPosition);
     onMarkerChange(newMarkerPosition);
   };
-  const [selectedLocation, setSelectedLocation] = useState(null);
-  handleSelect(address);
+  //handleSelect(address);
 
   return (
     <LoadScript googleMapsApiKey={`${KEY}`} libraries={LIBRARIES}>
+      <LocationSearchInput onLocationSelect={handleLocationSelect} />
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
-        center={{ lat: latitude, lng: longitude }}
+        center={selectedLocation || { lat: 0, lng: 0 }}
         zoom={zoom}
         onClick={handleMapClick}
       >
