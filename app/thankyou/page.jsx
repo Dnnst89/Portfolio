@@ -14,6 +14,8 @@ import DELETE_CART_ITEM_MUTATION from "@/src/graphQl/queries/deleteCartItem";
 import { GET_PAYMENT_DETAIL } from "@/src/graphQl/queries/getPaymentDetail";
 import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
 import { GET_CONSECUTIVE_NUMBER } from "@/src/graphQl/queries/getConsecutiveNumber";
+import { GET_USER_ADDRESS } from "@/src/graphQl/queries/getUserAddress";
+
 //import { GET_CONSECUTIVE_NUMBER } from "@/src/graphQl/queries/getConsecutiveNumber";
 import UPDATE_VARIANT_STOCK from "@/src/graphQl/queries/updateVariantStock";
 import useCartSummary from "@/hooks/useCartSummary";
@@ -76,6 +78,7 @@ export default function ThankYouMessage() {
   const [getPaymentDetails] = useLazyQuery(GET_PAYMENT_DETAILS);
   const [getOrderItemsByOrderId] = useLazyQuery(GET_ORDER_ITEMS_BY_ORDER_ID);
   const [getStoreInformation] = useLazyQuery(GET_STORE_INFO);
+  const [getUserAddress] = useLazyQuery(GET_USER_ADDRESS);
 
   // const { user } = useStorage();
   // const { id } = user || {};
@@ -257,21 +260,6 @@ export default function ThankYouMessage() {
         variables: { paymentId },
       });
 
-      if (addressError)
-        return console.log(
-          "Lo sentimos, ha ocurrido un error al cargar los datos"
-        );
-
-      const province =
-        userAddress.usersPermissionsUser.data.attributes.users_address.data
-          .attributes.province;
-      const canton =
-        userAddress.usersPermissionsUser.data.attributes.users_address.data
-          .attributes.canton;
-      const addressLine1 =
-        userAddress.usersPermissionsUser.data.attributes.users_address.data
-          .attributes.addressLine1;
-
       const total = paymentinfo?.data?.paymentDetail?.data?.attributes?.total;
       const tax = paymentinfo?.data?.paymentDetail?.data?.attributes?.taxes;
       const subtotal =
@@ -298,7 +286,7 @@ export default function ThankYouMessage() {
           await creatingOrderItems(orderNumber);
           await sendOrderEmail(quantity, orderNumber);
           console.log(paymentinfo);
-          fetchOrderMoovin(orderNumber);
+          // fetchOrderMoovin(orderNumber);
           handleCartItems();
           createInvoice(orderNumber);
         } catch (error) {
