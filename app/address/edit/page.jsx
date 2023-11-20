@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { GET_USER_PAYMENT_INFO } from "@/src/graphQl/queries/getUserPaymentInfo";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
@@ -6,12 +6,11 @@ import { useEffect, useState } from "react";
 import useStorage from "@/hooks/useStorage";
 import toast, { Toaster } from "react-hot-toast";
 import { UPDATE_BASIC_ADDRESS } from "@/src/graphQl/queries/updateBasicAddress";
-import { CREATE_BASIC_ADDRESS } from "@/src/graphQl/queries/createBasicAddress"
+import { CREATE_BASIC_ADDRESS } from "@/src/graphQl/queries/createBasicAddress";
 
 export default function Edit() {
-
   const redirect = () => {
-    window.location.href = `/address/`
+    window.location.href = `/address`;
   };
 
   const {
@@ -24,7 +23,7 @@ export default function Edit() {
 
   const [getUserInfo] = useLazyQuery(GET_USER_PAYMENT_INFO);
   const [updateAddress] = useMutation(UPDATE_BASIC_ADDRESS);
-  const [createNewAddres] = useMutation(CREATE_BASIC_ADDRESS)
+  const [createNewAddres] = useMutation(CREATE_BASIC_ADDRESS);
   const { user } = useStorage();
   const userId = user?.id;
   const [addressId, setAddressId] = useState();
@@ -38,7 +37,7 @@ export default function Edit() {
     addressLine2: "",
     province: "",
     canton: "",
-    postCode: ""
+    postCode: "",
   });
 
   const cargaDatos = async () => {
@@ -95,7 +94,7 @@ export default function Edit() {
         autoClose: 5000,
       });
     }
-  }
+  };
   useEffect(() => {
     cargaDatos();
     //eslint-disable-next-line react-hooks/exhaustive-deps
@@ -119,14 +118,16 @@ export default function Edit() {
         },
       });
       if (error) {
-        toast.error("Lo sentimos, ha ocurrido un error al actualizar la información", {
-          autoClose: 5000
-        })
+        toast.error(
+          "Lo sentimos, ha ocurrido un error al actualizar la información",
+          {
+            autoClose: 5000,
+          }
+        );
       } else {
         toast.success("La infomación se ha actualizado con éxito", {
-          autoClose: 8000
-        })
-
+          autoClose: 8000,
+        });
         setTimeout(() => {
           redirect();
         }, 2000);
@@ -145,30 +146,32 @@ export default function Edit() {
         },
       });
       if (error) {
-        toast.error("Lo sentimos, ha ocurrido un error al actualizar la información", {
-          autoClose: 5000
-        })
+        toast.error(
+          "Lo sentimos, ha ocurrido un error al actualizar la información",
+          {
+            autoClose: 5000,
+          }
+        );
       } else {
         toast.success("La infomación se ha actualizado con éxito", {
-          autoClose: 5000
-        })
+          autoClose: 5000,
+        });
         const newAddress = data.createUsersAddress.data.id;
-        setAddressId(newAddress)
-        setUserInfoExist(true)
+        setAddressId(newAddress);
+        setUserInfoExist(true);
         setTimeout(() => {
           redirect();
         }, 2000);
       }
-
     }
-
   });
   return (
     <div>
-
-      <div className="w-full max-w-screen-xl m-auto grid grid-cols-17 mt-10">
+      <div className="w-full max-w-screen-xl m-auto grid grid-cols-8 mt-10">
         <div className="col-span-9 md:pr-2">
-          <h1 class="text-xl mx-auto text-center font-bold">Edita tu dirección</h1>
+          <h1 class="text-xl mx-auto text-center font-bold">
+            Edita tu dirección
+          </h1>
           <form onSubmit={onSubmit}>
             <div className="mt-[40px] mx-[30px]">
               <main className="flex ">
@@ -188,12 +191,12 @@ export default function Edit() {
                             minLength: {
                               value: 2,
                               message:
-                                "El país no puede tener menos de 2 letras",
+                                "El país  no puede tener menos de 2 letras",
                             },
                             maxLength: {
                               value: 20,
                               message:
-                                "El país no puede tener más de 20 letras",
+                                "El país  no puede tener más de 20 letras",
                             },
                             pattern: {
                               value: /^[^0-9]*$/, // Expresión regular que no permite números
@@ -274,7 +277,7 @@ export default function Edit() {
                           {...register("postCode", {
                             required: {
                               value: true,
-                              message: "El país es requerido",
+                              message: "El código postal es requerido",
                             },
                             minLength: {
                               value: 5,
@@ -346,18 +349,21 @@ export default function Edit() {
                           {errors.addressLine2?.message}
                         </p>
                       </div>
-
                     </section>
                   </div>
                 </section>
               </main>
               <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
-                <input className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap" type="submit" value={"Editar"}></input>
+                <input
+                  className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
+                  type="submit"
+                  value={"Guardar"}
+                ></input>
               </div>
             </div>
           </form>
         </div>
       </div>
     </div>
-  )
+  );
 }

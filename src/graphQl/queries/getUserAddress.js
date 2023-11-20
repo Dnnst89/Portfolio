@@ -11,6 +11,7 @@ query GetUserAddress($id: ID){
             data{
               id,
               attributes{
+                country,
                 canton,
                 province,
                 addressLine1,

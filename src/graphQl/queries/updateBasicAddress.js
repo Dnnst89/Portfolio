@@ -7,7 +7,7 @@ mutation updateAddress(
     $addressLine1: String!
     $addressLine2: String
     $canton: String!
-    $postCode: String
+    $postCode: String!
     $id: ID!
   ) {
     updateUsersAddress(

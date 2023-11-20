@@ -12,6 +12,7 @@ query GetOrderItemsByOrderId($orderId: ID!) {
               subtotal
               taxes
               total
+              deliveryPayment
             }
           }
         }

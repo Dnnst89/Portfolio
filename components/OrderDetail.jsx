@@ -124,7 +124,7 @@ export default function OrderDetail() {
           <div key={order.ref} className="bg-resene col-span-6 md:col-span-4  w-full ">
             <section
               className="bg-floralwhite flex flex-col items-center border-2 border-dashed 
-            border-grey-200 rounded-2xl min-h-[275px] md:min-h-[250px] w-full px-2 col-span-12 md:col-span-3"
+            border-grey-200 rounded-2xl min-h-[310px] md:min-h-[275px] w-full px-2 col-span-12 md:col-span-3"
             >
               <h2 className="font-semibold mt-8">N° {order.ref}</h2>
               <div className="text-sm space-y-2 pt-3 text-center">
