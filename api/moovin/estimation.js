@@ -19,16 +19,11 @@ const requestEstimation = async (data) => {
   );
   const estimation = await estimationResponsde.json();
   console.log("estimationResponsde: ", estimation.optionService[1]);
-  return estimation.optionService[1];
+  return estimation;
 };
 const addProducts = (items) => {
   if (!items?.length) return [{}];
   return items?.map((item) => {
-    console.log(
-      "first",
-      item?.attributes?.variant?.data?.attributes?.product?.data?.attributes?.cabys?.toString()
-    );
-
     return {
       quantity: item?.attributes?.quantity,
       nameProduct:
@@ -50,9 +45,9 @@ const addProducts = (items) => {
 };
 
 const createData = (items, latitude, longitude) => {
-  console.log(items);
+  //console.log(items);
 
-  console.log("products", addProducts(items));
+  //console.log("products", addProducts(items));
   const data = {
     pointCollect: {
       latitude: 9.92421981523312,

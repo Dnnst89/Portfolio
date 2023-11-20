@@ -19,6 +19,9 @@ const GET_STORE_INFO = gql`
           email
           neighborhood
           currency
+          phoneNumber
+          latitude
+          longitude
         }
       }
     }

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import LocationSearchInput from "./LocationSearchInput";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
+import { useRouter } from "next/navigation";
 const KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY;
 const LIBRARIES = ["places"];
 const Map = ({
@@ -18,16 +19,16 @@ const Map = ({
 }) => {
   const [latitude, setLatitude] = useState(9.92421981523312);
   const [longitude, setLongitude] = useState(-84.13679786429938);
+  const router = useRouter();
 
   const mapContainerStyle = {
     width: "100%",
     height: "300px",
   };
-
+  const [map, setMap] = useState(null);
   const [markerPosition, setMarkerPosition] = useState(null);
   const address = province + "," + canton + "," + address1 + "," + address2;
   //const [address, setAddress] = useState("Costa Rica, Perez Zeledon");
-
 
   const handleSelect = async (address) => {
     try {
@@ -50,8 +51,22 @@ const Map = ({
     setSelectedLocation(latLng);
   };
   useEffect(() => {
-    //handleSelect(address);
-  }, []);
+    handleSelect(address);
+    const map = document.getElementById("map");
+    console.log("second", map);
+    if (map == null) {
+      console.log("es nulo", router);
+    }
+  }, [latitude, handleSelect, address]);
+  const [isMapInitialized, setIsMapInitialized] = useState(false);
+
+  useEffect(() => {
+    // Verifica si la inicialización ya ha ocurrido
+    if (!isMapInitialized) {
+      handleSelect(address);
+      setIsMapInitialized(true);
+    }
+  }, [isMapInitialized]);
 
   const handleMapClick = async (event) => {
     const newMarkerPosition = {
@@ -66,12 +81,41 @@ const Map = ({
     setMarkerPosition(newMarkerPosition);
     onMarkerChange(newMarkerPosition);
   };
-  handleSelect(address);
+  //handleSelect(address);
+  useEffect(() => {
+    const mapElement = document.getElementById("map");
 
+    if (mapElement && window.google) {
+      const google = window.google;
+      const mapOptions = {
+        center: { lat: latitude, lng: longitude },
+        zoom: zoom,
+      };
+
+      // Crea un nuevo mapa
+      const newMap = new google.maps.Map(mapElement, mapOptions);
+      setMap(newMap);
+      router.refresh();
+
+      // Añade el marcador si hay una posición
+      if (markerPosition) {
+        new google.maps.Marker({
+          position: markerPosition,
+          map: newMap,
+        });
+      }
+    }
+  }, [latitude, longitude, zoom, markerPosition]);
+  const handleMapLoad = (map) => {
+    // Se llama cuando el mapa se carga
+    setMap(map);
+  };
   return (
     <LoadScript googleMapsApiKey={`${KEY}`} libraries={LIBRARIES}>
-      <LocationSearchInput onLocationSelect={handleLocationSelect} />
       <GoogleMap
+        key={router.asPath}
+        onLoad={handleMapLoad}
+        id="map"
         mapContainerStyle={mapContainerStyle}
         center={{ lat: latitude, lng: longitude } || { lat: 0, lng: 0 }}
         zoom={zoom}

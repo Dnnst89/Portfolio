@@ -1,57 +1,12 @@
 import { getToken } from "./getToken";
-/*"idEstimation": 206923,
-  "idDelivery": 2,
-  "idOrder": "",
-  "email": "support@shop-feedback.com",
-  "emailAccount": "support@shop-feedback.com",
-   "pointCollect": {
-    "latitude": 9.949798,
-    "longitude": -84.194217,
-     "name": "Javier Hernandez",
-      "phone": "50688998899",
-       "notes": "Carretera lindora"
-  },
-  "pointDelivery": {
-    "latitude": 9.94793,
-    "longitude": -84.162222,
-    "locationAlias": "Autopista 27",
-    "name": "Javier Hernandez",
-    "identificationCard": "",
-    "phone": "50688998899",
-    "notes": "EBAIS Candelaria 50 mtrs al nte y 50 mts al ote, casa amarilla a 1 ca de calle principal carr vieja de naranjo 20705, Alajuela, Palmares, Candelaria",
-    "documents": [
-      {
-        "name": "Boleta",
-        "fields": [
-          {
-            "name": "Foto con firma del cliente",
-            "type": "image",
-            "description": ""
-          }
-        ]
-      }
-    ]
-  },
-  "listProduct": [
-     {
-      "quantity": 3,
-      "nameProduct": "Matcha Suri (Costa Rica)",
-      "description": "",
-      "size": "S",
-     "length": 5,
-      "width": 4.5,
-      "high": 12,
-      "weight": 0.4,
-      "price": 12000,
-      "codeProduct": "247"
-    }
-  ]
-}*/
+
 /**
  * Function the request the shipment estimation from Moovin
  */
-const CreateOrder = async (data) => {
+const orderMoovin = async (data) => {
+  console.log("creando", data);
   const accessToken = await getToken();
+  console.log("token", accessToken);
   const creationResponsde = await fetch(process.env.NEXT_PUBLIC_MOOVIN_ORDER, {
     method: "POST",
     headers: {
@@ -61,14 +16,15 @@ const CreateOrder = async (data) => {
     body: JSON.stringify(data),
   });
   const order = await creationResponsde.json();
-  console.log("estimationResponsde: ", order.optionService[1]);
-  return order.optionService[1];
+  console.log("orderResponsde: ", order);
+  return order;
 };
+
 const addProducts = (items) => {
   if (!items?.length) return [{}];
   return items?.map((item) => {
     return {
-      quantity: item?.attributes?.quantity,
+      quantity: item?.quantity,
       nameProduct:
         item?.attributes?.variant?.data?.attributes?.product?.data?.attributes
           ?.name,
@@ -79,7 +35,7 @@ const addProducts = (items) => {
       length: 5,
       width: 15,
       high: 10,
-      weight: 0.4,
+      weight: item?.attributes?.variant?.data?.attributes?.weight,
       price: item?.totalItemPrice,
       codeProduct:
         item?.attributes?.variant?.data?.attributes?.product?.data?.attributes?.cabys?.toString(),
@@ -87,41 +43,54 @@ const addProducts = (items) => {
   });
 };
 
-const createData = (
+const createOrderData = (
   store,
   items,
   order,
   client,
-  estimation,
-  latitude,
-  longitude
+  payment,
+  deliveryInformation
 ) => {
   console.log(items);
 
+  console.log("products", addProducts(items));
   const data = {
-    idEstimation: estimation,
+    idEstimation: payment,
     idDelivery: 2,
     idOrder: order,
     email: store.email,
     emailAccount: store.email,
     pointCollect: {
-      latitude: 9.92421981523312,
-      longitude: -84.13679786429938,
+      latitude: store.latitude,
+      longitude: store.longitude,
       name: store.name,
-      phone: "50688998899",
+      phone: store.phoneNumber,
       notes: store.otherSigns,
     },
-    pointCollect: {
-      latitude: 9.92421981523312,
-      longitude: -84.13679786429938,
-    },
     pointDelivery: {
-      latitude: latitude,
-      longitude: longitude,
+      latitude: deliveryInformation.latitude,
+      longitude: deliveryInformation.longitude,
+      locationAlias: "",
+      name: client.name,
+      identificationCard: client.idNumber || "",
+      phone: client.phone,
+      notes: deliveryInformation.addressLine1,
+      documents: [
+        {
+          name: "Boleta",
+          fields: [
+            {
+              name: "Foto con firma del cliente",
+              type: "image",
+              description: "",
+            },
+          ],
+        },
+      ],
     },
     listProduct: addProducts(items),
     ensure: true,
   };
   return data;
 };
-export { CreateOrder, createData };
+export { orderMoovin, createOrderData };

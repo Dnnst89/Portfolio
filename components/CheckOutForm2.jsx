@@ -73,16 +73,17 @@ export default function CheckOutForm2({
       try {
         const shipmentInfo = createData(items, lat, lng);
         const estimation = await requestEstimation(shipmentInfo);
-        deliveryPayment(estimation.amount);
+        deliveryPayment(estimation.optionService[1].amount);
         //   console.log("amount total", amounts.total);
         const suma = parseFloat(subTotal + taxes);
         const finalAmount = {
-          total: parseFloat(subTotal + taxes + estimation.amount),
+          total: parseFloat(
+            subTotal + taxes + estimation.optionService[1].amount
+          ),
           subTotal: subTotal,
           taxes: taxes,
         };
-        console.log("estimacion", estimation);
-        console.log("final", finalAmount);
+
         setAmount(finalAmount);
         try {
           const paymentDetailResponse = await createPaymentDetail({
@@ -92,8 +93,8 @@ export default function CheckOutForm2({
               taxes: taxes,
               total: total,
               invoiceRequired: checkbox,
-              deliveryPayment: parseFloat(estimation.amount),
-              deliveryId: parseInt(estimation.id),
+              deliveryPayment: parseFloat(estimation.optionService[1].amount),
+              deliveryId: parseInt(estimation.idEstimation),
               deliveryMethod: data.deliveryMethod,
               paymentMethod: "Tarjeta Crédito/ Débito",
               publishedAt: isoDate,
@@ -135,6 +136,8 @@ export default function CheckOutForm2({
         paymentDetailResponseId =
           paymentDetailResponse?.data?.createPaymentDetail?.data?.id;
         setPaymentDetailId(paymentDetailResponseId);
+        setAmount(finalAmount);
+        deliveryPayment("0");
         setChecktOutForm2Visible(true);
       } catch (error) {
         console.error(error);
