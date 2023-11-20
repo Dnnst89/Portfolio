@@ -59,13 +59,11 @@ function FormOne() {
   };
   const [lat, setLat] = useState(0);
   const handleLat = (data) => {
-    console.log("lat ", data)
     setLat(data);
   };
 
   const [lng, setLng] = useState(0);
   const handleLng = (data) => {
-    console.log("lng ", data)
     setLng(data);
   };
 
@@ -213,8 +211,6 @@ function FormOne() {
         });
 
       if (userInfoExist) {
-        console.log("update: lat", lat)
-        console.log("update: lng", lng)
         const {
           data: addressData,
           error: addressError,
