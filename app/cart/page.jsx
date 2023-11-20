@@ -22,7 +22,7 @@ export default function CartView() {
 
       </section>
       {/* ///////////LOS SIGUIENTES DATOS ESTAN QUEMADOS */}
-      <section>
+      <section className="w-full">
         <h1 className="flex justify-center text-center pt-10">
           Descubre nuestros productos estrella
         </h1>
