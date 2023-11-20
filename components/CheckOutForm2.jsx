@@ -12,7 +12,7 @@ import CREATE_PAYMENT_DETAIL from "@/src/graphQl/queries/createPaymentDetails";
 import Spinner from "./Spinner";
 import { useForm } from "react-hook-form";
 import { requestEstimation, createData } from "@/api/moovin/estimation";
-
+import toast, { Toaster } from "react-hot-toast";
 export default function CheckOutForm2({
   amount,
   checkbox,
@@ -39,9 +39,11 @@ export default function CheckOutForm2({
   const fetchEstimation = async () => {
     // alert(shipment);
     try {
-      const shipmentInfo = createData(items, lat, lng);
-      const estimation = await requestEstimation(shipmentInfo);
-      deliveryPayment(estimation.amount);
+      try {
+        const shipmentInfo = createData(items, lat, lng);
+        const estimation = await requestEstimation(shipmentInfo);
+        deliveryPayment(estimation.amount);
+      } catch (error) {}
       //   console.log("amount total", amounts.total);
       const suma = parseFloat(subTotal + taxes);
       const finalAmount = {
@@ -91,7 +93,7 @@ export default function CheckOutForm2({
               status: "Inicial",
               subTotal: subTotal,
               taxes: taxes,
-              total: total,
+              total: finalAmount.total,
               invoiceRequired: checkbox,
               deliveryPayment: parseFloat(estimation.optionService[1].amount),
               deliveryId: parseInt(estimation.idEstimation),
@@ -110,7 +112,9 @@ export default function CheckOutForm2({
         // console.log("suma", suma);
       } catch (error) {
         console.error("Error al obtener los datos:", error);
-        // Puedes manejar el error según tus necesidades
+        toast.error(
+          "El lugar seleccionado se encuentra fuera del area de cobertura"
+        );
       }
     } else {
       try {
