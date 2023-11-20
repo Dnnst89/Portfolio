@@ -295,6 +295,7 @@ export default function ThankYouMessage() {
       } else {
         //no creo otra orden, asigno la que ya tiene
         setOrderId(orderPayment.id);
+        console.log("");
       }
     } catch (error) {
       console.log("Error getting paymentDetail: ", error);
