@@ -1,10 +1,9 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import LocationSearchInput from "./LocationSearchInput";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 const KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY;
-const LIBRARIES = ["places"];
 const Map = ({
   onMarkerChange,
   zoom,
@@ -44,14 +43,6 @@ const Map = ({
       console.error("Error al seleccionar la ubicación:", error);
     }
   };
-  const [selectedLocation, setSelectedLocation] = useState(null);
-
-  const handleLocationSelect = (latLng) => {
-    setSelectedLocation(latLng);
-  };
-  useEffect(() => {
-    //handleSelect(address);
-  }, []);
 
   const handleMapClick = async (event) => {
     const newMarkerPosition = {
@@ -68,19 +59,43 @@ const Map = ({
   };
   handleSelect(address);
 
-  return (
-    <LoadScript googleMapsApiKey={`${KEY}`} libraries={LIBRARIES}>
-      <LocationSearchInput onLocationSelect={handleLocationSelect} />
-      <GoogleMap
-        mapContainerStyle={mapContainerStyle}
-        center={{ lat: latitude, lng: longitude } || { lat: 0, lng: 0 }}
-        zoom={zoom}
-        onClick={handleMapClick}
-      >
-        {markerPosition && <Marker position={markerPosition} />}
-      </GoogleMap>
-    </LoadScript>
-  );
+
+  const [map, setMap] = useState(null);
+  const mapRef = useRef(null);
+
+
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: KEY,
+    libraries: ['places'],
+  });
+
+  const handleMapLoad = (map) => {
+    mapRef.current = map;
+    setMap(map);
+  };
+
+
+  useEffect(() => {
+    return () => {
+      // Destruir el mapa si es necesario
+      mapRef.current = null; // Si necesitas resetear la referencia del mapa
+
+    }
+  }, [])
+
+  return isLoaded ? (
+    <GoogleMap
+      mapContainerStyle={mapContainerStyle}
+      center={{ lat: latitude, lng: longitude } || { lat: 0, lng: 0 }}
+      zoom={zoom}
+      onLoad={handleMapLoad}
+      onClick={handleMapClick}
+    >
+      {/* Marcadores u otros elementos en el mapa */}
+      {map && markerPosition && <Marker position={markerPosition} />}
+    </GoogleMap>
+  ) : null;
 };
 
 export default Map;
