@@ -84,14 +84,14 @@ function ProductDetail({ name, brand, description, variants, materials }) {
   };
   const variantItem = variantItems[0];
   return (
-    <>
+    <>{variants.length > 0 ? (
       <section aria-label="Descripción del producto" className="bg-floralwhite max-w-screen-xl grid grid-cols-12 m-auto p-5 z-0" target="_blank" rel="noopener noreferrer">
 
         {/* Columna de imagenes */}
         <section aria-label="Imágenes del producto" className="mb-10 col-span-12 md:col-span-6">
           {/* imagen principal grande */}
           <div className="m-auto w-full flex justify-center">
-            {images.length > 0 ? (
+            {images && images.length > 0 ? (
               <Image
                 {...image == null ? setImage(images[0].attributes.url) : null}
                 src={image}
@@ -340,6 +340,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
 
 
       </section>
+      ):( <div className="text-center grid content-center h-80 m-auto"> <h1 className="font-bold">¡Lo sentimos!</h1> <h2>En este momento este producto no se encuentra disponible.</h2> </div> )}
     </>
   );
 }
