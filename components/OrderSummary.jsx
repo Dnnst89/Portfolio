@@ -1,7 +1,7 @@
 import React from 'react'
 import Spinner from './Spinner';
 
-const OrderSummary = ({ detailTitle, quantity, subTotal, taxes, total }) => {
+const OrderSummary = ({ detailTitle, quantity, subTotal, taxes, total, deliveryPayment }) => {
     return (
         <div className="p-3 space-y-3">
             {
@@ -19,6 +19,10 @@ const OrderSummary = ({ detailTitle, quantity, subTotal, taxes, total }) => {
                     <div className="flex justify-between ">
                         <p>Impuestos:</p>
                         <p className="text-grey-100">${taxes}</p>
+                    </div>
+                    <div className="flex justify-between ">
+                        <p>Costo de envío:</p>
+                        <p className="text-grey-100">${deliveryPayment}</p>
                     </div>
                     <div className="flex justify-between ">
                         <p>Costo Total(IVA Incluido):</p>

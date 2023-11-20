@@ -97,9 +97,15 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
    */
   const addFeaturetoObject = (key, value, variantObject) => {
     // Crear una copia del objeto JSON existente
-    console.log("variantObject ", variantObject)
-    console.log("key ", key)
-    console.log("value ", value)
+    const position = Object.keys(featureObject).indexOf(key);
+    const keysArray = Object.keys(featureObject);
+    // Recorrer las claves y eliminar desde el índice especificado en adelante
+    if (position>=0) {
+      for (let i = position; i < keysArray.length; i++) {
+        const key = keysArray[i];
+        delete featureObject[key];
+      }
+    }
     //si la variante no tiene padre, el objeto de features se vacia, para eliminar features anteriores, aca va la logica para eliminar los features anteriores
     const updatedFeatureObject = variantObject?.variant?.data?.attributes?.parentVariant.data == null ? {} : { ...featureObject };
     // Agregar el nuevo par clave-valor si ya existe se sobreescribe
@@ -148,7 +154,6 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
         ]);
         //setFeatureCount((prevCount) => prevCount + 1);
       }
-      console.log("data ", data)
       //handleAddFeature();
       addFeaturetoObject(featureName, selectedFeatureValue, data)
     } catch (error) {
@@ -162,7 +167,6 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
      */
   const removeFeaturesFromIndex = (index) => {
     if (index < featureList.length - 1) {// si el identificador del select es menor a la cantidad de items en featureList
-      console.log("Borrando")
       // Actualiza la lista de características desde el índice dado en adelante
       let end = Number(index) + 1;
       const trimmedList = featureList.slice(0, end);
@@ -176,6 +180,7 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
 
   return (
     <div >
+      <h3 className="text-[#484848] text-lg underline font-bold pt-2 pb-5">Caracteristicas:</h3>
       {featureList.map((feature, index) => {
         const featureName = Object.keys(feature)[0]; // Obtén el nombre de la característica
         const featureOptions = feature[featureName].options; // Obtén las opciones de la característica

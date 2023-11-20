@@ -22,14 +22,23 @@ function ProductDetail({ name, brand, description, variants, materials }) {
   const [quantity, setQuantity] = useState(1);
   const [image, setImage] = useState(null);
   let shortDescrption = "";
-  const [images, setImages] = useState(variants.length > 0 ? variants[0].attributes.images.data : null);
+  const allImages = [];
+
+
   const { user } = useStorage();
   const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
   const [variantSelected, setvariantSelected] = useState(); //guarda la variante que actualmente se seleccionó{features:{}, variant:{object}}
   const [price, setPrice] = useState(variants.length > 0 ? variants[0].attributes.price : null);//precio inicial dado por primer variante
   const [enableButton, setEnableButton] = useState(variants.length <= 1);
 
-
+  variants.forEach((variant) => {
+    if (variant.attributes.images && variant.attributes.images.data) {
+      allImages.push(...variant.attributes.images.data);
+    }
+  });
+  
+  const [images, setImages] = useState(allImages.length > 0 ? allImages : null);
+  
   const decreaseCounter = () => {
     if (quantity === 1) return;
     setQuantity((prev) => --prev);
@@ -84,14 +93,14 @@ function ProductDetail({ name, brand, description, variants, materials }) {
   };
   const variantItem = variantItems[0];
   return (
-    <>
+    <>{variants.length > 0 ? (
       <section aria-label="Descripción del producto" className="bg-floralwhite max-w-screen-xl grid grid-cols-12 m-auto p-5 z-0" target="_blank" rel="noopener noreferrer">
 
         {/* Columna de imagenes */}
         <section aria-label="Imágenes del producto" className="mb-10 col-span-12 md:col-span-6">
           {/* imagen principal grande */}
           <div className="m-auto w-full flex justify-center">
-            {images.length > 0 ? (
+            {images && images.length > 0 ? (
               <Image
                 {...image == null ? setImage(images[0].attributes.url) : null}
                 src={image}
@@ -140,7 +149,17 @@ function ProductDetail({ name, brand, description, variants, materials }) {
 
         {/* Sección con los detalles del producto*/}
         <section aria-label="Detalles del producto" className="mb-10 col-span-12 md:col-span-6 m-auto m-0">
-          <h2 aria-label={`Referencia del producto ${variantSelected?.variant?.data?.attributes?.sku}`} className="flex justify-end text-sm">Ref {variantSelected ? variantSelected?.variant?.data?.attributes?.sku : variants[0]?.attributes?.sku}</h2>
+          <div className="grid grid-cols-12 md:col-span-12">
+            <div className="col-span-12 md:col-span-6">
+              <h2 aria-label={`Marca ${brand}`} className="flex justify-start text-sm text-lightblue"> {brand}</h2>
+            </div>
+
+            <div className="col-span-12 md:col-span-6">
+              <h2 aria-label={`Referencia del producto ${variantSelected?.variant?.data?.attributes?.sku}`} className="flex justify-end text-sm">Ref {variantSelected ? variantSelected?.variant?.data?.attributes?.sku : variants[0]?.attributes?.sku}</h2>
+            </div>
+
+          </div>
+
           <h1 aria-label={`Nombre del producto ${name}`} className="mb-3 text-xl font-bold">{name}</h1>
           <p>{shortDescrption}...</p>
           <a onClick={() => handleClick()}>
@@ -206,7 +225,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                   />
                   <p className="text-sm md:text-base">
                     Rango de edad: <br />
-                    {variantSelected?.variant?.data?.attributes?.price}
+                    {variantSelected?.variant?.data?.attributes?.ageRange}
                   </p>
                 </div>
                 <div className="col-span-6 flex mt-5 items-center">
@@ -244,30 +263,48 @@ function ProductDetail({ name, brand, description, variants, materials }) {
               </>
 
               :
-              //cuando el producto solo tiene una capa de variante, obtengo el variants[0]
-              Object.entries(variantItem).map(([key, value, index]) => {
-                // Obtén la traducción de la clave en español
-                const translatedKey = keyTranslations[key] || key;
-                if (value != null) {
-                  return (
-                    <div key={index} className="col-span-6 flex mt-5 items-center">
-                      <Image
-                        priority={true}
-                        width="50"
-                        height="50"
-                        src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
-                        alt="tailwind logo"
-                        className="rounded-xl mr-3"
-                      />
-                      <p className="text-sm md:text-base">
-                        {translatedKey}: <br />
-                        {value}
-                      </p>
-                    </div>
-                  );
-                }
+              <>
 
-              })
+                <div className="col-span-6 flex mt-5 items-center">
+                  <Image
+                    priority={true}
+                    width="50"
+                    height="50"
+                    src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
+                    alt="tailwind logo"
+                    className="rounded-xl mr-3"
+                  />
+                  <p className="text-sm md:text-base">
+                    Existencias: <br />
+                    {variantSelected?.variant?.data?.attributes?.stock === 0 ? "Agotados" : "Disponibles"}
+                  </p>
+                </div>
+                {Object.entries(variantItem).map(([key, value, index]) => {
+                  // Obtén la traducción de la clave en español
+                  const translatedKey = keyTranslations[key] || key;
+                  if (value != null) {
+                    return (
+                      <div key={index} className="col-span-6 flex mt-5 items-center">
+                        <Image
+                          priority={true}
+                          width="50"
+                          height="50"
+                          src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
+                          alt="tailwind logo"
+                          className="rounded-xl mr-3"
+                        />
+                        <p className="text-sm md:text-base">
+                          {translatedKey}: <br />
+                          {value}
+                        </p>
+                      </div>
+                    );
+                  }
+
+                })}
+              </>
+              //cuando el producto solo tiene una capa de variante, obtengo el variants[0]
+
             }
           </div>
 
@@ -312,6 +349,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
 
 
       </section>
+      ):( <div className="text-center grid content-center h-80 m-auto"> <h1 className="font-bold">¡Lo sentimos!</h1> <h2>En este momento este producto no se encuentra disponible.</h2> </div> )}
     </>
   );
 }

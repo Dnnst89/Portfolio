@@ -131,9 +131,7 @@ function FormOne() {
             data?.usersPermissionsUser?.data?.attributes?.users_address?.data
               ?.attributes?.canton || "",
           idNumber: "",
-          idType:
-            data?.usersPermissionsUser?.data?.attributes?.idCard?.idType ||
-            "Física",
+          idType: "Física",
         });
         setProvince(
           data?.usersPermissionsUser?.data?.attributes?.users_address?.data
@@ -152,6 +150,22 @@ function FormOne() {
             ?.attributes?.addressLine2 || ""
         );
       }
+      setProvince(
+        data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+          ?.attributes?.province || ""
+      );
+      setCanton(
+        data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+          ?.attributes?.canton || ""
+      );
+      setAddress1(
+        data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+          ?.attributes?.addressLine1 || ""
+      );
+      setAddress1(
+        data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+          ?.attributes?.addressLine2 || ""
+      );
     } catch (error) {
       toast.error(error.message, {
         autoClose: 5000,
@@ -455,9 +469,7 @@ function FormOne() {
                             id="province"
                             {...register("province", {
                               onChange: (e) => {
-                                setProvince(
-                                  e.target.value,
-                                );
+                                setProvince(e.target.value);
                                 //handleInputBlur(provincia);
                               },
                               required: {
@@ -492,9 +504,7 @@ function FormOne() {
                             id="canton"
                             {...register("canton", {
                               onChange: (e) => {
-                                setCanton(
-                                  e.target.value,
-                                );
+                                setCanton(e.target.value);
                               },
                               required: {
                                 value: true,
@@ -527,9 +537,8 @@ function FormOne() {
                             id="addressLine1"
                             {...register("addressLine1", {
                               onChange: (e) => {
-                                setAddress1(
-                                  e.target.value,
-                                );
+                                console.log("address1", e.target.value);
+                                setAddress1(e.target.value);
                               },
                               required: {
                                 value: true,
@@ -559,9 +568,7 @@ function FormOne() {
                             id="addressLine2"
                             {...register("addressLine2", {
                               onChange: (e) => {
-                                setAddress2(
-                                  e.target.value,
-                                );
+                                setAddress2(e.target.value);
                               },
                               minLength: {
                                 value: 5,

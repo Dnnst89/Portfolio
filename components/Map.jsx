@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import LocationSearchInput from "./LocationSearchInput";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
+import { useRouter } from "next/navigation";
 const KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY;
 const Map = ({
   onMarkerChange,
@@ -17,16 +18,15 @@ const Map = ({
 }) => {
   const [latitude, setLatitude] = useState(9.92421981523312);
   const [longitude, setLongitude] = useState(-84.13679786429938);
+  const router = useRouter();
 
   const mapContainerStyle = {
     width: "100%",
     height: "300px",
   };
-
   const [markerPosition, setMarkerPosition] = useState(null);
   const address = province + "," + canton + "," + address1 + "," + address2;
   //const [address, setAddress] = useState("Costa Rica, Perez Zeledon");
-
 
   const handleSelect = async (address) => {
     try {

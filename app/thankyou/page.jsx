@@ -14,6 +14,8 @@ import DELETE_CART_ITEM_MUTATION from "@/src/graphQl/queries/deleteCartItem";
 import { GET_PAYMENT_DETAIL } from "@/src/graphQl/queries/getPaymentDetail";
 import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
 import { GET_CONSECUTIVE_NUMBER } from "@/src/graphQl/queries/getConsecutiveNumber";
+import { GET_USER_ADDRESS } from "@/src/graphQl/queries/getUserAddress";
+
 //import { GET_CONSECUTIVE_NUMBER } from "@/src/graphQl/queries/getConsecutiveNumber";
 import UPDATE_VARIANT_STOCK from "@/src/graphQl/queries/updateVariantStock";
 import useCartSummary from "@/hooks/useCartSummary";
@@ -22,6 +24,10 @@ import { CREATE_ORDER } from "@/src/graphQl/queries/createUserOrder";
 import CREATE_ORDER_ITEM_MUTATION from "@/src/graphQl/queries/createOrderItem";
 import { UPDATE_PAYMENT_DETAIL_STATUS } from "@/src/graphQl/queries/updatePaymentDetailStatus";
 import { UPDATE_PAYMENT_DELIVERY_ID } from "@/src/graphQl/queries/updatePaymentDeliveryId";
+
+import { createOrderData, orderMoovin } from "@/api/moovin/createOrder";
+import { requestEstimation, createData } from "@/api/moovin/estimation";
+
 import {
   getAccessToken,
   formatTaxData,
@@ -38,7 +44,6 @@ import GET_ORDER_ITEMS_BY_ORDER_ID from "@/src/graphQl/queries/getOrderItemsByOr
 import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { CREATE_ELECTRONIC_INVOICE } from "@/src/graphQl/queries/createElectronicInvoice";
 import { CREATE_ORDER_EMAIL } from "@/src/graphQl/queries/sendEmail";
-import { GET_USER_ADDRESS } from "@/src/graphQl/queries/getUserAddress";
 
 /*
   recives the Tilopay response , based on the returns params 
@@ -49,6 +54,7 @@ import { GET_USER_ADDRESS } from "@/src/graphQl/queries/getUserAddress";
 */
 
 export default function ThankYouMessage() {
+  useProtectionRoute();
   const router = useRouter();
   //states
   const [code, setCode] = useState("");
@@ -72,12 +78,12 @@ export default function ThankYouMessage() {
   const [getPaymentDetails] = useLazyQuery(GET_PAYMENT_DETAILS);
   const [getOrderItemsByOrderId] = useLazyQuery(GET_ORDER_ITEMS_BY_ORDER_ID);
   const [getStoreInformation] = useLazyQuery(GET_STORE_INFO);
+  const [getUserAddress] = useLazyQuery(GET_USER_ADDRESS);
 
   // const { user } = useStorage();
   // const { id } = user || {};
 
   const [createOrderEmail] = useMutation(CREATE_ORDER_EMAIL);
-  const [getUserAddress] = useLazyQuery(GET_USER_ADDRESS);
 
   // const { user } = useStorage();
   // const { id } = user || {};
@@ -157,6 +163,93 @@ export default function ThankYouMessage() {
     });
   };
 
+  const fetchOrderMoovin = async (orderNumber) => {
+    try {
+      const paymentUser = await getPaymentDetails({
+        variables: {
+          userId: userId,
+        },
+      });
+      const paymentinfo = await getPaymentDetail({
+        //obtengo el paymentDetails, para que cuando refresque la pagina no cree mas ordenes
+        variables: { paymentId },
+      });
+      const client = {
+        name:
+          paymentUser?.data?.usersPermissionsUser?.data?.attributes?.firstName +
+          " " +
+          paymentUser?.data?.usersPermissionsUser?.data?.attributes?.lastName,
+        idType: validateID(
+          paymentUser?.data?.usersPermissionsUser?.data?.attributes?.idCard
+            ?.idType
+        ),
+        idNumber:
+          paymentUser?.data?.usersPermissionsUser?.data?.attributes?.idCard
+            ?.idNumber,
+        email: paymentUser?.data?.usersPermissionsUser?.data?.attributes?.email,
+        phone:
+          paymentUser?.data?.usersPermissionsUser?.data?.attributes
+            ?.phoneNumber,
+      };
+      const result = await getStoreInformation({
+        variables: {
+          id: 1,
+        },
+      });
+      const store = result?.data?.storeInformation?.data?.attributes;
+
+      const userAddress = await getUserAddress({
+        variables: {
+          id: userId,
+        },
+      });
+      const deliveryInformation =
+        userAddress?.data?.usersPermissionsUser?.data?.attributes?.users_address
+          ?.data?.attributes;
+      const payment = paymentinfo?.data?.paymentDetail?.data?.attributes;
+      console.log("cliente", client);
+      console.log("payment", payment);
+      console.log("tienda", store);
+      console.log("direccion", deliveryInformation);
+      console.log("order Id", orderNumber);
+      if (payment.deliveryMethod === "Envío a través de MOOVIN") {
+        const shipmentInfo = createData(
+          items,
+          deliveryInformation.latitude,
+          deliveryInformation.longitude
+        );
+        const estimation = await requestEstimation(shipmentInfo);
+
+        console.log("json", estimation.idEstimation);
+        const datos = createOrderData(
+          store,
+          items,
+          orderNumber,
+          client,
+          estimation.idEstimation,
+          deliveryInformation
+        );
+
+        const order = await orderMoovin(datos);
+        const paymentId = paymentinfo?.data?.paymentDetail?.data?.id;
+
+        const orderId = parseInt(order.idPackage);
+        console.log("order id", paymentId);
+        console.log("order id", orderId);
+
+        await updatePaymentDeliveryId({
+          variables: {
+            id: paymentId,
+            newDeliveryId: orderId,
+          },
+        });
+      }
+
+      debugger;
+    } catch (error) {
+      console.log("error creacion orden moovin", error);
+    }
+  };
   ////////////////////////////funciones para crear orden, orderItems y acutalizar paymentDetail/////////
 
   const handleCreateOrder = async (status) => {
@@ -166,26 +259,6 @@ export default function ThankYouMessage() {
         //obtengo el paymentDetails, para que cuando refresque la pagina no cree mas ordenes
         variables: { paymentId },
       });
-      const { data: userAddress, error: addressError } = await getUserAddress({
-        variables: {
-          id: userId,
-        },
-      });
-
-      if (addressError)
-        return console.log(
-          "Lo sentimos, ha ocurrido un error al cargar los datos"
-        );
-
-      const province =
-        userAddress.usersPermissionsUser.data.attributes.users_address.data
-          .attributes.province;
-      const canton =
-        userAddress.usersPermissionsUser.data.attributes.users_address.data
-          .attributes.canton;
-      const addressLine1 =
-        userAddress.usersPermissionsUser.data.attributes.users_address.data
-          .attributes.addressLine1;
 
       const total = paymentinfo?.data?.paymentDetail?.data?.attributes?.total;
       const tax = paymentinfo?.data?.paymentDetail?.data?.attributes?.taxes;
@@ -212,42 +285,8 @@ export default function ThankYouMessage() {
           setOrderId(orderNumber);
           await creatingOrderItems(orderNumber);
           await sendOrderEmail(quantity, orderNumber);
-
-          const paymentUser = await getPaymentDetails({
-            variables: {
-              userId: userId,
-            },
-          });
-
-          const client = {
-            name:
-              paymentUser?.data?.usersPermissionsUser?.data?.attributes
-                ?.firstName +
-              " " +
-              paymentUser?.data?.usersPermissionsUser?.data?.attributes
-                ?.lastName,
-            idType: validateID(
-              paymentUser?.data?.usersPermissionsUser?.data?.attributes?.idCard
-                ?.idType
-            ),
-            idNumber:
-              paymentUser?.data?.usersPermissionsUser?.data?.attributes?.idCard
-                ?.idNumber,
-            email:
-              paymentUser?.data?.usersPermissionsUser?.data?.attributes?.email,
-            phone:
-              paymentUser?.data?.usersPermissionsUser?.data?.attributes
-                ?.phoneNumber,
-          };
-          const result = await getStoreInformation({
-            variables: {
-              id: 1,
-            },
-          });
-          const store = result?.data?.storeInformation?.data?.attributes;
-          const shipmentInfo = createData(items, lat, lng);
-          const estimation = await requestEstimation(shipmentInfo);
-          sssssssssssssssssssssssssssss;
+          console.log(paymentinfo);
+          // fetchOrderMoovin(orderNumber);
           handleCartItems();
           createInvoice(orderNumber);
         } catch (error) {
@@ -256,6 +295,7 @@ export default function ThankYouMessage() {
       } else {
         //no creo otra orden, asigno la que ya tiene
         setOrderId(orderPayment.id);
+        console.log("");
       }
     } catch (error) {
       console.log("Error getting paymentDetail: ", error);
@@ -320,6 +360,7 @@ export default function ThankYouMessage() {
           const variantAtt = variant?.attributes;
           const { data } = await createOrderItem({
             variables: {
+              features: item?.attributes?.features,
               quantity: item?.attributes?.quantity,
               variantId: parseInt(variant?.id), //este dato es un INT no un ID
               publishedAt: isoDate,

@@ -12,25 +12,23 @@ import UPDATE_CART_ITEM_QUANTITY_MUTATION from "@/src/graphQl/queries/updateCart
 const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId, user, features, enableButton }) => {
 
 
+
     const dispatch = useDispatch();
     const { isAuthenticated } = useSelector((x) => x.auth);
     const [createCartItem] = useMutation(CREATE_CART_ITEM_MUTATION, {});
     const [updateCartItemQuantity] = useMutation(UPDATE_CART_ITEM_QUANTITY_MUTATION);
     const handleAdd = () => {
+       
         //filtro los items para verificar si ya ese producto fue agregado, si fue agregado, se actualiza los  item en el carrito
         //si no esta en los items del carrito se crea o agrega como uno nuevo
         if (!user?.id && !isAuthenticated) {
             toast.error("Debe iniciar sesión para agregar este producto al carrito")
         } else {
-
-
             const itemFiltrado = cartItems.find((item) => item.attributes.variant.data.id === variant?.id);
             const fechaActual = new Date();
             const fechaFormateada = fechaActual.toISOString();
-            console.log(itemFiltrado)
             if (itemFiltrado) {//si el item esta en carrito
                 const newQuantity = quantityItem + itemFiltrado.quantity
-                console.log(itemFiltrado.id + " " + newQuantity)
                 if (newQuantity > itemFiltrado.attributes.variant.data.attributes.stock) {
                     toast.error('No puedes agregar mas de este producto al carrito');
                 } else {
@@ -43,26 +41,19 @@ const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId,
                         .then((response) => {
                             dispatch(updateQtyItems(cartQuantity + quantityItem))
                             toast.success("Se ha actulizado un producto");
-
                             // Manejar la respuesta de la mutación aquí, si es necesario
-
                         })
                         .catch((error) => {
                             // Manejar errores de la mutación aquí
-                            console.log(error)
-                            toast.error('Ha sucedido un error');
+                            toast.error('Ha sucedido un error ');
                         });
                 }
-
-
             } else {//si el item nunca se ha agregado al carrito
-                console.log(quantityItem, variant.id);
-
                 if (variant?.attributes?.stock > 0) {//si el stock del item es 0
                     createCartItem({ //se crea un nuevo item en el carrito
                         variables: {
-                            features: features,
                             quantity: quantityItem,
+                            ...(Object.keys(features).length > 0 && { features }),
                             variantId: variant.id,
                             shoppingSessionId: sessionId,
                             publishedAt: fechaFormateada,
@@ -77,21 +68,17 @@ const AddItemBtn = ({ quantityItem, variant, cartItems, cartQuantity, sessionId,
                         })
                         .catch((error) => {
                             // Manejar errores de la mutación aquí
-                            toast.error("Ha sucedido un error");
+                            toast.error("Ha sucedido un error ", error);
                         });
                 } else {
                     toast.error("Lo sentimos, no tenemos suficiente stock para este producto")
                 }
             }
         }
-
-
-
     };
     return (
         <div>
             {" "}
-
             <button disabled={!enableButton} className="text-white text-sm" onClick={handleAdd}>
                 Agregar al carrito
             </button>

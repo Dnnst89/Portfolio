@@ -21,6 +21,7 @@ query GetCartItemsBySession(
       id
       attributes {
         quantity
+        features
         shopping_sessions {
           data {
             id

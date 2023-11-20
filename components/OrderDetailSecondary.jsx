@@ -18,6 +18,7 @@ export default function OrderDetailSecondary({ orderId }) {
       subtotal: 0,
       taxes: 0,
       total: 0,
+      deliveryPayment: 0
     },
     orderItems: [
       {
@@ -59,6 +60,8 @@ export default function OrderDetailSecondary({ orderId }) {
                 orderInfo?.attributes?.payment_detail?.data?.attributes?.taxes,
               total:
                 orderInfo.attributes?.payment_detail?.data?.attributes?.total,
+              deliveryPayment:
+                orderInfo.attributes?.payment_detail?.data?.attributes?.deliveryPayment,
             },
             orderItems: orderInfo?.attributes?.order_items?.data?.map(
               (item) => {
@@ -167,6 +170,7 @@ export default function OrderDetailSecondary({ orderId }) {
             subTotal={orderData.order.subtotal}
             taxes={orderData.order.taxes}
             total={orderData.order.total}
+            deliveryPayment={orderData.order.deliveryPayment}
           />
           <CartProceedPayment textButton={"Ver dirección"} page={""} />
         </section>
