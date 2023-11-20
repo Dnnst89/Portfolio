@@ -234,6 +234,7 @@ export default function ThankYouMessage() {
         const paymentId = paymentinfo?.data?.paymentDetail?.data?.id;
 
         const orderId = parseInt(order.idPackage);
+        alert(orderId);
         console.log("order id", paymentId);
         console.log("order id", orderId);
 
@@ -244,8 +245,6 @@ export default function ThankYouMessage() {
           },
         });
       }
-
-      debugger;
     } catch (error) {
       console.log("error creacion orden moovin", error);
     }
