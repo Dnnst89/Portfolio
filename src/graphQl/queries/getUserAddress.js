@@ -15,6 +15,7 @@ export const GET_USER_ADDRESS = gql`
                 addressLine1
                 latitude
                 longitude
+                country
               }
             }
           }
