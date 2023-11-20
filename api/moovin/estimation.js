@@ -43,7 +43,37 @@ const addProducts = (items) => {
     };
   });
 };
+const createFakeData = (latitude, longitude) => {
+  //console.log(items);
 
+  //console.log("products", addProducts(items));
+  const data = {
+    pointCollect: {
+      latitude: 9.92421981523312,
+      longitude: -84.13679786429938,
+    },
+    pointDelivery: {
+      latitude: latitude,
+      longitude: longitude,
+    },
+    listProduct: [
+      {
+        quantity: 3,
+        nameProduct: "Matcha Suri (Costa Rica)",
+        description: "",
+        size: "S",
+        length: 5,
+        width: 4.5,
+        high: 12,
+        weight: 0.4,
+        price: 1000,
+        codeProduct: "247",
+      },
+    ],
+    ensure: true,
+  };
+  return data;
+};
 const createData = (items, latitude, longitude) => {
   //console.log(items);
 
@@ -62,4 +92,4 @@ const createData = (items, latitude, longitude) => {
   };
   return data;
 };
-export { requestEstimation, createData };
+export { requestEstimation, createData, createFakeData };

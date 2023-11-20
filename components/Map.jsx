@@ -1,9 +1,10 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import LocationSearchInput from "./LocationSearchInput";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import { useRouter } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast";
+import { requestEstimation, createFakeData } from "@/api/moovin/estimation";
 const KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY;
 const Map = ({
   onMarkerChange,
@@ -49,25 +50,31 @@ const Map = ({
       lat: event.latLng.lat(),
       lng: event.latLng.lng(),
     };
+
+    /*
+    const shipmentInfo = createFakeData(
+      newMarkerPosition.lat,
+      newMarkerPosition.lng
+    ); 
+     const estimation = await requestEstimation(shipmentInfo);
+    alert("direccion", estimation);
+    */
     setLatitude(event.latLng.lat());
     setLongitude(event.latLng.lng());
     handleLat(event.latLng.lat());
     handleLng(event.latLng.lng());
-    //alert("direccion", address);
+
     setMarkerPosition(newMarkerPosition);
     onMarkerChange(newMarkerPosition);
   };
 
-
-
   const [map, setMap] = useState(null);
   const mapRef = useRef(null);
 
-
   const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
+    id: "google-map-script",
     googleMapsApiKey: KEY,
-    libraries: ['places'],
+    libraries: ["places"],
   });
 
   const handleMapLoad = (map) => {
@@ -81,9 +88,8 @@ const Map = ({
     return () => {
       // Destruir el mapa si es necesario
       mapRef.current = null; // Si necesitas resetear la referencia del mapa
-
-    }
-  }, [])
+    };
+  }, []);
 
   return isLoaded ? (
     <GoogleMap

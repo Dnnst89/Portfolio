@@ -286,7 +286,7 @@ export default function ThankYouMessage() {
           await creatingOrderItems(orderNumber);
           await sendOrderEmail(quantity, orderNumber);
           console.log(paymentinfo);
-          // fetchOrderMoovin(orderNumber);
+          fetchOrderMoovin(orderNumber);
           handleCartItems();
           createInvoice(orderNumber);
         } catch (error) {
