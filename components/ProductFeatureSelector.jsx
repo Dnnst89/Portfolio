@@ -19,18 +19,25 @@ const ProductFeatureSelector = ({ featureId, featureName, featureList, onSelect 
 
   
   return (
-    <div className='py-3 space-y-2 w-full h-fit border-t grid'>
-      <h3 className='font-bold'>{featureName}</h3>
+    <div className='py-3 space-y-2 w-full h-fit border-dashed border-grey-200 border-t-2 grid grid-cols-12'>
+      <h3 className='text-grey-100 font-bold col-span-12'>{featureName}</h3>
       <select
+      className='col-span-10 md:col-span-6 text-white bg-lightblue font-bold  rounded-lg px-5 px-10 py-3 text-center inline-flex items-center  '
         id={featureId}
         value={selectedValue}
         onChange={handleChange}
       >
-        <option value="" disabled>
+        <option 
+        className='font-semibold'
+        value="" 
+        disabled>
           Selecciona {featureName}
         </option>
         {Object.entries(featureList).map(([key, value], index) => (
-          <option key={value} value={value}>
+          <option 
+          className='font-semibold'
+          key={value} 
+          value={value}>
             {key}
           </option>
         ))}

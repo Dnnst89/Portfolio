@@ -42,7 +42,6 @@ import GET_ORDER_ITEMS_BY_ORDER_ID from "@/src/graphQl/queries/getOrderItemsByOr
 import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { CREATE_ELECTRONIC_INVOICE } from "@/src/graphQl/queries/createElectronicInvoice";
 import { CREATE_ORDER_EMAIL } from "@/src/graphQl/queries/sendEmail";
-import { GET_USER_ADDRESS } from "@/src/graphQl/queries/getUserAddress";
 
 /*
   recives the Tilopay response , based on the returns params 
@@ -53,6 +52,7 @@ import { GET_USER_ADDRESS } from "@/src/graphQl/queries/getUserAddress";
 */
 
 export default function ThankYouMessage() {
+  useProtectionRoute();
   const router = useRouter();
   //states
   const [code, setCode] = useState("");
@@ -81,7 +81,6 @@ export default function ThankYouMessage() {
   // const { id } = user || {};
 
   const [createOrderEmail] = useMutation(CREATE_ORDER_EMAIL);
-  const [getUserAddress] = useLazyQuery(GET_USER_ADDRESS);
 
   // const { user } = useStorage();
   // const { id } = user || {};
@@ -257,11 +256,6 @@ export default function ThankYouMessage() {
         //obtengo el paymentDetails, para que cuando refresque la pagina no cree mas ordenes
         variables: { paymentId },
       });
-      const { data: userAddress, error: addressError } = await getUserAddress({
-        variables: {
-          id: userId,
-        },
-      });
 
       if (addressError)
         return console.log(
@@ -377,6 +371,7 @@ export default function ThankYouMessage() {
           const variantAtt = variant?.attributes;
           const { data } = await createOrderItem({
             variables: {
+              features: item?.attributes?.features,
               quantity: item?.attributes?.quantity,
               variantId: parseInt(variant?.id), //este dato es un INT no un ID
               publishedAt: isoDate,

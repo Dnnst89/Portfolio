@@ -133,9 +133,7 @@ function FormOne() {
             data?.usersPermissionsUser?.data?.attributes?.users_address?.data
               ?.attributes?.canton || "",
           idNumber: "",
-          idType:
-            data?.usersPermissionsUser?.data?.attributes?.idCard?.idType ||
-            "Física",
+          idType: "Física",
         });
       }
       setProvince(

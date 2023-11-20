@@ -11,9 +11,11 @@ mutation CreateOrderItem(
   $cabys: Long!,
   $orderDetailId: ID!,
   $publishedAt: DateTime!,
+  $features: JSON,
 ) {
   createOrderItem(
     data: {
+      features: $features,
       quantity: $quantity,
       variantId: $variantId,
       price: $price,
@@ -34,6 +36,7 @@ mutation CreateOrderItem(
         price
         cabys
         variantId
+        features
         images {
           data {
             id
