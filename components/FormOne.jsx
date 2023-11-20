@@ -145,27 +145,11 @@ function FormOne() {
           data?.usersPermissionsUser?.data?.attributes?.users_address?.data
             ?.attributes?.addressLine1 || ""
         );
-        setAddress1(
+        setAddress2(
           data?.usersPermissionsUser?.data?.attributes?.users_address?.data
             ?.attributes?.addressLine2 || ""
         );
       }
-      setProvince(
-        data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-          ?.attributes?.province || ""
-      );
-      setCanton(
-        data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-          ?.attributes?.canton || ""
-      );
-      setAddress1(
-        data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-          ?.attributes?.addressLine1 || ""
-      );
-      setAddress1(
-        data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-          ?.attributes?.addressLine2 || ""
-      );
     } catch (error) {
       toast.error(error.message, {
         autoClose: 5000,
