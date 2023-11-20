@@ -38,7 +38,7 @@ export default function UserDataCard({
               Cantón:{" "}
               <span className="text-gray-300 font-normal">{canton}</span>
             </div>
-            <div class="font-semibold text-center">
+            <div className="font-semibold text-center">
               Dirección 1:{" "}
               <span className="text-gray-300 font-normal">
                 {shortAddress}...
