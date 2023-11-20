@@ -15,7 +15,8 @@ query GetUserAddress($id: ID){
                 canton,
                 province,
                 addressLine1,
-                addressLine2
+                addressLine2,
+                country
               }
               }
             }
