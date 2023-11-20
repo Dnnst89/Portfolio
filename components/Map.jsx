@@ -57,7 +57,7 @@ const Map = ({
     setMarkerPosition(newMarkerPosition);
     onMarkerChange(newMarkerPosition);
   };
-  handleSelect(address);
+
 
 
   const [map, setMap] = useState(null);
@@ -74,9 +74,10 @@ const Map = ({
     mapRef.current = map;
     setMap(map);
   };
-
+  handleSelect(address);
 
   useEffect(() => {
+    handleSelect(address);
     return () => {
       // Destruir el mapa si es necesario
       mapRef.current = null; // Si necesitas resetear la referencia del mapa
@@ -87,7 +88,7 @@ const Map = ({
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={mapContainerStyle}
-      center={{ lat: latitude, lng: longitude } || { lat: 0, lng: 0 }}
+      center={{ lat: latitude, lng: longitude }}
       zoom={zoom}
       onLoad={handleMapLoad}
       onClick={handleMapClick}
