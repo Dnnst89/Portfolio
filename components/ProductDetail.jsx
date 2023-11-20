@@ -22,14 +22,23 @@ function ProductDetail({ name, brand, description, variants, materials }) {
   const [quantity, setQuantity] = useState(1);
   const [image, setImage] = useState(null);
   let shortDescrption = "";
-  const [images, setImages] = useState(variants.length > 0 ? variants[0].attributes.images.data : null);
+  const allImages = [];
+
+
   const { user } = useStorage();
   const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
   const [variantSelected, setvariantSelected] = useState(); //guarda la variante que actualmente se seleccionó{features:{}, variant:{object}}
   const [price, setPrice] = useState(variants.length > 0 ? variants[0].attributes.price : null);//precio inicial dado por primer variante
   const [enableButton, setEnableButton] = useState(variants.length <= 1);
 
-
+  variants.forEach((variant) => {
+    if (variant.attributes.images && variant.attributes.images.data) {
+      allImages.push(...variant.attributes.images.data);
+    }
+  });
+  
+  const [images, setImages] = useState(allImages.length > 0 ? allImages : null);
+  
   const decreaseCounter = () => {
     if (quantity === 1) return;
     setQuantity((prev) => --prev);
