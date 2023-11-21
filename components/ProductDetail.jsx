@@ -36,9 +36,9 @@ function ProductDetail({ name, brand, description, variants, materials }) {
       allImages.push(...variant.attributes.images.data);
     }
   });
-  
+
   const [images, setImages] = useState(allImages.length > 0 ? allImages : null);
-  
+
   const decreaseCounter = () => {
     if (quantity === 1) return;
     setQuantity((prev) => --prev);
@@ -186,12 +186,12 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                 priority={true}
                 width="50"
                 height="50"
-                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
+                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/thumbnail_Detinmarin_Sitio_Web_iconos_600px_01_63399d6115.webp`}
                 alt="tailwind logo"
                 className="rounded-xl mr-3"
               />
               <p className="text-sm md:text-base">
-                Tipo de material : <br />
+                Tipo de material: <br />
                 {materials.length > 0 ? materials.map((material, index) => { return <p key={index}>{material.attributes.name}</p> }) : null}
               </p>
             </div>
@@ -205,7 +205,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                     priority={true}
                     width="50"
                     height="50"
-                    src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
+                    src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_05_53e3c402fc.webp`}
                     alt="tailwind logo"
                     className="rounded-xl mr-3"
                   />
@@ -219,7 +219,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                     priority={true}
                     width="50"
                     height="50"
-                    src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
+                    src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/thumbnail_Detinmarin_Sitio_Web_iconos_600px_02_571dd7c62d.webp`}
                     alt="tailwind logo"
                     className="rounded-xl mr-3"
                   />
@@ -233,7 +233,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                     priority={true}
                     width="50"
                     height="50"
-                    src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
+                    src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_03_0ac6e0b69d.webp`}
                     alt="tailwind logo"
                     className="rounded-xl mr-3"
                   />
@@ -243,18 +243,19 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                   </p>
                 </div>
                 {Object.entries(variantSelected.features).map((feature, index) => { //feature[0] = key feature[1] = value
+
                   return (
                     <div key={index} className="col-span-6 flex mt-5 items-center">
                       <Image
                         priority={true}
                         width="50"
                         height="50"
-                        src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
+                        src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_04_97a571b092.webp`}
                         alt="tailwind logo"
                         className="rounded-xl mr-3"
                       />
                       <p className="text-sm md:text-base">
-                        {feature[0]} : <br />
+                        {feature[0]}: <br />
                         {feature[1]}
                       </p>
                     </div>
@@ -270,7 +271,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                     priority={true}
                     width="50"
                     height="50"
-                    src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
+                    src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_03_0ac6e0b69d.webp`}
                     alt="tailwind logo"
                     className="rounded-xl mr-3"
                   />
@@ -280,6 +281,8 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                   </p>
                 </div>
                 {Object.entries(variantItem).map(([key, value, index]) => {
+                  console.log(key, value)
+                  let iconeImage = null
                   // Obtén la traducción de la clave en español
                   const translatedKey = keyTranslations[key] || key;
                   if (value != null) {
@@ -289,7 +292,8 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                           priority={true}
                           width="50"
                           height="50"
-                          src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/characteristics_image_dca6a00cc3.png`}
+                          {...key == "size" ? iconeImage = `https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_05_53e3c402fc.webp` : iconeImage = `https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_02_571dd7c62d.webp`}
+                          src={iconeImage}
                           alt="tailwind logo"
                           className="rounded-xl mr-3"
                         />
@@ -349,7 +353,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
 
 
       </section>
-      ):( <div className="text-center grid content-center h-80 m-auto"> <h1 className="font-bold">¡Lo sentimos!</h1> <h2>En este momento este producto no se encuentra disponible.</h2> </div> )}
+    ) : (<div className="text-center grid content-center h-80 m-auto"> <h1 className="font-bold">¡Lo sentimos!</h1> <h2>En este momento este producto no se encuentra disponible.</h2> </div>)}
     </>
   );
 }
