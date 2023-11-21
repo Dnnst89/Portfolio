@@ -12,6 +12,8 @@ import CREATE_PAYMENT_DETAIL from "@/src/graphQl/queries/createPaymentDetails";
 import Spinner from "./Spinner";
 import { useForm } from "react-hook-form";
 import { requestEstimation, createData } from "@/api/moovin/estimation";
+import getTipoCambio from "@/api/cambio/getTipoCambio";
+
 import toast, { Toaster } from "react-hot-toast";
 export default function CheckOutForm2({
   amount,
@@ -29,6 +31,7 @@ export default function CheckOutForm2({
   const [createPaymentDetail] = useMutation(CREATE_PAYMENT_DETAIL);
   const { user } = useStorage();
   const { id } = user || {};
+  const [tipoCambio, setTipoCambio] = useState(null);
   //me traigo los items de carrito para crear los items de la orden
   const { items } = useCartSummary({
     userId: id,
@@ -37,7 +40,6 @@ export default function CheckOutForm2({
   const [deliveryId, setDeliveryId] = useState(null);
 
   const fetchEstimation = async () => {
-    // alert(shipment);
     try {
       try {
         const shipmentInfo = createData(items, lat, lng);
@@ -51,7 +53,7 @@ export default function CheckOutForm2({
         subTotal: subTotal,
         taxes: taxes,
       };
-      console.log("final", finalAmount);
+
       setAmount(finalAmount);
       // console.log("suma", suma);
     } catch (error) {
@@ -65,7 +67,23 @@ export default function CheckOutForm2({
     formState: { errors },
     reset,
   } = useForm();
+  const fetchTipoCambio = async () => {
+    try {
+      // Llama a la función para obtener el tipo de cambio
+      const tipoCambioResultado = await getTipoCambio();
+      // Almacena el tipo de cambio en el estado del componente
+      setTipoCambio(tipoCambioResultado.compra);
+    } catch (error) {
+      // Manejar el error, por ejemplo, mostrar un mensaje al usuario
+      console.error("Error al obtener el tipo de cambio:", error);
+    }
+  };
   useEffect(() => {
+    try {
+      fetchTipoCambio();
+    } catch (error) {
+      console.log("error", error);
+    }
     //
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deliveryPayment]);
@@ -75,13 +93,12 @@ export default function CheckOutForm2({
       try {
         const shipmentInfo = createData(items, lat, lng);
         const estimation = await requestEstimation(shipmentInfo);
-        deliveryPayment(estimation.optionService[1].amount);
+        const deliveryPrice =
+          parseInt(estimation.optionService[1].amount / tipoCambio) + 1;
+        deliveryPayment(deliveryPrice);
         //   console.log("amount total", amounts.total);
-        const suma = parseFloat(subTotal + taxes);
         const finalAmount = {
-          total: parseFloat(
-            subTotal + taxes + estimation.optionService[1].amount
-          ),
+          total: parseFloat(subTotal + taxes + deliveryPrice),
           subTotal: subTotal,
           taxes: taxes,
         };
@@ -95,7 +112,7 @@ export default function CheckOutForm2({
               taxes: taxes,
               total: finalAmount.total,
               invoiceRequired: checkbox,
-              deliveryPayment: parseFloat(estimation.optionService[1].amount),
+              deliveryPayment: parseFloat(deliveryPrice),
               deliveryId: parseInt(estimation.idEstimation),
               deliveryMethod: data.deliveryMethod,
               paymentMethod: "Tarjeta Crédito/ Débito",
@@ -141,7 +158,7 @@ export default function CheckOutForm2({
           paymentDetailResponse?.data?.createPaymentDetail?.data?.id;
         setPaymentDetailId(paymentDetailResponseId);
         setAmount(finalAmount);
-        deliveryPayment("0");
+        deliveryPayment(0);
         setChecktOutForm2Visible(true);
       } catch (error) {
         console.error(error);
