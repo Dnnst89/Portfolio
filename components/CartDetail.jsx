@@ -63,8 +63,6 @@ const CartDetail = ({
           currencyType: currency,
         };
         setAmounts(newAmount);
-
-        console.log("aaaa", amounts.total);
       }
     }
     //fetchEstimation();
