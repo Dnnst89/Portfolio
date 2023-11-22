@@ -15,6 +15,8 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
+import { useQuery } from "@apollo/client";
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 
 function ProductDetail({ name, brand, description, variants, materials }) {
@@ -30,6 +32,19 @@ function ProductDetail({ name, brand, description, variants, materials }) {
   const [variantSelected, setvariantSelected] = useState(); //guarda la variante que actualmente se seleccionó{features:{}, variant:{object}}
   const [price, setPrice] = useState(variants.length > 0 ? variants[0].attributes.price : null);//precio inicial dado por primer variante
   const [enableButton, setEnableButton] = useState(variants.length <= 1);
+
+
+  const { data: storeInformation, error: storeInformationError } = useQuery(
+    GET_STORE_INFO,
+    {
+      variables: {
+        id: 1,
+      },
+    }
+  );
+  const currency =
+  storeInformation?.storeInformation?.data?.attributes?.currency;
+
 
   variants.forEach((variant) => {
     if (variant.attributes.images && variant.attributes.images.data) {
@@ -315,7 +330,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
           {/* precio, cantidad de la variante */}
           <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between  p-4">
             <span className="col-span-5 font-bold md:text-[30px]">
-              $ {price}
+              {currency} {price}
             </span>
             <div className="col-span-7 md:flex md:flex-col items-end md:items-end p-3">
               <div className="flex items-center mb-2 ">
