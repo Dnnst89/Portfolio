@@ -41,10 +41,34 @@ const CartDetail = ({
   } = useCartSummary({
     userId: user?.id,
   });
+
   useEffect(() => {
-    setShipment(0);
+    if (subTotal !== undefined) {
+      if (deliveryPayment != 0) {
+        const newTotal = subTotal + amounts.tax + deliveryPayment;
+        const newAmount = {
+          tax: amounts.tax,
+          total: newTotal,
+          loading: false,
+          currencyType: currency,
+        };
+        setAmounts(newAmount);
+      } else {
+        console.log("first");
+        const newTotal = subTotal + amounts.tax;
+        const newAmount = {
+          tax: amounts.tax,
+          total: newTotal,
+          loading: false,
+          currencyType: currency,
+        };
+        setAmounts(newAmount);
+
+        console.log("aaaa", amounts.total);
+      }
+    }
     //fetchEstimation();
-  }, [shipment]); // El segundo argumento [] asegura que useEffect se ejecute solo una vez al montar el componente
+  }, [deliveryPayment]); // El segundo argumento [] asegura que useEffect se ejecute solo una vez al montar el componente
 
   useEffect(() => {
     console.log("q", quantity);
@@ -122,7 +146,10 @@ const CartDetail = ({
         </div> */}
           <div className="flex justify-between ">
             <p>Subtotal:</p>
-            <p className="whitespace-nowrap">${subTotal.toFixed(2)}</p>
+            <p className="whitespace-nowrap">
+              {subTotal.toFixed(2)}
+              {amounts.currencyType}
+            </p>
           </div>
           <div className="flex justify-between border-dashed border-grey-200 border-b-[2px] pb-3">
             <p>Impuestos:</p>
@@ -134,7 +161,9 @@ const CartDetail = ({
           <>
             <div className="flex justify-between ">
               <p>Costo de envío:</p>
-              <p className="whitespace-nowrap">${deliveryPayment}</p>
+              <p className="whitespace-nowrap">
+                {deliveryPayment} {amounts.currencyType}
+              </p>
             </div>
             <div className="flex flex-col p-4 space-y-3">
               <p className="flex justify-center">Costo Total(IVA Incluido)</p>
