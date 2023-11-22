@@ -571,6 +571,23 @@ function FormOne() {
                             {errors.addressLine2?.message}
                           </p>
                         </div>
+                        <section className="w-3/4 m-auto mt-10 mb-5 flex items-center space-x-5">
+                          <label htmlFor="idType">Envuelto para regalo</label>
+                          <input
+                            className="p-3"
+                            type="checkbox"
+                            id="checkbox"
+                            {...register("checkbox", {
+                              onChange: (e) => {
+                                if (e.target.checked) {
+                                  setCheckbox(true);
+                                } else {
+                                  setCheckbox(false);
+                                }
+                              },
+                            })}
+                          ></input>
+                        </section>
 
                         <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <Map
