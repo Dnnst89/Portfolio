@@ -44,6 +44,28 @@ function ProductDetail({ name, brand, description, variants, materials }) {
     setQuantity((prev) => --prev);
   };
 
+  const handleQuantityChange = async (newQuantity) => {
+    const itemFiltrado = await cartSummary.items.find(
+      (item) => item.attributes.variant.data.id === variants[0]?.id
+    );
+    if (itemFiltrado) {
+      //si el item ya esta en carrito
+      if (variants.length > 0) {
+        if (
+          quantity >=
+          newQuantity
+        )
+          return;
+        setQuantity(newQuantity);
+      }
+    } else {
+      if (variants.length > 0) {
+        if (quantity >= variants[0].attributes.stock) return;
+        setQuantity(newQuantity);
+      }
+    }
+  };
+
   const increaseCounter = async () => {
     const itemFiltrado = await cartSummary.items.find(
       (item) => item.attributes.variant.data.id === variants[0]?.id
@@ -319,12 +341,32 @@ function ProductDetail({ name, brand, description, variants, materials }) {
             </span>
             <div className="col-span-7 md:flex md:flex-col items-end md:items-end p-3">
               <div className="flex items-center mb-2 ">
-                <span className="text-grey">Cantidad:</span>
+                <span className="text-grey mx-3">Cantidad:</span>
                 <div className="bg-resene rounded-full m-3 w-[120px] flex items-center justify-center p-2 space-x-4">
                   <button aria-label="Disminuir cantidad de produto" className=" bg-grey-100 rounded-full text-white">
                     <BiMinus onClick={decreaseCounter} />
                   </button>
-                  <span>{quantity}</span>
+                  {/* <span>{quantity}</span> */}
+                  <div className="group inline-block relative">
+                    <button
+                      type="button"
+                      className="bg-white rounded-full text-black px-4 py-2 transition duration-300 ease-in-out focus:outline-none focus:shadow-outline"
+                    >
+                      {quantity}
+                    </button>
+                    <ul className="absolute hidden text-grey-800 group-hover:block border border-grey-200 bg-white max-h-40 overflow-y-auto">
+                      {[...Array(variantSelected?.variant?.data?.attributes?.stock || variants[0].attributes.stock).keys()].map((index) => (
+                        <li
+                          key={index + 1}
+                          onClick={() => handleQuantityChange(index + 1)}
+                          className="cursor-pointer py-2 px-4 hover:bg-grey-200"
+                        >
+                          {index + 1}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <span>/{variantSelected?.variant?.data?.attributes?.stock || variants[0].attributes.stock}</span>
                   <button aria-label="Aumentar cantidad de produto" className=" bg-grey-100 rounded-full  text-white">
                     <BiPlus onClick={increaseCounter} />
                   </button>
