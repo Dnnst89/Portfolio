@@ -188,7 +188,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                 height="50"
                 src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/thumbnail_Detinmarin_Sitio_Web_iconos_600px_01_63399d6115.webp`}
                 alt="tailwind logo"
-                className="rounded-xl mr-3"
+                className="rounded-full mr-3"
               />
               <p className="text-sm md:text-base">
                 Tipo de material: <br />
@@ -207,7 +207,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                     height="50"
                     src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_05_53e3c402fc.webp`}
                     alt="tailwind logo"
-                    className="rounded-xl mr-3"
+                    className="rounded-full mr-3"
                   />
                   <p className="text-sm md:text-base">
                     Tamaño: <br />
@@ -221,7 +221,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                     height="50"
                     src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/thumbnail_Detinmarin_Sitio_Web_iconos_600px_02_571dd7c62d.webp`}
                     alt="tailwind logo"
-                    className="rounded-xl mr-3"
+                    className="rounded-full mr-3"
                   />
                   <p className="text-sm md:text-base">
                     Rango de edad: <br />
@@ -235,7 +235,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                     height="50"
                     src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_03_0ac6e0b69d.webp`}
                     alt="tailwind logo"
-                    className="rounded-xl mr-3"
+                    className="rounded-full mr-3"
                   />
                   <p className="text-sm md:text-base">
                     Existencias: <br />
@@ -252,7 +252,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                         height="50"
                         src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_04_97a571b092.webp`}
                         alt="tailwind logo"
-                        className="rounded-xl mr-3"
+                        className="rounded-full mr-3"
                       />
                       <p className="text-sm md:text-base">
                         {feature[0]}: <br />
@@ -273,7 +273,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                     height="50"
                     src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_03_0ac6e0b69d.webp`}
                     alt="tailwind logo"
-                    className="rounded-xl mr-3"
+                    className="rounded-full mr-3"
                   />
                   <p className="text-sm md:text-base">
                     Existencias: <br />
@@ -295,7 +295,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                           {...key == "size" ? iconeImage = `https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_05_53e3c402fc.webp` : iconeImage = `https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_02_571dd7c62d.webp`}
                           src={iconeImage}
                           alt="tailwind logo"
-                          className="rounded-xl mr-3"
+                          className="rounded-full mr-3"
                         />
                         <p className="text-sm md:text-base">
                           {translatedKey}: <br />
