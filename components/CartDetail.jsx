@@ -147,7 +147,7 @@ const CartDetail = ({
           <div className="flex justify-between ">
             <p>Subtotal:</p>
             <p className="whitespace-nowrap">
-              {subTotal.toFixed(2)}
+              {subTotal.toFixed(2)} &nbsp;
               {amounts.currencyType}
             </p>
           </div>
