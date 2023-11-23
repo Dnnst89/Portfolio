@@ -136,7 +136,7 @@ export default function CheckOutForm2({
     } else {
       try {
         const finalAmount = {
-          total: parseFloat(subTotal + taxes),
+          total: parseFloat(subTotal + taxes).toFixed(2),
           subTotal: subTotal,
           taxes: taxes,
         };
