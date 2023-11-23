@@ -371,6 +371,7 @@ export default function ThankYouMessage() {
               imagesIds: variantAtt.images.data.map((img) => img.id),
             },
           });
+
           return data?.OrderItemEntity?.data;
         } catch (error) {
           console.log("Error creating orderItem: ", error);
