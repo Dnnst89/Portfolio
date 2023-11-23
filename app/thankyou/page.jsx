@@ -364,13 +364,14 @@ export default function ThankYouMessage() {
               variantId: parseInt(variant?.id), //este dato es un INT no un ID
               publishedAt: isoDate,
               orderDetailId: orderId,
-              price: variantAtt.price.fixed.toFixed(2),
+              price: variantAtt.price,
               name: variantAtt.product.data.attributes.name,
               brand: variantAtt.product.data.attributes.brand,
               cabys: variantAtt.product.data.attributes.cabys,
               imagesIds: variantAtt.images.data.map((img) => img.id),
             },
           });
+
           return data?.OrderItemEntity?.data;
         } catch (error) {
           console.log("Error creating orderItem: ", error);
