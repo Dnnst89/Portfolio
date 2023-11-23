@@ -314,11 +314,10 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                   />
                   <p className="text-sm md:text-base">
                     Existencias: <br />
-                    {variantSelected?.variant?.data?.attributes?.stock === 0 ? "Agotados" : "Disponibles"}
+                    {variantSelected?.variant?.data?.attributes?.stock || variants[0].attributes.stock <= 0 ? "Agotados" : "Disponibles"}
                   </p>
                 </div>
                 {Object.entries(variantItem).map(([key, value, index]) => {
-                  console.log(key, value)
                   let iconeImage = null
                   // Obtén la traducción de la clave en español
                   const translatedKey = keyTranslations[key] || key;
