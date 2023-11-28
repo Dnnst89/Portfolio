@@ -223,6 +223,7 @@ const InvoiceInformation = (store, client, key, consecutive) => {
     saleCondition: "01",
     creditTerm: "0",
     paymentMethod: ["01"],
+    sendMail: true,
   };
 };
 
