@@ -2,7 +2,7 @@ import axios from "axios";
 const getAccessToken = async () => {
   const body = {
     grant_type: "client_credentials",
-    client_id: "detinmarin_client",
+    client_id: "facturazengateway_client",
     client_secret: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_SECRET,
     scope: "openid profile email",
   };
