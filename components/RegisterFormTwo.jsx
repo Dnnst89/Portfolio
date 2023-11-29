@@ -99,7 +99,7 @@ const RegisterFormTwo = () => {
     <main>
       <div className="h-screen">
         <CheckOutHeader regresar={"/"} />
-        <div className="flex justify-center items-center w-full max-w-screen-xl  m-auto">
+        <div className="flex justify-center items-center w-full md:max-w-screen-xl  m-auto">
           <div className="w-full">
             <Formik
               initialValues={initialValues}
@@ -109,7 +109,7 @@ const RegisterFormTwo = () => {
               {({ errors, touched }) => {
                 return (
                   <>
-                    <Form className=" max-w-screen-xl items-center mt-10 grid grid-cols-12">
+                    <Form className="max-w-screen-xl items-center mt-20 grid grid-cols-12 m-auto">
                       <h1 className=" text-3xl flex justify-center items-center mb-10 col-span-12">
                         Registrate
                       </h1>
