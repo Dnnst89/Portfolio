@@ -115,8 +115,8 @@ const RegisterFormTwo = () => {
                       </h1>
 
                       <div className="bg-resene  pt-10 w-full flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-2 col-span-10 md:col-start-3 md:col-span-8">
-                        <div className="flex grid w-full">
-                          <section className="md:p-3 w-10/12 m-auto grid grid-cols-12 md:gap-5">
+                        <div className="flex grid grid-cols-12 m-auto w-full">
+                          <section className="md:p-3 col-start-2 col-span-10 m-auto grid grid-cols-12 md:gap-5">
                             <div className="grid col-span-12 md:col-span-6 content-baseline">
                               <label
                                 className="whitespace-nowrap"
@@ -156,7 +156,7 @@ const RegisterFormTwo = () => {
                               ) : null}
                             </div>
                           </section>
-                          <section className="md:p-3 w-10/12 m-auto grid grid-cols-12 md:gap-5">
+                          <section className="md:p-3 col-start-2 col-span-10 m-auto grid grid-cols-12 md:gap-5">
                             <div className="grid col-span-12 md:col-span-6 content-baseline">
                               <label htmlFor="password">
                                 Constraseña
