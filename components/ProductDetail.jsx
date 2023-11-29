@@ -349,14 +349,14 @@ function ProductDetail({ name, brand, description, variants, materials }) {
           </div>
 
           {/* precio, cantidad de la variante */}
-          <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between  p-4">
-            <span className="col-span-5 font-bold md:text-[30px]">
+          <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between p-4">
+            <span className="col-span-4 md:col-span-5 font-bold md:text-[30px]">
               {currency} {price}
             </span>
-            <div className="col-span-7 md:flex md:flex-col items-end md:items-end p-3">
-              <div className="flex items-center mb-2 ">
+            <div className="col-span-8 mdd:col-span-7 md:flex md:flex-col items-end md:items-end p-3">
+              <div className="grid md:flex items-center mb-2 ">
                 <span className="text-grey mx-3">Cantidad:</span>
-                <div className="bg-resene rounded-full m-3 w-[120px] flex items-center justify-center p-2 space-x-4">
+                <div className="bg-resene rounded-full md:m-3 w-[140px] flex items-center justify-center p-2 space-x-4">
                   <button aria-label="Disminuir cantidad de produto" className=" bg-grey-100 rounded-full text-white">
                     <BiMinus onClick={decreaseCounter} />
                   </button>
@@ -364,7 +364,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                   <div className="group inline-block relative">
                     <button
                       type="button"
-                      className="bg-white rounded-full text-black px-4 py-2 transition duration-300 ease-in-out focus:outline-none focus:shadow-outline"
+                      className="bg-white rounded-full text-black px-4 py-2 transition duration-300 ease-in-out focus:outline-none focus:shadow-outline min-w-[60px]"
                     >
                       {quantity}
                     </button>
@@ -380,7 +380,6 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                       ))}
                     </ul>
                   </div>
-                  <span>/{variantSelected?.variant?.data?.attributes?.stock || variants[0].attributes.stock}</span>
                   <button aria-label="Aumentar cantidad de produto" className=" bg-grey-100 rounded-full  text-white">
                     <BiPlus onClick={increaseCounter} />
                   </button>
