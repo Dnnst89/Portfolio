@@ -53,6 +53,7 @@ const Searchbar = () => {
                   </Link>
                 );
               },
+              enterKeyHint: 'search', // Otra opción podría ser 'go'
             },
           },
         ]}
