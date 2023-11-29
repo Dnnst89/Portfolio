@@ -15,6 +15,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+import ImageGallery from "react-image-gallery";
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 
 function ProductDetail({ name, brand, description, variants, materials }) {
@@ -39,6 +40,20 @@ function ProductDetail({ name, brand, description, variants, materials }) {
   
   const [images, setImages] = useState(allImages.length > 0 ? allImages : null);
   
+  //galeria de imagenes para componente se compone de un arreglo [{original: url, thumbnail: url}]
+  const [galleryImages, setGalleryImages] = useState([]);
+  
+  useEffect(() => {
+    const newGalleryImages = images.map((image) => ({
+      original: image.attributes.url,
+      thumbnail: image.attributes.url,
+    }));
+    console.log("🚀 ~ file: ProductDetail.jsx:51 ~ newGalleryImages ~ newGalleryImages:", newGalleryImages)
+  
+    setGalleryImages(newGalleryImages);
+  }, [images]);
+
+
   const decreaseCounter = () => {
     if (quantity === 1) return;
     setQuantity((prev) => --prev);
@@ -98,49 +113,21 @@ function ProductDetail({ name, brand, description, variants, materials }) {
 
         {/* Columna de imagenes */}
         <section aria-label="Imágenes del producto" className="mb-10 col-span-12 md:col-span-6">
-          {/* imagen principal grande */}
-          <div className="m-auto w-full flex justify-center">
-            {images && images.length > 0 ? (
-              <Image
-                {...image == null ? setImage(images[0].attributes.url) : null}
-                src={image}
-                width={"450"}
-                height={"800"}
-                className={"rounded-xl mx-2"}
-                alt={altText}
-              />
-            ) : null}
-          </div>
+          
           {/* //imagenes debajo de la principal */}
-          <div className="md:w-4/6 m-auto mt-2 ">
-            <Swiper
-              modules={[Navigation, A11y]}
-              spaceBetween={1}
-              slidesPerView={3}
-              navigation
+          <div className="md:w-5/6 m-auto mt-2 ">
+            
+          {images && images.length > 0 ? (
+          <ImageGallery 
+          showPlayButton={false} 
+          originalHeight={"275px"}
+          disableThumbnailScroll={false}
+          disableKeyDown={false}
+          disableSwipe={false}
+          loading={"lazy"}
+          items={galleryImages}/>
+          ) : null}
 
-            >
-              {images
-                ? images.map((item) => {
-                  return (
-                    <div key={item.id}>
-                      <SwiperSlide key={item.id}>
-                        <button onClick={() => chanceImage(item.attributes.url)}>
-                          <Image
-                            priority={true}
-                            src={item.attributes.url}
-                            width={"125"}
-                            height={"100"}
-                            className={"rounded-xl"}
-                            alt={name}
-                          />
-                        </button>
-                      </SwiperSlide>
-                    </div>
-                  );
-                })
-                : null}
-            </Swiper>
 
 
           </div>
