@@ -116,7 +116,7 @@ const RegisterFormTwo = () => {
 
                       <div className="bg-resene  pt-10 w-full flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-2 col-span-10 md:col-start-3 md:col-span-8">
                         <div className="flex grid w-full">
-                          <section className="p-3 w-10/12 m-auto grid grid-cols-12 gap-5">
+                          <section className="md:p-3 w-10/12 m-auto grid grid-cols-12 md:gap-5">
                             <div className="grid col-span-12 md:col-span-6 content-baseline">
                               <label
                                 className="whitespace-nowrap"
@@ -129,7 +129,7 @@ const RegisterFormTwo = () => {
                                 type="text"
                                 id="username"
                                 name="username"
-                                className="focus:border-blue-500 outline-none px-6 py-2 mb-2 rounded-lg border-2 border-grey-200"
+                                className="focus:border-blue-500 outline-none md:px-6 py-2 mb-2 rounded-lg border-2 border-grey-200"
                                 autoFocus={true}
                               />
                               {errors.username && touched.username ? (
@@ -148,7 +148,7 @@ const RegisterFormTwo = () => {
                                 type="email"
                                 id="email"
                                 name="email"
-                                className="focus:border-blue-500 outline-none px-6 py-2 mb-2 rounded-lg border-2 border-grey-200"
+                                className="focus:border-blue-500 outline-none md:px-6 py-2 mb-2 rounded-lg border-2 border-grey-200"
                                 autoFocus={true}
                               />
                               {errors.email && touched.email ? (
@@ -156,7 +156,7 @@ const RegisterFormTwo = () => {
                               ) : null}
                             </div>
                           </section>
-                          <section className="p-3 w-10/12 m-auto grid grid-cols-12 gap-5">
+                          <section className="md:p-3 w-10/12 m-auto grid grid-cols-12 md:gap-5">
                             <div className="grid col-span-12 md:col-span-6 content-baseline">
                               <label htmlFor="password">
                                 Constraseña
@@ -166,7 +166,7 @@ const RegisterFormTwo = () => {
                                 type="password"
                                 id="password"
                                 name="password"
-                                className="focus:border-blue-500 outline-none  px-6 py-2 mb-2 border-2 border-grey-200 rounded-lg "
+                                className="focus:border-blue-500 outline-none md:px-6 py-2 mb-2 border-2 border-grey-200 rounded-lg "
                                 autoFocus={true}
                               />
                               {errors.password && touched.password ? (
@@ -185,7 +185,7 @@ const RegisterFormTwo = () => {
                                 type="password"
                                 id="confirmPassword"
                                 name="confirmPassword"
-                                className="focus:border-blue-500 outline-none  px-6 py-2 mb-2 rounded-lg border-2 border-grey-200"
+                                className="focus:border-blue-500 outline-none md:px-6 py-2 mb-2 rounded-lg border-2 border-grey-200"
                                 autoFocus={true}
                               />
                               {errors.confirmPassword &&

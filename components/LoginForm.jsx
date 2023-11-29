@@ -93,7 +93,7 @@ const LoginForm = () => {
                       <section className="p-3 md:w-10/12 m-auto grid grid-cols-12 gap-5">
                         <div className="grid col-span-12 md:col-start-4 md:col-span-6 md:w-full">
                           <label
-                            className="text-lg whitespace-nowrap w-full"
+                            className="text-md md:text-lg text-center md:text-left w-full"
                             htmlFor="identifier"
                           >
                             Usuario o Correo Electrónico
@@ -112,7 +112,7 @@ const LoginForm = () => {
                         </div>
                         <div className="relative grid col-span-12 md:col-start-4 md:col-span-6 md:w-full">
                           <label
-                            className="text-lg whitespace-nowrap w-full"
+                            className="text-md md:text-lg text-center md:text-left w-full"
                             htmlFor="password"
                           >
                             Contraseña
