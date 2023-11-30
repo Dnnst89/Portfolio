@@ -17,7 +17,7 @@ const SignupSchema = Yup.object().shape({
 });
 
 const LoginForm = () => {
-  const forgotPasswordUrl = `${process.env.NEXT_PUBLIC_STRAPI_URL}/forgotPassword`;
+  const forgotPasswordUrl = `${process.env.NEXT_PUBLIC_APP_URL}/forgotPassword`;
   const router = useRouter();
   const dispatch = useDispatch();
   const authUser = useSelector((state) => state.auth.user);

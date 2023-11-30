@@ -31,7 +31,7 @@ export default function ThankYouMessage() {
                 <button
                   onClick={() =>
                     router.push(
-                      `${process.env.NEXT_PUBLIC_STRAPI_URL}/login/`
+                      `${process.env.NEXT_PUBLIC_APP_URL}/login/`
                     )
                   }
                   className="bg-pink-200 text-white rounded-sm p-2 w-[150px]"
