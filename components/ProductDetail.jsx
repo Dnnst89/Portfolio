@@ -26,6 +26,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
   let shortDescrption = "";
   const allImages = [];
 
+  const baseURL = process.env.NEXT_PUBLIC_URL_DETINMARIN_BUCKET_IMAGES
 
   const { user } = useStorage();
   const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
@@ -43,7 +44,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
     }
   );
   const currency =
-  storeInformation?.storeInformation?.data?.attributes?.currency;
+    storeInformation?.storeInformation?.data?.attributes?.currency;
 
 
   variants.forEach((variant) => {
@@ -223,7 +224,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                 priority={true}
                 width="50"
                 height="50"
-                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/thumbnail_Detinmarin_Sitio_Web_iconos_600px_01_63399d6115.webp`}
+                src={`${baseURL}thumbnail_Detinmarin_Sitio_Web_iconos_600px_01_63399d6115.webp`}
                 alt="tailwind logo"
                 className="rounded-full mr-3"
               />
@@ -242,7 +243,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                     priority={true}
                     width="50"
                     height="50"
-                    src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_05_53e3c402fc.webp`}
+                    src={`${baseURL}Detinmarin_Sitio_Web_iconos_600px_05_53e3c402fc.webp`}
                     alt="tailwind logo"
                     className="rounded-full mr-3"
                   />
@@ -256,7 +257,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                     priority={true}
                     width="50"
                     height="50"
-                    src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/thumbnail_Detinmarin_Sitio_Web_iconos_600px_02_571dd7c62d.webp`}
+                    src={`${baseURL}thumbnail_Detinmarin_Sitio_Web_iconos_600px_02_571dd7c62d.webp`}
                     alt="tailwind logo"
                     className="rounded-full mr-3"
                   />
@@ -270,7 +271,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                     priority={true}
                     width="50"
                     height="50"
-                    src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_03_0ac6e0b69d.webp`}
+                    src={`${baseURL}Detinmarin_Sitio_Web_iconos_600px_03_0ac6e0b69d.webp`}
                     alt="tailwind logo"
                     className="rounded-full mr-3"
                   />
