@@ -17,6 +17,7 @@ const SignupSchema = Yup.object().shape({
 });
 
 const LoginForm = () => {
+  const forgotPasswordUrl = `${process.env.NEXT_PUBLIC_STRAPI_URL}/forgotPassword`;
   const router = useRouter();
   const dispatch = useDispatch();
   const authUser = useSelector((state) => state.auth.user);
@@ -144,7 +145,7 @@ const LoginForm = () => {
                           )}
                         </div>
                         <p className="text-center text-sm hover:underline cursor-pointer text-lightblue mb-3 grid col-span-12 md:col-span-12 md:w-2/4 m-auto">
-                          <Link href="http://detinmarin.s3-website-us-west-2.amazonaws.com/forgotPassword/">
+                          <Link href={forgotPasswordUrl}>
                             Recuperar contraseña
                           </Link>
                         </p>
