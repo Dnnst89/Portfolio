@@ -63,7 +63,7 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
             redirect:
               process.env.NODE_ENV === "development"
                 ? "http://localhost:3000/thankyou/"
-                : "http://detinmarin.s3-website-us-west-2.amazonaws.com/thankyou/",
+                : `${process.env.NEXT_PUBLIC_STRAPI_URL}/thankyou/`,
             key: process.env.NEXT_PUBLIC_TILOPAY_API_KEY,
             amount: total,
             currency: currency,
