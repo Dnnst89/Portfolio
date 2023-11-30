@@ -207,11 +207,7 @@ export default function ThankYouMessage() {
         userAddress?.data?.usersPermissionsUser?.data?.attributes?.users_address
           ?.data?.attributes;
       const payment = paymentinfo?.data?.paymentDetail?.data?.attributes;
-      console.log("cliente", client);
-      console.log("payment", payment);
-      console.log("tienda", store);
-      console.log("direccion", deliveryInformation);
-      console.log("order Id", orderNumber);
+
       if (payment.deliveryMethod === "Envío a través de MOOVIN") {
         const shipmentInfo = createData(
           items,
@@ -220,7 +216,6 @@ export default function ThankYouMessage() {
         );
         const estimation = await requestEstimation(shipmentInfo);
 
-        console.log("json", estimation.idEstimation);
         const datos = createOrderData(
           store,
           items,
@@ -234,9 +229,6 @@ export default function ThankYouMessage() {
         const paymentId = paymentinfo?.data?.paymentDetail?.data?.id;
 
         const orderId = parseInt(order.idPackage);
-
-        console.log("order id", paymentId);
-        console.log("order id", orderId);
 
         await updatePaymentDeliveryId({
           variables: {
