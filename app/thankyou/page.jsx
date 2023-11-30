@@ -224,8 +224,11 @@ export default function ThankYouMessage() {
           estimation.idEstimation,
           deliveryInformation
         );
-
-        const order = await orderMoovin(datos);
+        try {
+          console.log("datos", datos);
+          const order = await orderMoovin(datos);
+          console.log("order mooving", order);
+        } catch (error) {}
         const paymentId = paymentinfo?.data?.paymentDetail?.data?.id;
 
         const orderId = parseInt(order.idPackage);
