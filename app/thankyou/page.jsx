@@ -283,8 +283,8 @@ export default function ThankYouMessage() {
           const orderNumber = data?.createOrderDetail?.data?.id;
           setOrderId(orderNumber);
           await creatingOrderItems(orderNumber);
-          await sendOrderEmail(quantity, orderNumber);
-          console.log(paymentinfo);
+          //await sendOrderEmail(quantity, orderNumber);
+          console.log("sssss", paymentinfo);
           fetchOrderMoovin(orderNumber);
           handleCartItems();
           createInvoice(orderNumber);
@@ -537,6 +537,7 @@ export default function ThankYouMessage() {
                   },
                 },
                 posTicket: false,
+                sendMail: false,
                 additionalInfo: {
                   nameDoc: "Factura Electrónica",
                   legendFooter:
