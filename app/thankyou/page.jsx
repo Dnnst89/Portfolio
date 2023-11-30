@@ -276,8 +276,10 @@ export default function ThankYouMessage() {
           setOrderId(orderNumber);
           await creatingOrderItems(orderNumber);
           await sendOrderEmail(quantity, orderNumber);
-          // console.log("sssss", paymentinfo);
-          fetchOrderMoovin(orderNumber);
+          try {
+            fetchOrderMoovin(orderNumber);
+          } catch (error) {}
+
           handleCartItems();
           createInvoice(orderNumber);
         } catch (error) {
@@ -286,7 +288,6 @@ export default function ThankYouMessage() {
       } else {
         //no creo otra orden, asigno la que ya tiene
         setOrderId(orderPayment.id);
-        console.log("");
       }
     } catch (error) {
       console.log("Error getting paymentDetail: ", error);
@@ -538,15 +539,12 @@ export default function ThankYouMessage() {
                 },
                 returnCompleteAnswer: true,
               };
-              console.log("cuerpo json", bodyInvoice);
               const InvoiceResult = await facturationInstace.post(
                 `document/electronic-invoice?access_token=${token}`,
                 bodyInvoice
               );
 
-              console.log("FaCtura ElEctronica", InvoiceResult);
               try {
-                console.log("factura electronica", InvoiceResult);
                 const isoDate = new Date().toISOString();
                 const resulta = await getStoreInformation({
                   variables: {
