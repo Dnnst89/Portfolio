@@ -86,8 +86,8 @@ const createKey = (number, id) => {
       day +
       month +
       year +
-      id +
       refill +
+      id +
       consecutive +
       situation +
       clave;
@@ -99,8 +99,8 @@ const createKey = (number, id) => {
 };
 const validateID = (tipo) => {
   if (tipo === "Física") {
-    return "1";
-  } else return "3";
+    return "01";
+  } else return "02";
 };
 const formatBillSumary = (billSummary, exchangeRate, currencyCode) => {
   return {
@@ -150,7 +150,7 @@ const createConsecutiveNumber = (param) => {
   } else {
     validateFormat = "" + number;
   }
-  console.log("ssaaff", consecutiveNumber + validateFormat);
+  //console.log("ssaaff", consecutiveNumber + validateFormat);
 
   if (number != null) {
     return consecutiveNumber + validateFormat;
@@ -164,9 +164,16 @@ const formatItemInvoice = (items, imp) => {
   return items?.map((item) => {
     cont = cont + 1;
     console.log("item", item?.attributes);
+    var cod = 0;
+    if (imp[cont].taxes[0].code < 10) {
+      cod = "0" + imp[cont].taxes[0].code;
+    } else {
+      cod = imp[cont].taxes[0].code;
+    }
+    console.log("ssdfasdfasdfdsa", cod);
     return {
       lineNumber: cont + 1,
-      code: "" + item?.attributes?.cabys?.toString(),
+      cabys: "" + item?.attributes?.cabys?.toString(),
       qty: "" + item?.attributes?.quantity,
       measurementUnit: "Sp",
       commercialMeasurementUnit: "SP",
@@ -176,7 +183,7 @@ const formatItemInvoice = (items, imp) => {
       subTotal: "" + item?.attributes?.quantity * item?.attributes?.price,
       taxes: [
         {
-          code: "" + imp[cont].taxes[0].code,
+          code: "" + cod,
           codeFee: "" + imp[cont].taxes[0].codeFee,
           fee: "" + imp[cont].taxes[0].fee,
           VATFactor: "" + imp[cont].taxes[0].vatfactor,
@@ -190,6 +197,7 @@ const formatItemInvoice = (items, imp) => {
 };
 const InvoiceInformation = (store, client, key, consecutive) => {
   const isoDate = new Date().toISOString();
+  console.log("factura");
   return {
     key: key,
     activityCode: store.ActivityCode,
@@ -199,13 +207,13 @@ const InvoiceInformation = (store, client, key, consecutive) => {
       name: store.name,
       id: {
         type: "" + store.IdType,
-        number: "" + store.IdNumber,
+        number: "00" + store.IdNumber,
       },
       commercialName: store.ComercialName,
       address: {
         province: store.province,
-        country: store.country,
-        canton: store.canton,
+        //country: store.country,
+        county: store.canton,
         district: store.district,
         neighborhood: store.neighborhood,
         otherSigns: store.otherSigns,

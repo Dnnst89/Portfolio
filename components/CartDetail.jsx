@@ -45,17 +45,20 @@ const CartDetail = ({
   useEffect(() => {
     if (subTotal !== undefined) {
       if (deliveryPayment != 0) {
-        const newTotal = subTotal + amounts.tax + deliveryPayment;
+        const newTotal =
+          parseFloat(subTotal) +
+          parseFloat(amounts.tax) +
+          parseFloat(deliveryPayment);
         const newAmount = {
           tax: amounts.tax,
-          total: newTotal,
+          total: parseFloat(newTotal.toFixed(2)),
           loading: false,
           currencyType: currency,
         };
+
         setAmounts(newAmount);
       } else {
-        console.log("first");
-        const newTotal = subTotal + amounts.tax;
+        const newTotal = subTotal.toFixed(2) + amounts.tax.toFixed(2);
         const newAmount = {
           tax: amounts.tax,
           total: newTotal,

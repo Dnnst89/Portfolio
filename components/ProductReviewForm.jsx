@@ -120,7 +120,7 @@ function ProductReviewForm({ idProduct }) {
             <div className="flex justify-start">
               {" "}
               <ReCAPTCHA
-                sitekey="6LfFDLAoAAAAAJ25iZdqlICdDvwwkhxsDMZqdHs_"
+                sitekey="6Lea6iEpAAAAALI1Fb34ZuoJN9pUUJd2HykpyLpb"
                 //sitekey="6LfCrUYoAAAAAPgdh0MpvKzzHvhksbGTM3cP1prU"
                 ref={captchaRef}
               />

@@ -2,7 +2,7 @@ import { GET_USER_PAYMENT_INFO } from "@/src/graphQl/queries/getUserPaymentInfo"
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { UPDATE_USER_INFORMATION } from "@/src/graphQl/queries/updateUserInformation";
 import { UPDATE_ADDRESS } from "@/src/graphQl/queries/updateAddress";
-import { CREATE_ADDRESS } from "@/src/graphQl/queries/CreateAddress";
+import { CREATE_ADDRESS } from "@/src/graphQl/queries/createAddress";
 import { useForm } from "react-hook-form";
 import CartDetail from "./CartDetail";
 import { useEffect, useState } from "react";
@@ -85,9 +85,10 @@ function FormOne() {
       const userDataId = userData.user.id;
 
       const { data, error, loading } = await getUserInfo({
-        variables: { id: userDataId },
+        variables: { id: userDataId }, fetchPolicy: "network-only"
       });
-
+      console.log("🚀 ~ file: FormOne.jsx:98 ~ cargaDatos ~ data:", data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+      ?.attributes?.canton);
       if (error)
         return toast.error(
           "Lo sentimos, ha ocurrido un error al cargar los datos",
@@ -97,6 +98,7 @@ function FormOne() {
         );
 
       if (data && data.usersPermissionsUser) {
+        
         if (data.usersPermissionsUser.data.attributes.users_address.data) {
           setUserInfoExist(true);
           setAddressId(
@@ -106,6 +108,24 @@ function FormOne() {
         } else {
           setUserInfoExist(false);
         }
+
+        setProvince(
+          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+            ?.attributes?.province || ""
+        );
+        setCanton(
+          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+            ?.attributes?.canton || ""
+        );
+        setAddress1(
+          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+            ?.attributes?.addressLine1 || ""
+        );
+        setAddress2(
+          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+            ?.attributes?.addressLine2 || ""
+        );
+
         setUserInformation({
           ...userInformation,
           firstName:
@@ -135,22 +155,7 @@ function FormOne() {
           idNumber: "",
           idType: "Física",
         });
-        setProvince(
-          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-            ?.attributes?.province || ""
-        );
-        setCanton(
-          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-            ?.attributes?.canton || ""
-        );
-        setAddress1(
-          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-            ?.attributes?.addressLine1 || ""
-        );
-        setAddress2(
-          data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-            ?.attributes?.addressLine2 || ""
-        );
+        
       }
     } catch (error) {
       toast.error(error.message, {
@@ -523,7 +528,6 @@ function FormOne() {
                             id="addressLine1"
                             {...register("addressLine1", {
                               onChange: (e) => {
-                                console.log("address1", e.target.value);
                                 setAddress1(e.target.value);
                               },
                               required: {

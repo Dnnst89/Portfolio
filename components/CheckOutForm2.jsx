@@ -95,13 +95,17 @@ export default function CheckOutForm2({
         const estimation = await requestEstimation(shipmentInfo);
         const deliveryPrice =
           parseInt(estimation.optionService[1].amount / tipoCambio) + 1;
-        deliveryPayment(deliveryPrice);
-        //   console.log("amount total", amounts.total);
+        deliveryPayment(deliveryPrice.toFixed(2));
+        console.log("amount total", parseFloat(subTotal));
+        console.log("taxes total", parseFloat(taxes));
+        console.log("delivery total", parseFloat(deliveryPrice));
+        const suma = subTotal + taxes + deliveryPrice;
         const finalAmount = {
-          total: parseFloat(subTotal + taxes + deliveryPrice),
+          total: parseFloat(suma.toFixed(2)),
           subTotal: subTotal,
           taxes: taxes,
         };
+        console.log("total", parseFloat(suma.toFixed(2)));
 
         setAmount(finalAmount);
         try {
@@ -136,7 +140,7 @@ export default function CheckOutForm2({
     } else {
       try {
         const finalAmount = {
-          total: parseFloat(subTotal + taxes),
+          total: parseFloat(subTotal + taxes).toFixed(2),
           subTotal: subTotal,
           taxes: taxes,
         };

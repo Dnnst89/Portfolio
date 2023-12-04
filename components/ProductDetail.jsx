@@ -15,6 +15,8 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
+import { useQuery } from "@apollo/client";
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 
 function ProductDetail({ name, brand, description, variants, materials }) {
@@ -24,12 +26,26 @@ function ProductDetail({ name, brand, description, variants, materials }) {
   let shortDescrption = "";
   const allImages = [];
 
+  const baseURL = process.env.NEXT_PUBLIC_URL_DETINMARIN_BUCKET_IMAGES
 
   const { user } = useStorage();
   const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
   const [variantSelected, setvariantSelected] = useState(); //guarda la variante que actualmente se seleccionó{features:{}, variant:{object}}
   const [price, setPrice] = useState(variants.length > 0 ? variants[0].attributes.price : null);//precio inicial dado por primer variante
   const [enableButton, setEnableButton] = useState(variants.length <= 1);
+
+
+  const { data: storeInformation, error: storeInformationError } = useQuery(
+    GET_STORE_INFO,
+    {
+      variables: {
+        id: 1,
+      },
+    }
+  );
+  const currency =
+    storeInformation?.storeInformation?.data?.attributes?.currency;
+
 
   variants.forEach((variant) => {
     if (variant.attributes.images && variant.attributes.images.data) {
@@ -42,6 +58,28 @@ function ProductDetail({ name, brand, description, variants, materials }) {
   const decreaseCounter = () => {
     if (quantity === 1) return;
     setQuantity((prev) => --prev);
+  };
+
+  const handleQuantityChange = async (newQuantity) => {
+    const itemFiltrado = await cartSummary.items.find(
+      (item) => item.attributes.variant.data.id === variants[0]?.id
+    );
+    if (itemFiltrado) {
+      //si el item ya esta en carrito
+      if (variants.length > 0) {
+        if (
+          quantity >=
+          newQuantity
+        )
+          return;
+        setQuantity(newQuantity);
+      }
+    } else {
+      if (variants.length > 0) {
+        if (quantity >= variants[0].attributes.stock) return;
+        setQuantity(newQuantity);
+      }
+    }
   };
 
   const increaseCounter = async () => {
@@ -186,7 +224,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                 priority={true}
                 width="50"
                 height="50"
-                src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/thumbnail_Detinmarin_Sitio_Web_iconos_600px_01_63399d6115.webp`}
+                src={`${baseURL}thumbnail_Detinmarin_Sitio_Web_iconos_600px_01_63399d6115.webp`}
                 alt="tailwind logo"
                 className="rounded-full mr-3"
               />
@@ -205,7 +243,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                     priority={true}
                     width="50"
                     height="50"
-                    src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_05_53e3c402fc.webp`}
+                    src={`${baseURL}Detinmarin_Sitio_Web_iconos_600px_05_53e3c402fc.webp`}
                     alt="tailwind logo"
                     className="rounded-full mr-3"
                   />
@@ -219,7 +257,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                     priority={true}
                     width="50"
                     height="50"
-                    src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/thumbnail_Detinmarin_Sitio_Web_iconos_600px_02_571dd7c62d.webp`}
+                    src={`${baseURL}thumbnail_Detinmarin_Sitio_Web_iconos_600px_02_571dd7c62d.webp`}
                     alt="tailwind logo"
                     className="rounded-full mr-3"
                   />
@@ -233,7 +271,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                     priority={true}
                     width="50"
                     height="50"
-                    src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_03_0ac6e0b69d.webp`}
+                    src={`${baseURL}Detinmarin_Sitio_Web_iconos_600px_03_0ac6e0b69d.webp`}
                     alt="tailwind logo"
                     className="rounded-full mr-3"
                   />
@@ -277,11 +315,10 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                   />
                   <p className="text-sm md:text-base">
                     Existencias: <br />
-                    {variantSelected?.variant?.data?.attributes?.stock === 0 ? "Agotados" : "Disponibles"}
+                    {variantSelected?.variant?.data?.attributes?.stock || variants[0].attributes.stock <= 0 ? "Agotados" : "Disponibles"}
                   </p>
                 </div>
                 {Object.entries(variantItem).map(([key, value, index]) => {
-                  console.log(key, value)
                   let iconeImage = null
                   // Obtén la traducción de la clave en español
                   const translatedKey = keyTranslations[key] || key;
@@ -313,18 +350,37 @@ function ProductDetail({ name, brand, description, variants, materials }) {
           </div>
 
           {/* precio, cantidad de la variante */}
-          <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between  p-4">
-            <span className="col-span-5 font-bold md:text-[30px]">
-              $ {price}
+          <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between p-4">
+            <span className="col-span-4 md:col-span-5 font-bold md:text-[30px]">
+              {currency} {price}
             </span>
-            <div className="col-span-7 md:flex md:flex-col items-end md:items-end p-3">
-              <div className="flex items-center mb-2 ">
-                <span className="text-grey">Cantidad:</span>
-                <div className="bg-resene rounded-full m-3 w-[120px] flex items-center justify-center p-2 space-x-4">
+            <div className="col-span-8 mdd:col-span-7 md:flex md:flex-col items-end md:items-end p-3">
+              <div className="grid md:flex items-center mb-2 ">
+                <span className="text-grey mx-3">Cantidad:</span>
+                <div className="bg-resene rounded-full md:m-3 w-[140px] flex items-center justify-center p-2 space-x-4">
                   <button aria-label="Disminuir cantidad de produto" className=" bg-grey-100 rounded-full text-white">
                     <BiMinus onClick={decreaseCounter} />
                   </button>
-                  <span>{quantity}</span>
+                  {/* <span>{quantity}</span> */}
+                  <div className="group inline-block relative">
+                    <button
+                      type="button"
+                      className="bg-white rounded-full text-black px-4 py-2 transition duration-300 ease-in-out focus:outline-none focus:shadow-outline min-w-[60px]"
+                    >
+                      {quantity}
+                    </button>
+                    <ul className="absolute hidden text-grey-800 group-hover:block border border-grey-200 bg-white max-h-40 overflow-y-auto">
+                      {[...Array(variantSelected?.variant?.data?.attributes?.stock || variants[0].attributes.stock).keys()].map((index) => (
+                        <li
+                          key={index + 1}
+                          onClick={() => handleQuantityChange(index + 1)}
+                          className="cursor-pointer py-2 px-4 hover:bg-grey-200"
+                        >
+                          {index + 1}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                   <button aria-label="Aumentar cantidad de produto" className=" bg-grey-100 rounded-full  text-white">
                     <BiPlus onClick={increaseCounter} />
                   </button>

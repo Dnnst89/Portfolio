@@ -17,6 +17,7 @@ const SignupSchema = Yup.object().shape({
 });
 
 const LoginForm = () => {
+  const forgotPasswordUrl = `${process.env.NEXT_PUBLIC_APP_URL}/forgotPassword`;
   const router = useRouter();
   const dispatch = useDispatch();
   const authUser = useSelector((state) => state.auth.user);
@@ -93,7 +94,7 @@ const LoginForm = () => {
                       <section className="p-3 md:w-10/12 m-auto grid grid-cols-12 gap-5">
                         <div className="grid col-span-12 md:col-start-4 md:col-span-6 md:w-full">
                           <label
-                            className="text-lg whitespace-nowrap w-full"
+                            className="text-md md:text-lg text-center md:text-left w-full"
                             htmlFor="identifier"
                           >
                             Usuario o Correo Electrónico
@@ -112,7 +113,7 @@ const LoginForm = () => {
                         </div>
                         <div className="relative grid col-span-12 md:col-start-4 md:col-span-6 md:w-full">
                           <label
-                            className="text-lg whitespace-nowrap w-full"
+                            className="text-md md:text-lg text-center md:text-left w-full"
                             htmlFor="password"
                           >
                             Contraseña
@@ -144,7 +145,7 @@ const LoginForm = () => {
                           )}
                         </div>
                         <p className="text-center text-sm hover:underline cursor-pointer text-lightblue mb-3 grid col-span-12 md:col-span-12 md:w-2/4 m-auto">
-                          <Link href="http://detinmarin.s3-website-us-west-2.amazonaws.com/forgotPassword/">
+                          <Link href={forgotPasswordUrl}>
                             Recuperar contraseña
                           </Link>
                         </p>
