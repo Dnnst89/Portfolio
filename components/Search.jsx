@@ -2,6 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from 'next/router';
 
 import { getAlgoliaResults } from "@algolia/autocomplete-js";
 import algoliasearch from "algoliasearch";
@@ -17,16 +18,24 @@ const searchClient = algoliasearch(APPLICATION_ID, SEARCH_API_KEY);
 const index = searchClient.initIndex(ALGOLIA_INDEX);
 
 const Searchbar = () => {
+
+  const onSubmit = (data) => {
+    console.log(data.state.query);
+    const query = data.state.query
+    window.location.href = `/results/?query=${query}`
+  };
+
   return (
     <div className="border border-lightblue rounded-[4px] focus:outline-none focus:ring-2  w-full">
       <Autocomplete
         placeholder="Busca aquí lo que quieras..."
+        onSubmit={onSubmit}
         openOnFocus={false}
         getSources={({ query }) => [
           {
             sourceId: "products",
             getItemUrl({ item }) {
-              return `/detail/${item.id}`;
+              return `/detail/?id=${item.id}`;
             },
             getItems() {
               return getAlgoliaResults({
@@ -53,6 +62,7 @@ const Searchbar = () => {
                   </Link>
                 );
               },
+              enterKeyHint: 'search', // Otra opción podría ser 'go'
             },
           },
         ]}

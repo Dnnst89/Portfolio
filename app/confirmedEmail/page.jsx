@@ -31,7 +31,7 @@ export default function ThankYouMessage() {
                 <button
                   onClick={() =>
                     router.push(
-                      "http://detinmarin.s3-website-us-west-2.amazonaws.com/login/"
+                      `${process.env.NEXT_PUBLIC_APP_URL}/login/`
                     )
                   }
                   className="bg-pink-200 text-white rounded-sm p-2 w-[150px]"

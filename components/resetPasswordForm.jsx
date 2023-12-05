@@ -68,8 +68,8 @@ const ResetPasswordForm = ({ code, resetForm }) => {
   return (
     <div className="h-screen">
       <CheckOutHeader regresar={"/"} />
-      <div className=" flex justify-center items-center w-full">
-        <div className="">
+      <div className="flex justify-center items-center w-full md:max-w-screen-xl  m-auto">
+          <div className="w-full">
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -78,15 +78,15 @@ const ResetPasswordForm = ({ code, resetForm }) => {
             {({ errors, touched }) => {
               return (
                 <>
-                  <Form className=" w-screen flex flex-col items-center mt-20">
-                    <h2 className=" text-3xl flex justify-center items-center mb-10">
+                  <Form className="max-w-screen-xl items-center mt-20 grid grid-cols-12 m-auto">
+                      <h1 className=" text-3xl flex justify-center items-center mb-10 col-span-12 text-center">
                       Ingresa tu nueva contraseña
-                    </h2>
+                    </h1>
 
-                    <div className="bg-resene p-10 w-6/12 flex flex-col items-center ">
-                      <div className="flex w-10/12 space-x-3">
-                        <section className=" p-3 w-3/6">
-                          <div className="flex flex-col">
+                    <div className="bg-resene  pt-10 w-full flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-2 col-span-10 md:col-start-3 md:col-span-8">
+                        <div className="flex grid grid-cols-12 m-auto w-full">
+                          <section className="p-3 m-auto col-span-12 grid grid-cols-12 gap-5">
+                          <div className="grid col-span-12 md:col-span-6 content-baseline w-full">
                             <label htmlFor="password">
                               Constraseña
                               <span className="text-pink-200">*</span>
@@ -102,9 +102,8 @@ const ResetPasswordForm = ({ code, resetForm }) => {
                               <ErrorForm>{errors.password}</ErrorForm>
                             ) : null}
                           </div>
-                        </section>
-                        <section className="p-3 w-3/6">
-                          <div className="flex flex-col">
+                        
+                          <div className="grid col-span-12 md:col-span-6 content-baseline w-full">
                             <label
                               className="whitespace-nowrap w-[100px]"
                               htmlFor="confirmPassword"
@@ -129,8 +128,7 @@ const ResetPasswordForm = ({ code, resetForm }) => {
 
                       <button
                         type="submit"
-                        className="bg-blue-500 hover:bg-blue-300 text-whitetext-base rounded-lg py-2 px-5 transition-colors text-lg
-                         text-white bg-pink-200 disabled:opacity-50 flex justify-center mx-auto mt-5"
+                        className="bg-blue-500 hover:bg-blue-300 text-whitetext-base rounded-lg py-2 px-5 transition-colors text-lg text-white bg-pink-200 disabled:opacity-50 flex justify-center mx-auto mt-5 my-4"
                       >
                         Continuar
                       </button>

@@ -207,11 +207,7 @@ export default function ThankYouMessage() {
         userAddress?.data?.usersPermissionsUser?.data?.attributes?.users_address
           ?.data?.attributes;
       const payment = paymentinfo?.data?.paymentDetail?.data?.attributes;
-      console.log("cliente", client);
-      console.log("payment", payment);
-      console.log("tienda", store);
-      console.log("direccion", deliveryInformation);
-      console.log("order Id", orderNumber);
+
       if (payment.deliveryMethod === "Envío a través de MOOVIN") {
         const shipmentInfo = createData(
           items,
@@ -220,7 +216,6 @@ export default function ThankYouMessage() {
         );
         const estimation = await requestEstimation(shipmentInfo);
 
-        console.log("json", estimation.idEstimation);
         const datos = createOrderData(
           store,
           items,
@@ -229,14 +224,14 @@ export default function ThankYouMessage() {
           estimation.idEstimation,
           deliveryInformation
         );
-
-        const order = await orderMoovin(datos);
+        try {
+          console.log("datos", datos);
+          const order = await orderMoovin(datos);
+          console.log("order mooving", order);
+        } catch (error) {}
         const paymentId = paymentinfo?.data?.paymentDetail?.data?.id;
 
         const orderId = parseInt(order.idPackage);
-
-        console.log("order id", paymentId);
-        console.log("order id", orderId);
 
         await updatePaymentDeliveryId({
           variables: {
@@ -284,8 +279,10 @@ export default function ThankYouMessage() {
           setOrderId(orderNumber);
           await creatingOrderItems(orderNumber);
           await sendOrderEmail(quantity, orderNumber);
-          console.log(paymentinfo);
-          fetchOrderMoovin(orderNumber);
+          try {
+            fetchOrderMoovin(orderNumber);
+          } catch (error) {}
+
           handleCartItems();
           createInvoice(orderNumber);
         } catch (error) {
@@ -294,7 +291,6 @@ export default function ThankYouMessage() {
       } else {
         //no creo otra orden, asigno la que ya tiene
         setOrderId(orderPayment.id);
-        console.log("");
       }
     } catch (error) {
       console.log("Error getting paymentDetail: ", error);
@@ -371,6 +367,7 @@ export default function ThankYouMessage() {
               imagesIds: variantAtt.images.data.map((img) => img.id),
             },
           });
+
           return data?.OrderItemEntity?.data;
         } catch (error) {
           console.log("Error creating orderItem: ", error);
@@ -536,6 +533,7 @@ export default function ThankYouMessage() {
                   },
                 },
                 posTicket: false,
+                sendMail: false,
                 additionalInfo: {
                   nameDoc: "Factura Electrónica",
                   legendFooter:
@@ -544,15 +542,12 @@ export default function ThankYouMessage() {
                 },
                 returnCompleteAnswer: true,
               };
-              console.log("cuerpo json", bodyInvoice);
               const InvoiceResult = await facturationInstace.post(
                 `document/electronic-invoice?access_token=${token}`,
                 bodyInvoice
               );
 
-              console.log("FaCtura ElEctronica", InvoiceResult);
               try {
-                console.log("factura electronica", InvoiceResult);
                 const isoDate = new Date().toISOString();
                 const resulta = await getStoreInformation({
                   variables: {

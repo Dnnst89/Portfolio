@@ -7,7 +7,6 @@ import CheckOutHeader from "@/components/CheckoutHeader";
 import { RESET_PASSWORD } from "../../src/graphQl/queries/resetPassword";
 import { Toaster, toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import useProtectionRoute from "@/hooks/useProtectionRoute";
 const ResetPasswordSchema = Yup.object().shape({
   email: Yup.string()
     .email("El formato del correo no es el correcto.")
@@ -15,7 +14,7 @@ const ResetPasswordSchema = Yup.object().shape({
 });
 
 const ForgotPassword = () => {
-  useProtectionRoute()
+
   const router = useRouter();
   const [resetPassword, { loading, error, data }] = useMutation(RESET_PASSWORD);
 

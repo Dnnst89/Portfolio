@@ -6,6 +6,7 @@ import { getToken } from "./getToken";
 const requestEstimation = async (data) => {
   console.log("data", data);
   const accessToken = await getToken();
+  console.log(accessToken);
   const estimationResponsde = await fetch(
     process.env.NEXT_PUBLIC_MOOVIN_ESTIMATION,
     {
