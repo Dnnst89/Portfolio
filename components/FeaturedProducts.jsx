@@ -1,0 +1,103 @@
+"use client";
+
+import FilterProductCard from "./FilterProductCard";
+//GQL
+import { useQuery } from "@apollo/client";
+import GET_FEATURED_PRODUCTS from "@/src/graphQl/queries/getFeaturedProducts";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+import { EffectCoverflow } from 'swiper/modules';
+
+const FeaturedProducts = () => {
+
+
+  //GQL
+  const { loading, error, data } = useQuery(GET_FEATURED_PRODUCTS);
+
+  if (loading) return 'Loading...'
+  if (error) return toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
+    autoClose: 5000
+  })
+
+
+  const max = data?.products.data.length
+  const myArray = []
+  while (myArray.length < max) {
+    var num = Math.floor(Math.random() * max);
+    var exist = false;
+    for (var i = 0; i < myArray.length; i++) {
+      if (myArray[i] == num) {
+        exist = true;
+        break;
+      }
+    }
+    if (!exist) {
+      myArray[myArray.length] = num;
+    }
+  }
+
+  //tomamos los primeros veinte resultados del random anterior
+  const aux = [];
+  for (let i = 0; i <= 20; i++) {
+    if (i < myArray.length) {
+      const random = myArray[i]
+      aux.push(data?.products.data[random]);
+    }
+  }
+
+  return (
+    <>
+      <Swiper
+        modules={[EffectCoverflow, Navigation, A11y]}
+        effect="coverflow"
+        //slidesPerView={4}
+        //spaceBetween={-200}
+        navigation
+        coverflowEffect={{
+          rotate: -15,
+          //stretch: 0,
+          depth: 50,
+          slideShadows: false
+        }}
+        breakpoints={{
+          300: {
+            slidesPerView: 2,
+            //spaceBetween: 1000
+          },
+          768: {
+            slidesPerView: 3,
+            //spaceBetween: 30
+          },
+          1024: {
+            slidesPerView: 4,
+            //spaceBetween: 40
+          }
+        }}
+      >
+        {aux
+          ? aux.map((item) => {
+            return <div role="link" key={item.id} style={{ pointerEvents: "auto" }}>
+              <SwiperSlide key={item.id}>
+                <FilterProductCard
+                  key={item.id}
+                  id={item.id}
+                  name={item.attributes.name}
+                  coverImage={item.attributes.coverImage.data}
+                  defaultPrice={item.attributes.defaultPrice}
+                  brand={item.attributes.brand}
+                />
+              </SwiperSlide>
+            </div>;
+          })
+          : null}
+      </Swiper>
+    </>
+  );
+};
+
+export default FeaturedProducts;

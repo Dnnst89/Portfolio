@@ -1,59 +1,65 @@
 "use client";
 import React from "react";
+import Link from "next/link";
 import { useState } from "react";
-import algoliasearch from "algoliasearch/lite";
-import styles from "../styles/Home.module.css";
-import ProductContainer from "@/app/layouts/includes/ProductContainer";
 
-const id = process.env.NEXT_PUBLIC_APPLICATION_ID;
-const key = process.env.NEXT_PUBLIC_SEARCH_API_KEY;
-const indexAlgolia = process.env.NEXT_PUBLIC_ALGOLIA_INDEX;
+import { getAlgoliaResults } from "@algolia/autocomplete-js";
+import algoliasearch from "algoliasearch";
+import { Autocomplete } from "./Autocomplete";
+import SearchItem from "./SearchItem";
+import "@algolia/autocomplete-theme-classic";
 
-const searchClient = algoliasearch(id, key);
-const index = searchClient.initIndex(indexAlgolia);
+const APPLICATION_ID = "6TQCC8J5LB";
+const SEARCH_API_KEY = "5a6490a15e1b2c9a3c53d7f8328c3f8d";
+const ALGOLIA_INDEX = "development_api::product.product";
 
-index.search('query', {
-    page: 0,
-  }).then(({ hits }) => {
-    console.log(hits);
-  });
+const searchClient = algoliasearch(APPLICATION_ID, SEARCH_API_KEY);
+const index = searchClient.initIndex(ALGOLIA_INDEX);
 
-const Search = () => {
-  const [results, setResults] = useState(null);
-
-  const performSearch = async (value) => {
-    const { hits } = await index.search(value, {});
-
-    const results = hits.map((hit) => {
-      const { objectID: key, href, _highlightResult } = hit;
-      const {
-        name: { value: name },
-      } = _highlightResult;
-      return { key, href, name };
-    });
-
-    setResults(results);
-  };
-
-  const handleChange = (e) => {
-    const { value } = e.target;
-    value === "" ? setResults(null) : performSearch(value);
-  };
-
+const Searchbar = () => {
   return (
-    <div>
-      <form className={styles.search}>
-        <input
-          placeholder="Busca aquí lo que quieras..."
-          onChange={handleChange}
-          type="search"
-        />
-      </form>
-      <div className="py-20">
-        <ProductContainer products={results} />
-      </div>
+    <div className="border border-lightblue rounded-[4px] focus:outline-none focus:ring-2  w-full">
+      <Autocomplete
+        placeholder="Busca aquí lo que quieras..."
+        openOnFocus={false}
+        getSources={({ query }) => [
+          {
+            sourceId: "products",
+            getItemUrl({ item }) {
+              return `/detail/${item.id}`;
+            },
+            getItems() {
+              return getAlgoliaResults({
+                searchClient,
+                queries: [
+                  {
+                    indexName: "development_api::product.product",
+                    query,
+                    params: {
+                      hitsPerPage: 5,
+                    },
+                  },
+                ],
+              });
+            },
+            templates: {
+              item({ item, components }) {
+                return <SearchItem hit={item} components={components} />;
+              },
+              footer() {
+                return (
+                  <Link href={{ pathname: "/results", query: { query } }}>
+                    Ver todos los resultados
+                  </Link>
+                );
+              },
+              enterKeyHint: 'search', // Otra opción podría ser 'go'
+            },
+          },
+        ]}
+      />
     </div>
   );
 };
 
-export default Search;
+export default Searchbar;

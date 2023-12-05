@@ -1,0 +1,44 @@
+@import url("https://fonts.googleapis.com/css2?family=Grandstander:wght@100;200;300;400&display=swap");
+@font-face {
+  font-family: "Grandstander-Regular";
+  src: url("../app/fonts/Grandstander-Regular.ttf");
+  /* font-style: normal; */
+  font-weight: 900;
+}
+@font-face {
+  font-family: "Grandstander-Thin";
+  src: url("../app/fonts/Grandstander-Thin.ttf");
+  font-style: normal;
+  font-weight: 900;
+}
+h1 {
+  font-family: "Grandstander", sans-serif;
+  font-size: x-large;
+  color: #484848;
+}
+.tittle {
+  font-family: "Grandstander", sans-serif;
+  font-size: x-large;
+  color: #484848;
+}
+p {
+  color: #484848;
+}
+
+label {
+  color: #484848;
+}
+
+input[type=text], input[type=password],input[type=email], textarea {
+  border: 2px solid #B2B1C5;
+  padding-left: 10px;
+  border-radius: .5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+input[type=text], input[type=password],input[type=email]{
+  max-height: 35px;
+}
+.aa-Panel{
+  z-index: 99;
+}
