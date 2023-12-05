@@ -1,35 +1,42 @@
 "use client";
+import { algoliaInstace } from "@/src/axios/algoliaIntance/config";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
-  const menuItems = [
-    { id: 1, name: "Home", route: "/" },
-    { id: 2, name: "Saved", route: "/login" },
-    { id: 3, name: "Electronics", route: "/" },
-    { id: 4, name: "Motors", route: "/" },
-    { id: 5, name: "Fashion", route: "/" },
-    { id: 6, name: "Home", route: "/" },
-    { id: 7, name: "Saved", route: "/login" },
-    { id: 8, name: "Electronics", route: "/" },
-    { id: 9, name: "Motors", route: "/" },
-    { id: 10, name: "Fashion", route: "/" },
-  ];
+
+  const [menuItems, setMenuItems] = useState([])
+
+const getData = async ()=> {
+  const { data } = await algoliaInstace.get("development_api::category.category/")
+    setMenuItems(data.hits)
+}
+
+	useEffect(() => {
+    getData()
+
+	}, [])
+
   return (
     <>
       <div className="grid grid-cols-1 h-[50px] mt-[0.5px] bg-resene">
         <ul className="flex justify-center content-center text-[#333333]  overflow-y-scroll scrollbar scrollbar-none">
-          {menuItems.map((item) => (
-            <li
+        
+         
+          {menuItems && menuItems.length && menuItems.map((item) => (
+         <li
               key={item.id}
               className="px-3 hover:underline font-bold cursor-grab flex justify-center items-center"
             >
-              <Link href={item.route}>{item.name}</Link>
+              <Link href={`/results/${item.name}`}> {item.name}</Link>;
+              
             </li>
           ))}
         </ul>
       </div>
     </>
   );
+
 };
 
 export default Navbar;

@@ -1,7 +1,6 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 const client = new ApolloClient({
-    connectToDevTools: true,
-    uri: process.env.NEXT_PUBLIC_URL_API,
+    uri: 'https://api.detinmarin.cr/graphql',
     cache: new InMemoryCache(),
 });
 

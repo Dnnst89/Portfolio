@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images: {
-        domains: ['images.unsplash.com', 'https://didactoysperu.com'],
-    },
+  images: { unoptimized: true },
+  trailingSlash: true,
+  output: "export",
+  distDir: "build",
 };
 
 module.exports = nextConfig;

@@ -1,22 +1,48 @@
 "use client";
 import Image from "next/image";
-import Product from "../../../components/Product";
+import ProductCard from "../../../components/ProductCard";
 import Pagination from "@/components/Pagination";
+import { useEffect, useState } from "react";
+const ProductContainer = ({
+  result,
+  hitsPerPage,
+  nbHits,
+  nbPages,
+  currentPage,
+  setCurrentPage,
+}) => {
+  const { hits } = result;
 
-const ProductContainer = ({ result, hitsPerPage, nbHits, nbPages, currentPage, setCurrentPage }) => {
+  useEffect(() => {
+    // Desplaza la página al inicio al cargar el componente
+    window.scrollTo(0, 0);
+  }, [currentPage]);
 
-  const {hits} = result
- 
   return (
     <>
-      <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 w-full">
+      <div className="flex flex-wrap max-w-screen-xl m-auto justify-center">
         {hits
           ? hits.map((item) => {
-            return <Product id={item.id} name={item.name} />;
+            return (
+              <ProductCard
+                key={item.id}
+                id={item.id}
+                name={item.name}
+                defaultPrice={item.defaultPrice}
+                coverImage={item.coverImage}
+                brand={item.brand}
+              />
+            );
           })
           : null}
       </div>
-      <Pagination hitsPerPage={hitsPerPage} nbHits={nbHits} nbPages={nbPages} currentPage={currentPage} setCurrentPage={setCurrentPage}/>
+      <Pagination
+        hitsPerPage={hitsPerPage}
+        nbHits={nbHits}
+        nbPages={nbPages}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
     </>
   );
 };
