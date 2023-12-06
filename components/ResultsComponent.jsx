@@ -65,7 +65,8 @@ const ResultsComponent = (test) => {
           setCurrentPage={setCurrentPage}
         />
       </div>
-    ) : (<div className="text-center grid content-center h-80 m-auto"> <h1 className="font-bold">¡Lo sentimos!</h1> <h2>No se encontraron resultados.</h2> </div>)} </>
+    ) : (<div className="text-center grid content-center h-80 m-auto"> <h1 className="font-bold">¡Lo sentimos!</h1> <h2>No se encontraron resultados.</h2> </div>)}
+    </>
   );
 };
 
