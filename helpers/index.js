@@ -22,7 +22,7 @@ const formatTaxData = (items) => {
   if (!items?.length) return [];
   return items?.map((item) => {
     return {
-      measurementUnit: "Sp",
+      measurementUnit: "1/m",
       unitaryPrice: item?.attributes?.variant?.data?.attributes?.price,
       qty: item?.quantity,
       cabys:
@@ -103,23 +103,24 @@ const validateID = (tipo) => {
   } else return "02";
 };
 const formatBillSumary = (billSummary, exchangeRate, currencyCode) => {
+  console.log("resouesta bill getLine", billSummary);
   return {
     codeTypeCurrency: {
       currencyCode: currencyCode,
       exchangeRate: exchangeRate,
     },
 
-    totalTaxedServices: "" + billSummary.taxes,
-    totalExentServices: "0.00000",
-    totalTaxedMerch: "0.00000",
-    totalExentMerch: "0.00000",
-    totalTaxed: "" + billSummary.taxes,
-    totalExent: "0.00000",
-    totalSale: "51172.00000",
-    totalDiscount: "0.00000",
-    totalNetSale: "" + billSummary.subtotal,
-    totalTax: "" + billSummary.taxes,
-    totalDocument: "" + billSummary.total,
+    totalTaxedServices: "" + billSummary?.totalTaxedServices,
+    totalExentServices: "" + billSummary?.totalExentServices,
+    totalTaxedMerch: "" + billSummary?.totalTaxedMerch,
+    totalExentMerch: "" + billSummary?.totalExentMerch,
+    totalTaxed: "" + billSummary?.totalTaxed,
+    totalExent: "" + billSummary?.totalExent,
+    totalSale: "" + billSummary?.totalSale,
+    totalDiscount: "" + billSummary?.totalDiscount,
+    totalNetSale: "" + billSummary?.totalNetSale,
+    totalTax: "" + billSummary?.totalTax,
+    totalDocument: "" + billSummary.totalDocument,
   };
 };
 
@@ -163,21 +164,21 @@ const formatItemInvoice = (items, imp) => {
   if (!items?.length) return [];
   return items?.map((item) => {
     cont = cont + 1;
-    console.log("item", item?.attributes);
     var cod = 0;
     if (imp[cont].taxes[0].code < 10) {
       cod = "0" + imp[cont].taxes[0].code;
     } else {
       cod = imp[cont].taxes[0].code;
     }
-    console.log("ssdfasdfasdfdsa", cod);
+    console.log("imp", imp);
+    //console.log("fee", imp[cont].taxes[0].fee);
     return {
       lineNumber: cont + 1,
       cabys: "" + item?.attributes?.cabys?.toString(),
       qty: "" + item?.attributes?.quantity,
-      measurementUnit: "Sp",
-      commercialMeasurementUnit: "SP",
-      detail: "Servicios Postales",
+      measurementUnit: "1/m",
+      commercialMeasurementUnit: "1/m",
+      detail: "" + item?.attributes?.name,
       unitaryPrice: "" + item?.attributes?.price,
       totalAmount: "" + item?.attributes?.quantity * item?.attributes?.price,
       subTotal: "" + item?.attributes?.quantity * item?.attributes?.price,
@@ -185,7 +186,7 @@ const formatItemInvoice = (items, imp) => {
         {
           code: "" + cod,
           codeFee: "" + imp[cont].taxes[0].codeFee,
-          fee: "" + imp[cont].taxes[0].fee,
+          fee: "13",
           VATFactor: "" + imp[cont].taxes[0].vatfactor,
           amount: "" + imp[cont].taxes[0].amount,
         },
@@ -207,7 +208,7 @@ const InvoiceInformation = (store, client, key, consecutive) => {
       name: store.name,
       id: {
         type: "" + store.IdType,
-        number: "00" + store.IdNumber,
+        number: store.IdNumber,
       },
       commercialName: store.ComercialName,
       address: {
@@ -230,7 +231,7 @@ const InvoiceInformation = (store, client, key, consecutive) => {
     },
     saleCondition: "01",
     creditTerm: "0",
-    paymentMethod: ["01"],
+    paymentMethod: ["02"],
   };
 };
 

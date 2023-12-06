@@ -422,12 +422,12 @@ export default function ThankYouMessage() {
 
       const required =
         PaymentDetail.data.paymentDetail.data.attributes.invoiceRequired;
-      const billSummary = {
+      /*const billSummary = {
         total: PaymentDetail?.data?.paymentDetail?.data?.attributes?.total,
         subtotal:
           PaymentDetail?.data?.paymentDetail?.data?.attributes?.subtotal,
         taxes: PaymentDetail?.data?.paymentDetail?.data?.attributes?.taxes,
-      };
+      };*/
       if (required) {
         try {
           const { data } = await getOrderItemsByOrderId({
@@ -453,6 +453,8 @@ export default function ThankYouMessage() {
               body
             );
 
+            console.log("feeResult", feeResult);
+            const billSummary = feeResult?.data?.billSummary;
             const imp = feeResult?.data?.serviceDetail?.lineDetails;
 
             const inv = formatItemInvoice(resultado, imp);
@@ -525,7 +527,7 @@ export default function ThankYouMessage() {
                   },
                   otherCharges: [],
                   billSummary: {
-                    ...formatBillSumary(billSummary, "1.000", store.currency),
+                    ...formatBillSumary(billSummary, "535.86", store.currency),
                   },
                   referenceInformation: [],
                   others: {
@@ -533,7 +535,12 @@ export default function ThankYouMessage() {
                   },
                 },
                 posTicket: false,
-                sendMail: false,
+                sendMail: true,
+                mailTitle:
+                  "Gracias por su compra en Detinmarin, adjuntamos su factura electrónica",
+                mailBody:
+                  "<p>Hola:&nbsp;</p><p>Gracias por su compra. Le adjuntamos su Factura Elect&oacute;nica.</p><p>&nbsp;</p><p>Saludos.</p><p>&nbsp;</p><p>Equipo Detinmarin</p><br>Gracias por su compra</br>",
+
                 additionalInfo: {
                   nameDoc: "Factura Electrónica",
                   legendFooter:
@@ -542,11 +549,12 @@ export default function ThankYouMessage() {
                 },
                 returnCompleteAnswer: true,
               };
+              console.log("factura", bodyInvoice);
               const InvoiceResult = await facturationInstace.post(
                 `document/electronic-invoice?access_token=${token}`,
                 bodyInvoice
               );
-
+              console.log("resultado factura", InvoiceResult);
               try {
                 const isoDate = new Date().toISOString();
                 const resulta = await getStoreInformation({
