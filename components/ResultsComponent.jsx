@@ -50,20 +50,23 @@ const ResultsComponent = (test) => {
   }, [currentPage, test.query]);
 
   return (
-    <div>
-      <div className="flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
-        <h1>Resultados de &#34;{decodeURIComponent(test.query)}&#34;</h1>
+    <> {nbHits > 0 ? (
+      <div>
+        <div className="flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
+          <h1>Resultados de &#34;{decodeURIComponent(test.query)}&#34;</h1>
+        </div>
+        <Toaster />
+        <ProductContainer
+          result={result}
+          hitsPerPage={hitsPerPage}
+          nbHits={nbHits}
+          nbPages={nbPages}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
       </div>
-      <Toaster />
-      <ProductContainer
-        result={result}
-        hitsPerPage={hitsPerPage}
-        nbHits={nbHits}
-        nbPages={nbPages}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      />
-    </div>
+    ) : (<div className="text-center grid content-center h-80 m-auto"> <h1 className="font-bold">¡Lo sentimos!</h1> <h2>No se encontraron resultados.</h2> </div>)}
+    </>
   );
 };
 
