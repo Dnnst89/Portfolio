@@ -74,7 +74,12 @@ const ForgotPassword = () => {
                     <section className="p-3 m-auto col-span-12 grid grid-cols-12 gap-5">
                       <div className="grid col-span-12 md:col-span-12 content-baseline w-full">
                         <label htmlFor="email">Email:</label>
-                        <Field type="email" id="email" name="email" />
+                        <Field 
+                        type="email" 
+                        id="email" 
+                        className="focus:border-blue-500 outline-none md:px-6 py-2 mb-2 rounded-lg border-2 border-grey-200 w-full"
+                        name="email" 
+                        />
                         <ErrorMessage
                           className="text-[#ef4444] text-sm"
                           name="email"
