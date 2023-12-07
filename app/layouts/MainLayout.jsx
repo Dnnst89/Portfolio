@@ -74,7 +74,7 @@ const MainLayout = ({ children }) => {
               ageRange={"8-9"}
               image={libro}
               alt={"Imagen libro"}
-              age={"De 8 años o mas"}
+              age={"De 8 años o más"}
               button={"bg-yellow-300 rounded-lg text-white p-2 font-['GrandStander'] text-sm md:text-xl pr-4 pl-4 mb-5"}
               border={
                 "bg-white rounded-[15px] transition-transform transform hover:scale-105 duration-1000 hover:cursor-pointer border-2 border-yellow-300"
