@@ -20,9 +20,11 @@ const index = searchClient.initIndex(ALGOLIA_INDEX);
 const Searchbar = () => {
 
   const onSubmit = (data) => {
-    console.log(data.state.query);
-    const query = data.state.query
-    window.location.href = `/results/?query=${query}`
+    if (data.state.query.trim() != "") {
+      const query = data.state.query
+      window.location.href = `/results/?query=${query}`
+    }
+
   };
 
   return (
