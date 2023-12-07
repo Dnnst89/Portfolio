@@ -99,7 +99,7 @@ const RegisterFormTwo = () => {
     <main>
       <div className="h-screen">
         <CheckOutHeader regresar={"/"} />
-        <div className="flex justify-center items-center w-full md:max-w-screen-xl  m-auto">
+        <div className="flex justify-center items-center w-full md:max-w-screen-xl m-auto">
           <div className="w-full">
             <Formik
               initialValues={initialValues}
@@ -114,7 +114,7 @@ const RegisterFormTwo = () => {
                         Registrate
                       </h1>
 
-                      <div className="bg-resene  pt-10 w-full flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-2 col-span-10 md:col-start-3 md:col-span-8">
+                      <div className="bg-resene pt-10 w-full flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-2 col-span-10 md:col-start-3 md:col-span-8">
                         <div className="flex grid grid-cols-12 m-auto w-full">
                           <section className="p-3 m-auto col-span-12 grid grid-cols-12 gap-5">
                             <div className="grid col-span-12 md:col-span-6 content-baseline w-full">
@@ -129,7 +129,7 @@ const RegisterFormTwo = () => {
                                 type="text"
                                 id="username"
                                 name="username"
-                                className="focus:border-blue-500 outline-none md:px-6 py-2 mb-2 rounded-lg border-2 border-grey-200  w-full"
+                                className="focus:border-blue-500 outline-none md:px-6 py-2 mb-2 rounded-lg border-2 border-grey-200 w-full"
                                 autoFocus={true}
                               />
                               {errors.username && touched.username ? (

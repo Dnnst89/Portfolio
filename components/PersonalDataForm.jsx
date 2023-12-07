@@ -93,15 +93,15 @@ const PersonalDataForm = () => {
   return (
     <div className="bg-resene  flex flex-col items-center h-fit col-span-12 mx-3  md:col-span-7">
       <h1 className="m-2">Tus datos</h1>
-      <div className="flex justify-center w-11/12">
-        <section className="w-full p-5 grid grid-cols-6 gap-3">
-          <div className="col-span-6 md:col-span-3 space-y-1">
+      <div className="flex grid grid-cols-12 m-auto w-full">
+        <section className="p-3 m-auto col-span-12 grid grid-cols-12 gap-5">
+          <div className="col-span-12 md:col-span-6  space-y-1">
             <h2 className="font-bold">Nombre de usuario:</h2>
             {authUser && (
               <label className="">{authUser.username}</label>
             )}
           </div>
-          <div className="col-span-6 md:col-span-3 space-y-1">
+          <div className="col-span-12 md:col-span-6  space-y-1">
             <h2 className="font-bold">Correo Electrónico:</h2>
             {authUser && (
               <label className="">{authUser.email}</label>
@@ -115,15 +115,15 @@ const PersonalDataForm = () => {
             {({ errors, touched }) => {
               return (
                 <>
-                  <div className="w-full grid grid-cols-12  col-span-6">
-                    <div className="col-span-12">
+                  <div className="w-full grid grid-cols-12 col-span-12">
+                    <div className="grid col-span-12 md:col-span-12 content-baseline w-full">
                       <Form onSubmit={handleSubmit}>
                         <div className="w-full">
                           <main className="flex ">
                             <section className="w-full">
                               <div className="flex justify-center">
                                 <section className="w-full grid grid-cols-12 gap-4">
-                                  <div className="col-span-12 md:col-span-6 grid content-baseline">
+                                  <div className="grid col-span-12 md:col-span-6 content-baseline w-full">
                                     <label htmlFor="name">Nombre</label>
                                     <Field
                                       type="text"
@@ -142,7 +142,7 @@ const PersonalDataForm = () => {
                                       <ErrorForm>{errors.firstName}</ErrorForm>
                                     ) : null}
                                   </div>
-                                  <div className="col-span-12 md:col-span-6 grid content-baseline">
+                                  <div className="grid col-span-12 md:col-span-6 content-baseline w-full">
                                     <label htmlFor="lastName">Apellidos</label>
                                     <Field
                                       type="text"
@@ -161,7 +161,7 @@ const PersonalDataForm = () => {
                                       <ErrorForm>{errors.lastName}</ErrorForm>
                                     ) : null}
                                   </div>
-                                  <div className="col-span-12 md:col-span-6 grid content-baseline">
+                                  <div className="grid col-span-12 md:col-span-6 content-baseline w-full">
                                     <label htmlFor="phone">Teléfono</label>
                                     <Field
                                       type="text"
@@ -184,10 +184,10 @@ const PersonalDataForm = () => {
                               </div>
                             </section>
                           </main>
-                          <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
+                          <div className="grid col-span-12 md:col-span-6 py-5 content-baseline w-full">
                             <button
                               type="submit"
-                              className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
+                              className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap m-auto"
                             >
                               Guardar
                             </button>
@@ -200,7 +200,7 @@ const PersonalDataForm = () => {
               );
             }}
           </Formik>
-          <div className="col-span-6">
+          <div className="grid col-span-12 md:col-span-6 content-baseline w-full">
             <p className="text-center text-sm hover:underline cursor-pointer text-lightblue mb-3 grid col-span-12 md:col-span-12 w-2/4 m-auto">
               <Link href="/forgotPassword">Cambiar contraseña</Link>
             </p>

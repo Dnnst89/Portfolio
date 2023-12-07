@@ -63,9 +63,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
     const newGalleryImages = images.map((image) => ({
       original: image.attributes.url,
       thumbnail: image.attributes.url,
-    }));
-    console.log("🚀 ~ file: ProductDetail.jsx:51 ~ newGalleryImages ~ newGalleryImages:", newGalleryImages)
-  
+    }));  
     setGalleryImages(newGalleryImages);
   }, [images]);
 

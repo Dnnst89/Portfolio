@@ -88,11 +88,6 @@ function FormOne() {
         variables: { id: userDataId },
         fetchPolicy: "network-only",
       });
-      console.log(
-        "🚀 ~ file: FormOne.jsx:98 ~ cargaDatos ~ data:",
-        data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-          ?.attributes?.canton
-      );
       if (error)
         return toast.error(
           "Lo sentimos, ha ocurrido un error al cargar los datos",
