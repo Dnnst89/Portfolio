@@ -278,8 +278,9 @@ export default function ThankYouMessage() {
           const orderNumber = data?.createOrderDetail?.data?.id;
           setOrderId(orderNumber);
           await creatingOrderItems(orderNumber);
+
           //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-          //  await sendOrderEmail(quantity, orderNumber);
+          await sendOrderEmail(quantity, orderNumber);
           //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
           try {
             fetchOrderMoovin(orderNumber);
@@ -540,7 +541,18 @@ export default function ThankYouMessage() {
                 sendMail: true,
                 mailTitle:
                   "Gracias por su compra en Detinmarin, adjuntamos su factura electrónica",
-                mailBody: "Agradecemos su confianza",
+                mailBody: `
+                <p>Estimado(a): ${client.name} </p>
+
+                <p>La informaci&oacute;n suministrada ser&aacute; utilizada unicamente para los fines de la emisi&oacute;n de la factura electr&oacute;nica para suministrar dicha informaci&oacute;n en el registro&nbsp;conforme a lo establecido en la resoluci&oacute;n de Facturaci&oacute;n Electr&oacute;nica,No.\nDGT-R-033-2019 del 27 de junio de 2019 de la Direcci&oacute;nGeneral de Tributaci&oacute;n.</p>
+                
+                <p>El suministro voluntario de la informaci&oacute;n y datos personales se interpreta como el otorgamiento de su consentimiento para su uso de acuerdo a lo indicado en el presente aviso. Ante cualquer consulta podria comunicarse al correo <a href="mailto:hola@detinmarin.cr">hola@detinmarin.cr</a>&nbsp;o al numero telef&oacute;nico&nbsp;<a href="tel:+506-8771-6588">(+506) 8771-6588</a>&nbsp;</p>
+<img src="https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Logo_01_c02eda42d1.jpg"
+                alt="detinmarin" style="display:block;font-size:14px;border:0;outline:none;text-decoration:none"
+                width="140" title="detinmarin">
+                  
+                  
+                  `,
 
                 additionalInfo: {
                   nameDoc: "Factura Electrónica",

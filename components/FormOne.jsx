@@ -85,10 +85,14 @@ function FormOne() {
       const userDataId = userData.user.id;
 
       const { data, error, loading } = await getUserInfo({
-        variables: { id: userDataId }, fetchPolicy: "network-only"
+        variables: { id: userDataId },
+        fetchPolicy: "network-only",
       });
-      console.log("🚀 ~ file: FormOne.jsx:98 ~ cargaDatos ~ data:", data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-      ?.attributes?.canton);
+      console.log(
+        "🚀 ~ file: FormOne.jsx:98 ~ cargaDatos ~ data:",
+        data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+          ?.attributes?.canton
+      );
       if (error)
         return toast.error(
           "Lo sentimos, ha ocurrido un error al cargar los datos",
@@ -98,7 +102,6 @@ function FormOne() {
         );
 
       if (data && data.usersPermissionsUser) {
-        
         if (data.usersPermissionsUser.data.attributes.users_address.data) {
           setUserInfoExist(true);
           setAddressId(
@@ -155,7 +158,6 @@ function FormOne() {
           idNumber: "",
           idType: "Física",
         });
-        
       }
     } catch (error) {
       toast.error(error.message, {
@@ -592,6 +594,7 @@ function FormOne() {
                         </div>
                       </section>
                     </div>
+                    {/*
                     <div className="flex justify-center w-full">
                       <section className="w-3/4 m-auto mt-10 mb-5 flex items-center space-x-5">
                         <label htmlFor="gift">Envuelto para regalo</label>
@@ -637,7 +640,7 @@ function FormOne() {
                           </div>
                         </>
                       )}
-                    </div>
+                                </div>*/}
                     <div className="flex justify-center w-full">
                       <section className="w-3/4 m-auto mt-10 mb-5 flex items-center space-x-5">
                         <label htmlFor="idType">Factura Electrónica</label>
