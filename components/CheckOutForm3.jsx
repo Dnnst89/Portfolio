@@ -30,18 +30,21 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
     variables: { userId: id },
   });
 
-  const { data: storeInformation, error: storeInformationError } = useQuery(GET_STORE_INFO, {
-    variables: {
-      id: 1,
-    },
-  });
-  const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
+  const { data: storeInformation, error: storeInformationError } = useQuery(
+    GET_STORE_INFO,
+    {
+      variables: {
+        id: 1,
+      },
+    }
+  );
+  const currency =
+    storeInformation?.storeInformation?.data?.attributes?.currency;
 
-
-  const key = process.env.NODE_ENV === "development" ?
-    "6LfCrUYoAAAAAPgdh0MpvKzzHvhksbGTM3cP1prU" :
-    "6Lea6iEpAAAAALI1Fb34ZuoJN9pUUJd2HykpyLpb"
-
+  const key =
+    process.env.NODE_ENV === "development"
+      ? "6LfCrUYoAAAAAPgdh0MpvKzzHvhksbGTM3cP1prU"
+      : "6Lea6iEpAAAAALI1Fb34ZuoJN9pUUJd2HykpyLpb";
 
   useEffect(() => {
     if (!loading && !error) {
@@ -93,7 +96,6 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
   const handleVerification = async () => {
-
     const token = captchaRef.current.getValue();
     paymentUrl = await paymentRequest(formData);
 
@@ -114,7 +116,6 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
         } else {
           router.push(paymentUrl);
         }
-
       } else {
         setLoadingBtn(false);
         toast.error("Por favor selecciona la casilla de verificación", {
@@ -136,15 +137,9 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
           3
         </div>
         <h1 className="text-xl">Formulario de pago</h1>
-      </div>
-      {" "}
+      </div>{" "}
       <div className="flex justify-center m-auto mt-8 mb-8 ">
-
-
-        <ReCAPTCHA
-          sitekey={key}
-          ref={captchaRef}
-        />
+        <ReCAPTCHA sitekey={key} ref={captchaRef} />
       </div>
       <div className="flex justify-center m-auto mt-8 mb-8 w-3/4">
         <button

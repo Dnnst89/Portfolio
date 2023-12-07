@@ -278,6 +278,7 @@ export default function ThankYouMessage() {
           const orderNumber = data?.createOrderDetail?.data?.id;
           setOrderId(orderNumber);
           await creatingOrderItems(orderNumber);
+
           await sendOrderEmail(quantity, orderNumber);
           try {
             fetchOrderMoovin(orderNumber);
@@ -538,8 +539,7 @@ export default function ThankYouMessage() {
                 sendMail: true,
                 mailTitle:
                   "Gracias por su compra en Detinmarin, adjuntamos su factura electrónica",
-                mailBody:
-                  "<p>Hola:&nbsp;</p><p>Gracias por su compra. Le adjuntamos su Factura Elect&oacute;nica.</p><p>&nbsp;</p><p>Saludos.</p><p>&nbsp;</p><p>Equipo Detinmarin</p><br>Gracias por su compra</br>",
+                mailBody: "Agradecemos su confianza",
 
                 additionalInfo: {
                   nameDoc: "Factura Electrónica",
