@@ -10,6 +10,7 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+import toast, { Toaster } from "react-hot-toast";
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import { EffectCoverflow } from 'swiper/modules';
 
@@ -52,6 +53,7 @@ const FeaturedProducts = () => {
 
   return (
     <>
+    <Toaster />
       <Swiper
         modules={[EffectCoverflow, Navigation, A11y]}
         effect="coverflow"
