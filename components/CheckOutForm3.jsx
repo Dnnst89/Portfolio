@@ -17,6 +17,7 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
   const router = useRouter();
   const [formData, setFormData] = useState({});
   const [loadingBtn, setLoadingBtn] = useState(false);
+  const [domain, setDomain] = useState(false);
   const { user } = useStorage();
   const { id, email } = user || {};
   const cartSummary = useCartSummary({
@@ -37,15 +38,16 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
   });
   const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
 
-  const dominio = window.location.hostname;
-  console.log(dominio);
-
   const key =
     process.env.NODE_ENV === "development"
       ? "6LfCrUYoAAAAAPgdh0MpvKzzHvhksbGTM3cP1prU"
       : "6Lea6iEpAAAAALI1Fb34ZuoJN9pUUJd2HykpyLpb";
 
   useEffect(() => {
+
+    const domain = window?.location
+    setDomain(domain)
+
     if (!loading && !error) {
       const userData = data?.usersPermissionsUser?.data?.attributes;
 
@@ -98,7 +100,7 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
     paymentUrl = await paymentRequest(formData);
 
     try {
-      if (dominio == "www.detinmarin.cr") {
+      if (domain.origin == "https://www.detinmarin.cr") {
         const token = captchaRef.current.getValue();
         if (token) {
           setLoadingBtn(true);
@@ -157,7 +159,7 @@ export default function CheckOutForm3({ paymentDetailId, total }) {
         </div>
         <h1 className="text-xl">Formulario de pago</h1>
       </div>{" "}
-      {dominio == "www.detinmarin.cr" ?
+      {domain.origin == "https://www.detinmarin.cr" ?
         < div className="flex justify-center m-auto mt-8 mb-8 ">
           <ReCAPTCHA sitekey={key} ref={captchaRef} />
         </div>
