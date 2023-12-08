@@ -74,8 +74,9 @@ const CartDetail = ({
   useEffect(() => {
     console.log("q", quantity);
     setShipment(0);
-
-    getTaxCost();
+    if (items !== null || items !== null) {
+      getTaxCost();
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quantity]);
