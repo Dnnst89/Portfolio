@@ -671,7 +671,7 @@ function FormOne() {
                                   {...register("idNumber", {
                                     required: {
                                       value: true,
-                                      message: "La dédula es requerida",
+                                      message: "La cédula es requerida",
                                     },
                                     minLength: {
                                       value: 10,
