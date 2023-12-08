@@ -19,7 +19,7 @@ const ProductContainer = ({
   }, [currentPage]);
 
   return (
-    <>
+    <div>
       <div className="flex flex-wrap max-w-screen-xl m-auto justify-center">
         {hits
           ? hits.map((item) => {
@@ -43,7 +43,7 @@ const ProductContainer = ({
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
-    </>
+    </div>
   );
 };
 export default ProductContainer;

@@ -52,41 +52,58 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div>
+    <div className="h-screen">
       <Toaster />
       <CheckOutHeader regresar={"/personalData"} />
-      <div className="flex flex-col items-center max-w-screen-xl m-auto mt-10">
-        <div className="bg-resene  p-5 w-2/4 flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-3 col-span-8 space-y-5">
-          <h1>Cambiar contraseña</h1>
+      <div className="flex justify-center items-center w-full md:max-w-screen-xl m-auto">
+        <div className="w-full">
+
           <Formik
             initialValues={{ email: "" }}
             validationSchema={ResetPasswordSchema}
             onSubmit={handleSubmit}
           >
             {({ isSubmitting }) => (
-              <Form>
-                <div className="space-x-2">
-                  <label htmlFor="email">Email:</label>
-                  <Field type="email" id="email" name="email" />
-                  <ErrorMessage
-                    className="text-[#ef4444] text-sm"
-                    name="email"
-                    component="div"
-                  />
+              <Form className="max-w-screen-xl items-center mt-20 grid grid-cols-12 m-auto">
+                <h1 className="text-3xl flex justify-center items-center mb-10 col-span-12 text-center">
+                  Cambiar contraseña
+                </h1>
+
+                <div className="bg-resene  w-full flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-2 col-span-10 md:col-start-3 md:col-span-8 py-10">
+                  <div className="flex grid grid-cols-12 m-auto w-full">
+                    <section className="p-3 m-auto col-span-12 grid grid-cols-12 gap-5">
+                      <div className="grid col-span-12 md:col-span-12 content-baseline w-full">
+                        <label htmlFor="email">Email:</label>
+                        <Field 
+                        type="email" 
+                        id="email" 
+                        className="focus:border-blue-500 outline-none md:px-6 py-2 mb-2 rounded-lg border-2 border-grey-200 w-full"
+                        name="email" 
+                        />
+                        <ErrorMessage
+                          className="text-[#ef4444] text-sm"
+                          name="email"
+                          component="div"
+                        />
+                      </div>
+                      <div className="grid col-span-12 md:col-span-12 items-center content-baseline m-auto w-full">
+                        <button
+                          className="bg-aquamarine text-white rounded-sm p-2 flex items-center m-auto mt-5"
+                          type="submit"
+                          disabled={isSubmitting || loading}
+                        >
+                          Solicitar
+                        </button>
+                      </div>
+                    </section>
+                  </div>
                 </div>
-                <button
-                  className="bg-aquamarine text-white rounded-sm p-2 flex items-center m-auto mt-5"
-                  type="submit"
-                  disabled={isSubmitting || loading}
-                >
-                  Solicitar
-                </button>
               </Form>
             )}
           </Formik>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

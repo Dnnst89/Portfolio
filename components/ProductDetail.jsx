@@ -15,6 +15,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+import ImageGallery from "react-image-gallery";
 import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { useQuery } from "@apollo/client";
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
@@ -54,6 +55,18 @@ function ProductDetail({ name, brand, description, variants, materials }) {
   });
 
   const [images, setImages] = useState(allImages.length > 0 ? allImages : null);
+
+  //galeria de imagenes para componente se compone de un arreglo [{original: url, thumbnail: url}]
+  const [galleryImages, setGalleryImages] = useState([]);
+
+  useEffect(() => {
+    const newGalleryImages = images.map((image) => ({
+      original: image.attributes.url,
+      thumbnail: image.attributes.url,
+    }));
+    setGalleryImages(newGalleryImages);
+  }, [images]);
+
 
   const decreaseCounter = () => {
     if (quantity === 1) return;
@@ -136,49 +149,21 @@ function ProductDetail({ name, brand, description, variants, materials }) {
 
         {/* Columna de imagenes */}
         <section aria-label="Imágenes del producto" className="mb-10 col-span-12 md:col-span-6">
-          {/* imagen principal grande */}
-          <div className="m-auto w-full flex justify-center">
-            {images && images.length > 0 ? (
-              <Image
-                {...image == null ? setImage(images[0].attributes.url) : null}
-                src={image}
-                width={"450"}
-                height={"800"}
-                className={"rounded-xl mx-2"}
-                alt={altText}
-              />
-            ) : null}
-          </div>
-          {/* //imagenes debajo de la principal */}
-          <div className="md:w-4/6 m-auto mt-2 ">
-            <Swiper
-              modules={[Navigation, A11y]}
-              spaceBetween={1}
-              slidesPerView={3}
-              navigation
 
-            >
-              {images
-                ? images.map((item) => {
-                  return (
-                    <div key={item.id}>
-                      <SwiperSlide key={item.id}>
-                        <button onClick={() => chanceImage(item.attributes.url)}>
-                          <Image
-                            priority={true}
-                            src={item.attributes.url}
-                            width={"125"}
-                            height={"100"}
-                            className={"rounded-xl"}
-                            alt={name}
-                          />
-                        </button>
-                      </SwiperSlide>
-                    </div>
-                  );
-                })
-                : null}
-            </Swiper>
+          {/* //imagenes debajo de la principal */}
+          <div className="md:w-5/6 m-auto mt-2 ">
+
+            {images && images.length > 0 ? (
+              <ImageGallery
+                showPlayButton={false}
+                originalHeight={"275px"}
+                disableThumbnailScroll={false}
+                disableKeyDown={false}
+                disableSwipe={false}
+                loading={"lazy"}
+                items={galleryImages} />
+            ) : null}
+
 
 
           </div>
@@ -230,7 +215,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
               />
               <p className="text-sm md:text-base">
                 Tipo de material: <br />
-                {materials.length > 0 ? materials.map((material, index) => { return <p key={index}>{material.attributes.name}</p> }) : null}
+                {materials.length > 0 ? materials.map((material, index) => { return <span key={index}>{material.attributes.name}</span> }) : null}
               </p>
             </div>
 
@@ -318,18 +303,23 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                     {variantSelected?.variant?.data?.attributes?.stock || variants[0].attributes.stock <= 0 ? "Agotados" : "Disponibles"}
                   </p>
                 </div>
-                {Object.entries(variantItem).map(([key, value, index]) => {
+
+
+                {Object.entries(variantItem).map(([key, value]) => {
                   let iconeImage = null
                   // Obtén la traducción de la clave en español
                   const translatedKey = keyTranslations[key] || key;
                   if (value != null) {
+                    iconeImage =
+                      key === "size"
+                        ? "https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_05_53e3c402fc.webp"
+                        : "https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_02_571dd7c62d.webp";
                     return (
-                      <div key={index} className="col-span-6 flex mt-5 items-center">
+                      <div key={key} className="col-span-6 flex mt-5 items-center">
                         <Image
                           priority={true}
-                          width="50"
-                          height="50"
-                          {...key == "size" ? iconeImage = `https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_05_53e3c402fc.webp` : iconeImage = `https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_02_571dd7c62d.webp`}
+                          width={50}
+                          height={50}
                           src={iconeImage}
                           alt="tailwind logo"
                           className="rounded-full mr-3"
@@ -341,7 +331,6 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                       </div>
                     );
                   }
-
                 })}
               </>
               //cuando el producto solo tiene una capa de variante, obtengo el variants[0]

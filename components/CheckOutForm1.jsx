@@ -148,7 +148,7 @@ const CheckOutForm1 = () => {
             data?.usersPermissionsUser?.data?.attributes?.idCard?.idType || "",
           checkbox: Boolean(
             data?.usersPermissionsUser?.data?.attributes?.idCard?.checkbox ||
-            false
+              false
           ),
         });
       }
@@ -489,6 +489,24 @@ const CheckOutForm1 = () => {
                                       ...userInformation,
                                       checkbox: false,
                                     });
+                                  }
+                                }}
+                              />
+                            </section>
+                            <section className="w-2/4 m-auto mt-10 mb-5">
+                              <label htmlFor="gift" className="mr-3">
+                                Envuelto para regalo
+                              </label>
+                              <Field
+                                type="checkbox"
+                                id="gift"
+                                name="gift"
+                                checked={userInformation.checkbox}
+                                placeholder=""
+                                className="form-input"
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                  } else {
                                   }
                                 }}
                               />

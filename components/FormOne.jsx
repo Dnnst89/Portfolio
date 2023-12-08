@@ -38,6 +38,8 @@ function FormOne() {
   const [canton, setCanton] = useState("");
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
+  const [gift, setGift] = useState("");
+  const [giftInfo, setGiftInfo] = useState("");
   const [userInformation, setUserInformation] = useState({
     //campos de formulario
     firstName: "",
@@ -83,10 +85,9 @@ function FormOne() {
       const userDataId = userData.user.id;
 
       const { data, error, loading } = await getUserInfo({
-        variables: { id: userDataId }, fetchPolicy: "network-only"
+        variables: { id: userDataId },
+        fetchPolicy: "network-only",
       });
-      console.log("🚀 ~ file: FormOne.jsx:98 ~ cargaDatos ~ data:", data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-      ?.attributes?.canton);
       if (error)
         return toast.error(
           "Lo sentimos, ha ocurrido un error al cargar los datos",
@@ -96,7 +97,6 @@ function FormOne() {
         );
 
       if (data && data.usersPermissionsUser) {
-        
         if (data.usersPermissionsUser.data.attributes.users_address.data) {
           setUserInfoExist(true);
           setAddressId(
@@ -153,7 +153,6 @@ function FormOne() {
           idNumber: "",
           idType: "Física",
         });
-        
       }
     } catch (error) {
       toast.error(error.message, {
@@ -590,6 +589,53 @@ function FormOne() {
                         </div>
                       </section>
                     </div>
+                    {/*
+                    <div className="flex justify-center w-full">
+                      <section className="w-3/4 m-auto mt-10 mb-5 flex items-center space-x-5">
+                        <label htmlFor="gift">Envuelto para regalo</label>
+                        <input
+                          className="p-3"
+                          type="checkbox"
+                          id="gift"
+                          {...register("gift", {
+                            onChange: (e) => {
+                              if (e.target.checked) {
+                                setGift(true);
+                              } else {
+                                setGift(false);
+                              }
+                            },
+                          })}
+                        ></input>
+                      </section>
+                      {gift && (
+                        <>
+                          <div className="">
+                            <section className="">
+                              <div className="">
+                                <label htmlFor="idType">Tipo De Cédula</label>
+                                <select
+                                  {...register("idType", {
+                                    onChange: (e) => {
+                                      const selectedValue = e.target.value;
+                                      if (selectedValue === "Física") {
+                                        setFisica(true);
+                                      } else {
+                                        setFisica(false);
+                                      }
+                                    },
+                                  })}
+                                >
+                                  <option value={"Física"}>Física</option>
+                                  <option value={"Jurídica"}>Jurídica</option>
+                                </select>
+                              </div>
+                              sssss
+                            </section>
+                          </div>
+                        </>
+                      )}
+                                </div>*/}
                     <div className="flex justify-center w-full">
                       <section className="w-3/4 m-auto mt-10 mb-5 flex items-center space-x-5">
                         <label htmlFor="idType">Factura Electrónica</label>
@@ -640,7 +686,7 @@ function FormOne() {
                                   {...register("idNumber", {
                                     required: {
                                       value: true,
-                                      message: "La dédula es requerida",
+                                      message: "La cédula es requerida",
                                     },
                                     minLength: {
                                       value: 9,
@@ -671,7 +717,7 @@ function FormOne() {
                                   {...register("idNumber", {
                                     required: {
                                       value: true,
-                                      message: "La dédula es requerida",
+                                      message: "La cédula es requerida",
                                     },
                                     minLength: {
                                       value: 10,

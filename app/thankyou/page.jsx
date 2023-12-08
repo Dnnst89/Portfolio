@@ -278,7 +278,10 @@ export default function ThankYouMessage() {
           const orderNumber = data?.createOrderDetail?.data?.id;
           setOrderId(orderNumber);
           await creatingOrderItems(orderNumber);
+
+          //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
           await sendOrderEmail(quantity, orderNumber);
+          //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
           try {
             fetchOrderMoovin(orderNumber);
           } catch (error) {}
@@ -422,12 +425,12 @@ export default function ThankYouMessage() {
 
       const required =
         PaymentDetail.data.paymentDetail.data.attributes.invoiceRequired;
-      const billSummary = {
+      /*const billSummary = {
         total: PaymentDetail?.data?.paymentDetail?.data?.attributes?.total,
         subtotal:
           PaymentDetail?.data?.paymentDetail?.data?.attributes?.subtotal,
         taxes: PaymentDetail?.data?.paymentDetail?.data?.attributes?.taxes,
-      };
+      };*/
       if (required) {
         try {
           const { data } = await getOrderItemsByOrderId({
@@ -453,6 +456,8 @@ export default function ThankYouMessage() {
               body
             );
 
+            console.log("feeResult", feeResult);
+            const billSummary = feeResult?.data?.billSummary;
             const imp = feeResult?.data?.serviceDetail?.lineDetails;
 
             const inv = formatItemInvoice(resultado, imp);
@@ -525,7 +530,7 @@ export default function ThankYouMessage() {
                   },
                   otherCharges: [],
                   billSummary: {
-                    ...formatBillSumary(billSummary, "1.000", store.currency),
+                    ...formatBillSumary(billSummary, "535.86", store.currency),
                   },
                   referenceInformation: [],
                   others: {
@@ -533,7 +538,22 @@ export default function ThankYouMessage() {
                   },
                 },
                 posTicket: false,
-                sendMail: false,
+                sendMail: true,
+                mailTitle:
+                  "Gracias por su compra en Detinmarin, adjuntamos su factura electrónica",
+                mailBody: `
+                <p>Estimado(a): ${client.name} </p>
+
+                <p>La informaci&oacute;n suministrada ser&aacute; utilizada &uacute;nicamente para los fines de la emisi&oacute;n de la factura electr&oacute;nica para suministrar dicha informaci&oacute;n en el registro&nbsp;conforme a lo establecido en la resoluci&oacute;n de Facturaci&oacute;n Electr&oacute;nica,No.\nDGT-R-033-2019 del 27 de junio de 2019 de la Direcci&oacute;nGeneral de Tributaci&oacute;n.</p>
+                
+                <p>El suministro voluntario de la informaci&oacute;n y datos personales se interpreta como el otorgamiento de su consentimiento para su uso de acuerdo a lo indicado en el presente aviso. Ante cualquier consulta podria comunicarse al correo <a href="mailto:hola@detinmarin.cr">hola@detinmarin.cr</a>&nbsp;o al n&uacute;mero telef&oacute;nico&nbsp;<a href="tel:+506-8771-6588">(+506) 8771-6588</a>&nbsp;</p>
+<img src="https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Logo_01_c02eda42d1.jpg"
+                alt="detinmarin" style="display:block;font-size:14px;border:0;outline:none;text-decoration:none"
+                width="140" title="detinmarin">
+                  
+                  
+                  `,
+
                 additionalInfo: {
                   nameDoc: "Factura Electrónica",
                   legendFooter:
@@ -542,11 +562,12 @@ export default function ThankYouMessage() {
                 },
                 returnCompleteAnswer: true,
               };
+              console.log("factura", bodyInvoice);
               const InvoiceResult = await facturationInstace.post(
                 `document/electronic-invoice?access_token=${token}`,
                 bodyInvoice
               );
-
+              console.log("resultado factura", InvoiceResult);
               try {
                 const isoDate = new Date().toISOString();
                 const resulta = await getStoreInformation({

@@ -1,11 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
 import { algoliaInstace } from "@/src/axios/algoliaIntance/config";
-import Link from "next/link";
+import Spinner from "@/components/Spinner";
 import { useRouter } from "next/navigation";
 
 const NavCategories = () => {
   const [clickedItem, setClickedItem] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const [menuItems, setMenuItems] = useState([]);
   const router = useRouter();
@@ -18,6 +19,7 @@ const NavCategories = () => {
 
   useEffect(() => {
     getData();
+    setLoading(false);
   }, []);
 
   const handleItemClick = (item) => {
@@ -36,32 +38,30 @@ const NavCategories = () => {
   return (
     <>
 
-        <nav aria-label="Menú categorías" role="navigation" className="grid grid-cols-1 h-[50px] mt-[0.5px] bg-resene">
-          <ul className="flex md:justify-center content-center text-[#333333]  overflow-y-scroll scrollbar scrollbar-none">
-            {menuItems &&
-              menuItems.length &&
-              menuItems.map((item, index) => {
-                return (
-                  <li
-                    key={item.id}
-                    className="px-3 hover:underline font-bold cursor-grab flex justify-center items-center"
-                  >
-                    <button
-                      id={index}
-                      // href={{ pathname: "/results", query: { query: item.name } }}
-                      onClick={() => {
-                        handleItemClick(item);
-                      }}
-                      className="w-max"
-                    >
-                      {" "}
-                      {item.name}
-                    </button>
-                  </li>
-                );
-              })}
-          </ul>
-        </nav>
+      <nav aria-label="Menú categorías" role="navigation" className="grid grid-cols-1 h-[50px] mt-[0.5px] bg-resene">
+        <ul className="flex md:justify-center content-center text-[#333333]  overflow-y-scroll scrollbar scrollbar-none">
+          {menuItems && menuItems.length ? (
+            menuItems.map((item, index) => (
+              <li
+                key={item.id}
+                className="px-3 hover:underline font-bold cursor-grab flex justify-center items-center"
+              >
+                <button
+                  id={index}
+                  onClick={() => {
+                    handleItemClick(item);
+                  }}
+                  className="w-max"
+                >
+                  {item.name}
+                </button>
+              </li>
+            ))
+          ) : (
+            <Spinner />
+          )}
+        </ul>
+      </nav>
     </>
   );
 };
