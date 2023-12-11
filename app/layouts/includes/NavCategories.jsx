@@ -3,19 +3,29 @@ import { useState, useEffect } from "react";
 import { algoliaInstace } from "@/src/axios/algoliaIntance/config";
 import Spinner from "@/components/Spinner";
 import { useRouter } from "next/navigation";
+import GetCategories from "@/src/graphQl/queries/getCategories";
+import { useLazyQuery, useQuery } from "@apollo/client";
 
 const NavCategories = () => {
   const [clickedItem, setClickedItem] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [getCategories] = useLazyQuery(GetCategories);
   const [menuItems, setMenuItems] = useState([]);
   const router = useRouter();
-  const getData = async () => {
-    const { data } = await algoliaInstace.get(
-      "development_api::category.category/"
-    );
-    setMenuItems(data.hits);
-  };
+  // const getData = async () => { //se trae las categorias desde algolia(mayor cantidad de consultas innecesarias)
+  //   const { data } = await algoliaInstace.get(
+  //     "development_api::category.category/"
+  //   );
+  //   setMenuItems(data.hits);
+  // };
+
+  const getData = async () => { //obtiene la data directamente de strapi
+
+    const { data, error, loading } = await getCategories({
+    });
+    setMenuItems(data?.categories?.data);
+    setLoading(loading)
+  }
 
   useEffect(() => {
     getData();
@@ -32,7 +42,7 @@ const NavCategories = () => {
     console.log(window.location.pathname, "pathname");
     console.log(window.location.search, "search");
 
-    return (window.location.href = `/results/?query=${item.name}`);
+    return (window.location.href = `/results/?query=${item?.attributes?.name}`);
   };
 
   return (
@@ -53,7 +63,7 @@ const NavCategories = () => {
                   }}
                   className="w-max"
                 >
-                  {item.name}
+                  {item?.attributes?.name}
                 </button>
               </li>
             ))
