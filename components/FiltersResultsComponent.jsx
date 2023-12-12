@@ -1,22 +1,35 @@
 "use client";
 import { useQuery } from "@apollo/client";
-import getProductByAgeRange from "@/src/graphQl/queries/getProductByAgeRange";
 import ProductFilterContainer from "./ProductFilterContainer";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Spinner from "./Spinner";
 import toast, { Toaster } from "react-hot-toast";
+import getProductsFiltered from "@/src/graphQl/queries/getProductsFiltered";
 
-export default function FiltersResultsComponent({ ageRange }) {
-
+export default function FiltersResultsComponent({ querySearch }) {
+  //querySearch me indica el tipo de filtro y el valor del filtro
   const [currentPage, setCurrentPage] = useState(1);
-
-  const initialAge = parseInt(ageRange.split("-")[0]);
-  const finalAge = parseInt(ageRange.split("-")[1]);
   const page = currentPage;
   const pageSize = 12;
-  const { loading, error, data } = useQuery(getProductByAgeRange, {
-    variables: { initialAge, finalAge, page, pageSize },
+
+  let initialAge;
+  let finalAge;
+  let category;
+
+  //separo la query para saber que mostrar si es por rango de dedades o por categorias
+  const [filterType, filterValue] = querySearch.split('=');
+  if (filterType == "ageRange") {
+    initialAge = parseInt(filterValue.split("-")[0]);
+    finalAge = parseInt(filterValue.split("-")[1]);
+  } else if (filterType == "category") {
+    category = filterValue
+  }
+
+  const { loading, error, data } = useQuery(getProductsFiltered, {
+    variables: { initialAge, finalAge, page, pageSize, category },
   });
+
+
   //if (loading) return <Spinner />;
   if (error) return toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
     autoClose: 5000
@@ -26,7 +39,13 @@ export default function FiltersResultsComponent({ ageRange }) {
     <div className={loading ? "flex flex-wrap max-w-screen-xl m-auto justify-center my-10" : ""}>
       {loading ? <Spinner /> : <div> <Toaster />
         <div className="flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
-          <h1 className="text-center">Resultados de productos para niños de {initialAge === 8 ? `${initialAge} o más años` : `${initialAge} - ${finalAge} años`}</h1>
+          {filterType == "ageRange" ?
+            <h1 className="text-center">Resultados de productos para niños de {initialAge === 8 ? `${initialAge} o más años` : `${initialAge} - ${finalAge} años`}</h1>
+            :
+            <h1 className="text-center">Resultados de productos  de {category}</h1>
+
+          }
+
         </div>
         <ProductFilterContainer
           result={data.products}
