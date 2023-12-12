@@ -6,7 +6,6 @@ import toast, { Toaster } from "react-hot-toast";
 import Spinner from "@/components/Spinner";
 
 const ResultsComponent = (test) => {
-
   const [result, setResult] = useState([]);
   const [hitsPerPage, setHitsPerPage] = useState(null);
   const [nbHits, setNbHits] = useState(null);
@@ -15,7 +14,7 @@ const ResultsComponent = (test) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log(test);
+    console.log("sddasd", test);
   }, [test]);
   async function getHits() {
     try {
@@ -59,29 +58,33 @@ const ResultsComponent = (test) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, test.query]);
 
-
   return (
     <>
       <div className={loading ? "grid place-items-center" : ""}>
-        {loading ? <Spinner /> :
-
-          nbHits > 0 ? (
-            <div>
-              <div className="flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
-                <h1>Resultados de &#34;{decodeURIComponent(test.query)}&#34;</h1>
-              </div>
-              <Toaster />
-              <ProductContainer
-                result={result}
-                hitsPerPage={hitsPerPage}
-                nbHits={nbHits}
-                nbPages={nbPages}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-              />
+        {loading ? (
+          <Spinner />
+        ) : nbHits > 0 ? (
+          <div>
+            <div className="flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
+              <h1>Resultados de &#34;{decodeURIComponent(test.query)}&#34;</h1>
             </div>
-          ) : (<div className="text-center grid content-center h-80 m-auto"> <h1 className="font-bold">¡Lo sentimos!</h1> <h2>No se encontraron resultados.</h2> </div>)
-        }
+            <Toaster />
+            <ProductContainer
+              result={result}
+              hitsPerPage={hitsPerPage}
+              nbHits={nbHits}
+              nbPages={nbPages}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
+          </div>
+        ) : (
+          <div className="text-center grid content-center h-80 m-auto">
+            {" "}
+            <h1 className="font-bold">¡Lo sentimos!</h1>{" "}
+            <h2>No se encontraron resultados.</h2>{" "}
+          </div>
+        )}
       </div>
     </>
   );

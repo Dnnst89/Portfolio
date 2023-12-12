@@ -66,7 +66,7 @@ export default function ThankYouMessage() {
   const [description, setDescription] = useState();
   //calling the mutation
   const [updatePaymentDetailStatus] = useMutation(UPDATE_PAYMENT_DETAIL_STATUS);
-  const [updatePaymentDeliveryId] = useMutation(UPDATE_PAYMENT_DELIVERY_ID);
+
   const [deleteCarItem] = useMutation(DELETE_CART_ITEM_MUTATION);
   const [updateVariantStock] = useMutation(UPDATE_VARIANT_STOCK);
   const [createOrder] = useMutation(CREATE_ORDER);
@@ -163,87 +163,6 @@ export default function ThankYouMessage() {
     });
   };
 
-  const fetchOrderMoovin = async (orderNumber) => {
-    try {
-      const paymentUser = await getPaymentDetails({
-        variables: {
-          userId: userId,
-        },
-      });
-      const paymentinfo = await getPaymentDetail({
-        //obtengo el paymentDetails, para que cuando refresque la pagina no cree mas ordenes
-        variables: { paymentId },
-      });
-      const client = {
-        name:
-          paymentUser?.data?.usersPermissionsUser?.data?.attributes?.firstName +
-          " " +
-          paymentUser?.data?.usersPermissionsUser?.data?.attributes?.lastName,
-        idType: validateID(
-          paymentUser?.data?.usersPermissionsUser?.data?.attributes?.idCard
-            ?.idType
-        ),
-        idNumber:
-          paymentUser?.data?.usersPermissionsUser?.data?.attributes?.idCard
-            ?.idNumber,
-        email: paymentUser?.data?.usersPermissionsUser?.data?.attributes?.email,
-        phone:
-          paymentUser?.data?.usersPermissionsUser?.data?.attributes
-            ?.phoneNumber,
-      };
-      const result = await getStoreInformation({
-        variables: {
-          id: 1,
-        },
-      });
-      const store = result?.data?.storeInformation?.data?.attributes;
-
-      const userAddress = await getUserAddress({
-        variables: {
-          id: userId,
-        },
-      });
-      const deliveryInformation =
-        userAddress?.data?.usersPermissionsUser?.data?.attributes?.users_address
-          ?.data?.attributes;
-      const payment = paymentinfo?.data?.paymentDetail?.data?.attributes;
-
-      if (payment.deliveryMethod === "Envío a través de MOOVIN") {
-        const shipmentInfo = createData(
-          items,
-          deliveryInformation.latitude,
-          deliveryInformation.longitude
-        );
-        const estimation = await requestEstimation(shipmentInfo);
-
-        const datos = createOrderData(
-          store,
-          items,
-          orderNumber,
-          client,
-          estimation.idEstimation,
-          deliveryInformation
-        );
-        try {
-          console.log("datos", datos);
-          const order = await orderMoovin(datos);
-          console.log("order mooving", order);
-        } catch (error) {}
-        const paymentId = paymentinfo?.data?.paymentDetail?.data?.id;
-
-        const orderId = parseInt(order.idPackage);
-
-        await updatePaymentDeliveryId({
-          variables: {
-            id: paymentId,
-            newDeliveryId: orderId,
-          },
-        });
-      }
-    } catch (error) {
-      console.log("error creacion orden moovin", error);
-    }
-  };
   ////////////////////////////funciones para crear orden, orderItems y acutalizar paymentDetail/////////
 
   const handleCreateOrder = async (status) => {

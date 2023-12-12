@@ -15,6 +15,7 @@ const NavCategories = () => {
       "development_api::category.category/"
     );
     setMenuItems(data.hits);
+    console.log("ssssssss", data.hits);
   };
 
   useEffect(() => {
@@ -29,16 +30,19 @@ const NavCategories = () => {
     // } else {
     //   setClickedItem(id);
     // }
-    console.log(window.location.pathname, "pathname");
-    console.log(window.location.search, "search");
+    // console.log(window.location.pathname, "pathname");
+    // console.log(window.location.search, "search");
 
     return (window.location.href = `/results/?query=${item.name}`);
   };
 
   return (
     <>
-
-      <nav aria-label="Menú categorías" role="navigation" className="grid grid-cols-1 h-[50px] mt-[0.5px] bg-resene">
+      <nav
+        aria-label="Menú categorías"
+        role="navigation"
+        className="grid grid-cols-1 h-[50px] mt-[0.5px] bg-resene"
+      >
         <ul className="flex md:justify-center content-center text-[#333333]  overflow-y-scroll scrollbar scrollbar-none">
           {menuItems && menuItems.length ? (
             menuItems.map((item, index) => (
