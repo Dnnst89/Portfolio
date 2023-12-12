@@ -42,7 +42,7 @@ const NavCategories = () => {
     console.log(window.location.pathname, "pathname");
     console.log(window.location.search, "search");
 
-    return (window.location.href = `/results/?query=${item?.attributes?.name}`);
+    return (window.location.href = `/filtersResults/?category=${item?.attributes?.name}`);
   };
 
   return (

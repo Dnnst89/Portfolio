@@ -8,12 +8,13 @@ const Page = () => {
   const [querySearch, setQuerySearch] = useState("");
 
   useEffect(() => {
-    console.log(window?.location?.search?.split("=")[1])
-    setQuerySearch(window?.location?.search?.split("=")[1]);
+    setQuerySearch(window?.location?.search?.split("?")[1]);
+
   }, []);
+
   return (
     <BodyComponent>
-      <FiltersResultsComponent ageRange={querySearch} />
+      <FiltersResultsComponent querySearch={querySearch} />
     </BodyComponent>
   );
 };
