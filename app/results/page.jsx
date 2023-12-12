@@ -18,9 +18,9 @@ const GetResults = () => {
     <>
       <div className={loading ? "grid place-items-center" : ""}>
         {/* con algolia */}
-        {/* {loading ? <Spinner /> : <ResultsComponent query={querySearch || ""} />}  */}
+        {loading ? <Spinner /> : <ResultsComponent query={querySearch || ""} />}
         {/* con strapi */}
-        {loading ? <Spinner /> : <FilterResultsCategories category={querySearch || ""} />}
+        {/* {loading ? <Spinner /> : <FilterResultsCategories category={querySearch || ""} />} */}
       </div>
     </>
   );

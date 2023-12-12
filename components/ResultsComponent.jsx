@@ -4,8 +4,12 @@ import { algoliaInstace } from "@/src/axios/algoliaIntance/config";
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import Spinner from "@/components/Spinner";
+import FilterContainer from "./FilterContainer";
 
 const ResultsComponent = (test) => {
+
+  const [minPriceFilter, setMinPriceFilter] = useState(null);
+  const [maxPriceFilter, setMaxPriceFilter] = useState(null);
 
   const [result, setResult] = useState([]);
   const [hitsPerPage, setHitsPerPage] = useState(null);
@@ -14,14 +18,17 @@ const ResultsComponent = (test) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    console.log(test);
-  }, [test]);
   async function getHits() {
     try {
-      const { data, statusText, status } = await algoliaInstace.get(
-        `/development_api::product.product?query=${test.query}&page=${currentPage}`
-      );
+      var url = `/development_api::product.product?query=${test.query}&page=${currentPage}`;
+
+      // Agregar filtros de precio si están presentes
+      if (minPriceFilter != null && maxPriceFilter != null) {
+        url += `&numericFilters=variants.price>=${minPriceFilter},variants.price<=${maxPriceFilter}`;
+      }
+
+      const { data, statusText, status } = await algoliaInstace.get(url);
+
       if (statusText !== "OK") {
         toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
           autoClose: 5000,
@@ -69,8 +76,8 @@ const ResultsComponent = (test) => {
             <div>
               <div className="flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
                 <h1>Resultados de &#34;{decodeURIComponent(test.query)}&#34;</h1>
+                <FilterContainer test={test} minPriceFilter={minPriceFilter} maxPriceFilter={maxPriceFilter} setMaxPriceFilter={setMaxPriceFilter} setMinPriceFilter={setMinPriceFilter} setCurrentPage={setCurrentPage} setHitsPerPage={setHitsPerPage} setNbHits={setNbHits} setNbPages={setNbPages} setResult={setResult} />
               </div>
-              <Toaster />
               <ProductContainer
                 result={result}
                 hitsPerPage={hitsPerPage}
