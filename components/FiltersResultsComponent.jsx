@@ -22,7 +22,7 @@ export default function FiltersResultsComponent({ querySearch }) {
     initialAge = parseInt(filterValue.split("-")[0]);
     finalAge = parseInt(filterValue.split("-")[1]);
   } else if (filterType == "category") {
-    category = filterValue
+    category = decodeURIComponent(filterValue); //para transformar el texto con espacios desde el URL
   }
 
   const { loading, error, data } = useQuery(getProductsFiltered, {
