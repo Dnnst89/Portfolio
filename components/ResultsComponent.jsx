@@ -19,6 +19,8 @@ const ResultsComponent = (test) => {
   const [loading, setLoading] = useState(true);
 
   async function getHits() {
+
+    console.log(test.query)
     try {
       var url = `/development_api::product.product?query=${test.query}&page=${currentPage}`;
 
