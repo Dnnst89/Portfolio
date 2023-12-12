@@ -25,7 +25,7 @@ import CREATE_ORDER_ITEM_MUTATION from "@/src/graphQl/queries/createOrderItem";
 import { UPDATE_PAYMENT_DETAIL_STATUS } from "@/src/graphQl/queries/updatePaymentDetailStatus";
 import { UPDATE_PAYMENT_DELIVERY_ID } from "@/src/graphQl/queries/updatePaymentDeliveryId";
 
-import { createOrderData, orderMoovin } from "@/api/moovin/createOrder";
+import { deleteOrderMoovin } from "@/api/moovin/createOrder";
 import { requestEstimation, createData } from "@/api/moovin/estimation";
 
 import {
@@ -181,7 +181,8 @@ export default function ThankYouMessage() {
         paymentinfo?.data?.paymentDetail?.data?.attributes?.status;
       const orderPayment =
         paymentinfo?.data?.paymentDetail?.data?.attributes?.order_detail?.data; //me da la orden asociada al pago
-
+      const moovinId =
+        paymentinfo?.data?.paymentDetail?.data?.attributes?.deliveryId;
       if (orderPayment === null && orderStatus === "Inicial") {
         // si no tiene orden le asigno una
         try {
@@ -326,10 +327,22 @@ export default function ThankYouMessage() {
       } else {
         // Payment failed
         // I need to change the status of ther Payment to failed
+        console.log("sdfasdfasdfafdsasdfadsf");
         await handleUpdatePayment("Failed");
+        try {
+          const datos = { idPackage: moovinId };
+          const del = await deleteOrderMoovin(datos);
+          console.log("sdfasdf fallo", del);
+        } catch (error) {}
       }
     } else {
+      console.log("hola");
       await handleUpdatePayment("Cancelled");
+      try {
+        const datos = { idPackage: moovinId };
+        const del = await deleteOrderMoovin(datos);
+        console.log("sdfasdf fallo", del);
+      } catch (error) {}
     }
   };
   ////////////////////////////////FUNCION PARA CREAR LA FACTURA ELECTRONICA//////////////////////////////
