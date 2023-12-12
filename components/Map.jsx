@@ -81,10 +81,14 @@ const Map = ({
     mapRef.current = map;
     setMap(map);
   };
-  handleSelect(address);
+  if (address !== undefined || address !== null) {
+    handleSelect(address);
+  }
 
   useEffect(() => {
-    handleSelect(address);
+    if (address !== undefined || address !== null) {
+      handleSelect(address);
+    }
     return () => {
       // Destruir el mapa si es necesario
       mapRef.current = null; // Si necesitas resetear la referencia del mapa
