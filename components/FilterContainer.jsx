@@ -6,8 +6,6 @@ import React from 'react'
 
 function FilterContainer({ test, minPriceFilter, maxPriceFilter, setMinPriceFilter, setMaxPriceFilter, setCurrentPage, setHitsPerPage, setNbHits, setNbPages, setResult }) {
 
-    console.log(test.query)
-
     const [isOpen, setIsOpen] = useState(false);
 
     return (

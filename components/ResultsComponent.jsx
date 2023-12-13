@@ -20,7 +20,6 @@ const ResultsComponent = (test) => {
 
   async function getHits() {
 
-    console.log(test.query)
     try {
       var url = `/development_api::product.product?query=${test.query}&page=${currentPage}`;
 
