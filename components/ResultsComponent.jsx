@@ -19,8 +19,11 @@ const ResultsComponent = (test) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  const [selectedBrands, setSelectedBrands] = useState([]);
+
   async function getHits() {
 
+    console.log(selectedBrands)
 
     try {
       var url = `/development_api::product.product?query=${test.query}&page=${currentPage}`;
@@ -30,6 +33,13 @@ const ResultsComponent = (test) => {
         url += `&numericFilters=variants.price>=${minPriceFilter},variants.price<=${maxPriceFilter}`;
       }
 
+      if (selectedBrands.length !== 0) {
+        // Concatenar el arreglo selectedBrands usando join y agregarlo a la URL
+        const brandsFilter = selectedBrands.map((brand) => `brand:${brand.replace(/\s/g, '_')}`).join(' OR ');
+        url += `&filters=${brandsFilter}`;
+      }
+
+      console.log(url)
       const { data, statusText, status } = await algoliaInstace.get(url);
 
       if (statusText !== "OK") {
@@ -79,7 +89,7 @@ const ResultsComponent = (test) => {
             <div>
               <div className="flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
                 <h1>Resultados de &#34;{decodeURIComponent(test.query)}&#34;</h1>
-                <FilterContainer test={test} minPriceFilter={minPriceFilter} maxPriceFilter={maxPriceFilter} setMaxPriceFilter={setMaxPriceFilter} setMinPriceFilter={setMinPriceFilter} setCurrentPage={setCurrentPage} setHitsPerPage={setHitsPerPage} setNbHits={setNbHits} setNbPages={setNbPages} setResult={setResult} />
+                <FilterContainer test={test} minPriceFilter={minPriceFilter} maxPriceFilter={maxPriceFilter} setMaxPriceFilter={setMaxPriceFilter} setMinPriceFilter={setMinPriceFilter} setCurrentPage={setCurrentPage} setHitsPerPage={setHitsPerPage} setNbHits={setNbHits} setNbPages={setNbPages} setResult={setResult} selectedBrands={selectedBrands} setSelectedBrands={setSelectedBrands} />
               </div>
               <ProductContainer
                 result={result}
