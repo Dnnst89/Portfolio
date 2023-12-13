@@ -19,7 +19,6 @@ const GetResults = () => {
       <div className={loading ? "grid place-items-center" : ""}>
         {/* con algolia */}
         {loading ? <Spinner /> : <ResultsComponent query={querySearch || ""} />}
-
       </div>
     </>
   );
