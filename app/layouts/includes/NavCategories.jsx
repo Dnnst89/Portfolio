@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import { algoliaInstace } from "@/src/axios/algoliaIntance/config";
 import Spinner from "@/components/Spinner";
 import { useRouter } from "next/navigation";
 import GetCategories from "@/src/graphQl/queries/getCategories";
@@ -19,15 +18,41 @@ const NavCategories = () => {
   //   setMenuItems(data.hits);
   // };
 
-  const getData = async () => { //obtiene la data directamente de strapi
 
-    const { data, error, loading } = await getCategories({
-    });
-    setMenuItems(data?.categories?.data);
-    setLoading(loading)
-  }
 
   useEffect(() => {
+    const getData = async () => { //obtiene la data directamente de strapi
+      let currentPage = 1;
+      let pageSize = 10;
+      let fetchedData = []; // para ir juntando los datos de cada pagina
+      let pageCount = 1;
+
+      do {
+        //debemos hacer un primer recorrido ya que el dato paeCount de la consulta es incierto
+        try {
+          const { data, error, loading } = await getCategories({
+            variables: {
+              page: currentPage,
+              pageSize,
+            }
+
+          });
+
+          const categories = data?.categories;
+          console.log(data)
+          fetchedData = fetchedData.concat(categories?.data);
+          pageCount = categories?.meta?.pagination?.pageCount;
+          currentPage++;
+          setLoading(loading)
+        } catch (error) {
+          console.log(error)
+        }
+
+      } while (currentPage <= pageCount);
+      setMenuItems(fetchedData);
+      setLoading(loading)
+
+    }
     getData();
     setLoading(false);
   }, []);
