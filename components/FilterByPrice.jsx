@@ -1,16 +1,8 @@
 import React from 'react'
 import { useState } from 'react';
 import algoliasearch from "algoliasearch";
-import { useForm } from "react-hook-form";
 
 function FilterByPrice({ test, minPriceFilter, maxPriceFilter, setMinPriceFilter, setMaxPriceFilter, setCurrentPage, setHitsPerPage, setNbHits, setNbPages, setResult }) {
-
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-        reset,
-    } = useForm();
 
     const APPLICATION_ID = "6TQCC8J5LB";
     const SEARCH_API_KEY = "5a6490a15e1b2c9a3c53d7f8328c3f8d";

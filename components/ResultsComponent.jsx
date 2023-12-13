@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import Spinner from "@/components/Spinner";
 import FilterContainer from "./FilterContainer";
+import algoliasearch from "algoliasearch";
 
 const ResultsComponent = (test) => {
 
@@ -19,6 +20,7 @@ const ResultsComponent = (test) => {
   const [loading, setLoading] = useState(true);
 
   async function getHits() {
+
 
     try {
       var url = `/development_api::product.product?query=${test.query}&page=${currentPage}`;
@@ -59,10 +61,10 @@ const ResultsComponent = (test) => {
     }
   }
 
+
   useEffect(() => {
     if (test.query) {
       allResults();
-      // setLoading(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, test.query]);
