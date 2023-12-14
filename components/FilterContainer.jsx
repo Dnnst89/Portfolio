@@ -10,12 +10,14 @@ function FilterContainer({ test, minPriceFilter, maxPriceFilter, setMinPriceFilt
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <div>
+        <div className="max-w-screen-xl w-full flex mx-5 justify-end md:mx-[100px]">
+            <h3 onClick={() => setIsOpen(!isOpen)}>Filtros</h3>
 
-            <button type="button" className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 " onClick={() => setIsOpen(!isOpen)}>
+            <button type="button" className="-m-2 ml-1 p-2 text-gray-400 hover:text-gray-500 sm:ml-6" onClick={() => setIsOpen(!isOpen)}>
                 <span className="sr-only">Filtros</span>
                 <FaFilter />
             </button>
+
 
             {isOpen && (<div className="bg-white">
 

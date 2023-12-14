@@ -12,6 +12,7 @@ function FilterByBrand({ test, selectedBrands, setSelectedBrands, setCurrentPage
     const [brands, setBrands] = useState(null);
 
     async function getBrands() {
+        console.log(test.query)
         let allBrands = [];
         let page = 0;
         const hitsPerPage = 100;
@@ -19,8 +20,7 @@ function FilterByBrand({ test, selectedBrands, setSelectedBrands, setCurrentPage
         let results;
 
         do {
-            const { hits, nbHits } = await index.search(test.query
-
+            const { hits, nbHits } = await index.search(decodeURIComponent(test.query)
 
                 , {
                     attributesToRetrieve: ['brand'],
@@ -36,6 +36,7 @@ function FilterByBrand({ test, selectedBrands, setSelectedBrands, setCurrentPage
         } while (page * hitsPerPage < results.nbHits);
 
         setBrands(allBrands);
+        console.log(allBrands)
     }
 
     useEffect(() => {
@@ -43,12 +44,12 @@ function FilterByBrand({ test, selectedBrands, setSelectedBrands, setCurrentPage
     }, []);
 
     const handleBrandSelection = (brand) => {
-        const modifiedBrand = brand.replace(/\s/g, '_'); // Reemplaza espacios con guion bajo
+
         const selectedBrandsCopy = [...selectedBrands];
         const index = selectedBrandsCopy.indexOf(brand);
 
         if (index === -1) {
-            selectedBrandsCopy.push(modifiedBrand);
+            selectedBrandsCopy.push(brand);
         } else {
             selectedBrandsCopy.splice(index, 1);
         }
@@ -64,7 +65,7 @@ function FilterByBrand({ test, selectedBrands, setSelectedBrands, setCurrentPage
         console.log("marca", selectedBrands)
 
         // Construye la cadena de filtros de marcas
-        const brandFilters = selectedBrands.map((brand) => `brand:${brand}`).join(' OR ');
+        const brandFilters = selectedBrands.map((brand) => `brand:'${brand}'`).join(' OR ');
 
         // Combina con otros filtros si es necesario
         // const otherFilters = ...;
