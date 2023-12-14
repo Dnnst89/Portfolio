@@ -35,7 +35,7 @@ const ResultsComponent = (test) => {
 
       if (selectedBrands.length !== 0) {
         // Concatenar el arreglo selectedBrands usando join y agregarlo a la URL
-        const brandsFilter = selectedBrands.map((brand) => `brand:${brand.replace(/\s/g, '_')}`).join(' OR ');
+        const brandsFilter = selectedBrands.map((brand) => `brand:'${brand}'`).join(' OR ');
         url += `&filters=${brandsFilter}`;
       }
 
@@ -87,9 +87,22 @@ const ResultsComponent = (test) => {
 
           nbHits > 0 ? (
             <div>
-              <div className="flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
-                <h1>Resultados de &#34;{decodeURIComponent(test.query)}&#34;</h1>
-                <FilterContainer test={test} minPriceFilter={minPriceFilter} maxPriceFilter={maxPriceFilter} setMaxPriceFilter={setMaxPriceFilter} setMinPriceFilter={setMinPriceFilter} setCurrentPage={setCurrentPage} setHitsPerPage={setHitsPerPage} setNbHits={setNbHits} setNbPages={setNbPages} setResult={setResult} selectedBrands={selectedBrands} setSelectedBrands={setSelectedBrands} />
+              <div className="flex flex-wrap max-w-screen-xl m-auto justify-center items-center my-10">
+                <h1 className="w-full text-center">Resultados de &#34;{decodeURIComponent(test.query)}&#34;</h1>
+                <FilterContainer
+                  test={test}
+                  minPriceFilter={minPriceFilter}
+                  maxPriceFilter={maxPriceFilter}
+                  setMaxPriceFilter={setMaxPriceFilter}
+                  setMinPriceFilter={setMinPriceFilter}
+                  setCurrentPage={setCurrentPage}
+                  setHitsPerPage={setHitsPerPage}
+                  setNbHits={setNbHits}
+                  setNbPages={setNbPages}
+                  setResult={setResult}
+                  selectedBrands={selectedBrands}
+                  setSelectedBrands={setSelectedBrands}
+                />
               </div>
               <ProductContainer
                 result={result}
