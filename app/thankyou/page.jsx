@@ -332,7 +332,6 @@ export default function ThankYouMessage() {
         try {
           const datos = { idPackage: moovinId };
           const del = await deleteOrderMoovin(datos);
-          console.log("sdfasdf fallo", del);
         } catch (error) {}
       }
     } else {
@@ -340,8 +339,8 @@ export default function ThankYouMessage() {
       await handleUpdatePayment("Cancelled");
       try {
         const datos = { idPackage: moovinId };
+
         const del = await deleteOrderMoovin(datos);
-        console.log("sdfasdf fallo", del);
       } catch (error) {}
     }
   };

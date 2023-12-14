@@ -198,7 +198,7 @@ export default function CheckOutForm3({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    fetchOrderMoovin(orderNumber);
+    // fetchOrderMoovin(orderNumber);
   }, [data]);
 
   const handleVerification = async () => {
