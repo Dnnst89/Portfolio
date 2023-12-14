@@ -52,7 +52,7 @@ function FilterContainer({ test, minPriceFilter, maxPriceFilter, setMinPriceFilt
                                         </div>
 
                                     </div>
-                                    <div className="border-t border-gray-200 px-4 py-6">
+                                    {/* <div className="border-t border-gray-200 px-4 py-6">
                                         <h3 className="-mx-2 -my-3 flow-root">
                                             <button type="button" className="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500" aria-controls="filter-section-mobile-0" aria-expanded="false">
                                                 <span className="font-medium text-gray-900">Marca</span>
@@ -64,7 +64,7 @@ function FilterContainer({ test, minPriceFilter, maxPriceFilter, setMinPriceFilt
                                             </div>
                                         </div>
 
-                                    </div>
+                                    </div> */}
                                 </form>
                             </div>
                         </div>
