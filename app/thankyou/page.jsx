@@ -9,7 +9,6 @@ import { logo } from "../assets/images";
 import useStorage from "@/hooks/useStorage";
 import { useQuery } from "@apollo/client";
 import GET_CART_ITEMS_LIST_SHOPPING_SESSION from "@/src/graphQl/queries/getCartItemsByShoppingSession";
-import GET_SHOPPING_SESSION_BY_USER from "@/src/graphQl/queries/getShoppingSessionByUser";
 import DELETE_CART_ITEM_MUTATION from "@/src/graphQl/queries/deleteCartItem";
 import { GET_PAYMENT_DETAIL } from "@/src/graphQl/queries/getPaymentDetail";
 import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
@@ -147,7 +146,7 @@ export default function ThankYouMessage() {
               id: cartItemId,
             },
           });
-        } catch (error) {}
+        } catch (error) { }
 
         try {
           updateVariantStock({
@@ -228,7 +227,7 @@ export default function ThankYouMessage() {
           console.log("datos", datos);
           const order = await orderMoovin(datos);
           console.log("order mooving", order);
-        } catch (error) {}
+        } catch (error) { }
         const paymentId = paymentinfo?.data?.paymentDetail?.data?.id;
 
         const orderId = parseInt(order.idPackage);
@@ -284,7 +283,7 @@ export default function ThankYouMessage() {
           //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
           try {
             fetchOrderMoovin(orderNumber);
-          } catch (error) {}
+          } catch (error) { }
 
           handleCartItems();
           createInvoice(orderNumber);
@@ -592,8 +591,8 @@ export default function ThankYouMessage() {
               } catch (error) {
                 console.log("error", error);
               }
-            } catch (error) {}
-          } catch (error) {}
+            } catch (error) { }
+          } catch (error) { }
         } catch (error) {
           console.log("error crear factura", error);
         }
