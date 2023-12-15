@@ -166,7 +166,7 @@ const formatItemInvoice = (items, imp) => {
     cont = cont + 1;
     var cod = 0;
     if (imp[cont].taxes[0].code < 10) {
-      cod = "0" + imp[cont].taxes[0].code;
+      cod = "" + imp[cont].taxes[0].code;
     } else {
       cod = imp[cont].taxes[0].code;
     }
