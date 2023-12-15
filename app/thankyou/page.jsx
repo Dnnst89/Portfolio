@@ -327,21 +327,33 @@ export default function ThankYouMessage() {
       } else {
         // Payment failed
         // I need to change the status of ther Payment to failed
-        console.log("sdfasdfasdfafdsasdfadsf");
         await handleUpdatePayment("Failed");
         try {
+          const paymentinfo = await getPaymentDetail({
+            //obtengo el paymentDetails, para que cuando refresque la pagina no cree mas ordenes
+            variables: { paymentId },
+          });
+          const moovinId =
+            paymentinfo?.data?.paymentDetail?.data?.attributes?.deliveryId;
           const datos = { idPackage: moovinId };
           const del = await deleteOrderMoovin(datos);
-        } catch (error) {}
+        } catch (error) {
+          console.log("error", error);
+        }
       }
     } else {
-      console.log("hola");
-      await handleUpdatePayment("Cancelled");
       try {
+        const paymentinfo = await getPaymentDetail({
+          //obtengo el paymentDetails, para que cuando refresque la pagina no cree mas ordenes
+          variables: { paymentId },
+        });
+        const moovinId =
+          paymentinfo?.data?.paymentDetail?.data?.attributes?.deliveryId;
         const datos = { idPackage: moovinId };
-
         const del = await deleteOrderMoovin(datos);
-      } catch (error) {}
+      } catch (error) {
+        console.log("error", error);
+      }
     }
   };
   ////////////////////////////////FUNCION PARA CREAR LA FACTURA ELECTRONICA//////////////////////////////
