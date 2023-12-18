@@ -12,6 +12,9 @@ const ResultsComponent = (test) => {
   const [minPriceFilter, setMinPriceFilter] = useState(0);
   const [maxPriceFilter, setMaxPriceFilter] = useState(999999);
 
+  const [minAgeFilter, setMinAgeFilter] = useState(0);
+  const [maxAgeFilter, setMaxAgeFilter] = useState(100);
+
   const [result, setResult] = useState([]);
   const [hitsPerPage, setHitsPerPage] = useState(null);
   const [nbHits, setNbHits] = useState(null);
@@ -21,6 +24,7 @@ const ResultsComponent = (test) => {
 
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedPriceRange, setSelectedPriceRange] = useState(null);
+  const [selectedAgeRange, setSelectedAgeRange] = useState(null);
 
   const APPLICATION_ID = "6TQCC8J5LB";
   const SEARCH_API_KEY = "5a6490a15e1b2c9a3c53d7f8328c3f8d";
@@ -87,24 +91,37 @@ const ResultsComponent = (test) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, test.query]);
 
-  const handleFilters = (selectedBrands, min, max) => {
+  const handleFilters = (selectedBrands, minAge, maxAge, minPrice, maxPrice) => {
 
-    setMinPriceFilter(min);
-    setMaxPriceFilter(max);
+    setMinAgeFilter(minAge);
+    setMaxAgeFilter(maxAge);
+    setMinPriceFilter(minPrice);
+    setMaxPriceFilter(maxPrice);
 
-    if (min === null || min === undefined || min === '') {
+    if (minAge === null || minAge === undefined || minAge === "") {
+      min = 0; // Asignar un valor predeterminado de 0 si minAge es nulo o vacío
+      setMinAgeFilter(0); // <-- Debería ser setMinAgeFilter(0)
+    }
+    if (maxAge === null || maxAge === undefined || maxAge === "") {
+      max = 100; // Asignar un valor predeterminado de 100 si maxAge es nulo o vacío
+      setMaxAgeFilter(100); // Corregir el valor aquí
+    }
+
+    if (minPrice === null || minPrice === undefined || minPrice === '') {
       setMinPriceFilter(0);
     }
 
-    if (max === null || max === undefined || max === '') {
+    if (maxPrice === null || maxPrice === undefined || maxPrice === '') {
       setMaxPriceFilter(999999);
     }
 
-    const priceFilters = 'variants.price >= ' + min + ' AND variants.price <= ' + max;
+    const ageFilters = `variants.initialAge <= ${minAge} AND variants.finalAge >= ${maxAge}`;
+
+    const priceFilters = 'variants.price >= ' + minPrice + ' AND variants.price <= ' + maxPrice;
 
     const brandFilters = selectedBrands.map((brand) => `brand:'${brand}'`).join(' OR ');
 
-    const combinedFilters = [brandFilters, priceFilters].filter(Boolean).join(' AND ');
+    const combinedFilters = [brandFilters, priceFilters, ageFilters].filter(Boolean).join(' AND ');
 
     console.log(combinedFilters)
 
@@ -121,7 +138,9 @@ const ResultsComponent = (test) => {
     });
 
     setCurrentPage(0);
-    setSelectedPriceRange({ min, max });
+    setSelectedAgeRange({ minAge, maxAge });
+    setSelectedPriceRange({ minPrice, maxPrice });
+
   };
 
 
@@ -136,6 +155,10 @@ const ResultsComponent = (test) => {
                 <h1 className="w-full text-center">Resultados de &#34;{decodeURIComponent(test.query)}&#34;</h1>
                 <FilterContainer
                   test={test}
+                  minAgeFilter={minAgeFilter}
+                  maxAgeFilter={maxAgeFilter}
+                  setMaxAgeFilter={setMaxAgeFilter}
+                  setMinAgeFilter={setMinAgeFilter}
                   minPriceFilter={minPriceFilter}
                   maxPriceFilter={maxPriceFilter}
                   setMaxPriceFilter={setMaxPriceFilter}
@@ -143,6 +166,7 @@ const ResultsComponent = (test) => {
                   setSelectedBrands={setSelectedBrands}
                   handleFilters={handleFilters}
                   selectedPriceRange={selectedPriceRange}
+                  selectedAgeRange={selectedAgeRange}
                 />
               </div>
               <ProductContainer

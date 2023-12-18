@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react';
 import algoliasearch from "algoliasearch";
 
-function FilterByPrice({ selectedBrands, selectedPriceRange, handleFilters, minPriceFilter, maxPriceFilter, setMinPriceFilter, setMaxPriceFilter }) {
+function FilterByPrice({ minAgeFilter, maxAgeFilter, selectedBrands, selectedPriceRange, handleFilters, minPriceFilter, maxPriceFilter, setMinPriceFilter, setMaxPriceFilter }) {
 
     return (
         <div>
@@ -12,8 +12,8 @@ function FilterByPrice({ selectedBrands, selectedPriceRange, handleFilters, minP
                     type='checkbox'
                     className="ml-3 w-4 h-4 text-gray-500"
                     id="priceRange1"
-                    checked={selectedPriceRange && selectedPriceRange.min === 0 && selectedPriceRange.max === 25}
-                    onChange={() => handleFilters(selectedBrands, 0, 25)}
+                    checked={selectedPriceRange && selectedPriceRange.minPrice === 0 && selectedPriceRange.maxPrice === 25}
+                    onChange={() => handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, 0, 25)}
                 />
                 <label className="ml-3 min-w-0 flex-1 text-gray-500" htmlFor="priceRange1">Hasta $25</label>
             </div>
@@ -22,8 +22,8 @@ function FilterByPrice({ selectedBrands, selectedPriceRange, handleFilters, minP
                     type='checkbox'
                     className="ml-3 w-4 h-4 text-gray-500"
                     id="priceRange2"
-                    checked={selectedPriceRange && selectedPriceRange.min === 25 && selectedPriceRange.max === 50}
-                    onChange={() => handleFilters(selectedBrands, 25, 50)}
+                    checked={selectedPriceRange && selectedPriceRange.minPrice === 25 && selectedPriceRange.maxPrice === 50}
+                    onChange={() => handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, 25, 50)}
                 />
                 <label className="ml-3 min-w-0 flex-1 text-gray-500" htmlFor="priceRange2">$25 a $50</label>
             </div>
@@ -32,8 +32,8 @@ function FilterByPrice({ selectedBrands, selectedPriceRange, handleFilters, minP
                     type='checkbox'
                     className="ml-3 w-4 h-4 text-gray-500"
                     id="priceRange3"
-                    checked={selectedPriceRange && selectedPriceRange.min === 50 && selectedPriceRange.max === 100}
-                    onChange={() => handleFilters(selectedBrands, 50, 100)}
+                    checked={selectedPriceRange && selectedPriceRange.minPrice === 50 && selectedPriceRange.maxPrice === 100}
+                    onChange={() => handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, 50, 100)}
                 />
                 <label className="ml-3 min-w-0 flex-1 text-gray-500" htmlFor="priceRange3">$50 a $100</label>
             </div>
@@ -42,8 +42,8 @@ function FilterByPrice({ selectedBrands, selectedPriceRange, handleFilters, minP
                     type='checkbox'
                     className="ml-3 w-4 h-4 text-gray-500"
                     id="priceRange4"
-                    checked={selectedPriceRange && selectedPriceRange.min === 100 && selectedPriceRange.max === 200}
-                    onChange={() => handleFilters(selectedBrands, 100, 200)}
+                    checked={selectedPriceRange && selectedPriceRange.minPrice === 100 && selectedPriceRange.maxPrice === 200}
+                    onChange={() => handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, 100, 200)}
                 />
                 <label className="ml-3 min-w-0 flex-1 text-gray-500" htmlFor="priceRange4">$100 a $200</label>
             </div>
@@ -52,8 +52,8 @@ function FilterByPrice({ selectedBrands, selectedPriceRange, handleFilters, minP
                     type='checkbox'
                     className="ml-3 w-4 h-4 text-gray-500"
                     id="priceRange5"
-                    checked={selectedPriceRange && selectedPriceRange.min === 200 && selectedPriceRange.max === 999999}
-                    onChange={() => handleFilters(selectedBrands, 200, 999999)}
+                    checked={selectedPriceRange && selectedPriceRange.minPrice === 200 && selectedPriceRange.maxPrice === 999999}
+                    onChange={() => handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, 200, 999999)}
                 />
                 <label className="ml-3 min-w-0 flex-1 text-gray-500" htmlFor="priceRange5">$200 y más</label>
             </div>
@@ -88,7 +88,7 @@ function FilterByPrice({ selectedBrands, selectedPriceRange, handleFilters, minP
                         type="button"
                         value="Ir"
                         className="w-10 bg-pink-200 rounded-md rounded-sm w-[50px] whitespace-nowrap"
-                        onClick={() => handleFilters(selectedBrands, minPriceFilter, maxPriceFilter)}
+                        onClick={() => handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, minPriceFilter, maxPriceFilter)}
                     />
                 </div>
             </div>

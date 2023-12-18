@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import algoliasearch from 'algoliasearch/lite';
 
-function FilterByBrand({ handleFilters, test, selectedBrands, setSelectedBrands, minPriceFilter, maxPriceFilter }) {
+function FilterByBrand({ minAgeFilter, maxAgeFilter, handleFilters, test, selectedBrands, setSelectedBrands, minPriceFilter, maxPriceFilter }) {
     const APPLICATION_ID = process.env.NEXT_PUBLIC_APPLICATION_ID;
     const SEARCH_API_KEY = process.env.NEXT_PUBLIC_SEARCH_API_KEY;
     const ALGOLIA_INDEX = process.env.NEXT_PUBLIC_ALGOLIA_INDEX;
@@ -57,7 +57,7 @@ function FilterByBrand({ handleFilters, test, selectedBrands, setSelectedBrands,
         setSelectedBrands(selectedBrandsCopy);
 
         // Llama a la función handlePriceFilter para aplicar el filtro
-        handleFilters(selectedBrandsCopy, minPriceFilter, maxPriceFilter);
+        handleFilters(selectedBrandsCopy, minAgeFilter, maxAgeFilter, minPriceFilter, maxPriceFilter);
     };
 
     return (
