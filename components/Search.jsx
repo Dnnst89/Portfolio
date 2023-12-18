@@ -24,7 +24,6 @@ const Searchbar = () => {
       const query = data.state.query
       window.location.href = `/results/?query=${query}`
     }
-
   };
 
   return (

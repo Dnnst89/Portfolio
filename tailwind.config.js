@@ -41,5 +41,8 @@ module.exports = {
       'GrandStanderThin': ["Grandstander-Thin"],
     },
   },
-  plugins: [require("tailwind-scrollbar")],
+  plugins: [
+    require("tailwind-scrollbar"),
+    require('@tailwindcss/forms')
+  ],
 };

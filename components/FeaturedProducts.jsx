@@ -53,7 +53,6 @@ const FeaturedProducts = () => {
 
   return (
     <>
-    <Toaster />
       <Swiper
         modules={[EffectCoverflow, Navigation, A11y]}
         effect="coverflow"
