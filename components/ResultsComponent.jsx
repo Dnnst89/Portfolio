@@ -6,31 +6,24 @@ import toast, { Toaster } from "react-hot-toast";
 import Spinner from "@/components/Spinner";
 import FilterContainer from "./FilterContainer";
 import algoliasearch from "algoliasearch";
-
 const ResultsComponent = (test) => {
   const [minPriceFilter, setMinPriceFilter] = useState(null);
   const [maxPriceFilter, setMaxPriceFilter] = useState(null);
-
   const [result, setResult] = useState([]);
   const [hitsPerPage, setHitsPerPage] = useState(null);
   const [nbHits, setNbHits] = useState(null);
   const [nbPages, setNbPages] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(true);
-
   const [selectedBrands, setSelectedBrands] = useState([]);
-
   async function getHits() {
     console.log(selectedBrands);
-
     try {
       var url = `/development_api::product.product?query=${test.query}&page=${currentPage}`;
-
       // Agregar filtros de precio si están presentes
       if (minPriceFilter != null && maxPriceFilter != null) {
         url += `&numericFilters=variants.price>=${minPriceFilter},variants.price<=${maxPriceFilter}`;
       }
-
       if (selectedBrands.length !== 0) {
         // Concatenar el arreglo selectedBrands usando join y agregarlo a la URL
         const brandsFilter = selectedBrands
@@ -38,10 +31,8 @@ const ResultsComponent = (test) => {
           .join(" OR ");
         url += `&filters=${brandsFilter}`;
       }
-
       console.log(url);
       const { data, statusText, status } = await algoliaInstace.get(url);
-
       if (statusText !== "OK") {
         toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
           autoClose: 5000,
@@ -54,7 +45,6 @@ const ResultsComponent = (test) => {
       });
     }
   }
-
   async function allResults() {
     try {
       setLoading(true); // Establece loading en true antes de realizar la solicitud
@@ -70,14 +60,12 @@ const ResultsComponent = (test) => {
       setLoading(false); // Establece loading en false independientemente del éxito o fallo
     }
   }
-
   useEffect(() => {
     if (test.query) {
       allResults();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, test.query]);
-
   return (
     <>
       <div className={loading ? "grid place-items-center" : ""}>
@@ -85,10 +73,25 @@ const ResultsComponent = (test) => {
           <Spinner />
         ) : nbHits > 0 ? (
           <div>
-            <div className="flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
-              <h1>Resultados de &#34;{decodeURIComponent(test.query)}&#34;</h1>
+            <div className="flex flex-wrap max-w-screen-xl m-auto justify-center items-center my-10">
+              <h1 className="w-full text-center">
+                Resultados de &#34;{decodeURIComponent(test.query)}&#34;
+              </h1>
+              <FilterContainer
+                test={test}
+                minPriceFilter={minPriceFilter}
+                maxPriceFilter={maxPriceFilter}
+                setMaxPriceFilter={setMaxPriceFilter}
+                setMinPriceFilter={setMinPriceFilter}
+                setCurrentPage={setCurrentPage}
+                setHitsPerPage={setHitsPerPage}
+                setNbHits={setNbHits}
+                setNbPages={setNbPages}
+                setResult={setResult}
+                selectedBrands={selectedBrands}
+                setSelectedBrands={setSelectedBrands}
+              />
             </div>
-            <Toaster />
             <ProductContainer
               result={result}
               hitsPerPage={hitsPerPage}
@@ -109,5 +112,4 @@ const ResultsComponent = (test) => {
     </>
   );
 };
-
 export default ResultsComponent;
