@@ -54,6 +54,7 @@ function FormOne() {
     canton: "",
     idNumber: "",
     idType: "",
+    invoiceEmail: "",
   });
   const [deliveryPayment, setDeliveryPayment] = useState(0);
   const handleDeliveryPayment = (data) => {
@@ -130,6 +131,8 @@ function FormOne() {
             data?.usersPermissionsUser?.data?.attributes?.firstName || "",
           lastName:
             data?.usersPermissionsUser?.data?.attributes?.lastName || "",
+          invoiceEmail:
+            data?.usersPermissionsUser?.data?.attributes?.invoiceEmail || "",
           phone:
             data?.usersPermissionsUser?.data?.attributes?.phoneNumber || "",
           postCode:
@@ -200,6 +203,7 @@ function FormOne() {
         variables: {
           firstName: dataForm.firstName,
           lastName: dataForm.lastName,
+          invoiceEmail: dataForm.invoiceEmail,
           phone: parseInt(dataForm.phone),
           idType: dataForm.idType,
           idNumber: parseInt(dataForm.idNumber),
@@ -657,6 +661,7 @@ function FormOne() {
                     </div>
                     {checkbox && (
                       <>
+
                         <div className="flex justify-center">
                           <section className="md:w-4/6 grid grid-cols-12 gap-4">
                             <div className="col-span-12 md:col-span-6 grid">
@@ -742,6 +747,35 @@ function FormOne() {
                             )}
                           </section>
                         </div>
+                        <section className="flex justify-center">
+                          <section className="md:w-4/6 grid grid-cols-12 gap-4">
+                            <div className="col-span-12 md:col-span-6 grid">
+                              <label
+                                className="whitespace-nowrap  w-full pt-4"
+                                htmlFor="invoiceEmail"
+                              >
+                                Correo electrónico para factura
+                              </label>
+                              <input
+                                type="text"
+                                id="invoiceEmail"
+                                {...register("invoiceEmail", {
+                                  required: {
+                                    value: true,
+                                    message: "El correo es requerido",
+                                  },
+                                  pattern: {
+                                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                    message: "Ingresa una dirección de correo electrónico válida",
+                                  },
+                                })}
+                              ></input>
+                              <p className="text-red text-xs">
+                                {errors.invoiceEmail?.message}
+                              </p>
+                            </div>
+                          </section>
+                        </section>
                       </>
                     )}
                   </section>
