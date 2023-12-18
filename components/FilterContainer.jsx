@@ -5,7 +5,7 @@ import FilterByBrand from "./FilterByBrand";
 
 import React from 'react'
 
-function FilterContainer({ test, minPriceFilter, maxPriceFilter, setMinPriceFilter, setMaxPriceFilter, setCurrentPage, setHitsPerPage, setNbHits, setNbPages, setResult, selectedBrands, setSelectedBrands }) {
+function FilterContainer({ selectedPriceRange, handleFilters, test, minPriceFilter, maxPriceFilter, setMinPriceFilter, setMaxPriceFilter, selectedBrands, setSelectedBrands }) {
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -47,12 +47,12 @@ function FilterContainer({ test, minPriceFilter, maxPriceFilter, setMinPriceFilt
                                         </h3>
                                         <div className="pt-6" id="filter-section-mobile-0">
                                             <div className="space-y-6">
-                                                <FilterByPrice test={test} minPriceFilter={minPriceFilter} maxPriceFilter={maxPriceFilter} setMaxPriceFilter={setMaxPriceFilter} setMinPriceFilter={setMinPriceFilter} setCurrentPage={setCurrentPage} setHitsPerPage={setHitsPerPage} setNbHits={setNbHits} setNbPages={setNbPages} setResult={setResult} />
+                                                <FilterByPrice selectedBrands={selectedBrands} selectedPriceRange={selectedPriceRange} handleFilters={handleFilters} test={test} minPriceFilter={minPriceFilter} maxPriceFilter={maxPriceFilter} setMaxPriceFilter={setMaxPriceFilter} setMinPriceFilter={setMinPriceFilter} />
                                             </div>
                                         </div>
 
                                     </div>
-                                    {/* <div className="border-t border-gray-200 px-4 py-6">
+                                    <div className="border-t border-gray-200 px-4 py-6">
                                         <h3 className="-mx-2 -my-3 flow-root">
                                             <button type="button" className="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500" aria-controls="filter-section-mobile-0" aria-expanded="false">
                                                 <span className="font-medium text-gray-900">Marca</span>
@@ -60,11 +60,11 @@ function FilterContainer({ test, minPriceFilter, maxPriceFilter, setMinPriceFilt
                                         </h3>
                                         <div className="pt-6" id="filter-section-mobile-0">
                                             <div className="space-y-6">
-                                                <FilterByBrand test={test} selectedBrands={selectedBrands} setSelectedBrands={setSelectedBrands} setCurrentPage={setCurrentPage} setHitsPerPage={setHitsPerPage} setNbHits={setNbHits} setNbPages={setNbPages} setResult={setResult}></FilterByBrand>
+                                                <FilterByBrand minPriceFilter={minPriceFilter} maxPriceFilter={maxPriceFilter} handleFilters={handleFilters} test={test} selectedBrands={selectedBrands} setSelectedBrands={setSelectedBrands}></FilterByBrand>
                                             </div>
                                         </div>
 
-                                    </div> */}
+                                    </div>
                                 </form>
                             </div>
                         </div>

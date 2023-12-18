@@ -9,8 +9,8 @@ import algoliasearch from "algoliasearch";
 
 const ResultsComponent = (test) => {
 
-  const [minPriceFilter, setMinPriceFilter] = useState(null);
-  const [maxPriceFilter, setMaxPriceFilter] = useState(null);
+  const [minPriceFilter, setMinPriceFilter] = useState(0);
+  const [maxPriceFilter, setMaxPriceFilter] = useState(999999);
 
   const [result, setResult] = useState([]);
   const [hitsPerPage, setHitsPerPage] = useState(null);
@@ -20,6 +20,14 @@ const ResultsComponent = (test) => {
   const [loading, setLoading] = useState(true);
 
   const [selectedBrands, setSelectedBrands] = useState([]);
+  const [selectedPriceRange, setSelectedPriceRange] = useState(null);
+
+  const APPLICATION_ID = "6TQCC8J5LB";
+  const SEARCH_API_KEY = "5a6490a15e1b2c9a3c53d7f8328c3f8d";
+  const ALGOLIA_INDEX = "development_api::product.product";
+
+  const searchClient = algoliasearch(APPLICATION_ID, SEARCH_API_KEY);
+  const index = searchClient.initIndex(ALGOLIA_INDEX);
 
   async function getHits() {
 
@@ -79,6 +87,43 @@ const ResultsComponent = (test) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, test.query]);
 
+  const handleFilters = (selectedBrands, min, max) => {
+
+    setMinPriceFilter(min);
+    setMaxPriceFilter(max);
+
+    if (min === null || min === undefined || min === '') {
+      setMinPriceFilter(0);
+    }
+
+    if (max === null || max === undefined || max === '') {
+      setMaxPriceFilter(999999);
+    }
+
+    const priceFilters = 'variants.price >= ' + min + ' AND variants.price <= ' + max;
+
+    const brandFilters = selectedBrands.map((brand) => `brand:'${brand}'`).join(' OR ');
+
+    const combinedFilters = [brandFilters, priceFilters].filter(Boolean).join(' AND ');
+
+    console.log(combinedFilters)
+
+    const decodedQueryString = decodeURIComponent(test.query);
+
+    index.search(decodedQueryString, {
+      filters: combinedFilters,
+    }).then((response) => {
+      setResult(response);
+      const { hitsPerPage, nbHits, nbPages } = response;
+      setHitsPerPage(hitsPerPage);
+      setNbHits(nbHits);
+      setNbPages(nbPages);
+    });
+
+    setCurrentPage(0);
+    setSelectedPriceRange({ min, max });
+  };
+
 
   return (
     <>
@@ -94,14 +139,10 @@ const ResultsComponent = (test) => {
                   minPriceFilter={minPriceFilter}
                   maxPriceFilter={maxPriceFilter}
                   setMaxPriceFilter={setMaxPriceFilter}
-                  setMinPriceFilter={setMinPriceFilter}
-                  setCurrentPage={setCurrentPage}
-                  setHitsPerPage={setHitsPerPage}
-                  setNbHits={setNbHits}
-                  setNbPages={setNbPages}
-                  setResult={setResult}
                   selectedBrands={selectedBrands}
                   setSelectedBrands={setSelectedBrands}
+                  handleFilters={handleFilters}
+                  selectedPriceRange={selectedPriceRange}
                 />
               </div>
               <ProductContainer
