@@ -6,6 +6,7 @@ import toast, { Toaster } from "react-hot-toast";
 import Spinner from "@/components/Spinner";
 import FilterContainer from "./FilterContainer";
 import algoliasearch from "algoliasearch";
+import { Enriqueta } from "next/font/google";
 
 const ResultsComponent = (test) => {
 
@@ -41,8 +42,10 @@ const ResultsComponent = (test) => {
       var url = `/development_api::product.product?query=${test.query}&page=${currentPage}`;
 
       // Agregar filtros de precio si están presentes
-      if (minPriceFilter != null && maxPriceFilter != null) {
-        url += `&numericFilters=variants.price>=${minPriceFilter},variants.price<=${maxPriceFilter}`;
+      if (minPriceFilter != null && maxPriceFilter != null && minAgeFilter != null && maxAgeFilter != null) {
+        console.log("enta")
+        url += `&numericFilters=variants.price>=${minPriceFilter},variants.price<=${maxPriceFilter},variants.initialAge<=${maxAgeFilter},variants.finalAge>=${minAgeFilter}`;
+        console.log("sale")
       }
 
       if (selectedBrands.length !== 0) {
@@ -99,11 +102,9 @@ const ResultsComponent = (test) => {
     setMaxPriceFilter(maxPrice);
 
     if (minAge === null || minAge === undefined || minAge === "") {
-      min = 0; // Asignar un valor predeterminado de 0 si minAge es nulo o vacío
       setMinAgeFilter(0); // <-- Debería ser setMinAgeFilter(0)
     }
     if (maxAge === null || maxAge === undefined || maxAge === "") {
-      max = 100; // Asignar un valor predeterminado de 100 si maxAge es nulo o vacío
       setMaxAgeFilter(100); // Corregir el valor aquí
     }
 
@@ -115,7 +116,7 @@ const ResultsComponent = (test) => {
       setMaxPriceFilter(999999);
     }
 
-    const ageFilters = `variants.initialAge <= ${minAge} AND variants.finalAge >= ${maxAge}`;
+    const ageFilters = `variants.initialAge <= ${maxAge} AND variants.finalAge >= ${minAge}`;
 
     const priceFilters = 'variants.price >= ' + minPrice + ' AND variants.price <= ' + maxPrice;
 
@@ -162,6 +163,7 @@ const ResultsComponent = (test) => {
                   minPriceFilter={minPriceFilter}
                   maxPriceFilter={maxPriceFilter}
                   setMaxPriceFilter={setMaxPriceFilter}
+                  setMinPriceFilter={setMinPriceFilter}
                   selectedBrands={selectedBrands}
                   setSelectedBrands={setSelectedBrands}
                   handleFilters={handleFilters}
