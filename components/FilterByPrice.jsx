@@ -58,9 +58,10 @@ function FilterByPrice({ minAgeFilter, maxAgeFilter, selectedBrands, selectedPri
                 <label className="ml-3 min-w-0 flex-1 text-gray-500" htmlFor="priceRange5">$200 y más</label>
             </div>
 
-            <div>
+            <div className="mt-4 pl-3 text-sm">
 
-                <div className="flex">
+                <h5>Precio por rango específico: </h5>
+                <div className="flex mt-4">
                     <input
                         id="min"
                         type="text"

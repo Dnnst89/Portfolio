@@ -36,16 +36,12 @@ const ResultsComponent = (test) => {
 
   async function getHits() {
 
-    console.log(selectedBrands)
-
     try {
       var url = `/development_api::product.product?query=${test.query}&page=${currentPage}`;
 
       // Agregar filtros de precio si están presentes
       if (minPriceFilter != null && maxPriceFilter != null && minAgeFilter != null && maxAgeFilter != null) {
-        console.log("enta")
         url += `&numericFilters=variants.price>=${minPriceFilter},variants.price<=${maxPriceFilter},variants.initialAge<=${maxAgeFilter},variants.finalAge>=${minAgeFilter}`;
-        console.log("sale")
       }
 
       if (selectedBrands.length !== 0) {
@@ -53,8 +49,6 @@ const ResultsComponent = (test) => {
         const brandsFilter = selectedBrands.map((brand) => `brand:'${brand}'`).join(' OR ');
         url += `&filters=${brandsFilter}`;
       }
-
-      console.log(url)
       const { data, statusText, status } = await algoliaInstace.get(url);
 
       if (statusText !== "OK") {
@@ -120,11 +114,9 @@ const ResultsComponent = (test) => {
 
     const priceFilters = 'variants.price >= ' + minPrice + ' AND variants.price <= ' + maxPrice;
 
-    const brandFilters = selectedBrands.map((brand) => `brand:'${brand}'`).join(' OR ');
+    const brandFilters = selectedBrands.map((brand) => `brand:"${brand}"`).join(' OR ');
 
     const combinedFilters = [brandFilters, priceFilters, ageFilters].filter(Boolean).join(' AND ');
-
-    console.log(combinedFilters)
 
     const decodedQueryString = decodeURIComponent(test.query);
 

@@ -12,7 +12,6 @@ function FilterByBrand({ minAgeFilter, maxAgeFilter, handleFilters, test, select
     const [brands, setBrands] = useState(null);
 
     async function getBrands() {
-        console.log(test.query)
         let allBrands = [];
         let page = 0;
         const hitsPerPage = 100;
@@ -36,7 +35,6 @@ function FilterByBrand({ minAgeFilter, maxAgeFilter, handleFilters, test, select
         } while (page * hitsPerPage < results.nbHits);
 
         setBrands(allBrands);
-        console.log(allBrands)
     }
 
     useEffect(() => {
