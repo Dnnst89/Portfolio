@@ -90,36 +90,46 @@ const ResultsComponent = (test) => {
 
   const handleFilters = (selectedBrands, minAge, maxAge, minPrice, maxPrice) => {
 
+    // Establecer los valores de filtro recibidos
     setMinAgeFilter(minAge);
     setMaxAgeFilter(maxAge);
     setMinPriceFilter(minPrice);
     setMaxPriceFilter(maxPrice);
 
+    // Verificar y corregir valores nulos o indefinidos para minAge y maxAge
     if (minAge === null || minAge === undefined || minAge === "") {
-      setMinAgeFilter(0); // <-- Debería ser setMinAgeFilter(0)
+      setMinAgeFilter(0);
     }
     if (maxAge === null || maxAge === undefined || maxAge === "") {
-      setMaxAgeFilter(100); // Corregir el valor aquí
+      setMaxAgeFilter(100);
     }
 
+    // Verificar y corregir valores nulos o indefinidos para minPrice
     if (minPrice === null || minPrice === undefined || minPrice === '') {
       setMinPriceFilter(0);
+      minPrice = 0
     }
 
+    // Verificar y corregir valores nulos o indefinidos para maxPrice
     if (maxPrice === null || maxPrice === undefined || maxPrice === '') {
       setMaxPriceFilter(999999);
+      maxPrice = 999999
     }
 
+    // Crear filtros para la búsqueda
     const ageFilters = `variants.initialAge <= ${maxAge} AND variants.finalAge >= ${minAge}`;
+    const priceFilters = `variants.price >= ${minPrice} AND variants.price <= ${maxPrice}`;
 
-    const priceFilters = 'variants.price >= ' + minPrice + ' AND variants.price <= ' + maxPrice;
-
+    // Filtros de marca
     const brandFilters = selectedBrands.map((brand) => `brand:"${brand}"`).join(' OR ');
 
+    // Combinar todos los filtros
     const combinedFilters = [brandFilters, priceFilters, ageFilters].filter(Boolean).join(' AND ');
 
+    // Decodificar la cadena de consulta
     const decodedQueryString = decodeURIComponent(test.query);
 
+    // Realizar la búsqueda en Algolia con los filtros combinados
     index.search(decodedQueryString, {
       filters: combinedFilters,
     }).then((response) => {
@@ -130,10 +140,10 @@ const ResultsComponent = (test) => {
       setNbPages(nbPages);
     });
 
+    // Restablecer la página actual y almacenar los rangos de edad y precio seleccionados
     setCurrentPage(0);
     setSelectedAgeRange({ minAge, maxAge });
     setSelectedPriceRange({ minPrice, maxPrice });
-
   };
 
 

@@ -13,7 +13,19 @@ function FilterByPrice({ minAgeFilter, maxAgeFilter, selectedBrands, selectedPri
                     className="ml-3 w-4 h-4 text-gray-500"
                     id="priceRange1"
                     checked={selectedPriceRange && selectedPriceRange.minPrice === 0 && selectedPriceRange.maxPrice === 25}
-                    onChange={() => handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, 0, 25)}
+                    onChange={() => {
+                        if (
+                            selectedPriceRange &&
+                            selectedPriceRange.minPrice === 0 &&
+                            selectedPriceRange.maxPrice === 25
+                        ) {
+                            // If the checkbox is already checked, uncheck it
+                            handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, null, null);
+                        } else {
+                            // If the checkbox is unchecked, check it with the specified range
+                            handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, 0, 25);
+                        }
+                    }}
                 />
                 <label className="ml-3 min-w-0 flex-1 text-gray-500" htmlFor="priceRange1">Hasta $25</label>
             </div>
@@ -23,7 +35,19 @@ function FilterByPrice({ minAgeFilter, maxAgeFilter, selectedBrands, selectedPri
                     className="ml-3 w-4 h-4 text-gray-500"
                     id="priceRange2"
                     checked={selectedPriceRange && selectedPriceRange.minPrice === 25 && selectedPriceRange.maxPrice === 50}
-                    onChange={() => handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, 25, 50)}
+                    onChange={() => {
+                        if (
+                            selectedPriceRange &&
+                            selectedPriceRange.minPrice === 25 &&
+                            selectedPriceRange.maxPrice === 50
+                        ) {
+                            // If the checkbox is already checked, uncheck it
+                            handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, null, null);
+                        } else {
+                            // If the checkbox is unchecked, check it with the specified range
+                            handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, 25, 50);
+                        }
+                    }}
                 />
                 <label className="ml-3 min-w-0 flex-1 text-gray-500" htmlFor="priceRange2">$25 a $50</label>
             </div>
@@ -33,7 +57,19 @@ function FilterByPrice({ minAgeFilter, maxAgeFilter, selectedBrands, selectedPri
                     className="ml-3 w-4 h-4 text-gray-500"
                     id="priceRange3"
                     checked={selectedPriceRange && selectedPriceRange.minPrice === 50 && selectedPriceRange.maxPrice === 100}
-                    onChange={() => handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, 50, 100)}
+                    onChange={() => {
+                        if (
+                            selectedPriceRange &&
+                            selectedPriceRange.minPrice === 50 &&
+                            selectedPriceRange.maxPrice === 100
+                        ) {
+                            // If the checkbox is already checked, uncheck it
+                            handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, null, null);
+                        } else {
+                            // If the checkbox is unchecked, check it with the specified range
+                            handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, 50, 100);
+                        }
+                    }}
                 />
                 <label className="ml-3 min-w-0 flex-1 text-gray-500" htmlFor="priceRange3">$50 a $100</label>
             </div>
@@ -43,7 +79,19 @@ function FilterByPrice({ minAgeFilter, maxAgeFilter, selectedBrands, selectedPri
                     className="ml-3 w-4 h-4 text-gray-500"
                     id="priceRange4"
                     checked={selectedPriceRange && selectedPriceRange.minPrice === 100 && selectedPriceRange.maxPrice === 200}
-                    onChange={() => handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, 100, 200)}
+                    onChange={() => {
+                        if (
+                            selectedPriceRange &&
+                            selectedPriceRange.minPrice === 100 &&
+                            selectedPriceRange.maxPrice === 200
+                        ) {
+                            // If the checkbox is already checked, uncheck it
+                            handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, null, null);
+                        } else {
+                            // If the checkbox is unchecked, check it with the specified range
+                            handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, 100, 200);
+                        }
+                    }}
                 />
                 <label className="ml-3 min-w-0 flex-1 text-gray-500" htmlFor="priceRange4">$100 a $200</label>
             </div>
@@ -53,7 +101,19 @@ function FilterByPrice({ minAgeFilter, maxAgeFilter, selectedBrands, selectedPri
                     className="ml-3 w-4 h-4 text-gray-500"
                     id="priceRange5"
                     checked={selectedPriceRange && selectedPriceRange.minPrice === 200 && selectedPriceRange.maxPrice === 999999}
-                    onChange={() => handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, 200, 999999)}
+                    onChange={() => {
+                        if (
+                            selectedPriceRange &&
+                            selectedPriceRange.minPrice === 200 &&
+                            selectedPriceRange.maxPrice === 999999
+                        ) {
+                            // If the checkbox is already checked, uncheck it
+                            handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, null, null);
+                        } else {
+                            // If the checkbox is unchecked, check it with the specified range
+                            handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, 20, 999999);
+                        }
+                    }}
                 />
                 <label className="ml-3 min-w-0 flex-1 text-gray-500" htmlFor="priceRange5">$200 y más</label>
             </div>
