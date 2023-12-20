@@ -120,7 +120,7 @@ function FilterByPrice({ minAgeFilter, maxAgeFilter, selectedBrands, selectedPri
 
             <div className="mt-4 pl-3 text-sm">
 
-                <h5>Precio por rango específico: </h5>
+                <h5>Filtrar por otro rango: </h5>
                 <div className="flex mt-4">
                     <input
                         id="min"
@@ -148,7 +148,7 @@ function FilterByPrice({ minAgeFilter, maxAgeFilter, selectedBrands, selectedPri
                     <input
                         type="button"
                         value="Ir"
-                        className="w-10 bg-pink-200 rounded-md rounded-sm w-[50px] whitespace-nowrap"
+                        className="w-10 bg-pink-200 rounded-full w-[50px] whitespace-nowrap"
                         onClick={() => handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, minPriceFilter, maxPriceFilter)}
                     />
                 </div>
