@@ -11,8 +11,8 @@ function FilterContainer({ selectedAgeRange, setMaxAgeFilter, maxAgeFilter, setM
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <div className="max-w-screen-xl w-full flex mx-5 justify-end md:mx-[100px]">
-            <h3 onClick={() => setIsOpen(!isOpen)}>Filtros</h3>
+        <div className="max-w-screen-xl w-full flex mx-5 justify md:mx-[100px]">
+            <h3 className="ml-5" onClick={() => setIsOpen(!isOpen)}>Filtros</h3>
 
             <button type="button" className="-m-2 ml-1 p-2 text-gray-400 hover:text-gray-500 sm:ml-6" onClick={() => setIsOpen(!isOpen)}>
                 <span className="sr-only">Filtros</span>
