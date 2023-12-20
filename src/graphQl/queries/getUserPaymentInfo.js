@@ -10,6 +10,7 @@ export const GET_USER_PAYMENT_INFO = gql`
           lastName
           phoneNumber
           username
+          invoiceEmail
           idCard {
             idType
             idNumber
