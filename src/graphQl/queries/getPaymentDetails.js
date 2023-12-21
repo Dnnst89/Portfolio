@@ -10,17 +10,10 @@ export const GET_PAYMENT_DETAILS = gql`
           lastName
           phoneNumber
           email
+          invoiceEmail
           idCard {
             idType
             idNumber
-          }
-          users_address {
-            data {
-              attributes {
-                province
-                canton
-              }
-            }
           }
           users_address {
             data {
@@ -31,6 +24,7 @@ export const GET_PAYMENT_DETAILS = gql`
                 addressLine1
                 addressLine2
                 canton
+                province
               }
             }
           }

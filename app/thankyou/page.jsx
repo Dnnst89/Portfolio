@@ -147,7 +147,7 @@ export default function ThankYouMessage() {
               id: cartItemId,
             },
           });
-        } catch (error) {}
+        } catch (error) { }
 
         try {
           updateVariantStock({
@@ -204,7 +204,7 @@ export default function ThankYouMessage() {
           //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
           try {
             fetchOrderMoovin(orderNumber);
-          } catch (error) {}
+          } catch (error) { }
 
           handleCartItems();
           createInvoice(orderNumber);
@@ -449,7 +449,7 @@ export default function ThankYouMessage() {
                     ?.idCard?.idNumber,
                 email:
                   paymentUser?.data?.usersPermissionsUser?.data?.attributes
-                    ?.email,
+                    ?.invoiceEmail,
               };
               const store = result?.data?.storeInformation?.data?.attributes;
 
@@ -535,8 +535,8 @@ export default function ThankYouMessage() {
               } catch (error) {
                 console.log("error", error);
               }
-            } catch (error) {}
-          } catch (error) {}
+            } catch (error) { }
+          } catch (error) { }
         } catch (error) {
           console.log("error crear factura", error);
         }
