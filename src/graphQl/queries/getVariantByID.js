@@ -18,6 +18,15 @@ query GetVariantById($id: ID) {
         }
         stock
         ageRange
+        product{
+          data{
+            attributes{
+              name
+              cabys
+              brand
+            }
+          }
+        }
         images {
           data {
             id
