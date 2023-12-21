@@ -7,7 +7,6 @@ import Spinner from "@/components/Spinner";
 import FilterContainer from "./FilterContainer";
 import FilterContainerPrincipal from "./FilterContainerPrincipal";
 import algoliasearch from "algoliasearch";
-import { Enriqueta } from "next/font/google";
 
 const ResultsComponent = (test) => {
   const [minPriceFilter, setMinPriceFilter] = useState(0);
@@ -165,14 +164,34 @@ const ResultsComponent = (test) => {
   };
 
   return (
-    <>
-      <div className={loading ? "grid place-items-center" : ""}>
-        {loading ? (
-          <Spinner />
-        ) : nbHits > 0 ? (
-          <div>
-            <div className="flex">
-              <FilterContainerPrincipal
+
+    <div className={loading ? "grid place-items-center" : ""}>
+      {loading ? (
+        <Spinner />
+      ) :
+        <div>
+          <div className="flex">
+            <FilterContainerPrincipal
+              test={test}
+              minAgeFilter={minAgeFilter}
+              maxAgeFilter={maxAgeFilter}
+              setMaxAgeFilter={setMaxAgeFilter}
+              setMinAgeFilter={setMinAgeFilter}
+              minPriceFilter={minPriceFilter}
+              maxPriceFilter={maxPriceFilter}
+              setMaxPriceFilter={setMaxPriceFilter}
+              setMinPriceFilter={setMinPriceFilter}
+              selectedBrands={selectedBrands}
+              setSelectedBrands={setSelectedBrands}
+              handleFilters={handleFilters}
+              selectedPriceRange={selectedPriceRange}
+              selectedAgeRange={selectedAgeRange}
+            />
+            <div className="flex flex-wrap max-w-screen-xl items-center justify-center my-10">
+              <h1 className="w-full text-center ml-5">
+                Resultados de &#34;{decodeURIComponent(test.query)}&#34;
+              </h1>
+              <FilterContainer
                 test={test}
                 minAgeFilter={minAgeFilter}
                 maxAgeFilter={maxAgeFilter}
@@ -187,47 +206,23 @@ const ResultsComponent = (test) => {
                 handleFilters={handleFilters}
                 selectedPriceRange={selectedPriceRange}
                 selectedAgeRange={selectedAgeRange}
+              />{" "}
+              <ProductContainer
+                result={result}
+                hitsPerPage={hitsPerPage}
+                nbHits={nbHits}
+                nbPages={nbPages}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                loading={loading}
+                setLoading={setLoading}
               />
-              <div className="flex flex-wrap max-w-screen-xl items-center justify-center my-10">
-                <h1 className="w-full text-center ml-5">
-                  Resultados de &#34;{decodeURIComponent(test.query)}&#34;
-                </h1>
-                <FilterContainer
-                  test={test}
-                  minAgeFilter={minAgeFilter}
-                  maxAgeFilter={maxAgeFilter}
-                  setMaxAgeFilter={setMaxAgeFilter}
-                  setMinAgeFilter={setMinAgeFilter}
-                  minPriceFilter={minPriceFilter}
-                  maxPriceFilter={maxPriceFilter}
-                  setMaxPriceFilter={setMaxPriceFilter}
-                  setMinPriceFilter={setMinPriceFilter}
-                  selectedBrands={selectedBrands}
-                  setSelectedBrands={setSelectedBrands}
-                  handleFilters={handleFilters}
-                  selectedPriceRange={selectedPriceRange}
-                  selectedAgeRange={selectedAgeRange}
-                />{" "}
-                <ProductContainer
-                  result={result}
-                  hitsPerPage={hitsPerPage}
-                  nbHits={nbHits}
-                  nbPages={nbPages}
-                  currentPage={currentPage}
-                  setCurrentPage={setCurrentPage}
-                />
-              </div>
             </div>
           </div>
-        ) : (
-          <div className="text-center grid content-center h-80 m-auto">
-            {" "}
-            <h1 className="font-bold">¡Lo sentimos!</h1>{" "}
-            <h2>No se encontraron resultados.</h2>{" "}
-          </div>
-        )}
-      </div>
-    </>
+        </div>
+      }
+    </div>
+
   );
 };
 

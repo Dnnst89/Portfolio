@@ -3,6 +3,7 @@ import Image from "next/image";
 import ProductCard from "../../../components/ProductCard";
 import Pagination from "@/components/Pagination";
 import { useEffect, useState } from "react";
+import Spinner from "@/components/Spinner";
 const ProductContainer = ({
   result,
   hitsPerPage,
@@ -10,6 +11,8 @@ const ProductContainer = ({
   nbPages,
   currentPage,
   setCurrentPage,
+  loading,
+  setLoading
 }) => {
   const { hits } = result;
 
@@ -19,30 +22,42 @@ const ProductContainer = ({
   }, [currentPage]);
 
   return (
-    <div>
-      <div className="flex flex-wrap items-center justify-center m-auto sm:p-4">
-        {hits
-          ? hits.map((item) => {
-            return (
-              <ProductCard
-                key={item.id}
-                id={item.id}
-                name={item.name}
-                defaultPrice={item.defaultPrice}
-                coverImage={item.coverImage}
-                brand={item.brand}
-              />
-            );
-          })
-          : null}
-      </div>
-      <Pagination
-        hitsPerPage={hitsPerPage}
-        nbHits={nbHits}
-        nbPages={nbPages}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      />
+    <div className={loading ? "grid place-items-center" : ""}>
+      {loading ? (
+        <Spinner />
+      ) : nbHits > 0 ? (
+        <>
+          <div className="flex flex-wrap items-center justify-center m-auto sm:p-4">
+            {hits
+              ? hits.map((item) => {
+                return (
+                  <ProductCard
+                    key={item.id}
+                    id={item.id}
+                    name={item.name}
+                    defaultPrice={item.defaultPrice}
+                    coverImage={item.coverImage}
+                    brand={item.brand}
+                  />
+                );
+              })
+              : null}
+          </div>
+          <Pagination
+            hitsPerPage={hitsPerPage}
+            nbHits={nbHits}
+            nbPages={nbPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        </>
+      ) : (
+        <div className="text-center grid content-center h-80 m-auto">
+          {" "}
+          <h1 className="font-bold">¡Lo sentimos!</h1>{" "}
+          <h2>No se encontraron resultados.</h2>{" "}
+        </div>
+      )}
     </div>
   );
 };
