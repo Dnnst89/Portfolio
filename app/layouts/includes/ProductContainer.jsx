@@ -20,20 +20,20 @@ const ProductContainer = ({
 
   return (
     <div>
-      <div className="flex flex-wrap w-full m-auto justify-center">
+      <div className="flex flex-wrap  items-center w-full m-auto md:p-4 sm:p-2">
         {hits
           ? hits.map((item) => {
-            return (
-              <ProductCard
-                key={item.id}
-                id={item.id}
-                name={item.name}
-                defaultPrice={item.defaultPrice}
-                coverImage={item.coverImage}
-                brand={item.brand}
-              />
-            );
-          })
+              return (
+                <ProductCard
+                  key={item.id}
+                  id={item.id}
+                  name={item.name}
+                  defaultPrice={item.defaultPrice}
+                  coverImage={item.coverImage}
+                  brand={item.brand}
+                />
+              );
+            })
           : null}
       </div>
       <Pagination
