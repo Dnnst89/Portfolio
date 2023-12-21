@@ -7,11 +7,12 @@ mutation updateUserInformation(
   $phone: Int!
   $idType: String
   $idNumber: Long
+  $invoiceEmail: String
   $id: ID!
 ) {
   updateUsersPermissionsUser(
     id: $id
-    data: { firstName: $firstName, lastName: $lastName, phoneNumber: $phone, idCard:{idType: $idType, idNumber: $idNumber} }
+    data: { firstName: $firstName, lastName: $lastName, phoneNumber: $phone,invoiceEmail: $invoiceEmail, idCard:{idType: $idType, idNumber: $idNumber} }
   ) {
       data: data {
         id

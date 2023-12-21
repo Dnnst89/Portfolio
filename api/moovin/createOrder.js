@@ -4,9 +4,7 @@ import { getToken } from "./getToken";
  * Function the request the shipment estimation from Moovin
  */
 const orderMoovin = async (data) => {
-  console.log("creando", data);
   const accessToken = await getToken();
-  console.log("token", accessToken);
   const creationResponsde = await fetch(process.env.NEXT_PUBLIC_MOOVIN_ORDER, {
     method: "POST",
     headers: {
@@ -16,6 +14,23 @@ const orderMoovin = async (data) => {
     body: JSON.stringify(data),
   });
   const order = await creationResponsde.json();
+  console.log("orderResponsde: ", order);
+  return order;
+};
+const deleteOrderMoovin = async (data) => {
+  const accessToken = await getToken();
+  const deleteResponsde = await fetch(
+    process.env.NEXT_PUBLIC_MOOVIN_DELETE_ORDER,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        token: accessToken,
+      },
+      body: JSON.stringify(data),
+    }
+  );
+  const order = await deleteResponsde.json();
   console.log("orderResponsde: ", order);
   return order;
 };
@@ -93,4 +108,5 @@ const createOrderData = (
   };
   return data;
 };
-export { orderMoovin, createOrderData };
+
+export { orderMoovin, createOrderData, deleteOrderMoovin };

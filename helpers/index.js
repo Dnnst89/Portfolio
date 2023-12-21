@@ -166,12 +166,12 @@ const formatItemInvoice = (items, imp) => {
     cont = cont + 1;
     var cod = 0;
     if (imp[cont].taxes[0].code < 10) {
-      cod = "0" + imp[cont].taxes[0].code;
+      cod = "" + imp[cont].taxes[0].code;
     } else {
       cod = imp[cont].taxes[0].code;
     }
     console.log("imp", imp);
-    //console.log("fee", imp[cont].taxes[0].fee);
+    console.log("fee", imp[cont].taxes[0].fee);
     return {
       lineNumber: cont + 1,
       cabys: "" + item?.attributes?.cabys?.toString(),
@@ -186,7 +186,7 @@ const formatItemInvoice = (items, imp) => {
         {
           code: "" + cod,
           codeFee: "" + imp[cont].taxes[0].codeFee,
-          fee: "13",
+          fee: imp[cont].taxes[0].fee,
           VATFactor: "" + imp[cont].taxes[0].vatfactor,
           amount: "" + imp[cont].taxes[0].amount,
         },

@@ -3,7 +3,7 @@ import Image from "next/image";
 import moovin from "../app/assets/moovin.png";
 import logo from "../app/assets/tk-logo.png";
 import { useEffect, useState } from "react";
-import { useMutation, useQuery } from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import useStorage from "@/hooks/useStorage";
 import CheckOutForm3 from "./CheckOutForm3";
 import useCartSummary from "@/hooks/useCartSummary";
@@ -11,6 +11,7 @@ import { AiOutlineEdit } from "react-icons/ai";
 import CREATE_PAYMENT_DETAIL from "@/src/graphQl/queries/createPaymentDetails";
 import Spinner from "./Spinner";
 import { useForm } from "react-hook-form";
+import { createOrderData, orderMoovin } from "@/api/moovin/createOrder";
 import { requestEstimation, createData } from "@/api/moovin/estimation";
 import getTipoCambio from "@/api/cambio/getTipoCambio";
 
@@ -26,12 +27,15 @@ export default function CheckOutForm2({
   const isoDate = new Date().toISOString();
   const [paymentDetailId, setPaymentDetailId] = useState(null);
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
+
   const { total, subTotal, taxes } = amount;
   let paymentDetailResponseId = null;
   const [createPaymentDetail] = useMutation(CREATE_PAYMENT_DETAIL);
   const { user } = useStorage();
   const { id } = user || {};
   const [tipoCambio, setTipoCambio] = useState(null);
+  const [estima, setEstima] = useState(null);
+
   //me traigo los items de carrito para crear los items de la orden
   const { items } = useCartSummary({
     userId: id,
@@ -93,8 +97,9 @@ export default function CheckOutForm2({
       try {
         const shipmentInfo = createData(items, lat, lng);
         const estimation = await requestEstimation(shipmentInfo);
-        const deliveryPrice =
-          parseInt(estimation.optionService[1].amount / tipoCambio) + 1;
+        const deliveryPrice = Math.ceil(
+          estimation.optionService[1].amount / tipoCambio
+        );
         deliveryPayment(deliveryPrice.toFixed(2));
         console.log("amount total", parseFloat(subTotal));
         console.log("taxes total", parseFloat(taxes));
@@ -106,7 +111,7 @@ export default function CheckOutForm2({
           taxes: taxes,
         };
         console.log("total", parseFloat(suma.toFixed(2)));
-
+        setEstima(estimation.idEstimation);
         setAmount(finalAmount);
         try {
           const paymentDetailResponse = await createPaymentDetail({
@@ -260,7 +265,13 @@ export default function CheckOutForm2({
           </div>
         </form>
       ) : (
-        <CheckOutForm3 paymentDetailId={paymentDetailId} total={total} />
+        <CheckOutForm3
+          paymentDetailId={paymentDetailId}
+          total={total}
+          estimation={estima}
+          items={items}
+          orderNumber={paymentDetailId}
+        />
       )}
     </div>
   );

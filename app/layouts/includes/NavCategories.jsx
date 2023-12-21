@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import { algoliaInstace } from "@/src/axios/algoliaIntance/config";
 import Spinner from "@/components/Spinner";
 import { useRouter } from "next/navigation";
 import GetCategories from "@/src/graphQl/queries/getCategories";
@@ -19,15 +18,37 @@ const NavCategories = () => {
   //   setMenuItems(data.hits);
   // };
 
-  const getData = async () => { //obtiene la data directamente de strapi
-
-    const { data, error, loading } = await getCategories({
-    });
-    setMenuItems(data?.categories?.data);
-    setLoading(loading)
-  }
-
   useEffect(() => {
+    const getData = async () => {
+      //obtiene la data directamente de strapi
+      let currentPage = 1;
+      let pageSize = 10;
+      let fetchedData = []; // para ir juntando los datos de cada pagina
+      let pageCount = 1;
+
+      do {
+        //debemos hacer un primer recorrido ya que el dato paeCount de la consulta es incierto
+        try {
+          const { data, error, loading } = await getCategories({
+            variables: {
+              page: currentPage,
+              pageSize,
+            },
+          });
+
+          const categories = data?.categories;
+          console.log(data);
+          fetchedData = fetchedData.concat(categories?.data);
+          pageCount = categories?.meta?.pagination?.pageCount;
+          currentPage++;
+          setLoading(loading);
+        } catch (error) {
+          console.log(error);
+        }
+      } while (currentPage <= pageCount);
+      setMenuItems(fetchedData);
+      setLoading(loading);
+    };
     getData();
     setLoading(false);
   }, []);
@@ -39,16 +60,19 @@ const NavCategories = () => {
     // } else {
     //   setClickedItem(id);
     // }
-    console.log(window.location.pathname, "pathname");
-    console.log(window.location.search, "search");
+    // console.log(window.location.pathname, "pathname");
+    // console.log(window.location.search, "search");
 
-    return (window.location.href = `/results/?query=${item?.attributes?.name}`);
+    return (window.location.href = `/filtersResults/?category=${item?.attributes?.name}`);
   };
 
   return (
     <>
-
-      <nav aria-label="Menú categorías" role="navigation" className="grid grid-cols-1 h-[50px] mt-[0.5px] bg-resene">
+      <nav
+        aria-label="Menú categorías"
+        role="navigation"
+        className="grid grid-cols-1 h-[50px] mt-[0.5px] bg-resene"
+      >
         <ul className="flex md:justify-center content-center text-[#333333]  overflow-y-scroll scrollbar scrollbar-none">
           {menuItems && menuItems.length ? (
             menuItems.map((item, index) => (
