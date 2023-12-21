@@ -25,7 +25,7 @@ function FilterContainerPrincipal({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="max-w-screen-xl   mx-5 justify md:mx-[100px] hidden md:block">
+    <div className="hidden md:block">
       {true && (
         <div className="">
           <div>
@@ -33,7 +33,7 @@ function FilterContainerPrincipal({
               <div className=""></div>
 
               <div className="">
-                <div className="relative mr-auto flex h-full max-w-xs flex-col  bg-white py-4 pb-12 shadow-xl">
+                <div className="relative mr-auto flex h-full max-w-xs flex-col py-4 pb-12 shadow-xl">
                   <div className="flex items-center j px-4">
                     <h2 className="text-lg font-medium text-gray-900">
                       Filtros
@@ -45,7 +45,7 @@ function FilterContainerPrincipal({
                       <h3 className="-mx-2 -my-3 flow-root">
                         <button
                           type="button"
-                          className="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500"
+                          className="flex w-full items-center justify-between bg-resene px-2 py-3 text-gray-400 hover:text-gray-500"
                           aria-controls="filter-section-mobile-0"
                           aria-expanded="false"
                         >
@@ -75,7 +75,7 @@ function FilterContainerPrincipal({
                       <h3 className="-mx-2 -my-3 flow-root">
                         <button
                           type="button"
-                          className="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500"
+                          className="flex w-full items-center justify-between bg-resene px-2 py-3 text-gray-400 hover:text-gray-500"
                           aria-controls="filter-section-mobile-0"
                           aria-expanded="false"
                         >
@@ -105,7 +105,7 @@ function FilterContainerPrincipal({
                       <h3 className="-mx-2 -my-3 flow-root">
                         <button
                           type="button"
-                          className="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500"
+                          className="flex w-full items-center justify-between bg-resene px-2 py-3 text-gray-400 hover:text-gray-500"
                           aria-controls="filter-section-mobile-0"
                           aria-expanded="false"
                         >
