@@ -111,7 +111,7 @@ function FilterByPrice({ minAgeFilter, maxAgeFilter, selectedBrands, selectedPri
                             handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, null, null);
                         } else {
                             // If the checkbox is unchecked, check it with the specified range
-                            handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, 20, 999999);
+                            handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, 200, 999999);
                         }
                     }}
                 />

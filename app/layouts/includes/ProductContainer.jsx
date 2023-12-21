@@ -20,7 +20,7 @@ const ProductContainer = ({
 
   return (
     <div>
-      <div className="flex flex-wrap w-full m-auto justify-center">
+      <div className="flex flex-wrap max-w-screen-xl m-auto justify-center">
         {hits
           ? hits.map((item) => {
             return (

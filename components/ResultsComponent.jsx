@@ -51,6 +51,8 @@ const ResultsComponent = (test) => {
       }
       const { data, statusText, status } = await algoliaInstace.get(url);
 
+      console.log(url)
+
       if (statusText !== "OK") {
         toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
           autoClose: 5000,
@@ -98,9 +100,11 @@ const ResultsComponent = (test) => {
 
     // Verificar y corregir valores nulos o indefinidos para minAge y maxAge
     if (minAge === null || minAge === undefined || minAge === "") {
+      minAge = 0
       setMinAgeFilter(0);
     }
     if (maxAge === null || maxAge === undefined || maxAge === "") {
+      maxAge = 100
       setMaxAgeFilter(100);
     }
 
@@ -125,6 +129,7 @@ const ResultsComponent = (test) => {
 
     // Combinar todos los filtros
     const combinedFilters = [brandFilters, priceFilters, ageFilters].filter(Boolean).join(' AND ');
+    console.log(combinedFilters)
 
     // Decodificar la cadena de consulta
     const decodedQueryString = decodeURIComponent(test.query);

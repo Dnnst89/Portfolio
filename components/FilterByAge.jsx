@@ -21,7 +21,19 @@ function FilterByAge({
                         selectedAgeRange.minAge === 0 &&
                         selectedAgeRange.maxAge === 2
                     }
-                    onChange={() => handleFilters(selectedBrands, 0, 2, minPriceFilter, maxPriceFilter)}
+                    onChange={() => {
+                        if (
+                            selectedAgeRange &&
+                            selectedAgeRange.minAge === 0 &&
+                            selectedAgeRange.maxAge === 2
+                        ) {
+                            // If the checkbox is already checked, uncheck it
+                            handleFilters(selectedBrands, null, null, minPriceFilter, maxPriceFilter);
+                        } else {
+                            // If the checkbox is unchecked, check it with the specified range
+                            handleFilters(selectedBrands, 0, 2, minPriceFilter, maxPriceFilter);
+                        }
+                    }}
                 />
                 <label
                     className="ml-3 min-w-0 flex-1 text-gray-500"
@@ -40,7 +52,19 @@ function FilterByAge({
                         selectedAgeRange.minAge === 2 &&
                         selectedAgeRange.maxAge === 3
                     }
-                    onChange={() => handleFilters(selectedBrands, 2, 3, minPriceFilter, maxPriceFilter)}
+                    onChange={() => {
+                        if (
+                            selectedAgeRange &&
+                            selectedAgeRange.minAge === 2 &&
+                            selectedAgeRange.maxAge === 3
+                        ) {
+                            // If the checkbox is already checked, uncheck it
+                            handleFilters(selectedBrands, null, null, minPriceFilter, maxPriceFilter);
+                        } else {
+                            // If the checkbox is unchecked, check it with the specified range
+                            handleFilters(selectedBrands, 2, 3, minPriceFilter, maxPriceFilter);
+                        }
+                    }}
                 />
                 <label
                     className="ml-3 min-w-0 flex-1 text-gray-500"
@@ -59,7 +83,19 @@ function FilterByAge({
                         selectedAgeRange.minAge === 4 &&
                         selectedAgeRange.maxAge === 5
                     }
-                    onChange={() => handleFilters(selectedBrands, 4, 5, minPriceFilter, maxPriceFilter)}
+                    onChange={() => {
+                        if (
+                            selectedAgeRange &&
+                            selectedAgeRange.minAge === 4 &&
+                            selectedAgeRange.maxAge === 5
+                        ) {
+                            // If the checkbox is already checked, uncheck it
+                            handleFilters(selectedBrands, null, null, minPriceFilter, maxPriceFilter);
+                        } else {
+                            // If the checkbox is unchecked, check it with the specified range
+                            handleFilters(selectedBrands, 4, 5, minPriceFilter, maxPriceFilter);
+                        }
+                    }}
                 />
                 <label
                     className="ml-3 min-w-0 flex-1 text-gray-500"
@@ -78,7 +114,19 @@ function FilterByAge({
                         selectedAgeRange.minAge === 6 &&
                         selectedAgeRange.maxAge === 7
                     }
-                    onChange={() => handleFilters(selectedBrands, 6, 7, minPriceFilter, maxPriceFilter)}
+                    onChange={() => {
+                        if (
+                            selectedAgeRange &&
+                            selectedAgeRange.minAge === 6 &&
+                            selectedAgeRange.maxAge === 7
+                        ) {
+                            // If the checkbox is already checked, uncheck it
+                            handleFilters(selectedBrands, null, null, minPriceFilter, maxPriceFilter);
+                        } else {
+                            // If the checkbox is unchecked, check it with the specified range
+                            handleFilters(selectedBrands, 6, 7, minPriceFilter, maxPriceFilter);
+                        }
+                    }}
                 />
                 <label
                     className="ml-3 min-w-0 flex-1 text-gray-500"
@@ -97,7 +145,19 @@ function FilterByAge({
                         selectedAgeRange.minAge === 8 &&
                         selectedAgeRange.maxAge === 100
                     }
-                    onChange={() => handleFilters(selectedBrands, 8, 100, minPriceFilter, maxPriceFilter)}
+                    onChange={() => {
+                        if (
+                            selectedAgeRange &&
+                            selectedAgeRange.minAge === 8 &&
+                            selectedAgeRange.maxAge === 100
+                        ) {
+                            // If the checkbox is already checked, uncheck it
+                            handleFilters(selectedBrands, null, null, minPriceFilter, maxPriceFilter);
+                        } else {
+                            // If the checkbox is unchecked, check it with the specified range
+                            handleFilters(selectedBrands, 8, 100, minPriceFilter, maxPriceFilter);
+                        }
+                    }}
                 />
                 <label
                     className="ml-3 min-w-0 flex-1 text-gray-500"
