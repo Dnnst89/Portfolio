@@ -170,7 +170,7 @@ const ResultsComponent = (test) => {
         <Spinner />
       ) :
         <div>
-          <div className="flex">
+          <div className="md:flex">
             <FilterContainerPrincipal
               test={test}
               minAgeFilter={minAgeFilter}
@@ -187,12 +187,14 @@ const ResultsComponent = (test) => {
               selectedPriceRange={selectedPriceRange}
               selectedAgeRange={selectedAgeRange}
             />
-            <div className="flex-wrap max-w-screen-xl items-center justify-center my-10">
+            <div className={nbHits === 0 ? "my-10 my-30 md:ml-96" : "my-10"}>
+
               <div className="w-full text-center">
                 <h1>
                   Resultados de &#34;{decodeURIComponent(test.query)}&#34;
                 </h1>
               </div>
+
               <FilterContainer
                 test={test}
                 minAgeFilter={minAgeFilter}
