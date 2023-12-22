@@ -3,9 +3,7 @@ import { FaFilter } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import FilterByBrand from "./FilterByBrand";
 import FilterByAge from "./FilterByAge";
-
 import React from "react";
-
 function FilterContainerPrincipal({
   selectedAgeRange,
   setMaxAgeFilter,
@@ -23,15 +21,13 @@ function FilterContainerPrincipal({
   setSelectedBrands,
 }) {
   const [isOpen, setIsOpen] = useState(false);
-
   return (
-    <div className="hidden md:block">
+    <div className="max-w-screen-xl mx-5 justify hidden md:block ml-0 mr-0">
       {true && (
         <div className="">
           <div>
             <div className="">
               <div className=""></div>
-
               <div className="">
                 <div className="relative mr-auto flex h-full max-w-xs flex-col py-4 pb-12 shadow-xl">
                   <div className="flex items-center j px-4">
@@ -39,11 +35,10 @@ function FilterContainerPrincipal({
                       Filtros
                     </h2>
                   </div>
-
                   <form className="mt-4 border-t border-gray-200">
                     <div className="border-t border-gray-200 px-4 py-6">
                       <h3 className="-mx-2 -my-3 flow-root">
-                        <button
+                        <div
                           type="button"
                           className="flex w-full items-center justify-between bg-resene px-2 py-3 text-gray-400 hover:text-gray-500"
                           aria-controls="filter-section-mobile-0"
@@ -52,7 +47,7 @@ function FilterContainerPrincipal({
                           <span className="font-medium text-gray-900">
                             Edad
                           </span>
-                        </button>
+                        </div>
                       </h3>
                       <div className="pt-6" id="filter-section-mobile-0">
                         <div className="space-y-6">
@@ -73,7 +68,7 @@ function FilterContainerPrincipal({
                     </div>
                     <div className="border-t border-gray-200 px-4 py-6">
                       <h3 className="-mx-2 -my-3 flow-root">
-                        <button
+                        <div
                           type="button"
                           className="flex w-full items-center justify-between bg-resene px-2 py-3 text-gray-400 hover:text-gray-500"
                           aria-controls="filter-section-mobile-0"
@@ -82,7 +77,7 @@ function FilterContainerPrincipal({
                           <span className="font-medium text-gray-900">
                             Precio
                           </span>
-                        </button>
+                        </div>
                       </h3>
                       <div className="pt-6" id="filter-section-mobile-0">
                         <div className="space-y-6">
@@ -103,7 +98,7 @@ function FilterContainerPrincipal({
                     </div>
                     <div className="border-t border-gray-200 px-4 py-6">
                       <h3 className="-mx-2 -my-3 flow-root">
-                        <button
+                        <div
                           type="button"
                           className="flex w-full items-center justify-between bg-resene px-2 py-3 text-gray-400 hover:text-gray-500"
                           aria-controls="filter-section-mobile-0"
@@ -112,7 +107,7 @@ function FilterContainerPrincipal({
                           <span className="font-medium text-gray-900">
                             Marca
                           </span>
-                        </button>
+                        </div>
                       </h3>
                       <div className="pt-6" id="filter-section-mobile-0">
                         <div className="space-y-6">
@@ -139,5 +134,4 @@ function FilterContainerPrincipal({
     </div>
   );
 }
-
 export default FilterContainerPrincipal;
