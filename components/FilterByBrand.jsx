@@ -17,26 +17,35 @@ function FilterByBrand({ minAgeFilter, maxAgeFilter, handleFilters, test, select
         const hitsPerPage = 100;
 
         let results;
+        let newResults = [];
 
         do {
-            const { hits, nbHits } = await index.search(decodeURIComponent(test.query)
-
-                , {
-                    attributesToRetrieve: ['brand'],
-                    page: page,
-                    hitsPerPage: hitsPerPage,
-                });
+            const { hits, nbHits } = await index.search(decodeURIComponent(test.query), {
+                attributesToRetrieve: ['brand', 'variants'],
+                page: page,
+                hitsPerPage: hitsPerPage,
+            });
 
             results = hits;
-            const brandsPerPage = Array.from(new Set(results.map(item => item.brand)));
-            allBrands = allBrands.concat(brandsPerPage);
+            results.forEach(item => {
+                if (item.variants.length > 0) {
+                    item.variants.forEach(variant => {
+                        if (variant.initialAge != null && variant.finalAge != null) {
+                            newResults.push(item);
+                        }
+                    })
+
+                }
+            });
+
+            console.log(newResults);
+            allBrands = allBrands.concat(Array.from(new Set(newResults.map(item => item.brand))));
 
             page++;
         } while (page * hitsPerPage < results.nbHits);
 
         setBrands(allBrands);
     }
-
     useEffect(() => {
         getBrands();
     }, []);
