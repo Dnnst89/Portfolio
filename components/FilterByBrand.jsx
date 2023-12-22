@@ -29,7 +29,12 @@ function FilterByBrand({ minAgeFilter, maxAgeFilter, handleFilters, test, select
             results = hits;
             results.forEach(item => {
                 if (item.variants.length > 0) {
-                    newResults.push(item);
+                    item.variants.forEach(variant => {
+                        if (variant.initialAge != null && variant.finalAge != null) {
+                            newResults.push(item);
+                        }
+                    })
+
                 }
             });
 

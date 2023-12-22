@@ -27,7 +27,7 @@ const ProductContainer = ({
         <Spinner />
       ) : nbHits > 0 ? (
         <>
-          <div className="flex flex-wrap items-center justify-center m-auto sm:p-4">
+          <div className="flex flex-wrap items-center justify-center w-full m-auto sm:p-4">
             {hits
               ? hits.map((item) => {
                 return (
@@ -52,10 +52,11 @@ const ProductContainer = ({
           />
         </>
       ) : (
-        <div className="text-center grid content-center h-80 m-auto">
-          {" "}
-          <h1 className="font-bold">¡Lo sentimos!</h1>{" "}
-          <h2>No se encontraron resultados.</h2>{" "}
+        <div className="flex flex-wrap items-center justify-center max-w-screen-xl my-10">
+          <div className="text-center">
+            <h1 className="font-bold mb-2">¡Lo sentimos!</h1>
+            <h2>No se encontraron resultados.</h2>
+          </div>
         </div>
       )}
     </div>

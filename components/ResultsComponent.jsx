@@ -187,10 +187,12 @@ const ResultsComponent = (test) => {
               selectedPriceRange={selectedPriceRange}
               selectedAgeRange={selectedAgeRange}
             />
-            <div className="flex flex-wrap max-w-screen-xl items-center justify-center my-10">
-              <h1 className="w-full text-center ml-5">
-                Resultados de &#34;{decodeURIComponent(test.query)}&#34;
-              </h1>
+            <div className="flex-wrap max-w-screen-xl items-center justify-center my-10">
+              <div className="w-full text-center">
+                <h1>
+                  Resultados de &#34;{decodeURIComponent(test.query)}&#34;
+                </h1>
+              </div>
               <FilterContainer
                 test={test}
                 minAgeFilter={minAgeFilter}
@@ -206,7 +208,7 @@ const ResultsComponent = (test) => {
                 handleFilters={handleFilters}
                 selectedPriceRange={selectedPriceRange}
                 selectedAgeRange={selectedAgeRange}
-              />{" "}
+              />
               <ProductContainer
                 result={result}
                 hitsPerPage={hitsPerPage}
