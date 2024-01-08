@@ -203,7 +203,7 @@ function FormOne() {
         variables: {
           firstName: dataForm.firstName,
           lastName: dataForm.lastName,
-          invoiceEmail: dataForm.invoiceEmail,
+          invoiceEmail: dataForm.invoiceEmail == "" ? null : dataForm.invoiceEmail,
           phone: parseInt(dataForm.phone),
           idType: dataForm.idType,
           idNumber: parseInt(dataForm.idNumber),
