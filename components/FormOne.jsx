@@ -227,7 +227,7 @@ function FormOne() {
             postCode: dataForm.postCode,
             province: dataForm.province,
             addressLine1: dataForm.addressLine1,
-            addressLine2: dataForm.addressLine2,
+            addressLine2: dataForm.addressLine2 == "" ? null : dataForm.addressLine2,
             latitude: selectedLat !== undefined ? selectedLat : lat,
             longitude: selectedLng !== undefined ? selectedLng : lng,
             canton: dataForm.canton,
