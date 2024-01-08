@@ -54,6 +54,7 @@ const FeaturedProducts = () => {
   return (
     <>
       <Swiper
+        loop={true}
         modules={[EffectCoverflow, Navigation, A11y]}
         effect="coverflow"
         //slidesPerView={4}
@@ -68,14 +69,17 @@ const FeaturedProducts = () => {
         breakpoints={{
           300: {
             slidesPerView: 2,
+            slidesPerGroup: 2,
             //spaceBetween: 1000
           },
           768: {
             slidesPerView: 3,
+            slidesPerGroup: 3,
             //spaceBetween: 30
           },
           1024: {
             slidesPerView: 4,
+            slidesPerGroup: 4,
             //spaceBetween: 40
           }
         }}
