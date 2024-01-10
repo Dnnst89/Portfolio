@@ -17,37 +17,40 @@ const ProductDetailSecondary = ({ id, description, reviews }) => {
             <div>
               {showAllReviews
                 ? reviews
-                    .filter(
-                      //take the review by items and filter the item when is true
-                      (item) => item.attributes?.users_permissions_user?.data
-                    )
+                    // .filter(
+                    //   //take the review by items and filter the item when is true
+                    //   (item) => item.attributes?.users_permissions_user?.data
+                    // )
                     .map((item) => {
-                      <ProductReview
-                        key={item.id}
-                        comment={item.attributes.comment}
-                        score={item.attributes.score}
-                        user={
-                          item.attributes.users_permissions_user.data.attributes
-                            .username
-                        }
-                      />;
+                      if (item.attributes?.users_permissions_user?.data) {
+                        return (
+                          <ProductReview
+                            key={item.id}
+                            comment={item.attributes.comment}
+                            score={item.attributes.score}
+                            user={
+                              item.attributes.users_permissions_user.data
+                                .attributes.username
+                            }
+                          />
+                        );
+                      }
                     })
-                : reviews
-                    .filter(
-                      (item) => item.attributes?.users_permissions_user?.data
-                    )
-                    .slice(0, 3)
-                    .map((item) => {
-                      <ProductReview
-                        key={item.id}
-                        comment={item.attributes.comment}
-                        score={item.attributes.score}
-                        user={
-                          item.attributes.users_permissions_user.data.attributes
-                            .username
-                        }
-                      />;
-                    })}
+                : reviews.slice(0, 3).map((item) => {
+                    if (item.attributes?.users_permissions_user?.data) {
+                      return (
+                        <ProductReview
+                          key={item.id}
+                          comment={item.attributes.comment}
+                          score={item.attributes.score}
+                          user={
+                            item.attributes.users_permissions_user.data
+                              .attributes.username
+                          }
+                        />
+                      );
+                    }
+                  })}
             </div>
           </div>
         </section>
