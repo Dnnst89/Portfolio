@@ -75,6 +75,7 @@ const RegisterFormTwo = () => {
         variables: {
           publishedAt: fechaFormateada,
           userId: data.register.user.id,
+          active: true
         },
       });
       toast.success(`Hemos enviado un correo electrónico de confirmación.`, {

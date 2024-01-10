@@ -8,7 +8,7 @@ import Spinner from "@/components/Spinner";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function DetailComponent({ id }) {
-  
+
   const { loading, error, data } = useQuery(ProductDetailQuery, {
     variables: { id },
   });
@@ -20,14 +20,9 @@ export default function DetailComponent({ id }) {
   return (
 
     <div className={loading ? "grid place-items-center" : " max-w-screen-xl m-auto"}>
-      {loading ? <Spinner /> : <div> 
+      {loading ? <Spinner /> : <div>
         <ProductDetail
-          name={data?.product.data.attributes.name}
-          brand={data?.product.data.attributes.brand}
-          description={data?.product.data.attributes.description}
-          variants={data?.product.data.attributes.variants.data}
-          materials={data?.product.data.attributes.materials.data}
-
+          product={data?.product.data}
         />
         <ProductDetailSecondary
           id={data?.product.data.id}

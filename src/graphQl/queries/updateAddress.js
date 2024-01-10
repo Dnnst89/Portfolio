@@ -6,7 +6,7 @@ export const UPDATE_ADDRESS = gql`
     $postCode: String!
     $province: String!
     $addressLine1: String!
-    $addressLine2: String!
+    $addressLine2: String
     $canton: String!
     $latitude: Float!
     $longitude: Float!
