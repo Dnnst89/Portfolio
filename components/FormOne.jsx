@@ -38,8 +38,8 @@ function FormOne() {
   const [canton, setCanton] = useState("");
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
-  const [gift, setGift] = useState("");
-  const [giftInfo, setGiftInfo] = useState("");
+  const [wrappedGiftCheckbox, setWrappedGiftCheckbox] = useState(false);
+
   const [userInformation, setUserInformation] = useState({
     //campos de formulario
     firstName: "",
@@ -165,7 +165,6 @@ function FormOne() {
   };
   const [selectedLat, setSelectedLat] = useState();
   const [selectedLng, setSelectedLng] = useState();
-
   const handleMarkerChange = (markerPosition) => {
     setSelectedLat(markerPosition.lat);
     setSelectedLng(markerPosition.lng);
@@ -203,7 +202,8 @@ function FormOne() {
         variables: {
           firstName: dataForm.firstName,
           lastName: dataForm.lastName,
-          invoiceEmail: dataForm.invoiceEmail == "" ? null : dataForm.invoiceEmail,
+          invoiceEmail:
+            dataForm.invoiceEmail == "" ? null : dataForm.invoiceEmail,
           phone: parseInt(dataForm.phone),
           idType: dataForm.idType,
           idNumber: parseInt(dataForm.idNumber),
@@ -227,7 +227,8 @@ function FormOne() {
             postCode: dataForm.postCode,
             province: dataForm.province,
             addressLine1: dataForm.addressLine1,
-            addressLine2: dataForm.addressLine2 == "" ? null : dataForm.addressLine2,
+            addressLine2:
+              dataForm.addressLine2 == "" ? null : dataForm.addressLine2,
             latitude: selectedLat !== undefined ? selectedLat : lat,
             longitude: selectedLng !== undefined ? selectedLng : lng,
             canton: dataForm.canton,
@@ -593,53 +594,6 @@ function FormOne() {
                         </div>
                       </section>
                     </div>
-                    {/*
-                    <div className="flex justify-center w-full">
-                      <section className="w-3/4 m-auto mt-10 mb-5 flex items-center space-x-5">
-                        <label htmlFor="gift">Envuelto para regalo</label>
-                        <input
-                          className="p-3"
-                          type="checkbox"
-                          id="gift"
-                          {...register("gift", {
-                            onChange: (e) => {
-                              if (e.target.checked) {
-                                setGift(true);
-                              } else {
-                                setGift(false);
-                              }
-                            },
-                          })}
-                        ></input>
-                      </section>
-                      {gift && (
-                        <>
-                          <div className="">
-                            <section className="">
-                              <div className="">
-                                <label htmlFor="idType">Tipo De Cédula</label>
-                                <select
-                                  {...register("idType", {
-                                    onChange: (e) => {
-                                      const selectedValue = e.target.value;
-                                      if (selectedValue === "Física") {
-                                        setFisica(true);
-                                      } else {
-                                        setFisica(false);
-                                      }
-                                    },
-                                  })}
-                                >
-                                  <option value={"Física"}>Física</option>
-                                  <option value={"Jurídica"}>Jurídica</option>
-                                </select>
-                              </div>
-                              sssss
-                            </section>
-                          </div>
-                        </>
-                      )}
-                                </div>*/}
                     <div className="flex justify-center w-full">
                       <section className="w-3/4 m-auto mt-10 mb-5 flex items-center space-x-5">
                         <label htmlFor="idType">Factura Electrónica</label>
@@ -657,11 +611,28 @@ function FormOne() {
                             },
                           })}
                         ></input>
+                        {/* return true if the client wants a wrapped gift */}
+                        <label htmlFor="idType">
+                          Me gustaría con envoltura de regalo
+                        </label>
+                        <input
+                          className="p-3"
+                          type="checkbox"
+                          id="wrappedGiftCheckbox"
+                          {...register("wrappedGiftCheckbox", {
+                            onChange: (e) => {
+                              if (e.target.checked) {
+                                setWrappedGiftCheckbox(true);
+                              } else {
+                                setWrappedGiftCheckbox(false);
+                              }
+                            },
+                          })}
+                        ></input>
                       </section>
                     </div>
                     {checkbox && (
                       <>
-
                         <div className="flex justify-center">
                           <section className="md:w-4/6 grid grid-cols-12 gap-4">
                             <div className="col-span-12 md:col-span-6 grid">
@@ -766,7 +737,8 @@ function FormOne() {
                                   },
                                   pattern: {
                                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                    message: "Ingresa una dirección de correo electrónico válida",
+                                    message:
+                                      "Ingresa una dirección de correo electrónico válida",
                                   },
                                 })}
                               ></input>
