@@ -13,6 +13,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { getToken, refreshToken } from "@/api/moovin/getToken";
 import Map from "./Map";
 import { Marker } from "@react-google-maps/api";
+import CheckboxDropdownList from "./CheckboxDropdownList";
 
 function FormOne() {
   const {
@@ -612,23 +613,7 @@ function FormOne() {
                           })}
                         ></input>
                         {/* return true if the client wants a wrapped gift */}
-                        <label htmlFor="idType">
-                          Me gustaría con envoltura de regalo
-                        </label>
-                        <input
-                          className="p-3"
-                          type="checkbox"
-                          id="wrappedGiftCheckbox"
-                          {...register("wrappedGiftCheckbox", {
-                            onChange: (e) => {
-                              if (e.target.checked) {
-                                setWrappedGiftCheckbox(true);
-                              } else {
-                                setWrappedGiftCheckbox(false);
-                              }
-                            },
-                          })}
-                        ></input>
+                        <CheckboxDropdownList />
                       </section>
                     </div>
                     {checkbox && (
