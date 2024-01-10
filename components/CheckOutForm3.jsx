@@ -80,7 +80,7 @@ export default function CheckOutForm3({
       };
 
       const store = storeInformation?.storeInformation?.data?.attributes;
-      console.log("store nueva", store);
+      // console.log("store nueva", store);
       const userAddress = await getUserAddress({
         variables: {
           id: id,

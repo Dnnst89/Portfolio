@@ -15,32 +15,40 @@ const ProductDetailSecondary = ({ id, description, reviews }) => {
           <h1 className="text-xl mr-2">Reseñas</h1>
           <div className="w-full">
             <div>
-
               {showAllReviews
-                ? reviews.map((item) => (
-                  <ProductReview
-                    key={item.id}
-                    comment={item.attributes.comment}
-                    score={item.attributes.score}
-                    user={
-                      item.attributes.users_permissions_user.data.attributes
-                        .username
-                    }
-                  />
-                ))
-                : reviews
-                  .slice(0, 3)
-                  .map((item) => (
-                    <ProductReview
-                      key={item.id}
-                      comment={item.attributes.comment}
-                      score={item.attributes.score}
-                      user={
-                        item.attributes.users_permissions_user.data.attributes
-                          .username
+                ? reviews.map(
+                    (
+                      item //item imprime cada review
+                    ) => {
+                      if (item.attributes?.users_permissions_user?.data) {
+                        console.log("entro al primer if");
+                        <ProductReview
+                          key={item.id}
+                          comment={item.attributes.comment}
+                          score={item.attributes.score}
+                          user={
+                            item.attributes.users_permissions_user.data
+                              .attributes.username
+                          }
+                        />;
                       }
-                    />
-                  ))}
+                    }
+                  )
+                : reviews.slice(0, 3).map((item) => {
+                    if (item.attributes?.users_permissions_user?.data) {
+                      return (
+                        <ProductReview
+                          key={item.id}
+                          comment={item.attributes.comment}
+                          score={item.attributes.score}
+                          user={
+                            item.attributes.users_permissions_user.data
+                              .attributes.username
+                          }
+                        />
+                      );
+                    }
+                  })}
             </div>
           </div>
         </section>

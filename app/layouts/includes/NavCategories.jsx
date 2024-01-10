@@ -37,7 +37,7 @@ const NavCategories = () => {
           });
 
           const categories = data?.categories;
-          console.log(data);
+
           fetchedData = fetchedData.concat(categories?.data);
           pageCount = categories?.meta?.pagination?.pageCount;
           currentPage++;
