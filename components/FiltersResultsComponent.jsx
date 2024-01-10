@@ -24,6 +24,8 @@ export default function FiltersResultsComponent({ querySearch }) {
   let initialAge;
   let finalAge;
   let category;
+  let minPrice;
+  let maxPrice
 
   //separo la query para saber que mostrar si es por rango de dedades o por categorias
   const [filterType, filterValue] = querySearch.split("=");
@@ -34,23 +36,12 @@ export default function FiltersResultsComponent({ querySearch }) {
     category = decodeURIComponent(filterValue); //para transformar el texto con espacios desde el URL
     initialAge = minAgeFilter;
     finalAge = maxAgeFilter;
+    minPrice = minPriceFilter;
+    maxPrice = maxPriceFilter;
   }
 
-  /*
-  async function allResults() {
-    try {
-      const result = useQuery(getProductsFiltered, {
-        variables: { minAgeFilter, maxAgeFilter, page, pageSize, category },
-      });
-      console.log("query", result);
-      const { hitsPerPage, nbHits, nbPages } = result;
-    } catch (err) {
-      // Manejar errores si es necesario
-    } finally {
-    }
-  }*/
   const { loading, error, data } = useQuery(getProductsFiltered, {
-    variables: { initialAge, finalAge, page, pageSize, category },
+    variables: { initialAge, finalAge, minPrice, maxPrice, page, pageSize, category },
   });
   useEffect(() => {
     // Puedes mover la lógica de 'allResults' directamente aquí
@@ -59,14 +50,15 @@ export default function FiltersResultsComponent({ querySearch }) {
 
       initialAge = minAgeFilter;
       finalAge = maxAgeFilter;
+      minPrice = minPriceFilter;
+      maxPrice = maxPriceFilter;
       const { hitsPerPage, nbHits, nbPages } = data;
-      console.log("query", data);
-      console.log("minage", minAgeFilter);
+      console.log("resultados", data);
       // Continúa con el resto del código según tus necesidades
     } catch (err) {
       // Manejar errores si es necesario
     }
-  }, [minAgeFilter, maxAgeFilter, maxPriceFilter, minPriceFilter, data]);
+  }, [minAgeFilter, maxAgeFilter, maxPriceFilter, minPriceFilter, data, currentPage]);
 
   const handleFilters = (
     selectedBrands,
