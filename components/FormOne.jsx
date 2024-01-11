@@ -13,7 +13,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { getToken, refreshToken } from "@/api/moovin/getToken";
 import Map from "./Map";
 import { Marker } from "@react-google-maps/api";
-import CheckboxDropdownList from "./CheckboxDropdownList";
+import GifttCheckbox from "./GifttCheckbox";
 
 function FormOne() {
   const {
@@ -612,9 +612,10 @@ function FormOne() {
                             },
                           })}
                         ></input>
-                        {/* return true if the client wants a wrapped gift */}
-                        <CheckboxDropdownList />
                       </section>
+                      {/* return true if the client wants a wrapped gift */}
+
+                      <GifttCheckbox />
                     </div>
                     {checkbox && (
                       <>
