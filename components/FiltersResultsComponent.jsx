@@ -18,6 +18,7 @@ export default function FiltersResultsComponent({ querySearch }) {
   const [selectedPriceRange, setSelectedPriceRange] = useState(null);
   const [selectedAgeRange, setSelectedAgeRange] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [queryType, setQueryType] = useState();
   const page = currentPage;
   const pageSize = 12;
 
@@ -47,7 +48,7 @@ export default function FiltersResultsComponent({ querySearch }) {
     // Puedes mover la lógica de 'allResults' directamente aquí
     try {
       // Realiza las operaciones necesarias con 'data'
-
+      setQueryType("category")
       initialAge = minAgeFilter;
       finalAge = maxAgeFilter;
       minPrice = minPriceFilter;
@@ -94,41 +95,6 @@ export default function FiltersResultsComponent({ querySearch }) {
       setMaxPriceFilter(999999);
       maxPrice = 999999;
     }
-
-    /*
-    // Crear filtros para la búsqueda
-    const ageFilters = `variants.initialAge <= ${maxAge} AND variants.finalAge >= ${minAge}`;
-    const priceFilters = `variants.price >= ${minPrice} AND variants.price <= ${maxPrice}`;
-
-    // Filtros de marca
-    const brandFilters = selectedBrands
-      .map((brand) => `brand:"${brand}"`)
-      .join(" OR ");
-
-    // Combinar todos los filtros
-    const combinedFilters = [brandFilters, priceFilters, ageFilters]
-      .filter(Boolean)
-      .join(" AND ");
-
-    // Decodificar la cadena de consulta
-    const decodedQueryString = decodeURIComponent(test.query);
-
-    // Realizar la búsqueda en Algolia con los filtros combinados
-    index
-      .search(decodedQueryString, {
-        filters: combinedFilters,
-      })
-      .then((response) => {
-        setResult(response);
-        const { hitsPerPage, nbHits, nbPages } = response;
-        setHitsPerPage(hitsPerPage);
-        setNbHits(nbHits);
-        setNbPages(nbPages);
-      });
-
-    // Restablecer la página actual y almacenar los rangos de edad y precio seleccionados
-    setCurrentPage(0);
-    */
     setSelectedAgeRange({ minAge, maxAge });
     setSelectedPriceRange({ minPrice, maxPrice });
   };
@@ -158,55 +124,73 @@ export default function FiltersResultsComponent({ querySearch }) {
           <Toaster />
           <div className="flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
             {filterType == "ageRange" ? (
-              <h1 className="text-center">
-                Resultados de productos para niños de{" "}
-                {initialAge === 8
-                  ? `${initialAge} o más años`
-                  : `${initialAge} - ${finalAge} años`}
-              </h1>
+              <div>
+                <h1 className="text-center">
+                  Resultados de productos para niños de{" "}
+                  {initialAge === 8
+                    ? `${initialAge} o más años`
+                    : `${initialAge} - ${finalAge} años`}
+                </h1>
+                <ProductFilterContainer
+                  result={data.products}
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                />
+              </div>
             ) : (
-              <h1 className="text-center">
-                Resultados de productos de {category}
-              </h1>
+              <div>
+                <div>
+                  <h1 className="text-center">
+                    <h1>
+                      Resultados de &#34;{decodeURIComponent(category)}&#34;
+                    </h1>
+                  </h1>
+                </div>
+                <div>
+                  <FilterContainerPrincipal
+                    test={data}
+                    minAgeFilter={minAgeFilter}
+                    maxAgeFilter={maxAgeFilter}
+                    setMaxAgeFilter={setMaxAgeFilter}
+                    setMinAgeFilter={setMinAgeFilter}
+                    minPriceFilter={minPriceFilter}
+                    maxPriceFilter={maxPriceFilter}
+                    setMaxPriceFilter={setMaxPriceFilter}
+                    setMinPriceFilter={setMinPriceFilter}
+                    selectedBrands={selectedBrands}
+                    setSelectedBrands={setSelectedBrands}
+                    handleFilters={handleFilters}
+                    selectedPriceRange={selectedPriceRange}
+                    selectedAgeRange={selectedAgeRange}
+                    queryType={queryType}
+                  />
+                  <FilterContainer
+                    test={data}
+                    minAgeFilter={minAgeFilter}
+                    maxAgeFilter={maxAgeFilter}
+                    setMaxAgeFilter={setMaxAgeFilter}
+                    setMinAgeFilter={setMinAgeFilter}
+                    minPriceFilter={minPriceFilter}
+                    maxPriceFilter={maxPriceFilter}
+                    setMaxPriceFilter={setMaxPriceFilter}
+                    setMinPriceFilter={setMinPriceFilter}
+                    selectedBrands={selectedBrands}
+                    setSelectedBrands={setSelectedBrands}
+                    handleFilters={handleFilters}
+                    selectedPriceRange={selectedPriceRange}
+                    selectedAgeRange={selectedAgeRange}
+                    queryType={queryType}
+                  />
+                  <ProductFilterContainer
+                    result={data.products}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                  />
+                </div>
+              </div>
             )}
           </div>
-          <FilterContainerPrincipal
-            test={data}
-            minAgeFilter={minAgeFilter}
-            maxAgeFilter={maxAgeFilter}
-            setMaxAgeFilter={setMaxAgeFilter}
-            setMinAgeFilter={setMinAgeFilter}
-            minPriceFilter={minPriceFilter}
-            maxPriceFilter={maxPriceFilter}
-            setMaxPriceFilter={setMaxPriceFilter}
-            setMinPriceFilter={setMinPriceFilter}
-            selectedBrands={selectedBrands}
-            setSelectedBrands={setSelectedBrands}
-            handleFilters={handleFilters}
-            selectedPriceRange={selectedPriceRange}
-            selectedAgeRange={selectedAgeRange}
-          />
-          <FilterContainer
-            test={data}
-            minAgeFilter={minAgeFilter}
-            maxAgeFilter={maxAgeFilter}
-            setMaxAgeFilter={setMaxAgeFilter}
-            setMinAgeFilter={setMinAgeFilter}
-            minPriceFilter={minPriceFilter}
-            maxPriceFilter={maxPriceFilter}
-            setMaxPriceFilter={setMaxPriceFilter}
-            setMinPriceFilter={setMinPriceFilter}
-            selectedBrands={selectedBrands}
-            setSelectedBrands={setSelectedBrands}
-            handleFilters={handleFilters}
-            selectedPriceRange={selectedPriceRange}
-            selectedAgeRange={selectedAgeRange}
-          />
-          <ProductFilterContainer
-            result={data.products}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-          />
+
         </div>
       )}
     </div>
