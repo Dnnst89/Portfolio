@@ -34,7 +34,7 @@ const GifttCheckbox = () => {
       <div>
         <select onChange={handleSelectChange} className="cursor-pointer">
           {itemsOnCart.map((item) => (
-            <option key={item.cabys} value="">
+            <option key={item.cabys} value={item.name}>
               {item.name}
             </option>
           ))}
@@ -42,19 +42,17 @@ const GifttCheckbox = () => {
       </div>
       {/** shows all the gift in the cart */}
       <div className=" inline-flex items-baseline ">
-        {selectedItem && (
+        {articleList.length > 0 && (
           <div className="flex items-baseline w-[400px]">
             <ul>
-              <div className="m-3">
-                <span className="cursor-pointer text-sm rounded m-1 rounded p-1 border border-grey-300 border-solid">
-                  {Object.entries(selectedItem).map(([key, value]) => (
-                    <div key={key}>
-                      <strong>{key}:</strong> {value}
-                    </div>
-                  ))}
-                  <span>x</span>
-                </span>
-              </div>
+              {articleList.map((article) => (
+                <div key={article.cabys} className="m-3">
+                  <span className="cursor-pointer text-sm rounde-s m-1 rounded p-1 border border-grey-300 border-solid ">
+                    {article.name}
+                    <span>x</span>
+                  </span>
+                </div>
+              ))}
             </ul>
           </div>
         )}
