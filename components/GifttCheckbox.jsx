@@ -1,15 +1,26 @@
 "use client";
 import { useState } from "react";
-import styles from "../styles/giftCheckbox.module.css";
+import useCartSummary from "@/hooks/useCartSummary";
+import { formatTaxData } from "@/helpers";
 
-const GifttCheckbox = ({ props }) => {
+const GifttCheckbox = () => {
+  const [selectedItem, setSelectedItem] = useState(null);
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [articleList, setArticleList] = useState([]);
 
+  const { items } = useCartSummary({
+    userId: 256,
+  });
+  //gift?.attributes?.variant?.data?.attributes?.product?.data.attributes.name
+  const itemsOnCart = items.map(
+    (gift) =>
+      gift?.attributes?.variant?.data?.attributes?.product?.data.attributes
+  );
+
   const handleSelectChange = (e) => {
     const selectedValue = e.target.value;
-    const selectedArticle = articles.find(
-      (article) => article.title === selectedValue
+    const selectedArticle = itemsOnCart.find(
+      (item) => item.name === selectedValue
     );
 
     if (selectedArticle) {
@@ -17,41 +28,33 @@ const GifttCheckbox = ({ props }) => {
       setArticleList([...articleList, selectedArticle]);
     }
   };
-  const articles = [
-    { id: 1, title: "Article 1" },
-    { id: 2, title: "Article 2" },
-    { id: 3, title: "Article 3" },
-    // Add more articles as needed
-  ];
   return (
     <div className="flex justify-center align-baseline">
       <label htmlFor="">Envolver regalo</label>
       <div>
-        <select
-          onChange={handleSelectChange}
-          value={selectedArticle ? selectedArticle.title : ""}
-          className="cursor-pointer"
-        >
-          {articles.map((item) => (
-            <option key={item.id} value={item.title}>
-              {item.title}
+        <select onChange={handleSelectChange} className="cursor-pointer">
+          {itemsOnCart.map((item) => (
+            <option key={item.cabys} value="">
+              {item.name}
             </option>
           ))}
         </select>
       </div>
-
+      {/** shows all the gift in the cart */}
       <div className=" inline-flex items-baseline ">
-        {articleList.length > 0 && (
+        {selectedItem && (
           <div className="flex items-baseline w-[400px]">
             <ul>
-              {articleList.map((article) => (
-                <div key={article.id} className="m-3">
-                  <span className="cursor-pointer text-sm rounde-s m-1 rounded p-1 border border-grey-300 border-solid ">
-                    {article.title}
-                    <span>x</span>
-                  </span>
-                </div>
-              ))}
+              <div className="m-3">
+                <span className="cursor-pointer text-sm rounded m-1 rounded p-1 border border-grey-300 border-solid">
+                  {Object.entries(selectedItem).map(([key, value]) => (
+                    <div key={key}>
+                      <strong>{key}:</strong> {value}
+                    </div>
+                  ))}
+                  <span>x</span>
+                </span>
+              </div>
             </ul>
           </div>
         )}
