@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import useCartSummary from "@/hooks/useCartSummary";
-import { formatTaxData } from "@/helpers";
+import { AiOutlineClose } from "react-icons/ai";
 
 const GifttCheckbox = () => {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -30,15 +30,19 @@ const GifttCheckbox = () => {
   };
 
   const handleDeleteSpan = () => {
+    //cambiar la clase a hidden puede ser la solucion
     setHideSpan(true);
   };
   return (
-    <div className="flex justify-center align-baseline">
+    <div className="inline-block justify-center align-baseline w-[300px]">
       <label htmlFor="">Selecciona los artículos a envolver</label>
-      <div>
-        <select onChange={handleSelectChange} className="cursor-pointer">
-          <option value="" disabled selected>
-            Seleccionar los artículo
+      <div className="flex-col ">
+        <select
+          onChange={handleSelectChange}
+          className="cursor-pointer w-[150px] "
+        >
+          <option value="" disabled selected className="text-xs font-bold">
+            Seleccionar
           </option>
 
           {itemsOnCart.map((item) => (
@@ -49,26 +53,39 @@ const GifttCheckbox = () => {
         </select>
       </div>
       {/** shows all the gift in the cart */}
-      <div className=" inline-flex items-baseline ">
+      <div className="flex">
         {articleList.length > 0 && (
-          <div className="flex items-baseline w-[400px]">
-            <ul>
-              {/*  check if the option already exist in the list */}
-              {articleList.map((article) => (
-                <div key={article.cabys} className="m-3">
-                  <div className=" text-sm rounde-s m-1 rounded p-1 border border-grey-300 border-solid ">
-                    <div>{article.name}</div>
-                    <button
-                      onClick={handleDeleteSpan}
-                      className="rounded-full bg-orange m-1 p-[5px] cursor-pointer"
-                    >
-                      {hideSpan && <span>x</span>}
-                    </button>
-                  </div>
+          <ul className=" list-none p-0 w-[400px]">
+            {/*  check if the option already exists in the list */}
+            {articleList.map((article) => (
+              <li key={article.cabys} className="m-2">
+                <div
+                  className="inline-flex items-center whitespace-nowrap rounded-[0.27rem]
+                            bg-aquamarine px-[0.65em] pb-[0.25em] pt-[0.35em] text-center
+                             align-baseline text-[0.75em] leading-none text-resene"
+                >
+                  <div>{article.name}</div>
+                  <button
+                    onClick={handleDeleteSpan}
+                    className="inline-flex items-center m-1 p-[2px] cursor-pointer"
+                  >
+                    {/* Add any content or icon for the button if needed */}
+                  </button>
+                  <span className="ml-auto">
+                    <AiOutlineClose
+                      size={15}
+                      style={{
+                        backgroundColor: "#ff7849",
+                        borderRadius: "50%",
+                        padding: "1px",
+                        color: "#F6EEE5",
+                      }}
+                    />
+                  </span>
                 </div>
-              ))}
-            </ul>
-          </div>
+              </li>
+            ))}
+          </ul>
         )}
       </div>
     </div>

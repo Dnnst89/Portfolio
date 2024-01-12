@@ -595,7 +595,7 @@ function FormOne() {
                         </div>
                       </section>
                     </div>
-                    <div className="flex justify-center w-full">
+                    <div className="inline-block justify-center w-full">
                       <section className="w-3/4 m-auto mt-10 mb-5 flex items-center space-x-5">
                         <label htmlFor="idType">Factura Electrónica</label>
                         <input
@@ -614,8 +614,9 @@ function FormOne() {
                         ></input>
                       </section>
                       {/* return true if the client wants a wrapped gift */}
-
-                      <GifttCheckbox />
+                      <div>
+                        <GifttCheckbox />
+                      </div>
                     </div>
                     {checkbox && (
                       <>
