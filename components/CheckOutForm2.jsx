@@ -101,16 +101,12 @@ export default function CheckOutForm2({
           estimation.optionService[1].amount / tipoCambio
         );
         deliveryPayment(deliveryPrice.toFixed(2));
-        console.log("amount total", parseFloat(subTotal));
-        console.log("taxes total", parseFloat(taxes));
-        console.log("delivery total", parseFloat(deliveryPrice));
         const suma = subTotal + taxes + deliveryPrice;
         const finalAmount = {
           total: parseFloat(suma.toFixed(2)),
           subTotal: subTotal,
           taxes: taxes,
         };
-        console.log("total", parseFloat(suma.toFixed(2)));
         setEstima(estimation.idEstimation);
         setAmount(finalAmount);
         try {
@@ -135,7 +131,6 @@ export default function CheckOutForm2({
         } catch (error) {
           console.error(error);
         }
-        // console.log("suma", suma);
       } catch (error) {
         console.error("Error al obtener los datos:", error);
         toast.error(
@@ -173,7 +168,6 @@ export default function CheckOutForm2({
         console.error(error);
       }
     }
-    // console.log(data.deliveryMethod);
   });
   return (
     <div className="w-full">

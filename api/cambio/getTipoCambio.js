@@ -19,8 +19,8 @@ const getTipoCambio = async () => {
       "Error al obtener el tipo de cambio del Ministerio de Hacienda:",
       error
     );
-    throw error;
+    const tipoCambio = { compra: 527 };
+    return tipoCambio;
   }
 };
-
 export default getTipoCambio;
