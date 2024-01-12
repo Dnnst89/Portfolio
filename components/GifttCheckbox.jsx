@@ -7,7 +7,7 @@ const GifttCheckbox = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [articleList, setArticleList] = useState([]);
-
+  const [hideSpan, setHideSpan] = useState(false);
   const { items } = useCartSummary({
     userId: 256,
   });
@@ -28,14 +28,22 @@ const GifttCheckbox = () => {
       setArticleList([...articleList, selectedArticle]);
     }
   };
+
+  const handleDeleteSpan = () => {
+    setHideSpan(true);
+  };
   return (
     <div className="flex justify-center align-baseline">
-      <label htmlFor="">Envolver regalo</label>
+      <label htmlFor="">Selecciona los artículos a envolver</label>
       <div>
         <select onChange={handleSelectChange} className="cursor-pointer">
+          <option value="" disabled selected>
+            Seleccionar los artículo
+          </option>
+
           {itemsOnCart.map((item) => (
             <option key={item.cabys} value={item.name}>
-              {item.name}
+              <li>{item.name}</li>
             </option>
           ))}
         </select>
@@ -45,12 +53,18 @@ const GifttCheckbox = () => {
         {articleList.length > 0 && (
           <div className="flex items-baseline w-[400px]">
             <ul>
+              {/*  check if the option already exist in the list */}
               {articleList.map((article) => (
                 <div key={article.cabys} className="m-3">
-                  <span className="cursor-pointer text-sm rounde-s m-1 rounded p-1 border border-grey-300 border-solid ">
-                    {article.name}
-                    <span>x</span>
-                  </span>
+                  <div className=" text-sm rounde-s m-1 rounded p-1 border border-grey-300 border-solid ">
+                    <div>{article.name}</div>
+                    <button
+                      onClick={handleDeleteSpan}
+                      className="rounded-full bg-orange m-1 p-[5px] cursor-pointer"
+                    >
+                      {hideSpan && <span>x</span>}
+                    </button>
+                  </div>
                 </div>
               ))}
             </ul>
