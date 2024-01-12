@@ -184,15 +184,15 @@ export default function FiltersResultsComponent({ querySearch }) {
                     }
                   >
                     {nbHits === 0 ? (
-                      <div className="text-center flex items-center justify-center h-80 m-auto">
-                        <div className="w-full text-center">
+                      <div className="text-center flex flex-col items-center justify-center h-80">
+                        <div className="w-full text-center mb-4">
                           <h1 className="text-center">
                             Resultados de &#34;{decodeURIComponent(category)}
                             &#34;
                           </h1>
                         </div>
                         <div>
-                          <h1 className="font-bold">¡Lo sentimos!</h1>
+                          <h1 className="font-bold mb-2">¡Lo sentimos!</h1>
                           <h2>No se encontraron resultados.</h2>
                         </div>
                       </div>
