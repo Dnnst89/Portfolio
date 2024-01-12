@@ -19,6 +19,7 @@ export default function FiltersResultsComponent({ querySearch }) {
   const [selectedAgeRange, setSelectedAgeRange] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [queryType, setQueryType] = useState();
+  const [nbHits, setNbHits] = useState();
   const page = currentPage;
   const pageSize = 12;
 
@@ -26,7 +27,7 @@ export default function FiltersResultsComponent({ querySearch }) {
   let finalAge;
   let category;
   let minPrice;
-  let maxPrice
+  let maxPrice;
 
   //separo la query para saber que mostrar si es por rango de dedades o por categorias
   const [filterType, filterValue] = querySearch.split("=");
@@ -42,24 +43,41 @@ export default function FiltersResultsComponent({ querySearch }) {
   }
 
   const { loading, error, data } = useQuery(getProductsFiltered, {
-    variables: { initialAge, finalAge, minPrice, maxPrice, page, pageSize, category },
+    variables: {
+      initialAge,
+      finalAge,
+      minPrice,
+      maxPrice,
+      page,
+      pageSize,
+      category,
+    },
   });
   useEffect(() => {
     // Puedes mover la lógica de 'allResults' directamente aquí
     try {
       // Realiza las operaciones necesarias con 'data'
-      setQueryType("category")
+      setQueryType("category");
       initialAge = minAgeFilter;
       finalAge = maxAgeFilter;
       minPrice = minPriceFilter;
       maxPrice = maxPriceFilter;
-      const { hitsPerPage, nbHits, nbPages } = data;
-      console.log("resultados", data);
+      const total = data.products.meta.pagination.total;
+      setNbHits(total);
+      // console.log("resultado1", nbHits);
+      console.log("first", nbHits);
       // Continúa con el resto del código según tus necesidades
     } catch (err) {
       // Manejar errores si es necesario
     }
-  }, [minAgeFilter, maxAgeFilter, maxPriceFilter, minPriceFilter, data, currentPage]);
+  }, [
+    minAgeFilter,
+    maxAgeFilter,
+    maxPriceFilter,
+    minPriceFilter,
+    data,
+    currentPage,
+  ]);
 
   const handleFilters = (
     selectedBrands,
@@ -122,10 +140,10 @@ export default function FiltersResultsComponent({ querySearch }) {
         <div>
           {" "}
           <Toaster />
-          <div className="flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
+          <div className="">
             {filterType == "ageRange" ? (
               <div>
-                <h1 className="text-center">
+                <h1 className="text-center flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
                   Resultados de productos para niños de{" "}
                   {initialAge === 8
                     ? `${initialAge} o más años`
@@ -139,14 +157,7 @@ export default function FiltersResultsComponent({ querySearch }) {
               </div>
             ) : (
               <div>
-                <div>
-                  <h1 className="text-center">
-                    <h1>
-                      Resultados de &#34;{decodeURIComponent(category)}&#34;
-                    </h1>
-                  </h1>
-                </div>
-                <div>
+                <div className="md:flex">
                   <FilterContainerPrincipal
                     test={data}
                     minAgeFilter={minAgeFilter}
@@ -164,33 +175,65 @@ export default function FiltersResultsComponent({ querySearch }) {
                     selectedAgeRange={selectedAgeRange}
                     queryType={queryType}
                   />
-                  <FilterContainer
-                    test={data}
-                    minAgeFilter={minAgeFilter}
-                    maxAgeFilter={maxAgeFilter}
-                    setMaxAgeFilter={setMaxAgeFilter}
-                    setMinAgeFilter={setMinAgeFilter}
-                    minPriceFilter={minPriceFilter}
-                    maxPriceFilter={maxPriceFilter}
-                    setMaxPriceFilter={setMaxPriceFilter}
-                    setMinPriceFilter={setMinPriceFilter}
-                    selectedBrands={selectedBrands}
-                    setSelectedBrands={setSelectedBrands}
-                    handleFilters={handleFilters}
-                    selectedPriceRange={selectedPriceRange}
-                    selectedAgeRange={selectedAgeRange}
-                    queryType={queryType}
-                  />
-                  <ProductFilterContainer
-                    result={data.products}
-                    currentPage={currentPage}
-                    setCurrentPage={setCurrentPage}
-                  />
+
+                  <div
+                    className={
+                      nbHits === 0
+                        ? "my-10 my-30 md:ml-auto mx-auto"
+                        : "my-10 ml-auto mx-auto"
+                    }
+                  >
+                    {nbHits === 0 ? (
+                      <div className="text-center flex items-center justify-center h-80 m-auto">
+                        <div className="w-full text-center">
+                          <h1 className="text-center">
+                            Resultados de &#34;{decodeURIComponent(category)}
+                            &#34;
+                          </h1>
+                        </div>
+                        <div>
+                          <h1 className="font-bold">¡Lo sentimos!</h1>
+                          <h2>No se encontraron resultados.</h2>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="w-full text-center">
+                          <h1 className="text-center">
+                            Resultados de &#34;{decodeURIComponent(category)}
+                            &#34;
+                          </h1>
+                        </div>
+
+                        <FilterContainer
+                          test={data}
+                          minAgeFilter={minAgeFilter}
+                          maxAgeFilter={maxAgeFilter}
+                          setMaxAgeFilter={setMaxAgeFilter}
+                          setMinAgeFilter={setMinAgeFilter}
+                          minPriceFilter={minPriceFilter}
+                          maxPriceFilter={maxPriceFilter}
+                          setMaxPriceFilter={setMaxPriceFilter}
+                          setMinPriceFilter={setMinPriceFilter}
+                          selectedBrands={selectedBrands}
+                          setSelectedBrands={setSelectedBrands}
+                          handleFilters={handleFilters}
+                          selectedPriceRange={selectedPriceRange}
+                          selectedAgeRange={selectedAgeRange}
+                          queryType={queryType}
+                        />
+                        <ProductFilterContainer
+                          result={data.products}
+                          currentPage={currentPage}
+                          setCurrentPage={setCurrentPage}
+                        />
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
             )}
           </div>
-
         </div>
       )}
     </div>
