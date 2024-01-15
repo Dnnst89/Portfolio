@@ -63,8 +63,8 @@ const GifttCheckbox = () => {
               <li key={article.cabys} className="m-2">
                 <div
                   className="inline-flex items-center whitespace-nowrap rounded-[0.27rem]
-                            bg-aquamarine px-[0.65em] pb-[0.25em] pt-[0.35em] text-center
-                             align-baseline text-[0.75em] leading-none text-resene"
+                  border-solid border-2 border-aquamarine  px-[0.65em] pb-[0.25em] pt-[0.35em] text-center
+                             align-baseline text-[0.75em] leading-none text-black"
                 >
                   <div>{article.name}</div>
                   <button
