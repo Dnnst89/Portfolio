@@ -28,13 +28,21 @@ const GifttCheckbox = () => {
       setArticleList([...articleList, selectedArticle]);
     }
   };
+  // Filter out the article specific name
+  const handleDeleteSpan = (nameToRemove) => {
+    console.log(nameToRemove);
+    const updatedArticleList = articleList.filter(
+      (item) => item.name !== nameToRemove
+    );
 
-  const handleDeleteSpan = () => {
-    //cambiar la clase a hidden puede ser la solucion
+    // Update the state with the filtered article list
+    setArticleList(updatedArticleList);
+
+    // Optionally, you can set a state to hide the span here if needed
     setHideSpan(true);
   };
   return (
-    <div className="inline-block justify-center align-baseline w-[300px]">
+    <div className="w-3/4 m-auto mt-10 mb-5 flex items-center space-x-5">
       <label htmlFor="">Selecciona los artículos a envolver</label>
       <div className="flex-col ">
         <select
@@ -62,9 +70,9 @@ const GifttCheckbox = () => {
             {articleList.map((article) => (
               <li key={article.cabys} className="m-2">
                 <div
-                  className="inline-flex items-center whitespace-nowrap rounded-[0.27rem]
-                  border-solid border-2 border-aquamarine  px-[0.65em] pb-[0.25em] pt-[0.35em] text-center
-                             align-baseline text-[0.75em] leading-none text-black"
+                  className={`inline-flex items-center whitespace-nowrap rounded-[0.27rem]
+                   border-solid border-2 border-aquamarine px-[0.65em] pb-[0.25em] pt-[0.35em]
+                    text-center align-baseline text-[0.75em] leading-none text-black }`}
                 >
                   <div>{article.name}</div>
                   <button
@@ -73,7 +81,7 @@ const GifttCheckbox = () => {
                   >
                     {/* Add any content or icon for the button if needed */}
                   </button>
-                  <span className="ml-auto">
+                  <span className="ml-auto cursor-pointer">
                     <AiOutlineClose
                       size={15}
                       style={{
@@ -82,6 +90,7 @@ const GifttCheckbox = () => {
                         padding: "1px",
                         color: "#F6EEE5",
                       }}
+                      onClick={() => handleDeleteSpan(article.name)}
                     />
                   </span>
                 </div>
