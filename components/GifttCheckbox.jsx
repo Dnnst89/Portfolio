@@ -57,6 +57,8 @@ const GifttCheckbox = () => {
         {articleList.length > 0 && (
           <ul className=" list-none p-0 w-[400px]">
             {/*  check if the option already exists in the list */}
+            <div>Artículos seleccionados</div>
+
             {articleList.map((article) => (
               <li key={article.cabys} className="m-2">
                 <div
