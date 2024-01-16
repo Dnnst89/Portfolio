@@ -19,18 +19,27 @@ const GifttCheckbox = () => {
 
   const handleSelectChange = (e) => {
     const selectedValue = e.target.value;
-    const selectedArticle = itemsOnCart.find(
-      (item) => item.name === selectedValue
+
+    // Check if the selected item is not already in articleList
+    const isItemNotInList = articleList.every(
+      (item) => item.name !== selectedValue
     );
 
-    if (selectedArticle) {
-      setSelectedArticle(selectedArticle);
-      setArticleList([...articleList, selectedArticle]);
+    if (isItemNotInList) {
+      // Find the selected item in itemsOnCart
+      const selectedArticle = itemsOnCart.find(
+        (item) => item.name === selectedValue
+      );
+
+      if (selectedArticle) {
+        // Add the selected item to articleList
+        setArticleList([...articleList, selectedArticle]);
+      }
     }
   };
   // Filter out the article specific name
   const handleDeleteSpan = (nameToRemove) => {
-    console.log(nameToRemove);
+    console.log("name", nameToRemove);
     const updatedArticleList = articleList.filter(
       (item) => item.name !== nameToRemove
     );
@@ -41,13 +50,14 @@ const GifttCheckbox = () => {
     // Optionally, you can set a state to hide the span here if needed
     setHideSpan(true);
   };
+
   return (
     <div className="w-3/4 m-auto mt-10 mb-5 flex items-center space-x-5">
       <label htmlFor="">Selecciona los artículos a envolver</label>
-      <div className="flex-col ">
+      <div className="flex-col">
         <select
           onChange={handleSelectChange}
-          className="cursor-pointer w-[150px] "
+          className="cursor-pointer w-[150px]"
         >
           <option value="" disabled selected className="text-xs font-bold">
             Seleccionar
@@ -55,7 +65,7 @@ const GifttCheckbox = () => {
 
           {itemsOnCart.map((item) => (
             <option key={item.cabys} value={item.name}>
-              <li>{item.name}</li>
+              {item.name}
             </option>
           ))}
         </select>
@@ -75,13 +85,8 @@ const GifttCheckbox = () => {
                     text-center align-baseline text-[0.75em] leading-none text-black }`}
                 >
                   <div>{article.name}</div>
-                  <button
-                    onClick={handleDeleteSpan}
-                    className="inline-flex items-center m-1 p-[2px] cursor-pointer"
-                  >
-                    {/* Add any content or icon for the button if needed */}
-                  </button>
-                  <span className="ml-auto cursor-pointer">
+
+                  <span className="ml-auto cursor-pointer pl-1">
                     <AiOutlineClose
                       size={15}
                       style={{
