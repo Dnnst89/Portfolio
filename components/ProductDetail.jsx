@@ -20,7 +20,13 @@ import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { useQuery } from "@apollo/client";
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 
-function ProductDetail({ name, brand, description, variants, materials }) {
+function ProductDetail({ product }) {
+  const name = product?.attributes?.name;
+  const brand = product?.attributes?.brand;
+  const description = product?.attributes?.description;
+  const variants = product?.attributes?.variants?.data
+  const materials = product?.attributes?.materials?.data
+
   const altText = "Imagen de producto" + name
   const [quantity, setQuantity] = useState(1);
   const [image, setImage] = useState(null);
@@ -60,7 +66,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
   const [galleryImages, setGalleryImages] = useState([]);
 
   useEffect(() => {
-    const newGalleryImages = images.map((image) => ({
+    const newGalleryImages = images?.map((image) => ({
       original: image.attributes.url,
       thumbnail: image.attributes.url,
     }));
@@ -389,6 +395,7 @@ function ProductDetail({ name, brand, description, variants, materials }) {
                   sessionId={cartSummary.sessionId}
                   user={user}
                   enableButton={enableButton}
+                  product={product}
                 />
               </div>
             </div>

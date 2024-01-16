@@ -24,34 +24,32 @@ function ProductReviewForm({ idProduct }) {
     const score = parseInt(rating);
     const product = idProduct;
     const users_permissions_user = sessionData.user.id;
-    const token = captchaRef.current.getValue();
+    //const token = captchaRef.current.getValue();
 
     try {
-      if (token) {
+      if (score) {
         const { loading, error, data } = createReview({
           variables: { comment, score, product, users_permissions_user },
         });
 
         reset();
         setRating(0);
-        captchaRef.current.reset();
+        //captchaRef.current.reset();
 
         if (error) {
           toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
-            autoClose: 5000
-          })
+            autoClose: 5000,
+          });
         } else {
           toast.success("Gracias por tu reseña!", {
             autoClose: 5000,
           });
         }
-
       } else {
         toast.error("Por favor selecciona la casilla de verificación", {
           autoClose: 5000,
         });
       }
-
     } catch (error) {
       toast.error(error.message, {
         autoClose: 5000,
@@ -62,9 +60,10 @@ function ProductReviewForm({ idProduct }) {
   return (
     <>
       {sessionData && (
-        <form onSubmit={onSubmit} className="md:p-5 w-full col-start-2 col-span-10 md:col-start-4 md:col-span-6 m-auto">
-
-
+        <form
+          onSubmit={onSubmit}
+          className="md:p-5 w-full col-start-2 col-span-10 md:col-start-4 md:col-span-6 m-auto"
+        >
           <div className="space-y-3 w-full">
             <label htmlFor="message" className="text-lg w-full">
               Danos tu opinión del producto
@@ -81,14 +80,11 @@ function ProductReviewForm({ idProduct }) {
                 },
                 maxLength: {
                   value: 3000,
-                  message:
-                    "El comentario es muy extenso",
+                  message: "El comentario es muy extenso",
                 },
               })}
             ></textarea>
-            <p className="text-red text-xs">
-              {errors.comment?.message}
-            </p>
+            <p className="text-red text-xs">{errors.comment?.message}</p>
             <div className="flex space-x-2">
               <label>Dale una calificación</label>
               <div className="flex">
@@ -116,15 +112,19 @@ function ProductReviewForm({ idProduct }) {
                 })}
               </div>
             </div>
-            {errors.rating && <span className="text-red text-xs">Debes ingresar una calificación</span>}
-            <div className="flex justify-start">
+            {errors.rating && (
+              <span className="text-red text-xs">
+                Debes ingresar una calificación
+              </span>
+            )}
+            {/* <div className="flex justify-start">
               {" "}
               <ReCAPTCHA
                 sitekey="6Lea6iEpAAAAALI1Fb34ZuoJN9pUUJd2HykpyLpb"
                 //sitekey="6LfCrUYoAAAAAPgdh0MpvKzzHvhksbGTM3cP1prU"
                 ref={captchaRef}
-              />
-            </div>
+              /> 
+            </div>*/}
             <div className="flex justify-start pb-5">
               <button
                 type="submit"

@@ -1,7 +1,7 @@
 import { updateQtyItems } from "@/redux/features/cart-slice";
 import client from "@/src/graphQl/config";
 import GET_CART_ITEMS_LIST_SHOPPING_SESSION from "@/src/graphQl/queries/getCartItemsByShoppingSession";
-import GET_SHOPPING_SESSION_BY_USER from "@/src/graphQl/queries/getShoppingSessionByUser";
+import GET_ACTIVE_SHOPPING_SESSION_BY_USER from "@/src/graphQl/queries/getActiveShoppingSessionByUser";
 import { useLazyQuery, useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,7 +27,7 @@ const useCartSummary = ({ userId }) => {
     errorQueries: null,
   });
   const [loading, setLoading] = useState(true);
-  const [getSession] = useLazyQuery(GET_SHOPPING_SESSION_BY_USER);
+  const [getSession] = useLazyQuery(GET_ACTIVE_SHOPPING_SESSION_BY_USER);
   const [getCart] = useLazyQuery(GET_CART_ITEMS_LIST_SHOPPING_SESSION, {
     fetchPolicy: "network-only", // Forzar la consulta directa al servidor
   });
@@ -39,7 +39,7 @@ const useCartSummary = ({ userId }) => {
       try {
         const { data } = await getSession({
           //llamo la query para traer la shopping session
-          variables: { userId },
+          variables: { userId, active: true },
         });
 
         if (data) {

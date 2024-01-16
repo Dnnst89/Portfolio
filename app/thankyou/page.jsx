@@ -9,7 +9,6 @@ import { logo } from "../assets/images";
 import useStorage from "@/hooks/useStorage";
 import { useQuery } from "@apollo/client";
 import GET_CART_ITEMS_LIST_SHOPPING_SESSION from "@/src/graphQl/queries/getCartItemsByShoppingSession";
-import GET_SHOPPING_SESSION_BY_USER from "@/src/graphQl/queries/getShoppingSessionByUser";
 import DELETE_CART_ITEM_MUTATION from "@/src/graphQl/queries/deleteCartItem";
 import { GET_PAYMENT_DETAIL } from "@/src/graphQl/queries/getPaymentDetail";
 import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
@@ -44,6 +43,8 @@ import GET_ORDER_ITEMS_BY_ORDER_ID from "@/src/graphQl/queries/getOrderItemsByOr
 import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { CREATE_ELECTRONIC_INVOICE } from "@/src/graphQl/queries/createElectronicInvoice";
 import { CREATE_ORDER_EMAIL } from "@/src/graphQl/queries/sendEmail";
+import { UPDATE_SHOPPING_SESSION_ACTIVE } from "@/src/graphQl/queries/updateShoppingSessionActive";
+import CREATE_SHOPPING_SESSION_MUTATION from "@/src/graphQl/queries/createShoppingSession";
 
 /*
   recives the Tilopay response , based on the returns params 
@@ -79,6 +80,8 @@ export default function ThankYouMessage() {
   const [getOrderItemsByOrderId] = useLazyQuery(GET_ORDER_ITEMS_BY_ORDER_ID);
   const [getStoreInformation] = useLazyQuery(GET_STORE_INFO);
   const [getUserAddress] = useLazyQuery(GET_USER_ADDRESS);
+  const [updateShoppingSessionActive] = useMutation(UPDATE_SHOPPING_SESSION_ACTIVE);
+  const [createShoppingSession] = useMutation(CREATE_SHOPPING_SESSION_MUTATION);
 
   // const { user } = useStorage();
   // const { id } = user || {};
@@ -87,7 +90,7 @@ export default function ThankYouMessage() {
 
   // const { user } = useStorage();
   // const { id } = user || {};
-  const { items, loading, quantity } = useCartSummary({
+  const { items, loading, quantity, sessionId } = useCartSummary({
     //me traigo los items que hay en carrito con el hook
     userId: userId,
   });
@@ -129,7 +132,9 @@ export default function ThankYouMessage() {
   }, [loading]);
 
   const handleCartItems = async () => {
-    //se elimina los items de carrito y se actualizan los stocks de los productos
+
+    const fechaActual = new Date();
+    const fechaFormateada = fechaActual.toISOString();
     items.map((item) => {
       if (
         item.attributes.variant.data &&
@@ -141,24 +146,38 @@ export default function ThankYouMessage() {
         const variant = item.attributes.variant.data.id;
         const cartItemId = item.id;
 
-        try {
-          deleteCarItem({
-            variables: {
-              id: cartItemId,
-            },
-          });
-        } catch (error) { }
+        // try {//se elimina los items de carrito**
+        //   deleteCarItem({
+        //     variables: {
+        //       id: cartItemId,
+        //     },
+        //   });
+        // } catch (error) { }
 
         try {
-          updateVariantStock({
+          updateVariantStock({//actualizo el stock de las variantes
             variables: {
               id: variant,
               stock: newStock,
             },
           });
+          updateShoppingSessionActive({//inactivo la sesion del carrito viejo
+            variables: {
+              id: sessionId,
+              active: false,
+            },
+          });
+          createShoppingSession({//se le crea una nueva sesion de carrito
+            variables: {
+              publishedAt: fechaFormateada,
+              userId: userId,
+              active: true
+            },
+          });
         } catch (error) {
           console.log("error");
         }
+
       }
     });
   };
