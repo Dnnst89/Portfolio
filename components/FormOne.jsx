@@ -613,8 +613,11 @@ function FormOne() {
                           })}
                         ></input>
                       </section>
-                      {/* return true if the client wants a wrapped gift */}
-                      <div>
+                      {/* return the articles the user wants to wrap*/}
+                      <div className=" flex flex-col h-[300px]">
+                        <h4 className="w-3/4 m-auto mt-10 mb-5 flex items-center space-x-5">
+                          Seleccione los articulos a envolver
+                        </h4>
                         <GifttCheckbox />
                       </div>
                     </div>
