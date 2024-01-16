@@ -2,12 +2,14 @@
 import { useState } from "react";
 import useCartSummary from "@/hooks/useCartSummary";
 import { AiOutlineClose } from "react-icons/ai";
-
+import useStorage from "@/hooks/useStorage";
 const GifttCheckbox = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [articleList, setArticleList] = useState([]);
+  const { user } = useStorage(); //me trae el usuario autorizado
+  const userId = user?.id;
   const { items } = useCartSummary({
-    userId: 256,
+    userId: userId,
   });
   //gift?.attributes?.variant?.data?.attributes?.product?.data.attributes.name
   const itemsOnCart = items.map(
