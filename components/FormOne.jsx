@@ -276,7 +276,6 @@ function FormOne() {
       });
     }
   });
-
   return (
     <div>
       <Toaster />
@@ -618,7 +617,7 @@ function FormOne() {
                         <h4 className="w-3/4 m-auto mt-10 mb-5 flex items-center space-x-5">
                           Seleccione los articulos a envolver
                         </h4>
-                        <GifttCheckbox />
+                        <GifttCheckbox onSubmit={handleSubmit} />
                       </div>
                     </div>
                     {checkbox && (

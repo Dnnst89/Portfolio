@@ -2,12 +2,16 @@
 import { useState } from "react";
 import useCartSummary from "@/hooks/useCartSummary";
 import { AiOutlineClose } from "react-icons/ai";
+import { AddGiftInfo } from "@/src/graphQl/queries/addGiftInfo";
 import useStorage from "@/hooks/useStorage";
-const GifttCheckbox = () => {
-  const [selectedItem, setSelectedItem] = useState(null);
+import { useMutation } from "@apollo/client";
+const GifttCheckbox = (onSubmit) => {
+  const [wrappedGifts] = useMutation(AddGiftInfo);
   const [articleList, setArticleList] = useState([]);
-  const { user } = useStorage(); //me trae el usuario autorizado
+  // brings the authorized user in session
+  const { user } = useStorage();
   const userId = user?.id;
+  //alert(userId);
   const { items } = useCartSummary({
     userId: userId,
   });
@@ -45,6 +49,21 @@ const GifttCheckbox = () => {
 
     // Update the state with the filtered article list
     setArticleList(updatedArticleList);
+  };
+
+  const handleSubmitWrappedGifts = async () => {
+    const description = articleList.map((article) => article.name).join(", ");
+    try {
+      const { data } = await wrappedGifts({
+        variables: { id: userId, des: description },
+      });
+      // If the mutation is successful, call the onSubmit callback
+      if (onSubmit) {
+        onSubmit();
+      }
+    } catch (error) {
+      console.error("No fue posible realizar la acción", mutationError);
+    }
   };
 
   return (
