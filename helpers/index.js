@@ -70,7 +70,8 @@ const createKey = (number, id) => {
     }
     var month = "";
     if (date.getMonth() < 10) {
-      month = "0" + new Date().getMonth();
+      //month = "0" + new Date().getMonth();
+      month = ("0" + (new Date().getMonth() + 1)).slice(-2);
     } else {
       month = new Date().getMonth();
     }
