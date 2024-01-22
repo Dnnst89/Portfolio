@@ -75,6 +75,7 @@ const RegisterFormTwo = () => {
         variables: {
           publishedAt: fechaFormateada,
           userId: data.register.user.id,
+          active: true
         },
       });
       toast.success(`Hemos enviado un correo electrónico de confirmación.`, {
@@ -159,7 +160,7 @@ const RegisterFormTwo = () => {
                           <section className="p-3 m-auto col-span-12 grid grid-cols-12 gap-5">
                             <div className="grid col-span-12 md:col-span-6 content-baseline  w-full">
                               <label htmlFor="password">
-                                Constraseña
+                                Contraseña
                                 <span className="text-pink-200">*</span>
                               </label>
                               <Field
@@ -189,7 +190,7 @@ const RegisterFormTwo = () => {
                                 autoFocus={true}
                               />
                               {errors.confirmPassword &&
-                                touched.confirmPassword ? (
+                              touched.confirmPassword ? (
                                 <ErrorForm>{errors.confirmPassword}</ErrorForm>
                               ) : null}
                             </div>

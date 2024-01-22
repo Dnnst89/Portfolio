@@ -19,6 +19,7 @@ function FilterContainerPrincipal({
   setMaxPriceFilter,
   selectedBrands,
   setSelectedBrands,
+  queryType
 }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -96,7 +97,7 @@ function FilterContainerPrincipal({
                         </div>
                       </div>
                     </div>
-                    <div className="border-t border-gray-200 px-4 py-6">
+                    {queryType == "category" ? ("") : (<div className="border-t border-gray-200 px-4 py-6">
                       <h3 className="-mx-2 -my-3 flow-root">
                         <div
                           type="button"
@@ -124,6 +125,7 @@ function FilterContainerPrincipal({
                         </div>
                       </div>
                     </div>
+                    )}
                   </form>
                 </div>
               </div>

@@ -203,7 +203,7 @@ function FormOne() {
         variables: {
           firstName: dataForm.firstName,
           lastName: dataForm.lastName,
-          invoiceEmail: dataForm.invoiceEmail,
+          invoiceEmail: dataForm.invoiceEmail == "" ? null : dataForm.invoiceEmail,
           phone: parseInt(dataForm.phone),
           idType: dataForm.idType,
           idNumber: parseInt(dataForm.idNumber),
@@ -227,7 +227,7 @@ function FormOne() {
             postCode: dataForm.postCode,
             province: dataForm.province,
             addressLine1: dataForm.addressLine1,
-            addressLine2: dataForm.addressLine2,
+            addressLine2: dataForm.addressLine2 == "" ? null : dataForm.addressLine2,
             latitude: selectedLat !== undefined ? selectedLat : lat,
             longitude: selectedLng !== undefined ? selectedLng : lng,
             canton: dataForm.canton,
@@ -523,7 +523,7 @@ function FormOne() {
                           </p>
                         </div>
                         <div className="col-span-12 md:col-span-6 grid content-baseline">
-                          <label htmlFor="addressLine1">Direccion 1</label>
+                          <label htmlFor="addressLine1">Dirección 1</label>
                           <textarea
                             // type="text"
                             id="addressLine1"
@@ -553,7 +553,7 @@ function FormOne() {
                           </p>
                         </div>
                         <div className="col-span-12 md:col-span-6 grid content-baseline">
-                          <label htmlFor="addressLine2">Direccion 2</label>
+                          <label htmlFor="addressLine2">Dirección 2</label>
                           <textarea
                             //type="text"
                             id="addressLine2"
@@ -661,7 +661,6 @@ function FormOne() {
                     </div>
                     {checkbox && (
                       <>
-
                         <div className="flex justify-center">
                           <section className="md:w-4/6 grid grid-cols-12 gap-4">
                             <div className="col-span-12 md:col-span-6 grid">
@@ -766,7 +765,8 @@ function FormOne() {
                                   },
                                   pattern: {
                                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                    message: "Ingresa una dirección de correo electrónico válida",
+                                    message:
+                                      "Ingresa una dirección de correo electrónico válida",
                                   },
                                 })}
                               ></input>
