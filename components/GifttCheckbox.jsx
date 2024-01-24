@@ -1,13 +1,18 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useCartSummary from "@/hooks/useCartSummary";
 import { AiOutlineClose } from "react-icons/ai";
 import { AddGiftInfo } from "@/src/graphQl/queries/addGiftInfo";
 import useStorage from "@/hooks/useStorage";
 import { useMutation } from "@apollo/client";
+import { useDispatch } from "react-redux";
+import { setNewValue } from "../redux/features/itemsOnCartSlice";
 const GifttCheckbox = (onSubmit) => {
+  const dispatch = useDispatch();
   const [wrappedGifts] = useMutation(AddGiftInfo);
+  const [selectedValue, setSelectedValue] = useState(null);
   const [articleList, setArticleList] = useState([]);
+  const [mappedGifts, setMappedGifts] = useState({});
   // brings the authorized user in session
   const { user } = useStorage();
   const userId = user?.id;
@@ -22,7 +27,7 @@ const GifttCheckbox = (onSubmit) => {
   );
 
   const handleSelectChange = (e) => {
-    const selectedValue = e.target.value;
+    setSelectedValue(e.target.value);
 
     // Check if the selected item is not already in articleList
     const isItemNotInList = articleList.every(
@@ -38,6 +43,10 @@ const GifttCheckbox = (onSubmit) => {
       if (selectedArticle) {
         // Add the selected item to articleList
         setArticleList([...articleList, selectedArticle]);
+        const storeArticles = articleList.map((item) => item.name);
+        console.log("items", storeArticles);
+
+        dispatch(setNewValue(storeArticles));
       }
     }
   };
@@ -51,26 +60,16 @@ const GifttCheckbox = (onSubmit) => {
     setArticleList(updatedArticleList);
   };
 
-  const handleSubmitWrappedGifts = async () => {
-    const description = articleList.map((article) => article.name).join(", ");
-    try {
-      const { data } = await wrappedGifts({
-        variables: { id: userId, des: description },
-      });
-      // If the mutation is successful, call the onSubmit callback
-      if (onSubmit) {
-        onSubmit();
-      }
-    } catch (error) {
-      console.error("No fue posible realizar la acción", mutationError);
-    }
-  };
-
+  //dispatch(setSelectedValue(itemsOnCart.map((item) => item.));
   return (
     <div className="flex flex-col h-[200px] m-auto mt-10 mb-5 items-center space-x-5">
       <div>
         <select onChange={handleSelectChange} className="cursor-pointer">
           <option value="" disabled selected className="text-xs font-bold">
+            {/** falta desarrollar aqui
+             * tengo que mostrar mensaje de que se han selecionado
+             * todos los items
+             */}
             Seleccionar
           </option>
 

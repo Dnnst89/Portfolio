@@ -3,6 +3,7 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { UPDATE_USER_INFORMATION } from "@/src/graphQl/queries/updateUserInformation";
 import { UPDATE_ADDRESS } from "@/src/graphQl/queries/updateAddress";
 import { CREATE_ADDRESS } from "@/src/graphQl/queries/createAddress";
+import { ADD_WRAPPED_GIFTS_LIST } from "@/src/graphQl/queries/addwrappedGiftList";
 import { useForm } from "react-hook-form";
 import CartDetail from "./CartDetail";
 import { useEffect, useState } from "react";
@@ -14,7 +15,7 @@ import { getToken, refreshToken } from "@/api/moovin/getToken";
 import Map from "./Map";
 import { Marker } from "@react-google-maps/api";
 import GifttCheckbox from "./GifttCheckbox";
-
+import { useSelector } from "react-redux";
 function FormOne() {
   const {
     register,
@@ -27,6 +28,7 @@ function FormOne() {
   const [updateAddress] = useMutation(UPDATE_ADDRESS);
   const [getUserInfo] = useLazyQuery(GET_USER_PAYMENT_INFO);
   const [createAddress] = useMutation(CREATE_ADDRESS);
+  const [updateGifts] = useMutation(ADD_WRAPPED_GIFTS_LIST);
   const [checkoutForm1Visible, setCheckoutForm1Visible] = useState(false);
   const { user } = useStorage();
   const userId = user?.id;
@@ -40,7 +42,10 @@ function FormOne() {
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
   const [wrappedGiftCheckbox, setWrappedGiftCheckbox] = useState(false);
-
+  const selectedItemsOnCart = useSelector(
+    (state) => state.itemsOnCart.newValue
+  );
+  console.log("redux store", { selectedItemsOnCart });
   const [userInformation, setUserInformation] = useState({
     //campos de formulario
     firstName: "",
@@ -56,6 +61,7 @@ function FormOne() {
     idNumber: "",
     idType: "",
     invoiceEmail: "",
+    gift: "",
   });
   const [deliveryPayment, setDeliveryPayment] = useState(0);
   const handleDeliveryPayment = (data) => {
@@ -72,9 +78,9 @@ function FormOne() {
   };
 
   const [amount, setAmount] = useState({
-    total: 0,
-    subTotal: 0,
-    taxes: 0,
+    total: 1,
+    subTotal: 1,
+    taxes: 1,
   });
 
   const handleChange = (data) => {
@@ -260,7 +266,13 @@ function FormOne() {
             id: userId,
           },
         });
-
+        const { data, error, loading } = await updateGifts({
+          variables: {
+            id: userId,
+            gift: selectedItemsOnCart,
+          },
+        });
+        console.log("gift", { data });
         if (createAddressError)
           return toast.error("Error al crear la dirección", {
             autoClose: 5000,
@@ -617,7 +629,7 @@ function FormOne() {
                         <h4 className="w-3/4 m-auto mt-10 mb-5 flex items-center space-x-5">
                           Seleccione los articulos a envolver
                         </h4>
-                        <GifttCheckbox onSubmit={handleSubmit} />
+                        <GifttCheckbox />
                       </div>
                     </div>
                     {checkbox && (
