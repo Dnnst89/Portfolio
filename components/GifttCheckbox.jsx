@@ -44,7 +44,6 @@ const GifttCheckbox = (onSubmit) => {
         // Add the selected item to articleList
         setArticleList([...articleList, selectedArticle]);
         const storeArticles = articleList.map((item) => item.name);
-        console.log("items", storeArticles);
 
         dispatch(setNewValue(storeArticles));
       }

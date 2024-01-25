@@ -16,6 +16,7 @@ import Map from "./Map";
 import { Marker } from "@react-google-maps/api";
 import GifttCheckbox from "./GifttCheckbox";
 import { useSelector } from "react-redux";
+import useCartSummary from "@/hooks/useCartSummary";
 function FormOne() {
   const {
     register,
@@ -42,10 +43,11 @@ function FormOne() {
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
   const [wrappedGiftCheckbox, setWrappedGiftCheckbox] = useState(false);
-  const selectedItemsOnCart = useSelector(
-    (state) => state.itemsOnCart.newValue
-  );
-  console.log("redux store", { selectedItemsOnCart });
+  // loading wrapped gifts from dropdown
+  const { items, sessionId } = useCartSummary({
+    userId: userId,
+  });
+
   const [userInformation, setUserInformation] = useState({
     //campos de formulario
     firstName: "",
@@ -266,12 +268,9 @@ function FormOne() {
             id: userId,
           },
         });
-        const { data, error, loading } = await updateGifts({
-          variables: {
-            id: userId,
-            gift: selectedItemsOnCart,
-          },
-        });
+
+        console.log("errores ", data.updatePaymentDetail.data.attributes.gift);
+
         console.log("gift", { data });
         if (createAddressError)
           return toast.error("Error al crear la dirección", {
@@ -287,6 +286,9 @@ function FormOne() {
         autoClose: 5000,
       });
     }
+    const { data, error, loading } = await updateGifts({
+      variables: { sessionId, gift: "test" },
+    });
   });
   return (
     <div>
