@@ -7,3 +7,4 @@ export { default as img7 } from "./Detinmarin_Logo-05.jpg";
 export { default as img8 } from "./Detinmarin_Logo-06.jpg";
 export { default as storeLogo } from "./tk-logo.png";
 export { default as moovinLogo } from "./moovin.png";
+export { default as correosDeCR } from "./correosDeCostaRica.jpg";

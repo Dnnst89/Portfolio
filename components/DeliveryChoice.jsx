@@ -5,9 +5,11 @@ export const DeliveryChoice = ({
   onSubmit,
   register,
   handleSubmit,
-  storeLogo,
+  logo,
+  labelName,
+  valueName,
 }) => {
-  console.log("register", register);
+  console.log("register", labelName);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="w-full flex flex-col items-center mt-5 space-y-10">
@@ -17,18 +19,18 @@ export const DeliveryChoice = ({
               type="radio"
               id="pickUpInStore"
               name="del_method"
-              value="Recoger en tienda"
+              value={valueName}
               className="w-5 h-5"
-              defaultChecked
+              defaultChecked={valueName === "Recoger en tienda" ? true : false}
               {...register("deliveryMethod")}
             />
           </div>
           <div className="items-center pl-5 md:pl-[90px] md:flex">
             <label className="text-sm md:text-xl md:tracking-wider">
-              Recoger en tienda:
+              {labelName}
             </label>
             <Image
-              src={storeLogo}
+              src={logo}
               alt=""
               style={{ width: "auto", height: "65px" }}
               className="m-auto md:ml-20 py-2"

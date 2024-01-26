@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { storeLogo, moovinLogo } from "../app/assets/images";
+import { storeLogo, moovinLogo, correosDeCR } from "../app/assets/images";
 import { useEffect, useState } from "react";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import useStorage from "@/hooks/useStorage";
@@ -197,16 +197,28 @@ export default function CheckOutForm2({
       {!checktOutForm2Visible ? (
         <form>
           <DeliveryChoice
+            labelName="Recoger en tienda"
             onSubmit={onSubmit}
             register={register}
             handleSubmit={handleSubmit}
-            storeLogo={storeLogo}
+            logo={storeLogo}
+            valueName="Recoger en tienda"
           />
           <DeliveryChoice
+            labelName={"Envío a través de"}
             onSubmit={onSubmit}
             register={register}
             handleSubmit={handleSubmit}
-            storeLogo={moovinLogo}
+            logo={moovinLogo}
+            valueName="Envío a través de"
+          />
+          <DeliveryChoice
+            labelName={"Correos de Costa Rica"}
+            onSubmit={onSubmit}
+            register={register}
+            handleSubmit={handleSubmit}
+            logo={correosDeCR}
+            valueName="Correos de Costa Rica"
           />
           <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
             <button
