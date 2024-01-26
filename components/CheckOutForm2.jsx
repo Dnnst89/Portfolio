@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
-import moovin from "../app/assets/moovin.png";
-import logo from "../app/assets/tk-logo.png";
+import { storeLogo, moovinLogo } from "../app/assets/images";
 import { useEffect, useState } from "react";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import useStorage from "@/hooks/useStorage";
@@ -16,6 +15,7 @@ import { requestEstimation, createData } from "@/api/moovin/estimation";
 import getTipoCambio from "@/api/cambio/getTipoCambio";
 
 import toast, { Toaster } from "react-hot-toast";
+import { DeliveryChoice } from "./deliveryChoice";
 export default function CheckOutForm2({
   amount,
   checkbox,
@@ -195,61 +195,21 @@ export default function CheckOutForm2({
         </div>
       </div>
       {!checktOutForm2Visible ? (
-        <form onSubmit={onSubmit}>
-          <div className="w-full flex flex-col items-center mt-5 space-y-10">
-            <section className="bg-white w-3/4 flex  rounded-t-3xl drop-shadow-lg text-xl">
-              <div className=" border-r-2 border-dashed border-grey-200  w-[100px] flex justify-center items-center ml-[10px]">
-                <input
-                  type="radio"
-                  id="moovin"
-                  name="del_method"
-                  value="Recoger en tienda"
-                  className="w-5 h-5"
-                  defaultChecked
-                  {...register("deliveryMethod")}
-                />
-              </div>
-              <div className="items-center pl-5 md:pl-[90px] md:flex">
-                <label className="text-sm md:text-xl md:tracking-wider">
-                  Recoger en tienda:
-                </label>
-                <Image
-                  src={logo}
-                  alt=""
-                  style={{ width: "auto", height: "65px" }}
-                  className="m-auto md:ml-20 py-2"
-                />
-              </div>
-            </section>
-            <section className="bg-white w-3/4 flex  rounded-t-3xl drop-shadow-lg text-xl">
-              <div className=" border-r-2 border-dashed border-grey-200  w-[100px] flex justify-center items-center ml-[10px]">
-                <input
-                  type="radio"
-                  id="moovin"
-                  name="del_method"
-                  value="Envío a través de MOOVIN"
-                  className="w-5 h-5"
-                  {...register("deliveryMethod")}
-                />
-              </div>
-              <div className="items-center pl-5 md:pl-[90px] md:flex">
-                <label className="text-sm md:text-xl md:tracking-wider">
-                  Envío a través de:
-                </label>
-                <Image
-                  src={moovin}
-                  alt=""
-                  style={{ width: "auto", height: "65px" }}
-                  className="max-h-[50px] md:max-h-[50px] m-auto md:ml-20 py-2"
-                />
-              </div>
-            </section>
-          </div>
+        <form>
+          <DeliveryChoice
+            onSubmit={onSubmit}
+            register={register}
+            handleSubmit={handleSubmit}
+            storeLogo={storeLogo}
+          />
+          <DeliveryChoice
+            onSubmit={onSubmit}
+            register={register}
+            handleSubmit={handleSubmit}
+            storeLogo={moovinLogo}
+          />
           <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
             <button
-              // onClick={() => {
-              //   handleCreatePaymentDetail();
-              // }}
               type="submit"
               disabled={total === 0}
               className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
