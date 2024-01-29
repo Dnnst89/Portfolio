@@ -92,9 +92,12 @@ export default function CheckOutForm2({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deliveryPayment]);
 
+  console.log("working from here...");
   const onSubmit = handleSubmit(async (data) => {
-    if (data.deliveryMethod != "Recoger en tienda") {
+    //delivery method - MVN(Moovin)
+    if (data.deliveryMethod === "MVN") {
       try {
+        console.log("working data:", data);
         const shipmentInfo = createData(items, lat, lng);
         const estimation = await requestEstimation(shipmentInfo);
         const deliveryPrice = Math.ceil(
@@ -137,8 +140,10 @@ export default function CheckOutForm2({
           "El lugar seleccionado se encuentra fuera del area de cobertura"
         );
       }
-    } else {
+    } else if (data.deliveryMethod === "SPU") {
       try {
+        console.log(" NOT working data:", data);
+
         const finalAmount = {
           total: parseFloat(subTotal + taxes).toFixed(2),
           subTotal: subTotal,
@@ -167,10 +172,12 @@ export default function CheckOutForm2({
       } catch (error) {
         console.error(error);
       }
+    } else if (data.deliveryMethod === "CCR") {
+      alert("Correos de costa rica");
     }
   });
   return (
-    <div className="w-full">
+    <form className="w-full">
       <div className="flex justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200 min-w-[375px]">
         <div className="flex justify-center items-center min-w-[375px]  max-w-[375px] m-auto  justify-between  px-3">
           <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
@@ -195,38 +202,35 @@ export default function CheckOutForm2({
         </div>
       </div>
       {!checktOutForm2Visible ? (
-        <form>
+        <form onSubmit={onSubmit}>
           <DeliveryChoice
             labelName="Recoger en tienda"
-            onSubmit={onSubmit}
             register={register}
-            handleSubmit={handleSubmit}
             logo={storeLogo}
-            valueName="Recoger en tienda"
+            valueName="SPU"
+            deliveryId={"SPU"}
           />
           <DeliveryChoice
             labelName={"Envío a través de"}
-            onSubmit={onSubmit}
             register={register}
-            handleSubmit={handleSubmit}
             logo={moovinLogo}
-            valueName="Envío a través de"
+            valueName="MVN"
+            deliveryId={"MVN"}
           />
           <DeliveryChoice
             labelName={"Correos de Costa Rica"}
-            onSubmit={onSubmit}
             register={register}
-            handleSubmit={handleSubmit}
             logo={correosDeCR}
-            valueName="Correos de Costa Rica"
+            valueName="CCR"
+            deliveryId={"CCR"}
           />
           <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
             <button
               type="submit"
-              disabled={total === 0}
+              // disabled={total === 0}
               className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
             >
-              {total <= 0 ? <Spinner /> : "Continuar"}
+              continar {/* {total <= 0 ? <Spinner /> : "Continuar"} */}
             </button>
           </div>
         </form>
@@ -239,6 +243,6 @@ export default function CheckOutForm2({
           orderNumber={paymentDetailId}
         />
       )}
-    </div>
+    </form>
   );
 }
