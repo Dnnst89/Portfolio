@@ -70,13 +70,10 @@ export default function CheckOutForm2({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deliveryPayment]);
 
-  console.log("working from here...");
   const onSubmit = handleSubmit(async (data) => {
     //delivery method - MVN(Moovin)
-    console.log("inside onSubmit", data.deliveryMethod);
     if (data.deliveryMethod === "MVN") {
       try {
-        console.log("working data:", data);
         const shipmentInfo = createData(items, lat, lng);
         const estimation = await requestEstimation(shipmentInfo);
         const deliveryPrice = Math.ceil(
@@ -114,15 +111,12 @@ export default function CheckOutForm2({
           console.error(error);
         }
       } catch (error) {
-        console.error("Error al obtener los datos:", error);
         toast.error(
           "El lugar seleccionado se encuentra fuera del area de cobertura"
         );
       }
     } else if (data.deliveryMethod === "SPU") {
       try {
-        console.log(" NOT working data:", data);
-
         const finalAmount = {
           total: parseFloat(subTotal + taxes).toFixed(2),
           subTotal: subTotal,
@@ -152,7 +146,7 @@ export default function CheckOutForm2({
         console.error(error);
       }
     } else if (data.deliveryMethod === "CCR") {
-      alert("Correos de costa rica");
+      console.log("Correos de costa rica");
     }
   });
   return (
