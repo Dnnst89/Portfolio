@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import { createOrderData, orderMoovin } from "@/api/moovin/createOrder";
 import { requestEstimation, createData } from "@/api/moovin/estimation";
 import getTipoCambio from "@/api/cambio/getTipoCambio";
-
+import GET_DELIVERY_CHOICES from "@/src/graphQl/queries/getDeliveryChoices";
 import toast, { Toaster } from "react-hot-toast";
 import { DeliveryChoice } from "./deliveryChoice";
 export default function CheckOutForm2({
@@ -31,6 +31,14 @@ export default function CheckOutForm2({
   const { total, subTotal, taxes } = amount;
   let paymentDetailResponseId = null;
   const [createPaymentDetail] = useMutation(CREATE_PAYMENT_DETAIL);
+  /**
+   * Se obtienen las opciones de delivery
+   */
+  const { loading, error, data } = useQuery(GET_DELIVERY_CHOICES);
+  const CCR = data?.deliveries?.data?.[0]?.attributes?.delivery_code;
+  const MVN = data?.deliveries?.data?.[1]?.attributes?.delivery_code;
+  const SPU = data?.deliveries?.data?.[2]?.attributes?.delivery_code;
+
   const { user } = useStorage();
   const { id } = user || {};
   const [tipoCambio, setTipoCambio] = useState(null);
@@ -70,9 +78,10 @@ export default function CheckOutForm2({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deliveryPayment]);
 
+  console.log("deliveryItems", CCR, MVN, SPU);
   const onSubmit = handleSubmit(async (data) => {
     //delivery method - MVN(Moovin)
-    if (data.deliveryMethod === "MVN") {
+    if (data.deliveryMethod === MVN) {
       try {
         const shipmentInfo = createData(items, lat, lng);
         const estimation = await requestEstimation(shipmentInfo);
@@ -115,7 +124,7 @@ export default function CheckOutForm2({
           "El lugar seleccionado se encuentra fuera del area de cobertura"
         );
       }
-    } else if (data.deliveryMethod === "SPU") {
+    } else if (data.deliveryMethod === SPU) {
       try {
         const finalAmount = {
           total: parseFloat(subTotal + taxes).toFixed(2),
@@ -145,7 +154,7 @@ export default function CheckOutForm2({
       } catch (error) {
         console.error(error);
       }
-    } else if (data.deliveryMethod === "CCR") {
+    } else if (data.deliveryMethod === CCR) {
       console.log("Correos de costa rica");
     }
   });
