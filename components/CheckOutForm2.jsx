@@ -27,6 +27,7 @@ export default function CheckOutForm2({
   const isoDate = new Date().toISOString();
   const [paymentDetailId, setPaymentDetailId] = useState(null);
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
+  const [blockMoovin, setBlockMoovin] = useState(false);
 
   const { total, subTotal, taxes } = amount;
   let paymentDetailResponseId = null;
@@ -78,7 +79,6 @@ export default function CheckOutForm2({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deliveryPayment]);
 
-  console.log("deliveryItems", CCR, MVN, SPU);
   const onSubmit = handleSubmit(async (data) => {
     //delivery method - MVN(Moovin)
     if (data.deliveryMethod === MVN) {
@@ -88,6 +88,7 @@ export default function CheckOutForm2({
         const deliveryPrice = Math.ceil(
           estimation.optionService[1].amount / tipoCambio
         );
+        console.log("deliveryPrice: " + deliveryPrice);
         deliveryPayment(deliveryPrice.toFixed(2));
         const suma = subTotal + taxes + deliveryPrice;
         const finalAmount = {
@@ -120,8 +121,15 @@ export default function CheckOutForm2({
           console.error(error);
         }
       } catch (error) {
+        /* 
+          si la respuesta de estimacion de moovin genera un error
+          indica que no tienen covertura en el area seleccionada
+          en dado caso se bloquea la opcion de moovin
+         */
+        setBlockMoovin(true);
         toast.error(
-          "El lugar seleccionado se encuentra fuera del area de cobertura"
+          "El lugar seleccionado se encuentra fuera del area de cobertura",
+          { duration: 4000 }
         );
       }
     } else if (data.deliveryMethod === SPU) {
@@ -191,13 +199,17 @@ export default function CheckOutForm2({
             logo={storeLogo}
             valueName="SPU"
             deliveryId={"SPU"}
+            className=""
           />
+
           <DeliveryChoice
             labelName={"Envío a través de"}
             register={register}
             logo={moovinLogo}
             valueName="MVN"
             deliveryId={"MVN"}
+            blockMoovin={blockMoovin}
+            className="bg-[#B4B4B8]"
           />
           <DeliveryChoice
             labelName={"Correos de Costa Rica"}
@@ -205,14 +217,15 @@ export default function CheckOutForm2({
             logo={correosDeCR}
             valueName="CCR"
             deliveryId={"CCR"}
+            className=""
           />
           <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
             <button
               type="submit"
-              // disabled={total === 0}
+              disabled={total === 0}
               className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
             >
-              continar {/* {total <= 0 ? <Spinner /> : "Continuar"} */}
+              {total <= 0 ? <Spinner /> : "Continuar"}
             </button>
           </div>
         </form>

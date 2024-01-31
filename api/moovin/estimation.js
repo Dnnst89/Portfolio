@@ -19,7 +19,6 @@ const requestEstimation = async (data) => {
     }
   );
   const estimation = await estimationResponsde.json();
-  console.log("estimationResponsde: ", estimation.optionService[1]);
   return estimation;
 };
 const addProducts = (items) => {

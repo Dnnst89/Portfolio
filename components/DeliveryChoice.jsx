@@ -7,17 +7,25 @@ export const DeliveryChoice = ({
   labelName,
   valueName,
   deliveryId,
+  blockMoovin,
+  className,
 }) => {
+  console.log("blockMoovin", blockMoovin);
   return (
     <div className="w-full flex flex-col items-center mt-5 space-y-10">
-      <section className="bg-white w-3/4 flex  rounded-t-3xl drop-shadow-lg text-xl">
+      <section
+        className={`${
+          blockMoovin ? "bg-[#B4B4B8]" : "bg-white"
+        } w-3/4 flex rounded-t-3xl drop-shadow-lg text-xl`}
+      >
         <div className=" border-r-2 border-dashed border-grey-200  w-[100px] flex justify-center items-center ml-[10px]">
           <input
             type="radio"
             id={deliveryId}
             name="del_method"
             value={valueName}
-            className="w-5 h-5"
+            className={`${blockMoovin ? className : null} w-5 h-5 `}
+            disabled={blockMoovin}
             /*
               Se consulta el tipo de envio desde el backend
               (CCR/SPU/MVN)
@@ -26,7 +34,7 @@ export const DeliveryChoice = ({
             {...register("deliveryMethod")}
           />
         </div>
-        <div className="items-center pl-5 md:pl-[90px] md:flex">
+        <div className="items-center pl-5 md:pl-[90px] md:flex ">
           <label className="text-sm md:text-xl md:tracking-wider">
             {labelName}
           </label>
