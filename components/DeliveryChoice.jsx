@@ -35,8 +35,6 @@ export const DeliveryChoice = ({
             alt=""
             style={{ width: "auto", height: "65px" }}
             className="m-auto md:ml-20 py-2"
-            defaultChecked
-            {...register("deliveryMethod")}
           />
         </div>
       </section>

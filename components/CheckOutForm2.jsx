@@ -43,28 +43,6 @@ export default function CheckOutForm2({
   const [deliveryMethod, setDeliveryMethod] = useState(null);
   const [deliveryId, setDeliveryId] = useState(null);
 
-  const fetchEstimation = async () => {
-    try {
-      try {
-        const shipmentInfo = createData(items, lat, lng);
-        const estimation = await requestEstimation(shipmentInfo);
-        deliveryPayment(estimation.amount);
-      } catch (error) {}
-      //   console.log("amount total", amounts.total);
-      const suma = parseFloat(subTotal + taxes);
-      const finalAmount = {
-        total: parseFloat(subTotal + taxes + estimation.amount),
-        subTotal: subTotal,
-        taxes: taxes,
-      };
-
-      setAmount(finalAmount);
-      // console.log("suma", suma);
-    } catch (error) {
-      console.error("Error al obtener los datos:", error);
-      // Puedes manejar el error según tus necesidades
-    }
-  };
   const {
     register,
     handleSubmit,
@@ -95,6 +73,7 @@ export default function CheckOutForm2({
   console.log("working from here...");
   const onSubmit = handleSubmit(async (data) => {
     //delivery method - MVN(Moovin)
+    console.log("inside onSubmit", data.deliveryMethod);
     if (data.deliveryMethod === "MVN") {
       try {
         console.log("working data:", data);
@@ -177,7 +156,7 @@ export default function CheckOutForm2({
     }
   });
   return (
-    <form className="w-full">
+    <div className="w-full">
       <div className="flex justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200 min-w-[375px]">
         <div className="flex justify-center items-center min-w-[375px]  max-w-[375px] m-auto  justify-between  px-3">
           <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
@@ -243,6 +222,6 @@ export default function CheckOutForm2({
           orderNumber={paymentDetailId}
         />
       )}
-    </form>
+    </div>
   );
 }
