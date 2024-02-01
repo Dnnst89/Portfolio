@@ -9,14 +9,15 @@ export const DeliveryChoice = ({
   deliveryId,
   blockMoovin,
   className,
+  text,
 }) => {
-  console.log("blockMoovin", blockMoovin);
-
   return (
-    <div className="w-full flex flex-col items-center mt-5 space-y-10">
+    <div className="w-full flex flex-col items-center mt-5 space-y-5">
+      {" "}
+      {/* Adjusted space-y value */}
       <section
         className={`${
-          blockMoovin ? "bg-[#C7C8CC]" : "bg-white"
+          blockMoovin ? "bg-[#e9ecef]" : "bg-white"
         } w-3/4 flex rounded-t-3xl drop-shadow-lg text-xl`}
       >
         <div className=" border-r-2 border-dashed border-grey-200  w-[100px] flex justify-center items-center ml-[10px]">
@@ -27,10 +28,6 @@ export const DeliveryChoice = ({
             value={valueName}
             className={`${blockMoovin ? className : null} w-5 h-5 `}
             disabled={blockMoovin}
-            /*
-              Se consulta el tipo de envio desde el backend
-              (CCR/SPU/MVN)
-            */
             defaultChecked={
               blockMoovin ? valueName === "CCR" : valueName === "SPU"
             }
@@ -49,6 +46,8 @@ export const DeliveryChoice = ({
           />
         </div>
       </section>
+      {blockMoovin ? <p className="text-sm text-orange mt-1">{text}</p> : null}{" "}
+      {/* Adjusted margin top value */}
     </div>
   );
 };

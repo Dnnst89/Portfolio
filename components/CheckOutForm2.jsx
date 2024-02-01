@@ -86,18 +86,19 @@ export default function CheckOutForm2({
   useEffect(() => {
     const fetchMoovinCoverageData = async () => {
       try {
+        // Se envian las coordenadas que provienen de google map
+        // ingresadas en el formulario de direccion
         const result = await coverageArea(lat, lng);
-        console.log("Coverage area result:", result);
         if (result === "ERRORZONE") {
+          //Si la zona esta fuera de cobertura se bloquea el componente
+          // y se asigna correos de costa rica como defautl
           setBlockMoovin(true);
         }
-
         // Further processing based on the result
       } catch (error) {
         console.error("Error fetching coverage area:", error);
       }
     };
-
     fetchMoovinCoverageData();
   }, [lat, lng]);
 
@@ -148,9 +149,8 @@ export default function CheckOutForm2({
           indica que no tienen covertura en el area seleccionada
           en dado caso se bloquea la opcion de moovin
          */
-        toast.error(
-          "El lugar seleccionado se encuentra fuera del area de cobertura",
-          { duration: 4000 }
+        console.error(
+          "El lugar seleccionado se encuentra fuera del area de cobertura"
         );
       }
     } else if (data.deliveryMethod === SPU) {
@@ -239,7 +239,8 @@ export default function CheckOutForm2({
               valueName="MVN"
               deliveryId={"MVN"}
               blockMoovin={blockMoovin}
-              className="bg-[#C7C8CC]"
+              className="bg-[#e9ecef]"
+              text={"Moovin no se encuetra disponible en el area seleccionada."}
             />
           )}
 
