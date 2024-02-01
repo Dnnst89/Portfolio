@@ -11,11 +11,12 @@ export const DeliveryChoice = ({
   className,
 }) => {
   console.log("blockMoovin", blockMoovin);
+
   return (
     <div className="w-full flex flex-col items-center mt-5 space-y-10">
       <section
         className={`${
-          blockMoovin ? "bg-[#B4B4B8]" : "bg-white"
+          blockMoovin ? "bg-[#C7C8CC]" : "bg-white"
         } w-3/4 flex rounded-t-3xl drop-shadow-lg text-xl`}
       >
         <div className=" border-r-2 border-dashed border-grey-200  w-[100px] flex justify-center items-center ml-[10px]">
@@ -30,7 +31,9 @@ export const DeliveryChoice = ({
               Se consulta el tipo de envio desde el backend
               (CCR/SPU/MVN)
             */
-            defaultChecked={valueName === "SPU" ? true : false}
+            defaultChecked={
+              blockMoovin ? valueName === "CCR" : valueName === "SPU"
+            }
             {...register("deliveryMethod")}
           />
         </div>

@@ -16,6 +16,7 @@ import getTipoCambio from "@/api/cambio/getTipoCambio";
 import GET_DELIVERY_CHOICES from "@/src/graphQl/queries/getDeliveryChoices";
 import toast, { Toaster } from "react-hot-toast";
 import { DeliveryChoice } from "./deliveryChoice";
+import coverageArea from "@/api/moovin/coverageArea";
 export default function CheckOutForm2({
   amount,
   checkbox,
@@ -78,6 +79,24 @@ export default function CheckOutForm2({
     //
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deliveryPayment]);
+  /**
+   *
+   */
+
+  useEffect(() => {
+    const fetchMoovinCoverageData = async () => {
+      try {
+        const result = await coverageArea(lat, lng);
+        console.log("Coverage area result:", result);
+        result ? setBlockMoovin(true) : null;
+        // Further processing based on the result
+      } catch (error) {
+        console.error("Error fetching coverage area:", error);
+      }
+    };
+
+    fetchMoovinCoverageData();
+  }, [lat, lng]);
 
   const onSubmit = handleSubmit(async (data) => {
     //delivery method - MVN(Moovin)
@@ -88,7 +107,7 @@ export default function CheckOutForm2({
         const deliveryPrice = Math.ceil(
           estimation.optionService[1].amount / tipoCambio
         );
-        console.log("deliveryPrice: " + deliveryPrice);
+
         deliveryPayment(deliveryPrice.toFixed(2));
         const suma = subTotal + taxes + deliveryPrice;
         const finalAmount = {
@@ -126,7 +145,6 @@ export default function CheckOutForm2({
           indica que no tienen covertura en el area seleccionada
           en dado caso se bloquea la opcion de moovin
          */
-        setBlockMoovin(true);
         toast.error(
           "El lugar seleccionado se encuentra fuera del area de cobertura",
           { duration: 4000 }
@@ -201,24 +219,38 @@ export default function CheckOutForm2({
             deliveryId={"SPU"}
             className=""
           />
+          {!blockMoovin ? (
+            <DeliveryChoice
+              labelName={"Envío a través de"}
+              register={register}
+              logo={moovinLogo}
+              valueName="MVN"
+              deliveryId={"MVN"}
+              className=""
+            />
+          ) : (
+            <DeliveryChoice
+              labelName={"Envío a través de"}
+              register={register}
+              logo={moovinLogo}
+              valueName="MVN"
+              deliveryId={"MVN"}
+              blockMoovin={blockMoovin}
+              className="bg-[#C7C8CC]"
+            />
+          )}
 
-          <DeliveryChoice
-            labelName={"Envío a través de"}
-            register={register}
-            logo={moovinLogo}
-            valueName="MVN"
-            deliveryId={"MVN"}
-            blockMoovin={blockMoovin}
-            className="bg-[#B4B4B8]"
-          />
-          <DeliveryChoice
-            labelName={"Correos de Costa Rica"}
-            register={register}
-            logo={correosDeCR}
-            valueName="CCR"
-            deliveryId={"CCR"}
-            className=""
-          />
+          {
+            <DeliveryChoice
+              labelName={"Correos de Costa Rica"}
+              register={register}
+              logo={correosDeCR}
+              valueName="CCR"
+              deliveryId={"CCR"}
+              className=""
+            />
+          }
+
           <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
             <button
               type="submit"

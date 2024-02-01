@@ -4,9 +4,7 @@ import { getToken } from "./getToken";
  * Function the request the shipment estimation from Moovin
  */
 const requestEstimation = async (data) => {
-  console.log("data", data);
   const accessToken = await getToken();
-  console.log(accessToken);
   const estimationResponsde = await fetch(
     process.env.NEXT_PUBLIC_MOOVIN_ESTIMATION,
     {
