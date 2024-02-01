@@ -88,7 +88,10 @@ export default function CheckOutForm2({
       try {
         const result = await coverageArea(lat, lng);
         console.log("Coverage area result:", result);
-        result ? setBlockMoovin(true) : null;
+        if (result === "ERRORZONE") {
+          setBlockMoovin(true);
+        }
+
         // Further processing based on the result
       } catch (error) {
         console.error("Error fetching coverage area:", error);
