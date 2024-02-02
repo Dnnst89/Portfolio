@@ -8,6 +8,8 @@ const GET_DELIVERY_CHOICES = gql`
         id
         attributes {
           delivery_code
+          long_distance_price
+          short_distance_price
         }
       }
     }

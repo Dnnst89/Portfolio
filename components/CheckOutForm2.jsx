@@ -28,6 +28,7 @@ export default function CheckOutForm2({
   const [paymentDetailId, setPaymentDetailId] = useState(null);
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
   const [blockMoovin, setBlockMoovin] = useState(false);
+  const [isMoreThanTwenty, setIsMoreThanTwenty] = useState(false);
 
   const { total, subTotal, taxes } = amount;
   let paymentDetailResponseId = null;
@@ -40,24 +41,25 @@ export default function CheckOutForm2({
       id: 1,
     },
   });
-  console.log("DATA", data);
-  try {
-    if (data && data.storeInformation && data.storeInformation.data) {
-      const { latitude, longitude } = data.storeInformation.data.attributes;
-      console.log("Latitude:", latitude, "Longitude:", longitude);
-      const isDistanceMorethanTwenty = calculateShippingDistance(
-        latitude,
-        longitude,
-        lat,
-        lng
-      );
-      console.log("distance:", isDistanceMorethanTwenty);
-    } else {
-      console.log("No data available");
+
+  useEffect(() => {
+    try {
+      if (data && data.storeInformation && data.storeInformation.data) {
+        // se obtienen las coordenadas de la tienda fisica.
+        const { latitude, longitude } = data.storeInformation.data.attributes;
+        // verificamos si la distancia de entrega exede los 20 kilometros
+        var isMoreThanTwenty = calculateShippingDistance(
+          latitude,
+          longitude,
+          lat,
+          lng
+        );
+        setIsMoreThanTwenty(isMoreThanTwenty);
+      }
+    } catch (error) {
+      console.error("Error processing data:", error);
     }
-  } catch (error) {
-    console.error("Error processing data:", error);
-  }
+  }, [data, lat, lng]);
 
   const {
     loading,
@@ -67,12 +69,20 @@ export default function CheckOutForm2({
   //Correos de Costa Rica
   const CCR =
     deliveryChoicesData?.deliveries?.data?.[0]?.attributes?.delivery_code;
+  // Correos de Costa Rica Id
+  const CCR_ID = deliveryChoicesData?.deliveries?.data?.[0]?.id;
+
   //Moovin
   const MVN =
     deliveryChoicesData?.deliveries?.data?.[1]?.attributes?.delivery_code;
   //Store Pick Up
   const SPU =
     deliveryChoicesData?.deliveries?.data?.[2]?.attributes?.delivery_code;
+  //Precio por distancia correos de costa rica
+  const ShortDistancePrice =
+    deliveryChoicesData?.deliveries?.data?.[0]?.attributes?.long_distance_price;
+  const LongDistancePrice =
+    deliveryChoicesData?.deliveries?.data?.[0]?.attributes?.long_distance_price;
 
   const { user } = useStorage();
   const { id } = user || {};
@@ -113,9 +123,9 @@ export default function CheckOutForm2({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deliveryPayment]);
   /**
-   *
+   * Verifica si las cordenadas de entrega estan dentro
+   * de las zonas de entrega de moovin
    */
-
   useEffect(() => {
     const fetchMoovinCoverageData = async () => {
       try {
@@ -128,7 +138,10 @@ export default function CheckOutForm2({
           setBlockMoovin(true);
         }
       } catch (error) {
-        console.error("Error fetching coverage area:", error);
+        console.error(
+          "Se ha producido un error al verificar las zona de cobertura de Moovin",
+          error
+        );
       }
     };
     fetchMoovinCoverageData();
@@ -181,8 +194,11 @@ export default function CheckOutForm2({
           indica que no tienen covertura en el area seleccionada
           en dado caso se bloquea la opcion de moovin
          */
+        setBlockMoovin(true);
         console.error(
-          "El lugar seleccionado se encuentra fuera del area de cobertura"
+          `Actualmente Moovin no ofrece servicio en las coordenadas seleccionadas,
+         por favor seleccione alguno de los servicios habilitados para el envio de sus artículos.`,
+          error
         );
       }
     } else if (data.deliveryMethod === SPU) {
@@ -216,9 +232,56 @@ export default function CheckOutForm2({
         console.error(error);
       }
     } else if (data.deliveryMethod === CCR) {
-      // query longitud de la tienda y compararla con la
-      // con la lat lgn que el usario ingresa
-      if ((StoreLatitude, StoreLongitude)) console.log("Correos de costa rica");
+      const totalToPay = subTotal + taxes + LongDistancePrice;
+      // Cargamos el objeto con los montos originales
+      //que el cliente debera pagar.
+
+      const finalPriceToPay = {
+        // Total final le agregamos el costo del envio
+        total: totalToPay,
+        subTotal: subTotal,
+        taxes: taxes,
+      };
+      //Se envia el costo del delivery y se mostrara
+      //en detalles del carrito al seleccionarse Correos de Costa Rica.
+      deliveryPayment(LongDistancePrice);
+      // retornamos el costo final de la transaccion
+      setAmount(finalPriceToPay);
+      //verificamos si la distancia exede los 20 kilometros
+      isMoreThanTwenty
+        .then((result) => {
+          if (result === true) {
+            //Creamos la mutacion segun los parametros de Correos de Costa Rica.
+            //si la distancia de entrega supera los 20 kilometros.
+            const { data: responsePaymentDetail } = createPaymentDetail({
+              variables: {
+                status: "Inicial",
+                subTotal: subTotal,
+                taxes: taxes,
+                total: parseFloat(finalPriceToPay.total),
+                invoiceRequired: checkbox,
+                deliveryPayment: parseFloat(LongDistancePrice),
+                deliveryId: 1,
+                deliveryMethod: data.deliveryMethod,
+                paymentMethod: "Tarjeta Crédito/ Débito",
+                publishedAt: isoDate,
+              },
+            });
+
+            setPaymentDetailId(1);
+            console.log("response", responsePaymentDetail);
+            setChecktOutForm2Visible(true);
+          } else {
+            console.log(
+              "Correos de Costa Rica: shortdistance",
+              ShortDistancePrice
+            );
+          }
+        })
+        .catch((error) => {
+          console.error("Error occurred:", error);
+        });
+      // Se crea el payment segun correos de Costa Rica
     }
   });
   return (

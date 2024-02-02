@@ -12,7 +12,6 @@ const calculateShippingDistance = async (
   googleMapsLat,
   googleMapsLng
 ) => {
-  console.log(StoreLatitude, StoreLongitude);
   // Convertir todas las coordenadas a radianes
   const lat1 = radGrades(StoreLatitude);
   const lon1 = radGrades(StoreLongitude);
@@ -34,10 +33,8 @@ const calculateShippingDistance = async (
       Math.pow(Math.sin(differenceBetweenLatitudes / 2.0), 2);
   let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-  const distanceExeedTweentyKilometres = (
-    EARTH_RADIUS_IN_KILOMETERS * c
-  ).toFixed(0);
-  return distanceExeedTweentyKilometres > 20 ? true : false;
+  const distanceInKilometres = (EARTH_RADIUS_IN_KILOMETERS * c).toFixed(0);
+  return distanceInKilometres > 20;
 };
 export default calculateShippingDistance;
 /**
@@ -45,8 +42,8 @@ export default calculateShippingDistance;
  * La conversión es necesaria porque la fórmula para calcular la distancia
  * en kilómetros entre dos puntos en la superficie de la Tierra requiere
  * radianes en lugar de grados.
- * @param {grades} grades
- * @returns
+ * @param {number} grades el angulo en grados
+ * @returns {number} el angulo en radianes
  */
 const radGrades = (grades) => {
   return (grades * Math.PI) / 180;
