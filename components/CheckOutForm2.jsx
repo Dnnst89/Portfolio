@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { storeLogo, moovinLogo, correosDeCR } from "../app/assets/images";
 import { useEffect, useState } from "react";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
@@ -10,13 +9,13 @@ import { AiOutlineEdit } from "react-icons/ai";
 import CREATE_PAYMENT_DETAIL from "@/src/graphQl/queries/createPaymentDetails";
 import Spinner from "./Spinner";
 import { useForm } from "react-hook-form";
-import { createOrderData, orderMoovin } from "@/api/moovin/createOrder";
 import { requestEstimation, createData } from "@/api/moovin/estimation";
 import getTipoCambio from "@/api/cambio/getTipoCambio";
 import GET_DELIVERY_CHOICES from "@/src/graphQl/queries/getDeliveryChoices";
-import toast, { Toaster } from "react-hot-toast";
+import GET_STORE_LOCATION from "@/src/graphQl/queries/getStoreLocation";
 import { DeliveryChoice } from "./deliveryChoice";
 import coverageArea from "@/api/moovin/coverageArea";
+import calculateShippingDistance from "@/helpers/calculateShippingDistance";
 export default function CheckOutForm2({
   amount,
   checkbox,
@@ -36,10 +35,44 @@ export default function CheckOutForm2({
   /**
    * Se obtienen las opciones de delivery
    */
-  const { loading, error, data } = useQuery(GET_DELIVERY_CHOICES);
-  const CCR = data?.deliveries?.data?.[0]?.attributes?.delivery_code;
-  const MVN = data?.deliveries?.data?.[1]?.attributes?.delivery_code;
-  const SPU = data?.deliveries?.data?.[2]?.attributes?.delivery_code;
+  const { data } = useQuery(GET_STORE_LOCATION, {
+    variables: {
+      id: 1,
+    },
+  });
+  console.log("DATA", data);
+  try {
+    if (data && data.storeInformation && data.storeInformation.data) {
+      const { latitude, longitude } = data.storeInformation.data.attributes;
+      console.log("Latitude:", latitude, "Longitude:", longitude);
+      const isDistanceMorethanTwenty = calculateShippingDistance(
+        latitude,
+        longitude,
+        lat,
+        lng
+      );
+      console.log("distance:", isDistanceMorethanTwenty);
+    } else {
+      console.log("No data available");
+    }
+  } catch (error) {
+    console.error("Error processing data:", error);
+  }
+
+  const {
+    loading,
+    error,
+    data: deliveryChoicesData,
+  } = useQuery(GET_DELIVERY_CHOICES);
+  //Correos de Costa Rica
+  const CCR =
+    deliveryChoicesData?.deliveries?.data?.[0]?.attributes?.delivery_code;
+  //Moovin
+  const MVN =
+    deliveryChoicesData?.deliveries?.data?.[1]?.attributes?.delivery_code;
+  //Store Pick Up
+  const SPU =
+    deliveryChoicesData?.deliveries?.data?.[2]?.attributes?.delivery_code;
 
   const { user } = useStorage();
   const { id } = user || {};
@@ -91,10 +124,9 @@ export default function CheckOutForm2({
         const result = await coverageArea(lat, lng);
         if (result === "ERRORZONE") {
           //Si la zona esta fuera de cobertura se bloquea el componente
-          // y se asigna correos de costa rica como defautl
+          // y se asigna correos de costa rica como default
           setBlockMoovin(true);
         }
-        // Further processing based on the result
       } catch (error) {
         console.error("Error fetching coverage area:", error);
       }
@@ -184,7 +216,9 @@ export default function CheckOutForm2({
         console.error(error);
       }
     } else if (data.deliveryMethod === CCR) {
-      console.log("Correos de costa rica");
+      // query longitud de la tienda y compararla con la
+      // con la lat lgn que el usario ingresa
+      if ((StoreLatitude, StoreLongitude)) console.log("Correos de costa rica");
     }
   });
   return (

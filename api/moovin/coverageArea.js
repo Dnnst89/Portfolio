@@ -7,7 +7,6 @@ import { getToken } from "./getToken";
 
 const coverageArea = async (lat, lng) => {
   const COVERAGE_AREA_MOOVIN_URL = process.env.NEXT_PUBLIC_MOOVIN_COBERTURA;
-  console.log("lat", lat, lng);
   try {
     const accessToken = await getToken();
     const coverageResponse = await fetch(

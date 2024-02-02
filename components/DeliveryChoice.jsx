@@ -1,5 +1,8 @@
+/**
+ * Componente que muestra los metodos de entrega disponibles
+ * por la aplicación
+ */
 import Image from "next/image";
-import Spinner from "./Spinner";
 
 export const DeliveryChoice = ({
   register,
@@ -13,20 +16,21 @@ export const DeliveryChoice = ({
 }) => {
   return (
     <div className="w-full flex flex-col items-center mt-5 space-y-5">
-      {" "}
-      {/* Adjusted space-y value */}
       <section
         className={`${
           blockMoovin ? "bg-[#e9ecef]" : "bg-white"
         } w-3/4 flex rounded-t-3xl drop-shadow-lg text-xl`}
       >
-        <div className=" border-r-2 border-dashed border-grey-200  w-[100px] flex justify-center items-center ml-[10px]">
+        {/* TODO: seleccionar correos de costa rica si moovin no esta disponible */}
+        <div className="border-r-2 border-dashed border-grey-200  w-[100px] flex justify-center items-center ml-[10px]">
           <input
             type="radio"
             id={deliveryId}
             name="del_method"
             value={valueName}
-            className={`${blockMoovin ? className : null} w-5 h-5 `}
+            className={`${
+              blockMoovin ? className : null
+            } w-5 h-5 cursor-pointer`}
             disabled={blockMoovin}
             defaultChecked={
               blockMoovin ? valueName === "CCR" : valueName === "SPU"
@@ -46,7 +50,7 @@ export const DeliveryChoice = ({
           />
         </div>
       </section>
-      {blockMoovin ? <p className="text-sm text-orange mt-1">{text}</p> : null}{" "}
+      {blockMoovin ? <p className="text-sm text-orange mt-0">{text}</p> : null}{" "}
       {/* Adjusted margin top value */}
     </div>
   );
