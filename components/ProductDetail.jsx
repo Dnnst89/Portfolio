@@ -347,7 +347,7 @@ function ProductDetail({ product }) {
           {/* precio, cantidad de la variante */}
           <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between p-4">
             <span className="col-span-4 md:col-span-5 font-bold md:text-[30px]">
-              {currency} {price}
+              {currency} {price.toFixed(2)}
             </span>
             <div className="col-span-8 mdd:col-span-7 md:flex md:flex-col items-end md:items-end p-3">
               <div className="grid md:flex items-center mb-2 ">
