@@ -70,7 +70,7 @@ export default function OrderDetailSecondary({ orderId }) {
                   quantity: item.attributes.quantity,
                   name: item.attributes.name,
                   brand: item.attributes.brand,
-                  price: item.attributes.price, //se saca el precio de la unica variante que tiene
+                  price: item.attributes.price.toFixed(2), //se saca el precio de la unica variante que tiene
                   images:
                     item.attributes.images?.data.map(
                       (img) => img.attributes.url
