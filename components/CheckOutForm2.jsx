@@ -80,7 +80,8 @@ export default function CheckOutForm2({
     deliveryChoicesData?.deliveries?.data?.[2]?.attributes?.delivery_code;
   //Precio por distancia correos de costa rica
   const ShortDistancePrice =
-    deliveryChoicesData?.deliveries?.data?.[0]?.attributes?.long_distance_price;
+    deliveryChoicesData?.deliveries?.data?.[0]?.attributes
+      ?.short_distance_price;
   const LongDistancePrice =
     deliveryChoicesData?.deliveries?.data?.[0]?.attributes?.long_distance_price;
 
@@ -278,12 +279,13 @@ export default function CheckOutForm2({
                 console.log("Response Data:", responsePaymentDetail.data);
                 setPaymentDetailId(1);
                 setChecktOutForm2Visible(true);
-              } else {
-                console.error("Response data is missing or invalid");
               }
             })
             .catch((error) => {
-              console.error("Error creating payment detail:", error);
+              console.error(
+                "Se ha producido un error al calcular el envio por correos de Costa Rica. ",
+                error
+              );
             });
         } else {
           // si la distancia no exede los 20 kilometros
@@ -312,21 +314,18 @@ export default function CheckOutForm2({
             },
           })
             .then((response) => {
-              // Log the entire response object
-              console.log("Full Response:", response);
-
               // Verificamos si la data esta disponible
-              if (responsePaymentDetail && response.data) {
-                // Handle the response data
-                console.log("Response Data:", response.data);
+              if (response && response.data) {
+                console.log("Response:", response);
                 setPaymentDetailId(1);
                 setChecktOutForm2Visible(true);
-              } else {
-                console.error("Response data is missing or invalid");
               }
             })
             .catch((error) => {
-              console.error("Error creating payment detail:", error);
+              console.error(
+                "Se ha producido un error al calcular el envio por correos de Costa Rica. ",
+                error
+              );
             });
         }
       });
