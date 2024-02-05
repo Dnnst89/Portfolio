@@ -167,10 +167,10 @@ export default function OrderDetailSecondary({ orderId }) {
             quantity={orderData.orderItems.reduce((accumulator, item) => {
               return accumulator + item.quantity;
             }, 0)}
-            subTotal={orderData.order.subtotal}
+            subTotal={orderData.order.subtotal.toFixed(2)}
             taxes={orderData.order.taxes}
-            total={orderData.order.total}
-            deliveryPayment={orderData.order.deliveryPayment}
+            total={orderData.order.total.toFixed(2)}
+            deliveryPayment={orderData.order.deliveryPayment.toFixed(2)}
           />
           <CartProceedPayment textButton={"Ver dirección"} page={""} />
         </section>
