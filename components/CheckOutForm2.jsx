@@ -271,7 +271,9 @@ export default function CheckOutForm2({
             .then((responsePaymentDetail) => {
               // Verificamos si la data esta disponible
               if (responsePaymentDetail && responsePaymentDetail.data) {
-                setPaymentDetailId(1);
+                const orderId =
+                  responsePaymentDetail?.data?.createPaymentDetail?.data?.id;
+                setPaymentDetailId(orderId);
                 setChecktOutForm2Visible(true);
               }
             })
@@ -310,7 +312,8 @@ export default function CheckOutForm2({
             .then((response) => {
               // Verificamos si la data esta disponible
               if (response && response.data) {
-                setPaymentDetailId(1);
+                const orderId = response?.data?.createPaymentDetail?.data?.id;
+                setPaymentDetailId(orderId);
                 setChecktOutForm2Visible(true);
               }
             })
@@ -324,6 +327,7 @@ export default function CheckOutForm2({
       });
     }
   });
+
   return (
     <div className="w-full">
       <div className="flex justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200 min-w-[375px]">
