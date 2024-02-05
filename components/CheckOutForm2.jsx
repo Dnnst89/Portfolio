@@ -222,6 +222,7 @@ export default function CheckOutForm2({
             publishedAt: isoDate,
           },
         });
+
         paymentDetailResponseId =
           paymentDetailResponse?.data?.createPaymentDetail?.data?.id;
         setPaymentDetailId(paymentDetailResponseId);
@@ -248,40 +249,87 @@ export default function CheckOutForm2({
       // retornamos el costo final de la transaccion
       setAmount(finalPriceToPay);
       //verificamos si la distancia exede los 20 kilometros
-      isMoreThanTwenty
-        .then((result) => {
-          if (result === true) {
-            //Creamos la mutacion segun los parametros de Correos de Costa Rica.
-            //si la distancia de entrega supera los 20 kilometros.
-            const { data: responsePaymentDetail } = createPaymentDetail({
-              variables: {
-                status: "Inicial",
-                subTotal: subTotal,
-                taxes: taxes,
-                total: parseFloat(finalPriceToPay.total),
-                invoiceRequired: checkbox,
-                deliveryPayment: parseFloat(LongDistancePrice),
-                deliveryId: 1,
-                deliveryMethod: data.deliveryMethod,
-                paymentMethod: "Tarjeta Crédito/ Débito",
-                publishedAt: isoDate,
-              },
-            });
+      isMoreThanTwenty.then((result) => {
+        if (result === true) {
+          //Creamos la mutacion segun los parametros de Correos de Costa Rica.
+          //si la distancia de entrega supera los 20 kilometros.
+          // TODO: vericar que la estructura del request esta correcto.
+          createPaymentDetail({
+            variables: {
+              status: "Inicial",
+              subTotal: subTotal,
+              taxes: taxes,
+              total: parseFloat(finalPriceToPay.total),
+              invoiceRequired: checkbox,
+              deliveryPayment: parseFloat(LongDistancePrice),
+              deliveryId: parseInt(CCR_ID),
+              deliveryMethod: data.deliveryMethod,
+              paymentMethod: "Tarjeta Crédito/ Débito",
+              publishedAt: isoDate,
+            },
+          })
+            .then((responsePaymentDetail) => {
+              // Log the entire response object
+              console.log("Full Response:", responsePaymentDetail);
 
-            setPaymentDetailId(1);
-            console.log("response", responsePaymentDetail);
-            setChecktOutForm2Visible(true);
-          } else {
-            console.log(
-              "Correos de Costa Rica: shortdistance",
-              ShortDistancePrice
-            );
-          }
-        })
-        .catch((error) => {
-          console.error("Error occurred:", error);
-        });
-      // Se crea el payment segun correos de Costa Rica
+              // Verificamos si la data esta disponible
+              if (responsePaymentDetail && responsePaymentDetail.data) {
+                // Handle the response data
+                console.log("Response Data:", responsePaymentDetail.data);
+                setPaymentDetailId(1);
+                setChecktOutForm2Visible(true);
+              } else {
+                console.error("Response data is missing or invalid");
+              }
+            })
+            .catch((error) => {
+              console.error("Error creating payment detail:", error);
+            });
+        } else {
+          // si la distancia no exede los 20 kilometros
+          const totalToPay = subTotal + taxes + ShortDistancePrice;
+          const finalPriceToPay = {
+            total: totalToPay,
+            subTotal: subTotal,
+            taxes: taxes,
+          };
+
+          deliveryPayment(ShortDistancePrice);
+          setAmount(finalPriceToPay);
+
+          createPaymentDetail({
+            variables: {
+              status: "Inicial",
+              subTotal: subTotal,
+              taxes: taxes,
+              total: parseFloat(finalPriceToPay.total),
+              invoiceRequired: checkbox,
+              deliveryPayment: parseFloat(ShortDistancePrice),
+              deliveryId: parseInt(CCR_ID),
+              deliveryMethod: data.deliveryMethod,
+              paymentMethod: "Tarjeta Crédito/ Débito",
+              publishedAt: isoDate,
+            },
+          })
+            .then((response) => {
+              // Log the entire response object
+              console.log("Full Response:", response);
+
+              // Verificamos si la data esta disponible
+              if (responsePaymentDetail && response.data) {
+                // Handle the response data
+                console.log("Response Data:", response.data);
+                setPaymentDetailId(1);
+                setChecktOutForm2Visible(true);
+              } else {
+                console.error("Response data is missing or invalid");
+              }
+            })
+            .catch((error) => {
+              console.error("Error creating payment detail:", error);
+            });
+        }
+      });
     }
   });
   return (
