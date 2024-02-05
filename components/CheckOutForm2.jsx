@@ -135,7 +135,6 @@ export default function CheckOutForm2({
         const result = await coverageArea(lat, lng);
         if (result === "ERRORZONE") {
           //Si la zona esta fuera de cobertura se bloquea el componente
-          // y se asigna correos de costa rica como default
           setBlockMoovin(true);
         }
       } catch (error) {
@@ -270,13 +269,8 @@ export default function CheckOutForm2({
             },
           })
             .then((responsePaymentDetail) => {
-              // Log the entire response object
-              console.log("Full Response:", responsePaymentDetail);
-
               // Verificamos si la data esta disponible
               if (responsePaymentDetail && responsePaymentDetail.data) {
-                // Handle the response data
-                console.log("Response Data:", responsePaymentDetail.data);
                 setPaymentDetailId(1);
                 setChecktOutForm2Visible(true);
               }
@@ -316,7 +310,6 @@ export default function CheckOutForm2({
             .then((response) => {
               // Verificamos si la data esta disponible
               if (response && response.data) {
-                console.log("Response:", response);
                 setPaymentDetailId(1);
                 setChecktOutForm2Visible(true);
               }
@@ -384,7 +377,7 @@ export default function CheckOutForm2({
               deliveryId={"MVN"}
               blockMoovin={blockMoovin}
               className="bg-[#e9ecef]"
-              text={"Moovin no se encuetra disponible en el area seleccionada."}
+              text={"Moovin no se encuetra disponible en el área seleccionada."}
             />
           )}
 
