@@ -168,7 +168,7 @@ export default function OrderDetailSecondary({ orderId }) {
               return accumulator + item.quantity;
             }, 0)}
             subTotal={orderData.order.subtotal.toFixed(2)}
-            taxes={orderData.order.taxes}
+            taxes={orderData.order.taxes.toFixed(2)}
             total={orderData.order.total.toFixed(2)}
             deliveryPayment={orderData.order.deliveryPayment.toFixed(2)}
           />

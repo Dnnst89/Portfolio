@@ -48,10 +48,10 @@ const CartDetail = ({
         const newTotal =
           parseFloat(subTotal) +
           parseFloat(amounts.tax) +
-          parseFloat(deliveryPayment);
+          parseFloat(deliveryPayment).toFixed(2);
         const newAmount = {
           tax: amounts.tax,
-          total: parseFloat(newTotal.toFixed(2)),
+          total: parseFloat(newTotal),
           loading: false,
           currencyType: currency,
         };
@@ -156,7 +156,7 @@ const CartDetail = ({
           <div className="flex justify-between border-dashed border-grey-200 border-b-[2px] pb-3">
             <p>Impuestos:</p>
             <p className="whitespace-nowrap">
-              {amounts.tax} {amounts.currencyType}
+              {amounts.tax.toFixed(2)} {amounts.currencyType}
             </p>
           </div>
 
@@ -164,13 +164,13 @@ const CartDetail = ({
             <div className="flex justify-between ">
               <p>Costo de envío:</p>
               <p className="whitespace-nowrap">
-                {deliveryPayment} {amounts.currencyType}
+                {parseFloat(deliveryPayment).toFixed(2)} {amounts.currencyType}
               </p>
             </div>
             <div className="flex flex-col p-4 space-y-3">
               <p className="flex justify-center">Costo Total(IVA Incluido)</p>
               <p className="flex justify-center whitespace-nowrap">
-                {amounts?.total} {amounts.currencyType}
+                {amounts?.total.toFixed(2)} {amounts.currencyType}
               </p>
             </div>
           </>
