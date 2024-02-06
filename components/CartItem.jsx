@@ -52,9 +52,9 @@ const CartItem = ({ cartItemId, idVariant, productName, brand, description, colo
             </div>
             <section className="grid grid-cols-12 col-span-12 md:col-span-5 ">
                 <div className='grid grid-cols-6 col-span-10 md:col-span-6 place-content-center '>
-                    <span className='text-xs mx-2 col-start-2 col-span-6'>Precio Unitario: ${price.toFixed(2)}</span>
+                    <span className='text-xs mx-2 col-start-2 col-span-6'>Precio Unitario: ${price}</span>
 
-                    <span className='mx-2 font-bold col-start-2 col-span-6'>Precio Total: ${totalPrice.toFixed(2)}</span>
+                    <span className='mx-2 font-bold col-start-2 col-span-6'>Precio Total: ${totalPrice}</span>
                 </div>
                 {/* Botón para eliminar el producto del carrito */}
                 <DeleteCartItemBtn
