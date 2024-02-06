@@ -29,7 +29,7 @@ export default function CheckOutForm2({
   const [paymentDetailId, setPaymentDetailId] = useState(null);
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
   const [blockMoovin, setBlockMoovin] = useState(false);
-  const [isMoreThanTwenty, setIsMoreThanTwenty] = useState(false);
+  const [isMoreThanDeliveryRange, setIsMoreThanDeliveryRange] = useState(false);
 
   const { total, subTotal, taxes } = amount;
   let paymentDetailResponseId = null;
@@ -47,15 +47,18 @@ export default function CheckOutForm2({
     try {
       if (data && data.storeInformation && data.storeInformation.data) {
         // se obtienen las coordenadas de la tienda fisica.
-        const { latitude, longitude } = data.storeInformation.data.attributes;
+        const {latitude, longitude , delivey_distance_range} = data.storeInformation.data.attributes;
+
+        
         // verificamos si la distancia de entrega exede los 20 kilometros
-        var isMoreThanTwenty = calculateShippingDistance(
+        var isMoreThanDeliveryRange = calculateShippingDistance(
           latitude,
           longitude,
+          delivey_distance_range,
           lat,
           lng
         );
-        setIsMoreThanTwenty(isMoreThanTwenty);
+        setIsMoreThanDeliveryRange(isMoreThanDeliveryRange);
       }
     } catch (error) {
       console.error("Error processing data:", error);
@@ -262,7 +265,7 @@ export default function CheckOutForm2({
       // retornamos el costo final de la transaccion
       setAmount(finalPriceToPay);
       //verificamos si la distancia exede los 20 kilometros
-      isMoreThanTwenty.then((result) => {
+      isMoreThanDeliveryRange.then((result) => {
         if (result === true) {
           //Creamos la mutacion segun los parametros de Correos de Costa Rica.
           //si la distancia de entrega supera los 20 kilometros.
@@ -324,6 +327,7 @@ export default function CheckOutForm2({
               estimate_delivery_date: ShortEstimatedDelivery,
             },
           })
+          
             .then((response) => {
               // Verificamos si la data esta disponible
               if (response && response.data) {
@@ -342,7 +346,6 @@ export default function CheckOutForm2({
       });
     }
   });
-
   return (
     <div className="w-full">
       <div className="flex justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200 min-w-[375px]">

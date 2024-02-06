@@ -1,6 +1,7 @@
 /**Calcula la distancia entre dos coordenadas geograficas usando la formula Haversine
  * @param {number} StoreLatitude La latitud de la tienda fisica.
  * @param {number} StoreLongitude La longitud de la tienda fisica.
+ * @param {number} StoreDeliveryRange  El rango de calculo para delivery
  * @param {number} googleMapsLat La latitud del punto de destino.
  * @param {number} googleMapsLng La longitued del punto de destino.
  * @returns {boolean} retorna true si la distancia entre los dos puntos es mayor a 20 kilometros
@@ -9,6 +10,7 @@
 const calculateShippingDistance = async (
   StoreLatitude,
   StoreLongitude,
+  StoreDeliveryRange,
   googleMapsLat,
   googleMapsLng
 ) => {
@@ -34,7 +36,7 @@ const calculateShippingDistance = async (
   let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
   const distanceInKilometres = (EARTH_RADIUS_IN_KILOMETERS * c).toFixed(0);
-  return distanceInKilometres > 20;
+  return distanceInKilometres > StoreDeliveryRange;
 };
 export default calculateShippingDistance;
 /**

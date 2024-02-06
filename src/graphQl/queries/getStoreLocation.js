@@ -7,6 +7,7 @@ const GET_STORE_LOCATION = gql`
         attributes {
           latitude
           longitude
+          delivey_distance_range
         }
       }
     }
