@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client";
-import { Dela_Gothic_One } from "next/font/google";
 
 const GET_DELIVERY_CHOICES = gql`
   query GetDeliveryInput {
@@ -10,6 +9,8 @@ const GET_DELIVERY_CHOICES = gql`
           delivery_code
           long_distance_price
           short_distance_price
+          short_estimate_delivery_date
+          long_estimate_delivery_date
         }
       }
     }

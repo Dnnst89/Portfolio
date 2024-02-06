@@ -16,6 +16,7 @@ import GET_STORE_LOCATION from "@/src/graphQl/queries/getStoreLocation";
 import { DeliveryChoice } from "./deliveryChoice";
 import coverageArea from "@/api/moovin/coverageArea";
 import calculateShippingDistance from "@/helpers/calculateShippingDistance";
+import { CgArrowLongRight } from "react-icons/cg";
 export default function CheckOutForm2({
   amount,
   checkbox,
@@ -84,6 +85,17 @@ export default function CheckOutForm2({
       ?.short_distance_price;
   const LongDistancePrice =
     deliveryChoicesData?.deliveries?.data?.[0]?.attributes?.long_distance_price;
+  // Dias estimados para la entrega de Correos de Costa Rica
+  const LongEstimatedDelivery =
+    deliveryChoicesData?.deliveries?.data?.[0]?.attributes
+      ?.long_estimate_delivery_date;
+  const ShortEstimatedDelivery =
+    deliveryChoicesData?.deliveries?.data?.[0]?.attributes
+      ?.short_estimate_delivery_date;
+  // Entrega estimada para Moovin
+  const MoovinEstimatedDelivery =
+    deliveryChoicesData?.deliveries?.data?.[1]?.attributes
+      ?.short_estimate_delivery_date;
 
   const { user } = useStorage();
   const { id } = user || {};
@@ -179,6 +191,7 @@ export default function CheckOutForm2({
               deliveryMethod: data.deliveryMethod,
               paymentMethod: "Tarjeta Crédito/ Débito",
               publishedAt: isoDate,
+              estimate_delivery_date: MoovinEstimatedDelivery,
             },
           });
           paymentDetailResponseId =
@@ -266,6 +279,7 @@ export default function CheckOutForm2({
               deliveryMethod: data.deliveryMethod,
               paymentMethod: "Tarjeta Crédito/ Débito",
               publishedAt: isoDate,
+              estimate_delivery_date: LongEstimatedDelivery,
             },
           })
             .then((responsePaymentDetail) => {
@@ -307,6 +321,7 @@ export default function CheckOutForm2({
               deliveryMethod: data.deliveryMethod,
               paymentMethod: "Tarjeta Crédito/ Débito",
               publishedAt: isoDate,
+              estimate_delivery_date: ShortEstimatedDelivery,
             },
           })
             .then((response) => {
