@@ -613,14 +613,14 @@ function FormOne() {
                   Se adiciona componente que permite seleccionar los regalos 
                   a envolver por el cliente. 
                  */}
-                    <div className=" flex flex-col h-[80px]">
+                    <div className="flex flex-col min-h-[100px]">
                       <h4 className="w-3/4 m-auto mt-5 mb-3 flex items-center space-x-5">
-                        Seleccione los articulos a envolver :
+                        Seleccione los artículos a envolver 🎁:
                       </h4>
                       <WrappedGiftCheckbox />
                     </div>
                     <div className="inline-block justify-center w-full">
-                      <section className="w-3/4 m-auto mt-10 mb-5 flex items-center space-x-5">
+                      <section className="w-3/4 m-auto mt-10 mb-3 flex items-center space-x-5">
                         <label htmlFor="idType">Factura Electrónica</label>
                         <input
                           className="p-3"
