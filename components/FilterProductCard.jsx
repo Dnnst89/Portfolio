@@ -2,11 +2,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
+import trackEvent from '../helpers/analytics.js';
 
 const FilterProductCard = ({ id, name, defaultPrice, coverImage, brand }) => {
   const altTextDesc = "Imagen Producto " + name
   const router = useRouter();
   const productChange = () => {
+    trackEvent(brand, "click_on_product", name, defaultPrice);
     window.location.href = `/detail/?id=${id}`
   };
 

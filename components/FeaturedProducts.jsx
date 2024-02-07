@@ -16,7 +16,6 @@ import { EffectCoverflow } from 'swiper/modules';
 
 const FeaturedProducts = () => {
 
-
   //GQL
   const { loading, error, data } = useQuery(GET_FEATURED_PRODUCTS);
 
@@ -50,9 +49,10 @@ const FeaturedProducts = () => {
       aux.push(data?.products.data[random]);
     }
   }
-
+  
   return (
     <>
+
       <Swiper
         loop={true}
         modules={[EffectCoverflow, Navigation, A11y]}
