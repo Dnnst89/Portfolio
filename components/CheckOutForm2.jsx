@@ -1,5 +1,5 @@
 "use client";
-import { storeLogo, moovinLogo, correosDeCR } from "../app/assets/images";
+import { logo, moovinLogo, correosDeCR } from "../app/assets/images";
 import { useEffect, useState } from "react";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import useStorage from "@/hooks/useStorage";
@@ -30,7 +30,7 @@ export default function CheckOutForm2({
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
   const [blockMoovin, setBlockMoovin] = useState(false);
   const [isMoreThanDeliveryRange, setIsMoreThanDeliveryRange] = useState(false);
-
+  const [moovinMessageError, setMoovinMessageError] = useState("");
   const { total, subTotal, taxes } = amount;
   let paymentDetailResponseId = null;
   const [createPaymentDetail] = useMutation(CREATE_PAYMENT_DETAIL);
@@ -47,9 +47,9 @@ export default function CheckOutForm2({
     try {
       if (data && data.storeInformation && data.storeInformation.data) {
         // se obtienen las coordenadas de la tienda fisica.
-        const {latitude, longitude , delivey_distance_range} = data.storeInformation.data.attributes;
+        const { latitude, longitude, delivey_distance_range } =
+          data.storeInformation.data.attributes;
 
-        
         // verificamos si la distancia de entrega exede los 20 kilometros
         var isMoreThanDeliveryRange = calculateShippingDistance(
           latitude,
@@ -150,7 +150,17 @@ export default function CheckOutForm2({
         const result = await coverageArea(lat, lng);
         if (result === "ERRORZONE") {
           //Si la zona esta fuera de cobertura se bloquea el componente
+          console.log("Blocking Moovin", result);
           setBlockMoovin(true);
+          setMoovinMessageError(
+            "Moovin no se encuetra disponible en el área seleccionada."
+          );
+          //Si la zona esta fuera de cobertura se bloquea el componente
+        } else if (result === "ERRORDANGERZONE") {
+          setBlockMoovin(true);
+          setMoovinMessageError(
+            "El punto se encuentra en una zona peligrosa, por lo que moovin no realiza la entrega."
+          );
         }
       } catch (error) {
         console.error(
@@ -167,7 +177,10 @@ export default function CheckOutForm2({
     if (data.deliveryMethod === MVN) {
       try {
         const shipmentInfo = createData(items, lat, lng);
+
+        // TODO: adaptar los cambios que moovin hizo en el endpoint
         const estimation = await requestEstimation(shipmentInfo);
+
         const deliveryPrice = Math.ceil(
           estimation.optionService[1].amount / tipoCambio
         );
@@ -179,7 +192,9 @@ export default function CheckOutForm2({
           subTotal: subTotal,
           taxes: taxes,
         };
+
         setEstima(estimation.idEstimation);
+
         setAmount(finalAmount);
         try {
           const paymentDetailResponse = await createPaymentDetail({
@@ -197,6 +212,7 @@ export default function CheckOutForm2({
               estimate_delivery_date: MoovinEstimatedDelivery,
             },
           });
+
           paymentDetailResponseId =
             paymentDetailResponse?.data?.createPaymentDetail?.data?.id;
           setPaymentDetailId(paymentDetailResponseId);
@@ -210,10 +226,12 @@ export default function CheckOutForm2({
           indica que no tienen covertura en el area seleccionada
           en dado caso se bloquea la opcion de moovin
          */
+        setMoovinMessageError(
+          "Moovin no se encuetra disponible en el área seleccionada."
+        );
         setBlockMoovin(true);
         console.error(
-          `Actualmente Moovin no ofrece servicio en las coordenadas seleccionadas,
-         por favor seleccione alguno de los servicios habilitados para el envio de sus artículos.`,
+          `Se ha generado un error al solicitar el servicio de Moovin.`,
           error
         );
       }
@@ -327,7 +345,6 @@ export default function CheckOutForm2({
               estimate_delivery_date: ShortEstimatedDelivery,
             },
           })
-          
             .then((response) => {
               // Verificamos si la data esta disponible
               if (response && response.data) {
@@ -376,7 +393,7 @@ export default function CheckOutForm2({
           <DeliveryChoice
             labelName="Recoger en tienda"
             register={register}
-            logo={storeLogo}
+            logo={logo}
             valueName="SPU"
             deliveryId={"SPU"}
             className=""
@@ -399,7 +416,7 @@ export default function CheckOutForm2({
               deliveryId={"MVN"}
               blockMoovin={blockMoovin}
               className="bg-[#e9ecef]"
-              text={"Moovin no se encuetra disponible en el área seleccionada."}
+              text={moovinMessageError}
             />
           )}
 
