@@ -15,6 +15,7 @@ import { getToken, refreshToken } from "@/api/moovin/getToken";
 import Map from "./Map";
 import { Marker } from "@react-google-maps/api";
 import GifttCheckbox from "./GifttCheckbox";
+import WrappedGiftCheckbox from "./WrappedGiftCheckbox";
 import { useSelector } from "react-redux";
 import useCartSummary from "@/hooks/useCartSummary";
 function FormOne() {
@@ -608,6 +609,16 @@ function FormOne() {
                         </div>
                       </section>
                     </div>
+                    {/*
+                  Se adiciona componente que permite seleccionar los regalos 
+                  a envolver por el cliente. 
+                 */}
+                    <div className=" flex flex-col h-[80px]">
+                      <h4 className="w-3/4 m-auto mt-5 mb-3 flex items-center space-x-5">
+                        Seleccione los articulos a envolver :
+                      </h4>
+                      <WrappedGiftCheckbox />
+                    </div>
                     <div className="inline-block justify-center w-full">
                       <section className="w-3/4 m-auto mt-10 mb-5 flex items-center space-x-5">
                         <label htmlFor="idType">Factura Electrónica</label>
@@ -626,13 +637,6 @@ function FormOne() {
                           })}
                         ></input>
                       </section>
-                      {/* return the articles the user wants to wrap*/}
-                      <div className=" flex flex-col h-[300px]">
-                        <h4 className="w-3/4 m-auto mt-10 mb-5 flex items-center space-x-5">
-                          Seleccione los articulos a envolver
-                        </h4>
-                        <GifttCheckbox />
-                      </div>
                     </div>
                     {checkbox && (
                       <>
