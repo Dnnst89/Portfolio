@@ -13,6 +13,8 @@ const getTipoCambio = async () => {
     // Analiza la respuesta y extrae el tipo de cambio u otra información relevante
     const tipoCambio = response.data;
 
+    console.log(response.data['venta']);
+
     return tipoCambio;
   } catch (error) {
     console.error(
