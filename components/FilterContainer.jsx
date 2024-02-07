@@ -19,6 +19,7 @@ function FilterContainer({
   setMaxPriceFilter,
   selectedBrands,
   setSelectedBrands,
+  queryType
 }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -130,34 +131,36 @@ function FilterContainer({
                         </div>
                       </div>
                     </div>
-                    <div className="border-t border-gray-200 px-4 py-6">
-                      <h3 className="-mx-2 -my-3 flow-root">
-                        <button
-                          type="button"
-                          className="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500"
-                          aria-controls="filter-section-mobile-0"
-                          aria-expanded="false"
-                        >
-                          <span className="font-medium text-gray-900">
-                            Marca
-                          </span>
-                        </button>
-                      </h3>
-                      <div className="pt-6" id="filter-section-mobile-0">
-                        <div className="space-y-6">
-                          <FilterByBrand
-                            minPriceFilter={minPriceFilter}
-                            maxPriceFilter={maxPriceFilter}
-                            handleFilters={handleFilters}
-                            test={test}
-                            selectedBrands={selectedBrands}
-                            setSelectedBrands={setSelectedBrands}
-                            minAgeFilter={minAgeFilter}
-                            maxAgeFilter={maxAgeFilter}
-                          ></FilterByBrand>
+                    {queryType == "category" ? ("") : (
+                      <div className="border-t border-gray-200 px-4 py-6">
+                        <h3 className="-mx-2 -my-3 flow-root">
+                          <button
+                            type="button"
+                            className="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500"
+                            aria-controls="filter-section-mobile-0"
+                            aria-expanded="false"
+                          >
+                            <span className="font-medium text-gray-900">
+                              Marca
+                            </span>
+                          </button>
+                        </h3>
+                        <div className="pt-6" id="filter-section-mobile-0">
+                          <div className="space-y-6">
+                            <FilterByBrand
+                              minPriceFilter={minPriceFilter}
+                              maxPriceFilter={maxPriceFilter}
+                              handleFilters={handleFilters}
+                              test={test}
+                              selectedBrands={selectedBrands}
+                              setSelectedBrands={setSelectedBrands}
+                              minAgeFilter={minAgeFilter}
+                              maxAgeFilter={maxAgeFilter}
+                            ></FilterByBrand>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </form>
                 </div>
               </div>

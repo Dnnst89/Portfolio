@@ -22,5 +22,4 @@ const getTipoCambio = async () => {
     throw error;
   }
 };
-
 export default getTipoCambio;

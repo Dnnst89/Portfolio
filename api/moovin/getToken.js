@@ -22,11 +22,8 @@ export async function getToken() {
       }),
     });
 
-    console.log("Token refresh response:", response);
     if (response.ok) {
       const responseData = await response.json();
-      console.log("Token refreshed successfully. Response data:", responseData);
-
       accessToken = responseData.token;
       const expirationDateString = responseData.expirationDate;
       expirationDate = new Date(expirationDateString);

@@ -169,8 +169,24 @@ const ResultsComponent = (test) => {
       {loading ? (
         <Spinner />
       ) :
-        <div>
-          <div className="md:flex">
+        <div className="mx-auto">
+          <div className="md:flex ">
+            <FilterContainer
+              test={test}
+              minAgeFilter={minAgeFilter}
+              maxAgeFilter={maxAgeFilter}
+              setMaxAgeFilter={setMaxAgeFilter}
+              setMinAgeFilter={setMinAgeFilter}
+              minPriceFilter={minPriceFilter}
+              maxPriceFilter={maxPriceFilter}
+              setMaxPriceFilter={setMaxPriceFilter}
+              setMinPriceFilter={setMinPriceFilter}
+              selectedBrands={selectedBrands}
+              setSelectedBrands={setSelectedBrands}
+              handleFilters={handleFilters}
+              selectedPriceRange={selectedPriceRange}
+              selectedAgeRange={selectedAgeRange}
+            />
             <FilterContainerPrincipal
               test={test}
               minAgeFilter={minAgeFilter}
@@ -187,40 +203,25 @@ const ResultsComponent = (test) => {
               selectedPriceRange={selectedPriceRange}
               selectedAgeRange={selectedAgeRange}
             />
-            <div className={nbHits === 0 ? "my-10 my-30 md:ml-96" : "my-10"}>
-
-              <div className="w-full text-center">
-                <h1>
+            <div className={nbHits === 0 ? "my-10 my-30 md:ml-96" : "my-10 mx-auto"}>
+              <div className="w-full">
+                <h1 className="text-center">
                   Resultados de &#34;{decodeURIComponent(test.query)}&#34;
                 </h1>
+                <ProductContainer
+                  result={result}
+                  hitsPerPage={hitsPerPage}
+                  nbHits={nbHits}
+                  nbPages={nbPages}
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  loading={loading}
+                  setLoading={setLoading}
+                />
               </div>
 
-              <FilterContainer
-                test={test}
-                minAgeFilter={minAgeFilter}
-                maxAgeFilter={maxAgeFilter}
-                setMaxAgeFilter={setMaxAgeFilter}
-                setMinAgeFilter={setMinAgeFilter}
-                minPriceFilter={minPriceFilter}
-                maxPriceFilter={maxPriceFilter}
-                setMaxPriceFilter={setMaxPriceFilter}
-                setMinPriceFilter={setMinPriceFilter}
-                selectedBrands={selectedBrands}
-                setSelectedBrands={setSelectedBrands}
-                handleFilters={handleFilters}
-                selectedPriceRange={selectedPriceRange}
-                selectedAgeRange={selectedAgeRange}
-              />
-              <ProductContainer
-                result={result}
-                hitsPerPage={hitsPerPage}
-                nbHits={nbHits}
-                nbPages={nbPages}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                loading={loading}
-                setLoading={setLoading}
-              />
+
+
             </div>
           </div>
         </div>

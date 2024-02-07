@@ -538,7 +538,7 @@ function FormOne() {
                           </p>
                         </div>
                         <div className="col-span-12 md:col-span-6 grid content-baseline">
-                          <label htmlFor="addressLine1">Direccion 1</label>
+                          <label htmlFor="addressLine1">Dirección 1</label>
                           <textarea
                             // type="text"
                             id="addressLine1"
@@ -568,7 +568,7 @@ function FormOne() {
                           </p>
                         </div>
                         <div className="col-span-12 md:col-span-6 grid content-baseline">
-                          <label htmlFor="addressLine2">Direccion 2</label>
+                          <label htmlFor="addressLine2">Dirección 2</label>
                           <textarea
                             //type="text"
                             id="addressLine2"
