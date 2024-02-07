@@ -38,7 +38,7 @@ function ProductDetail({ product }) {
   const { user } = useStorage();
   const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
   const [variantSelected, setvariantSelected] = useState(); //guarda la variante que actualmente se seleccionó{features:{}, variant:{object}}
-  const [price, setPrice] = useState(variants.length > 0 ? variants[0].attributes.price : null);//precio inicial dado por primer variante
+  const [price, setPrice] = useState(variants.length > 0 ? variants[0].attributes.price.toFixed(2) : null);//precio inicial dado por primer variante
   const [enableButton, setEnableButton] = useState(variants.length <= 1);
 
 
