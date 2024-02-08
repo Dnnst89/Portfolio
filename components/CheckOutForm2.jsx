@@ -34,9 +34,13 @@ export default function CheckOutForm2({
   const [moovinMessageError, setMoovinMessageError] = useState("");
 
   //Obtenemos el estado de los regalos que se van a envolver
+  //seleccionamos la etiqueta que se mostrar en el correo
   const { selectedGifts } = useSelector((state) => state.selectedGifts);
+  const selectedGiftsLabels = selectedGifts.map((gift) => gift.label);
+  const selectedGiftsString = selectedGiftsLabels.join(", ");
 
   const { total, subTotal, taxes } = amount;
+
   let paymentDetailResponseId = null;
   const [createPaymentDetail] = useMutation(CREATE_PAYMENT_DETAIL);
   /**
@@ -214,7 +218,8 @@ export default function CheckOutForm2({
               deliveryMethod: data.deliveryMethod,
               paymentMethod: "Tarjeta Crédito/ Débito",
               publishedAt: isoDate,
-              gift: JSON.stringify(selectedGifts),
+              //TODO: debe llegar un texto a base de datos
+              gift: selectedGiftsString,
               estimate_delivery_date: MoovinEstimatedDelivery,
             },
           });
@@ -253,14 +258,14 @@ export default function CheckOutForm2({
             status: "Inicial",
             subTotal: subTotal,
             taxes: taxes,
-            total: 15,
+            total: total, // TODO: solucionar error de total
             invoiceRequired: checkbox,
             deliveryPayment: parseFloat(0),
             deliveryId: parseInt(0),
             deliveryMethod: data.deliveryMethod,
             paymentMethod: "Tarjeta Crédito/ Débito",
             publishedAt: isoDate,
-            gift: JSON.stringify(selectedGifts),
+            gift: selectedGiftsString,
           },
         });
 
@@ -308,7 +313,7 @@ export default function CheckOutForm2({
               paymentMethod: "Tarjeta Crédito/ Débito",
               publishedAt: isoDate,
               estimate_delivery_date: LongEstimatedDelivery,
-              gift: JSON.stringify(selectedGifts),
+              gift: selectedGiftsString,
             },
           })
             .then((responsePaymentDetail) => {
@@ -351,7 +356,7 @@ export default function CheckOutForm2({
               paymentMethod: "Tarjeta Crédito/ Débito",
               publishedAt: isoDate,
               estimate_delivery_date: ShortEstimatedDelivery,
-              gift: JSON.stringify(selectedGifts),
+              gift: selectedGiftsString,
             },
           })
             .then((response) => {

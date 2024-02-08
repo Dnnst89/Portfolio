@@ -29,9 +29,8 @@ const WrappedGiftCheckbox = () => {
     label: gift.name,
   }));
 
-  //
+  // Agregamos los articulos seleccionados al store
   const handleSelectChange = (value) => {
-    console.log("values", value);
     dispatch(setSelectedGifts(value));
   };
 
