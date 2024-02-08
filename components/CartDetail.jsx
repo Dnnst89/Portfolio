@@ -24,6 +24,7 @@ const CartDetail = ({
     }
   );
 
+  const withoutDelivery = 0;
   const currency =
     storeInformation?.storeInformation?.data?.attributes?.currency;
   const [shipment, setShipment] = useState(0);
@@ -48,7 +49,7 @@ const CartDetail = ({
         const newTotal =
           parseFloat(subTotal) +
           parseFloat(amounts.tax) +
-          parseFloat(deliveryPayment).toFixed(2);
+          parseFloat(deliveryPayment);
         const newAmount = {
           tax: amounts.tax,
           total: parseFloat(newTotal),
@@ -56,6 +57,15 @@ const CartDetail = ({
           currencyType: currency,
         };
 
+        setAmounts(newAmount);
+      } else if (deliveryPayment === withoutDelivery) {
+        const newTotal = parseFloat(subTotal) + parseFloat(amounts.tax);
+        const newAmount = {
+          tax: amounts.tax,
+          total: parseFloat(newTotal),
+          loading: false,
+          currencyType: currency,
+        };
         setAmounts(newAmount);
       } else {
         const newTotal = subTotal.toFixed(2) + amounts.tax.toFixed(2);
@@ -72,7 +82,6 @@ const CartDetail = ({
   }, [deliveryPayment]); // El segundo argumento [] asegura que useEffect se ejecute solo una vez al montar el componente
 
   useEffect(() => {
-    console.log("q", quantity);
     setShipment(0);
     if (items !== null || items !== null) {
       getTaxCost();
@@ -156,7 +165,7 @@ const CartDetail = ({
           <div className="flex justify-between border-dashed border-grey-200 border-b-[2px] pb-3">
             <p>Impuestos:</p>
             <p className="whitespace-nowrap">
-              {amounts.tax.toFixed(2)} {amounts.currencyType}
+              {amounts.tax} {amounts.currencyType}
             </p>
           </div>
 

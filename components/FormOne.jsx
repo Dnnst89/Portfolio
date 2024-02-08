@@ -77,9 +77,9 @@ function FormOne() {
   };
 
   const [amount, setAmount] = useState({
-    total: 1,
-    subTotal: 1,
-    taxes: 1,
+    total: 0,
+    subTotal: 0,
+    taxes: 0,
   });
 
   const handleChange = (data) => {

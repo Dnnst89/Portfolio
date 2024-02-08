@@ -285,7 +285,7 @@ export default function CheckOutForm2({
 
       const finalPriceToPay = {
         // Total final le agregamos el costo del envio
-        total: totalToPay,
+        total: parseFloat(totalToPay.toFixed(2)),
         subTotal: subTotal,
         taxes: taxes,
       };
@@ -305,7 +305,7 @@ export default function CheckOutForm2({
               status: "Inicial",
               subTotal: subTotal,
               taxes: taxes,
-              total: parseFloat(finalPriceToPay.total),
+              total: parseFloat(totalToPay.toFixed(2)),
               invoiceRequired: checkbox,
               deliveryPayment: parseFloat(LongDistancePrice),
               deliveryId: parseInt(CCR_ID),
@@ -334,21 +334,24 @@ export default function CheckOutForm2({
         } else {
           // si la distancia no exede los 20 kilometros
           const totalToPay = subTotal + taxes + ShortDistancePrice;
+          // Cargamos el objeto con los montos originales
+          //que el cliente debera pagar.
+
           const finalPriceToPay = {
-            total: totalToPay,
+            // Total final le agregamos el costo del envio
+            total: parseFloat(totalToPay.toFixed(2)),
             subTotal: subTotal,
             taxes: taxes,
           };
 
           deliveryPayment(ShortDistancePrice);
           setAmount(finalPriceToPay);
-
           createPaymentDetail({
             variables: {
               status: "Inicial",
               subTotal: subTotal,
               taxes: taxes,
-              total: parseFloat(finalPriceToPay.total),
+              total: parseFloat(totalToPay.toFixed(2)),
               invoiceRequired: checkbox,
               deliveryPayment: parseFloat(ShortDistancePrice),
               deliveryId: parseInt(CCR_ID),
