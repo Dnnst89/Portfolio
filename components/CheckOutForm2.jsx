@@ -17,6 +17,7 @@ import { DeliveryChoice } from "./deliveryChoice";
 import coverageArea from "@/api/moovin/coverageArea";
 import calculateShippingDistance from "@/helpers/calculateShippingDistance";
 import { CgArrowLongRight } from "react-icons/cg";
+import { useSelector } from "react-redux";
 export default function CheckOutForm2({
   amount,
   checkbox,
@@ -31,6 +32,10 @@ export default function CheckOutForm2({
   const [blockMoovin, setBlockMoovin] = useState(false);
   const [isMoreThanDeliveryRange, setIsMoreThanDeliveryRange] = useState(false);
   const [moovinMessageError, setMoovinMessageError] = useState("");
+
+  //Obtenemos el estado de los regalos que se van a envolver
+  const { selectedGifts } = useSelector((state) => state.selectedGifts);
+
   const { total, subTotal, taxes } = amount;
   let paymentDetailResponseId = null;
   const [createPaymentDetail] = useMutation(CREATE_PAYMENT_DETAIL);
@@ -209,6 +214,7 @@ export default function CheckOutForm2({
               deliveryMethod: data.deliveryMethod,
               paymentMethod: "Tarjeta Crédito/ Débito",
               publishedAt: isoDate,
+              gift: JSON.stringify(selectedGifts),
               estimate_delivery_date: MoovinEstimatedDelivery,
             },
           });
@@ -247,13 +253,14 @@ export default function CheckOutForm2({
             status: "Inicial",
             subTotal: subTotal,
             taxes: taxes,
-            total: total,
+            total: 15,
             invoiceRequired: checkbox,
             deliveryPayment: parseFloat(0),
             deliveryId: parseInt(0),
             deliveryMethod: data.deliveryMethod,
             paymentMethod: "Tarjeta Crédito/ Débito",
             publishedAt: isoDate,
+            gift: JSON.stringify(selectedGifts),
           },
         });
 
@@ -301,6 +308,7 @@ export default function CheckOutForm2({
               paymentMethod: "Tarjeta Crédito/ Débito",
               publishedAt: isoDate,
               estimate_delivery_date: LongEstimatedDelivery,
+              gift: JSON.stringify(selectedGifts),
             },
           })
             .then((responsePaymentDetail) => {
@@ -343,6 +351,7 @@ export default function CheckOutForm2({
               paymentMethod: "Tarjeta Crédito/ Débito",
               publishedAt: isoDate,
               estimate_delivery_date: ShortEstimatedDelivery,
+              gift: JSON.stringify(selectedGifts),
             },
           })
             .then((response) => {

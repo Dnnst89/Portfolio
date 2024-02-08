@@ -3,10 +3,13 @@ import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import useCartSummary from "@/hooks/useCartSummary";
 import useStorage from "@/hooks/useStorage";
-
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setSelectedGifts } from "@/redux/features/selectedGiftsSlice";
 const animatedComponent = makeAnimated();
 
 const WrappedGiftCheckbox = () => {
+  const dispatch = useDispatch();
   //Se obtienen los datos del usuario en sesion
   const { user } = useStorage();
   const userId = user?.id;
@@ -25,15 +28,21 @@ const WrappedGiftCheckbox = () => {
     value: gift.name,
     label: gift.name,
   }));
-  console.log("items on cart", listedGifts);
+
+  //
+  const handleSelectChange = (value) => {
+    console.log("values", value);
+    dispatch(setSelectedGifts(value));
+  };
+
   return (
     <div className="w-3/4 m-auto mt-5 mb-2 pb-2 ">
       <Select
         closeMenuOnScroll={false}
         components={animatedComponent}
-        defaultValue={"Seleccionar"} //TODO:
         isMulti
         options={listedGifts}
+        onChange={handleSelectChange}
       />
     </div>
   );

@@ -3,7 +3,6 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { UPDATE_USER_INFORMATION } from "@/src/graphQl/queries/updateUserInformation";
 import { UPDATE_ADDRESS } from "@/src/graphQl/queries/updateAddress";
 import { CREATE_ADDRESS } from "@/src/graphQl/queries/createAddress";
-import { ADD_WRAPPED_GIFTS_LIST } from "@/src/graphQl/queries/addwrappedGiftList";
 import { useForm } from "react-hook-form";
 import CartDetail from "./CartDetail";
 import { useEffect, useState } from "react";
@@ -11,10 +10,8 @@ import { AiOutlineEdit } from "react-icons/ai";
 import CheckOutForm2 from "./CheckOutForm2";
 import useStorage from "@/hooks/useStorage";
 import toast, { Toaster } from "react-hot-toast";
-import { getToken, refreshToken } from "@/api/moovin/getToken";
 import Map from "./Map";
 import { Marker } from "@react-google-maps/api";
-import GifttCheckbox from "./GifttCheckbox";
 import WrappedGiftCheckbox from "./WrappedGiftCheckbox";
 import { useSelector } from "react-redux";
 import useCartSummary from "@/hooks/useCartSummary";
@@ -30,7 +27,6 @@ function FormOne() {
   const [updateAddress] = useMutation(UPDATE_ADDRESS);
   const [getUserInfo] = useLazyQuery(GET_USER_PAYMENT_INFO);
   const [createAddress] = useMutation(CREATE_ADDRESS);
-  const [updateGifts] = useMutation(ADD_WRAPPED_GIFTS_LIST);
   const [checkoutForm1Visible, setCheckoutForm1Visible] = useState(false);
   const { user } = useStorage();
   const userId = user?.id;
@@ -43,6 +39,7 @@ function FormOne() {
   const [canton, setCanton] = useState("");
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
+
   const [wrappedGiftCheckbox, setWrappedGiftCheckbox] = useState(false);
   // loading wrapped gifts from dropdown
   const { items, sessionId } = useCartSummary({
@@ -64,7 +61,6 @@ function FormOne() {
     idNumber: "",
     idType: "",
     invoiceEmail: "",
-    gift: "",
   });
   const [deliveryPayment, setDeliveryPayment] = useState(0);
   const handleDeliveryPayment = (data) => {
@@ -269,10 +265,6 @@ function FormOne() {
             id: userId,
           },
         });
-
-        console.log("errores ", data.updatePaymentDetail.data.attributes.gift);
-
-        console.log("gift", { data });
         if (createAddressError)
           return toast.error("Error al crear la dirección", {
             autoClose: 5000,
@@ -287,10 +279,8 @@ function FormOne() {
         autoClose: 5000,
       });
     }
-    const { data, error, loading } = await updateGifts({
-      variables: { sessionId, gift: "test" },
-    });
   });
+
   return (
     <div>
       <Toaster />

@@ -13,6 +13,7 @@ const CREATE_PAYMENT_DETAIL = gql`
     $paymentMethod: String
     $estimate_delivery_date: String
     $publishedAt: DateTime
+    $gift: String
   ) {
     createPaymentDetail(
       data: {
@@ -27,6 +28,7 @@ const CREATE_PAYMENT_DETAIL = gql`
         paymentMethod: $paymentMethod
         estimate_delivery_date: $estimate_delivery_date
         publishedAt: $publishedAt
+        gift: $gift
       }
     ) {
       data {
@@ -43,6 +45,7 @@ const CREATE_PAYMENT_DETAIL = gql`
           deliveryId
           estimate_delivery_date
           publishedAt
+          gift
         }
       }
     }
