@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
+import { useRouter } from "next/navigation";
 import ProductDetail from "./ProductDetail";
 import ProductDetailSecondary from "./ProductDetailSecondary";
 import RelatedItems from "./RelatedItems";
@@ -9,41 +10,20 @@ import Spinner from "@/components/Spinner";
 import toast from "react-hot-toast";
 
 export default function DetailComponent({ id }) {
+  const [errorToastShown, setErrorToastShown] = useState(false);
   const { loading, error, data } = useQuery(ProductDetailQuery, {
     variables: { id },
   });
-
-  const [toastShown, setToastShown] = useState(false);
-
-  // Mostrar toast cuando data es null
-  useEffect(() => {
-    if (!data && !toastShown) {
-      toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
-        autoClose: 5000,
-      });
-      setToastShown(true);
-    }
-  }, [data, toastShown]);
-
-  if (error) {
-    return toast.error(
-      "Lo sentimos, ha ocurrido un error al cargar los datos",
-      {
-        autoClose: 5000,
-      }
-    );
+  const router = useRouter();
+  // Verificar si hay un error en la consulta
+  if (error && !errorToastShown) {
+    setErrorToastShown(true);
+    toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
+      autoClose: 5000,
+    });
   }
 
-  if (!data || !data.product || !data.product.data) {
-    return (
-      <div className="max-w-screen-xl m-auto">
-        <p>
-          Ocurrió un problema con los datos. No se encontraron datos válidos.
-        </p>
-      </div>
-    );
-  }
-
+  // Mostrar la página incluso si data es nulo
   return (
     <div
       className={loading ? "grid place-items-center" : "max-w-screen-xl m-auto"}
@@ -52,16 +32,42 @@ export default function DetailComponent({ id }) {
         <Spinner />
       ) : (
         <div>
-          <ProductDetail product={data.product.data} />
-          <ProductDetailSecondary
-            id={data.product.data.id}
-            description={data.product.data.attributes.description}
-            reviews={data.product.data.attributes.reviews.data}
-          />
-          <RelatedItems
-            categories={data.product.data.attributes.categories.data}
-            productId={data.product.data.id}
-          />
+          {data && data.product && data.product.data ? (
+            <>
+              <ProductDetail product={data.product.data} />
+              <ProductDetailSecondary
+                id={data.product.data.id}
+                description={data.product.data.attributes.description}
+                reviews={data.product.data.attributes.reviews.data}
+              />
+              <RelatedItems
+                categories={data.product.data.attributes.categories.data}
+                productId={data.product.data.id}
+              />
+            </>
+          ) : (
+            !errorToastShown && (
+              <div>
+                {setErrorToastShown(true)}
+                {toast.error(
+                  "Hubo un error al cargar los datos. Inténtalo de nuevo.",
+                  {
+                    autoClose: 5000,
+                  }
+                )}
+              </div>
+            )
+          )}
+          <div className="text-center my-48">
+            <button
+              onClick={() => {
+                router.push("/");
+              }}
+              className="bg-aquamarine text-white rounded-sm p-2 w-[150px]"
+            >
+              Volver
+            </button>
+          </div>
         </div>
       )}
     </div>
