@@ -1,3 +1,7 @@
+/**
+ * Se crea un dropdown menu que muestra los articulos agregados al carrito
+ * el usuario puede seleccionar los que le gustaria que se entreguen con papel de regalo.
+ */
 "use client";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";

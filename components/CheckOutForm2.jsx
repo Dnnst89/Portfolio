@@ -258,7 +258,7 @@ export default function CheckOutForm2({
             status: "Inicial",
             subTotal: subTotal,
             taxes: taxes,
-            total: total, // TODO: solucionar error de total
+            total: total,
             invoiceRequired: checkbox,
             deliveryPayment: parseFloat(0),
             deliveryId: parseInt(0),
