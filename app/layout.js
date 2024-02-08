@@ -10,7 +10,6 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "detinmarin",
   description: "DetinMarin",
-
 };
 
 const poppins = Poppins({
