@@ -14,7 +14,10 @@ const CartContainer = () => {
   const { total, items, quantity, errors, loading } = useCartSummary({
     userId: user?.id,
   });
-
+  console.log(
+    "items: ",
+    items.map((item) => item.attributes.variant.data.attributes.price)
+  );
   const dispatch = useDispatch();
 
   return (
