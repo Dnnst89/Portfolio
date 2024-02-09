@@ -65,7 +65,7 @@ export default function DetailComponent({ id }) {
               }}
               className="bg-aquamarine text-white rounded-sm p-2 w-[150px]"
             >
-              Volver
+              Ir a inicio
             </button>
           </div>
         </div>
