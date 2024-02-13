@@ -69,7 +69,7 @@ function FormOne() {
   const handleLng = (data) => {
     setLng(data);
   };
-
+  // Asigna los valores a pagar en el carrito
   const [amount, setAmount] = useState({
     total: 0,
     subTotal: 0,
@@ -203,7 +203,8 @@ function FormOne() {
         variables: {
           firstName: dataForm.firstName,
           lastName: dataForm.lastName,
-          invoiceEmail: dataForm.invoiceEmail == "" ? null : dataForm.invoiceEmail,
+          invoiceEmail:
+            dataForm.invoiceEmail == "" ? null : dataForm.invoiceEmail,
           phone: parseInt(dataForm.phone),
           idType: dataForm.idType,
           idNumber: parseInt(dataForm.idNumber),
@@ -227,7 +228,8 @@ function FormOne() {
             postCode: dataForm.postCode,
             province: dataForm.province,
             addressLine1: dataForm.addressLine1,
-            addressLine2: dataForm.addressLine2 == "" ? null : dataForm.addressLine2,
+            addressLine2:
+              dataForm.addressLine2 == "" ? null : dataForm.addressLine2,
             latitude: selectedLat !== undefined ? selectedLat : lat,
             longitude: selectedLng !== undefined ? selectedLng : lng,
             canton: dataForm.canton,

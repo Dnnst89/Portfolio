@@ -72,7 +72,6 @@ const CartDetail = ({
   }, [deliveryPayment]); // El segundo argumento [] asegura que useEffect se ejecute solo una vez al montar el componente
 
   useEffect(() => {
-    console.log("q", quantity);
     setShipment(0);
     if (items !== null || items !== null) {
       getTaxCost();
