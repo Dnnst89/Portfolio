@@ -1,7 +1,10 @@
 import axios from "axios";
 
+
+
 const getTipoCambio = async () => {
   try {
+
     // Realiza la solicitud GET al endpoint del Ministerio de Hacienda
     const fechaActual = new Date();
     const formattedDate = `${fechaActual.getFullYear()}/${
@@ -12,10 +15,11 @@ const getTipoCambio = async () => {
 
     // Analiza la respuesta y extrae el tipo de cambio u otra información relevante
     const tipoCambio = response.data;
-
-    console.log(response.data['venta']);
-
+    
     return tipoCambio;
+    
+    
+
   } catch (error) {
     console.error(
       "Error al obtener el tipo de cambio del Ministerio de Hacienda:",

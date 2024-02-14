@@ -15,4 +15,4 @@ mutation UpdateExchangeRate($exchangeRateId: ID!, $newPurchase: Float!, $newSale
   }
 `;
 
-export default UPDATE_EXCHANGE_RATE
+export default UPDATE_EXCHANGE_RATE;

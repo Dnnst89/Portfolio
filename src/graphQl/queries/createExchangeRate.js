@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client";
-
 const CREATE_EXCHANGE_RATE = gql`
 mutation (
     $purchase: Float
@@ -26,8 +25,5 @@ mutation (
       }
     }
   }
-
-
 `;
-
-export default CREATE_EXCHANGE_RATE
+export default CREATE_EXCHANGE_RATE;
