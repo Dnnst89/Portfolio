@@ -96,24 +96,6 @@ export default function CheckOutForm3({
      
 */
       if (payment.deliveryMethod === "Envío a través de MOOVIN") {
-        /*const shipmentInfo = createData(
-          items,
-          deliveryInformation.latitude,
-          deliveryInformation.longitude
-        );
-        console.log("sdasdfadfa", shipmentInfo);
-        const estimation = await requestEstimation(shipmentInfo);
-
-        deliveryPayment(estimation.amount);
-        // const suma = parseFloat(subTotal + taxes);
-        const finalAmount = {
-          total: parseFloat(subTotal + taxes + estimation.amount),
-          subTotal: subTotal,
-          taxes: taxes,
-        };
-
-        setAmount(finalAmount);
-*/
         const datos = createOrderData(
           store,
           items,
@@ -123,7 +105,6 @@ export default function CheckOutForm3({
           deliveryInformation
         );
         try {
-          console.log("datos", datos);
           const order = await orderMoovin(datos);
           console.log("order mooving", order);
           const orderId = parseInt(order.idPackage);

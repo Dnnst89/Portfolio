@@ -14,12 +14,7 @@ const CartContainer = () => {
   const { total, items, quantity, errors, loading } = useCartSummary({
     userId: user?.id,
   });
-  console.log(
-    "items: ",
-    items.map((item) => item.attributes.variant.data.attributes.price)
-  );
   const dispatch = useDispatch();
-
   return (
     <>
       <div className="flex flex-col md:col-span-8 col-span-12">

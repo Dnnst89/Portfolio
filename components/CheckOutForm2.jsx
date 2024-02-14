@@ -70,7 +70,6 @@ export default function CheckOutForm2({
     error,
     data: deliveryChoicesData,
   } = useQuery(GET_DELIVERY_CHOICES);
-  console.log("deliveryChoicesData", deliveryChoicesData);
   //Correos de Costa Rica
   const CCR =
     deliveryChoicesData?.deliveries?.data?.[0]?.attributes?.delivery_code;
@@ -151,7 +150,6 @@ export default function CheckOutForm2({
         const result = await coverageArea(lat, lng);
         if (result === "ERRORZONE") {
           //Si la zona esta fuera de cobertura se bloquea el componente
-          console.log("Blocking Moovin", result);
           setBlockMoovin(true);
           setMoovinMessageError(
             "Moovin no se encuetra disponible en el área seleccionada."
@@ -174,7 +172,6 @@ export default function CheckOutForm2({
   }, [lat, lng]);
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log("testing", MVN);
     //delivery method - MVN(Moovin)
     if (data.deliveryMethod === MVN) {
       try {
@@ -243,7 +240,6 @@ export default function CheckOutForm2({
           subTotal: subTotal,
           taxes: taxes,
         };
-        console.log("finalAmount: " + finalAmount);
         setAmount(finalAmount);
         const paymentDetailResponse = await createPaymentDetail({
           variables: {
@@ -329,7 +325,6 @@ export default function CheckOutForm2({
             subTotal: subTotal,
             taxes: taxes,
           };
-          console.log("finalAmount: ", finalPriceToPay);
           deliveryPayment(ShortDistancePrice);
           setAmount(finalPriceToPay);
 
