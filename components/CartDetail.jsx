@@ -24,6 +24,7 @@ const CartDetail = ({
     }
   );
 
+  const withoutDelivery = 0;
   const currency =
     storeInformation?.storeInformation?.data?.attributes?.currency;
   const [shipment, setShipment] = useState(0);
@@ -51,11 +52,20 @@ const CartDetail = ({
           parseFloat(deliveryPayment);
         const newAmount = {
           tax: amounts.tax,
-          total: parseFloat(newTotal.toFixed(2)),
+          total: parseFloat(newTotal),
           loading: false,
           currencyType: currency,
         };
 
+        setAmounts(newAmount);
+      } else if (deliveryPayment === withoutDelivery) {
+        const newTotal = parseFloat(subTotal) + parseFloat(amounts.tax);
+        const newAmount = {
+          tax: amounts.tax,
+          total: parseFloat(newTotal),
+          loading: false,
+          currencyType: currency,
+        };
         setAmounts(newAmount);
       } else {
         const newTotal = subTotal.toFixed(2) + amounts.tax.toFixed(2);
@@ -72,7 +82,6 @@ const CartDetail = ({
   }, [deliveryPayment]); // El segundo argumento [] asegura que useEffect se ejecute solo una vez al montar el componente
 
   useEffect(() => {
-    console.log("q", quantity);
     setShipment(0);
     if (items !== null || items !== null) {
       getTaxCost();
@@ -164,13 +173,13 @@ const CartDetail = ({
             <div className="flex justify-between ">
               <p>Costo de envío:</p>
               <p className="whitespace-nowrap">
-                {deliveryPayment} {amounts.currencyType}
+                {parseFloat(deliveryPayment).toFixed(2)} {amounts.currencyType}
               </p>
             </div>
             <div className="flex flex-col p-4 space-y-3">
               <p className="flex justify-center">Costo Total(IVA Incluido)</p>
               <p className="flex justify-center whitespace-nowrap">
-                {amounts?.total} {amounts.currencyType}
+                {amounts?.total.toFixed(2)} {amounts.currencyType}
               </p>
             </div>
           </>

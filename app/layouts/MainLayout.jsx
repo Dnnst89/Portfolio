@@ -14,9 +14,6 @@ import toast from "react-hot-toast";
 
 
 const MainLayout = ({ children }) => {
-  
-  
-
   return (
     <>
       <BodyComponent role="article">
@@ -38,7 +35,9 @@ const MainLayout = ({ children }) => {
               image={heart}
               alt={"Imagen corazón en manos"}
               age={"Menores de 2 años"}
-              button={"bg-aquamarine rounded-lg text-white p-2 font-['GrandStander'] text-sm md:text-xl pr-4 pl-4 mb-5"}
+              button={
+                "bg-aquamarine rounded-lg text-white p-2 font-['GrandStander'] text-sm md:text-xl pr-4 pl-4 mb-5"
+              }
               border={
                 "bg-white rounded-[15px] transition-transform transform hover:scale-105 duration-1000 hover:cursor-pointer border-2 border-aquamarine"
               }
@@ -48,7 +47,9 @@ const MainLayout = ({ children }) => {
               image={wood}
               alt={"Imagen bloques madera"}
               age={"De 2 a 3 años"}
-              button={"bg-lightblue rounded-lg text-white p-2 font-['GrandStander'] text-sm md:text-xl pr-4 pl-4 mb-5"}
+              button={
+                "bg-lightblue rounded-lg text-white p-2 font-['GrandStander'] text-sm md:text-xl pr-4 pl-4 mb-5"
+              }
               border={
                 "bg-white rounded-[15px] transition-transform transform hover:scale-105 duration-1000 hover:cursor-pointer border-2 border-lightblue"
               }
@@ -58,7 +59,9 @@ const MainLayout = ({ children }) => {
               image={brush}
               alt={"Imagen pincel y pinturas"}
               age={"De 4 a 5 años"}
-              button={"bg-yellow-200 rounded-lg text-white p-2 font-['GrandStander'] text-sm md:text-xl pr-4 pl-4 mb-5"}
+              button={
+                "bg-yellow-200 rounded-lg text-white p-2 font-['GrandStander'] text-sm md:text-xl pr-4 pl-4 mb-5"
+              }
               border={
                 "bg-white rounded-[15px] transition-transform transform hover:scale-105 duration-1000 hover:cursor-pointer border-2 border-yellow-200"
               }
@@ -68,7 +71,9 @@ const MainLayout = ({ children }) => {
               image={guitar}
               alt={"Imagen guitarra"}
               age={"De 6 a 7 años"}
-              button={"bg-pink-200 rounded-lg text-white p-2 font-['GrandStander'] text-sm md:text-xl pr-4 pl-4 mb-5"}
+              button={
+                "bg-pink-200 rounded-lg text-white p-2 font-['GrandStander'] text-sm md:text-xl pr-4 pl-4 mb-5"
+              }
               border={
                 "bg-white rounded-[15px] transition-transform transform hover:scale-105 duration-1000 hover:cursor-pointer border-2 border-pink-200"
               }
@@ -78,7 +83,9 @@ const MainLayout = ({ children }) => {
               image={libro}
               alt={"Imagen libro"}
               age={"De 8 años o más"}
-              button={"bg-yellow-300 rounded-lg text-white p-2 font-['GrandStander'] text-sm md:text-xl pr-4 pl-4 mb-5"}
+              button={
+                "bg-yellow-300 rounded-lg text-white p-2 font-['GrandStander'] text-sm md:text-xl pr-4 pl-4 mb-5"
+              }
               border={
                 "bg-white rounded-[15px] transition-transform transform hover:scale-105 duration-1000 hover:cursor-pointer border-2 border-yellow-300"
               }

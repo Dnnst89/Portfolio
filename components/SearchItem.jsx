@@ -1,11 +1,18 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import trackEvent from '../helpers/analytics.js';
 
 function SearchItem({ hit, components }) {
+
+  // when users clicks a product on the search component, then trackEvent is called for Google Analytics traking products.
+  const handleClick = () => {
+    trackEvent(hit.brand, "click_on_product", hit.name, hit.defaultPrice);
+  }
+
   return (
     <div className="border-b-2 border-dashed border-grey-200 w-full">
-      <Link href={{ pathname: "/detail", query: { id: hit.id } }}>
+      <Link onClick={handleClick} href={{ pathname: "/detail", query: { id: hit.id } }}>
         <div className="hover:bg-blue-300 flex gap-4 p-4 items-center">
           <Image
             priority={true}
@@ -29,7 +36,7 @@ function SearchItem({ hit, components }) {
           </div>
 
           <div className="flex-1">
-          <p className="text-xl font-semibold text-right">${hit.defaultPrice}</p>
+          <p className="text-xl font-semibold text-right">${hit.defaultPrice.toFixed(2)}</p>
           </div>
 
         </div>

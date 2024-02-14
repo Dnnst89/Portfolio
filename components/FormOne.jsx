@@ -10,10 +10,11 @@ import { AiOutlineEdit } from "react-icons/ai";
 import CheckOutForm2 from "./CheckOutForm2";
 import useStorage from "@/hooks/useStorage";
 import toast, { Toaster } from "react-hot-toast";
-import { getToken, refreshToken } from "@/api/moovin/getToken";
 import Map from "./Map";
 import { Marker } from "@react-google-maps/api";
-
+import WrappedGiftCheckbox from "./WrappedGiftCheckbox";
+import { useSelector } from "react-redux";
+import useCartSummary from "@/hooks/useCartSummary";
 function FormOne() {
   const {
     register,
@@ -38,8 +39,13 @@ function FormOne() {
   const [canton, setCanton] = useState("");
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
-  const [gift, setGift] = useState("");
-  const [giftInfo, setGiftInfo] = useState("");
+
+  const [wrappedGiftCheckbox, setWrappedGiftCheckbox] = useState(false);
+  // loading wrapped gifts from dropdown
+  const { items, sessionId } = useCartSummary({
+    userId: userId,
+  });
+
   const [userInformation, setUserInformation] = useState({
     //campos de formulario
     firstName: "",
@@ -165,7 +171,6 @@ function FormOne() {
   };
   const [selectedLat, setSelectedLat] = useState();
   const [selectedLng, setSelectedLng] = useState();
-
   const handleMarkerChange = (markerPosition) => {
     setSelectedLat(markerPosition.lat);
     setSelectedLng(markerPosition.lng);
@@ -203,7 +208,8 @@ function FormOne() {
         variables: {
           firstName: dataForm.firstName,
           lastName: dataForm.lastName,
-          invoiceEmail: dataForm.invoiceEmail == "" ? null : dataForm.invoiceEmail,
+          invoiceEmail:
+            dataForm.invoiceEmail == "" ? null : dataForm.invoiceEmail,
           phone: parseInt(dataForm.phone),
           idType: dataForm.idType,
           idNumber: parseInt(dataForm.idNumber),
@@ -227,7 +233,8 @@ function FormOne() {
             postCode: dataForm.postCode,
             province: dataForm.province,
             addressLine1: dataForm.addressLine1,
-            addressLine2: dataForm.addressLine2 == "" ? null : dataForm.addressLine2,
+            addressLine2:
+              dataForm.addressLine2 == "" ? null : dataForm.addressLine2,
             latitude: selectedLat !== undefined ? selectedLat : lat,
             longitude: selectedLng !== undefined ? selectedLng : lng,
             canton: dataForm.canton,
@@ -258,7 +265,6 @@ function FormOne() {
             id: userId,
           },
         });
-
         if (createAddressError)
           return toast.error("Error al crear la dirección", {
             autoClose: 5000,
@@ -594,54 +600,17 @@ function FormOne() {
                       </section>
                     </div>
                     {/*
-                    <div className="flex justify-center w-full">
-                      <section className="w-3/4 m-auto mt-10 mb-5 flex items-center space-x-5">
-                        <label htmlFor="gift">Envuelto para regalo</label>
-                        <input
-                          className="p-3"
-                          type="checkbox"
-                          id="gift"
-                          {...register("gift", {
-                            onChange: (e) => {
-                              if (e.target.checked) {
-                                setGift(true);
-                              } else {
-                                setGift(false);
-                              }
-                            },
-                          })}
-                        ></input>
-                      </section>
-                      {gift && (
-                        <>
-                          <div className="">
-                            <section className="">
-                              <div className="">
-                                <label htmlFor="idType">Tipo De Cédula</label>
-                                <select
-                                  {...register("idType", {
-                                    onChange: (e) => {
-                                      const selectedValue = e.target.value;
-                                      if (selectedValue === "Física") {
-                                        setFisica(true);
-                                      } else {
-                                        setFisica(false);
-                                      }
-                                    },
-                                  })}
-                                >
-                                  <option value={"Física"}>Física</option>
-                                  <option value={"Jurídica"}>Jurídica</option>
-                                </select>
-                              </div>
-                              sssss
-                            </section>
-                          </div>
-                        </>
-                      )}
-                                </div>*/}
-                    <div className="flex justify-center w-full">
-                      <section className="w-3/4 m-auto mt-10 mb-5 flex items-center space-x-5">
+                  Se adiciona componente que permite seleccionar los regalos 
+                  a envolver por el cliente. 
+                 */}
+                    <div className="flex flex-col min-h-[100px]">
+                      <h4 className="w-3/4 m-auto mt-5 mb-3 flex items-center space-x-5">
+                        Seleccione los artículos a envolver 🎁:
+                      </h4>
+                      <WrappedGiftCheckbox />
+                    </div>
+                    <div className="inline-block justify-center w-full">
+                      <section className="w-3/4 m-auto mt-10 mb-3 flex items-center space-x-5">
                         <label htmlFor="idType">Factura Electrónica</label>
                         <input
                           className="p-3"
