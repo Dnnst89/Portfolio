@@ -1,61 +1,63 @@
 import { gql } from "@apollo/client";
 
 const getProductsFiltered = gql`
+
 query GetProductsFiltered(
   $initialAge: Float
   $finalAge: Float
   $minPrice: Float
   $maxPrice: Float
   $category: String
+  $brands : String
   $page: Int!
   $pageSize: Int!
 ) {
   products(
-    filters: {
-      categories: { name: { containsi: $category } }
-      and: {
-        variants: {
-          finalAge: { gte: $initialAge }
-          initialAge: { lte: $finalAge }
-         price: { gte: $minPrice, lte: $maxPrice }
-        }
+      filters: {
+          categories: { name: { containsi: $category } }
+          and: {
+              variants: {
+                  finalAge: { gte: $initialAge }
+                  initialAge: { lte: $finalAge }
+                  price: { gte: $minPrice, lte: $maxPrice }
+              }
+          }
+          brand: { contains: $brands }
       }
-    }
-    pagination: { page: $page, pageSize: $pageSize }
+      pagination: { page: $page, pageSize: $pageSize }
   ) {
-    data {
-      id
-      attributes {
-        name
-        brand
-        defaultPrice
-        variants {
-          data {
-            attributes {
-              initialAge
-              finalAge
-              price
-            }
+      data {
+          id
+          attributes {
+              name
+              brand
+              defaultPrice
+              variants {
+                  data {
+                      attributes {
+                          initialAge
+                          finalAge
+                          price
+                      }
+                  }
+              }
+              coverImage {
+                  data {
+                      attributes {
+                          url
+                      }
+                  }
+              }
           }
-        }
-        coverImage {
-          data {
-            attributes {
-              url
-            }
+      }
+      meta {
+          pagination {
+              total
+              pageCount
           }
-        }
       }
-    }
-    meta {
-      pagination {
-        total
-        pageCount
-      }
-    }
   }
 }
-
 `;
 
 export default getProductsFiltered;

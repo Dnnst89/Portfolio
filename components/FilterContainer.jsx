@@ -131,7 +131,8 @@ function FilterContainer({
                         </div>
                       </div>
                     </div>
-                    {queryType == "category" ? ("") : (
+                     {/* div for brand options */}
+                    {/* {queryType == "category" ? ("") : ( */}
                       <div className="border-t border-gray-200 px-4 py-6">
                         <h3 className="-mx-2 -my-3 flow-root">
                           <button
@@ -160,7 +161,8 @@ function FilterContainer({
                           </div>
                         </div>
                       </div>
-                    )}
+                        {/* end of div for brand options */}
+                    {/* )} */}
                   </form>
                 </div>
               </div>

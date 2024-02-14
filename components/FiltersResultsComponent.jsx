@@ -26,11 +26,23 @@ export default function FiltersResultsComponent({ querySearch }) {
   let initialAge;
   let finalAge;
   let category;
+  let brands = "";
+  if (selectedBrands.length > 0) {
+    // Filtros de marca
+    brands = selectedBrands
+      .map((brand) => `${brand}`)
+    .join(" OR ");
+    console.log("selectedBrands");
+    console.log(selectedBrands);
+    console.log(brands);
+    // brands = "Nomellamo Ecolekua";
+  }
   let minPrice;
   let maxPrice;
 
   //separo la query para saber que mostrar si es por rango de dedades o por categorias
   const [filterType, filterValue] = querySearch.split("=");
+
   if (filterType == "ageRange") {
     initialAge = parseInt(filterValue.split("-")[0]);
     finalAge = parseInt(filterValue.split("-")[1]);
@@ -40,8 +52,8 @@ export default function FiltersResultsComponent({ querySearch }) {
     finalAge = maxAgeFilter;
     minPrice = minPriceFilter;
     maxPrice = maxPriceFilter;
-  }
 
+  }
   const { loading, error, data } = useQuery(getProductsFiltered, {
     variables: {
       initialAge,
@@ -51,10 +63,11 @@ export default function FiltersResultsComponent({ querySearch }) {
       page,
       pageSize,
       category,
+      brands,
     },
   });
   useEffect(() => {
-    // Puedes mover la lógica de 'allResults' directamente aquí
+    //   // Puedes mover la lógica de 'allResults' directamente aquí
     try {
       // Realiza las operaciones necesarias con 'data'
       setQueryType("category");
@@ -78,7 +91,6 @@ export default function FiltersResultsComponent({ querySearch }) {
     data,
     currentPage,
   ]);
-
   const handleFilters = (
     selectedBrands,
     minAge,
@@ -86,11 +98,13 @@ export default function FiltersResultsComponent({ querySearch }) {
     minPrice,
     maxPrice
   ) => {
+    //  alert(selectedBrands),
     // Establecer los valores de filtro recibidos
     setMinAgeFilter(minAge);
     setMaxAgeFilter(maxAge);
     setMinPriceFilter(minPrice);
     setMaxPriceFilter(maxPrice);
+    setSelectedBrands(selectedBrands);
 
     // Verificar y corregir valores nulos o indefinidos para minAge y maxAge
     if (minAge === null || minAge === undefined || minAge === "") {
@@ -159,6 +173,7 @@ export default function FiltersResultsComponent({ querySearch }) {
               <div>
                 <div className="md:flex">
                   <FilterContainerPrincipal
+                    category={category} //category selected in NavCategories.jsx
                     test={data}
                     minAgeFilter={minAgeFilter}
                     maxAgeFilter={maxAgeFilter}

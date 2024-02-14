@@ -93,12 +93,18 @@ const ResultsComponent = (test) => {
   }, [currentPage, test.query]);
 
   const handleFilters = (
+    
     selectedBrands,
     minAge,
     maxAge,
     minPrice,
     maxPrice
   ) => {
+    alert(selectedBrands,
+      minAge,
+      maxAge,
+      minPrice,
+      maxPrice),
     // Establecer los valores de filtro recibidos
     setMinAgeFilter(minAge);
     setMaxAgeFilter(maxAge);
@@ -219,9 +225,6 @@ const ResultsComponent = (test) => {
                   setLoading={setLoading}
                 />
               </div>
-
-
-
             </div>
           </div>
         </div>

@@ -2,9 +2,11 @@ import FilterByPrice from "./FilterByPrice";
 import { FaFilter } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import FilterByBrand from "./FilterByBrand";
+import FilterByBrand_Category from "./FilterByBrand_Category";
 import FilterByAge from "./FilterByAge";
 import React from "react";
 function FilterContainerPrincipal({
+  category, //category selected in NavCategories.jsx, incoming parameter from FilterResultsComponent.jsx
   selectedAgeRange,
   setMaxAgeFilter,
   maxAgeFilter,
@@ -21,6 +23,7 @@ function FilterContainerPrincipal({
   setSelectedBrands,
   queryType
 }) {
+
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="max-w-screen-xl mx-5 justify hidden md:block ml-0 mr-0">
@@ -80,9 +83,10 @@ function FilterContainerPrincipal({
                           </span>
                         </div>
                       </h3>
+                      {/* div for category filter */}
                       <div className="pt-6" id="filter-section-mobile-0">
                         <div className="space-y-6">
-                          <FilterByPrice
+                          <FilterByPrice                          
                             selectedBrands={selectedBrands}
                             selectedPriceRange={selectedPriceRange}
                             handleFilters={handleFilters}
@@ -97,35 +101,72 @@ function FilterContainerPrincipal({
                         </div>
                       </div>
                     </div>
-                    {queryType == "category" ? ("") : (<div className="border-t border-gray-200 px-4 py-6">
-                      <h3 className="-mx-2 -my-3 flow-root">
-                        <div
-                          type="button"
-                          className="flex w-full items-center justify-between bg-resene px-2 py-3 text-gray-400 hover:text-gray-500"
-                          aria-controls="filter-section-mobile-0"
-                          aria-expanded="false"
-                        >
-                          <span className="font-medium text-gray-900">
-                            Marca
-                          </span>
+                    {queryType == "category" ? (
+                      // div for filter when queryType is "category"
+                      <div className="border-t border-gray-200 px-4 py-6">
+                        <h3 className="-mx-2 -my-3 flow-root">
+                          <div
+                            type="button"
+                            className="flex w-full items-center justify-between bg-resene px-2 py-3 text-gray-400 hover:text-gray-500"
+                            aria-controls="filter-section-mobile-0"
+                            aria-expanded="false"
+                          >
+                            <span className="font-medium text-gray-900">
+                              Marca
+                            </span>
+                          </div>
+                        </h3>
+
+                        <div className="pt-6" id="filter-section-mobile-0">
+                          <div className="space-y-6">
+                            <FilterByBrand_Category
+                              category={category}
+                              minPriceFilter={minPriceFilter}
+                              maxPriceFilter={maxPriceFilter}
+                              handleFilters={handleFilters}
+                              test={test}
+                              selectedBrands={selectedBrands}
+                              setSelectedBrands={setSelectedBrands}
+                              minAgeFilter={minAgeFilter}
+                              maxAgeFilter={maxAgeFilter}
+                            ></FilterByBrand_Category>
+                          </div>
                         </div>
-                      </h3>
-                      <div className="pt-6" id="filter-section-mobile-0">
-                        <div className="space-y-6">
-                          <FilterByBrand
-                            minPriceFilter={minPriceFilter}
-                            maxPriceFilter={maxPriceFilter}
-                            handleFilters={handleFilters}
-                            test={test}
-                            selectedBrands={selectedBrands}
-                            setSelectedBrands={setSelectedBrands}
-                            minAgeFilter={minAgeFilter}
-                            maxAgeFilter={maxAgeFilter}
-                          ></FilterByBrand>
-                        </div>
-                      </div>
-                    </div>
-                    )}
+                      </div>)
+                      // end div for filter when queryType is "category"
+                      : (
+                        // div for filter when use the search component
+                        <div className="border-t border-gray-200 px-4 py-6">
+                          <h3 className="-mx-2 -my-3 flow-root">
+                            <div
+                              type="button"
+                              className="flex w-full items-center justify-between bg-resene px-2 py-3 text-gray-400 hover:text-gray-500"
+                              aria-controls="filter-section-mobile-0"
+                              aria-expanded="false"
+                            >
+                              <span className="font-medium text-gray-900">
+                                Marca
+                              </span>
+                            </div>
+                          </h3>
+
+                          <div className="pt-6" id="filter-section-mobile-0">
+                            <div className="space-y-6">
+                              <FilterByBrand
+                                minPriceFilter={minPriceFilter}
+                                maxPriceFilter={maxPriceFilter}
+                                handleFilters={handleFilters}
+                                test={test}
+                                selectedBrands={selectedBrands}
+                                setSelectedBrands={setSelectedBrands}
+                                minAgeFilter={minAgeFilter}
+                                maxAgeFilter={maxAgeFilter}
+                              ></FilterByBrand>
+                            </div>
+                          </div>
+                        </div> // end div for filter when use the search component
+                      )}
+                    {/* end div for category filter */}
                   </form>
                 </div>
               </div>
