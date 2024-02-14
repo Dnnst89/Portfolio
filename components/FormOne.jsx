@@ -763,7 +763,7 @@ function FormOne() {
               amount={amount}
               checkbox={checkbox}
               setDeliveryPayment={handleDeliveryPayment}
-
+              deliveryPayment={deliveryPayment}
               setAmount={handleChange}
               lat={lat}
               lng={lng}

@@ -1,6 +1,6 @@
 "use client";
 import { logo, moovinLogo, correosDeCR } from "../app/assets/images";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import useStorage from "@/hooks/useStorage";
 import CheckOutForm3 from "./CheckOutForm3";
@@ -21,10 +21,12 @@ import coverageArea from "@/api/moovin/coverageArea";
 import calculateShippingDistance from "@/helpers/calculateShippingDistance";
 import { CgArrowLongRight } from "react-icons/cg";
 import { useSelector } from "react-redux";
+
 export default function CheckOutForm2({
   amount,
   checkbox,
   setDeliveryPayment,
+  deliveryPayment,
   setAmount,
   lat,
   lng,
@@ -41,11 +43,17 @@ export default function CheckOutForm2({
   const { selectedGifts } = useSelector((state) => state.selectedGifts);
   const selectedGiftsLabels = selectedGifts.map((gift) => gift.label);
   const selectedGiftsString = selectedGiftsLabels.join(", ");
-
+  console.log("DELIVERY PAYMENT",deliveryPayment)
   const { total, subTotal, taxes } = amount;
 
   let paymentDetailResponseId = null;
   const [createPaymentDetail] = useMutation(CREATE_PAYMENT_DETAIL);
+
+
+  const [createExchangeRate] = useMutation(CREATE_EXCHANGE_RATE);
+  const [updateExchangeRate] = useMutation(UPDATE_EXCHANGE_RATE);
+  let exchangeRateResponseId = null;
+  const [exchangeRateId, setExchangeRateId] = useState(null);
   /**
    * Se obtienen las opciones de delivery
    */
@@ -78,8 +86,6 @@ export default function CheckOutForm2({
   }, [data, lat, lng]);
 
   const {
-    loading,
-    error,
     data: deliveryChoicesData,
   } = useQuery(GET_DELIVERY_CHOICES);
   //Correos de Costa Rica
@@ -125,9 +131,10 @@ export default function CheckOutForm2({
     // Se obtiene el tipo de cambio actualizado
       const {
         loading,
-        error,
-        data,
-      } = useQuery(GET_EXCHANGE_RATE)
+        data: exchangeRateData,
+      } = useQuery(GET_EXCHANGE_RATE, {
+        pollInterval: 300 // Intervalo de tiempo en milisegundos para volver a ejecutar la consulta
+      });
       
 
       // 
@@ -168,12 +175,14 @@ export default function CheckOutForm2({
     formState: { errors },
     reset,
   } = useForm();
-
+  const count = useRef(0);
 
   const fetchTipoCambio = async () => {
+    
+    count.current = count.current + 1;
     try { 
-      const exchangeLength = data?.exchangeRates?.data?.length
-      const exchangeId = data?.exchangeRates?.data[0]?.id
+      const exchangeLength = exchangeRateData?.exchangeRates?.data?.length
+      const exchangeId = exchangeRateData?.exchangeRates?.data[0]?.id
       // const exchangePurchase = data?.exchangeRates?.data[0]?.attributes.purchase
 
       // console.log("Exchange length: " , exchangeLength)
@@ -210,7 +219,7 @@ export default function CheckOutForm2({
           variables: {
             exchangeRateId: exchangeId,
             newPurchase: tipoCambioResultado.compra,
-            newSale: 560,
+            newSale: 550,
             newDate: isoDate,
           },
         });
@@ -219,7 +228,7 @@ export default function CheckOutForm2({
       }  catch (error) {
         console.error(error);
       }
-      
+      console.log("fetching tipo de cambio",count.current);
     } catch (error) {
       // Manejar el error, por ejemplo, mostrar un mensaje al usuario
       //setTipoCambio(exchangePurchase);
@@ -235,7 +244,8 @@ export default function CheckOutForm2({
   // }, [data]);
   
   useEffect(() => {
-    if (!loading ){
+
+    if(!loading){
       try {
         fetchTipoCambio();
       } catch (error) {
@@ -243,11 +253,12 @@ export default function CheckOutForm2({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [deliveryPayment]);
+  }, [loading]);
   /**
    * Verifica si las cordenadas de entrega estan dentro
    * de las zonas de entrega de moovin
    */
+  
   useEffect(() => {
     const fetchMoovinCoverageData = async () => {
       try {
