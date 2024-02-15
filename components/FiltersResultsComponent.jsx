@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import Spinner from "./Spinner";
 import toast, { Toaster } from "react-hot-toast";
 import getProductsFiltered from "@/src/graphQl/queries/getProductsFiltered";
+import getProductsFilteredWithBrands from "@/src/graphQl/queries/getProductsFilteredWithBrands";
 import FilterContainer from "./FilterContainer";
 import FilterContainerPrincipal from "./FilterContainerPrincipal";
 
@@ -26,17 +27,10 @@ export default function FiltersResultsComponent({ querySearch }) {
   let initialAge;
   let finalAge;
   let category;
-  let brands = "";
-  if (selectedBrands.length > 0) {
-    // Filtros de marca
-    brands = selectedBrands
-      .map((brand) => `${brand}`)
-    .join(" OR ");
-    console.log("selectedBrands");
-    console.log(selectedBrands);
-    console.log(brands);
-    // brands = "Nomellamo Ecolekua";
-  }
+  // Brands filters
+  let brands;
+  brands = selectedBrands;
+
   let minPrice;
   let maxPrice;
 
@@ -54,18 +48,34 @@ export default function FiltersResultsComponent({ querySearch }) {
     maxPrice = maxPriceFilter;
 
   }
-  const { loading, error, data } = useQuery(getProductsFiltered, {
-    variables: {
-      initialAge,
-      finalAge,
-      minPrice,
-      maxPrice,
-      page,
-      pageSize,
-      category,
-      brands,
-    },
-  });
+
+  // depending if there´s a brand selected or not we use the necessary query for it, with or without brand variable.
+  const { loading, error, data } = brands.length > 0
+    ? useQuery(getProductsFilteredWithBrands, {
+      variables: {
+        initialAge,
+        finalAge,
+        minPrice,
+        maxPrice,
+        brands,
+        page,
+        pageSize,
+        category,
+      },
+    })
+    : useQuery(getProductsFiltered, {
+      variables: {
+        initialAge,
+        finalAge,
+        minPrice,
+        maxPrice,
+        page,
+        pageSize,
+        category,
+      },
+    });
+
+
   useEffect(() => {
     //   // Puedes mover la lógica de 'allResults' directamente aquí
     try {
@@ -98,7 +108,6 @@ export default function FiltersResultsComponent({ querySearch }) {
     minPrice,
     maxPrice
   ) => {
-    //  alert(selectedBrands),
     // Establecer los valores de filtro recibidos
     setMinAgeFilter(minAge);
     setMaxAgeFilter(maxAge);
@@ -127,6 +136,7 @@ export default function FiltersResultsComponent({ querySearch }) {
       setMaxPriceFilter(999999);
       maxPrice = 999999;
     }
+    setCurrentPage(0);
     setSelectedAgeRange({ minAge, maxAge });
     setSelectedPriceRange({ minPrice, maxPrice });
   };
@@ -221,6 +231,7 @@ export default function FiltersResultsComponent({ querySearch }) {
                         </div>
 
                         <FilterContainer
+                          category={category}
                           test={data}
                           minAgeFilter={minAgeFilter}
                           maxAgeFilter={maxAgeFilter}

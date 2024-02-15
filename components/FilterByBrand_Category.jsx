@@ -6,7 +6,6 @@ function FilterByBrand_Category({
   minAgeFilter,
   maxAgeFilter,
   handleFilters,
-  test,
   selectedBrands,
   setSelectedBrands,
   minPriceFilter,
@@ -15,26 +14,9 @@ function FilterByBrand_Category({
 
   const [brands, setBrands] = useState(null);
 
-
-  // let brandsSet = new Set();
-  // let allBrands = [];
-  // async function getBrands() {
-  //   const products = test.products.data;
-  //   if (products != null) {
-  //     console.log(test);
-  //     products.forEach(product => {
-  //       brandsSet.add(product.attributes.brand);
-  //     });
-  //   }
-  //   if (allBrands.length === 0) { // Verifica si el arreglo está vacío antes de actualizarlo
-  //     allBrands = [...brandsSet];
-  //     await setBrands(allBrands); // Suponiendo que setBrands es una función asíncrona
-  //   }
-  // }
-
   async function getBrands() {
     let page = 1;
-    const hitsPerPage = 100; // El número de resultados por página
+    const hitsPerPage = 100; // The number of results per page
     try {
       let hasMorePages = true;
       let brandsSet = new Set();
@@ -47,11 +29,13 @@ function FilterByBrand_Category({
           }
           page++;
         } else {
-          hasMorePages = false; // No hay más páginas disponibles
+          hasMorePages = false; // There are no more pages available
         }
       }
-      // Actualizar el estado después de completar la iteración
-      setBrands([...brandsSet]);
+      let allBrands = [...brandsSet];
+      //Update state after iteration completion
+      setBrands(allBrands);
+
     } catch (error) {
       console.error('Error al obtener los datos:', error);
     }

@@ -86,7 +86,7 @@ function FilterContainerPrincipal({
                       {/* div for category filter */}
                       <div className="pt-6" id="filter-section-mobile-0">
                         <div className="space-y-6">
-                          <FilterByPrice                          
+                          <FilterByPrice
                             selectedBrands={selectedBrands}
                             selectedPriceRange={selectedPriceRange}
                             handleFilters={handleFilters}
@@ -124,7 +124,6 @@ function FilterContainerPrincipal({
                               minPriceFilter={minPriceFilter}
                               maxPriceFilter={maxPriceFilter}
                               handleFilters={handleFilters}
-                              test={test}
                               selectedBrands={selectedBrands}
                               setSelectedBrands={setSelectedBrands}
                               minAgeFilter={minAgeFilter}

@@ -100,12 +100,7 @@ const ResultsComponent = (test) => {
     minPrice,
     maxPrice
   ) => {
-    alert(selectedBrands,
-      minAge,
-      maxAge,
-      minPrice,
-      maxPrice),
-    // Establecer los valores de filtro recibidos
+      // Establecer los valores de filtro recibidos
     setMinAgeFilter(minAge);
     setMaxAgeFilter(maxAge);
     setMinPriceFilter(minPrice);
