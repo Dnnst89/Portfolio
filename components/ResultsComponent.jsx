@@ -85,15 +85,14 @@ const ResultsComponent = (test) => {
     }
   }
 
-  useEffect(() => {
+  useEffect(() => {    
     if (test.query) {
       allResults();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, test.query]);
 
-  const handleFilters = (
-    
+  const handleFilters = (    
     selectedBrands,
     minAge,
     maxAge,

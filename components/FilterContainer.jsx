@@ -6,7 +6,7 @@ import FilterByAge from "./FilterByAge";
 import React from "react";
 import FilterByBrand_Category from "./FilterByBrand_Category";
 function FilterContainer({
-  category,
+  brands,
   selectedAgeRange,
   setMaxAgeFilter,
   maxAgeFilter,
@@ -144,14 +144,14 @@ function FilterContainer({
                             aria-expanded="false"
                           >
                             <span className="font-medium text-gray-900">
-                              Marca
+                            Marca
                             </span>
                           </button>
                         </h3>
                         <div className="pt-6" id="filter-section-mobile-0">
                           <div className="space-y-6">
                             <FilterByBrand_Category
-                             category={category} //category selected in NavCategories.jsx
+                              brands={brands} //category selected in NavCategories.jsx
                               minPriceFilter={minPriceFilter}
                               maxPriceFilter={maxPriceFilter}
                               handleFilters={handleFilters}

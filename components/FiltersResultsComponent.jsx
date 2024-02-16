@@ -10,6 +10,7 @@ import FilterContainer from "./FilterContainer";
 import FilterContainerPrincipal from "./FilterContainerPrincipal";
 
 export default function FiltersResultsComponent({ querySearch }) {
+
   //querySearch me indica el tipo de filtro y el valor del filtro
   const [minPriceFilter, setMinPriceFilter] = useState(0);
   const [maxPriceFilter, setMaxPriceFilter] = useState(999999);
@@ -27,10 +28,8 @@ export default function FiltersResultsComponent({ querySearch }) {
   let initialAge;
   let finalAge;
   let category;
-  // Brands filters
-  let brands;
+  let brands;// Brands filters
   brands = selectedBrands;
-
   let minPrice;
   let maxPrice;
 
@@ -48,6 +47,39 @@ export default function FiltersResultsComponent({ querySearch }) {
     maxPrice = maxPriceFilter;
 
   }
+
+  // gets the brands for checkboxes depending on the selected category
+  const [brandsForChecbox, setBrands] = useState(null);
+  async function getBrands() {
+    let page = 1;
+    const hitsPerPage = 100; // The number of results per page
+    try {
+      let hasMorePages = true;
+      let brandsSet = new Set();
+      while (hasMorePages) {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}api/products?filters[categories][name][$contains]=${category}&pagination[page]=${page}&pagination[pageSize]=${hitsPerPage}`);
+        const data = await response.json();
+        if (data && data.data && data.data.length > 0) {
+          for (let index = 0; index < data.data.length; index++) {
+            brandsSet.add(data.data[index].attributes.brand);
+          }
+          page++;
+        } else {
+          hasMorePages = false; // There are no more pages available
+        }
+      }
+      let allBrands = [...brandsSet];
+      //Update state after iteration completion
+      setBrands(allBrands);
+
+    } catch (error) {
+      console.error('Error al obtener los datos:', error);
+    }
+  }
+  useEffect(() => {
+    getBrands();
+  }, [category]);
+
 
   // depending if there´s a brand selected or not we use the necessary query for it, with or without brand variable.
   const { loading, error, data } = brands.length > 0
@@ -75,9 +107,7 @@ export default function FiltersResultsComponent({ querySearch }) {
       },
     });
 
-
-  useEffect(() => {
-    //   // Puedes mover la lógica de 'allResults' directamente aquí
+  useEffect(() => {        //   // Puedes mover la lógica de 'allResults' directamente aquí
     try {
       // Realiza las operaciones necesarias con 'data'
       setQueryType("category");
@@ -183,7 +213,7 @@ export default function FiltersResultsComponent({ querySearch }) {
               <div>
                 <div className="md:flex">
                   <FilterContainerPrincipal
-                    category={category} //category selected in NavCategories.jsx
+                    brands={brandsForChecbox} //brands depending on selected category in NavCategories.jsx
                     test={data}
                     minAgeFilter={minAgeFilter}
                     maxAgeFilter={maxAgeFilter}
@@ -231,7 +261,7 @@ export default function FiltersResultsComponent({ querySearch }) {
                         </div>
 
                         <FilterContainer
-                          category={category}
+                          brands={brandsForChecbox}
                           test={data}
                           minAgeFilter={minAgeFilter}
                           maxAgeFilter={maxAgeFilter}
