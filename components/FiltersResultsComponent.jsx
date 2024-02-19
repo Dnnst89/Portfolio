@@ -5,10 +5,12 @@ import React, { useEffect, useState } from "react";
 import Spinner from "./Spinner";
 import toast, { Toaster } from "react-hot-toast";
 import getProductsFiltered from "@/src/graphQl/queries/getProductsFiltered";
+import getProductsFilteredWithBrands from "@/src/graphQl/queries/getProductsFilteredWithBrands";
 import FilterContainer from "./FilterContainer";
 import FilterContainerPrincipal from "./FilterContainerPrincipal";
 
 export default function FiltersResultsComponent({ querySearch }) {
+
   //querySearch me indica el tipo de filtro y el valor del filtro
   const [minPriceFilter, setMinPriceFilter] = useState(0);
   const [maxPriceFilter, setMaxPriceFilter] = useState(999999);
@@ -22,15 +24,19 @@ export default function FiltersResultsComponent({ querySearch }) {
   const [nbHits, setNbHits] = useState();
   const page = currentPage;
   const pageSize = 12;
+  const [loadingBrands, setLoadingBrands] = useState(true);
 
   let initialAge;
   let finalAge;
   let category;
+  let brands;// Brands filters
+  brands = selectedBrands;
   let minPrice;
   let maxPrice;
 
   //separo la query para saber que mostrar si es por rango de dedades o por categorias
   const [filterType, filterValue] = querySearch.split("=");
+
   if (filterType == "ageRange") {
     initialAge = parseInt(filterValue.split("-")[0]);
     finalAge = parseInt(filterValue.split("-")[1]);
@@ -40,21 +46,74 @@ export default function FiltersResultsComponent({ querySearch }) {
     finalAge = maxAgeFilter;
     minPrice = minPriceFilter;
     maxPrice = maxPriceFilter;
+
   }
 
-  const { loading, error, data } = useQuery(getProductsFiltered, {
-    variables: {
-      initialAge,
-      finalAge,
-      minPrice,
-      maxPrice,
-      page,
-      pageSize,
-      category,
-    },
-  });
+  // gets the brands for checkboxes depending on the selected category
+  const [brandsForChecbox, setBrands] = useState(null);
+  async function getBrands() {
+    let page = 1;
+    const hitsPerPage = 100; // The number of results per page
+    try {
+      setLoadingBrands(true);
+      let hasMorePages = true;
+      let brandsSet = new Set(); //set to have unique brands and not repeated
+      while (hasMorePages) {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}api/products?filters[categories][name][$contains]=${category}&pagination[page]=${page}&pagination[pageSize]=${hitsPerPage}`);
+        const data = await response.json();
+        if (data && data.data && data.data.length > 0) {
+          for (let index = 0; index < data.data.length; index++) {
+            brandsSet.add(data.data[index].attributes.brand);
+          }
+          page++;
+        } else {
+          hasMorePages = false; // There are no more pages available
+        }
+      }
+      let allBrands = [...brandsSet]; //parse set to list
+      //Update state after iteration completion
+      setBrands(allBrands);
+
+    } catch (error) {
+      console.error('Error al obtener los datos:', error);
+    }
+    finally{
+    setLoadingBrands(false);
+    }
+  }
   useEffect(() => {
-    // Puedes mover la lógica de 'allResults' directamente aquí
+    
+    getBrands();
+  }, [category]);
+
+
+  // depending if there´s a brand selected or not we use the necessary query for it, with or without brand variable.
+  const { loading, error, data } = brands.length > 0
+    ? useQuery(getProductsFilteredWithBrands, {
+      variables: {
+        initialAge,
+        finalAge,
+        minPrice,
+        maxPrice,
+        brands,
+        page,
+        pageSize,
+        category,
+      },
+    })
+    : useQuery(getProductsFiltered, {
+      variables: {
+        initialAge,
+        finalAge,
+        minPrice,
+        maxPrice,
+        page,
+        pageSize,
+        category,
+      },
+    });
+
+  useEffect(() => {        //   // Puedes mover la lógica de 'allResults' directamente aquí
     try {
       // Realiza las operaciones necesarias con 'data'
       setQueryType("category");
@@ -78,7 +137,6 @@ export default function FiltersResultsComponent({ querySearch }) {
     data,
     currentPage,
   ]);
-
   const handleFilters = (
     selectedBrands,
     minAge,
@@ -91,6 +149,7 @@ export default function FiltersResultsComponent({ querySearch }) {
     setMaxAgeFilter(maxAge);
     setMinPriceFilter(minPrice);
     setMaxPriceFilter(maxPrice);
+    setSelectedBrands(selectedBrands);
 
     // Verificar y corregir valores nulos o indefinidos para minAge y maxAge
     if (minAge === null || minAge === undefined || minAge === "") {
@@ -113,6 +172,7 @@ export default function FiltersResultsComponent({ querySearch }) {
       setMaxPriceFilter(999999);
       maxPrice = 999999;
     }
+    setCurrentPage(0);
     setSelectedAgeRange({ minAge, maxAge });
     setSelectedPriceRange({ minPrice, maxPrice });
   };
@@ -125,7 +185,8 @@ export default function FiltersResultsComponent({ querySearch }) {
         autoClose: 5000,
       }
     );
-
+    
+if(!loadingBrands){ //if is not loading brands
   return (
     <div
       className={
@@ -159,6 +220,7 @@ export default function FiltersResultsComponent({ querySearch }) {
               <div>
                 <div className="md:flex">
                   <FilterContainerPrincipal
+                    brands={brandsForChecbox} //brands depending on selected category in NavCategories.jsx
                     test={data}
                     minAgeFilter={minAgeFilter}
                     maxAgeFilter={maxAgeFilter}
@@ -206,6 +268,7 @@ export default function FiltersResultsComponent({ querySearch }) {
                         </div>
 
                         <FilterContainer
+                          brands={brandsForChecbox}
                           test={data}
                           minAgeFilter={minAgeFilter}
                           maxAgeFilter={maxAgeFilter}
@@ -238,4 +301,6 @@ export default function FiltersResultsComponent({ querySearch }) {
       )}
     </div>
   );
+}
+  
 }
