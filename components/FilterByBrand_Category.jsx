@@ -33,33 +33,43 @@ function FilterByBrand_Category({
     );
   };
 
-  return (
-    <div>
-      {brands &&
-        brands.map(
-          (brand, index) =>
-            // Check if brand is null or empty before rendering
-            brand &&
-            brand.trim() !== "" && (
-              <div key={index} className="flex items-center">
-                <input
-                  type="checkbox"
-                  className="ml-3 w-4 h-4 text-gray-500"
-                  id={`brand${index}`}
-                  checked={selectedBrands.includes(brand)}
-                  onChange={() => handleBrandSelection(brand)}
-                />
-                <label
-                  className="ml-3 min-w-0 flex-1 text-gray-500"
-                  htmlFor={`brand${index}`}
-                >
-                  {brand}
-                </label>
-              </div>
-            )
-        )}
-    </div>
-  );
+  if (brands.length == 0) {
+    return (
+      <div className="ml-3 min-w-0 flex-1 text-gray-500">
+        <h5>No hay marcas para filtrar en esta categoría</h5>
+      </div>
+    );
+
+  } else {
+    return (
+      <div>
+        {brands &&
+          brands.map(
+            (brand, index) =>
+              // Check if brand is null or empty before rendering
+              brand &&
+              brand.trim() !== "" && (
+                <div key={index} className="flex items-center">
+                  <input
+                    type="checkbox"
+                    className="ml-3 w-4 h-4 text-gray-500"
+                    id={`brand${index}`}
+                    checked={selectedBrands.includes(brand)}
+                    onChange={() => handleBrandSelection(brand)}
+                  />
+                  <label
+                    className="ml-3 min-w-0 flex-1 text-gray-500"
+                    htmlFor={`brand${index}`}
+                  >
+                    {brand}
+                  </label>
+                </div>
+              )
+          )}
+      </div>
+    );
+  }
+
 }
 
 export default FilterByBrand_Category;

@@ -24,6 +24,7 @@ export default function FiltersResultsComponent({ querySearch }) {
   const [nbHits, setNbHits] = useState();
   const page = currentPage;
   const pageSize = 12;
+  const [loadingBrands, setLoadingBrands] = useState(true);
 
   let initialAge;
   let finalAge;
@@ -54,8 +55,9 @@ export default function FiltersResultsComponent({ querySearch }) {
     let page = 1;
     const hitsPerPage = 100; // The number of results per page
     try {
+      setLoadingBrands(true);
       let hasMorePages = true;
-      let brandsSet = new Set();
+      let brandsSet = new Set(); //set to have unique brands and not repeated
       while (hasMorePages) {
         const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}api/products?filters[categories][name][$contains]=${category}&pagination[page]=${page}&pagination[pageSize]=${hitsPerPage}`);
         const data = await response.json();
@@ -68,15 +70,19 @@ export default function FiltersResultsComponent({ querySearch }) {
           hasMorePages = false; // There are no more pages available
         }
       }
-      let allBrands = [...brandsSet];
+      let allBrands = [...brandsSet]; //parse set to list
       //Update state after iteration completion
       setBrands(allBrands);
 
     } catch (error) {
       console.error('Error al obtener los datos:', error);
     }
+    finally{
+    setLoadingBrands(false);
+    }
   }
   useEffect(() => {
+    
     getBrands();
   }, [category]);
 
@@ -179,7 +185,8 @@ export default function FiltersResultsComponent({ querySearch }) {
         autoClose: 5000,
       }
     );
-
+    
+if(!loadingBrands){ //if is not loading brands
   return (
     <div
       className={
@@ -294,4 +301,6 @@ export default function FiltersResultsComponent({ querySearch }) {
       )}
     </div>
   );
+}
+  
 }
