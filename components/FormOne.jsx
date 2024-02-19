@@ -75,7 +75,7 @@ function FormOne() {
   const handleLng = (data) => {
     setLng(data);
   };
-
+  // Asigna los valores a pagar en el carrito
   const [amount, setAmount] = useState({
     total: 0,
     subTotal: 0,

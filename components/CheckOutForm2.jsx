@@ -159,7 +159,6 @@ export default function CheckOutForm2({
         const result = await coverageArea(lat, lng);
         if (result === "ERRORZONE") {
           //Si la zona esta fuera de cobertura se bloquea el componente
-          console.log("Blocking Moovin", result);
           setBlockMoovin(true);
           setMoovinMessageError(
             "Moovin no se encuetra disponible en el área seleccionada."
@@ -168,7 +167,7 @@ export default function CheckOutForm2({
         } else if (result === "ERRORDANGERZONE") {
           setBlockMoovin(true);
           setMoovinMessageError(
-            "El punto se encuentra en una zona peligrosa, por lo que moovin no realiza la entrega."
+            "Moovin no se encuetra disponible en el área seleccionada."
           );
         }
       } catch (error) {
@@ -203,7 +202,6 @@ export default function CheckOutForm2({
         };
 
         setEstima(estimation.idEstimation);
-
         setAmount(finalAmount);
         try {
           const paymentDetailResponse = await createPaymentDetail({
@@ -253,6 +251,7 @@ export default function CheckOutForm2({
           subTotal: subTotal,
           taxes: taxes,
         };
+        setAmount(finalAmount);
         const paymentDetailResponse = await createPaymentDetail({
           variables: {
             status: "Inicial",
@@ -343,7 +342,6 @@ export default function CheckOutForm2({
             subTotal: subTotal,
             taxes: taxes,
           };
-
           deliveryPayment(ShortDistancePrice);
           setAmount(finalPriceToPay);
           createPaymentDetail({

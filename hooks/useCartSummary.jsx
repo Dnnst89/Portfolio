@@ -77,7 +77,7 @@ const useCartSummary = ({ userId }) => {
               return (
                 accumulator +
                 item.attributes.variant.data.attributes.price *
-                item.attributes.quantity
+                  item.attributes.quantity
               );
             }
             return accumulator;
@@ -88,7 +88,6 @@ const useCartSummary = ({ userId }) => {
               item.attributes.variant.data &&
               item.attributes.variant.data.attributes.product.data
             ) {
-
               //debe existir un producto con su respectiva variante
               return accumulator + item.attributes.quantity;
             }
@@ -105,16 +104,23 @@ const useCartSummary = ({ userId }) => {
               if (errors.errorStock.includes(item.attributes.variant.data.id)) {
                 setErrors((prevErrors) => ({
                   ...prevErrors,
-                  errorStock: prevErrors.errorStock.filter((errorId) => errorId !== item.attributes.variant.data.id),
+                  errorStock: prevErrors.errorStock.filter(
+                    (errorId) => errorId !== item.attributes.variant.data.id
+                  ),
                 }));
               }
-              if (item.attributes.quantity > item.attributes.variant.data.attributes.stock) {
+              if (
+                item.attributes.quantity >
+                item.attributes.variant.data.attributes.stock
+              ) {
                 // Almacena el objeto completo en un arreglo en Error si lleva mas cantidad de lo que hay en stock
                 setErrors((prevErrors) => ({
                   ...prevErrors,
-                  errorStock: [...prevErrors.errorStock, item.attributes.variant.data.id],
+                  errorStock: [
+                    ...prevErrors.errorStock,
+                    item.attributes.variant.data.id,
+                  ],
                 }));
-
               }
 
               return {
@@ -126,7 +132,6 @@ const useCartSummary = ({ userId }) => {
               };
 
               //se agrega validacion ITEM >= STOCK
-
             }
             return null; // lo asigno null para filtrarlo luego y no agregarlo a los items
           });
@@ -143,7 +148,7 @@ const useCartSummary = ({ userId }) => {
         //Manejo de errores
         setErrors((prevErrors) => ({
           ...prevErrors,
-          errorQueries: error
+          errorQueries: error,
         }));
       } finally {
         setLoading(false);
@@ -154,7 +159,6 @@ const useCartSummary = ({ userId }) => {
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, cartQuantity]);
-
 
   return {
     total: cartData.total,
