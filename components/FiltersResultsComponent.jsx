@@ -77,41 +77,43 @@ export default function FiltersResultsComponent({ querySearch }) {
     } catch (error) {
       console.error('Error al obtener los datos:', error);
     }
-    finally{
-    setLoadingBrands(false);
+    finally {
+      setLoadingBrands(false);
     }
   }
   useEffect(() => {
-    
+
     getBrands();
   }, [category]);
 
-
   // depending if there´s a brand selected or not we use the necessary query for it, with or without brand variable.
-  const { loading, error, data } = brands.length > 0
-    ? useQuery(getProductsFilteredWithBrands, {
-      variables: {
-        initialAge,
-        finalAge,
-        minPrice,
-        maxPrice,
-        brands,
-        page,
-        pageSize,
-        category,
-      },
-    })
-    : useQuery(getProductsFiltered, {
-      variables: {
-        initialAge,
-        finalAge,
-        minPrice,
-        maxPrice,
-        page,
-        pageSize,
-        category,
-      },
-    });
+  let queryResultWithBrands = useQuery(getProductsFilteredWithBrands, {
+    variables: {
+      initialAge,
+      finalAge,
+      minPrice,
+      maxPrice,
+      brands,
+      page,
+      pageSize,
+      category,
+    },
+  });
+
+  let queryResult = useQuery(getProductsFiltered, {
+    variables: {
+      initialAge,
+      finalAge,
+      minPrice,
+      maxPrice,
+      page,
+      pageSize,
+      category,
+    },
+  });
+  
+  // Using results conditionally
+  const { loading, error, data } = brands.length>0 ? queryResultWithBrands  : queryResult;
 
   useEffect(() => {        //   // Puedes mover la lógica de 'allResults' directamente aquí
     try {
@@ -185,122 +187,122 @@ export default function FiltersResultsComponent({ querySearch }) {
         autoClose: 5000,
       }
     );
-    
-if(!loadingBrands){ //if is not loading brands
-  return (
-    <div
-      className={
-        loading
-          ? "flex flex-wrap max-w-screen-xl m-auto justify-center my-10"
-          : ""
-      }
-    >
-      {loading ? (
-        <Spinner />
-      ) : (
-        <div>
-          {" "}
-          <Toaster />
-          <div className="">
-            {filterType == "ageRange" ? (
-              <div>
-                <h1 className="text-center flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
-                  Resultados de productos para niños de{" "}
-                  {initialAge === 8
-                    ? `${initialAge} o más años`
-                    : `${initialAge} - ${finalAge} años`}
-                </h1>
-                <ProductFilterContainer
-                  result={data.products}
-                  currentPage={currentPage}
-                  setCurrentPage={setCurrentPage}
-                />
-              </div>
-            ) : (
-              <div>
-                <div className="md:flex">
-                  <FilterContainerPrincipal
-                    brands={brandsForChecbox} //brands depending on selected category in NavCategories.jsx
-                    test={data}
-                    minAgeFilter={minAgeFilter}
-                    maxAgeFilter={maxAgeFilter}
-                    setMaxAgeFilter={setMaxAgeFilter}
-                    setMinAgeFilter={setMinAgeFilter}
-                    minPriceFilter={minPriceFilter}
-                    maxPriceFilter={maxPriceFilter}
-                    setMaxPriceFilter={setMaxPriceFilter}
-                    setMinPriceFilter={setMinPriceFilter}
-                    selectedBrands={selectedBrands}
-                    setSelectedBrands={setSelectedBrands}
-                    handleFilters={handleFilters}
-                    selectedPriceRange={selectedPriceRange}
-                    selectedAgeRange={selectedAgeRange}
-                    queryType={queryType}
+
+  if (!loadingBrands) { //if is not loading brands
+    return (
+      <div
+        className={
+          loading
+            ? "flex flex-wrap max-w-screen-xl m-auto justify-center my-10"
+            : ""
+        }
+      >
+        {loading ? (
+          <Spinner />
+        ) : (
+          <div>
+            {" "}
+            <Toaster />
+            <div className="">
+              {filterType == "ageRange" ? (
+                <div>
+                  <h1 className="text-center flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
+                    Resultados de productos para niños de{" "}
+                    {initialAge === 8
+                      ? `${initialAge} o más años`
+                      : `${initialAge} - ${finalAge} años`}
+                  </h1>
+                  <ProductFilterContainer
+                    result={data.products}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
                   />
+                </div>
+              ) : (
+                <div>
+                  <div className="md:flex">
+                    <FilterContainerPrincipal
+                      brands={brandsForChecbox} //brands depending on selected category in NavCategories.jsx
+                      test={data}
+                      minAgeFilter={minAgeFilter}
+                      maxAgeFilter={maxAgeFilter}
+                      setMaxAgeFilter={setMaxAgeFilter}
+                      setMinAgeFilter={setMinAgeFilter}
+                      minPriceFilter={minPriceFilter}
+                      maxPriceFilter={maxPriceFilter}
+                      setMaxPriceFilter={setMaxPriceFilter}
+                      setMinPriceFilter={setMinPriceFilter}
+                      selectedBrands={selectedBrands}
+                      setSelectedBrands={setSelectedBrands}
+                      handleFilters={handleFilters}
+                      selectedPriceRange={selectedPriceRange}
+                      selectedAgeRange={selectedAgeRange}
+                      queryType={queryType}
+                    />
 
-                  <div
-                    className={
-                      nbHits === 0
-                        ? "my-10 my-30 md:ml-auto mx-auto"
-                        : "my-10 ml-auto mx-auto"
-                    }
-                  >
-                    {nbHits === 0 ? (
-                      <div className="text-center flex flex-col items-center justify-center h-80">
-                        <div className="w-full text-center mb-4">
-                          <h1 className="text-center">
-                            Resultados de &#34;{decodeURIComponent(category)}
-                            &#34;
-                          </h1>
+                    <div
+                      className={
+                        nbHits === 0
+                          ? "my-10 my-30 md:ml-auto mx-auto"
+                          : "my-10 ml-auto mx-auto"
+                      }
+                    >
+                      {nbHits === 0 ? (
+                        <div className="text-center flex flex-col items-center justify-center h-80">
+                          <div className="w-full text-center mb-4">
+                            <h1 className="text-center">
+                              Resultados de &#34;{decodeURIComponent(category)}
+                              &#34;
+                            </h1>
+                          </div>
+                          <div>
+                            <h1 className="font-bold mb-2">¡Lo sentimos!</h1>
+                            <h2>No se encontraron resultados.</h2>
+                          </div>
                         </div>
-                        <div>
-                          <h1 className="font-bold mb-2">¡Lo sentimos!</h1>
-                          <h2>No se encontraron resultados.</h2>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        <div className="w-full text-center">
-                          <h1 className="text-center">
-                            Resultados de &#34;{decodeURIComponent(category)}
-                            &#34;
-                          </h1>
-                        </div>
+                      ) : (
+                        <>
+                          <div className="w-full text-center">
+                            <h1 className="text-center">
+                              Resultados de &#34;{decodeURIComponent(category)}
+                              &#34;
+                            </h1>
+                          </div>
 
-                        <FilterContainer
-                          brands={brandsForChecbox}
-                          test={data}
-                          minAgeFilter={minAgeFilter}
-                          maxAgeFilter={maxAgeFilter}
-                          setMaxAgeFilter={setMaxAgeFilter}
-                          setMinAgeFilter={setMinAgeFilter}
-                          minPriceFilter={minPriceFilter}
-                          maxPriceFilter={maxPriceFilter}
-                          setMaxPriceFilter={setMaxPriceFilter}
-                          setMinPriceFilter={setMinPriceFilter}
-                          selectedBrands={selectedBrands}
-                          setSelectedBrands={setSelectedBrands}
-                          handleFilters={handleFilters}
-                          selectedPriceRange={selectedPriceRange}
-                          selectedAgeRange={selectedAgeRange}
-                          queryType={queryType}
-                        />
-                        <ProductFilterContainer
-                          result={data.products}
-                          currentPage={currentPage}
-                          setCurrentPage={setCurrentPage}
-                        />
-                      </>
-                    )}
+                          <FilterContainer
+                            brands={brandsForChecbox}
+                            test={data}
+                            minAgeFilter={minAgeFilter}
+                            maxAgeFilter={maxAgeFilter}
+                            setMaxAgeFilter={setMaxAgeFilter}
+                            setMinAgeFilter={setMinAgeFilter}
+                            minPriceFilter={minPriceFilter}
+                            maxPriceFilter={maxPriceFilter}
+                            setMaxPriceFilter={setMaxPriceFilter}
+                            setMinPriceFilter={setMinPriceFilter}
+                            selectedBrands={selectedBrands}
+                            setSelectedBrands={setSelectedBrands}
+                            handleFilters={handleFilters}
+                            selectedPriceRange={selectedPriceRange}
+                            selectedAgeRange={selectedAgeRange}
+                            queryType={queryType}
+                          />
+                          <ProductFilterContainer
+                            result={data.products}
+                            currentPage={currentPage}
+                            setCurrentPage={setCurrentPage}
+                          />
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
-  );
-}
-  
+        )}
+      </div>
+    );
+  }
+
 }
