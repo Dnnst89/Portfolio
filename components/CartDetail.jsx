@@ -13,6 +13,10 @@ const CartDetail = ({
   detailTitle = "Detalle del carrito",
   deliveryPayment,
   onChange,
+  loading,
+  items,
+  quantity,
+  subTotal,
 }) => {
   const { user } = useStorage();
   const { data: storeInformation, error: storeInformationError } = useQuery(
@@ -34,14 +38,14 @@ const CartDetail = ({
     currencyType: currency,
     loading: false,
   });
-  const {
-    loading,
-    items,
-    quantity,
-    total: subTotal,
-  } = useCartSummary({
-    userId: user?.id,
-  });
+  // const {
+  //   loading,
+  //   items,
+  //   quantity,
+  //   total: subTotal,
+  // } = useCartSummary({
+  //   userId: user?.id,
+  // });
 
   useEffect(() => {
     if (subTotal !== undefined) {

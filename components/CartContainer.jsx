@@ -1,22 +1,17 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { memo } from "react";
 import CartItem from "./CartItem";
 import useCartSummary from "@/hooks/useCartSummary";
-import toast, { Toaster } from "react-hot-toast";
 import useStorage from "@/hooks/useStorage";
 import CartDetail from "@/components/CartDetail";
 import CartProceedPayment from "@/components/CartProceedPayment";
-import { useDispatch, useSelector } from "react-redux";
-import { updateQtyItems } from "@/redux/features/cart-slice";
 
 const CartContainer = () => {
   const { user } = useStorage(); //me trae el usuario de local storage
   const { total, items, quantity, errors, loading } = useCartSummary({
     userId: user?.id,
   });
-
-  const dispatch = useDispatch();
-
+  console.log("loading cart", items);
   return (
     <>
       <div className="flex flex-col md:col-span-8 col-span-12">
@@ -58,7 +53,14 @@ const CartContainer = () => {
         })}
       </div>
       <div className=" bg-resene rounded-sm col-span-12 md:col-span-4 p-4 h-[500px]  border-l-4 border-lightblue">
-        <CartDetail detailTitle={"Detalle del carrito"} deliveryPayment={0} />
+        <CartDetail
+          detailTitle={"Detalle del carrito"}
+          deliveryPayment={0}
+          loading={loading}
+          items={items}
+          quantity={quantity}
+          subTotal={total}
+        />
         {items.length > 0 ? (
           <CartProceedPayment
             textButton={"Proceder al pago"}
@@ -75,4 +77,4 @@ const CartContainer = () => {
   );
 };
 
-export default CartContainer;
+export default memo(CartContainer);
