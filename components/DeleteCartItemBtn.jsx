@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
 import DELETE_CART_ITEM_MUTATION from "../src/graphQl/queries/deleteCartItem";
 import GET_CART_ITEMS_LIST from "@/src/graphQl/queries/getCartItems";
-import { updateQtyItems } from "@/redux/features/cart-slice";
+import { updateQtyItems,isTaxesLoading, } from "@/redux/features/cart-slice";
 import { useSelector, useDispatch } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import useStorage from "@/hooks/useStorage";
@@ -23,6 +23,8 @@ const DeleteCartItemBtn = ({ idItem, qtyItem }) => {
   }, []);
 
   const handleDelete = () => {
+    //TODO: dispatch(isTaxesLoading(true))
+    dispatch(isTaxesLoading(true));
     deleteCartItem({ variables: { id: idItem } })
       .then((response) => {
         // Manejar la respuesta de la mutación aquí, si es necesario
