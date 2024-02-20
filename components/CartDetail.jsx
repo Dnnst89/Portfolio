@@ -173,12 +173,21 @@ const CartDetail = ({
           </div>
 
           <>
-            <div className="flex justify-between ">
-              <p>Costo de envío:</p>
-              <p className="whitespace-nowrap">
-                {parseFloat(deliveryPayment).toFixed(2)} {amounts.currencyType}
-              </p>
-            </div>
+            {
+              // Se carga unicamente cuando estamos en checkout
+              isCheckout ? (
+                <div className="flex justify-between ">
+                  <p>Costo de envío:</p>
+                  <p className="whitespace-nowrap">
+                    {parseFloat(deliveryPayment).toFixed(2)}{" "}
+                    {amounts.currencyType}
+                  </p>
+                </div>
+              ) : (
+                ""
+              )
+            }
+
             <div className="flex flex-col p-4 space-y-3">
               <p className="flex justify-center">Costo Total(IVA Incluido)</p>
               <p className="flex justify-center whitespace-nowrap">

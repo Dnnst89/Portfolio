@@ -1,9 +1,11 @@
 import React from "react";
 
-const Spinner = () => {
+const Spinner = ({ styles }) => {
   return (
     <>
-      <div className="m-auto">
+      <div
+        className={`m-auto ${styles} inline w-5 h-5 mr-3 text-aquamarine animate-spin`}
+      >
         <svg
           aria-hidden="true"
           role="status"

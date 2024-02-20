@@ -11,7 +11,6 @@ import { MdOutlineDeleteForever } from "react-icons/md";
 const DeleteCartItemBtn = ({ idItem, qtyItem }) => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
-  console.log("cart", cart);
   const { user } = useStorage();
   const { items, quantity, errors, sessionId } = useCartSummary({
     userId: user?.id,

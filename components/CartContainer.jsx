@@ -1,19 +1,33 @@
 "use client";
-import { memo } from "react";
+
 import CartItem from "./CartItem";
 import useCartSummary from "@/hooks/useCartSummary";
 import useStorage from "@/hooks/useStorage";
 import CartDetail from "@/components/CartDetail";
 import CartProceedPayment from "@/components/CartProceedPayment";
-
+import { useSelector } from "react-redux";
+import Spinner from "./Spinner";
 const CartContainer = () => {
   const { user } = useStorage(); //me trae el usuario de local storage
+  const cart = useSelector((state) => state.cart);
   const { total, items, quantity, errors, loading } = useCartSummary({
     userId: user?.id,
   });
   return (
     <>
-      <div className="flex flex-col md:col-span-8 col-span-12">
+      <div
+        className={`${
+          cart.loadingTaxes
+            ? "  flex flex-col md:col-span-8 col-span-12 relative"
+            : "flex flex-col md:col-span-8 col-span-12"
+        }`}
+      >
+        {
+          // se muestra el spinner cuando carga sobre el contenido.
+          cart.loadingTaxes && (
+            <Spinner styles={"absolute top-1/2 left-1/2 transform z-40"} />
+          )
+        }
         {items?.map((item, index) => {
           const variant = item.attributes.variant.data; // Desestructuración aquí
           const variantAtt = variant.attributes;
@@ -65,6 +79,7 @@ const CartContainer = () => {
             textButton={"Proceder al pago"}
             page={"/checkout"}
             error={errors.errorStock}
+            isCheckout={false}
           />
         ) : (
           <div className="p-3 space-y-3 border-l-4 border-lightblue">
