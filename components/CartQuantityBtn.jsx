@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { BiMinus, BiPlus } from "react-icons/bi";
 import {
   addQtyItems,
+  isTaxesLoading,
   reduceQtyItems,
   updateQtyItems,
 } from "@/redux/features/cart-slice";
@@ -34,6 +35,8 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem, loading }) => {
   };
 
   const handleIncrement = () => {
+    //TODO: dispatch(isTaxesLoading(true))
+    dispatch(isTaxesLoading(true)); //
     if (quantity < stock) {
       const newQuantity = quantity + 1; //guardo en una nueva cosntante
       setQuantity(newQuantity); //actualizo el state
@@ -52,6 +55,8 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem, loading }) => {
   };
 
   const handleDecrement = () => {
+    //TODO: dispatch(isTaxesLoading(true))
+    dispatch(isTaxesLoading(true)); //
     if (quantity > 1) {
       const newQuantity = quantity - 1;
       setQuantity(newQuantity);

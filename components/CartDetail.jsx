@@ -103,8 +103,7 @@ const CartDetail = ({
       ...prev,
       loading: true,
     }));
-    //TODO: dispatch(isTaxesLoading(true))
-    dispatch(isTaxesLoading(true)); //
+
     try {
       if (!items.length) {
         // si no hay items se pone por default todo en 0
@@ -189,7 +188,7 @@ const CartDetail = ({
             }
 
             <div className="flex flex-col p-4 space-y-3">
-              <p className="flex justify-center">Costo Total(IVA Incluido)</p>
+              <p className="flex justify-center">Costo Total (IVA Incluido)</p>
               <p className="flex justify-center whitespace-nowrap">
                 {amounts?.total.toFixed(2)} {amounts.currencyType}
               </p>

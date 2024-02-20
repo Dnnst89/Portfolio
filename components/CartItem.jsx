@@ -7,7 +7,6 @@ import CartQuantityBtn from "./CartQuantityBtn";
 import DeleteCartItemBtn from "./DeleteCartItemBtn";
 import CarouselImages from "./CarouselImages";
 import { useSelector } from "react-redux";
-import Spinner from "./Spinner";
 
 const CartItem = ({
   cartItemId,
@@ -34,7 +33,7 @@ const CartItem = ({
       <div
         className={`${
           cart.loadingTaxes
-            ? `blur-[2px] grid grid-cols-12 w-full py-3 border-dashed border-grey-200 border-b-[2px]`
+            ? ` opacity-40 grid grid-cols-12 w-full py-3 border-dashed border-grey-200 border-b-[2px]`
             : "grid grid-cols-12 w-full py-3 border-dashed border-grey-200 border-b-[2px]"
         }`}
       >

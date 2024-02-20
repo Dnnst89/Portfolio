@@ -18,7 +18,7 @@ const CartContainer = () => {
       <div
         className={`${
           cart.loadingTaxes
-            ? "  flex flex-col md:col-span-8 col-span-12 relative"
+            ? "flex flex-col md:col-span-8 col-span-12 relative"
             : "flex flex-col md:col-span-8 col-span-12"
         }`}
       >
