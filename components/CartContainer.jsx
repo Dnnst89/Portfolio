@@ -10,7 +10,7 @@ import Spinner from "./Spinner";
 const CartContainer = () => {
   const { user } = useStorage(); //me trae el usuario de local storage
   const cart = useSelector((state) => state.cart);
-  const { total, items, quantity, errors, loading } = useCartSummary({
+  const { items, errors, loading } = useCartSummary({
     userId: user?.id,
   });
   return (

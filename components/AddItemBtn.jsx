@@ -5,8 +5,6 @@ import CREATE_CART_ITEM_MUTATION from "../src/graphQl/queries/createCartItem";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCartItems, updateQtyItems } from "@/redux/features/cart-slice";
-import { isTaxesLoading } from "@/redux/features/cart-slice";
-import useStorage from "@/hooks/useStorage";
 import UPDATE_CART_ITEM_QUANTITY_MUTATION from "@/src/graphQl/queries/updateCartItemQuantity";
 
 const AddItemBtn = ({
@@ -65,7 +63,6 @@ const AddItemBtn = ({
         //si el item nunca se ha agregado al carrito
         if (variant?.attributes?.stock > 0) {
           //si el stock del item es 0
-          console.log(variant);
           const variantAtt = variant?.attributes;
           createCartItem({
             //se crea un nuevo item en el carrito
