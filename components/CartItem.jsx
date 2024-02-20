@@ -34,7 +34,7 @@ const CartItem = ({
       <div
         className={`${
           cart.loadingTaxes
-            ? `blur-sm grid grid-cols-12 w-full py-3 border-dashed border-grey-200 border-b-[2px]`
+            ? `blur-[2px] grid grid-cols-12 w-full py-3 border-dashed border-grey-200 border-b-[2px]`
             : "grid grid-cols-12 w-full py-3 border-dashed border-grey-200 border-b-[2px]"
         }`}
       >
