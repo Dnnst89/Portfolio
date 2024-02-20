@@ -7,6 +7,8 @@ import { useCallback, useEffect, useState } from "react";
 import { facturationInstace } from "@/src/axios/algoliaIntance/config";
 import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { useQuery } from "@apollo/client";
+import { useDispatch } from "react-redux";
+import { isTaxesLoading } from "@/redux/features/cart-slice";
 
 const CartDetail = ({
   isCheckout = false,
@@ -19,6 +21,7 @@ const CartDetail = ({
   subTotal,
 }) => {
   const { user } = useStorage();
+  const dispatch = useDispatch();
   const { data: storeInformation, error: storeInformationError } = useQuery(
     GET_STORE_INFO,
     {
@@ -100,6 +103,8 @@ const CartDetail = ({
       ...prev,
       loading: true,
     }));
+    //TODO: dispatch(isTaxesLoading(true))
+    dispatch(isTaxesLoading(true)); //
     try {
       if (!items.length) {
         // si no hay items se pone por default todo en 0
@@ -139,6 +144,8 @@ const CartDetail = ({
         ...prev,
         loading: false,
       }));
+      //TODO: dispatch(isTaxesLoading(false))
+      dispatch(isTaxesLoading(false));
     }
   };
 
@@ -151,14 +158,6 @@ const CartDetail = ({
             <p className="whitespace-nowrap">N° artículos</p>
             <p className="whitespace-nowrap">{quantity}</p>
           </div>
-          {/* input de codigo promocional comentado en caso de que se quiera usr en elfuturo ===> */}
-          {/* <div className="flex justify-center">
-          <input
-            placeholder="Codigo promocional"
-            className="rounded-l-lg text-center"
-          />
-          <button className="bg-aquamarine p-2 rounded-r-lg w-[60px]">OK</button>
-        </div> */}
           <div className="flex justify-between ">
             <p>Subtotal:</p>
             <p className="whitespace-nowrap">

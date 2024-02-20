@@ -11,7 +11,6 @@ const CartContainer = () => {
   const { total, items, quantity, errors, loading } = useCartSummary({
     userId: user?.id,
   });
-  console.log("loading cart", items);
   return (
     <>
       <div className="flex flex-col md:col-span-8 col-span-12">
@@ -77,4 +76,4 @@ const CartContainer = () => {
   );
 };
 
-export default memo(CartContainer);
+export default CartContainer;

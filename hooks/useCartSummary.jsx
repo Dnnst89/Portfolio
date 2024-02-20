@@ -27,7 +27,6 @@ const useCartSummary = ({ userId }) => {
   });
 
   useEffect(() => {
-    console.log("useeffect inside");
     const getCartSession = async () => {
       //me trae la session del usuario
       setLoading(true);
@@ -36,10 +35,8 @@ const useCartSummary = ({ userId }) => {
           //llamo la query para traer la shopping session
           variables: { userId, active: true },
         });
-
         if (data) {
           // Si existe la sesión
-          console.log("useeffect inside if");
           const shoppingSession = data.shoppingSessions.data[0];
           let currentPage = 1;
           let pageSize = 25;
@@ -114,20 +111,16 @@ const useCartSummary = ({ userId }) => {
     if (userId) {
       getCartSession();
     }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, cartQuantity]);
 
-  return useMemo(
-    () => ({
-      total: cartData.total,
-      items: cartData.items,
-      quantity: cartData.quantity,
-      errors,
-      sessionId: cartData.sessionId,
-      loading,
-    }),
-    [cartData, loading, errors]
-  );
+  return {
+    total: cartData.total,
+    items: cartData.items,
+    quantity: cartData.quantity,
+    errors,
+    sessionId: cartData.sessionId,
+    loading,
+  };
 };
 
 export default useCartSummary;
