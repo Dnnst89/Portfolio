@@ -58,16 +58,19 @@ export default function DetailComponent({ id }) {
               </div>
             )
           )}
-          <div className="text-center my-48">
-            <button
-              onClick={() => {
-                router.push("/");
-              }}
-              className="bg-aquamarine text-white rounded-sm p-2 w-[150px]"
-            >
-              Ir a inicio
-            </button>
-          </div>
+
+          {errorToastShown && (
+            <div className="text-center my-48">
+              <button
+                onClick={() => {
+                  router.push("/");
+                }}
+                className="bg-aquamarine text-white rounded-sm p-2 w-[150px]"
+              >
+                Ir a inicio
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
