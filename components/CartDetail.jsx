@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { facturationInstace } from "@/src/axios/algoliaIntance/config";
 import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { useQuery } from "@apollo/client";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { isTaxesLoading } from "@/redux/features/cart-slice";
 
 const CartDetail = ({
@@ -18,6 +18,7 @@ const CartDetail = ({
 }) => {
   const { user } = useStorage();
   const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cart);
   const { data: storeInformation, error: storeInformationError } = useQuery(
     GET_STORE_INFO,
     {
@@ -147,7 +148,7 @@ const CartDetail = ({
   return (
     <div className="p-3 md:space-y-3">
       <h2 className="tittle flex justify-center">{detailTitle}</h2>
-      {!amounts.loading ? (
+      {!cart.loadingTaxes ? (
         <>
           <div className="flex justify-between ">
             <p className="whitespace-nowrap">N° artículos</p>
