@@ -22,7 +22,7 @@ const formatTaxData = (items) => {
   if (!items?.length) return [];
   return items?.map((item) => {
     return {
-      measurementUnit: "Sp",
+      measurementUnit: "1/m",
       unitaryPrice: item?.attributes?.variant?.data?.attributes?.price,
       qty: item?.quantity,
       cabys:
@@ -59,7 +59,6 @@ const createConsecutiveKey = () => {
 };
 
 const createKey = (number, id) => {
-  // console.log("security", securityCode());
   if (number != null) {
     const date = new Date();
     var day = "";
@@ -70,7 +69,8 @@ const createKey = (number, id) => {
     }
     var month = "";
     if (date.getMonth() < 10) {
-      month = "0" + new Date().getMonth();
+      //month = "0" + new Date().getMonth();
+      month = ("0" + (new Date().getMonth() + 1)).slice(-2);
     } else {
       month = new Date().getMonth();
     }
@@ -80,7 +80,6 @@ const createKey = (number, id) => {
     const consecutive = createConsecutiveNumber(number);
     const situation = "1";
     const refill = "00";
-    console.log("clave", clave);
     const key =
       "506" +
       day +
@@ -109,17 +108,17 @@ const formatBillSumary = (billSummary, exchangeRate, currencyCode) => {
       exchangeRate: exchangeRate,
     },
 
-    totalTaxedServices: "" + billSummary.taxes,
-    totalExentServices: "0.00000",
-    totalTaxedMerch: "0.00000",
-    totalExentMerch: "0.00000",
-    totalTaxed: "" + billSummary.taxes,
-    totalExent: "0.00000",
-    totalSale: "51172.00000",
-    totalDiscount: "0.00000",
-    totalNetSale: "" + billSummary.subtotal,
-    totalTax: "" + billSummary.taxes,
-    totalDocument: "" + billSummary.total,
+    totalTaxedServices: "" + billSummary?.totalTaxedServices,
+    totalExentServices: "" + billSummary?.totalExentServices,
+    totalTaxedMerch: "" + billSummary?.totalTaxedMerch,
+    totalExentMerch: "" + billSummary?.totalExentMerch,
+    totalTaxed: "" + billSummary?.totalTaxed,
+    totalExent: "" + billSummary?.totalExent,
+    totalSale: "" + billSummary?.totalSale,
+    totalDiscount: "" + billSummary?.totalDiscount,
+    totalNetSale: "" + billSummary?.totalNetSale,
+    totalTax: "" + billSummary?.totalTax,
+    totalDocument: "" + billSummary.totalDocument,
   };
 };
 
@@ -150,8 +149,6 @@ const createConsecutiveNumber = (param) => {
   } else {
     validateFormat = "" + number;
   }
-  //console.log("ssaaff", consecutiveNumber + validateFormat);
-
   if (number != null) {
     return consecutiveNumber + validateFormat;
   } else return "00100001010000000001";
@@ -163,21 +160,19 @@ const formatItemInvoice = (items, imp) => {
   if (!items?.length) return [];
   return items?.map((item) => {
     cont = cont + 1;
-    console.log("item", item?.attributes);
     var cod = 0;
     if (imp[cont].taxes[0].code < 10) {
-      cod = "0" + imp[cont].taxes[0].code;
+      cod = "" + imp[cont].taxes[0].code;
     } else {
       cod = imp[cont].taxes[0].code;
     }
-    console.log("ssdfasdfasdfdsa", cod);
     return {
       lineNumber: cont + 1,
       cabys: "" + item?.attributes?.cabys?.toString(),
       qty: "" + item?.attributes?.quantity,
-      measurementUnit: "Sp",
-      commercialMeasurementUnit: "SP",
-      detail: "Servicios Postales",
+      measurementUnit: "1/m",
+      commercialMeasurementUnit: "1/m",
+      detail: "" + item?.attributes?.name,
       unitaryPrice: "" + item?.attributes?.price,
       totalAmount: "" + item?.attributes?.quantity * item?.attributes?.price,
       subTotal: "" + item?.attributes?.quantity * item?.attributes?.price,
@@ -185,7 +180,7 @@ const formatItemInvoice = (items, imp) => {
         {
           code: "" + cod,
           codeFee: "" + imp[cont].taxes[0].codeFee,
-          fee: "" + imp[cont].taxes[0].fee,
+          fee: imp[cont].taxes[0].fee,
           VATFactor: "" + imp[cont].taxes[0].vatfactor,
           amount: "" + imp[cont].taxes[0].amount,
         },
@@ -197,7 +192,6 @@ const formatItemInvoice = (items, imp) => {
 };
 const InvoiceInformation = (store, client, key, consecutive) => {
   const isoDate = new Date().toISOString();
-  console.log("factura");
   return {
     key: key,
     activityCode: store.ActivityCode,
@@ -207,7 +201,7 @@ const InvoiceInformation = (store, client, key, consecutive) => {
       name: store.name,
       id: {
         type: "" + store.IdType,
-        number: "00" + store.IdNumber,
+        number: store.IdNumber,
       },
       commercialName: store.ComercialName,
       address: {
@@ -230,7 +224,7 @@ const InvoiceInformation = (store, client, key, consecutive) => {
     },
     saleCondition: "01",
     creditTerm: "0",
-    paymentMethod: ["01"],
+    paymentMethod: ["02"],
   };
 };
 

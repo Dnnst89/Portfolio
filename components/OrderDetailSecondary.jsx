@@ -18,7 +18,7 @@ export default function OrderDetailSecondary({ orderId }) {
       subtotal: 0,
       taxes: 0,
       total: 0,
-      deliveryPayment: 0
+      deliveryPayment: 0,
     },
     orderItems: [
       {
@@ -48,7 +48,6 @@ export default function OrderDetailSecondary({ orderId }) {
         console.log(data);
         if (data) {
           const orderInfo = data?.orderDetail?.data;
-          console.log("orderInfo: ", orderInfo);
           setOrderData((prev) => ({
             ...prev,
             order: {
@@ -61,7 +60,8 @@ export default function OrderDetailSecondary({ orderId }) {
               total:
                 orderInfo.attributes?.payment_detail?.data?.attributes?.total,
               deliveryPayment:
-                orderInfo.attributes?.payment_detail?.data?.attributes?.deliveryPayment,
+                orderInfo.attributes?.payment_detail?.data?.attributes
+                  ?.deliveryPayment,
             },
             orderItems: orderInfo?.attributes?.order_items?.data?.map(
               (item) => {
@@ -70,11 +70,10 @@ export default function OrderDetailSecondary({ orderId }) {
                   quantity: item.attributes.quantity,
                   name: item.attributes.name,
                   brand: item.attributes.brand,
-                  price: item.attributes.price, //se saca el precio de la unica variante que tiene
-                  images:
-                    item.attributes.images?.data.map(
-                      (img) => img.attributes.url
-                    ),
+                  price: item.attributes.price.toFixed(2), //se saca el precio de la unica variante que tiene
+                  images: item.attributes.images?.data.map(
+                    (img) => img.attributes.url
+                  ),
                 };
               }
             ),
@@ -150,7 +149,9 @@ export default function OrderDetailSecondary({ orderId }) {
                         <h1 className="text-sm md:text-xl">
                           N° artículos: {item.quantity}{" "}
                         </h1>
-                        <p className="sm:text-sm ">${item.price}</p>
+                        <p className="sm:text-sm ">
+                          ${item.price * item.quantity}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -167,10 +168,10 @@ export default function OrderDetailSecondary({ orderId }) {
             quantity={orderData.orderItems.reduce((accumulator, item) => {
               return accumulator + item.quantity;
             }, 0)}
-            subTotal={orderData.order.subtotal}
-            taxes={orderData.order.taxes}
-            total={orderData.order.total}
-            deliveryPayment={orderData.order.deliveryPayment}
+            subTotal={orderData.order.subtotal.toFixed(2)}
+            taxes={orderData.order.taxes.toFixed(2)}
+            total={orderData.order.total.toFixed(2)}
+            deliveryPayment={orderData.order.deliveryPayment.toFixed(2)}
           />
           <CartProceedPayment textButton={"Ver dirección"} page={""} />
         </section>

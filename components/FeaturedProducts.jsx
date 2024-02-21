@@ -10,11 +10,11 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+import toast, { Toaster } from "react-hot-toast";
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import { EffectCoverflow } from 'swiper/modules';
 
 const FeaturedProducts = () => {
-
 
   //GQL
   const { loading, error, data } = useQuery(GET_FEATURED_PRODUCTS);
@@ -49,10 +49,12 @@ const FeaturedProducts = () => {
       aux.push(data?.products.data[random]);
     }
   }
-
+  
   return (
     <>
+
       <Swiper
+        loop={true}
         modules={[EffectCoverflow, Navigation, A11y]}
         effect="coverflow"
         //slidesPerView={4}
@@ -67,14 +69,17 @@ const FeaturedProducts = () => {
         breakpoints={{
           300: {
             slidesPerView: 2,
+            slidesPerGroup: 2,
             //spaceBetween: 1000
           },
           768: {
             slidesPerView: 3,
+            slidesPerGroup: 3,
             //spaceBetween: 30
           },
           1024: {
             slidesPerView: 4,
+            slidesPerGroup: 4,
             //spaceBetween: 40
           }
         }}
@@ -88,7 +93,7 @@ const FeaturedProducts = () => {
                   id={item.id}
                   name={item.attributes.name}
                   coverImage={item.attributes.coverImage.data}
-                  defaultPrice={item.attributes.defaultPrice}
+                  defaultPrice={item.attributes.defaultPrice.toFixed(2)}
                   brand={item.attributes.brand}
                 />
               </SwiperSlide>

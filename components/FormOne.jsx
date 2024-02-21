@@ -10,10 +10,11 @@ import { AiOutlineEdit } from "react-icons/ai";
 import CheckOutForm2 from "./CheckOutForm2";
 import useStorage from "@/hooks/useStorage";
 import toast, { Toaster } from "react-hot-toast";
-import { getToken, refreshToken } from "@/api/moovin/getToken";
 import Map from "./Map";
 import { Marker } from "@react-google-maps/api";
-
+import WrappedGiftCheckbox from "./WrappedGiftCheckbox";
+import { useSelector } from "react-redux";
+import useCartSummary from "@/hooks/useCartSummary";
 function FormOne() {
   const {
     register,
@@ -38,6 +39,13 @@ function FormOne() {
   const [canton, setCanton] = useState("");
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
+
+  const [wrappedGiftCheckbox, setWrappedGiftCheckbox] = useState(false);
+  // loading wrapped gifts from dropdown
+  const { items, sessionId } = useCartSummary({
+    userId: userId,
+  });
+
   const [userInformation, setUserInformation] = useState({
     //campos de formulario
     firstName: "",
@@ -52,6 +60,7 @@ function FormOne() {
     canton: "",
     idNumber: "",
     idType: "",
+    invoiceEmail: "",
   });
   const [deliveryPayment, setDeliveryPayment] = useState(0);
   const handleDeliveryPayment = (data) => {
@@ -66,7 +75,7 @@ function FormOne() {
   const handleLng = (data) => {
     setLng(data);
   };
-
+  // Asigna los valores a pagar en el carrito
   const [amount, setAmount] = useState({
     total: 0,
     subTotal: 0,
@@ -83,10 +92,9 @@ function FormOne() {
       const userDataId = userData.user.id;
 
       const { data, error, loading } = await getUserInfo({
-        variables: { id: userDataId }, fetchPolicy: "network-only"
+        variables: { id: userDataId },
+        fetchPolicy: "network-only",
       });
-      console.log("🚀 ~ file: FormOne.jsx:98 ~ cargaDatos ~ data:", data?.usersPermissionsUser?.data?.attributes?.users_address?.data
-      ?.attributes?.canton);
       if (error)
         return toast.error(
           "Lo sentimos, ha ocurrido un error al cargar los datos",
@@ -96,7 +104,6 @@ function FormOne() {
         );
 
       if (data && data.usersPermissionsUser) {
-        
         if (data.usersPermissionsUser.data.attributes.users_address.data) {
           setUserInfoExist(true);
           setAddressId(
@@ -130,6 +137,8 @@ function FormOne() {
             data?.usersPermissionsUser?.data?.attributes?.firstName || "",
           lastName:
             data?.usersPermissionsUser?.data?.attributes?.lastName || "",
+          invoiceEmail:
+            data?.usersPermissionsUser?.data?.attributes?.invoiceEmail || "",
           phone:
             data?.usersPermissionsUser?.data?.attributes?.phoneNumber || "",
           postCode:
@@ -153,7 +162,6 @@ function FormOne() {
           idNumber: "",
           idType: "Física",
         });
-        
       }
     } catch (error) {
       toast.error(error.message, {
@@ -163,7 +171,6 @@ function FormOne() {
   };
   const [selectedLat, setSelectedLat] = useState();
   const [selectedLng, setSelectedLng] = useState();
-
   const handleMarkerChange = (markerPosition) => {
     setSelectedLat(markerPosition.lat);
     setSelectedLng(markerPosition.lng);
@@ -201,6 +208,8 @@ function FormOne() {
         variables: {
           firstName: dataForm.firstName,
           lastName: dataForm.lastName,
+          invoiceEmail:
+            dataForm.invoiceEmail == "" ? null : dataForm.invoiceEmail,
           phone: parseInt(dataForm.phone),
           idType: dataForm.idType,
           idNumber: parseInt(dataForm.idNumber),
@@ -224,7 +233,8 @@ function FormOne() {
             postCode: dataForm.postCode,
             province: dataForm.province,
             addressLine1: dataForm.addressLine1,
-            addressLine2: dataForm.addressLine2,
+            addressLine2:
+              dataForm.addressLine2 == "" ? null : dataForm.addressLine2,
             latitude: selectedLat !== undefined ? selectedLat : lat,
             longitude: selectedLng !== undefined ? selectedLng : lng,
             canton: dataForm.canton,
@@ -255,7 +265,6 @@ function FormOne() {
             id: userId,
           },
         });
-
         if (createAddressError)
           return toast.error("Error al crear la dirección", {
             autoClose: 5000,
@@ -520,7 +529,7 @@ function FormOne() {
                           </p>
                         </div>
                         <div className="col-span-12 md:col-span-6 grid content-baseline">
-                          <label htmlFor="addressLine1">Direccion 1</label>
+                          <label htmlFor="addressLine1">Dirección 1</label>
                           <textarea
                             // type="text"
                             id="addressLine1"
@@ -550,7 +559,7 @@ function FormOne() {
                           </p>
                         </div>
                         <div className="col-span-12 md:col-span-6 grid content-baseline">
-                          <label htmlFor="addressLine2">Direccion 2</label>
+                          <label htmlFor="addressLine2">Dirección 2</label>
                           <textarea
                             //type="text"
                             id="addressLine2"
@@ -590,8 +599,18 @@ function FormOne() {
                         </div>
                       </section>
                     </div>
-                    <div className="flex justify-center w-full">
-                      <section className="w-3/4 m-auto mt-10 mb-5 flex items-center space-x-5">
+                    {/*
+                  Se adiciona componente que permite seleccionar los regalos 
+                  a envolver por el cliente. 
+                 */}
+                    <div className="flex flex-col min-h-[100px]">
+                      <h4 className="w-3/4 m-auto mt-5 mb-3 flex items-center space-x-5">
+                        Seleccione los artículos a envolver 🎁:
+                      </h4>
+                      <WrappedGiftCheckbox />
+                    </div>
+                    <div className="inline-block justify-center w-full">
+                      <section className="w-3/4 m-auto mt-10 mb-3 flex items-center space-x-5">
                         <label htmlFor="idType">Factura Electrónica</label>
                         <input
                           className="p-3"
@@ -640,7 +659,7 @@ function FormOne() {
                                   {...register("idNumber", {
                                     required: {
                                       value: true,
-                                      message: "La dédula es requerida",
+                                      message: "La cédula es requerida",
                                     },
                                     minLength: {
                                       value: 9,
@@ -671,7 +690,7 @@ function FormOne() {
                                   {...register("idNumber", {
                                     required: {
                                       value: true,
-                                      message: "La dédula es requerida",
+                                      message: "La cédula es requerida",
                                     },
                                     minLength: {
                                       value: 10,
@@ -696,6 +715,36 @@ function FormOne() {
                             )}
                           </section>
                         </div>
+                        <section className="flex justify-center">
+                          <section className="md:w-4/6 grid grid-cols-12 gap-4">
+                            <div className="col-span-12 md:col-span-6 grid">
+                              <label
+                                className="whitespace-nowrap  w-full pt-4"
+                                htmlFor="invoiceEmail"
+                              >
+                                Correo electrónico para factura
+                              </label>
+                              <input
+                                type="text"
+                                id="invoiceEmail"
+                                {...register("invoiceEmail", {
+                                  required: {
+                                    value: true,
+                                    message: "El correo es requerido",
+                                  },
+                                  pattern: {
+                                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                    message:
+                                      "Ingresa una dirección de correo electrónico válida",
+                                  },
+                                })}
+                              ></input>
+                              <p className="text-red text-xs">
+                                {errors.invoiceEmail?.message}
+                              </p>
+                            </div>
+                          </section>
+                        </section>
                       </>
                     )}
                   </section>
@@ -720,7 +769,7 @@ function FormOne() {
             />
           )}
         </div>
-        <div className=" bg-resene rounded-sm col-span-12 md:col-span-3 h-fit  border-l-4 border-lightblue order-1">
+        <div className=" bg-resene rounded-sm col-span-12 md:col-span-3 h-fit  border-l-4 border-lightblue order-1 sticky top-0 z-10">
           <div className="flex flex-col space-y-3 ">
             <CartDetail
               detailTitle={"Detalle del carrito"}

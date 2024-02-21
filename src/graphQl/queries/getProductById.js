@@ -9,6 +9,7 @@ const ProductDetailQuery = gql`
           name
           brand
           description
+          cabys
           materials {
             data {
               id

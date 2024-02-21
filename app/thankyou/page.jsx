@@ -9,7 +9,6 @@ import { logo } from "../assets/images";
 import useStorage from "@/hooks/useStorage";
 import { useQuery } from "@apollo/client";
 import GET_CART_ITEMS_LIST_SHOPPING_SESSION from "@/src/graphQl/queries/getCartItemsByShoppingSession";
-import GET_SHOPPING_SESSION_BY_USER from "@/src/graphQl/queries/getShoppingSessionByUser";
 import DELETE_CART_ITEM_MUTATION from "@/src/graphQl/queries/deleteCartItem";
 import { GET_PAYMENT_DETAIL } from "@/src/graphQl/queries/getPaymentDetail";
 import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
@@ -25,7 +24,7 @@ import CREATE_ORDER_ITEM_MUTATION from "@/src/graphQl/queries/createOrderItem";
 import { UPDATE_PAYMENT_DETAIL_STATUS } from "@/src/graphQl/queries/updatePaymentDetailStatus";
 import { UPDATE_PAYMENT_DELIVERY_ID } from "@/src/graphQl/queries/updatePaymentDeliveryId";
 
-import { createOrderData, orderMoovin } from "@/api/moovin/createOrder";
+import { deleteOrderMoovin } from "@/api/moovin/createOrder";
 import { requestEstimation, createData } from "@/api/moovin/estimation";
 
 import {
@@ -44,6 +43,8 @@ import GET_ORDER_ITEMS_BY_ORDER_ID from "@/src/graphQl/queries/getOrderItemsByOr
 import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { CREATE_ELECTRONIC_INVOICE } from "@/src/graphQl/queries/createElectronicInvoice";
 import { CREATE_ORDER_EMAIL } from "@/src/graphQl/queries/sendEmail";
+import { UPDATE_SHOPPING_SESSION_ACTIVE } from "@/src/graphQl/queries/updateShoppingSessionActive";
+import CREATE_SHOPPING_SESSION_MUTATION from "@/src/graphQl/queries/createShoppingSession";
 
 /*
   recives the Tilopay response , based on the returns params 
@@ -66,7 +67,7 @@ export default function ThankYouMessage() {
   const [description, setDescription] = useState();
   //calling the mutation
   const [updatePaymentDetailStatus] = useMutation(UPDATE_PAYMENT_DETAIL_STATUS);
-  const [updatePaymentDeliveryId] = useMutation(UPDATE_PAYMENT_DELIVERY_ID);
+
   const [deleteCarItem] = useMutation(DELETE_CART_ITEM_MUTATION);
   const [updateVariantStock] = useMutation(UPDATE_VARIANT_STOCK);
   const [createOrder] = useMutation(CREATE_ORDER);
@@ -79,6 +80,10 @@ export default function ThankYouMessage() {
   const [getOrderItemsByOrderId] = useLazyQuery(GET_ORDER_ITEMS_BY_ORDER_ID);
   const [getStoreInformation] = useLazyQuery(GET_STORE_INFO);
   const [getUserAddress] = useLazyQuery(GET_USER_ADDRESS);
+  const [updateShoppingSessionActive] = useMutation(
+    UPDATE_SHOPPING_SESSION_ACTIVE
+  );
+  const [createShoppingSession] = useMutation(CREATE_SHOPPING_SESSION_MUTATION);
 
   // const { user } = useStorage();
   // const { id } = user || {};
@@ -87,7 +92,7 @@ export default function ThankYouMessage() {
 
   // const { user } = useStorage();
   // const { id } = user || {};
-  const { items, loading, quantity } = useCartSummary({
+  const { items, loading, quantity, sessionId } = useCartSummary({
     //me traigo los items que hay en carrito con el hook
     userId: userId,
   });
@@ -129,7 +134,8 @@ export default function ThankYouMessage() {
   }, [loading]);
 
   const handleCartItems = async () => {
-    //se elimina los items de carrito y se actualizan los stocks de los productos
+    const fechaActual = new Date();
+    const fechaFormateada = fechaActual.toISOString();
     items.map((item) => {
       if (
         item.attributes.variant.data &&
@@ -141,19 +147,35 @@ export default function ThankYouMessage() {
         const variant = item.attributes.variant.data.id;
         const cartItemId = item.id;
 
-        try {
-          deleteCarItem({
-            variables: {
-              id: cartItemId,
-            },
-          });
-        } catch (error) {}
+        // try {//se elimina los items de carrito**
+        //   deleteCarItem({
+        //     variables: {
+        //       id: cartItemId,
+        //     },
+        //   });
+        // } catch (error) { }
 
         try {
           updateVariantStock({
+            //actualizo el stock de las variantes
             variables: {
               id: variant,
               stock: newStock,
+            },
+          });
+          updateShoppingSessionActive({
+            //inactivo la sesion del carrito viejo
+            variables: {
+              id: sessionId,
+              active: false,
+            },
+          });
+          createShoppingSession({
+            //se le crea una nueva sesion de carrito
+            variables: {
+              publishedAt: fechaFormateada,
+              userId: userId,
+              active: true,
             },
           });
         } catch (error) {
@@ -163,87 +185,6 @@ export default function ThankYouMessage() {
     });
   };
 
-  const fetchOrderMoovin = async (orderNumber) => {
-    try {
-      const paymentUser = await getPaymentDetails({
-        variables: {
-          userId: userId,
-        },
-      });
-      const paymentinfo = await getPaymentDetail({
-        //obtengo el paymentDetails, para que cuando refresque la pagina no cree mas ordenes
-        variables: { paymentId },
-      });
-      const client = {
-        name:
-          paymentUser?.data?.usersPermissionsUser?.data?.attributes?.firstName +
-          " " +
-          paymentUser?.data?.usersPermissionsUser?.data?.attributes?.lastName,
-        idType: validateID(
-          paymentUser?.data?.usersPermissionsUser?.data?.attributes?.idCard
-            ?.idType
-        ),
-        idNumber:
-          paymentUser?.data?.usersPermissionsUser?.data?.attributes?.idCard
-            ?.idNumber,
-        email: paymentUser?.data?.usersPermissionsUser?.data?.attributes?.email,
-        phone:
-          paymentUser?.data?.usersPermissionsUser?.data?.attributes
-            ?.phoneNumber,
-      };
-      const result = await getStoreInformation({
-        variables: {
-          id: 1,
-        },
-      });
-      const store = result?.data?.storeInformation?.data?.attributes;
-
-      const userAddress = await getUserAddress({
-        variables: {
-          id: userId,
-        },
-      });
-      const deliveryInformation =
-        userAddress?.data?.usersPermissionsUser?.data?.attributes?.users_address
-          ?.data?.attributes;
-      const payment = paymentinfo?.data?.paymentDetail?.data?.attributes;
-
-      if (payment.deliveryMethod === "Envío a través de MOOVIN") {
-        const shipmentInfo = createData(
-          items,
-          deliveryInformation.latitude,
-          deliveryInformation.longitude
-        );
-        const estimation = await requestEstimation(shipmentInfo);
-
-        const datos = createOrderData(
-          store,
-          items,
-          orderNumber,
-          client,
-          estimation.idEstimation,
-          deliveryInformation
-        );
-        try {
-          console.log("datos", datos);
-          const order = await orderMoovin(datos);
-          console.log("order mooving", order);
-        } catch (error) {}
-        const paymentId = paymentinfo?.data?.paymentDetail?.data?.id;
-
-        const orderId = parseInt(order.idPackage);
-
-        await updatePaymentDeliveryId({
-          variables: {
-            id: paymentId,
-            newDeliveryId: orderId,
-          },
-        });
-      }
-    } catch (error) {
-      console.log("error creacion orden moovin", error);
-    }
-  };
   ////////////////////////////funciones para crear orden, orderItems y acutalizar paymentDetail/////////
 
   const handleCreateOrder = async (status) => {
@@ -262,7 +203,8 @@ export default function ThankYouMessage() {
         paymentinfo?.data?.paymentDetail?.data?.attributes?.status;
       const orderPayment =
         paymentinfo?.data?.paymentDetail?.data?.attributes?.order_detail?.data; //me da la orden asociada al pago
-
+      const moovinId =
+        paymentinfo?.data?.paymentDetail?.data?.attributes?.deliveryId;
       if (orderPayment === null && orderStatus === "Inicial") {
         // si no tiene orden le asigno una
         try {
@@ -278,7 +220,10 @@ export default function ThankYouMessage() {
           const orderNumber = data?.createOrderDetail?.data?.id;
           setOrderId(orderNumber);
           await creatingOrderItems(orderNumber);
+
+          //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
           await sendOrderEmail(quantity, orderNumber);
+          //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
           try {
             fetchOrderMoovin(orderNumber);
           } catch (error) {}
@@ -405,9 +350,32 @@ export default function ThankYouMessage() {
         // Payment failed
         // I need to change the status of ther Payment to failed
         await handleUpdatePayment("Failed");
+        try {
+          const paymentinfo = await getPaymentDetail({
+            //obtengo el paymentDetails, para que cuando refresque la pagina no cree mas ordenes
+            variables: { paymentId },
+          });
+          const moovinId =
+            paymentinfo?.data?.paymentDetail?.data?.attributes?.deliveryId;
+          const datos = { idPackage: moovinId };
+          const del = await deleteOrderMoovin(datos);
+        } catch (error) {
+          console.log("error", error);
+        }
       }
     } else {
-      await handleUpdatePayment("Cancelled");
+      try {
+        const paymentinfo = await getPaymentDetail({
+          //obtengo el paymentDetails, para que cuando refresque la pagina no cree mas ordenes
+          variables: { paymentId },
+        });
+        const moovinId =
+          paymentinfo?.data?.paymentDetail?.data?.attributes?.deliveryId;
+        const datos = { idPackage: moovinId };
+        const del = await deleteOrderMoovin(datos);
+      } catch (error) {
+        console.log("error", error);
+      }
     }
   };
   ////////////////////////////////FUNCION PARA CREAR LA FACTURA ELECTRONICA//////////////////////////////
@@ -422,12 +390,12 @@ export default function ThankYouMessage() {
 
       const required =
         PaymentDetail.data.paymentDetail.data.attributes.invoiceRequired;
-      const billSummary = {
+      /*const billSummary = {
         total: PaymentDetail?.data?.paymentDetail?.data?.attributes?.total,
         subtotal:
           PaymentDetail?.data?.paymentDetail?.data?.attributes?.subtotal,
         taxes: PaymentDetail?.data?.paymentDetail?.data?.attributes?.taxes,
-      };
+      };*/
       if (required) {
         try {
           const { data } = await getOrderItemsByOrderId({
@@ -453,6 +421,8 @@ export default function ThankYouMessage() {
               body
             );
 
+            console.log("feeResult", feeResult);
+            const billSummary = feeResult?.data?.billSummary;
             const imp = feeResult?.data?.serviceDetail?.lineDetails;
 
             const inv = formatItemInvoice(resultado, imp);
@@ -501,7 +471,7 @@ export default function ThankYouMessage() {
                     ?.idCard?.idNumber,
                 email:
                   paymentUser?.data?.usersPermissionsUser?.data?.attributes
-                    ?.email,
+                    ?.invoiceEmail,
               };
               const store = result?.data?.storeInformation?.data?.attributes;
 
@@ -525,7 +495,7 @@ export default function ThankYouMessage() {
                   },
                   otherCharges: [],
                   billSummary: {
-                    ...formatBillSumary(billSummary, "1.000", store.currency),
+                    ...formatBillSumary(billSummary, "535.86", store.currency),
                   },
                   referenceInformation: [],
                   others: {
@@ -533,7 +503,22 @@ export default function ThankYouMessage() {
                   },
                 },
                 posTicket: false,
-                sendMail: false,
+                sendMail: true,
+                mailTitle:
+                  "Gracias por su compra en Detinmarin, adjuntamos su factura electrónica",
+                mailBody: `
+                <p>Estimado(a): ${client.name} </p>
+
+                <p>La informaci&oacute;n suministrada ser&aacute; utilizada &uacute;nicamente para los fines de la emisi&oacute;n de la factura electr&oacute;nica para suministrar dicha informaci&oacute;n en el registro&nbsp;conforme a lo establecido en la resoluci&oacute;n de Facturaci&oacute;n Electr&oacute;nica,No.\nDGT-R-033-2019 del 27 de junio de 2019 de la Direcci&oacute;n General de Tributaci&oacute;n.</p>
+                
+                <p>El suministro voluntario de la informaci&oacute;n y datos personales se interpreta como el otorgamiento de su consentimiento para su uso de acuerdo a lo indicado en el presente aviso. Ante cualquier consulta podria comunicarse al correo <a href="mailto:hola@detinmarin.cr">hola@detinmarin.cr</a>&nbsp;o al n&uacute;mero telef&oacute;nico&nbsp;<a href="tel:+506-8771-6588">(+506) 8771-6588</a>&nbsp;</p>
+<img src="https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Logo_01_c02eda42d1.jpg"
+                alt="detinmarin" style="display:block;font-size:14px;border:0;outline:none;text-decoration:none"
+                width="140" title="detinmarin">
+                  
+                  
+                  `,
+
                 additionalInfo: {
                   nameDoc: "Factura Electrónica",
                   legendFooter:
@@ -542,11 +527,12 @@ export default function ThankYouMessage() {
                 },
                 returnCompleteAnswer: true,
               };
+              console.log("factura", bodyInvoice);
               const InvoiceResult = await facturationInstace.post(
                 `document/electronic-invoice?access_token=${token}`,
                 bodyInvoice
               );
-
+              console.log("resultado factura", InvoiceResult);
               try {
                 const isoDate = new Date().toISOString();
                 const resulta = await getStoreInformation({

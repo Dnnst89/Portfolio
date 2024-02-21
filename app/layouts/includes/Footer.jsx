@@ -41,7 +41,7 @@ const Footer = () => {
                 </li>
                 <li >
                   Teléfono: <Link
-                   aria-label="Teléfono de contacto +506-8771-6588"
+                    aria-label="Teléfono de contacto +506-8771-6588"
                     href={"tel:+506-8771-6588"}
                     className="hover:underline"
                   >
@@ -49,7 +49,7 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  Horario: Lunes a Sábado de 10am-7pm {<br />}y domingos de 11am-5pm
+                  Horario: Lunes a Sábado de 10am-7pm {<br />}y Domingos de 11am-5pm
                 </li>
               </ul>
             </div>

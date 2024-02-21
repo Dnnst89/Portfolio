@@ -36,3 +36,9 @@ next-env.d.ts
 
 #imagenes 
 .imagenes
+
+#env
+.env
+
+# Contentlayer
+.contentlayer
