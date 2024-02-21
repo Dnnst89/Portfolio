@@ -9,7 +9,7 @@ const Spinner = ({ styles, size }) => {
         <svg
           aria-hidden="true"
           role="status"
-          className={` ${
+          className={`inline ${
             size ? size : "w-5 h-5 mr-3 text-aquamarine animate-spin"
           } `}
           viewBox="0 0 100 101"
