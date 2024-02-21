@@ -20,6 +20,7 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem, loading }) => {
   );
 
   const handleQuantityChange = (newQuantity) => {
+    dispatch(isTaxesLoading(true)); //
     setQuantity(newQuantity);
     updateCartItemQuantity({
       variables: { newQuantity, cartItemId: idCartItem },
@@ -35,7 +36,6 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem, loading }) => {
   };
 
   const handleIncrement = () => {
-    //TODO: dispatch(isTaxesLoading(true))
     dispatch(isTaxesLoading(true)); //
     if (quantity < stock) {
       const newQuantity = quantity + 1; //guardo en una nueva cosntante
