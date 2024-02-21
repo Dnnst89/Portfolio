@@ -161,13 +161,15 @@ export default function CheckOutForm2({
           //Si la zona esta fuera de cobertura se bloquea el componente
           setBlockMoovin(true);
           setMoovinMessageError(
-            "Moovin no se encuetra disponible en el área seleccionada."
+            `Este método de envío no se encuentra disponible en la zona de entrega
+             indicada ya que se encuentra fuera del área de cobertura del proveedor del servicio.`
           );
           //Si la zona esta fuera de cobertura se bloquea el componente
         } else if (result === "ERRORDANGERZONE") {
           setBlockMoovin(true);
           setMoovinMessageError(
-            "Moovin no se encuetra disponible en el área seleccionada."
+            `Este método de envío no se encuentra disponible en la zona
+             de entrega indicada por restricciones del proveedor del servicio.`
           );
         }
       } catch (error) {
