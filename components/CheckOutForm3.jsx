@@ -80,7 +80,7 @@ export default function CheckOutForm3({
       };
 
       const store = storeInformation?.storeInformation?.data?.attributes;
-      // console.log("store nueva", store);
+
       const userAddress = await getUserAddress({
         variables: {
           id: id,
@@ -106,10 +106,10 @@ export default function CheckOutForm3({
         );
         try {
           const order = await orderMoovin(datos);
-          console.log("order mooving", order);
+
           const orderId = parseInt(order.idPackage);
           const paymentId = paymentinfo?.data?.paymentDetail?.data?.id;
-          console.log("payment", paymentId);
+
           await updatePaymentDeliveryId({
             variables: {
               id: paymentId,

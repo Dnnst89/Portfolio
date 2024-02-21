@@ -3,10 +3,12 @@ import useStorage from "@/hooks/useStorage";
 import useCartSummary from "@/hooks/useCartSummary";
 import Spinner from "./Spinner";
 import { getAccessToken, formatTaxData } from "@/helpers";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { facturationInstace } from "@/src/axios/algoliaIntance/config";
 import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { useQuery } from "@apollo/client";
+import { useDispatch } from "react-redux";
+import { isTaxesLoading } from "@/redux/features/cart-slice";
 
 const CartDetail = ({
   isCheckout = false,
@@ -15,6 +17,7 @@ const CartDetail = ({
   onChange,
 }) => {
   const { user } = useStorage();
+  const dispatch = useDispatch();
   const { data: storeInformation, error: storeInformationError } = useQuery(
     GET_STORE_INFO,
     {
@@ -23,7 +26,6 @@ const CartDetail = ({
       },
     }
   );
-
   const withoutDelivery = 0;
   const currency =
     storeInformation?.storeInformation?.data?.attributes?.currency;
@@ -96,6 +98,7 @@ const CartDetail = ({
       ...prev,
       loading: true,
     }));
+
     try {
       if (!items.length) {
         // si no hay items se pone por default todo en 0
@@ -135,26 +138,21 @@ const CartDetail = ({
         ...prev,
         loading: false,
       }));
+      // Se finaliza el proceso de request a gateway.
+      // se cambia el estado.
+      dispatch(isTaxesLoading(false));
     }
   };
 
   return (
     <div className="p-3 md:space-y-3">
       <h2 className="tittle flex justify-center">{detailTitle}</h2>
-      {!loading && !amounts.loading ? (
+      {!amounts.loading ? (
         <>
           <div className="flex justify-between ">
             <p className="whitespace-nowrap">N° artículos</p>
             <p className="whitespace-nowrap">{quantity}</p>
           </div>
-          {/* input de codigo promocional comentado en caso de que se quiera usr en elfuturo ===> */}
-          {/* <div className="flex justify-center">
-          <input
-            placeholder="Codigo promocional"
-            className="rounded-l-lg text-center"
-          />
-          <button className="bg-aquamarine p-2 rounded-r-lg w-[60px]">OK</button>
-        </div> */}
           <div className="flex justify-between ">
             <p>Subtotal:</p>
             <p className="whitespace-nowrap">
@@ -170,14 +168,23 @@ const CartDetail = ({
           </div>
 
           <>
-            <div className="flex justify-between ">
-              <p>Costo de envío:</p>
-              <p className="whitespace-nowrap">
-                {parseFloat(deliveryPayment).toFixed(2)} {amounts.currencyType}
-              </p>
-            </div>
+            {
+              // Se carga unicamente cuando estamos en checkout
+              isCheckout ? (
+                <div className="flex justify-between ">
+                  <p>Costo de envío:</p>
+                  <p className="whitespace-nowrap">
+                    {parseFloat(deliveryPayment).toFixed(2)}{" "}
+                    {amounts.currencyType}
+                  </p>
+                </div>
+              ) : (
+                ""
+              )
+            }
+
             <div className="flex flex-col p-4 space-y-3">
-              <p className="flex justify-center">Costo Total(IVA Incluido)</p>
+              <p className="flex justify-center">Costo Total (IVA Incluido)</p>
               <p className="flex justify-center whitespace-nowrap">
                 {amounts?.total.toFixed(2)} {amounts.currencyType}
               </p>

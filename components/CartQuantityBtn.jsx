@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { BiMinus, BiPlus } from "react-icons/bi";
 import {
   addQtyItems,
+  isTaxesLoading,
   reduceQtyItems,
   updateQtyItems,
 } from "@/redux/features/cart-slice";
@@ -13,6 +14,7 @@ import toast, { Toaster } from "react-hot-toast";
 const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem, loading }) => {
   const [quantity, setQuantity] = useState(quantityCartItem);
   const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cart);
   const [updateCartItemQuantity] = useMutation(
     UPDATE_CART_ITEM_QUANTITY_MUTATION
   );
@@ -33,11 +35,13 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem, loading }) => {
   };
 
   const handleIncrement = () => {
+    //TODO: dispatch(isTaxesLoading(true))
+    dispatch(isTaxesLoading(true)); //
     if (quantity < stock) {
       const newQuantity = quantity + 1; //guardo en una nueva cosntante
       setQuantity(newQuantity); //actualizo el state
       updateCartItemQuantity({
-        variables: { newQuantity, cartItemId: idCartItem },
+        variables: { newQuantity: newQuantity, cartItemId: idCartItem },
       })
         .then((response) => {
           dispatch(addQtyItems()); //actualizo la store
@@ -51,6 +55,8 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem, loading }) => {
   };
 
   const handleDecrement = () => {
+    //TODO: dispatch(isTaxesLoading(true))
+    dispatch(isTaxesLoading(true)); //
     if (quantity > 1) {
       const newQuantity = quantity - 1;
       setQuantity(newQuantity);
@@ -96,7 +102,7 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem, loading }) => {
           <button
             aria-label="Disminuir cantidad producto"
             className="bg-grey-200 rounded-full text-white  relative z-10"
-            disabled={loading}
+            disabled={cart.loadingTaxes}
             onClick={handleDecrement}
           >
             <BiMinus />
@@ -125,7 +131,7 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem, loading }) => {
           <button
             aria-label="Aumentar cantidad producto"
             className="bg-grey-200 rounded-full text-white relative z-10"
-            disabled={loading}
+            disabled={cart.loadingTaxes}
             onClick={handleIncrement}
           >
             <BiPlus />
