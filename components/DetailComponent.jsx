@@ -50,7 +50,7 @@ export default function DetailComponent({ id }) {
               <div>
                 {setErrorToastShown(true)}
                 {toast.error(
-                  "Hubo un error al cargar los datos. Inténtalo de nuevo.",
+                  "Ha ocurrido un error al obtener los datos del producto seleccionado. Inténtalo de nuevo.",
                   {
                     autoClose: 5000,
                   }
