@@ -68,7 +68,7 @@ const CartContainer = () => {
           );
         })}
       </div>
-      <div className=" bg-resene rounded-sm col-span-12 md:col-span-4 p-4 h-[500px]  border-l-4 border-lightblue">
+      <div className=" bg-resene rounded-sm col-span-12 md:col-span-4 p-4 h-[500px]  border-l-4 border-lightblue  sticky top-0 z-10">
         <CartDetail detailTitle={"Detalle del carrito"} deliveryPayment={0} />
         {items.length > 0 ? (
           <CartProceedPayment

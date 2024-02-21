@@ -3,7 +3,7 @@ import useStorage from "@/hooks/useStorage";
 import useCartSummary from "@/hooks/useCartSummary";
 import Spinner from "./Spinner";
 import { getAccessToken, formatTaxData } from "@/helpers";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { facturationInstace } from "@/src/axios/algoliaIntance/config";
 import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { useQuery } from "@apollo/client";
@@ -138,7 +138,8 @@ const CartDetail = ({
         ...prev,
         loading: false,
       }));
-      //TODO: dispatch(isTaxesLoading(false))
+      // Se finaliza el proceso de request a gateway.
+      // se cambia el estado.
       dispatch(isTaxesLoading(false));
     }
   };
@@ -146,7 +147,7 @@ const CartDetail = ({
   return (
     <div className="p-3 md:space-y-3">
       <h2 className="tittle flex justify-center">{detailTitle}</h2>
-      {!loading && !amounts.loading ? (
+      {!amounts.loading ? (
         <>
           <div className="flex justify-between ">
             <p className="whitespace-nowrap">N° artículos</p>

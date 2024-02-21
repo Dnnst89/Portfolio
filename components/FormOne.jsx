@@ -769,7 +769,7 @@ function FormOne() {
             />
           )}
         </div>
-        <div className=" bg-resene rounded-sm col-span-12 md:col-span-3 h-fit  border-l-4 border-lightblue order-1">
+        <div className=" bg-resene rounded-sm col-span-12 md:col-span-3 h-fit  border-l-4 border-lightblue order-1 sticky top-0 z-10">
           <div className="flex flex-col space-y-3 ">
             <CartDetail
               detailTitle={"Detalle del carrito"}

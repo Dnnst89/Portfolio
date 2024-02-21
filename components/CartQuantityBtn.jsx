@@ -41,7 +41,7 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem, loading }) => {
       const newQuantity = quantity + 1; //guardo en una nueva cosntante
       setQuantity(newQuantity); //actualizo el state
       updateCartItemQuantity({
-        variables: { newQuantity, cartItemId: idCartItem },
+        variables: { newQuantity: newQuantity, cartItemId: idCartItem },
       })
         .then((response) => {
           dispatch(addQtyItems()); //actualizo la store
