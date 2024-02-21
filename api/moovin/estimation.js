@@ -19,6 +19,7 @@ const requestEstimation = async (data) => {
   const estimation = await estimationResponsde.json();
   return estimation;
 };
+console.log("requestEstimation ", requestEstimation);
 const addProducts = (items) => {
   if (!items?.length) return [{}];
   return items?.map((item) => {
@@ -42,9 +43,6 @@ const addProducts = (items) => {
   });
 };
 const createFakeData = (latitude, longitude) => {
-  //console.log(items);
-
-  //console.log("products", addProducts(items));
   const data = {
     pointCollect: {
       latitude: 9.92421981523312,
@@ -73,9 +71,6 @@ const createFakeData = (latitude, longitude) => {
   return data;
 };
 const createData = (items, latitude, longitude) => {
-  //console.log(items);
-
-  //console.log("products", addProducts(items));
   const data = {
     pointCollect: {
       latitude: 9.92421981523312,

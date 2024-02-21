@@ -148,7 +148,7 @@ export default function CheckOutForm2({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deliveryPayment]);
   /**
-   * Verifica si las cordenadas de entrega estan dentro
+   * Verifica si las cordenadas estan dentro
    * de las zonas de entrega de moovin
    */
   useEffect(() => {
@@ -190,7 +190,6 @@ export default function CheckOutForm2({
 
         // TODO: adaptar los cambios que moovin hizo en el endpoint
         const estimation = await requestEstimation(shipmentInfo);
-
         const deliveryPrice = Math.ceil(
           estimation.optionService[1].amount / tipoCambio
         );
@@ -238,7 +237,8 @@ export default function CheckOutForm2({
           en dado caso se bloquea la opcion de moovin
          */
         setMoovinMessageError(
-          "Moovin no se encuetra disponible en el área seleccionada."
+          `Este método de envío no se encuentra disponible en la zona de
+           entrega indicada ya que se encuentra fuera del área de cobertura del proveedor del servicio.`
         );
         setBlockMoovin(true);
         console.error(

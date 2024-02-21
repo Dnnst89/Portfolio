@@ -18,7 +18,7 @@ const coverageArea = async (lat, lng) => {
         },
       }
     );
-
+    console.log("coverageResponse", coverageResponse);
     if (!coverageResponse.ok) {
       throw new Error("Network response failed");
     }
