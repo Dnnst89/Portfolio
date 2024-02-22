@@ -31,19 +31,24 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem }) => {
       dispatch(isTaxesLoading(false));
     } else {
       if (newQuantity < stock) {
-        dispatch(isTaxesLoading(true)); //
-        setQuantity(newQuantity);
-        updateCartItemQuantity({
-          variables: { newQuantity, cartItemId: idCartItem },
-        })
-          .then((response) => {
-            // Manejar la respuesta de la mutación aquí, si es necesario
-            dispatch(updateQtyItems(newQuantity)); //actualizo la store
+        if (newQuantity === quantityCartItem) {
+          dispatch(isTaxesLoading(false)); //
+        } else {
+          dispatch(isTaxesLoading(true)); //
+          setBlockOnchangeBtn(true);
+          setQuantity(newQuantity);
+          updateCartItemQuantity({
+            variables: { newQuantity, cartItemId: idCartItem },
           })
-          .catch((error) => {
-            // Manejar errores de la mutación aquí
-            toast.error("Ha sucedido un error");
-          });
+            .then((response) => {
+              // Manejar la respuesta de la mutación aquí, si es necesario
+              dispatch(updateQtyItems(newQuantity)); //actualizo la store
+            })
+            .catch((error) => {
+              // Manejar errores de la mutación aquí
+              toast.error("Ha sucedido un error");
+            });
+        }
       }
     }
   };
@@ -79,7 +84,7 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem }) => {
      Bloqueamos el boton de aumentar cuando quantity es mayor
      a lo que tenemos en stock.
      */
-    if (quantity < stock) {
+    if (quantity < 1) {
       setBlockDecrementBtn(true);
     }
     if (quantity > 1) {
@@ -156,9 +161,13 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem }) => {
               {[...Array(stock).keys()].map((index) => (
                 <li
                   key={index + 1}
-                  onClick={() => handleQuantityChange(index + 1)}
+                  onClick={
+                    !cart.loadingTaxes
+                      ? () => handleQuantityChange(index + 1)
+                      : undefined
+                  }
                   className={`cursor-pointer py-2 px-4 hover:bg-grey-200 ${
-                    blockOnchangeBtn ? "disabled" : ""
+                    cart.loadingTaxes ? "disabled" : ""
                   }`}
                 >
                   {index + 1}

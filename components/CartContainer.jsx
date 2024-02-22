@@ -6,7 +6,6 @@ import useStorage from "@/hooks/useStorage";
 import CartDetail from "@/components/CartDetail";
 import CartProceedPayment from "@/components/CartProceedPayment";
 import { useSelector } from "react-redux";
-import Spinner from "./Spinner";
 import CartSpinner from "./CartSpinner";
 const CartContainer = () => {
   const { user } = useStorage(); //me trae el usuario de local storage
