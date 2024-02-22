@@ -163,7 +163,7 @@ const CartDetail = ({
           <div className="flex justify-between border-dashed border-grey-200 border-b-[2px] pb-3">
             <p>Impuestos:</p>
             <p className="whitespace-nowrap">
-              {amounts.tax} {amounts.currencyType}
+              {amounts.tax.toFixed(2)} {amounts.currencyType}
             </p>
           </div>
 
