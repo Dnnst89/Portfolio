@@ -9,11 +9,15 @@ import ProductDetailQuery from "@/src/graphQl/queries/getProductById";
 import Spinner from "@/components/Spinner";
 import toast from "react-hot-toast";
 
+
 export default function DetailComponent({ id }) {
+  console.log("si" ,id);
   const [errorToastShown, setErrorToastShown] = useState(false);
+
   const { loading, error, data } = useQuery(ProductDetailQuery, {
     variables: { id },
   });
+
   const router = useRouter();
   // Verificar si hay un error en la consulta
   if (error && !errorToastShown) {
@@ -55,6 +59,7 @@ export default function DetailComponent({ id }) {
                     autoClose: 5000,
                   }
                 )}
+                {console.log(id)}
               </div>
             )
           )}

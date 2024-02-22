@@ -7,6 +7,11 @@ import CartQuantityBtn from "./CartQuantityBtn";
 import DeleteCartItemBtn from "./DeleteCartItemBtn";
 import CarouselImages from "./CarouselImages";
 import { useSelector } from "react-redux";
+import {useQuery } from "@apollo/client";
+import PRODUCT_ID_CARTITEM_QUERY from "@/src/graphQl/queries/getProductIdFromCartItem";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 
 const CartItem = ({
   cartItemId,
@@ -28,6 +33,16 @@ const CartItem = ({
 }) => {
   const cart = useSelector((state) => state.cart);
 
+  // const [productId, setProductId] = useState(null);
+  const{ data, loading: productIdLoading}= useQuery(PRODUCT_ID_CARTITEM_QUERY,{
+      variables: {
+        cartItemId: cartItemId
+      }
+  });
+
+  const productId = data?.cartItem?.data?.attributes?.variant?.data?.attributes?.product?.data?.id;
+
+
   return (
     <>
       <div
@@ -39,16 +54,18 @@ const CartItem = ({
       >
         <section className="grid grid-cols-12 col-span-12 md:col-span-4">
           <div className="grid grid-cols-12 col-span-12 items-center">
+          
+         
             {images.length > 0 ? (
               <CarouselImages
                 altText={productName}
                 images={images}
                 widthImg={140}
                 heightImg={140}
-                classStyle={"rounded-2xl col-span-6"}
+                classStyle={"rounded-2xl"}
               />
             ) : (
-              <Image
+              <Image 
                 src={test}
                 alt={productName}
                 style={{ width: "140px", height: "140px" }}
@@ -57,7 +74,13 @@ const CartItem = ({
             )}
 
             <div className="p-3 col-span-6">
-              <h1 className="text-lg">{productName}</h1>
+            {!productIdLoading ? (
+              <Link role="link" href={{ pathname: "/detail", query: { productId } }}>
+                 <h1 className="text-lg">{productName}</h1>
+              </Link>
+              ) : (
+                <h1 className="text-lg">{productName}</h1>
+              )}
               <p className="text-xs text-lightblue">{brand}</p>
               <span className="text-xs text-grey">Ref {idVariant}</span>
             </div>

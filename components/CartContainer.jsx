@@ -32,6 +32,7 @@ const CartContainer = () => {
           )
         }
         {items?.map((item, index) => {
+          
           const variant = item.attributes.variant.data; // Desestructuración aquí
           const variantAtt = variant.attributes;
           const productAtt = variant.attributes.product?.data?.attributes; // Desestructuración aquí
@@ -43,6 +44,7 @@ const CartContainer = () => {
               </div>
             );
           }
+          console.log(item);
           return (
             <div key={item.id}>
               <CartItem
