@@ -11,8 +11,11 @@ import { useMutation } from "@apollo/client";
 import UPDATE_CART_ITEM_QUANTITY_MUTATION from "@/src/graphQl/queries/updateCartItemQuantity";
 import toast, { Toaster } from "react-hot-toast";
 
-const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem, loading }) => {
+const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem }) => {
   const [quantity, setQuantity] = useState(quantityCartItem);
+  const [blockIncrementBtn, setBlockIncrementBtn] = useState(false);
+  const [blockDecrementBtn, setBlockDEcrementBtn] = useState(false);
+
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
   const [updateCartItemQuantity] = useMutation(
@@ -36,8 +39,16 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem, loading }) => {
   };
 
   const handleIncrement = () => {
-    dispatch(isTaxesLoading(true)); //
+    /*
+     Bloqueamos el boton de aumentar cuando quantity es mayor
+     a lo que tenemos en stock.
+     */
+    if (quantity > stock) {
+      setBlockIncrementBtn(true);
+    }
+
     if (quantity < stock) {
+      dispatch(isTaxesLoading(true)); //
       const newQuantity = quantity + 1; //guardo en una nueva cosntante
       setQuantity(newQuantity); //actualizo el state
       updateCartItemQuantity({
@@ -55,9 +66,15 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem, loading }) => {
   };
 
   const handleDecrement = () => {
-    //TODO: dispatch(isTaxesLoading(true))
-    dispatch(isTaxesLoading(true)); //
+    /*
+     Bloqueamos el boton de aumentar cuando quantity es mayor
+     a lo que tenemos en stock.
+     */
+    if (quantity < 1) {
+      setBlockIncrementBtn(true);
+    }
     if (quantity > 1) {
+      dispatch(isTaxesLoading(true)); //
       const newQuantity = quantity - 1;
       setQuantity(newQuantity);
       updateCartItemQuantity({
@@ -105,6 +122,7 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem, loading }) => {
             disabled={cart.loadingTaxes}
             onClick={handleDecrement}
           >
+            {}
             <BiMinus />
           </button>
           {/* <span>{quantity}/{stock}</span> */}
@@ -131,7 +149,7 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem, loading }) => {
           <button
             aria-label="Aumentar cantidad producto"
             className="bg-grey-200 rounded-full text-white relative z-10"
-            disabled={cart.loadingTaxes}
+            disabled={cart.loadingTaxes || blockIncrementBtn}
             onClick={handleIncrement}
           >
             <BiPlus />
