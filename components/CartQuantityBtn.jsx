@@ -26,17 +26,17 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem }) => {
 
   const handleQuantityChange = (newQuantity) => {
     //verificamos que la cantidad sea menor o igual a 1
+    // para evitar request inecesario
+    console.log("new quantity", newQuantity);
+    console.log("quantitycartItem", quantityCartItem);
     if (newQuantity === quantityCartItem) {
       dispatch(isTaxesLoading(false));
       setBlockOnchangeBtn(true);
     } else if (newQuantity < 1) {
-      console.log("test1");
       setBlockOnchangeBtn(true);
       dispatch(isTaxesLoading(false));
-    } else if (newQuantity < stock) {
-      console.log("test2");
-      dispatch(isTaxesLoading(true)); //
-      setBlockOnchangeBtn(false);
+    } else if (newQuantity <= stock) {
+      dispatch(isTaxesLoading(true));
       setQuantity(newQuantity);
       updateCartItemQuantity({
         variables: { newQuantity, cartItemId: idCartItem },
@@ -47,7 +47,7 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem }) => {
         })
         .catch((error) => {
           // Manejar errores de la mutación aquí
-          toast.error("Ha sucedido un error");
+          toast.error("Ha sucedido un error", error);
         });
     }
   };
@@ -154,20 +154,22 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem }) => {
               {quantity}
             </button>
             <ul
-              className="absolute z-20 hidden text-grey-800 group-hover:block
-             border border-grey-200 bg-white max-h-40 overflow-y-auto"
+              className={` ${
+                cart.loadingTaxes
+                  ? "hidden"
+                  : `absolute z-20 hidden text-grey-800 group-hover:block
+              border border-grey-200 bg-white max-h-40 overflow-y-auto`
+              }`}
             >
               {[...Array(stock).keys()].map((index) => (
                 <li
-                  key={index + 1}
+                  key={index}
                   onClick={
                     !cart.loadingTaxes
                       ? () => handleQuantityChange(index + 1)
                       : undefined
                   }
-                  className={`cursor-pointer py-2 px-4 hover:bg-grey-200 ${
-                    cart.loadingTaxes ? "disabled" : ""
-                  }`}
+                  className="cursor-pointer py-2 px-4 hover:bg-grey-200"
                 >
                   {index + 1}
                 </li>
