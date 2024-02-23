@@ -26,30 +26,29 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem }) => {
 
   const handleQuantityChange = (newQuantity) => {
     //verificamos que la cantidad sea menor o igual a 1
-    if (newQuantity <= 1) {
+    if (newQuantity === quantityCartItem) {
+      dispatch(isTaxesLoading(false));
+      setBlockOnchangeBtn(true);
+    } else if (newQuantity < 1) {
+      console.log("test1");
       setBlockOnchangeBtn(true);
       dispatch(isTaxesLoading(false));
-    } else {
-      if (newQuantity < stock) {
-        if (newQuantity === quantityCartItem) {
-          dispatch(isTaxesLoading(false)); //
-        } else {
-          dispatch(isTaxesLoading(true)); //
-          setBlockOnchangeBtn(true);
-          setQuantity(newQuantity);
-          updateCartItemQuantity({
-            variables: { newQuantity, cartItemId: idCartItem },
-          })
-            .then((response) => {
-              // Manejar la respuesta de la mutación aquí, si es necesario
-              dispatch(updateQtyItems(newQuantity)); //actualizo la store
-            })
-            .catch((error) => {
-              // Manejar errores de la mutación aquí
-              toast.error("Ha sucedido un error");
-            });
-        }
-      }
+    } else if (newQuantity < stock) {
+      console.log("test2");
+      dispatch(isTaxesLoading(true)); //
+      setBlockOnchangeBtn(false);
+      setQuantity(newQuantity);
+      updateCartItemQuantity({
+        variables: { newQuantity, cartItemId: idCartItem },
+      })
+        .then((response) => {
+          // Manejar la respuesta de la mutación aquí, si es necesario
+          dispatch(updateQtyItems(newQuantity)); //actualizo la store
+        })
+        .catch((error) => {
+          // Manejar errores de la mutación aquí
+          toast.error("Ha sucedido un error");
+        });
     }
   };
 
