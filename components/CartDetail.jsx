@@ -30,7 +30,6 @@ const CartDetail = ({
   const withoutDelivery = 0;
   const currency =
     storeInformation?.storeInformation?.data?.attributes?.currency;
-  const [shipment, setShipment] = useState(0);
   const [amounts, setAmounts] = useState({
     total: 0,
     tax: 0,
@@ -38,14 +37,12 @@ const CartDetail = ({
     loading: false,
   });
   const {
-    loading,
     items,
     quantity,
     total: subTotal,
   } = useCartSummary({
     userId: user?.id,
   });
-
   useEffect(() => {
     if (subTotal !== undefined) {
       if (deliveryPayment != 0) {
@@ -85,12 +82,7 @@ const CartDetail = ({
   }, [deliveryPayment]); // El segundo argumento [] asegura que useEffect se ejecute solo una vez al montar el componente
 
   useEffect(() => {
-    setShipment(0);
-    if (items !== null || items !== null) {
-      getTaxCost();
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    getTaxCost();
   }, [quantity]);
 
   const getTaxCost = async () => {
@@ -133,7 +125,7 @@ const CartDetail = ({
         });
       }
     } catch (error) {
-      console.log(error);
+      console.error("La solicitud de impuestos ha presentado un error.", error);
     } finally {
       setAmounts((prev) => ({
         ...prev,
@@ -144,11 +136,10 @@ const CartDetail = ({
     }
     dispatch(isTaxesLoading(false));
   };
-  console.log("cartdetail", cart.loadingTaxes);
   return (
     <div className="p-3 md:space-y-3">
       <h2 className="tittle flex justify-center">{detailTitle}</h2>
-      {!cart.loadignTaxes ? (
+      {!cart.loadignTaxes || !amounts.loading ? (
         <>
           <div className="flex justify-between ">
             <p className="whitespace-nowrap">N° artículos</p>
