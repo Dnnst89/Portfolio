@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import test from "../app/assets/heart.png";
 
@@ -6,8 +5,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import CartQuantityBtn from "./CartQuantityBtn";
 import DeleteCartItemBtn from "./DeleteCartItemBtn";
 import CarouselImages from "./CarouselImages";
-import { useDispatch, useSelector } from "react-redux";
-import { updateItemReferece } from "@/redux/features/cart-slice";
+import { useSelector } from "react-redux";
 
 const CartItem = ({
   cartItemId,
@@ -28,10 +26,6 @@ const CartItem = ({
   error,
 }) => {
   const cart = useSelector((state) => state.cart);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(updateItemReferece(cartItemId)); // se utiliza como dependencia en useCartSummary
-  }, [dispatch, cartItemId]);
 
   return (
     <>

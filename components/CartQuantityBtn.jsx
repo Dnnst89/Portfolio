@@ -39,8 +39,6 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem }) => {
       if (newQuantity <= stock) {
         dispatch(isTaxesLoading(true));
         setQuantity(newQuantity);
-        console.log("newquantity", newQuantity);
-        console.log("idCartItem", idCartItem);
         updateCartItemQuantity({
           variables: { newQuantity, cartItemId: idCartItem },
         })

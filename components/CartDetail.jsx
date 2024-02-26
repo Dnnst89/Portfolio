@@ -19,6 +19,7 @@ const CartDetail = ({
   const { user } = useStorage();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
+
   const { data: storeInformation, error: storeInformationError } = useQuery(
     GET_STORE_INFO,
     {
@@ -43,7 +44,6 @@ const CartDetail = ({
   } = useCartSummary({
     userId: user?.id,
   });
-
   useEffect(() => {
     if (subTotal !== undefined) {
       if (deliveryPayment != 0) {
@@ -140,7 +140,7 @@ const CartDetail = ({
   return (
     <div className="p-3 md:space-y-3">
       <h2 className="tittle flex justify-center">{detailTitle}</h2>
-      {!cart.loadignTaxes || !amounts.loading ? (
+      {!cart.loadingTaxes ? (
         <>
           <div className="flex justify-between ">
             <p className="whitespace-nowrap">N° artículos</p>
