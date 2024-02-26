@@ -43,6 +43,7 @@ const CartDetail = ({
   } = useCartSummary({
     userId: user?.id,
   });
+
   useEffect(() => {
     if (subTotal !== undefined) {
       if (deliveryPayment != 0) {

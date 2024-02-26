@@ -35,6 +35,7 @@ const CartContainer = () => {
           const variant = item.attributes.variant.data; // Desestructuración aquí
           const variantAtt = variant.attributes;
           const productAtt = variant.attributes.product?.data?.attributes; // Desestructuración aquí
+
           if (typeof item == "undefined") {
             return (
               <div key={index}>
