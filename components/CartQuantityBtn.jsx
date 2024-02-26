@@ -28,32 +28,25 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem }) => {
     //verificamos que la cantidad sea menor o igual a 1
     // para evitar request inecesario
     if (newQuantity === quantityCartItem) {
+      dispatch(isTaxesLoading(false));
       setBlockOnchangeBtn(true);
-    }
-    //no es posible seleccionar cantidades negativas
-    if (newQuantity < 1) {
+    } else if (newQuantity < 1) {
       setBlockOnchangeBtn(true);
-    }
-
-    try {
-      if (newQuantity <= stock) {
-        dispatch(isTaxesLoading(true));
-        setQuantity(newQuantity);
-        updateCartItemQuantity({
-          variables: { newQuantity, cartItemId: idCartItem },
+      dispatch(isTaxesLoading(false));
+    } else if (newQuantity <= stock) {
+      dispatch(isTaxesLoading(true));
+      setQuantity(newQuantity);
+      updateCartItemQuantity({
+        variables: { newQuantity, cartItemId: idCartItem },
+      })
+        .then((response) => {
+          // Manejar la respuesta de la mutación aquí, si es necesario
+          dispatch(addQtyItems(newQuantity)); //actualizo la store
         })
-          .then((response) => {
-            // Manejar la respuesta de la mutación aquí, si es necesario
-
-            dispatch(addQtyItems(newQuantity)); //actualizo la store
-          })
-          .catch((error) => {
-            // Manejar errores de la mutación aquí
-            toast.error("Ha sucedido un error", error);
-          });
-      }
-    } catch (error) {
-      console.error("Error al agregar la cantidad.", error);
+        .catch((error) => {
+          // Manejar errores de la mutación aquí
+          toast.error("Ha sucedido un error", error);
+        });
     }
   };
 
