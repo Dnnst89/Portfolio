@@ -9,7 +9,8 @@ import { AiOutlineEdit } from "react-icons/ai";
 import CREATE_PAYMENT_DETAIL from "@/src/graphQl/queries/createPaymentDetails";
 import Spinner from "./Spinner";
 import { useForm } from "react-hook-form";
-import { requestEstimation, createData } from "@/api/moovin/estimation";
+import requestEstimation from "@/api/moovin/estimation";
+import createEstimationMoovinRequest from "@/api/moovin/createEstimationMoovinRequest";
 import getTipoCambio from "@/api/cambio/getTipoCambio";
 import GET_DELIVERY_CHOICES from "@/src/graphQl/queries/getDeliveryChoices";
 import GET_STORE_LOCATION from "@/src/graphQl/queries/getStoreLocation";
@@ -18,11 +19,11 @@ import coverageArea from "@/api/moovin/coverageArea";
 import calculateShippingDistance from "@/helpers/calculateShippingDistance";
 import { CgArrowLongRight } from "react-icons/cg";
 import { useSelector } from "react-redux";
-import { MOOVIN_ERROR } from "@/helpers/messageTypes";
+import { MOOVIN_ERROR, MOOVIN_RESPONSE } from "@/helpers/messageTypes";
 export default function CheckOutForm2({
   amount,
   checkbox,
-  deliveryPayment,
+  handleDeliveryPayment,
   setAmount,
   lat,
   lng,
@@ -119,8 +120,6 @@ export default function CheckOutForm2({
   const { items } = useCartSummary({
     userId: id,
   });
-  const [deliveryMethod, setDeliveryMethod] = useState(null);
-  const [deliveryId, setDeliveryId] = useState(null);
 
   const {
     register,
@@ -147,7 +146,7 @@ export default function CheckOutForm2({
     }
     //
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [deliveryPayment]);
+  }, [handleDeliveryPayment]);
   /**
    * Verifica si las cordenadas estan dentro
    * de las zonas de entrega de moovin
@@ -157,18 +156,18 @@ export default function CheckOutForm2({
       try {
         // Se envian las coordenadas que provienen de google map
         // ingresadas en el formulario de direccion
-        const result = await coverageArea(lat, lng);
-        if (result === MOOVIN_ERROR.OUT_OF_COVERAGES) {
+        const isMoovinAvailable = await coverageArea(lat, lng);
+        if (isMoovinAvailable === MOOVIN_RESPONSE.OUT_OF_COVERAGE) {
           //Si la zona esta fuera de cobertura se bloquea el componente
           setBlockMoovin(true);
-          setMoovinMessageError(MOOVIN_ERROR.ERROR_OUT_OF_COVERAGE);
+          setMoovinMessageError(MOOVIN_RESPONSE.ERROR_OUT_OF_COVERAGE);
           //Si la zona esta fuera de cobertura se bloquea el componente
-        } else if (result === MOOVIN_ERROR.DANGER_ZONE) {
+        } else if (isMoovinAvailable === MOOVIN_RESPONSE.DANGER_ZONE) {
           setBlockMoovin(true);
-          setMoovinMessageError(MOOVIN_ERROR.ERROR_DANGER_ZONE);
+          setMoovinMessageError(MOOVIN_RESPONSE.ERROR_DANGER_ZONE);
         }
       } catch (error) {
-        console.error(MOOVIN_ERROR.ERROR_DEFAULT, error);
+        console.error(MOOVIN_RESPONSE.ERROR_DEFAULT, error);
       }
     };
     fetchMoovinCoverageData();
@@ -178,49 +177,68 @@ export default function CheckOutForm2({
     //delivery method - MVN(Moovin)
     if (data.deliveryMethod === MVN) {
       try {
-        const shipmentInfo = createData(items, lat, lng);
-
-        // TODO: adaptar los cambios que moovin hizo en el endpoint
-        const estimation = await requestEstimation(shipmentInfo);
-        const deliveryPrice = Math.ceil(
-          estimation.optionService[1].amount / tipoCambio
+        /**
+         *  se crea el formato para hacer  para hacer la peticion del costo de envio a Moovin
+         */
+        const moovinShipmentRequestData = createEstimationMoovinRequest(
+          items,
+          lat,
+          lng
         );
 
-        deliveryPayment(deliveryPrice.toFixed(2));
-        const suma = subTotal + taxes + deliveryPrice;
-        const finalAmount = {
-          total: parseFloat(suma.toFixed(2)),
-          subTotal: subTotal,
-          taxes: taxes,
-        };
+        // TODO: adaptar los cambios que moovin hizo en el endpoint
 
-        setEstima(estimation.idEstimation);
-        setAmount(finalAmount);
-        try {
-          const paymentDetailResponse = await createPaymentDetail({
-            variables: {
-              status: "Inicial",
-              subTotal: subTotal,
-              taxes: taxes,
-              total: finalAmount.total,
-              invoiceRequired: checkbox,
-              deliveryPayment: parseFloat(deliveryPrice),
-              deliveryId: parseInt(estimation.idEstimation),
-              deliveryMethod: data.deliveryMethod,
-              paymentMethod: "Tarjeta Crédito/ Débito",
-              publishedAt: isoDate,
-              //TODO: debe llegar un texto a base de datos
-              gift: selectedGiftsString,
-              estimate_delivery_date: MoovinEstimatedDelivery,
-            },
-          });
+        const estimation = await requestEstimation(moovinShipmentRequestData);
+        // Verificamos que el servicio sea tipo Route
 
-          paymentDetailResponseId =
-            paymentDetailResponse?.data?.createPaymentDetail?.data?.id;
-          setPaymentDetailId(paymentDetailResponseId);
-          setChecktOutForm2Visible(true);
-        } catch (error) {
-          console.error(error);
+        if (
+          estimation.optionService[1].type ===
+          MOOVIN_RESPONSE.OPTION_SERVICE_TYPE
+        ) {
+          //obtenemos el costo del delivery
+          const deliveryPrice = Math.ceil(
+            estimation.optionService[1].amount / tipoCambio
+          );
+          /**
+           * - Metodo llamado en FormOne
+           * - Modifica el estado del deliveryPayment
+           */
+          handleDeliveryPayment(deliveryPrice.toFixed(2));
+          const suma = subTotal + taxes + deliveryPrice;
+          const finalAmount = {
+            total: parseFloat(suma.toFixed(2)),
+            subTotal: subTotal,
+            taxes: taxes,
+          };
+
+          setEstima(estimation.idEstimation);
+          setAmount(finalAmount);
+          try {
+            const paymentDetailResponse = await createPaymentDetail({
+              variables: {
+                status: "Inicial",
+                subTotal: subTotal,
+                taxes: taxes,
+                total: finalAmount.total,
+                invoiceRequired: checkbox,
+                deliveryPayment: parseFloat(deliveryPrice),
+                deliveryId: parseInt(estimation.idEstimation),
+                deliveryMethod: data.deliveryMethod,
+                paymentMethod: "Tarjeta Crédito/ Débito",
+                publishedAt: isoDate,
+                //TODO: debe llegar un texto a base de datos
+                gift: selectedGiftsString,
+                estimate_delivery_date: MoovinEstimatedDelivery,
+              },
+            });
+
+            paymentDetailResponseId =
+              paymentDetailResponse?.data?.createPaymentDetail?.data?.id;
+            setPaymentDetailId(paymentDetailResponseId);
+            setChecktOutForm2Visible(true);
+          } catch (error) {
+            console.error(error);
+          }
         }
       } catch (error) {
         /* 
@@ -266,7 +284,7 @@ export default function CheckOutForm2({
           paymentDetailResponse?.data?.createPaymentDetail?.data?.id;
         setPaymentDetailId(paymentDetailResponseId);
         setAmount(finalAmount);
-        deliveryPayment(0);
+        handleDeliveryPayment(0);
         setChecktOutForm2Visible(true);
       } catch (error) {
         console.error(error);
@@ -284,7 +302,7 @@ export default function CheckOutForm2({
       };
       //Se envia el costo del delivery y se mostrara
       //en detalles del carrito al seleccionarse Correos de Costa Rica.
-      deliveryPayment(LongDistancePrice);
+      handleDeliveryPayment(LongDistancePrice);
       // retornamos el costo final de la transaccion
       setAmount(finalPriceToPay);
       //verificamos si la distancia exede los 20 kilometros
@@ -336,7 +354,7 @@ export default function CheckOutForm2({
             subTotal: subTotal,
             taxes: taxes,
           };
-          deliveryPayment(ShortDistancePrice);
+          handleDeliveryPayment(ShortDistancePrice);
           setAmount(finalPriceToPay);
           createPaymentDetail({
             variables: {

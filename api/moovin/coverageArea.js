@@ -18,9 +18,10 @@ const coverageArea = async (lat, lng) => {
         },
       }
     );
-    console.log("coverageResponse", coverageResponse);
     if (!coverageResponse.ok) {
-      throw new Error("Network response failed");
+      throw new Error(
+        "Se ha producido un error al procesar la solicitud de cobertura de zona de Moovin."
+      );
     }
 
     const responseData = await coverageResponse.json();
@@ -28,7 +29,10 @@ const coverageArea = async (lat, lng) => {
 
     // Further processing based on the response data
   } catch (error) {
-    console.error("There is a problem fetching:", error);
+    console.error(
+      "Ha ocurrido un error al realizar la solicitud a los servicios de Moovin.",
+      error
+    );
   }
 };
 
