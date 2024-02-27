@@ -14,11 +14,13 @@ import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
  * @param {Function} props.setPrice - Función para establecer el precio del producto.
  * @param {Function} props.setEnableButton - Función para habilitar/deshabilitar el botón.
  */
-const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected, setPrice, setEnableButton }) => {
+const ProductFeatures = ({variantData, variantsList, setImages, setImage, setvariantSelected, setPrice, setEnableButton }) => {
   const [featureCount, setFeatureCount] = useState(1);
   const [variantInfo, setVariantInfo] = useState(variantsList);// objeto con las variantes hijas de la seleccion actual
   const [featureObject, setFeatureObject] = useState({});
   const [getVariant] = useLazyQuery(GET_VARIANT_BY_ID);
+
+  // console.log("productFeature",variantData);
 
   /**
    * Obtiene un diccionario de variantes a partir de la lista de variantes.
@@ -188,6 +190,7 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
         if (featureName != "null") {
           return (
             <FeatureSelector
+              variantData= {variantData || null}
               key={index}
               featureId={index}
               featureName={featureName}

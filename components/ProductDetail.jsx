@@ -18,14 +18,30 @@ import 'swiper/css/scrollbar';
 import ImageGallery from "react-image-gallery";
 import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { useQuery } from "@apollo/client";
+import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 
-function ProductDetail({ product }) {
+function ProductDetail({ product, variantId }) {
   const name = product?.attributes?.name;
   const brand = product?.attributes?.brand;
   const description = product?.attributes?.description;
   const variants = product?.attributes?.variants?.data
   const materials = product?.attributes?.materials?.data
+
+  const{ data, loading: productIdLoading}= useQuery(GET_VARIANT_BY_ID,{
+    variables: {
+      id: variantId
+    }
+  });
+  // console.log("productDetail",variantId);
+  
+  const skuSelected = data?.variant?.data?.attributes?.sku;
+  const stockVariantSelected = data?.variant?.data?.attributes?.stock;
+  const imageVariantSelected = data?.variant?.data?.attributes?.images?.data;
+
+  
+  // console.log(data);
+  console.log(imageVariantSelected);
 
   const altText = "Imagen de producto" + name
   const [quantity, setQuantity] = useState(1);
@@ -53,25 +69,38 @@ function ProductDetail({ product }) {
   const currency =
     storeInformation?.storeInformation?.data?.attributes?.currency;
 
-
+  if(imageVariantSelected){
+    allImages.push(...imageVariantSelected);
+  }
+  else{
   variants.forEach((variant) => {
     if (variant.attributes.images && variant.attributes.images.data) {
       allImages.push(...variant.attributes.images.data);
     }
-  });
-
+    });
+  }
+  
   const [images, setImages] = useState(allImages.length > 0 ? allImages : null);
-
   //galeria de imagenes para componente se compone de un arreglo [{original: url, thumbnail: url}]
   const [galleryImages, setGalleryImages] = useState([]);
 
   useEffect(() => {
+    if(imageVariantSelected){
+
+      const variantGalleryImages = imageVariantSelected.map((image)=>({
+        original: image.attributes?.url,
+        thumbnail: image.attributes?.url,
+      }));
+      setGalleryImages(variantGalleryImages);
+    }
+    else{
     const newGalleryImages = images?.map((image) => ({
       original: image.attributes.url,
       thumbnail: image.attributes.url,
     }));
     setGalleryImages(newGalleryImages);
-  }, [images]);
+    }
+  }, [images,imageVariantSelected]);
 
 
   const decreaseCounter = () => {
@@ -184,8 +213,12 @@ function ProductDetail({ product }) {
             </div>
 
             <div className="col-span-12 md:col-span-6">
+              {skuSelected? (
+              <h2 aria-label={`Referencia del producto ${variantSelected?.variant?.data?.attributes?.sku}`} className="flex justify-end text-sm">Ref {skuSelected}</h2>
+              ) : 
               <h2 aria-label={`Referencia del producto ${variantSelected?.variant?.data?.attributes?.sku}`} className="flex justify-end text-sm">Ref {variantSelected ? variantSelected?.variant?.data?.attributes?.sku : variants[0]?.attributes?.sku}</h2>
-            </div>
+              }
+              </div>
 
           </div>
 
@@ -199,6 +232,7 @@ function ProductDetail({ product }) {
           {/* Sección seleccion del producto*/}
           <section>
             <ProductFeatures
+              variantData ={data || null}
               variantsList={variants}
               setImages={setImages}
               setImage={setImage}
@@ -266,10 +300,19 @@ function ProductDetail({ product }) {
                     alt="tailwind logo"
                     className="rounded-full mr-3"
                   />
+                  {stockVariantSelected? (
                   <p className="text-sm md:text-base">
                     Existencias: <br />
-                    {variantSelected?.variant?.data?.attributes?.stock === 0 ? "Agotados" : "Disponibles"}
+                    {stockVariantSelected === 0 ? "Agotados" : "Disponibles"}
                   </p>
+                   ) :
+                   (
+                    <p className="text-sm md:text-base">
+                      Existencias: <br />
+                      {variantSelected?.variant?.data?.attributes?.stock === 0 ? "Agotados" : "Disponibles"}
+                    </p>
+                     )
+                  }
                 </div>
                 {Object.entries(variantSelected.features).map((feature, index) => { //feature[0] = key feature[1] = value
 

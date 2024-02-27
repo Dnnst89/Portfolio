@@ -10,8 +10,24 @@ import Spinner from "@/components/Spinner";
 import toast from "react-hot-toast";
 
 
-export default function DetailComponent({ id }) {
-  console.log("si" ,id);
+
+
+
+export default function DetailComponent({ id, idVariant}) {
+
+  const [querySearch, setQuerySearch] = useState("");
+
+  useEffect(() => {
+    setQuerySearch(window?.location?.search?.split("?")[1]);
+
+  }, []);
+
+  // const [filterType, filterValue] = querySearch.split("&");
+
+  // const [idVar, idV] = filterValue.split("=");
+   const idV=  163;
+  
+  
   const [errorToastShown, setErrorToastShown] = useState(false);
 
   const { loading, error, data } = useQuery(ProductDetailQuery, {
@@ -20,6 +36,7 @@ export default function DetailComponent({ id }) {
 
   const router = useRouter();
   // Verificar si hay un error en la consulta
+
   if (error && !errorToastShown) {
     setErrorToastShown(true);
     toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
@@ -38,7 +55,7 @@ export default function DetailComponent({ id }) {
         <div>
           {data && data.product && data.product.data ? (
             <>
-              <ProductDetail product={data.product.data} />
+              <ProductDetail product={data.product.data} variantId={idV || null}/>
               <ProductDetailSecondary
                 id={data.product.data.id}
                 description={data.product.data.attributes.description}

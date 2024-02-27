@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import test from "../app/assets/heart.png";
-
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import CartQuantityBtn from "./CartQuantityBtn";
 import DeleteCartItemBtn from "./DeleteCartItemBtn";
@@ -9,6 +8,7 @@ import CarouselImages from "./CarouselImages";
 import { useSelector } from "react-redux";
 import {useQuery } from "@apollo/client";
 import PRODUCT_ID_CARTITEM_QUERY from "@/src/graphQl/queries/getProductIdFromCartItem";
+import DetailComponent from './DetailComponent';
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -33,16 +33,20 @@ const CartItem = ({
 }) => {
   const cart = useSelector((state) => state.cart);
 
-  // const [productId, setProductId] = useState(null);
+  
+  //Get the data of the product depend on the cartItemId
   const{ data, loading: productIdLoading}= useQuery(PRODUCT_ID_CARTITEM_QUERY,{
       variables: {
         cartItemId: cartItemId
       }
   });
 
+  //Product Id 
   const productId = data?.cartItem?.data?.attributes?.variant?.data?.attributes?.product?.data?.id;
 
+  
 
+  console.log("esta es la data",data?.cartItem?.data?.attributes?.variant?.data?.id);
   return (
     <>
       <div
@@ -75,12 +79,14 @@ const CartItem = ({
 
             <div className="p-3 col-span-6">
             {!productIdLoading ? (
-              <Link role="link" href={{ pathname: "/detail", query: { productId } }}>
-                 <h1 className="text-lg">{productName}</h1>
-              </Link>
+              <Link role="link" href={{ pathname: "/detail", query: {productId: productId, idVariant: idVariant} }}>
+              <h1 className="text-lg hover:underline">{productName}</h1>
+            </Link>
+                
               ) : (
                 <h1 className="text-lg">{productName}</h1>
               )}
+
               <p className="text-xs text-lightblue">{brand}</p>
               <span className="text-xs text-grey">Ref {idVariant}</span>
             </div>
