@@ -15,6 +15,10 @@ import { Marker } from "@react-google-maps/api";
 import WrappedGiftCheckbox from "./WrappedGiftCheckbox";
 import { useSelector } from "react-redux";
 import useCartSummary from "@/hooks/useCartSummary";
+import ProvinciaDropdown from "./ProvinciaDropdown";
+import CantonDropdown from "./CantonDropdown";
+import DistritoDropdown from "./DistritoDropdown";
+import { PROVINCIAS } from "../api/direcciones/data";
 function FormOne() {
   const {
     register,
@@ -23,6 +27,9 @@ function FormOne() {
     reset,
     setValue,
   } = useForm();
+  const [inputsEnabled, setInputsEnabled] = useState(false); //enable or disable user information inputs / show or hide the map component
+  let [checkedEditInfoVisible, setcheckedEditInfoVisible] = useState(false);
+
   const [updateUserInformation] = useMutation(UPDATE_USER_INFORMATION);
   const [updateAddress] = useMutation(UPDATE_ADDRESS);
   const [getUserInfo] = useLazyQuery(GET_USER_PAYMENT_INFO);
@@ -45,6 +52,9 @@ function FormOne() {
   const { items, sessionId } = useCartSummary({
     userId: userId,
   });
+  const [provincia, setProvincia] = useState("");
+  const [cantonw, setCantonw] = useState("");
+  const [distrito, setDistrito] = useState("");
 
   const [userInformation, setUserInformation] = useState({
     //campos de formulario
@@ -63,6 +73,25 @@ function FormOne() {
     invoiceEmail: "",
   });
   const [deliveryPayment, setDeliveryPayment] = useState(0);
+
+  const handleProvinciaChange = (provinciaSeleccionada) => {
+    setProvincia(provinciaSeleccionada);
+    setCantonw(""); // Resetear el cantón cuando cambia la provincia
+    setDistrito(""); // Resetear el distrito cuando cambia la provincia
+  };
+
+  const handleCantonChange = (cantonSeleccionado) => {
+    setCantonw(cantonSeleccionado);
+    setDistrito(""); // Resetear el distrito cuando cambia el cantón
+    handleCanton();
+  };
+
+  const handleDistritoChange = (distritoSeleccionado) => {
+    setDistrito(distritoSeleccionado);
+    console.log("handle distrito", distritoSeleccionado);
+    setAddress1(distritoSeleccionado);
+  };
+
   const handleDeliveryPayment = (data) => {
     setDeliveryPayment(data);
   };
@@ -82,8 +111,36 @@ function FormOne() {
     taxes: 0,
   });
 
-  const handleChange = (data) => {
+  const handleChange = () => {
     setAmount(data);
+  };
+  const handleProvince = (data, provincias) => {
+    setUserInformation((prevUserInformation) => ({
+      ...prevUserInformation,
+      province: data,
+    }));
+    const provincia = provincias[data]?.nombre || "";
+    setProvince(provincia);
+    setCanton("");
+    setAddress1("");
+    setAddress2("");
+  };
+  const handleCanton = (cantonNombre) => {
+    setUserInformation((prevUserInformation) => ({
+      ...prevUserInformation,
+      canton: cantonNombre,
+    }));
+
+    console.log("Cantón seteado:", cantonNombre);
+    setCanton(cantonNombre);
+  };
+
+  const handleAddress1 = (data) => {
+    setUserInformation((prevUserInformation) => ({
+      ...prevUserInformation, // Copia todas las propiedades existentes
+      addressLine1: data, // Modifica solo la propiedad distrito
+    }));
+    setAddress1(data);
   };
 
   const cargaDatos = async () => {
