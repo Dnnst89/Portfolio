@@ -6,7 +6,7 @@ import useStorage from "@/hooks/useStorage";
 import CartDetail from "@/components/CartDetail";
 import CartProceedPayment from "@/components/CartProceedPayment";
 import { useSelector } from "react-redux";
-import Spinner from "./Spinner";
+import CartSpinner from "./CartSpinner";
 const CartContainer = () => {
   const { user } = useStorage(); //me trae el usuario de local storage
   const cart = useSelector((state) => state.cart);
@@ -25,7 +25,7 @@ const CartContainer = () => {
         {
           // se muestra el spinner cuando carga sobre el contenido.
           cart.loadingTaxes && (
-            <Spinner
+            <CartSpinner
               styles={"absolute top-1/2 left-1/2 transform z-40"}
               size={"h-10 w-10 mr-3 text-aquamarine animate-spin"}
             />
@@ -35,6 +35,7 @@ const CartContainer = () => {
           const variant = item.attributes.variant.data; // Desestructuración aquí
           const variantAtt = variant.attributes;
           const productAtt = variant.attributes.product?.data?.attributes; // Desestructuración aquí
+
           if (typeof item == "undefined") {
             return (
               <div key={index}>

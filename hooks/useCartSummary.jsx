@@ -10,6 +10,7 @@ import processCartItems from "@/helpers/processCartItems";
 
 const useCartSummary = ({ userId }) => {
   const cartQuantity = useSelector((state) => state.cart.quantity);
+
   const [cartData, setCartData] = useState({
     total: 0,
     items: [],
@@ -25,7 +26,9 @@ const useCartSummary = ({ userId }) => {
   const [getCart] = useLazyQuery(GET_CART_ITEMS_LIST_SHOPPING_SESSION, {
     fetchPolicy: "network-only", // Forzar la consulta directa al servidor
   });
-
+  /*
+    el useEffect no renderiza cuando el monto es igual al anterior
+*/
   useEffect(() => {
     const getCartSession = async () => {
       //me trae la session del usuario
@@ -59,7 +62,6 @@ const useCartSummary = ({ userId }) => {
             currentPage++;
           } while (currentPage <= pageCount);
           //}
-
           // Ahora,se procesa los datos recopilados
           const total = fetchedData.reduce((accumulator, item) => {
             if (
@@ -88,6 +90,7 @@ const useCartSummary = ({ userId }) => {
           }, 0);
 
           // llamamos el metodo para procesar los datos
+
           const items = processCartItems(fetchedData, errors, setErrors);
 
           // Actualiza el estado después de que se hayan procesado todos los datos
@@ -111,7 +114,7 @@ const useCartSummary = ({ userId }) => {
     if (userId) {
       getCartSession();
     }
-  }, [userId, cartQuantity]);
+  }, [userId, cartQuantity, getSession, errors, getCart]);
 
   return {
     total: cartData.total,

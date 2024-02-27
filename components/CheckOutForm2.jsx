@@ -18,6 +18,7 @@ import coverageArea from "@/api/moovin/coverageArea";
 import calculateShippingDistance from "@/helpers/calculateShippingDistance";
 import { CgArrowLongRight } from "react-icons/cg";
 import { useSelector } from "react-redux";
+import { MOOVIN_ERROR } from "@/helpers/messageTypes";
 export default function CheckOutForm2({
   amount,
   checkbox,
@@ -157,26 +158,17 @@ export default function CheckOutForm2({
         // Se envian las coordenadas que provienen de google map
         // ingresadas en el formulario de direccion
         const result = await coverageArea(lat, lng);
-        if (result === "ERRORZONE") {
+        if (result === MOOVIN_ERROR.OUT_OF_COVERAGES) {
           //Si la zona esta fuera de cobertura se bloquea el componente
           setBlockMoovin(true);
-          setMoovinMessageError(
-            `Este método de envío no se encuentra disponible en la zona de entrega
-             indicada ya que se encuentra fuera del área de cobertura del proveedor del servicio.`
-          );
+          setMoovinMessageError(MOOVIN_ERROR.ERROR_OUT_OF_COVERAGE);
           //Si la zona esta fuera de cobertura se bloquea el componente
-        } else if (result === "ERRORDANGERZONE") {
+        } else if (result === MOOVIN_ERROR.DANGER_ZONE) {
           setBlockMoovin(true);
-          setMoovinMessageError(
-            `Este método de envío no se encuentra disponible en la zona
-             de entrega indicada por restricciones del proveedor del servicio.`
-          );
+          setMoovinMessageError(MOOVIN_ERROR.ERROR_DANGER_ZONE);
         }
       } catch (error) {
-        console.error(
-          "Se ha producido un error al verificar las zona de cobertura de Moovin",
-          error
-        );
+        console.error(MOOVIN_ERROR.ERROR_DEFAULT, error);
       }
     };
     fetchMoovinCoverageData();
