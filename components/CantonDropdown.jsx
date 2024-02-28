@@ -14,6 +14,7 @@ const CantonDropdown = ({
   });
 
   useEffect(() => {
+    console.log("sdfad", defaultValue);
     const cantonDefault = defaultValue || "";
     setSelectedCanton({
       id: cantonDefault,
@@ -31,7 +32,7 @@ const CantonDropdown = ({
       nombre: nombre,
     });
     onCantonChange(value);
-    handleCanton(nombre);
+    handleCanton(value);
   };
 
   return (

@@ -26,7 +26,8 @@ const Map = ({
     height: "300px",
   };
   const [markerPosition, setMarkerPosition] = useState(null);
-  const address = province + "," + canton + "," + address1 + "," + address2;
+  const address =
+    "Costa Rica" + province + "," + canton + "," + address1 + "," + address2;
   //const [address, setAddress] = useState("Costa Rica, Perez Zeledon");
 
   const handleSelect = async (address) => {

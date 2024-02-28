@@ -34,7 +34,7 @@ const DistritoDropdown = ({
     });
 
     onDistritoChange(nombreDistrito);
-    handleAddress1(nombreDistrito);
+    handleAddress1(value);
   };
 
   return (

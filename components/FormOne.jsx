@@ -241,6 +241,7 @@ function FormOne() {
 */
   useEffect(() => {
     cargaDatos();
+
     //console.log("pppp", dataForm.firstName);
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -395,9 +396,7 @@ function FormOne() {
                   <section className="w-3/4 m-auto mt-10  flex items-center space-x-5">
                     <label htmlFor="idType">Editar información de envío</label>
                     <input
-                      className={`bg-${
-                        inputsEnabled ? "white" : "grey-400"
-                      } p-3 `}
+                      className="p-3"
                       type="checkbox"
                       id="CheckboxEditInfo"
                       checked={inputsEnabled}
@@ -507,7 +506,7 @@ function FormOne() {
                           </p>
                         </div>
 
-                        {/*pais*/}
+                        {/*/}
                         <div className="col-span-12 md:col-span-6 grid content-baseline bg-gray-500">
                           <label htmlFor="country">País</label>
                           <input
@@ -541,7 +540,7 @@ function FormOne() {
                             {errors.country?.message}
                           </p>
                         </div>
-                        {/*Provincia*/}
+                       
                         <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <ProvinciaDropdown
                             provincias={PROVINCIAS}
@@ -551,7 +550,7 @@ function FormOne() {
                             handleProvince={handleProvince}
                           />
                         </div>
-                        {/*Canton*/}
+                        {console.log("canton", userInformation.canton)}
                         <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <CantonDropdown
                             provincias={PROVINCIAS}
@@ -562,7 +561,7 @@ function FormOne() {
                             handleCanton={handleCanton}
                           />
                         </div>
-                        {/*Distrito*/}
+                       
                         <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <DistritoDropdown
                             provincias={PROVINCIAS}
@@ -574,7 +573,7 @@ function FormOne() {
                             handleAddress1={handleAddress1}
                           />
                         </div>
-                        {/*Codigo Postal*/}
+                        {*/}
                         <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <label htmlFor="postCode">Código Postal</label>
                           <input
