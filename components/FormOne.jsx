@@ -111,7 +111,7 @@ function FormOne() {
     taxes: 0,
   });
 
-  const handleChange = () => {
+  const handleChange = (data) => {
     setAmount(data);
   };
   const handleProvince = (data, provincias) => {
