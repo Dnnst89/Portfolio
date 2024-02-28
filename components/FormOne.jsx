@@ -935,7 +935,7 @@ function FormOne() {
             <CheckOutForm2
               amount={amount}
               checkbox={checkbox}
-              deliveryPayment={handleDeliveryPayment}
+              handleDeliveryPayment={handleDeliveryPayment}
               setAmount={handleChange}
               lat={lat}
               lng={lng}

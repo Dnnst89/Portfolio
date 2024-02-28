@@ -50,7 +50,11 @@ export const DeliveryChoice = ({
           />
         </div>
       </section>
-      {blockMoovin ? <p className="text-sm text-orange mt-0">{text}</p> : null}{" "}
+      {blockMoovin ? (
+        <div className="w-3/4 flex justify-center">
+          <span className="text-sm text-orange mt-0">{text}</span>
+        </div>
+      ) : null}
       {/* Adjusted margin top value */}
     </div>
   );

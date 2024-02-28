@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import test from "../app/assets/heart.png";
 
