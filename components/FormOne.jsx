@@ -46,7 +46,7 @@ function FormOne() {
   const [canton, setCanton] = useState("");
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
-
+  const [isCheckOut, setIscheckOut] = useState("");
   const [wrappedGiftCheckbox, setWrappedGiftCheckbox] = useState(false);
   // loading wrapped gifts from dropdown
   const { items, sessionId } = useCartSummary({
@@ -74,6 +74,9 @@ function FormOne() {
   });
   const [deliveryPayment, setDeliveryPayment] = useState(0);
 
+  const handleCheckout = (isCheckOut) => {
+    setIscheckOut(isCheckOut);
+  };
   const handleProvinciaChange = (provinciaSeleccionada) => {
     setProvincia(provinciaSeleccionada);
     setCantonw(""); // Resetear el cantón cuando cambia la provincia
@@ -146,6 +149,7 @@ function FormOne() {
 
   const cargaDatos = async () => {
     try {
+      setIscheckOut(false);
       const userData = JSON.parse(localStorage.getItem("userData")); //datos de user
       const userDataId = userData.user.id;
 
@@ -375,7 +379,10 @@ function FormOne() {
                   <div>
                     <button
                       className="ml-8"
-                      onClick={() => setCheckoutForm1Visible(false)}
+                      onClick={() => {
+                        setCheckoutForm1Visible(false);
+                        setIscheckOut(false);
+                      }}
                     >
                       <AiOutlineEdit
                         style={{
@@ -505,8 +512,6 @@ function FormOne() {
                             {errors.phone?.message}
                           </p>
                         </div>
-
-                        {/*/}
                         <div className="col-span-12 md:col-span-6 grid content-baseline bg-gray-500">
                           <label htmlFor="country">País</label>
                           <input
@@ -540,6 +545,117 @@ function FormOne() {
                             {errors.country?.message}
                           </p>
                         </div>
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
+                          <label htmlFor="province">Provincia</label>
+                          <input
+                            type="text"
+                            id="province"
+                            {...register("province", {
+                              onChange: (e) => {
+                                setProvince(e.target.value);
+                                //handleInputBlur(provincia);
+                              },
+                              required: {
+                                value: true,
+                                message: "La provincia es requerida",
+                              },
+                              minLength: {
+                                value: 2,
+                                message:
+                                  "La provincia no puede tener menos de 2 letras",
+                              },
+                              maxLength: {
+                                value: 20,
+                                message:
+                                  "La provincia no puede tener más de 20 letras",
+                              },
+                              pattern: {
+                                value: /^[^0-9]*$/, // Expresión regular que no permite números
+                                message: "No se permiten números en este campo",
+                              },
+                            })}
+                            className={`bg-${
+                              inputsEnabled ? "white" : "grey-400"
+                            } `}
+                            disabled={!inputsEnabled} // Disable input if inputsEnabled is false
+                          ></input>
+                          <p className="text-red text-xs">
+                            {errors.province?.message}
+                          </p>
+                        </div>
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
+                          <label htmlFor="canton">Cantón</label>
+                          <input
+                            type="text"
+                            id="canton"
+                            {...register("canton", {
+                              onChange: (e) => {
+                                setCanton(e.target.value);
+                              },
+
+                              required: {
+                                value: true,
+                                message: "El cantón es requerido",
+                              },
+                              minLength: {
+                                value: 2,
+                                message:
+                                  "El cantón no puede tener menos de 2 letras",
+                              },
+                              maxLength: {
+                                value: 20,
+                                message:
+                                  "El cantón no puede tener más de 20 letras",
+                              },
+                              pattern: {
+                                value: /^[^0-9]*$/, // Expresión regular que no permite números
+                                message: "No se permiten números en este campo",
+                              },
+                            })}
+                            className={`bg-${
+                              inputsEnabled ? "white" : "grey-400"
+                            } `}
+                            disabled={!inputsEnabled} // Disable input if inputsEnabled is false
+                          ></input>
+                          <p className="text-red text-xs">
+                            {errors.canton?.message}
+                          </p>
+                        </div>
+                        <div className="col-span-12 md:col-span-6 grid content-baseline">
+                          <label htmlFor="addressLine1">Dirección 1</label>
+                          <input
+                            type="text"
+                            id="addressLine1"
+                            {...register("addressLine1", {
+                              onChange: (e) => {
+                                setAddress1(e.target.value);
+                              },
+                              required: {
+                                value: true,
+                                message: "La dirreción es requerida",
+                              },
+                              minLength: {
+                                value: 5,
+                                message:
+                                  "La dirección es muy corta, por favor se más específico",
+                              },
+                              maxLength: {
+                                value: 100,
+                                message:
+                                  "La información es muy grande, por favor utiliza la segunda linea",
+                              },
+                            })}
+                            className={`bg-${
+                              inputsEnabled ? "white" : "grey-400"
+                            } `}
+                            disabled={!inputsEnabled} // Disable input if inputsEnabled is false
+                          ></input>
+                          <p className="text-red text-xs">
+                            {errors.addressLine1?.message}
+                          </p>
+                        </div>
+                        {/*/}
+                       
                        
                         <div className="col-span-12 md:col-span-6 grid content-baseline">
                           <ProvinciaDropdown
@@ -823,6 +939,7 @@ function FormOne() {
               setAmount={handleChange}
               lat={lat}
               lng={lng}
+              handleCheckout={handleCheckout}
             />
           )}
         </div>
@@ -830,7 +947,7 @@ function FormOne() {
           <div className="flex flex-col space-y-3 ">
             <CartDetail
               detailTitle={"Detalle del carrito"}
-              isCheckout
+              isCheckout={isCheckOut}
               onChange={handleChange}
               deliveryPayment={deliveryPayment}
             />
