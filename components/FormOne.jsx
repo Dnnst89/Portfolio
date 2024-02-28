@@ -28,7 +28,7 @@ function FormOne() {
     setValue,
   } = useForm();
   const [inputsEnabled, setInputsEnabled] = useState(false); //enable or disable user information inputs / show or hide the map component
-  let [checkedEditInfoVisible, setcheckedEditInfoVisible] = useState(false);
+  let [checkedEditInfoVisible, setcheckedEditInfoVisible] = useState(true);
 
   const [updateUserInformation] = useMutation(UPDATE_USER_INFORMATION);
   const [updateAddress] = useMutation(UPDATE_ADDRESS);
@@ -157,6 +157,9 @@ function FormOne() {
         variables: { id: userDataId },
         fetchPolicy: "network-only",
       });
+
+      handleShowCheckboxEditInfo(data);
+
       if (error)
         return toast.error(
           "Lo sentimos, ha ocurrido un error al cargar los datos",
@@ -398,7 +401,7 @@ function FormOne() {
           </div>
           {!checkoutForm1Visible ? (
             <form onSubmit={onSubmit}>
-              {!checkedEditInfoVisible ? (
+              {checkedEditInfoVisible ? (
                 <div className="flex ml-14 justify-center w-full">
                   <section className="w-3/4 m-auto mt-10  flex items-center space-x-5">
                     <label htmlFor="idType">Editar información de envío</label>
@@ -517,6 +520,7 @@ function FormOne() {
                           <input
                             type="text"
                             id="country"
+                            value={"Costa Rica"}
                             readOnly
                             {...register("country", {
                               required: {
