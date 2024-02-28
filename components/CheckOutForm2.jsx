@@ -20,6 +20,7 @@ import calculateShippingDistance from "@/helpers/calculateShippingDistance";
 import { CgArrowLongRight } from "react-icons/cg";
 import { useSelector } from "react-redux";
 import { MOOVIN_ERROR, MOOVIN_RESPONSE } from "@/helpers/messageTypes";
+import useFetchMoovinCoverageData from "@/hooks/useFetchMoovinCoverageData";
 export default function CheckOutForm2({
   amount,
   checkbox,
@@ -31,9 +32,7 @@ export default function CheckOutForm2({
   const isoDate = new Date().toISOString();
   const [paymentDetailId, setPaymentDetailId] = useState(null);
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
-  const [blockMoovin, setBlockMoovin] = useState(false);
   const [isMoreThanDeliveryRange, setIsMoreThanDeliveryRange] = useState(false);
-  const [moovinMessageError, setMoovinMessageError] = useState("");
 
   //Obtenemos el estado de los regalos que se van a envolver
   //seleccionamos la etiqueta que se mostrar en el correo
@@ -148,31 +147,18 @@ export default function CheckOutForm2({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleDeliveryPayment]);
   /**
+   * Hook
    * Verifica si las cordenadas estan dentro
    * de las zonas de entrega de moovin
    */
-  useEffect(() => {
-    const fetchMoovinCoverageData = async () => {
-      try {
-        // Se envian las coordenadas que provienen de google map
-        // ingresadas en el formulario de direccion
-        const isMoovinAvailable = await coverageArea(lat, lng);
-        if (isMoovinAvailable === MOOVIN_RESPONSE.OUT_OF_COVERAGE) {
-          //Si la zona esta fuera de cobertura se bloquea el componente
-          setBlockMoovin(true);
-          setMoovinMessageError(MOOVIN_RESPONSE.ERROR_OUT_OF_COVERAGE);
-          //Si la zona esta fuera de cobertura se bloquea el componente
-        } else if (isMoovinAvailable === MOOVIN_RESPONSE.DANGER_ZONE) {
-          setBlockMoovin(true);
-          setMoovinMessageError(MOOVIN_RESPONSE.ERROR_DANGER_ZONE);
-        }
-      } catch (error) {
-        console.error(MOOVIN_RESPONSE.ERROR_DEFAULT, error);
-      }
-    };
-    fetchMoovinCoverageData();
-  }, [lat, lng]);
 
+  const { blockMoovin, moovinMessageError, isMoovinAvailable } =
+    useFetchMoovinCoverageData(lat, lng);
+
+  console.log("blockMoovin", blockMoovin);
+  console.log("moovinMessageError", moovinMessageError);
+  console.log("isMoovinAvailable", isMoovinAvailable);
+  console.log("testing");
   const onSubmit = handleSubmit(async (data) => {
     //delivery method - MVN(Moovin)
     if (data.deliveryMethod === MVN) {
@@ -186,8 +172,6 @@ export default function CheckOutForm2({
           lng
         );
 
-        // TODO: adaptar los cambios que moovin hizo en el endpoint
-
         const estimation = await requestEstimation(moovinShipmentRequestData);
         // Verificamos que el servicio sea tipo Route
 
@@ -196,6 +180,7 @@ export default function CheckOutForm2({
           MOOVIN_RESPONSE.OPTION_SERVICE_TYPE
         ) {
           //obtenemos el costo del delivery
+
           const deliveryPrice = Math.ceil(
             estimation.optionService[1].amount / tipoCambio
           );
@@ -241,16 +226,6 @@ export default function CheckOutForm2({
           }
         }
       } catch (error) {
-        /* 
-          si la respuesta de estimacion de moovin genera un error
-          indica que no tienen covertura en el area seleccionada
-          en dado caso se bloquea la opcion de moovin
-         */
-        setMoovinMessageError(
-          `Este método de envío no se encuentra disponible en la zona de
-           entrega indicada ya que se encuentra fuera del área de cobertura del proveedor del servicio.`
-        );
-        setBlockMoovin(true);
         console.error(
           `Se ha generado un error al solicitar el servicio de Moovin.`,
           error
