@@ -25,6 +25,7 @@ export default function CheckOutForm2({
   setAmount,
   lat,
   lng,
+  handleCheckout,
 }) {
   const isoDate = new Date().toISOString();
   const [paymentDetailId, setPaymentDetailId] = useState(null);
@@ -54,6 +55,7 @@ export default function CheckOutForm2({
 
   useEffect(() => {
     try {
+      handleCheckout(true);
       if (data && data.storeInformation && data.storeInformation.data) {
         // se obtienen las coordenadas de la tienda fisica.
         const { latitude, longitude, delivey_distance_range } =
