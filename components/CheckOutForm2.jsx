@@ -143,22 +143,14 @@ export default function CheckOutForm2({
     } catch (error) {
       console.log("error", error);
     }
-    //
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleDeliveryPayment]);
   /**
    * Hook
    * Verifica si las cordenadas estan dentro
    * de las zonas de entrega de moovin
    */
-
   const { blockMoovin, moovinMessageError, isMoovinAvailable } =
     useFetchMoovinCoverageData(lat, lng);
-
-  console.log("blockMoovin", blockMoovin);
-  console.log("moovinMessageError", moovinMessageError);
-  console.log("isMoovinAvailable", isMoovinAvailable);
-  console.log("testing");
   const onSubmit = handleSubmit(async (data) => {
     //delivery method - MVN(Moovin)
     if (data.deliveryMethod === MVN) {
@@ -166,29 +158,28 @@ export default function CheckOutForm2({
         /**
          *  se crea el formato para hacer  para hacer la peticion del costo de envio a Moovin
          */
+
         const moovinShipmentRequestData = createEstimationMoovinRequest(
           items,
           lat,
           lng
         );
-
         const estimation = await requestEstimation(moovinShipmentRequestData);
         // Verificamos que el servicio sea tipo Route
-
-        if (
-          estimation.optionService[1].type ===
-          MOOVIN_RESPONSE.OPTION_SERVICE_TYPE
-        ) {
+        const routeOption = estimation.optionService.find(
+          (option) => option.type === MOOVIN_RESPONSE.OPTION_SERVICE_TYPE
+        );
+        if (routeOption) {
           //obtenemos el costo del delivery
-
-          const deliveryPrice = Math.ceil(
-            estimation.optionService[1].amount / tipoCambio
-          );
+          const deliveryPrice = Math.ceil(routeOption.amount / tipoCambio);
           /**
            * - Metodo llamado en FormOne
            * - Modifica el estado del deliveryPayment
+           * - se envia unicamente cuando moovin tiene disponibilidad.
            */
+
           handleDeliveryPayment(deliveryPrice.toFixed(2));
+
           const suma = subTotal + taxes + deliveryPrice;
           const finalAmount = {
             total: parseFloat(suma.toFixed(2)),
@@ -226,10 +217,7 @@ export default function CheckOutForm2({
           }
         }
       } catch (error) {
-        console.error(
-          `Se ha generado un error al solicitar el servicio de Moovin.`,
-          error
-        );
+        console.error(MOOVIN_RESPONSE.ERROR_DEFAULT, error, error);
       }
     } else if (data.deliveryMethod === SPU) {
       try {

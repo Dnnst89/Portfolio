@@ -1,10 +1,11 @@
-/**
- * El método realiza una consulta al endpoint de moovin
- * para verificar si la dirección selecionada por el usuario
- * esta dentro o fuera del rango de covertura de moovin en el pais.
- */
 import { getToken } from "./getToken";
-
+/**
+ *
+ * @param {Number} lat - Latitud de punto de entrega.
+ * @param {Number} lng - Longitud de punto de entrega.
+ * @returns - Cadena de texto confirmando la disponibilidad del servicio
+ * en materia de covertura.
+ */
 const coverageArea = async (lat, lng) => {
   const COVERAGE_AREA_MOOVIN_URL = process.env.NEXT_PUBLIC_MOOVIN_COBERTURA;
   try {
