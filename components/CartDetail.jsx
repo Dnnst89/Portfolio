@@ -15,6 +15,7 @@ const CartDetail = ({
   detailTitle = "Detalle del carrito",
   deliveryPayment,
   onChange,
+  showDeliveryPayment,
 }) => {
   const { user } = useStorage();
   const dispatch = useDispatch();
@@ -171,7 +172,7 @@ const CartDetail = ({
           <>
             {
               // Se carga unicamente cuando estamos en checkout
-              isCheckout ? (
+              showDeliveryPayment ? (
                 <div className="flex justify-between ">
                   <p>Costo de envío:</p>
                   <p className="whitespace-nowrap">

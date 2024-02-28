@@ -951,9 +951,10 @@ function FormOne() {
           <div className="flex flex-col space-y-3 ">
             <CartDetail
               detailTitle={"Detalle del carrito"}
-              isCheckout={isCheckOut}
+              isCheckout
               onChange={handleChange}
               deliveryPayment={deliveryPayment}
+              showDeliveryPayment={isCheckOut}
             />
           </div>
           <div>
