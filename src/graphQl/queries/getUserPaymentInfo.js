@@ -25,6 +25,8 @@ export const GET_USER_PAYMENT_INFO = gql`
                 addressLine1
                 addressLine2
                 canton
+                latitude
+                longitude
               }
             }
           }

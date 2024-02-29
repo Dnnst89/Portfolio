@@ -91,7 +91,7 @@ function FormOne() {
 
   const handleDistritoChange = (distritoSeleccionado) => {
     setDistrito(distritoSeleccionado);
-    console.log("handle distrito", distritoSeleccionado);
+    // console.log("handle distrito", distritoSeleccionado);
     setAddress1(distritoSeleccionado);
   };
 
@@ -174,6 +174,14 @@ function FormOne() {
           setAddressId(
             data?.usersPermissionsUser?.data?.attributes?.users_address?.data
               ?.id
+          );
+          setLat(
+            data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+              ?.attributes?.latitude || ""
+          );
+          setLng(
+            data?.usersPermissionsUser?.data?.attributes?.users_address?.data
+              ?.attributes?.longitude || ""
           );
         } else {
           setUserInfoExist(false);
