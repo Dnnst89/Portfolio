@@ -372,7 +372,7 @@ function FormOne() {
       <div className="w-full max-w-screen-xl m-auto grid grid-cols-12 mt-10 mb-20">
         <div className="col-span-12 md:col-span-9 md:pr-2">
           <div className="flex  justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200 min-w-3[375px] justify-between">
-            <div className="flex justify-center items-center min-w-[375px]  max-w-[375px] m-auto  justify-between  px-3">
+            <div className="flex justify-center items-center min-w-[375px] max-w-[375px] m-auto justify-between px-3 whitespace-nowrap">
               <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
                 1
               </div>
@@ -626,7 +626,7 @@ function FormOne() {
                           </p>
                         </div>
                         <div className="col-span-12 md:col-span-6 grid content-baseline">
-                          <label htmlFor="addressLine1">Dirección 1</label>
+                          <label htmlFor="addressLine1">Distrito</label>
                           <input
                             type="text"
                             id="addressLine1"
