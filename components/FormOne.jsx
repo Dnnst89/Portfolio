@@ -317,6 +317,8 @@ function FormOne() {
             autoClose: 5000,
           });
       } else {
+        /*En este caso se envia por defecto el valor Costa Rica porque
+        react bloquea los input que estan desabilitados para edición*/
         const {
           data: createAddressData,
           error: createAddressError,
@@ -324,7 +326,7 @@ function FormOne() {
         } = await createAddress({
           variables: {
             postCode: dataForm.postCode,
-            country: dataForm.country,
+            country: dataForm.country || "Costa Rica",
             addressLine1: dataForm.addressLine1,
             addressLine2: dataForm.addressLine2,
             province: dataForm.province,
@@ -530,26 +532,6 @@ function FormOne() {
                             id="country"
                             value={"Costa Rica"}
                             readOnly
-                            {...register("country", {
-                              required: {
-                                value: true,
-                                message: "El país es requerido",
-                              },
-                              minLength: {
-                                value: 2,
-                                message:
-                                  "El país no puede tener menos de 2 letras",
-                              },
-                              maxLength: {
-                                value: 20,
-                                message:
-                                  "El país postal no puede tener más de 20 letras",
-                              },
-                              pattern: {
-                                value: /^[^0-9]*$/, // Expresión regular que no permite números
-                                message: "No se permiten números en este campo",
-                              },
-                            })}
                             className="bg-grey-400"
                             disabled={!inputsEnabled} // Disable input if inputsEnabled is false
                           />
