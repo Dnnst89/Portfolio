@@ -28,7 +28,7 @@ function FormOne() {
     setValue,
   } = useForm();
   const [inputsEnabled, setInputsEnabled] = useState(false); //enable or disable user information inputs / show or hide the map component
-  let [checkedEditInfoVisible, setcheckedEditInfoVisible] = useState(false);
+  let [checkedEditInfoVisible, setcheckedEditInfoVisible] = useState(true);
 
   const [updateUserInformation] = useMutation(UPDATE_USER_INFORMATION);
   const [updateAddress] = useMutation(UPDATE_ADDRESS);
@@ -157,6 +157,9 @@ function FormOne() {
         variables: { id: userDataId },
         fetchPolicy: "network-only",
       });
+
+      handleShowCheckboxEditInfo(data);
+
       if (error)
         return toast.error(
           "Lo sentimos, ha ocurrido un error al cargar los datos",
@@ -369,7 +372,7 @@ function FormOne() {
       <div className="w-full max-w-screen-xl m-auto grid grid-cols-12 mt-10 mb-20">
         <div className="col-span-12 md:col-span-9 md:pr-2">
           <div className="flex  justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200 min-w-3[375px] justify-between">
-            <div className="flex justify-center items-center min-w-[375px]  max-w-[375px] m-auto  justify-between  px-3">
+            <div className="flex justify-center items-center min-w-[375px] max-w-[375px] m-auto justify-between px-3 whitespace-nowrap">
               <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
                 1
               </div>
@@ -398,7 +401,7 @@ function FormOne() {
           </div>
           {!checkoutForm1Visible ? (
             <form onSubmit={onSubmit}>
-              {!checkedEditInfoVisible ? (
+              {checkedEditInfoVisible ? (
                 <div className="flex ml-14 justify-center w-full">
                   <section className="w-3/4 m-auto mt-10  flex items-center space-x-5">
                     <label htmlFor="idType">Editar información de envío</label>
@@ -517,6 +520,7 @@ function FormOne() {
                           <input
                             type="text"
                             id="country"
+                            value={"Costa Rica"}
                             readOnly
                             {...register("country", {
                               required: {
@@ -622,7 +626,7 @@ function FormOne() {
                           </p>
                         </div>
                         <div className="col-span-12 md:col-span-6 grid content-baseline">
-                          <label htmlFor="addressLine1">Dirección 1</label>
+                          <label htmlFor="addressLine1">Distrito</label>
                           <input
                             type="text"
                             id="addressLine1"
@@ -947,9 +951,10 @@ function FormOne() {
           <div className="flex flex-col space-y-3 ">
             <CartDetail
               detailTitle={"Detalle del carrito"}
-              isCheckout={isCheckOut}
+              isCheckout
               onChange={handleChange}
               deliveryPayment={deliveryPayment}
+              showDeliveryPayment={isCheckOut}
             />
           </div>
           <div>
