@@ -20,8 +20,21 @@ const ProductFeatures = ({variantData, variantsList, setImages, setImage, setvar
   const [featureObject, setFeatureObject] = useState({});
   const [getVariant] = useLazyQuery(GET_VARIANT_BY_ID);
 
-  // console.log("productFeature",variantData);
+  const colorTypeParentVariant = variantData?.variant?.data?.attributes?.parentVariant?.data?.attributes?.type;
+  const colorValueParentVariant = variantData?.variant?.data?.attributes?.parentVariant?.data?.attributes?.typeValue;
+  const colorTypeVariant = variantData?.variant?.data?.attributes?.type;
+  const colorValueVariant = variantData?.variant?.data?.attributes?.typeValue;
 
+  const featuresSelected = {};
+  if (colorTypeParentVariant !== undefined && colorValueParentVariant !== undefined) {
+    featuresSelected[colorTypeParentVariant] = colorValueParentVariant;
+  }
+  
+  // Agregar propiedades solo si colorTypeVariant y colorValueVariant no son indefinidos
+  if (colorTypeVariant !== undefined && colorValueVariant !== undefined) {
+    featuresSelected[colorTypeVariant] = colorValueVariant;
+  }
+  
   /**
    * Obtiene un diccionario de variantes a partir de la lista de variantes.
    * @param {Array} variantsList - Lista de variantes del producto.
@@ -181,27 +194,58 @@ const ProductFeatures = ({variantData, variantsList, setImages, setImage, setvar
   };
 
   return (
-    <div >
-      <h3 className="text-[#484848] text-lg underline font-bold pt-2 pb-5">Características:</h3>
-      {featureList.map((feature, index) => {
-        const featureName = Object.keys(feature)[0]; // Obtén el nombre de la característica
-        const featureOptions = feature[featureName].options; // Obtén las opciones de la característica
+    <div>
+    <h3 className="text-[#484848] text-lg underline font-bold pt-2 pb-5">Características:</h3>
+    
 
-        if (featureName != "null") {
-          return (
-            <FeatureSelector
-              variantData= {variantData || null}
-              key={index}
-              featureId={index}
-              featureName={featureName}
-              featureList={featureOptions}
-              onSelect={handleFeatureSelect}
-            />
-          );
-        }
+  {featuresSelected !== null && featuresSelected !== undefined && Object.keys(featuresSelected).some(key => featuresSelected[key] !== undefined) ?
+  ( 
+    Object.keys(featuresSelected).map((key, index) => {
+      const value = featuresSelected[key];
+      const variantFeatureSelected = key;
+      const variantfeatureOptions = {};
+      variantfeatureOptions[variantFeatureSelected] = value;
+      // Aquí debes definir qué es exactamente `variantfeatureOptions`
+      if (variantFeatureSelected !== "null") {
+        return (
+          <FeatureSelector
+            variantData={variantData || null}
+            key={index}
+            featureId={index}
+            featureName={variantFeatureSelected}
+            featureSelectedList={variantfeatureOptions || null}
+            onSelect={handleFeatureSelect}
+          />
+        );
+      } 
+    })  
+  )
+  :
+  (
+    featureList.map((feature, index) => {
+      const featureName = Object.keys(feature)[0];
+      const featureOptions = feature[featureName].options;
+      
+      if (featureName !== "null") {
+        return (
+          <FeatureSelector
+            variantData={variantData || null}
+            key={index}
+            featureId={index}
+            featureName={featureName}
+            featureList={featureOptions}
+            onSelect={handleFeatureSelect}
+          />
+        );
+      } 
+    })
+  )
+  
+}
 
-      })}
-    </div>
+ 
+
+  </div>
   );
 
 };

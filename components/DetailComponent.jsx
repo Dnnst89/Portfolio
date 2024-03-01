@@ -6,6 +6,7 @@ import ProductDetail from "./ProductDetail";
 import ProductDetailSecondary from "./ProductDetailSecondary";
 import RelatedItems from "./RelatedItems";
 import ProductDetailQuery from "@/src/graphQl/queries/getProductById";
+import GET_CART_ITEM_BY_ID from "@/src/graphQl/queries/getCartItemById";
 import Spinner from "@/components/Spinner";
 import toast from "react-hot-toast";
 
@@ -16,18 +17,50 @@ import toast from "react-hot-toast";
 export default function DetailComponent({ id, idVariant}) {
 
   const [querySearch, setQuerySearch] = useState("");
+  const [idVariantSelected, setIdVariantSelected] = useState();
+  const [idItemSelected, setIdItemSelected] = useState();
 
   useEffect(() => {
-    setQuerySearch(window?.location?.search?.split("?")[1]);
+    const queryString = window?.location?.search?.split("?")[1];
+    setQuerySearch(queryString);
+}, []); 
 
-  }, []);
+useEffect(() => {
 
-  // const [filterType, filterValue] = querySearch.split("&");
-
-  // const [idVar, idV] = filterValue.split("=");
-   const idV=  163;
+  if (querySearch) {
+    const [filterType, filterValue, itemId] = querySearch.split("&");
+ 
+    console.log(itemId);
+    // Verificar si la URL contiene la cadena esperada
+    const containsProductId = filterType.includes("productId");
+    if(filterValue && itemId){
+    const containsIdVariant = filterValue.includes("idVariant");
+    const containsIdItem = itemId.includes("itemId")
   
-  
+
+    if (containsProductId && containsIdVariant && containsIdItem) {
+
+        // Extraer el id de la variante y establecerlo en el estado
+        const [, idV] = filterValue.split("=");
+        setIdVariantSelected(idV);
+        const [ ,idItem] = itemId.split("=");
+        setIdItemSelected(idItem);
+    } else {
+        setIdVariantSelected(null);
+        setIdItemSelected(null);
+    }
+  }
+}
+}, [querySearch]); 
+
+// const{ dataCartItem, load}= useQuery(GET_CART_ITEM_BY_ID,{
+//   variables: {
+//     id: 2182
+//   },
+// });
+// console.log(idItemSelected);
+// console.log(dataCartItem);
+
   const [errorToastShown, setErrorToastShown] = useState(false);
 
   const { loading, error, data } = useQuery(ProductDetailQuery, {
@@ -55,7 +88,7 @@ export default function DetailComponent({ id, idVariant}) {
         <div>
           {data && data.product && data.product.data ? (
             <>
-              <ProductDetail product={data.product.data} variantId={idV || null}/>
+              <ProductDetail product={data.product.data} variantId={idVariantSelected || null} itemId={idItemSelected || null }/>
               <ProductDetailSecondary
                 id={data.product.data.id}
                 description={data.product.data.attributes.description}
@@ -76,7 +109,6 @@ export default function DetailComponent({ id, idVariant}) {
                     autoClose: 5000,
                   }
                 )}
-                {console.log(id)}
               </div>
             )
           )}

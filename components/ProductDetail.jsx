@@ -19,38 +19,40 @@ import ImageGallery from "react-image-gallery";
 import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { useQuery } from "@apollo/client";
 import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
+import GET_CART_ITEM_BY_ID from "@/src/graphQl/queries/getCartItemById";
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 
-function ProductDetail({ product, variantId }) {
+function ProductDetail({ product, variantId , itemId}) {
   const name = product?.attributes?.name;
   const brand = product?.attributes?.brand;
   const description = product?.attributes?.description;
   const variants = product?.attributes?.variants?.data
   const materials = product?.attributes?.materials?.data
-
+  
   const{ data, loading: productIdLoading}= useQuery(GET_VARIANT_BY_ID,{
     variables: {
       id: variantId
     }
   });
-  // console.log("productDetail",variantId);
-  
+
+
+
   const skuSelected = data?.variant?.data?.attributes?.sku;
   const stockVariantSelected = data?.variant?.data?.attributes?.stock;
   const imageVariantSelected = data?.variant?.data?.attributes?.images?.data;
-
   
-  // console.log(data);
-  console.log(imageVariantSelected);
+  
+ 
+
 
   const altText = "Imagen de producto" + name
   const [quantity, setQuantity] = useState(1);
+  const [quantitySelected, SetQuantitySelected] = useState(itemId);
   const [image, setImage] = useState(null);
   let shortDescrption = "";
   const allImages = [];
 
   const baseURL = process.env.NEXT_PUBLIC_URL_DETINMARIN_BUCKET_IMAGES
-
   const { user } = useStorage();
   const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
   const [variantSelected, setvariantSelected] = useState(); //guarda la variante que actualmente se seleccionó{features:{}, variant:{object}}
@@ -68,7 +70,6 @@ function ProductDetail({ product, variantId }) {
   );
   const currency =
     storeInformation?.storeInformation?.data?.attributes?.currency;
-
   if(imageVariantSelected){
     allImages.push(...imageVariantSelected);
   }
@@ -104,11 +105,22 @@ function ProductDetail({ product, variantId }) {
 
 
   const decreaseCounter = () => {
-    if (quantity === 1) return;
-    setQuantity((prev) => --prev);
+      if(itemId){
+        if (quantitySelected === 1) return;
+        SetQuantitySelected((prev) => --prev);
+      }else{
+        if (quantity === 1) return;
+        setQuantity((prev) => --prev);
+      }
   };
 
   const handleQuantityChange = async (newQuantity) => {
+
+    if(itemId){
+      if(quantitySelected ==newQuantity)return;
+      SetQuantitySelected(newQuantity);
+  }
+    else{
     const itemFiltrado = await cartSummary.items.find(
       (item) => item.attributes.variant.data.id === variants[0]?.id
     );
@@ -128,9 +140,15 @@ function ProductDetail({ product, variantId }) {
         setQuantity(newQuantity);
       }
     }
+    }
   };
 
   const increaseCounter = async () => {
+    if(itemId){
+        if(quantitySelected===stockVariantSelected)return;
+        SetQuantitySelected((prev) => ++prev);
+    }
+    else{
     const itemFiltrado = await cartSummary.items.find(
       (item) => item.attributes.variant.data.id === variants[0]?.id
     );
@@ -149,6 +167,7 @@ function ProductDetail({ product, variantId }) {
         if (quantity >= variants[0].attributes.stock) return;
         setQuantity((prev) => ++prev);
       }
+    }
     }
   };
   const handleClick = () => {
@@ -314,8 +333,8 @@ function ProductDetail({ product, variantId }) {
                      )
                   }
                 </div>
-                {Object.entries(variantSelected.features).map((feature, index) => { //feature[0] = key feature[1] = value
-
+                {Object.entries(variantSelected.features).map((feature, index) => { 
+                  
                   return (
                     <div key={index} className="col-span-6 flex mt-5 items-center">
                       <Image
@@ -401,23 +420,34 @@ function ProductDetail({ product, variantId }) {
                   </button>
                   {/* <span>{quantity}</span> */}
                   <div className="group inline-block relative">
+                    {stockVariantSelected ? (
                     <button
+                       type="button"
+                       className="bg-white rounded-full text-black px-4 py-2 transition duration-300 ease-in-out focus:outline-none focus:shadow-outline min-w-[60px]"
+                     >
+                       {quantitySelected}
+                     </button>
+                    ):
+                    (
+                      <button
                       type="button"
                       className="bg-white rounded-full text-black px-4 py-2 transition duration-300 ease-in-out focus:outline-none focus:shadow-outline min-w-[60px]"
                     >
                       {quantity}
                     </button>
-                    <ul className="absolute hidden text-grey-800 group-hover:block border border-grey-200 bg-white max-h-40 overflow-y-auto">
-                      {[...Array(variantSelected?.variant?.data?.attributes?.stock || variants[0].attributes.stock).keys()].map((index) => (
-                        <li
-                          key={index + 1}
-                          onClick={() => handleQuantityChange(index + 1)}
-                          className="cursor-pointer py-2 px-4 hover:bg-grey-200"
-                        >
-                          {index + 1}
-                        </li>
-                      ))}
-                    </ul>
+                    )}
+                   
+                   <ul className="absolute hidden text-grey-800 group-hover:block border border-grey-200 bg-white max-h-40 overflow-y-auto">
+                    {(stockVariantSelected ? [...Array(stockVariantSelected).keys()] : [...Array(variants[0].attributes.stock).keys()]).map((index) => (
+                      <li
+                        key={index + 1}
+                        onClick={() => handleQuantityChange(index + 1)}
+                        className="cursor-pointer py-2 px-4 hover:bg-grey-200"
+                      >
+                        {index + 1}
+                      </li>
+                    ))}
+                  </ul>
                   </div>
                   <button aria-label="Aumentar cantidad de produto" className=" bg-grey-100 rounded-full  text-white">
                     <BiPlus onClick={increaseCounter} />

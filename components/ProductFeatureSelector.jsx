@@ -2,8 +2,11 @@
 
 import React, { useState } from 'react';
 
-const ProductFeatureSelector = ({variantData, featureId, featureName, featureList, onSelect }) => {
+const ProductFeatureSelector = ({variantData, featureId, featureName, featureList, featureSelectedList, onSelect }) => {
   const [selectedValue, setSelectedValue] = useState('');
+
+  
+
 
   const TypeVariantSelected = variantData?.variant?.data?.attributes?.type;
   const TypeValueVariantSelected = variantData?.variant?.data?.attributes?.typeValue;
@@ -26,47 +29,47 @@ const ProductFeatureSelector = ({variantData, featureId, featureName, featureLis
 
     
       <h3 className='text-grey-100 font-bold col-span-12'>{featureName}</h3>
-      {TypeValueVariantSelected? (
-      <select
-      className='col-span-10 md:col-span-7 text-white bg-lightblue font-bold  rounded-lg px-5 px-10 py-3 inline-flex items-center  '
-        id={featureId}
-        value={selectedValue}
-        onChange={handleChange}
-        disabled
-      >
-      <option 
-      className='font-semibold'
-      value={TypeVariantSelected} // Usar el valor de TypeValueVariantSelected como el único valor
-      >
-      {TypeValueVariantSelected}
-      </option>
-      </select>
-      ) :
-      (
-        <select
-        className='col-span-10 md:col-span-7 text-white bg-lightblue font-bold  rounded-lg px-5 px-10 py-3 inline-flex items-center  '
-          id={featureId}
-          value={selectedValue}
-          onChange={handleChange}
-        >
-          <option 
-          className='font-semibold'
-          value="" 
-          disabled>
-            Selec. {featureName}
-          </option>
-          {Object.entries(featureList).map(([key, value], index) => (
-            <option 
-            className='font-semibold'
-            key={value} 
-            value={value}>
-              {key}
-            </option>
-          ))}
-        </select>
-        ) 
+          {featureSelectedList !== null && featureSelectedList !== undefined && Object.keys(featureSelectedList).some(key => featureSelectedList[key] !== undefined) ?
+          (
+            Object.entries(featureSelectedList).map(([key, value], index) => (
+            <div
+                className="col-span-10 md:col-span-7 text-white bg-lightblue font-bold  rounded-lg px-5 px-10 py-3 inline-flex items-center" // Agrega estilos para que parezca una opción deshabilitada
+                key={value} // Agrega la clave única para cada opción
+              >
+                {value}
+            </div>
+            ))
+          )
+          :
+          (
+            <select
+              className='col-span-10 md:col-span-7 text-white bg-lightblue font-bold  rounded-lg px-5 px-10 py-3 inline-flex items-center  '
+              id={featureId}
+              value={selectedValue}
+              onChange={handleChange}
+            >
+            <>
+              <option 
+                className='font-semibold'
+                value="" 
+                disabled
+              >
+                Selec. {featureName}
+              </option>
+              {Object.entries(featureList).map(([key, value], index) => (
+                <option 
+                  className='font-semibold'
+                  key={index} // Agrega la clave única para cada opción
+                  value={value}
+                >
+                  {key}
+                </option>
+              ))}
+            </>
+            </select>
+          )
         }
-
+        
     </div>
   );
 };

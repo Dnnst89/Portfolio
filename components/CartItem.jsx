@@ -27,6 +27,7 @@ const CartItem = ({
   weight,
   images,
   stockVariant,
+  features,
   quantityCartItem,
   loading,
   error,
@@ -44,9 +45,6 @@ const CartItem = ({
   //Product Id 
   const productId = data?.cartItem?.data?.attributes?.variant?.data?.attributes?.product?.data?.id;
 
-  
-
-  console.log("esta es la data",data?.cartItem?.data?.attributes?.variant?.data?.id);
   return (
     <>
       <div
@@ -79,7 +77,7 @@ const CartItem = ({
 
             <div className="p-3 col-span-6">
             {!productIdLoading ? (
-              <Link role="link" href={{ pathname: "/detail", query: {productId: productId, idVariant: idVariant} }}>
+              <Link role="link" href={{ pathname: "/detail", query: {productId: productId, idVariant: idVariant,itemId: quantityCartItem} }}>
               <h1 className="text-lg hover:underline">{productName}</h1>
             </Link>
                 
