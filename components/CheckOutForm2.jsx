@@ -224,7 +224,7 @@ export default function CheckOutForm2({
     } else if (data.deliveryMethod === SPU) {
       try {
         const finalAmount = {
-          total: parseFloat(subTotal + taxes).toFixed(2),
+          total: parseFloat((subTotal + taxes).toFixed(2)),
           subTotal: subTotal,
           taxes: taxes,
         };
@@ -234,7 +234,7 @@ export default function CheckOutForm2({
             status: "Inicial",
             subTotal: subTotal,
             taxes: taxes,
-            total: total,
+            total: finalAmount.total,
             invoiceRequired: checkbox,
             deliveryPayment: parseFloat(0),
             deliveryId: parseInt(0),
@@ -265,6 +265,7 @@ export default function CheckOutForm2({
         subTotal: subTotal,
         taxes: taxes,
       };
+
       //Se envia el costo del delivery y se mostrara
       //en detalles del carrito al seleccionarse Correos de Costa Rica.
       handleDeliveryPayment(LongDistancePrice);
