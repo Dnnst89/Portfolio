@@ -35,7 +35,7 @@ const ProductContainer = ({
                     key={item.id}
                     id={item.id}
                     name={item.name}
-                    defaultPrice={item.defaultPrice}
+                    defaultPrice={item.defaultPrice.toFixed(2)}
                     coverImage={item.coverImage}
                     brand={item.brand}
                   />

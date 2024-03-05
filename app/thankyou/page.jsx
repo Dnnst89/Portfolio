@@ -80,7 +80,9 @@ export default function ThankYouMessage() {
   const [getOrderItemsByOrderId] = useLazyQuery(GET_ORDER_ITEMS_BY_ORDER_ID);
   const [getStoreInformation] = useLazyQuery(GET_STORE_INFO);
   const [getUserAddress] = useLazyQuery(GET_USER_ADDRESS);
-  const [updateShoppingSessionActive] = useMutation(UPDATE_SHOPPING_SESSION_ACTIVE);
+  const [updateShoppingSessionActive] = useMutation(
+    UPDATE_SHOPPING_SESSION_ACTIVE
+  );
   const [createShoppingSession] = useMutation(CREATE_SHOPPING_SESSION_MUTATION);
 
   // const { user } = useStorage();
@@ -132,7 +134,6 @@ export default function ThankYouMessage() {
   }, [loading]);
 
   const handleCartItems = async () => {
-
     const fechaActual = new Date();
     const fechaFormateada = fechaActual.toISOString();
     items.map((item) => {
@@ -155,29 +156,31 @@ export default function ThankYouMessage() {
         // } catch (error) { }
 
         try {
-          updateVariantStock({//actualizo el stock de las variantes
+          updateVariantStock({
+            //actualizo el stock de las variantes
             variables: {
               id: variant,
               stock: newStock,
             },
           });
-          updateShoppingSessionActive({//inactivo la sesion del carrito viejo
+          updateShoppingSessionActive({
+            //inactivo la sesion del carrito viejo
             variables: {
               id: sessionId,
               active: false,
             },
           });
-          createShoppingSession({//se le crea una nueva sesion de carrito
+          createShoppingSession({
+            //se le crea una nueva sesion de carrito
             variables: {
               publishedAt: fechaFormateada,
               userId: userId,
-              active: true
+              active: true,
             },
           });
         } catch (error) {
           console.log("error");
         }
-
       }
     });
   };
@@ -223,7 +226,7 @@ export default function ThankYouMessage() {
           //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
           try {
             fetchOrderMoovin(orderNumber);
-          } catch (error) { }
+          } catch (error) {}
 
           handleCartItems();
           createInvoice(orderNumber);
@@ -554,8 +557,8 @@ export default function ThankYouMessage() {
               } catch (error) {
                 console.log("error", error);
               }
-            } catch (error) { }
-          } catch (error) { }
+            } catch (error) {}
+          } catch (error) {}
         } catch (error) {
           console.log("error crear factura", error);
         }

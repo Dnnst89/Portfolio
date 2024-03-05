@@ -1,15 +1,30 @@
 "use client";
 import Link from "next/link";
-export default function CartProceedPayment({ textButton, page, error }) {
+import { useSelector } from "react-redux";
+export default function CartProceedPayment({
+  textButton,
+  page,
+  error,
+  isCheckout,
+}) {
+  const cart = useSelector((state) => state.cart);
   return (
     <div className="flex flex-col p-4 space-y-3">
-      <div className="flex justify-between ">
-        <p>Entrega Estimada:</p>
-        <p className="whitespace-nowrap">48 horas hábiles</p>
-      </div>
-      <p className="flex justify-center text-sm whitespace-nowrap">
-        *Detalle acerca de la fecha de entrega*
-      </p>
+      {
+        // se muestra solo cuando estamos en checkout
+        isCheckout ? (
+          <div>
+            <div className="flex justify-between ">
+              <p>Entrega Estimada:</p>
+              <p className="whitespace-nowrap">48 horas hábiles</p>
+            </div>
+            <p className="flex justify-center text-sm whitespace-nowrap">
+              *Detalle acerca de la fecha de entrega*
+            </p>
+          </div>
+        ) : null
+      }
+
       <div className="m-auto">
         <Link href={page}>
           <button
@@ -17,9 +32,11 @@ export default function CartProceedPayment({ textButton, page, error }) {
             className={`bg-pink-200 text-white rounded-sm p-2 w-[200px] whitespace-nowrap ${
               error?.length > 0 ? "cursor-not-allowed" : "cursor-pointer" //si el arreglo de errores tiene algun id d eun item que este provocando errores
             }`}
-            disabled={error?.length > 0}
+            disabled={error?.length > 0 || cart.loadingTaxes}
           >
-            {textButton}
+            {error?.length > 0 || cart.loadingTaxes
+              ? "Procesando..."
+              : textButton}
           </button>
         </Link>
       </div>
