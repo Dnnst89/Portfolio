@@ -8,6 +8,7 @@ import { updateCartItems, updateQtyItems } from "@/redux/features/cart-slice";
 import UPDATE_CART_ITEM_QUANTITY_MUTATION from "@/src/graphQl/queries/updateCartItemQuantity";
 
 const AddItemBtn = ({
+  variantData,
   product,
   quantityItem,
   variant,
@@ -18,9 +19,11 @@ const AddItemBtn = ({
   features,
   enableButton,
 }) => {
+ 
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((x) => x.auth);
   const [createCartItem] = useMutation(CREATE_CART_ITEM_MUTATION, {});
+  const [newQuantityValue, setNewQuantity] = useState();
   const [updateCartItemQuantity] = useMutation(
     UPDATE_CART_ITEM_QUANTITY_MUTATION
   );
@@ -33,16 +36,37 @@ const AddItemBtn = ({
       const itemFiltrado = cartItems.find(
         (item) => item.attributes.variant.data.id === variant?.id
       );
+      
       const fechaActual = new Date();
       const fechaFormateada = fechaActual.toISOString();
       if (itemFiltrado) {
         //si el item esta en carrito
-        const newQuantity = quantityItem + itemFiltrado.quantity;
+        console.log("quantityItem",quantityItem);
+        console.log("itemFiltrado.quantity",itemFiltrado.quantity);
+        if(variantData != null){
+          if(quantityItem < itemFiltrado.quantity ){
+            setNewQuantity(quantityItem);
+          }
+          else{
+            const quantityDetail = quantityItem - itemFiltrado.quantity ;
+            console.log("quantityDetail",quantityDetail)
+            setNewQuantity(quantityDetail + itemFiltrado.quantity);
+          }
+          
+          
+        }
+        else{
+          setNewQuantity(quantityItem + itemFiltrado.quantity);
+        }
+        
         if (
-          newQuantity > itemFiltrado.attributes.variant.data.attributes.stock
+          newQuantityValue > itemFiltrado.attributes.variant.data.attributes.stock
         ) {
           toast.error("No puedes agregar mas de este producto al carrito");
         } else {
+          const newQuantity = newQuantityValue;
+          console.log(newQuantity);
+          console.log(quantityItem);
           updateCartItemQuantity({
             variables: {
               newQuantity: newQuantity,

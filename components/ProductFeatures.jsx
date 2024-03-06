@@ -25,6 +25,7 @@ const ProductFeatures = ({variantData, variantsList, setImages, setImage, setvar
   const colorTypeVariant = variantData?.variant?.data?.attributes?.type;
   const colorValueVariant = variantData?.variant?.data?.attributes?.typeValue;
 
+  
   const featuresSelected = {};
   if (colorTypeParentVariant !== undefined && colorValueParentVariant !== undefined) {
     featuresSelected[colorTypeParentVariant] = colorValueParentVariant;
@@ -35,6 +36,9 @@ const ProductFeatures = ({variantData, variantsList, setImages, setImage, setvar
     featuresSelected[colorTypeVariant] = colorValueVariant;
   }
   
+  if(variantData){
+    setEnableButton(variantData?.variant?.data?.attributes?.childVariants?.data?.length == 0);
+  }
   /**
    * Obtiene un diccionario de variantes a partir de la lista de variantes.
    * @param {Array} variantsList - Lista de variantes del producto.
@@ -156,6 +160,7 @@ const ProductFeatures = ({variantData, variantsList, setImages, setImage, setvar
         //llamo la query para traer la shopping session
         variables: { id: selectedValue },
       });
+      
       setEnableButton(data.variant.data.attributes.childVariants.data.length == 0);
       const variantData = data?.variant?.data?.attributes.childVariants;
       setVariantInfo(variantData.data);

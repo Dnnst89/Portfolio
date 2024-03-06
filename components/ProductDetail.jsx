@@ -35,12 +35,25 @@ function ProductDetail({ product, variantId , itemId}) {
     }
   });
 
-
-
+  const lastVariantSelected = data?.variant?.data
   const skuSelected = data?.variant?.data?.attributes?.sku;
   const stockVariantSelected = data?.variant?.data?.attributes?.stock;
   const imageVariantSelected = data?.variant?.data?.attributes?.images?.data;
+  const colorTypeParentVariant = data?.variant?.data?.attributes?.parentVariant?.data?.attributes?.type;
+  const colorValueParentVariant = data?.variant?.data?.attributes?.parentVariant?.data?.attributes?.typeValue;
+  const colorTypeVariant = data?.variant?.data?.attributes?.type;
+  const colorValueVariant = data?.variant?.data?.attributes?.typeValue;
+
+
+  const featuresSelected = {};
+  if (colorTypeParentVariant !== undefined && colorValueParentVariant !== undefined) {
+    featuresSelected[colorTypeParentVariant] = colorValueParentVariant;
+  }
   
+  // Agregar propiedades solo si colorTypeVariant y colorValueVariant no son indefinidos
+  if (colorTypeVariant !== undefined && colorValueVariant !== undefined) {
+    featuresSelected[colorTypeVariant] = colorValueVariant;
+  }
   
  
 
@@ -457,12 +470,10 @@ function ProductDetail({ product, variantId , itemId}) {
               <div className={`${enableButton ? 'bg-aquamarine' : 'bg-grey-200'} rounded-sm p-2 md:p-3  md:mx-4"`}>
 
                 <AddItemBtn
-                  quantityItem={quantity}
-                  variant={variantSelected?.variant?.data ? variantSelected.variant.data
-                    : variants[0]}//Se envía la ultima variante seleccionada
-                  features={variantSelected?.features
-                    ? variantSelected.features
-                    : {}}
+                  variantData ={data || null}
+                  quantityItem={quantitySelected !== null ? quantitySelected : quantity}
+                  variant={lastVariantSelected !== null ? lastVariantSelected : (variantSelected?.variant?.data ? variantSelected.variant.data : variants[0])}//Se envía la ultima variante seleccionada
+                  features={featuresSelected !== null ? featuresSelected : (variantSelected?.features ? variantSelected.features : {})}
                   cartItems={cartSummary.items}
                   cartQuantity={cartSummary.quantity}
                   sessionId={cartSummary.sessionId}
