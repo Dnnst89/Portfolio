@@ -208,7 +208,7 @@ function ProductDetail({ product, variantId , ItemQt}) {
 
 
   //cuando el producto solo tiene una capa de variante, obtengo el variants[0]
-  {data== undefined ?
+  {data != undefined ?
     (() => {
       variantItems = [
         {
@@ -231,6 +231,7 @@ function ProductDetail({ product, variantId , ItemQt}) {
     ageRange: 'Rango de edad',
   };
   const variantItem = variantItems[0];
+  
   return (
     <>{variants.length > 0 ? (
       <section aria-label="Descripción del producto" className="bg-floralwhite max-w-screen-xl grid grid-cols-12 m-auto p-5 z-0" target="_blank" rel="noopener noreferrer">
