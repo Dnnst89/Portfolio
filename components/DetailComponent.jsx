@@ -10,48 +10,41 @@ import GET_CART_ITEM_BY_ID from "@/src/graphQl/queries/getCartItemById";
 import Spinner from "@/components/Spinner";
 import toast from "react-hot-toast";
 
-
-
-
-
-export default function DetailComponent({ id, idVariant}) {
-
+export default function DetailComponent({ id, idVariant }) {
   const [querySearch, setQuerySearch] = useState("");
   const [idVariantSelected, setIdVariantSelected] = useState();
   const [idItemSelected, setIdItemSelected] = useState();
 
+  //obtengo el url
   useEffect(() => {
     const queryString = window?.location?.search?.split("?")[1];
     setQuerySearch(queryString);
-}, []); 
+  }, []);
 
-useEffect(() => {
+  //obtengo los valores de productId, idVariant y ItemQt que viene en la url
+  useEffect(() => {
+    if (querySearch) {
+      const [filterType, filterValue, ItemQt] = querySearch.split("&");
 
-  if (querySearch) {
-    const [filterType, filterValue, ItemQt] = querySearch.split("&");
- 
-    // Verificar si la URL contiene la cadena esperada
-    const containsProductId = filterType.includes("productId");
-    if(filterValue && ItemQt){
-    const containsIdVariant = filterValue.includes("idVariant");
-    const containsIdItem = ItemQt.includes("ItemQt")
-  
+      // Verificar si la URL contiene la cadena esperada
+      const containsProductId = filterType.includes("productId");
+      if (filterValue && ItemQt) {
+        const containsIdVariant = filterValue.includes("idVariant");
+        const containsIdItem = ItemQt.includes("ItemQt");
 
-    if (containsProductId && containsIdVariant && containsIdItem) {
-
-        // Extraer el id de la variante y establecerlo en el estado
-        const [, idV] = filterValue.split("=");
-        setIdVariantSelected(idV);
-        const [ ,idItem] = ItemQt.split("=");
-        setIdItemSelected(idItem);
-    } else {
-        setIdVariantSelected(null);
-        setIdItemSelected(null);
+        if (containsProductId && containsIdVariant && containsIdItem) {
+          // Extraer el id de la variante y establecerlo en el estado
+          const [, idV] = filterValue.split("=");
+          setIdVariantSelected(idV);
+          const [, idItem] = ItemQt.split("=");
+          setIdItemSelected(idItem);
+        } else {
+          setIdVariantSelected(null);
+          setIdItemSelected(null);
+        }
+      }
     }
-  }
-}
-}, [querySearch]); 
-
+  }, [querySearch]);
 
   const [errorToastShown, setErrorToastShown] = useState(false);
 
@@ -80,7 +73,11 @@ useEffect(() => {
         <div>
           {data && data.product && data.product.data ? (
             <>
-              <ProductDetail product={data.product.data} variantId={idVariantSelected || null} ItemQt={idItemSelected || null }/>
+              <ProductDetail
+                product={data.product.data}
+                variantId={idVariantSelected || null}
+                ItemQt={idItemSelected || null}
+              />
               <ProductDetailSecondary
                 id={data.product.data.id}
                 description={data.product.data.attributes.description}
