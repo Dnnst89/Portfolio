@@ -23,7 +23,7 @@ const AddItemBtn = ({
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((x) => x.auth);
   const [createCartItem] = useMutation(CREATE_CART_ITEM_MUTATION, {});
-  const [newQuantityValue, setNewQuantity] = useState();
+  let newQuantity = 0;
   const [updateCartItemQuantity] = useMutation(
     UPDATE_CART_ITEM_QUANTITY_MUTATION
   );
@@ -39,34 +39,28 @@ const AddItemBtn = ({
       
       const fechaActual = new Date();
       const fechaFormateada = fechaActual.toISOString();
+      
       if (itemFiltrado) {
         //si el item esta en carrito
-        console.log("quantityItem",quantityItem);
-        console.log("itemFiltrado.quantity",itemFiltrado.quantity);
-        if(variantData != null){
+        if(variantData && variantData.variant && variantData.variant.data){
           if(quantityItem < itemFiltrado.quantity ){
-            setNewQuantity(quantityItem);
+            newQuantity = quantityItem;
           }
           else{
             const quantityDetail = quantityItem - itemFiltrado.quantity ;
-            console.log("quantityDetail",quantityDetail)
-            setNewQuantity(quantityDetail + itemFiltrado.quantity);
+            newQuantity = quantityDetail + itemFiltrado.quantity;
           }
-          
-          
         }
         else{
-          setNewQuantity(quantityItem + itemFiltrado.quantity);
+          
+          newQuantity = quantityItem + itemFiltrado.quantity;
         }
         
         if (
-          newQuantityValue > itemFiltrado.attributes.variant.data.attributes.stock
+          newQuantity > itemFiltrado.attributes.variant.data.attributes.stock
         ) {
           toast.error("No puedes agregar mas de este producto al carrito");
         } else {
-          const newQuantity = newQuantityValue;
-          console.log(newQuantity);
-          console.log(quantityItem);
           updateCartItemQuantity({
             variables: {
               newQuantity: newQuantity,

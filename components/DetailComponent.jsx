@@ -28,14 +28,13 @@ export default function DetailComponent({ id, idVariant}) {
 useEffect(() => {
 
   if (querySearch) {
-    const [filterType, filterValue, itemId] = querySearch.split("&");
+    const [filterType, filterValue, ItemQt] = querySearch.split("&");
  
-    console.log(itemId);
     // Verificar si la URL contiene la cadena esperada
     const containsProductId = filterType.includes("productId");
-    if(filterValue && itemId){
+    if(filterValue && ItemQt){
     const containsIdVariant = filterValue.includes("idVariant");
-    const containsIdItem = itemId.includes("itemId")
+    const containsIdItem = ItemQt.includes("ItemQt")
   
 
     if (containsProductId && containsIdVariant && containsIdItem) {
@@ -43,7 +42,7 @@ useEffect(() => {
         // Extraer el id de la variante y establecerlo en el estado
         const [, idV] = filterValue.split("=");
         setIdVariantSelected(idV);
-        const [ ,idItem] = itemId.split("=");
+        const [ ,idItem] = ItemQt.split("=");
         setIdItemSelected(idItem);
     } else {
         setIdVariantSelected(null);
@@ -53,13 +52,6 @@ useEffect(() => {
 }
 }, [querySearch]); 
 
-// const{ dataCartItem, load}= useQuery(GET_CART_ITEM_BY_ID,{
-//   variables: {
-//     id: 2182
-//   },
-// });
-// console.log(idItemSelected);
-// console.log(dataCartItem);
 
   const [errorToastShown, setErrorToastShown] = useState(false);
 
@@ -88,7 +80,7 @@ useEffect(() => {
         <div>
           {data && data.product && data.product.data ? (
             <>
-              <ProductDetail product={data.product.data} variantId={idVariantSelected || null} itemId={idItemSelected || null }/>
+              <ProductDetail product={data.product.data} variantId={idVariantSelected || null} ItemQt={idItemSelected || null }/>
               <ProductDetailSecondary
                 id={data.product.data.id}
                 description={data.product.data.attributes.description}

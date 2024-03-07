@@ -36,7 +36,7 @@ const ProductFeatures = ({variantData, variantsList, setImages, setImage, setvar
     featuresSelected[colorTypeVariant] = colorValueVariant;
   }
   
-  if(variantData){
+  if(variantData && variantData.variant && variantData.variant.data){
     setEnableButton(variantData?.variant?.data?.attributes?.childVariants?.data?.length == 0);
   }
   /**

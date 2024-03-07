@@ -22,7 +22,7 @@ import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
 import GET_CART_ITEM_BY_ID from "@/src/graphQl/queries/getCartItemById";
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 
-function ProductDetail({ product, variantId , itemId}) {
+function ProductDetail({ product, variantId , ItemQt}) {
   const name = product?.attributes?.name;
   const brand = product?.attributes?.brand;
   const description = product?.attributes?.description;
@@ -34,10 +34,12 @@ function ProductDetail({ product, variantId , itemId}) {
       id: variantId
     }
   });
-
   const lastVariantSelected = data?.variant?.data
   const skuSelected = data?.variant?.data?.attributes?.sku;
   const stockVariantSelected = data?.variant?.data?.attributes?.stock;
+  const ageRangeVariantSelected = data?.variant?.data?.attributes?.ageRange;
+  const priceVariantSelected = data?.variant?.data?.attributes?.price;
+  const sizeVariantSelected = data?.variant?.data?.attributes?.size;
   const imageVariantSelected = data?.variant?.data?.attributes?.images?.data;
   const colorTypeParentVariant = data?.variant?.data?.attributes?.parentVariant?.data?.attributes?.type;
   const colorValueParentVariant = data?.variant?.data?.attributes?.parentVariant?.data?.attributes?.typeValue;
@@ -60,7 +62,8 @@ function ProductDetail({ product, variantId , itemId}) {
 
   const altText = "Imagen de producto" + name
   const [quantity, setQuantity] = useState(1);
-  const [quantitySelected, SetQuantitySelected] = useState(itemId);
+  const [quantitySelected, SetQuantitySelected] = useState(ItemQt);
+  
   const [image, setImage] = useState(null);
   let shortDescrption = "";
   const allImages = [];
@@ -71,7 +74,7 @@ function ProductDetail({ product, variantId , itemId}) {
   const [variantSelected, setvariantSelected] = useState(); //guarda la variante que actualmente se seleccionó{features:{}, variant:{object}}
   const [price, setPrice] = useState(variants.length > 0 ? variants[0].attributes.price.toFixed(2) : null);//precio inicial dado por primer variante
   const [enableButton, setEnableButton] = useState(variants.length <= 1);
-
+  let variantItems  = [];
 
   const { data: storeInformation, error: storeInformationError } = useQuery(
     GET_STORE_INFO,
@@ -116,20 +119,25 @@ function ProductDetail({ product, variantId , itemId}) {
     }
   }, [images,imageVariantSelected]);
 
-
+ 
   const decreaseCounter = () => {
-      if(itemId){
-        if (quantitySelected === 1) return;
-        SetQuantitySelected((prev) => --prev);
-      }else{
-        if (quantity === 1) return;
-        setQuantity((prev) => --prev);
+    if (ItemQt) {
+      if (quantitySelected > 1) {
+        SetQuantitySelected((prev) => prev - 1);
+      } else {
+        // Evitar decrementar por debajo de 1
+        SetQuantitySelected(1);
       }
+    } else {
+      if (quantity > 1) {
+        setQuantity((prev) => prev - 1);
+      }
+    }
   };
 
   const handleQuantityChange = async (newQuantity) => {
 
-    if(itemId){
+    if(ItemQt){
       if(quantitySelected ==newQuantity)return;
       SetQuantitySelected(newQuantity);
   }
@@ -157,8 +165,8 @@ function ProductDetail({ product, variantId , itemId}) {
   };
 
   const increaseCounter = async () => {
-    if(itemId){
-        if(quantitySelected===stockVariantSelected)return;
+    if(ItemQt){
+        if(quantitySelected >= stockVariantSelected)return;
         SetQuantitySelected((prev) => ++prev);
     }
     else{
@@ -200,10 +208,23 @@ function ProductDetail({ product, variantId , itemId}) {
 
 
   //cuando el producto solo tiene una capa de variante, obtengo el variants[0]
-  const variantItems = variants.map(variant => {
-    const { size, price, color, stock, ageRange } = variant.attributes;
-    return { size, ageRange };
-  });
+  {data== undefined ?
+    (() => {
+      variantItems = [
+        {
+          size: data?.variant?.data?.attributes?.size,
+          ageRange: data?.variant?.data?.attributes?.ageRange,
+        }
+      ]
+    })()
+    :
+    (() => {
+       variantItems = variants.map(variant => {
+        const { size, price, color, stock, ageRange } = variant.attributes;
+        return { size, ageRange };
+      });
+    })()
+  }
   const keyTranslations = {
     size: 'Tamaño',
     stock: 'Existencias',
@@ -290,8 +311,6 @@ function ProductDetail({ product, variantId , itemId}) {
                 {materials.length > 0 ? materials.map((material, index) => { return <span key={index}>{material.attributes.name}</span> }) : null}
               </p>
             </div>
-
-
             {/* INFORMACION E ICONOS DE LA VARIANTE, DINAMICOS*/}
             {variantSelected ?
               <>
@@ -306,7 +325,7 @@ function ProductDetail({ product, variantId , itemId}) {
                   />
                   <p className="text-sm md:text-base">
                     Tamaño: <br />
-                    {variantSelected?.variant?.data?.attributes?.size}
+                    {sizeVariantSelected != null ? sizeVariantSelected : variantSelected?.variant?.data?.attributes?.size}
                   </p>
                 </div>
                 <div className="col-span-6 flex mt-5 items-center">
@@ -320,7 +339,7 @@ function ProductDetail({ product, variantId , itemId}) {
                   />
                   <p className="text-sm md:text-base">
                     Rango de edad: <br />
-                    {variantSelected?.variant?.data?.attributes?.ageRange}
+                    { variantSelected?.variant?.data?.attributes?.ageRange}
                   </p>
                 </div>
                 <div className="col-span-6 flex mt-5 items-center">
@@ -332,7 +351,7 @@ function ProductDetail({ product, variantId , itemId}) {
                     alt="tailwind logo"
                     className="rounded-full mr-3"
                   />
-                  {stockVariantSelected? (
+                  {stockVariantSelected != null? (
                   <p className="text-sm md:text-base">
                     Existencias: <br />
                     {stockVariantSelected === 0 ? "Agotados" : "Disponibles"}
@@ -379,10 +398,23 @@ function ProductDetail({ product, variantId , itemId}) {
                     alt="tailwind logo"
                     className="rounded-full mr-3"
                   />
-                  <p className="text-sm md:text-base">
+                  {stockVariantSelected != null ?
+                  (
+                    <p className="text-sm md:text-base">
+                    Existencias: <br />
+                    {stockVariantSelected == 0 ? "Agotados" : "Disponibles"}
+                  </p>
+                    
+                  )
+                  :
+                  (
+                    <p className="text-sm md:text-base">
                     Existencias: <br />
                     {variantSelected?.variant?.data?.attributes?.stock || variants[0].attributes.stock <= 0 ? "Agotados" : "Disponibles"}
                   </p>
+                  )
+                  }
+                  
                 </div>
 
 
@@ -413,6 +445,24 @@ function ProductDetail({ product, variantId , itemId}) {
                     );
                   }
                 })}
+                {JSON.stringify(featuresSelected) !== JSON.stringify({null: null}) && Object.entries(featuresSelected).map((feature, index) => { 
+                return (
+                  <div key={index} className="col-span-6 flex mt-5 items-center">
+                    <Image
+                      priority={true}
+                      width="50"
+                      height="50"
+                      src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_04_97a571b092.webp`}
+                      alt="tailwind logo"
+                      className="rounded-full mr-3"
+                    />
+                    <p className="text-sm md:text-base">
+                      {feature[0]}: <br />
+                      {feature[1]}
+                    </p>
+                  </div>
+                );
+              })}
               </>
               //cuando el producto solo tiene una capa de variante, obtengo el variants[0]
 
