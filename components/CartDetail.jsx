@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { facturationInstace } from "@/src/axios/algoliaIntance/config";
 import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { useQuery } from "@apollo/client";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { isTaxesLoading } from "@/redux/features/cart-slice";
 
 const CartDetail = ({
@@ -15,9 +15,11 @@ const CartDetail = ({
   detailTitle = "Detalle del carrito",
   deliveryPayment,
   onChange,
+  showDeliveryPayment,
 }) => {
   const { user } = useStorage();
   const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cart);
   const { data: storeInformation, error: storeInformationError } = useQuery(
     GET_STORE_INFO,
     {
@@ -29,7 +31,6 @@ const CartDetail = ({
   const withoutDelivery = 0;
   const currency =
     storeInformation?.storeInformation?.data?.attributes?.currency;
-  const [shipment, setShipment] = useState(0);
   const [amounts, setAmounts] = useState({
     total: 0,
     tax: 0,
@@ -37,14 +38,12 @@ const CartDetail = ({
     loading: false,
   });
   const {
-    loading,
     items,
     quantity,
     total: subTotal,
   } = useCartSummary({
     userId: user?.id,
   });
-
   useEffect(() => {
     if (subTotal !== undefined) {
       if (deliveryPayment != 0) {
@@ -84,12 +83,7 @@ const CartDetail = ({
   }, [deliveryPayment]); // El segundo argumento [] asegura que useEffect se ejecute solo una vez al montar el componente
 
   useEffect(() => {
-    setShipment(0);
-    if (items !== null || items !== null) {
-      getTaxCost();
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    getTaxCost();
   }, [quantity]);
 
   const getTaxCost = async () => {
@@ -132,7 +126,7 @@ const CartDetail = ({
         });
       }
     } catch (error) {
-      console.log(error);
+      console.error("La solicitud de impuestos ha presentado un error.", error);
     } finally {
       setAmounts((prev) => ({
         ...prev,
@@ -140,14 +134,13 @@ const CartDetail = ({
       }));
       // Se finaliza el proceso de request a gateway.
       // se cambia el estado.
-      dispatch(isTaxesLoading(false));
     }
+    dispatch(isTaxesLoading(false));
   };
-
   return (
     <div className="p-3 md:space-y-3">
       <h2 className="tittle flex justify-center">{detailTitle}</h2>
-      {!amounts.loading ? (
+      {!cart.loadingTaxes ? (
         <>
           <div className="flex justify-between ">
             <p className="whitespace-nowrap">N° artículos</p>
@@ -163,14 +156,14 @@ const CartDetail = ({
           <div className="flex justify-between border-dashed border-grey-200 border-b-[2px] pb-3">
             <p>Impuestos:</p>
             <p className="whitespace-nowrap">
-              {amounts.tax} {amounts.currencyType}
+              {amounts.tax.toFixed(2)} {amounts.currencyType}
             </p>
           </div>
 
           <>
             {
               // Se carga unicamente cuando estamos en checkout
-              isCheckout ? (
+              showDeliveryPayment ? (
                 <div className="flex justify-between ">
                   <p>Costo de envío:</p>
                   <p className="whitespace-nowrap">
