@@ -1,11 +1,15 @@
 import Image from "next/image";
 import test from "../app/assets/heart.png";
-
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import CartQuantityBtn from "./CartQuantityBtn";
 import DeleteCartItemBtn from "./DeleteCartItemBtn";
 import CarouselImages from "./CarouselImages";
 import { useSelector } from "react-redux";
+import {useQuery } from "@apollo/client";
+import PRODUCT_ID_CARTITEM_QUERY from "@/src/graphQl/queries/getProductIdFromCartItem";
+import DetailComponent from './DetailComponent';
+import Link from "next/link";
+
 
 const CartItem = ({
   cartItemId,
@@ -21,11 +25,24 @@ const CartItem = ({
   weight,
   images,
   stockVariant,
+  features,
   quantityCartItem,
   loading,
   error,
 }) => {
   const cart = useSelector((state) => state.cart);
+
+  
+  //Get the data of the product depend on the cartItemId
+  const{ data, loading: productIdLoading}= useQuery(PRODUCT_ID_CARTITEM_QUERY,{
+      variables: {
+        cartItemId: cartItemId
+      }
+  });
+
+  //Product Id 
+  const productId = data?.cartItem?.data?.attributes?.variant?.data?.attributes?.product?.data?.id;
+
 
   return (
     <>
@@ -38,25 +55,42 @@ const CartItem = ({
       >
         <section className="grid grid-cols-12 col-span-12 md:col-span-4">
           <div className="grid grid-cols-12 col-span-12 items-center">
+          
+         
             {images.length > 0 ? (
               <CarouselImages
                 altText={productName}
                 images={images}
                 widthImg={140}
                 heightImg={140}
-                classStyle={"rounded-2xl col-span-6"}
+                classStyle={"rounded-2xl"}
+                productId ={productId}
+                idVariant={idVariant}
+                ItemQt = {quantityCartItem}
               />
             ) : (
-              <Image
-                src={test}
-                alt={productName}
-                style={{ width: "140px", height: "140px" }}
-                className="col-span-6"
-              />
+
+             <Link href={{ pathname: "/detail", query: { productId: productId, idVariant: idVariant, ItemQt: quantityCartItem } }}>
+              
+                <Image 
+                  src={test}
+                  alt={productName}
+                  style={{ width: "140px", height: "140px" }}
+                  className="col-span-6"
+                />
+            </Link>
             )}
 
             <div className="p-3 col-span-6">
-              <h1 className="text-lg">{productName}</h1>
+            {!productIdLoading ? (
+              <Link role="link" href={{ pathname: "/detail", query: {productId: productId, idVariant: idVariant,ItemQt: quantityCartItem} }}>
+              <h1 className="text-lg hover:underline">{productName}</h1>
+            </Link>
+                
+              ) : (
+                <h1 className="text-lg">{productName}</h1>
+              )}
+
               <p className="text-xs text-lightblue">{brand}</p>
               <span className="text-xs text-grey">Ref {idVariant}</span>
             </div>
