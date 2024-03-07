@@ -208,10 +208,11 @@ function ProductDetail({ product, variantId , ItemQt}) {
 
 
   //cuando el producto solo tiene una capa de variante, obtengo el variants[0]
-  {data != undefined ?
+  {data && data.variant && data.variant.data ?
     (() => {
       variantItems = [
         {
+          
           size: data?.variant?.data?.attributes?.size,
           ageRange: data?.variant?.data?.attributes?.ageRange,
         }
@@ -225,6 +226,7 @@ function ProductDetail({ product, variantId , ItemQt}) {
       });
     })()
   }
+  
   const keyTranslations = {
     size: 'Tamaño',
     stock: 'Existencias',
