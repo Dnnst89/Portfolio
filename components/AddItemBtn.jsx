@@ -65,7 +65,7 @@ const AddItemBtn = ({
           })
             .then((response) => {
               dispatch(updateQtyItems(cartQuantity + quantityItem));
-              toast.success("Se ha actulizado un producto");
+              toast.success("Se ha actualizado un producto");
               // Manejar la respuesta de la mutación aquí, si es necesario
             })
             .catch((error) => {
