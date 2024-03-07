@@ -50,7 +50,7 @@ export default function DetailComponent({ id }) {
               <div>
                 {setErrorToastShown(true)}
                 {toast.error(
-                  "Hubo un error al cargar los datos. Inténtalo de nuevo.",
+                  "Ha ocurrido un error al obtener los datos del producto seleccionado. Inténtalo de nuevo.",
                   {
                     autoClose: 5000,
                   }
@@ -58,16 +58,19 @@ export default function DetailComponent({ id }) {
               </div>
             )
           )}
-          <div className="text-center my-48">
-            <button
-              onClick={() => {
-                router.push("/");
-              }}
-              className="bg-aquamarine text-white rounded-sm p-2 w-[150px]"
-            >
-              Volver
-            </button>
-          </div>
+
+          {errorToastShown && (
+            <div className="text-center my-48">
+              <button
+                onClick={() => {
+                  router.push("/");
+                }}
+                className="bg-aquamarine text-white rounded-sm p-2 w-[150px]"
+              >
+                Ir a inicio
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

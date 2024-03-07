@@ -85,21 +85,21 @@ const ResultsComponent = (test) => {
     }
   }
 
-  useEffect(() => {
+  useEffect(() => {    
     if (test.query) {
       allResults();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, test.query]);
 
-  const handleFilters = (
+  const handleFilters = (    
     selectedBrands,
     minAge,
     maxAge,
     minPrice,
     maxPrice
   ) => {
-    // Establecer los valores de filtro recibidos
+      // Establecer los valores de filtro recibidos
     setMinAgeFilter(minAge);
     setMaxAgeFilter(maxAge);
     setMinPriceFilter(minPrice);
@@ -219,9 +219,6 @@ const ResultsComponent = (test) => {
                   setLoading={setLoading}
                 />
               </div>
-
-
-
             </div>
           </div>
         </div>

@@ -59,7 +59,6 @@ const createConsecutiveKey = () => {
 };
 
 const createKey = (number, id) => {
-  // console.log("security", securityCode());
   if (number != null) {
     const date = new Date();
     var day = "";
@@ -81,7 +80,6 @@ const createKey = (number, id) => {
     const consecutive = createConsecutiveNumber(number);
     const situation = "1";
     const refill = "00";
-    console.log("clave", clave);
     const key =
       "506" +
       day +
@@ -104,7 +102,6 @@ const validateID = (tipo) => {
   } else return "02";
 };
 const formatBillSumary = (billSummary, exchangeRate, currencyCode) => {
-  console.log("resouesta bill getLine", billSummary);
   return {
     codeTypeCurrency: {
       currencyCode: currencyCode,
@@ -152,8 +149,6 @@ const createConsecutiveNumber = (param) => {
   } else {
     validateFormat = "" + number;
   }
-  //console.log("ssaaff", consecutiveNumber + validateFormat);
-
   if (number != null) {
     return consecutiveNumber + validateFormat;
   } else return "00100001010000000001";
@@ -171,8 +166,6 @@ const formatItemInvoice = (items, imp) => {
     } else {
       cod = imp[cont].taxes[0].code;
     }
-    console.log("imp", imp);
-    console.log("fee", imp[cont].taxes[0].fee);
     return {
       lineNumber: cont + 1,
       cabys: "" + item?.attributes?.cabys?.toString(),
@@ -199,7 +192,6 @@ const formatItemInvoice = (items, imp) => {
 };
 const InvoiceInformation = (store, client, key, consecutive) => {
   const isoDate = new Date().toISOString();
-  console.log("factura");
   return {
     key: key,
     activityCode: store.ActivityCode,

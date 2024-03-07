@@ -1,21 +1,16 @@
-import { updateQtyItems } from "@/redux/features/cart-slice";
-import client from "@/src/graphQl/config";
+import { useSelector } from "react-redux";
+import { useMemo, useEffect, useState } from "react";
 import GET_CART_ITEMS_LIST_SHOPPING_SESSION from "@/src/graphQl/queries/getCartItemsByShoppingSession";
 import GET_ACTIVE_SHOPPING_SESSION_BY_USER from "@/src/graphQl/queries/getActiveShoppingSessionByUser";
-import { useLazyQuery, useQuery } from "@apollo/client";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useLazyQuery } from "@apollo/client";
+import processCartItems from "@/helpers/processCartItems";
 
 // se ocupa ingresar el id del usuario para poder obtener la session y sus respectivos items del carrito,
 //calculos de totales y cantidades de productos, retorna un obj con las props
-//  {
-//         total: number
-//         items: array,
-//         quantity: number,
-//         sessionId
-//     }
+
 const useCartSummary = ({ userId }) => {
   const cartQuantity = useSelector((state) => state.cart.quantity);
+
   const [cartData, setCartData] = useState({
     total: 0,
     items: [],
@@ -31,7 +26,9 @@ const useCartSummary = ({ userId }) => {
   const [getCart] = useLazyQuery(GET_CART_ITEMS_LIST_SHOPPING_SESSION, {
     fetchPolicy: "network-only", // Forzar la consulta directa al servidor
   });
-
+  /*
+    el useEffect no renderiza cuando el monto es igual al anterior
+*/
   useEffect(() => {
     const getCartSession = async () => {
       //me trae la session del usuario
@@ -41,7 +38,6 @@ const useCartSummary = ({ userId }) => {
           //llamo la query para traer la shopping session
           variables: { userId, active: true },
         });
-
         if (data) {
           // Si existe la sesión
           const shoppingSession = data.shoppingSessions.data[0];
@@ -66,7 +62,6 @@ const useCartSummary = ({ userId }) => {
             currentPage++;
           } while (currentPage <= pageCount);
           //}
-
           // Ahora,se procesa los datos recopilados
           const total = fetchedData.reduce((accumulator, item) => {
             if (
@@ -77,7 +72,7 @@ const useCartSummary = ({ userId }) => {
               return (
                 accumulator +
                 item.attributes.variant.data.attributes.price *
-                item.attributes.quantity
+                  item.attributes.quantity
               );
             }
             return accumulator;
@@ -88,48 +83,15 @@ const useCartSummary = ({ userId }) => {
               item.attributes.variant.data &&
               item.attributes.variant.data.attributes.product.data
             ) {
-
               //debe existir un producto con su respectiva variante
               return accumulator + item.attributes.quantity;
             }
             return accumulator;
           }, 0);
 
-          const items = fetchedData.map((item) => {
-            if (
-              item.attributes.variant.data &&
-              item.attributes.variant.data.attributes.product.data
-            ) {
-              //debe existir un producto con su respectiva variante
-              // Elimina idVariant del arreglo error si ya no hay error
-              if (errors.errorStock.includes(item.attributes.variant.data.id)) {
-                setErrors((prevErrors) => ({
-                  ...prevErrors,
-                  errorStock: prevErrors.errorStock.filter((errorId) => errorId !== item.attributes.variant.data.id),
-                }));
-              }
-              if (item.attributes.quantity > item.attributes.variant.data.attributes.stock) {
-                // Almacena el objeto completo en un arreglo en Error si lleva mas cantidad de lo que hay en stock
-                setErrors((prevErrors) => ({
-                  ...prevErrors,
-                  errorStock: [...prevErrors.errorStock, item.attributes.variant.data.id],
-                }));
+          // llamamos el metodo para procesar los datos
 
-              }
-
-              return {
-                totalItemPrice:
-                  item.attributes.variant.data.attributes.price *
-                  item.attributes.quantity,
-                quantity: item.attributes.quantity,
-                ...item,
-              };
-
-              //se agrega validacion ITEM >= STOCK
-
-            }
-            return null; // lo asigno null para filtrarlo luego y no agregarlo a los items
-          });
+          const items = processCartItems(fetchedData, errors, setErrors);
 
           // Actualiza el estado después de que se hayan procesado todos los datos
           setCartData({
@@ -143,7 +105,7 @@ const useCartSummary = ({ userId }) => {
         //Manejo de errores
         setErrors((prevErrors) => ({
           ...prevErrors,
-          errorQueries: error
+          errorQueries: error,
         }));
       } finally {
         setLoading(false);
@@ -152,9 +114,7 @@ const useCartSummary = ({ userId }) => {
     if (userId) {
       getCartSession();
     }
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId, cartQuantity]);
-
+  }, [userId, cartQuantity, getSession, errors, getCart]);
 
   return {
     total: cartData.total,
