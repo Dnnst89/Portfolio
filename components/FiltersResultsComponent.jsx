@@ -201,10 +201,30 @@ export default function FiltersResultsComponent({ querySearch }) {
           <Spinner />
         ) : (
           <div>
-            {" "}
             <Toaster />
-            <div className="">
-              {!filterType == "ageRange" ? (
+            <div className="md:flex">
+              <div className="md:w-1/2">
+                <FilterContainerPrincipal
+                  brands={brandsForChecbox} //brands depending on selected category in NavCategories.jsx
+                  test={data}
+                  minAgeFilter={minAgeFilter}
+                  maxAgeFilter={maxAgeFilter}
+                  setMaxAgeFilter={setMaxAgeFilter}
+                  setMinAgeFilter={setMinAgeFilter}
+                  minPriceFilter={minPriceFilter}
+                  maxPriceFilter={maxPriceFilter}
+                  setMaxPriceFilter={setMaxPriceFilter}
+                  setMinPriceFilter={setMinPriceFilter}
+                  selectedBrands={selectedBrands}
+                  setSelectedBrands={setSelectedBrands}
+                  handleFilters={handleFilters}
+                  selectedPriceRange={selectedPriceRange}
+                  selectedAgeRange={selectedAgeRange}
+                  queryType={queryType}
+                  querySearch={querySearch}
+                />
+              </div>
+              <div className="md:w-1/1">
                 <div>
                   <h1 className="text-center flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
                     Resultados de productos para niños de{" "}
@@ -212,93 +232,14 @@ export default function FiltersResultsComponent({ querySearch }) {
                       ? `${initialAge} o más años`
                       : `${initialAge} - ${finalAge} años`}
                   </h1>
+
                   <ProductFilterContainer
                     result={data.products}
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
                   />
                 </div>
-              ) : (
-                <div>
-                  <div className="md:flex">
-                    <FilterContainerPrincipal
-                      brands={brandsForChecbox} //brands depending on selected category in NavCategories.jsx
-                      test={data}
-                      minAgeFilter={minAgeFilter}
-                      maxAgeFilter={maxAgeFilter}
-                      setMaxAgeFilter={setMaxAgeFilter}
-                      setMinAgeFilter={setMinAgeFilter}
-                      minPriceFilter={minPriceFilter}
-                      maxPriceFilter={maxPriceFilter}
-                      setMaxPriceFilter={setMaxPriceFilter}
-                      setMinPriceFilter={setMinPriceFilter}
-                      selectedBrands={selectedBrands}
-                      setSelectedBrands={setSelectedBrands}
-                      handleFilters={handleFilters}
-                      selectedPriceRange={selectedPriceRange}
-                      selectedAgeRange={selectedAgeRange}
-                      queryType={queryType}
-                      querySearch={querySearch}
-                    />
-
-                    <div
-                      className={
-                        nbHits === 0
-                          ? "my-10 my-30 md:ml-auto mx-auto"
-                          : "my-10 ml-auto mx-auto"
-                      }
-                    >
-                      {nbHits === 0 ? (
-                        <div className="text-center flex flex-col items-center justify-center h-80">
-                          <div className="w-full text-center mb-4">
-                            <h1 className="text-center">
-                              Resultados de &#34;{decodeURIComponent(category)}
-                              &#34;
-                            </h1>
-                          </div>
-                          <div>
-                            <h1 className="font-bold mb-2">¡Lo sentimos!</h1>
-                            <h2>No se encontraron resultados.</h2>
-                          </div>
-                        </div>
-                      ) : (
-                        <>
-                          <div className="w-full text-center">
-                            <h1 className="text-center">
-                              Resultados de &#34;{decodeURIComponent(category)}
-                              &#34;
-                            </h1>
-                          </div>
-
-                          <FilterContainer
-                            brands={brandsForChecbox}
-                            test={data}
-                            minAgeFilter={minAgeFilter}
-                            maxAgeFilter={maxAgeFilter}
-                            setMaxAgeFilter={setMaxAgeFilter}
-                            setMinAgeFilter={setMinAgeFilter}
-                            minPriceFilter={minPriceFilter}
-                            maxPriceFilter={maxPriceFilter}
-                            setMaxPriceFilter={setMaxPriceFilter}
-                            setMinPriceFilter={setMinPriceFilter}
-                            selectedBrands={selectedBrands}
-                            setSelectedBrands={setSelectedBrands}
-                            handleFilters={handleFilters}
-                            selectedPriceRange={selectedPriceRange}
-                            selectedAgeRange={selectedAgeRange}
-                            queryType={queryType}
-                          />
-                          <ProductFilterContainer
-                            result={data.products}
-                            currentPage={currentPage}
-                            setCurrentPage={setCurrentPage}
-                          />
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
+              </div>
             </div>
           </div>
         )}
