@@ -8,17 +8,25 @@ import RelatedItems from "./RelatedItems";
 import ProductDetailQuery from "@/src/graphQl/queries/getProductById";
 import Spinner from "@/components/Spinner";
 import toast from "react-hot-toast";
+import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 
 export default function DetailComponent({ id }) {
   const [errorToastShown, setErrorToastShown] = useState(false);
   const { loading, error, data } = useQuery(ProductDetailQuery, {
     variables: { id },
   });
+  const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 13 },
+  });
+  const { data: errorMessageProduct } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 14 },
+  });
+
   const router = useRouter();
   // Verificar si hay un error en la consulta
   if (error && !errorToastShown) {
     setErrorToastShown(true);
-    toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
+    toast.error(errorMessage.errorInformation.data.attributes.error_message, {
       autoClose: 5000,
     });
   }
@@ -50,7 +58,8 @@ export default function DetailComponent({ id }) {
               <div>
                 {setErrorToastShown(true)}
                 {toast.error(
-                  "Ha ocurrido un error al obtener los datos del producto seleccionado. Inténtalo de nuevo.",
+                  errorMessageProduct.errorInformation.data.attributes
+                    .error_message,
                   {
                     autoClose: 5000,
                   }

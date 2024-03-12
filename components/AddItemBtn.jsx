@@ -6,7 +6,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCartItems, updateQtyItems } from "@/redux/features/cart-slice";
 import UPDATE_CART_ITEM_QUANTITY_MUTATION from "@/src/graphQl/queries/updateCartItemQuantity";
-
+import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
+import { useQuery } from "@apollo/client";
 const AddItemBtn = ({
   product,
   quantityItem,
@@ -24,11 +25,23 @@ const AddItemBtn = ({
   const [updateCartItemQuantity] = useMutation(
     UPDATE_CART_ITEM_QUANTITY_MUTATION
   );
+  const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 6 },
+  });
+  const { data: errorMessageGeneral } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 7 },
+  });
+  const { data: errorMessageStock } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 8 },
+  });
+  const { data: errorMessageAddProduct } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 9 },
+  });
   const handleAdd = () => {
     //filtro los items para verificar si ya ese producto fue agregado, si fue agregado, se actualiza los  item en el carrito
     //si no esta en los items del carrito se crea o agrega como uno nuevo
     if (!user?.id && !isAuthenticated) {
-      toast.error("Debe iniciar sesión para agregar este producto al carrito");
+      toast.error(errorMessage.errorInformation.data.attributes.error_message);
     } else {
       const itemFiltrado = cartItems.find(
         (item) => item.attributes.variant.data.id === variant?.id
@@ -41,7 +54,10 @@ const AddItemBtn = ({
         if (
           newQuantity > itemFiltrado.attributes.variant.data.attributes.stock
         ) {
-          toast.error("No puedes agregar mas de este producto al carrito");
+          toast.error(
+            errorMessageAddProduct.errorInformation.data.attributes
+              .error_message
+          );
         } else {
           updateCartItemQuantity({
             variables: {
@@ -56,7 +72,10 @@ const AddItemBtn = ({
             })
             .catch((error) => {
               // Manejar errores de la mutación aquí
-              toast.error("Ha sucedido un error ");
+              toast.error(
+                errorMessageGeneral.errorInformation.data.attributes
+                  .error_message
+              );
             });
         }
       } else {
@@ -89,11 +108,15 @@ const AddItemBtn = ({
             })
             .catch((error) => {
               // Manejar errores de la mutación aquí
-              toast.error("Ha sucedido un error ", error);
+              toast.error(
+                errorMessageGeneral.errorInformation.data.attributes
+                  .error_message,
+                error
+              );
             });
         } else {
           toast.error(
-            "Lo sentimos, no tenemos suficiente stock para este producto"
+            errorMessageStock.errorInformation.data.attributes.error_message
           );
         }
       }

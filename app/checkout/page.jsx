@@ -5,13 +5,17 @@ import "../../styles/fonts.css";
 import FormOne from "@/components/FormOne";
 
 const CheckOut = () => {
-  useProtectionRoute();
-  return (
-    <div>
-      <CheckOutHeader regresar={"/cart"} />
-      <FormOne />
-    </div>
-  );
+  try {
+    useProtectionRoute();
+    return (
+      <div>
+        <CheckOutHeader regresar={"/cart"} />
+        <FormOne />
+      </div>
+    );
+  } catch (error) {
+    //  alert(error);
+  }
 };
 
 export default CheckOut;

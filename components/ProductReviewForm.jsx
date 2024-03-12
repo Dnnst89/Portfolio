@@ -5,12 +5,15 @@ import toast, { Toaster } from "react-hot-toast";
 import ReCAPTCHA from "react-google-recaptcha";
 import React, { useRef, useState } from "react";
 import { FaStar } from "react-icons/fa";
-
+import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
+import { useQuery } from "@apollo/client";
 function ProductReviewForm({ idProduct }) {
   const [rating, setRating] = useState(null);
   const sessionData = JSON.parse(localStorage.getItem("userData"));
   const captchaRef = useRef(null);
-
+  const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 13 },
+  });
   const {
     register,
     handleSubmit,
@@ -37,9 +40,12 @@ function ProductReviewForm({ idProduct }) {
         //captchaRef.current.reset();
 
         if (error) {
-          toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
-            autoClose: 5000,
-          });
+          toast.error(
+            errorMessage.errorInformation.data.attributes.error_message,
+            {
+              autoClose: 5000,
+            }
+          );
         } else {
           toast.success("Gracias por tu reseña!", {
             autoClose: 5000,
