@@ -8,7 +8,6 @@ import getProductsFiltered from "@/src/graphQl/queries/getProductsFiltered";
 import getProductsFilteredWithBrands from "@/src/graphQl/queries/getProductsFilteredWithBrands";
 import FilterContainer from "./FilterContainer";
 import FilterContainerPrincipal from "./FilterContainerPrincipal";
-
 import useFilteredBrand from "@/hooks/useFilteredBrand";
 export default function FiltersResultsComponent({ querySearch }) {
   //querySearch me indica el tipo de filtro y el valor del filtro
@@ -41,8 +40,6 @@ export default function FiltersResultsComponent({ querySearch }) {
     initialAge = parseInt(filterValue.split("-")[0]);
     finalAge = parseInt(filterValue.split("-")[1]);
     ageRange = decodeURIComponent(filterValue);
-    initialAge = minAgeFilter;
-    finalAge = maxAgeFilter;
     minPrice = minPriceFilter;
     maxPrice = maxPriceFilter;
   } else if (filterType == "category") {
