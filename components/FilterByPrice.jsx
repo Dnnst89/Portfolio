@@ -1,8 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import algoliasearch from "algoliasearch";
-import { useDispatch } from "react-redux";
-import { addFilter } from "@/redux/features/filterSlice";
 
 function FilterByPrice({
   minAgeFilter,
@@ -15,8 +13,6 @@ function FilterByPrice({
   setMinPriceFilter,
   setMaxPriceFilter,
 }) {
-  const dispatch = useDispatch();
-  dispatch(addFilter(selectedPriceRange));
   const [minInputValue, setMinInputValue] = useState("");
   const [maxInputValue, setMaxInputValue] = useState("");
 
@@ -50,9 +46,6 @@ function FilterByPrice({
       maxPrice
     );
   };
-
-  console.log("price", minPriceFilter, maxPriceFilter);
-
   return (
     <div>
       <div className="flex items-center">

@@ -23,7 +23,6 @@ const useFilteredBrand = (category) => {
             `${process.env.NEXT_PUBLIC_STRAPI_URL}api/products?filters[categories][name][$contains]=${category}&pagination[page]=${page}&pagination[pageSize]=${hitsPerPage}`
           );
           const data = await response.json();
-          console.log("data", data);
           if (data && data.data && data.data.length > 0) {
             for (let index = 0; index < data.data.length; index++) {
               brandsSet.add(data.data[index].attributes.brand);

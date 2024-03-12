@@ -8,10 +8,9 @@ import getProductsFiltered from "@/src/graphQl/queries/getProductsFiltered";
 import getProductsFilteredWithBrands from "@/src/graphQl/queries/getProductsFilteredWithBrands";
 import FilterContainer from "./FilterContainer";
 import FilterContainerPrincipal from "./FilterContainerPrincipal";
-import { useSelector } from "react-redux";
+
 import useFilteredBrand from "@/hooks/useFilteredBrand";
 export default function FiltersResultsComponent({ querySearch }) {
-  const priceRange = useSelector((state) => state.filter);
   //querySearch me indica el tipo de filtro y el valor del filtro
   const [minPriceFilter, setMinPriceFilter] = useState(0);
   const [maxPriceFilter, setMaxPriceFilter] = useState(999999);
@@ -98,7 +97,6 @@ export default function FiltersResultsComponent({ querySearch }) {
       const total = data.products.meta.pagination.total;
       setNbHits(total);
       // console.log("resultado1", nbHits);
-      console.log("first", nbHits);
       // Continúa con el resto del código según tus necesidades
     } catch (err) {
       // Manejar errores si es necesario
@@ -205,7 +203,6 @@ export default function FiltersResultsComponent({ querySearch }) {
                   </h1>
 
                   <ProductFilterContainer
-                    priceRange={priceRange}
                     result={data.products}
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
