@@ -10,6 +10,8 @@ function FilterByBrand({
   setSelectedBrands,
   minPriceFilter,
   maxPriceFilter,
+  filteredBrands,
+  isAgeRangeURL,
 }) {
   const APPLICATION_ID = process.env.NEXT_PUBLIC_APPLICATION_ID;
   const SEARCH_API_KEY = process.env.NEXT_PUBLIC_SEARCH_API_KEY;
@@ -21,7 +23,8 @@ function FilterByBrand({
   const [brands, setBrands] = useState(null);
 
   async function getBrands() {
-    let allBrands = [];
+    let allBrands = isAgeRangeURL ? filteredBrands : [];
+
     let page = 0;
     const hitsPerPage = 100;
 

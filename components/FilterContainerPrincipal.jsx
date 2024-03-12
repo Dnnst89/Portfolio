@@ -5,6 +5,8 @@ import FilterByBrand from "./FilterByBrand";
 import FilterByBrand_Category from "./FilterByBrand_Category";
 import FilterByAge from "./FilterByAge";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { addFilter } from "@/redux/features/filterSlice";
 function FilterContainerPrincipal({
   brands,
   selectedAgeRange,
@@ -23,14 +25,27 @@ function FilterContainerPrincipal({
   setSelectedBrands,
   queryType,
   querySearch,
+  result,
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
   /**
    * Tomamos los parametros de la URL para definir que contenido mostraremos
    * en este caso en especifico no queremos mostrar el filtro por edades
    */
-  const [filterType, filterValue] = querySearch.split("=");
+  const isAgeRangeURL = window.location.href.includes(
+    "/filtersResults/?ageRange"
+  );
 
+  const { data } = result;
+  const filteringData = new Set();
+  data.forEach((item) => {
+    filteringData.add(item.attributes.brand);
+  });
+  const brandsFiltered = Array.from(filteringData);
+  dispatch(addFilter({ isAgeRangeURL, brandsFiltered }));
+
+  const [filterType, filterValue] = querySearch.split("=");
   return (
     <div className="max-w-screen-xl mx-5 justify hidden md:block ml-0 mr-0">
       {true && (
@@ -160,7 +175,9 @@ function FilterContainerPrincipal({
 
                         <div className="pt-6" id="filter-section-mobile-0">
                           <div className="space-y-6">
-                            <FilterByBrand
+                            <FilterByBrand_Category
+                              filteredBrands={uniqueBrandsArray}
+                              isAgeRangeURL={isAgeRangeURL}
                               minPriceFilter={minPriceFilter}
                               maxPriceFilter={maxPriceFilter}
                               handleFilters={handleFilters}
@@ -169,7 +186,7 @@ function FilterContainerPrincipal({
                               setSelectedBrands={setSelectedBrands}
                               minAgeFilter={minAgeFilter}
                               maxAgeFilter={maxAgeFilter}
-                            ></FilterByBrand>
+                            ></FilterByBrand_Category>
                           </div>
                         </div>
                       </div> // end div for filter when use the search component

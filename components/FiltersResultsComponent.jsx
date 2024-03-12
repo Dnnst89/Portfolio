@@ -49,7 +49,7 @@ export default function FiltersResultsComponent({ querySearch }) {
     minPrice = minPriceFilter;
     maxPrice = maxPriceFilter;
   }
-  // Hook que retorna las marcas segun la categoria
+  // Hook que retorna las marcas tomando como referencia la categoria
   const { loadingBrands, brandsForCheckbox } = useFilteredBrand(category);
 
   // depending if there´s a brand selected or not we use the necessary query for it, with or without brand variable.
@@ -81,7 +81,6 @@ export default function FiltersResultsComponent({ querySearch }) {
   // Using results conditionally
   const { loading, error, data } =
     brands.length > 0 ? queryResultWithBrands : queryResult;
-
   useEffect(() => {
     //   // Puedes mover la lógica de 'allResults' directamente aquí
     try {
@@ -188,6 +187,7 @@ export default function FiltersResultsComponent({ querySearch }) {
                   selectedAgeRange={selectedAgeRange}
                   queryType={queryType}
                   querySearch={querySearch}
+                  result={data.products}
                 />
               </div>
               <div className="md:w-1/1">
