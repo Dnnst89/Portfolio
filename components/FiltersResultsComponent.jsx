@@ -8,8 +8,9 @@ import getProductsFiltered from "@/src/graphQl/queries/getProductsFiltered";
 import getProductsFilteredWithBrands from "@/src/graphQl/queries/getProductsFilteredWithBrands";
 import FilterContainer from "./FilterContainer";
 import FilterContainerPrincipal from "./FilterContainerPrincipal";
-
+import { useSelector } from "react-redux";
 export default function FiltersResultsComponent({ querySearch }) {
+  const priceRange = useSelector((state) => state.filter);
   //querySearch me indica el tipo de filtro y el valor del filtro
   const [minPriceFilter, setMinPriceFilter] = useState(0);
   const [maxPriceFilter, setMaxPriceFilter] = useState(999999);
@@ -28,6 +29,7 @@ export default function FiltersResultsComponent({ querySearch }) {
   let initialAge;
   let finalAge;
   let category;
+  let ageRange;
   let brands; // Brands filters
   brands = selectedBrands;
   let minPrice;
@@ -39,6 +41,11 @@ export default function FiltersResultsComponent({ querySearch }) {
   if (filterType == "ageRange") {
     initialAge = parseInt(filterValue.split("-")[0]);
     finalAge = parseInt(filterValue.split("-")[1]);
+    ageRange = decodeURIComponent(filterValue);
+    initialAge = minAgeFilter;
+    finalAge = maxAgeFilter;
+    minPrice = minPriceFilter;
+    maxPrice = maxPriceFilter;
   } else if (filterType == "category") {
     category = decodeURIComponent(filterValue); //para transformar el texto con espacios desde el URL
     initialAge = minAgeFilter;
@@ -177,7 +184,6 @@ export default function FiltersResultsComponent({ querySearch }) {
     setSelectedAgeRange({ minAge, maxAge });
     setSelectedPriceRange({ minPrice, maxPrice });
   };
-
   //if (loading) return <Spinner />;
   if (error)
     return toast.error(
@@ -186,7 +192,6 @@ export default function FiltersResultsComponent({ querySearch }) {
         autoClose: 5000,
       }
     );
-
   if (!loadingBrands) {
     //if is not loading brands
     return (
@@ -234,6 +239,7 @@ export default function FiltersResultsComponent({ querySearch }) {
                   </h1>
 
                   <ProductFilterContainer
+                    priceRange={priceRange}
                     result={data.products}
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
