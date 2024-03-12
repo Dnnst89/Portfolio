@@ -9,6 +9,7 @@ import getProductsFilteredWithBrands from "@/src/graphQl/queries/getProductsFilt
 import FilterContainer from "./FilterContainer";
 import FilterContainerPrincipal from "./FilterContainerPrincipal";
 import { useSelector } from "react-redux";
+import useFilteredBrand from "@/hooks/useFilteredBrand";
 export default function FiltersResultsComponent({ querySearch }) {
   const priceRange = useSelector((state) => state.filter);
   //querySearch me indica el tipo de filtro y el valor del filtro
@@ -24,7 +25,6 @@ export default function FiltersResultsComponent({ querySearch }) {
   const [nbHits, setNbHits] = useState();
   const page = currentPage;
   const pageSize = 12;
-  const [loadingBrands, setLoadingBrands] = useState(true);
 
   let initialAge;
   let finalAge;
@@ -53,42 +53,8 @@ export default function FiltersResultsComponent({ querySearch }) {
     minPrice = minPriceFilter;
     maxPrice = maxPriceFilter;
   }
-
-  // gets the brands for checkboxes depending on the selected category
-  const [brandsForChecbox, setBrands] = useState(null);
-  async function getBrands() {
-    let page = 1;
-    const hitsPerPage = 100; // The number of results per page
-    try {
-      setLoadingBrands(true);
-      let hasMorePages = true;
-      let brandsSet = new Set(); //set to have unique brands and not repeated
-      while (hasMorePages) {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_STRAPI_URL}api/products?filters[categories][name][$contains]=${category}&pagination[page]=${page}&pagination[pageSize]=${hitsPerPage}`
-        );
-        const data = await response.json();
-        if (data && data.data && data.data.length > 0) {
-          for (let index = 0; index < data.data.length; index++) {
-            brandsSet.add(data.data[index].attributes.brand);
-          }
-          page++;
-        } else {
-          hasMorePages = false; // There are no more pages available
-        }
-      }
-      let allBrands = [...brandsSet]; //parse set to list
-      //Update state after iteration completion
-      setBrands(allBrands);
-    } catch (error) {
-      console.error("Error al obtener los datos:", error);
-    } finally {
-      setLoadingBrands(false);
-    }
-  }
-  useEffect(() => {
-    getBrands();
-  }, [category]);
+  // Hook que retorna las marcas segun la categoria
+  const { loadingBrands, brandsForCheckbox } = useFilteredBrand(category);
 
   // depending if there´s a brand selected or not we use the necessary query for it, with or without brand variable.
   let queryResultWithBrands = useQuery(getProductsFilteredWithBrands, {
@@ -210,7 +176,7 @@ export default function FiltersResultsComponent({ querySearch }) {
             <div className="md:flex">
               <div className="md:w-1/2">
                 <FilterContainerPrincipal
-                  brands={brandsForChecbox} //brands depending on selected category in NavCategories.jsx
+                  brands={brandsForCheckbox} //brands depending on selected category in NavCategories.jsx
                   test={data}
                   minAgeFilter={minAgeFilter}
                   maxAgeFilter={maxAgeFilter}
