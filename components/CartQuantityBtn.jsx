@@ -11,7 +11,8 @@ import { useMutation } from "@apollo/client";
 import UPDATE_CART_ITEM_QUANTITY_MUTATION from "@/src/graphQl/queries/updateCartItemQuantity";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
-
+import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
+import { useQuery } from "@apollo/client";
 const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem }) => {
   const [quantity, setQuantity] = useState(quantityCartItem);
   const [blockIncrementBtn, setBlockIncrementBtn] = useState(false);
@@ -23,7 +24,9 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem }) => {
   const [updateCartItemQuantity] = useMutation(
     UPDATE_CART_ITEM_QUANTITY_MUTATION
   );
-
+  const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 7 },
+  });
   const handleQuantityChange = (newQuantity) => {
     //verificamos que la cantidad sea menor o igual a 1
     // para evitar request inecesario
@@ -45,7 +48,12 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem }) => {
         })
         .catch((error) => {
           // Manejar errores de la mutación aquí
-          toast.error("Ha sucedido un error", error);
+          toast.error(
+            errorMessage.errorInformation.data.attributes.error_message,
+            {
+              autoClose: 5000,
+            }
+          );
         });
     }
   };
@@ -71,7 +79,12 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem }) => {
         })
         .catch((error) => {
           // Manejar errores de la mutación aquí
-          toast.error("Ha sucedido un error");
+          toast.error(
+            errorMessage.errorInformation.data.attributes.error_message,
+            {
+              autoClose: 5000,
+            }
+          );
         });
     }
   };
@@ -97,7 +110,12 @@ const CartQuantityBtn = ({ quantityCartItem, stock, idCartItem }) => {
         })
         .catch((error) => {
           // Manejar errores de la mutación aquí
-          toast.error("Ha sucedido un error");
+          toast.error(
+            errorMessage.errorInformation.data.attributes.error_message,
+            {
+              autoClose: 5000,
+            }
+          );
         });
     }
   };

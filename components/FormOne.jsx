@@ -373,7 +373,7 @@ function FormOne() {
         setUserInfoExist(true);
       }
     } catch (error) {
-      toast.error(error.message, {
+      toast.error(errorMessage.errorInformation.data.attributes.error_message, {
         autoClose: 5000,
       });
     }

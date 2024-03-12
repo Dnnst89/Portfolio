@@ -16,6 +16,7 @@ import { GET_PAYMENT_DETAIL } from "@/src/graphQl/queries/getPaymentDetail";
 import { validateID } from "@/helpers";
 import { createOrderData, orderMoovin } from "@/api/moovin/createOrder";
 import { UPDATE_PAYMENT_DELIVERY_ID } from "@/src/graphQl/queries/updatePaymentDeliveryId";
+import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 export default function CheckOutForm3({
   paymentDetailId,
   total,

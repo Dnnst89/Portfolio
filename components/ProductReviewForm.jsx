@@ -14,6 +14,9 @@ function ProductReviewForm({ idProduct }) {
   const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
     variables: { id: 13 },
   });
+  const { data: errorMessageVerify } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 10 },
+  });
   const {
     register,
     handleSubmit,
@@ -52,9 +55,12 @@ function ProductReviewForm({ idProduct }) {
           });
         }
       } else {
-        toast.error("Por favor selecciona la casilla de verificación", {
-          autoClose: 5000,
-        });
+        toast.error(
+          errorMessageVerify.errorInformation.data.attributes.error_message,
+          {
+            autoClose: 5000,
+          }
+        );
       }
     } catch (error) {
       toast.error(error.message, {
