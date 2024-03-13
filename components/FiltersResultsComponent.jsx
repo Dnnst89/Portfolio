@@ -152,6 +152,7 @@ export default function FiltersResultsComponent({ querySearch }) {
         autoClose: 5000,
       }
     );
+
   if (!loadingBrands) {
     //if is not loading brands
     return (

@@ -36,13 +36,14 @@ function FilterContainerPrincipal({
   const isAgeRangeURL = window.location.href.includes(
     "/filtersResults/?ageRange"
   );
-
   const { data } = result;
+  // obrenemos las marcas filtrando las repetidas
   const filteringData = new Set();
   data.forEach((item) => {
     filteringData.add(item.attributes.brand);
   });
   const brandsFiltered = Array.from(filteringData);
+  // las agregamos a un estado global
   dispatch(addFilter({ isAgeRangeURL, brandsFiltered }));
 
   const [filterType, filterValue] = querySearch.split("=");
@@ -152,6 +153,7 @@ function FilterContainerPrincipal({
                               setSelectedBrands={setSelectedBrands}
                               minAgeFilter={minAgeFilter}
                               maxAgeFilter={maxAgeFilter}
+                              test={test}
                             ></FilterByBrand_Category>
                           </div>
                         </div>

@@ -10,32 +10,29 @@ function FilterByBrand_Category({
   minPriceFilter,
   maxPriceFilter,
 }) {
+  console.log("selected brand", selectedBrands);
+
   const filteredBrands = useSelector((state) => state.filter.filteredBrands);
-
+  const brandsFilteredArray = filteredBrands.map(
+    (entry) => entry.brandsFiltered
+  );
   const handleBrandSelection = (brand) => {
-    const selectedBrandsCopy = [...selectedBrands];
-    const index = selectedBrandsCopy.indexOf(brand);
+    // Se evita la mutacion del array con push y se agrega opread operation.
+    const updatedBrands = selectedBrands.includes(brand)
+      ? selectedBrands.filter((selectedBrand) => selectedBrand !== brand)
+      : [...selectedBrands, brand];
 
-    if (index === -1) {
-      selectedBrandsCopy.push(brand);
-    } else {
-      selectedBrandsCopy.splice(index, 1);
-    }
-
-    setSelectedBrands(selectedBrandsCopy);
+    setSelectedBrands(updatedBrands);
 
     // Call the handlePriceFilter function to apply the filter
     handleFilters(
-      selectedBrandsCopy,
+      updatedBrands,
       minAgeFilter,
       maxAgeFilter,
       minPriceFilter,
       maxPriceFilter
     );
   };
-  const brandsFilteredArray = filteredBrands.map(
-    (entry) => entry.brandsFiltered
-  );
 
   if (brands.length == 0 && brandsFilteredArray[0].length === 0) {
     return (
@@ -49,7 +46,6 @@ function FilterByBrand_Category({
         {brandsFilteredArray[0] &&
           brandsFilteredArray[0].map(
             (brand, index) =>
-              // Check if brand is null or empty before rendering
               brand &&
               brand.trim() !== "" && (
                 <div key={index} className="flex items-center">
