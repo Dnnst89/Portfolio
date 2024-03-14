@@ -1,15 +1,12 @@
 "use client";
 import { logo, moovinLogo, correosDeCR } from "../app/assets/images";
-import { useEffect, useState,useRef } from "react";
+import { useEffect, useState } from "react";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import useStorage from "@/hooks/useStorage";
 import CheckOutForm3 from "./CheckOutForm3";
 import useCartSummary from "@/hooks/useCartSummary";
 import { AiOutlineEdit } from "react-icons/ai";
 import CREATE_PAYMENT_DETAIL from "@/src/graphQl/queries/createPaymentDetails";
-import CREATE_EXCHANGE_RATE from "@/src/graphQl/queries/createExchangeRate";
-import UPDATE_EXCHANGE_RATE from "@/src/graphQl/queries/updateExchangeRate";
-import GET_EXCHANGE_RATE from "@/src/graphQl/queries/getExchangeRate";
 import Spinner from "./Spinner";
 import { useForm } from "react-hook-form";
 import requestEstimation from "@/api/moovin/estimation";
@@ -17,6 +14,9 @@ import createEstimationMoovinRequest from "@/api/moovin/createEstimationMoovinRe
 import getTipoCambio from "@/api/cambio/getTipoCambio";
 import GET_DELIVERY_CHOICES from "@/src/graphQl/queries/getDeliveryChoices";
 import GET_STORE_LOCATION from "@/src/graphQl/queries/getStoreLocation";
+import CREATE_EXCHANGE_RATE from "@/src/graphQl/queries/createExchangeRate";
+import UPDATE_EXCHANGE_RATE from "@/src/graphQl/queries/updateExchangeRate";
+import GET_EXCHANGE_RATE from "@/src/graphQl/queries/getExchangeRate";
 import { DeliveryChoice } from "./deliveryChoice";
 import coverageArea from "@/api/moovin/coverageArea";
 import calculateShippingDistance from "@/helpers/calculateShippingDistance";
@@ -33,27 +33,29 @@ export default function CheckOutForm2({
   lng,
   handleCheckout,
 }) {
+ 
   const isoDate = new Date().toISOString();
   const [paymentDetailId, setPaymentDetailId] = useState(null);
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
   const [isMoreThanDeliveryRange, setIsMoreThanDeliveryRange] = useState(false);
+
+  //Exchange rate
+  const [createExchangeRate] = useMutation(CREATE_EXCHANGE_RATE);
+  const [updateExchangeRate] = useMutation(UPDATE_EXCHANGE_RATE);
+  let exchangeRateResponseId = null;
+  const [exchangeRateId, setExchangeRateId] = useState(null);
+
 
   //Obtenemos el estado de los regalos que se van a envolver
   //seleccionamos la etiqueta que se mostrar en el correo
   const { selectedGifts } = useSelector((state) => state.selectedGifts);
   const selectedGiftsLabels = selectedGifts.map((gift) => gift.label);
   const selectedGiftsString = selectedGiftsLabels.join(", ");
-  console.log("DELIVERY PAYMENT",deliveryPayment)
+
   const { total, subTotal, taxes } = amount;
 
   let paymentDetailResponseId = null;
   const [createPaymentDetail] = useMutation(CREATE_PAYMENT_DETAIL);
-
-
-  const [createExchangeRate] = useMutation(CREATE_EXCHANGE_RATE);
-  const [updateExchangeRate] = useMutation(UPDATE_EXCHANGE_RATE);
-  let exchangeRateResponseId = null;
-  const [exchangeRateId, setExchangeRateId] = useState(null);
   /**
    * Se obtienen las opciones de delivery
    */
@@ -62,6 +64,13 @@ export default function CheckOutForm2({
       id: 1,
     },
   });
+ 
+  const { loading: load, data : exchangeRate } = useQuery(GET_EXCHANGE_RATE, {
+    
+  });
+
+
+  
 
   useEffect(() => {
     try {
@@ -87,8 +96,12 @@ export default function CheckOutForm2({
   }, [data, lat, lng]);
 
   const {
+    loading,
+    error,
     data: deliveryChoicesData,
   } = useQuery(GET_DELIVERY_CHOICES);
+
+
   //Correos de Costa Rica
   const CCR =
     deliveryChoicesData?.deliveries?.data?.[0]?.attributes?.delivery_code;
@@ -129,131 +142,49 @@ export default function CheckOutForm2({
     userId: id,
   });
 
-    // Se obtiene el tipo de cambio actualizado
-      const {
-        loading,
-        data: exchangeRateData,
-      } = useQuery(GET_EXCHANGE_RATE, {
-        pollInterval: 300 // Intervalo de tiempo en milisegundos para volver a ejecutar la consulta
-      });
-      
-
-      // 
-      //console.log("data",data)
-      
-      
-        
-      //setTipoCambio(data["exchangeRates"]["data"][0]["attributes"]["purchase"])
-    //console.log("id exchange " ,data?.exchangeRates?.data);
-  // const ExchangeRatePurchase = ;
-  
-
-  // const fetchEstimation = async () => {
-  //   try {
-  //     try {
-  //       const shipmentInfo = createData(items, lat, lng);
-  //       const estimation = await requestEstimation(shipmentInfo);
-  //       setDeliveryPayment(estimation.amount);
-  //     } catch (error) {}
-  //     //   console.log("amount total", amounts.total);
-  //     const suma = parseFloat(subTotal + taxes);
-  //     const finalAmount = {
-  //       total: parseFloat(subTotal + taxes + estimation.amount),
-  //       subTotal: subTotal,
-  //       taxes: taxes,
-  //     };
-
-  //     setAmount(finalAmount);
-  //     // console.log("suma", suma);
-  //   } catch (error) {
-  //     console.error("Error al obtener los datos:", error);
-  //     // Puedes manejar el error según tus necesidades
-  //   }
-  // };
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm();
-  const count = useRef(0);
-
   const fetchTipoCambio = async () => {
     
-    count.current = count.current + 1;
     try { 
-      const exchangeLength = exchangeRateData?.exchangeRates?.data?.length
-      const exchangeId = exchangeRateData?.exchangeRates?.data[0]?.id
-      // const exchangePurchase = data?.exchangeRates?.data[0]?.attributes.purchase
-
-      // console.log("Exchange length: " , exchangeLength)
-      // console.log("exchangeId: ", exchangeId)
-      // console.log("exchange purchase", exchangePurchase)
       
-      // Llama a la función para obtener el tipo de cambio
+      // // Llama a la función para obtener el tipo de cambio
       const tipoCambioResultado = await getTipoCambio();
+  
       // Almacena el tipo de cambio en el estado del componente
       setTipoCambio(tipoCambioResultado.compra) 
-      try {
-        console.log("exchange length:  " , exchangeLength)
-      
-        if( exchangeLength === 0){
-          //console.log(exchangeLength)
-        const ExchangeRateResponse = await createExchangeRate({
-          variables: {
-            purchase: tipoCambioResultado.compra,
-            sale: tipoCambioResultado.venta,
-            date: isoDate,
-            publishedAt: isoDate,
-          },
-          
-        });
-        
-        exchangeRateResponseId =
-        ExchangeRateResponse?.data?.createExchangeRate?.data?.id;
-        
-        setExchangeRateId(exchangeRateResponseId);
-      }
-      else{
-        //console.log("exchangeLength else")
+  
         updateExchangeRate({//actualizo el registro en base de datos
           variables: {
-            exchangeRateId: exchangeId,
+            exchangeRateId: 1,
             newPurchase: tipoCambioResultado.compra,
-            newSale: 550,
+            newSale: tipoCambioResultado.venta,
             newDate: isoDate,
           },
         });
-     }
-        
-      }  catch (error) {
-        console.error(error);
-      }
-      console.log("fetching tipo de cambio",count.current);
+     
     } catch (error) {
       // Manejar el error, por ejemplo, mostrar un mensaje al usuario
-      //setTipoCambio(exchangePurchase);
-      console.error("Error al obtener el tipo de cambio:", error);
+     setTipoCambio(exchangeRate?.exchangeRates?.data[0]?.attributes?.purchase);
+     
     }
   };
- 
-  // useEffect(() => {
-  //   // Este efecto se ejecutará cada vez que 'data' cambie
-  //   // Aquí puedes realizar las acciones necesarias después de que 'data' se actualice
-  //   // Por ejemplo, puedes verificar el nuevo valor de 'length' y realizar acciones en consecuencia
-  //   console.log("Nuevo valor de 'length': ", data?.exchangeRates?.data?.length);
-  // }, [data]);
   
   useEffect(() => {
-
-    if(!loading){
-      try {
-        fetchTipoCambio();
-      } catch (error) {
-        console.log("error", error);
+      if (!load) {
+        try {
+          fetchTipoCambio();
+        } catch (error) {
+          console.log("error", error);
+        }
       }
-    }
-  }, [handleDeliveryPayment]);
+  }, [load]);
+
+
   /**
    * Hook
    * Verifica si las cordenadas estan dentro
