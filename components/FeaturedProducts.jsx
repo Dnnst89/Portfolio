@@ -14,6 +14,7 @@ import "swiper/css/scrollbar";
 import toast, { Toaster } from "react-hot-toast";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import { EffectCoverflow } from "swiper/modules";
+import { useState } from "react";
 
 const FeaturedProducts = () => {
   //GQL
@@ -21,8 +22,10 @@ const FeaturedProducts = () => {
   const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
     variables: { id: 1 },
   });
+  const [showError, setShowError] = useState(false);
   if (loading) return "Loading...";
-  if (error) {
+  if (error && !loading && !showError) {
+    setShowError(true);
     return toast.error(
       errorMessage.errorInformation.data.attributes.error_message,
       {
