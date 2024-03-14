@@ -22,16 +22,32 @@ const FeaturedProducts = () => {
   const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
     variables: { id: 1 },
   });
+
   const [showError, setShowError] = useState(false);
+  const message =
+    errorMessage?.errorInformation?.data?.attributes?.error_message;
   if (loading) return "Loading...";
-  if (error && !loading && !showError) {
-    setShowError(true);
-    return toast.error(
-      errorMessage.errorInformation.data.attributes.error_message,
-      {
-        autoClose: 5000,
-      }
-    );
+  if (!error && !loading && !showError) {
+    if (message !== undefined) {
+      setShowError(true);
+
+      return toast.error(
+        errorMessage?.errorInformation?.data?.attributes?.error_message,
+        {
+          autoClose: 5000,
+        }
+      );
+    } else {
+      alert("sdfasdf");
+      setShowError(true);
+
+      return toast.error(
+        "Lo sentimos, ha ocurrido un error al cargar los datos",
+        {
+          autoClose: 5000,
+        }
+      );
+    }
   }
 
   const max = data?.products.data.length;
