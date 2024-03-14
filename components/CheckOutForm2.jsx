@@ -156,7 +156,7 @@ export default function CheckOutForm2({
       const tipoCambioResultado = await getTipoCambio();
   
       // Almacena el tipo de cambio en el estado del componente
-      setTipoCambio(tipoCambioResultado.compra) 
+      setTipoCambio(tipoCambioResultado.venta) 
   
         updateExchangeRate({//actualizo el registro en base de datos
           variables: {
@@ -169,7 +169,7 @@ export default function CheckOutForm2({
      
     } catch (error) {
       // Manejar el error, por ejemplo, mostrar un mensaje al usuario
-     setTipoCambio(exchangeRate?.exchangeRates?.data[0]?.attributes?.purchase);
+     setTipoCambio(exchangeRate?.exchangeRates?.data[0]?.attributes?.sale);
      
     }
   };
