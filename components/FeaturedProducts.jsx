@@ -4,29 +4,31 @@ import FilterProductCard from "./FilterProductCard";
 //GQL
 import { useQuery } from "@apollo/client";
 import GET_FEATURED_PRODUCTS from "@/src/graphQl/queries/getFeaturedProducts";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/effect-coverflow';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/effect-coverflow";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
 import toast, { Toaster } from "react-hot-toast";
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
-import { EffectCoverflow } from 'swiper/modules';
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
+import { EffectCoverflow } from "swiper/modules";
 
 const FeaturedProducts = () => {
-
   //GQL
   const { loading, error, data } = useQuery(GET_FEATURED_PRODUCTS);
 
-  if (loading) return 'Loading...'
-  if (error) return toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
-    autoClose: 5000
-  })
+  if (loading) return "Loading...";
+  if (error)
+    return toast.error(
+      "Lo sentimos, ha ocurrido un error al cargar los datos",
+      {
+        autoClose: 5000,
+      }
+    );
 
-
-  const max = data?.products.data.length
-  const myArray = []
+  const max = data?.products.data.length;
+  const myArray = [];
   while (myArray.length < max) {
     var num = Math.floor(Math.random() * max);
     var exist = false;
@@ -45,14 +47,13 @@ const FeaturedProducts = () => {
   const aux = [];
   for (let i = 0; i <= 20; i++) {
     if (i < myArray.length) {
-      const random = myArray[i]
+      const random = myArray[i];
       aux.push(data?.products.data[random]);
     }
   }
-  
+
   return (
     <>
-
       <Swiper
         loop={true}
         modules={[EffectCoverflow, Navigation, A11y]}
@@ -64,7 +65,7 @@ const FeaturedProducts = () => {
           rotate: -15,
           //stretch: 0,
           depth: 50,
-          slideShadows: false
+          slideShadows: false,
         }}
         breakpoints={{
           300: {
@@ -81,24 +82,36 @@ const FeaturedProducts = () => {
             slidesPerView: 4,
             slidesPerGroup: 4,
             //spaceBetween: 40
-          }
+          },
         }}
       >
         {aux
           ? aux.map((item) => {
-            return <div role="link" key={item.id} style={{ pointerEvents: "auto" }}>
-              <SwiperSlide key={item.id}>
-                <FilterProductCard
+              return (
+                <div
+                  role="link"
                   key={item.id}
-                  id={item.id}
-                  name={item.attributes.name}
-                  coverImage={item.attributes.coverImage.data}
-                  defaultPrice={item.attributes.defaultPrice.toFixed(2)}
-                  brand={item.attributes.brand}
-                />
-              </SwiperSlide>
-            </div>;
-          })
+                  style={{ pointerEvents: "auto" }}
+                >
+                  <SwiperSlide key={item.id}>
+                    <FilterProductCard
+                      key={item.id}
+                      id={item.id}
+                      name={item.attributes.name}
+                      coverImage={item.attributes.coverImage.data}
+                      defaultPrice={item.attributes.defaultPrice.toFixed(2)}
+                      brand={item.attributes.brand}
+                      initialAge={
+                        item.attributes.variants.data[0].attributes.initialAge
+                      }
+                      finalAge={
+                        item.attributes.variants.data[0].attributes.finalAge
+                      }
+                    />
+                  </SwiperSlide>
+                </div>
+              );
+            })
           : null}
       </Swiper>
     </>
