@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { BiPlus, BiMinus } from "react-icons/bi";
+import { BiPlus, BiMinus,BiArrowBack } from "react-icons/bi";
 import Link from "next/link";
 import AddItemBtn from "./AddItemBtn";
 import ProductImage from "./ProductImage";
@@ -22,7 +22,7 @@ import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
 import GET_CART_ITEM_BY_ID from "@/src/graphQl/queries/getCartItemById";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 
-function ProductDetail({ product, variantId, ItemQt }) {
+function ProductDetail({ product, variantId, ItemQt, handleGoBack }) {
   const name = product?.attributes?.name;
   const brand = product?.attributes?.brand;
   const description = product?.attributes?.description;
@@ -90,6 +90,13 @@ function ProductDetail({ product, variantId, ItemQt }) {
       },
     }
   );
+
+useEffect(() => {
+  if(data && data.variant && data.variant.data)
+  setEnableButton(false);
+
+},[data])
+
   const currency =
     storeInformation?.storeInformation?.data?.attributes?.currency;
   if (imageVariantSelected) {
@@ -101,6 +108,7 @@ function ProductDetail({ product, variantId, ItemQt }) {
       }
     });
   }
+
 
   const [images, setImages] = useState(allImages.length > 0 ? allImages : null);
   //galeria de imagenes para componente se compone de un arreglo [{original: url, thumbnail: url}]
@@ -124,12 +132,28 @@ function ProductDetail({ product, variantId, ItemQt }) {
 
   const decreaseCounter = () => {
     if (ItemQt) {
+      // console.log(ItemQt);
+      // console.log(quantitySelected);
+      
       if (quantitySelected > 1) {
         SetQuantitySelected((prev) => prev - 1);
+        console.log("ItemQ",ItemQt)
+        console.log("quantitySelected",quantitySelected)
+        if(ItemQt == quantitySelected){
+          console.log("aqui");
+          setEnableButton(false);
+        }else{
+          console.log("aqui si");
+          setEnableButton(true);
+        }
+        
       } else {
         // Evitar decrementar por debajo de 1
         SetQuantitySelected(1);
       }
+      // if(ItemQt == quantitySelected){
+      //   setEnableButton(false);
+      // }
     } else {
       if (quantity > 1) {
         setQuantity((prev) => prev - 1);
@@ -162,8 +186,12 @@ function ProductDetail({ product, variantId, ItemQt }) {
 
   const increaseCounter = async () => {
     if (ItemQt) {
+      // if(ItemQt == quantitySelected){
+      //   setEnableButton(false);
+      // }
       if (quantitySelected >= stockVariantSelected) return;
       SetQuantitySelected((prev) => ++prev);
+      setEnableButton(true);
     } else {
       const itemFiltrado = await cartSummary.items.find(
         (item) => item.attributes.variant.data.id === variants[0]?.id
@@ -237,10 +265,17 @@ function ProductDetail({ product, variantId, ItemQt }) {
           rel="noopener noreferrer"
         >
           {/* Columna de imagenes */}
+         
           <section
             aria-label="Imágenes del producto"
-            className="mb-10 col-span-12 md:col-span-6"
+            className="mb-10 col-span-12 md:col-span-6 flex items-start"
+            
           >
+            <div style={{ marginTop: "12px" }}>
+              <button onClick={handleGoBack}>
+              <BiArrowBack className="text-3xl"/>
+              </button>
+            </div>
             {/* //imagenes debajo de la principal */}
             <div className="md:w-5/6 m-auto mt-2 ">
               {images && images.length > 0 ? (

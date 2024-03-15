@@ -4,13 +4,14 @@ import { useQuery } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import ProductDetail from "./ProductDetail";
 import ProductDetailSecondary from "./ProductDetailSecondary";
+import BackButton from "./BackButton";
 import RelatedItems from "./RelatedItems";
 import ProductDetailQuery from "@/src/graphQl/queries/getProductById";
 import GET_CART_ITEM_BY_ID from "@/src/graphQl/queries/getCartItemById";
 import Spinner from "@/components/Spinner";
 import toast from "react-hot-toast";
 
-export default function DetailComponent({ id, idVariant }) {
+export default function DetailComponent({ id, idVariant,handleGoBack }) {
   const [querySearch, setQuerySearch] = useState("");
   const [idVariantSelected, setIdVariantSelected] = useState();
   const [idItemSelected, setIdItemSelected] = useState();
@@ -73,10 +74,12 @@ export default function DetailComponent({ id, idVariant }) {
         <div>
           {data && data.product && data.product.data ? (
             <>
+              
               <ProductDetail
                 product={data.product.data}
                 variantId={idVariantSelected || null}
                 ItemQt={idItemSelected || null}
+                handleGoBack = {handleGoBack}
               />
               <ProductDetailSecondary
                 id={data.product.data.id}
