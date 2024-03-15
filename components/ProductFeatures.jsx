@@ -4,7 +4,6 @@ import FeatureSelector from "./ProductFeatureSelector";
 import { useLazyQuery, useQuery } from "@apollo/client";
 import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
 
-
 /**
  * Componente de características del producto. Se van presentando las opciones de caracteristicas según lo seleccionado.
  * @param {Array} props.variantsList - Lista de variantes del producto. Trae un objeto con todas y cada una de las variantes relacionadas al producto
@@ -14,12 +13,50 @@ import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
  * @param {Function} props.setPrice - Función para establecer el precio del producto.
  * @param {Function} props.setEnableButton - Función para habilitar/deshabilitar el botón.
  */
-const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected, setPrice, setEnableButton }) => {
+const ProductFeatures = ({
+  variantData,
+  variantsList,
+  setImages,
+  setImage,
+  setvariantSelected,
+  setPrice,
+  setEnableButton,
+}) => {
   const [featureCount, setFeatureCount] = useState(1);
-  const [variantInfo, setVariantInfo] = useState(variantsList);// objeto con las variantes hijas de la seleccion actual
+  const [variantInfo, setVariantInfo] = useState(variantsList); // objeto con las variantes hijas de la seleccion actual
   const [featureObject, setFeatureObject] = useState({});
   const [getVariant] = useLazyQuery(GET_VARIANT_BY_ID);
 
+  const colorTypeParentVariant =
+    variantData?.variant?.data?.attributes?.parentVariant?.data?.attributes
+      ?.type;
+  const colorValueParentVariant =
+    variantData?.variant?.data?.attributes?.parentVariant?.data?.attributes
+      ?.typeValue;
+  const colorTypeVariant = variantData?.variant?.data?.attributes?.type;
+  const colorValueVariant = variantData?.variant?.data?.attributes?.typeValue;
+
+  const featuresSelected = {};
+  if (
+    colorTypeParentVariant !== undefined &&
+    colorValueParentVariant !== undefined
+  ) {
+    featuresSelected[colorTypeParentVariant] = colorValueParentVariant;
+  }
+
+  // Agregar propiedades solo si colorTypeVariant y colorValueVariant no son indefinidos
+  if (colorTypeVariant !== undefined && colorValueVariant !== undefined) {
+    featuresSelected[colorTypeVariant] = colorValueVariant;
+  }
+
+  //pone el boton en enabled ya que en el detalle de pedido desde le carrito no se utiliza los dropdowns
+  useEffect(() => {
+    if (variantData && variantData.variant && variantData.variant.data) {
+      setEnableButton(
+        variantData?.variant?.data?.attributes?.childVariants?.data?.length == 0
+      );
+    }
+  }, [variantData, setEnableButton]);
   /**
    * Obtiene un diccionario de variantes a partir de la lista de variantes.
    * @param {Array} variantsList - Lista de variantes del producto.
@@ -45,23 +82,22 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
       return acc;
     }, {});
 
-    return result
-  }
+    return result;
+  };
 
   const result = getVariantDictionary(variantInfo);
-  const [featureList, setFeatureList] = useState([result]);//lista de caracteristicas que se van renderizando en componentes
-
+  const [featureList, setFeatureList] = useState([result]); //lista de caracteristicas que se van renderizando en componentes
 
   /**
-     * Obtiene las imágenes correspondientes a un ID de variante.
-     * @param {number} id - ID de la variante.
-     * @param {Array} variants - Lista de variantes.
-     * @returns {Array} - Lista de imágenes.
-     */
+   * Obtiene las imágenes correspondientes a un ID de variante.
+   * @param {number} id - ID de la variante.
+   * @param {Array} variants - Lista de variantes.
+   * @returns {Array} - Lista de imágenes.
+   */
   const getImagesById = (id, variants) => {
-    const variant = variants.find(variant => {
-      return variant.id === id
-    })
+    const variant = variants.find((variant) => {
+      return variant.id === id;
+    });
     if (variant) {
       return variant.attributes.images.data;
     }
@@ -69,7 +105,7 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
   };
 
   /**
-   * Usa el id para obtener las imagenes que corresponden al 
+   * Usa el id para obtener las imagenes que corresponden al
    * child seleccionado
    * @author Fabián Fernández Chaves
    * @param {number} selectedValue id del child seleccionado
@@ -83,11 +119,11 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
       let variantData = data?.variant?.data?.attributes.images.data;
       //let variantImages = getImagesById(selectedValue, variantInfo);
       setImages(variantData);
-      setImage(variantData[0].attributes.url)
+      setImage(variantData[0].attributes.url);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   /**
    * Agrega una característica al objeto de características.
@@ -100,14 +136,17 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
     const position = Object.keys(featureObject).indexOf(key);
     const keysArray = Object.keys(featureObject);
     // Recorrer las claves y eliminar desde el índice especificado en adelante
-    if (position>=0) {
+    if (position >= 0) {
       for (let i = position; i < keysArray.length; i++) {
         const key = keysArray[i];
         delete featureObject[key];
       }
     }
     //si la variante no tiene padre, el objeto de features se vacia, para eliminar features anteriores, aca va la logica para eliminar los features anteriores
-    const updatedFeatureObject = variantObject?.variant?.data?.attributes?.parentVariant.data == null ? {} : { ...featureObject };
+    const updatedFeatureObject =
+      variantObject?.variant?.data?.attributes?.parentVariant.data == null
+        ? {}
+        : { ...featureObject };
     // Agregar el nuevo par clave-valor si ya existe se sobreescribe
     updatedFeatureObject[key] = value;
     // Actualizar el estado con el nuevo objeto JSON
@@ -117,7 +156,7 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
     if (variantObject?.variant?.data?.attributes) {
       let variant = {
         variant: variantObject?.variant,
-        features: updatedFeatureObject
+        features: updatedFeatureObject,
       };
       setvariantSelected(variant);
       setPrice(variant.variant.data.attributes.price.toFixed(2));
@@ -133,7 +172,12 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
    * @param {any} selectedFeatureValue - Valor de la característica seleccionada.
    * @param {string} featureName - Nombre de la característica.
    */
-  const handleFeatureSelect = async (selectedValue, selectedBox, selectedFeatureValue, featureName) => {
+  const handleFeatureSelect = async (
+    selectedValue,
+    selectedBox,
+    selectedFeatureValue,
+    featureName
+  ) => {
     try {
       removeFeaturesFromIndex(selectedBox);
       chanceImages(selectedValue);
@@ -141,32 +185,33 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
         //llamo la query para traer la shopping session
         variables: { id: selectedValue },
       });
-      setEnableButton(data.variant.data.attributes.childVariants.data.length == 0);
+
+      setEnableButton(
+        data.variant.data.attributes.childVariants.data.length == 0
+      );
       const variantData = data?.variant?.data?.attributes.childVariants;
       setVariantInfo(variantData.data);
       if (variantData && variantData.data.length > 0) {
         // Obtener el diccionario de la variante
         let data = getVariantDictionary(variantData.data);
         // Actualizar la lista de características y el contador
-        setFeatureList((prevList) => [
-          ...prevList,
-          data,
-        ]);
+        setFeatureList((prevList) => [...prevList, data]);
         //setFeatureCount((prevCount) => prevCount + 1);
       }
       //handleAddFeature();
-      addFeaturetoObject(featureName, selectedFeatureValue, data)
+      addFeaturetoObject(featureName, selectedFeatureValue, data);
     } catch (error) {
       console.log(error);
     }
   };
 
   /**
-     * Elimina características a partir de un índice dado.
-     * @param {number} index - Índice desde el cual eliminar características.
-     */
+   * Elimina características a partir de un índice dado.
+   * @param {number} index - Índice desde el cual eliminar características.
+   */
   const removeFeaturesFromIndex = (index) => {
-    if (index < featureList.length - 1) {// si el identificador del select es menor a la cantidad de items en featureList
+    if (index < featureList.length - 1) {
+      // si el identificador del select es menor a la cantidad de items en featureList
       // Actualiza la lista de características desde el índice dado en adelante
       let end = Number(index) + 1;
       const trimmedList = featureList.slice(0, end);
@@ -179,28 +224,54 @@ const ProductFeatures = ({ variantsList, setImages, setImage, setvariantSelected
   };
 
   return (
-    <div >
-      <h3 className="text-[#484848] text-lg underline font-bold pt-2 pb-5">Características:</h3>
-      {featureList.map((feature, index) => {
-        const featureName = Object.keys(feature)[0]; // Obtén el nombre de la característica
-        const featureOptions = feature[featureName].options; // Obtén las opciones de la característica
+    <div>
+      <h3 className="text-[#484848] text-lg underline font-bold pt-2 pb-5">
+        Características:
+      </h3>
 
-        if (featureName != "null") {
-          return (
-            <FeatureSelector
-              key={index}
-              featureId={index}
-              featureName={featureName}
-              featureList={featureOptions}
-              onSelect={handleFeatureSelect}
-            />
-          );
-        }
+      {featuresSelected !== null &&
+      featuresSelected !== undefined &&
+      Object.keys(featuresSelected).some(
+        (key) => featuresSelected[key] !== undefined
+      )
+        ? Object.keys(featuresSelected).map((key, index) => {
+            const value = featuresSelected[key];
+            const variantFeatureSelected = key;
+            const variantfeatureOptions = {};
+            variantfeatureOptions[variantFeatureSelected] = value;
+            // Aquí debes definir qué es exactamente `variantfeatureOptions`
+            if (variantFeatureSelected !== "null") {
+              return (
+                <FeatureSelector
+                  variantData={variantData || null}
+                  key={index}
+                  featureId={index}
+                  featureName={variantFeatureSelected}
+                  featureSelectedList={variantfeatureOptions || null}
+                  onSelect={handleFeatureSelect}
+                />
+              );
+            }
+          })
+        : featureList.map((feature, index) => {
+            const featureName = Object.keys(feature)[0];
+            const featureOptions = feature[featureName].options;
 
-      })}
+            if (featureName !== "null") {
+              return (
+                <FeatureSelector
+                  variantData={variantData || null}
+                  key={index}
+                  featureId={index}
+                  featureName={featureName}
+                  featureList={featureOptions}
+                  onSelect={handleFeatureSelect}
+                />
+              );
+            }
+          })}
     </div>
   );
-
 };
 
 export default ProductFeatures;

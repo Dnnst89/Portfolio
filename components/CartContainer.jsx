@@ -10,6 +10,7 @@ import CartSpinner from "./CartSpinner";
 const CartContainer = () => {
   const { user } = useStorage(); //me trae el usuario de local storage
   const cart = useSelector((state) => state.cart);
+
   const { items, errors, loading } = useCartSummary({
     userId: user?.id,
   });
@@ -32,6 +33,7 @@ const CartContainer = () => {
           )
         }
         {items?.map((item, index) => {
+          
           const variant = item.attributes.variant.data; // Desestructuración aquí
           const variantAtt = variant.attributes;
           const productAtt = variant.attributes.product?.data?.attributes; // Desestructuración aquí
@@ -49,6 +51,7 @@ const CartContainer = () => {
               <CartItem
                 key={item.id}
                 cartItemId={item.id}
+                features={item.attributes.features}
                 quantityCartItem={item.attributes.quantity}
                 idVariant={variant.id}
                 productName={productAtt.name}

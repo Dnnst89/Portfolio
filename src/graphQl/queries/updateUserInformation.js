@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client";
-
 export const UPDATE_USER_INFORMATION = gql`
   mutation updateUserInformation(
     $firstName: String!
