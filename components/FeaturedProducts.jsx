@@ -27,7 +27,7 @@ const FeaturedProducts = () => {
   const message =
     errorMessage?.errorInformation?.data?.attributes?.error_message;
   if (loading) return "Loading...";
-  if (!error && !loading && !showError) {
+  if (error && !loading && !showError) {
     if (message !== undefined) {
       setShowError(true);
 
