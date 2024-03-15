@@ -9,7 +9,6 @@ import UPDATE_CART_ITEM_QUANTITY_MUTATION from "@/src/graphQl/queries/updateCart
 import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 import { useQuery } from "@apollo/client";
 const AddItemBtn = ({
-  variantData,
   product,
   quantityItem,
   variant,
@@ -23,7 +22,6 @@ const AddItemBtn = ({
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((x) => x.auth);
   const [createCartItem] = useMutation(CREATE_CART_ITEM_MUTATION, {});
-  let newQuantity = 0;
   const [updateCartItemQuantity] = useMutation(
     UPDATE_CART_ITEM_QUANTITY_MUTATION
   );
@@ -48,23 +46,11 @@ const AddItemBtn = ({
       const itemFiltrado = cartItems.find(
         (item) => item.attributes.variant.data.id === variant?.id
       );
-
       const fechaActual = new Date();
       const fechaFormateada = fechaActual.toISOString();
-
       if (itemFiltrado) {
         //si el item esta en carrito
-        if (variantData && variantData.variant && variantData.variant.data) {
-          if (quantityItem < itemFiltrado.quantity) {
-            newQuantity = quantityItem;
-          } else {
-            const quantityDetail = quantityItem - itemFiltrado.quantity;
-            newQuantity = quantityDetail + itemFiltrado.quantity;
-          }
-        } else {
-          newQuantity = quantityItem + itemFiltrado.quantity;
-        }
-
+        const newQuantity = quantityItem + itemFiltrado.quantity;
         if (
           newQuantity > itemFiltrado.attributes.variant.data.attributes.stock
         ) {
@@ -81,7 +67,7 @@ const AddItemBtn = ({
           })
             .then((response) => {
               dispatch(updateQtyItems(cartQuantity + quantityItem));
-              toast.success("Se ha actualizado un producto");
+              toast.success("Se ha actulizado un producto");
               // Manejar la respuesta de la mutación aquí, si es necesario
             })
             .catch((error) => {
