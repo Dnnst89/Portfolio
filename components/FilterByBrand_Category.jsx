@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 function FilterByBrand_Category({
-  brands,
+  brandsForCheckbox,
   minAgeFilter,
   maxAgeFilter,
   handleFilters,
@@ -10,8 +10,15 @@ function FilterByBrand_Category({
   minPriceFilter,
   maxPriceFilter,
 }) {
-  console.log("selected brand", selectedBrands);
+  console.log("selected brand", brandsForCheckbox.products.data);
+  const testindta = brandsForCheckbox.products.data.map((entry) => {
+    return entry.attributes.brand;
+  });
+  // Filtramos las marcas repetidas
+  const filteringAgeBrands = new Set(testindta);
+  const uniqueBrandByAge = Array.from(filteringAgeBrands);
 
+  console.log("atribues", testindta);
   const filteredBrands = useSelector((state) => state.filter.filteredBrands);
   const brandsFilteredArray = filteredBrands.map(
     (entry) => entry.brandsFiltered
@@ -34,7 +41,7 @@ function FilterByBrand_Category({
     );
   };
 
-  if (brands.length == 0 && brandsFilteredArray[0].length === 0) {
+  if (brandsForCheckbox.length == 0) {
     return (
       <div className="ml-3 min-w-0 flex-1 text-gray-500">
         <h5>No hay marcas para filtrar en esta categoría</h5>
@@ -43,8 +50,8 @@ function FilterByBrand_Category({
   } else if (filteredBrands[0].isAgeRangeURL) {
     return (
       <div>
-        {brandsFilteredArray[0] &&
-          brandsFilteredArray[0].map(
+        {uniqueBrandByAge &&
+          uniqueBrandByAge.map(
             (brand, index) =>
               brand &&
               brand.trim() !== "" && (
@@ -70,8 +77,8 @@ function FilterByBrand_Category({
   } else {
     return (
       <div>
-        {brands &&
-          brands.map(
+        {brandsForCheckbox &&
+          brandsForCheckbox.map(
             (brand, index) =>
               // Check if brand is null or empty before rendering
               brand &&

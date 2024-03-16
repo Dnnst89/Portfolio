@@ -9,6 +9,7 @@ import getProductsFilteredWithBrands from "@/src/graphQl/queries/getProductsFilt
 import FilterContainer from "./FilterContainer";
 import FilterContainerPrincipal from "./FilterContainerPrincipal";
 import useFilteredBrand from "@/hooks/useFilteredBrand";
+import useBrandsByAgeRange from "@/hooks/useBrandsByAgeRange";
 export default function FiltersResultsComponent({ querySearch }) {
   //querySearch me indica el tipo de filtro y el valor del filtro
   const [minPriceFilter, setMinPriceFilter] = useState(0);
@@ -27,7 +28,6 @@ export default function FiltersResultsComponent({ querySearch }) {
   let initialAge;
   let finalAge;
   let category;
-  let ageRange;
   let brands; // Brands filters
   brands = selectedBrands;
   let minPrice;
@@ -39,7 +39,6 @@ export default function FiltersResultsComponent({ querySearch }) {
   if (filterType == "ageRange") {
     initialAge = parseInt(filterValue.split("-")[0]);
     finalAge = parseInt(filterValue.split("-")[1]);
-    ageRange = decodeURIComponent(filterValue);
     minPrice = minPriceFilter;
     maxPrice = maxPriceFilter;
   } else if (filterType == "category") {
@@ -51,6 +50,15 @@ export default function FiltersResultsComponent({ querySearch }) {
   }
   // Hook que retorna las marcas tomando como referencia la categoria
   const { loadingBrands, brandsForCheckbox } = useFilteredBrand(category);
+  //Hook que retorna las marcas segun una edad inicial y una edad final
+  const {
+    loading: loadBrandsByAge,
+    data: getBrandsByAgeData,
+    getBrandsByAge,
+  } = useBrandsByAgeRange(initialAge, finalAge);
+  useEffect(() => {
+    getBrandsByAge();
+  }, [getBrandsByAge]);
 
   // depending if there´s a brand selected or not we use the necessary query for it, with or without brand variable.
   let queryResultWithBrands = useQuery(getProductsFilteredWithBrands, {
@@ -171,7 +179,13 @@ export default function FiltersResultsComponent({ querySearch }) {
             <div className="md:flex">
               <div className="md:w-1/2">
                 <FilterContainerPrincipal
-                  brands={brandsForCheckbox} //brands depending on selected category in NavCategories.jsx
+                  // crear una condicio que ejecute un hook brandsForCheckbox o el que filtra por edades
+                  //
+                  brandsForCheckbox={
+                    filterType === "category"
+                      ? brandsForCheckbox
+                      : getBrandsByAgeData
+                  } //brands depending on selected category in NavCategories.jsx
                   test={data}
                   minAgeFilter={minAgeFilter}
                   maxAgeFilter={maxAgeFilter}

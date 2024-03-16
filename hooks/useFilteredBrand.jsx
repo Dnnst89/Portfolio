@@ -20,7 +20,8 @@ const useFilteredBrand = (category) => {
         let brandsSet = new Set(); //set to have unique brands and not repeated
         while (hasMorePages) {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_STRAPI_URL}api/products?filters[categories][name][$contains]=${category}&pagination[page]=${page}&pagination[pageSize]=${hitsPerPage}`
+            `${process.env.NEXT_PUBLIC_STRAPI_URL}api/products?filters[categories][name][$contains]
+            =${category}&pagination[page]=${page}&pagination[pageSize]=${hitsPerPage}`
           );
           const data = await response.json();
           if (data && data.data && data.data.length > 0) {

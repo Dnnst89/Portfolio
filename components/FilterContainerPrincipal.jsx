@@ -8,7 +8,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { addFilter } from "@/redux/features/filterSlice";
 function FilterContainerPrincipal({
-  brands,
+  brandsForCheckbox,
   selectedAgeRange,
   setMaxAgeFilter,
   maxAgeFilter,
@@ -145,7 +145,7 @@ function FilterContainerPrincipal({
                         <div className="pt-6" id="filter-section-mobile-0">
                           <div className="space-y-6">
                             <FilterByBrand_Category
-                              brands={brands}
+                              brandsForCheckbox={brandsForCheckbox}
                               minPriceFilter={minPriceFilter}
                               maxPriceFilter={maxPriceFilter}
                               handleFilters={handleFilters}
