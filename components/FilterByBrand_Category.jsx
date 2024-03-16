@@ -9,9 +9,10 @@ function FilterByBrand_Category({
   setSelectedBrands,
   minPriceFilter,
   maxPriceFilter,
+  filterType,
 }) {
   // No garantiza que estamos ubicados en la seccion filtro por edades
-  const filterType = useSelector((state) => state.filter.isAgeRangeURL);
+  //const filterType = useSelector((state) => state.filter.isAgeRangeURL);
 
   const handleBrandSelection = (brand) => {
     // Se evita la mutacion del array con push y se agrega opread operation.

@@ -5,7 +5,6 @@ import FilterByBrand from "./FilterByBrand";
 import FilterByBrand_Category from "./FilterByBrand_Category";
 import FilterByAge from "./FilterByAge";
 import React from "react";
-import { useDispatch } from "react-redux";
 
 function FilterContainerPrincipal({
   brandsForCheckbox,
@@ -26,15 +25,15 @@ function FilterContainerPrincipal({
   queryType,
   querySearch,
   result,
+  filterType,
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const dispatch = useDispatch();
+
   /**
    * Tomamos los parametros de la URL para definir que contenido mostraremos
    * en este caso en especifico no queremos mostrar el filtro por edades
    */
 
-  const [filterType, filterValue] = querySearch.split("=");
   return (
     <div className="max-w-screen-xl mx-5 justify hidden md:block ml-0 mr-0">
       {true && (
@@ -133,6 +132,7 @@ function FilterContainerPrincipal({
                         <div className="pt-6" id="filter-section-mobile-0">
                           <div className="space-y-6">
                             <FilterByBrand_Category
+                              filterType={filterType}
                               brandsForCheckbox={brandsForCheckbox}
                               minPriceFilter={minPriceFilter}
                               maxPriceFilter={maxPriceFilter}
