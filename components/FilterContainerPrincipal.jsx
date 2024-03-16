@@ -6,7 +6,7 @@ import FilterByBrand_Category from "./FilterByBrand_Category";
 import FilterByAge from "./FilterByAge";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { addFilter } from "@/redux/features/filterSlice";
+
 function FilterContainerPrincipal({
   brandsForCheckbox,
   selectedAgeRange,
@@ -33,18 +33,6 @@ function FilterContainerPrincipal({
    * Tomamos los parametros de la URL para definir que contenido mostraremos
    * en este caso en especifico no queremos mostrar el filtro por edades
    */
-  const isAgeRangeURL = window.location.href.includes(
-    "/filtersResults/?ageRange"
-  );
-  const { data } = result;
-  // obrenemos las marcas filtrando las repetidas
-  const filteringData = new Set();
-  data.forEach((item) => {
-    filteringData.add(item.attributes.brand);
-  });
-  const brandsFiltered = Array.from(filteringData);
-  // las agregamos a un estado global
-  dispatch(addFilter({ isAgeRangeURL, brandsFiltered }));
 
   const [filterType, filterValue] = querySearch.split("=");
   return (

@@ -10,7 +10,10 @@ import FilterContainer from "./FilterContainer";
 import FilterContainerPrincipal from "./FilterContainerPrincipal";
 import useFilteredBrand from "@/hooks/useFilteredBrand";
 import useBrandsByAgeRange from "@/hooks/useBrandsByAgeRange";
+import { addFilter } from "@/redux/features/filterSlice";
+import { useDispatch } from "react-redux";
 export default function FiltersResultsComponent({ querySearch }) {
+  const dispatch = useDispatch();
   //querySearch me indica el tipo de filtro y el valor del filtro
   const [minPriceFilter, setMinPriceFilter] = useState(0);
   const [maxPriceFilter, setMaxPriceFilter] = useState(999999);
@@ -50,6 +53,12 @@ export default function FiltersResultsComponent({ querySearch }) {
   }
   // Hook que retorna las marcas tomando como referencia la categoria
   const { loadingBrands, brandsForCheckbox } = useFilteredBrand(category);
+  /**
+   * Agregamos al estado global la ubicacion actual,
+   * de esta forma podemos definir que rendizar en la marcas
+   * ya sea categorias o unicamente por edades.
+   */
+  dispatch(addFilter(filterType));
   //Hook que retorna las marcas segun una edad inicial y una edad final
   const {
     loading: loadBrandsByAge,
@@ -179,8 +188,10 @@ export default function FiltersResultsComponent({ querySearch }) {
             <div className="md:flex">
               <div className="md:w-1/2">
                 <FilterContainerPrincipal
-                  // crear una condicio que ejecute un hook brandsForCheckbox o el que filtra por edades
-                  //
+                  /**
+                   * Se toma como referencia la seccion en que se esta ubicado
+                   * para enviar la data segun categoria o segun edades.
+                   */
                   brandsForCheckbox={
                     filterType === "category"
                       ? brandsForCheckbox

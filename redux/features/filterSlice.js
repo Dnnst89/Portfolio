@@ -1,12 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  filteredBrands: [
-    {
-      isAgeRangeURL: "",
-      brandsFiltered: [],
-    },
-  ],
+  isAgeRangeURL: "",
 };
 
 const filterSlice = createSlice({
@@ -14,9 +9,7 @@ const filterSlice = createSlice({
   initialState,
   reducers: {
     addFilter: (state, action) => {
-      const { isAgeRangeURL, brandsFiltered } = action.payload;
-      state.filteredBrands[0].isAgeRangeURL = isAgeRangeURL;
-      state.filteredBrands[0].brandsFiltered = brandsFiltered;
+      state.isAgeRangeURL = action.payload;
     },
   },
 });

@@ -10,19 +10,9 @@ function FilterByBrand_Category({
   minPriceFilter,
   maxPriceFilter,
 }) {
-  console.log("selected brand", brandsForCheckbox.products.data);
-  const testindta = brandsForCheckbox.products.data.map((entry) => {
-    return entry.attributes.brand;
-  });
-  // Filtramos las marcas repetidas
-  const filteringAgeBrands = new Set(testindta);
-  const uniqueBrandByAge = Array.from(filteringAgeBrands);
+  // No garantiza que estamos ubicados en la seccion filtro por edades
+  const filterType = useSelector((state) => state.filter.isAgeRangeURL);
 
-  console.log("atribues", testindta);
-  const filteredBrands = useSelector((state) => state.filter.filteredBrands);
-  const brandsFilteredArray = filteredBrands.map(
-    (entry) => entry.brandsFiltered
-  );
   const handleBrandSelection = (brand) => {
     // Se evita la mutacion del array con push y se agrega opread operation.
     const updatedBrands = selectedBrands.includes(brand)
@@ -47,7 +37,16 @@ function FilterByBrand_Category({
         <h5>No hay marcas para filtrar en esta categoría</h5>
       </div>
     );
-  } else if (filteredBrands[0].isAgeRangeURL) {
+    // si la condicion se cumple renderizara la marcas segun las edades y  no la categoria
+  } else if (filterType === "ageRange") {
+    //Obtenemos las marcas
+    const brandsByAge = brandsForCheckbox.products.data.map((entry) => {
+      return entry.attributes.brand;
+    });
+    // Filtramos las marcas repetidas
+    const filteringAgeBrands = new Set(brandsByAge);
+    // Las pasamos a un arreglo con marcas unicas
+    const uniqueBrandByAge = Array.from(filteringAgeBrands);
     return (
       <div>
         {uniqueBrandByAge &&
