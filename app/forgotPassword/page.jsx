@@ -3,7 +3,6 @@ import React from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useMutation, useQuery } from "@apollo/client";
-import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 import CheckOutHeader from "@/components/CheckoutHeader";
 import { RESET_PASSWORD } from "../../src/graphQl/queries/resetPassword";
 import { Toaster, toast } from "react-hot-toast";
