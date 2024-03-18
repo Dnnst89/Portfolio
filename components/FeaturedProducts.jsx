@@ -38,7 +38,6 @@ const FeaturedProducts = () => {
         }
       );
     } else {
-      alert("sdfasdf");
       setShowError(true);
 
       return toast.error(

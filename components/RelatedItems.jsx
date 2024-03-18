@@ -53,7 +53,7 @@ function RelatedItems({ categories, productId }) {
     <div className="flex grid w-full justify-center">
       <div className="flex justify-center p-6 pt-10">
         <h1 className="text-xl shadow-text font-bold">
-          Encuentra nuestros articulos relacionados
+          Encuentra nuestros artículos relacionados
         </h1>
       </div>
       <section className="flex flex-wrap max-w-screen-xl m-auto justify-center">
