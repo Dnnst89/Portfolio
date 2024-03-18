@@ -45,7 +45,7 @@ import { CREATE_ELECTRONIC_INVOICE } from "@/src/graphQl/queries/createElectroni
 import { CREATE_ORDER_EMAIL } from "@/src/graphQl/queries/sendEmail";
 import { UPDATE_SHOPPING_SESSION_ACTIVE } from "@/src/graphQl/queries/updateShoppingSessionActive";
 import CREATE_SHOPPING_SESSION_MUTATION from "@/src/graphQl/queries/createShoppingSession";
-
+import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 /*
   recives the Tilopay response , based on the returns params 
   redirects to an certain page.
@@ -83,6 +83,12 @@ export default function ThankYouMessage() {
   const [updateShoppingSessionActive] = useMutation(
     UPDATE_SHOPPING_SESSION_ACTIVE
   );
+  const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 13 },
+  });
+  const { data: errorMessageEmail } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 15 },
+  });
   const [createShoppingSession] = useMutation(CREATE_SHOPPING_SESSION_MUTATION);
 
   // const { user } = useStorage();
@@ -264,7 +270,7 @@ export default function ThankYouMessage() {
       });
     if (storeInformationError)
       return toast.error(
-        "Lo sentimos, ha ocurrido un error al cargar los datos",
+        errorMessage.errorInformation.data.attributes.error_message,
         {
           autoClose: 5000,
         }
@@ -283,7 +289,7 @@ export default function ThankYouMessage() {
     });
     if (sendEmailError)
       return toast.error(
-        "Lo sentimos, ha ocurrido un error al enviar el correo",
+        errorMessageEmail.errorInformation.data.attributes.error_message,
         {
           autoClose: 5000,
         }
