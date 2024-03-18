@@ -32,7 +32,7 @@ function FilterByBrand_Category({
     );
   };
 
-  if (brandsForCheckbox.length == 0) {
+  if (brandsForCheckbox?.length == 0) {
     return (
       <div className="ml-3 min-w-0 flex-1 text-gray-500">
         <h5>No hay marcas para filtrar en esta categoría</h5>

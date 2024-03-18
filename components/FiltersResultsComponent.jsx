@@ -187,7 +187,7 @@ export default function FiltersResultsComponent({ querySearch }) {
                     filterType === "category"
                       ? brandsForCheckbox
                       : getBrandsByAgeData
-                  } //brands depending on selected category in NavCategories.jsx
+                  }
                   test={data}
                   filterType={filterType}
                   minAgeFilter={minAgeFilter}
