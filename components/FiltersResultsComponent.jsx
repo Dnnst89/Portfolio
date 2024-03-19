@@ -1,3 +1,4 @@
+/*nuevo*/
 "use client";
 import { useQuery } from "@apollo/client";
 import ProductFilterContainer from "./ProductFilterContainer";
@@ -176,8 +177,8 @@ export default function FiltersResultsComponent({ querySearch }) {
         ) : (
           <div>
             <Toaster />
-            <div className="md:flex">
-              <div className="md:w-3/3">
+            <div className="flex flex-wrap">
+              <div className="w-1/4 p-2">
                 <FilterContainerPrincipal
                   /**
                    * Se toma como referencia la seccion en que se esta ubicado
@@ -208,14 +209,45 @@ export default function FiltersResultsComponent({ querySearch }) {
                   result={data.products}
                 />
               </div>
-              <div className="md:w-1/1">
-                <div>
-                  <h1 className="text-center flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
-                    Resultados de productos para niños de{" "}
-                    {initialAge === 8
-                      ? `${initialAge} o más años`
-                      : `${initialAge} - ${finalAge} años`}
-                  </h1>
+
+              <div className="w-3/4">
+                <div className="w-full">
+                  {filterType === "ageRange" ? (
+                    <h1 className="text-center flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
+                      Resultados de productos para niños de{" "}
+                      {initialAge === 8
+                        ? `${initialAge} o más años`
+                        : `${initialAge} - ${finalAge} años`}
+                    </h1>
+                  ) : nbHits === 0 ? (
+                    <div className="text-center flex flex-col items-center justify-center h-80">
+                      <div className="w-full text-center mb-4">
+                        <h1 className="text-center">
+                          Resultados de &#34;{decodeURIComponent(category)}
+                          &#34;
+                        </h1>
+                      </div>
+                      <div>
+                        <h1 className="font-bold mb-2">¡Lo sentimos!</h1>
+                        <h2>No se encontraron resultados.</h2>
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      className={
+                        nbHits === 0
+                          ? "my-10 my-30 md:ml-auto mx-auto"
+                          : "my-10 ml-auto mx-auto"
+                      }
+                    >
+                      <div className="w-full text-center">
+                        <h1 className="text-center">
+                          Resultados de &#34;{decodeURIComponent(category)}
+                          &#34;
+                        </h1>
+                      </div>
+                    </div>
+                  )}
 
                   <ProductFilterContainer
                     result={data.products}
