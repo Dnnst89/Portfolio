@@ -20,14 +20,6 @@ export default function GetDetail() {
   }, []);
   return (
     <section>
-      {/* <button
-                  onClick={() =>
-                    router.back()
-                  }
-                  // className="bg-pink-200 text-white rounded-sm p-2 w-[150px]"
-                >
-                 <BiArrowBack />
-       </button> */}
       <DetailComponent id={detailId} handleGoBack={handleGoBack} />
     </section>
   );

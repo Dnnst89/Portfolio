@@ -4,7 +4,6 @@ import { useQuery } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import ProductDetail from "./ProductDetail";
 import ProductDetailSecondary from "./ProductDetailSecondary";
-import BackButton from "./BackButton";
 import RelatedItems from "./RelatedItems";
 import ProductDetailQuery from "@/src/graphQl/queries/getProductById";
 import GET_CART_ITEM_BY_ID from "@/src/graphQl/queries/getCartItemById";

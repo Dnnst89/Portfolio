@@ -17,6 +17,7 @@ const AddItemBtn = ({
   sessionId,
   user,
   features,
+  setEnableButton,
   enableButton,
 }) => {
   
@@ -65,6 +66,7 @@ const AddItemBtn = ({
             },
           })
             .then((response) => {
+              setEnableButton(false);
               dispatch(updateQtyItems(cartQuantity + quantityItem));
               toast.success("Se ha actualizado un producto");
               // Manejar la respuesta de la mutación aquí, si es necesario

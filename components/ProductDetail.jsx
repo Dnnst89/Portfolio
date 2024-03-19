@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { BiPlus, BiMinus,BiArrowBack } from "react-icons/bi";
+import { BiPlus, BiMinus, BiArrowBack } from "react-icons/bi";
 import Link from "next/link";
 import AddItemBtn from "./AddItemBtn";
 import ProductImage from "./ProductImage";
@@ -91,11 +91,9 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack }) {
     }
   );
 
-useEffect(() => {
-  if(data && data.variant && data.variant.data)
-  setEnableButton(false);
-
-},[data])
+  useEffect(() => {
+    if (data && data.variant && data.variant.data) setEnableButton(false);
+  }, [data]);
 
   const currency =
     storeInformation?.storeInformation?.data?.attributes?.currency;
@@ -108,7 +106,6 @@ useEffect(() => {
       }
     });
   }
-
 
   const [images, setImages] = useState(allImages.length > 0 ? allImages : null);
   //galeria de imagenes para componente se compone de un arreglo [{original: url, thumbnail: url}]
@@ -132,28 +129,21 @@ useEffect(() => {
 
   const decreaseCounter = () => {
     if (ItemQt) {
-      // console.log(ItemQt);
-      // console.log(quantitySelected);
-      
       if (quantitySelected > 1) {
-        SetQuantitySelected((prev) => prev - 1);
-        console.log("ItemQ",ItemQt)
-        console.log("quantitySelected",quantitySelected)
-        if(ItemQt == quantitySelected){
-          console.log("aqui");
+        const updatedQuantity = quantitySelected - 1;
+        SetQuantitySelected(updatedQuantity);
+        const itemFiltrado = cartSummary.items.find(
+          (item) => item.attributes.variant.data.id === variants[0]?.id
+        );
+        if (updatedQuantity === itemFiltrado.attributes.quantity) {
           setEnableButton(false);
-        }else{
-          console.log("aqui si");
+        } else {
           setEnableButton(true);
         }
-        
       } else {
         // Evitar decrementar por debajo de 1
         SetQuantitySelected(1);
       }
-      // if(ItemQt == quantitySelected){
-      //   setEnableButton(false);
-      // }
     } else {
       if (quantity > 1) {
         setQuantity((prev) => prev - 1);
@@ -164,6 +154,17 @@ useEffect(() => {
   const handleQuantityChange = async (newQuantity) => {
     if (ItemQt) {
       if (quantitySelected == newQuantity) return; //controla dropdown (detalle del producto desde carrito)
+
+      const itemFiltrado = await cartSummary.items.find(
+        (item) => item.attributes.variant.data.id === variants[0]?.id
+      );
+      const isQuantityEqualToItemQt =
+        newQuantity === itemFiltrado.attributes.quantity;
+
+      // Establecer el botón habilitado o deshabilitado basado en la comparación
+      setEnableButton(!isQuantityEqualToItemQt);
+
+      // Establecer la cantidad seleccionada
       SetQuantitySelected(newQuantity);
     } else {
       const itemFiltrado = await cartSummary.items.find(
@@ -186,12 +187,19 @@ useEffect(() => {
 
   const increaseCounter = async () => {
     if (ItemQt) {
-      // if(ItemQt == quantitySelected){
-      //   setEnableButton(false);
-      // }
       if (quantitySelected >= stockVariantSelected) return;
-      SetQuantitySelected((prev) => ++prev);
-      setEnableButton(true);
+      const updatedQuantity = parseInt(quantitySelected, 10) + 1;
+
+      SetQuantitySelected(updatedQuantity);
+      const itemFiltrado = await cartSummary.items.find(
+        (item) => item.attributes.variant.data.id === variants[0]?.id
+      );
+
+      if (updatedQuantity === itemFiltrado.attributes.quantity) {
+        setEnableButton(false);
+      } else {
+        setEnableButton(true);
+      }
     } else {
       const itemFiltrado = await cartSummary.items.find(
         (item) => item.attributes.variant.data.id === variants[0]?.id
@@ -265,15 +273,14 @@ useEffect(() => {
           rel="noopener noreferrer"
         >
           {/* Columna de imagenes */}
-         
+
           <section
             aria-label="Imágenes del producto"
             className="mb-10 col-span-12 md:col-span-6 flex items-start"
-            
           >
             <div style={{ marginTop: "12px" }}>
               <button onClick={handleGoBack}>
-              <BiArrowBack className="text-3xl"/>
+                <BiArrowBack className="text-3xl" />
               </button>
             </div>
             {/* //imagenes debajo de la principal */}
@@ -633,6 +640,7 @@ useEffect(() => {
                     cartQuantity={cartSummary.quantity}
                     sessionId={cartSummary.sessionId}
                     user={user}
+                    setEnableButton={setEnableButton}
                     enableButton={enableButton}
                     product={product}
                   />

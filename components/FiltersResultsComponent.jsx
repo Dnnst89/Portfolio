@@ -10,6 +10,18 @@ import FilterContainer from "./FilterContainer";
 import FilterContainerPrincipal from "./FilterContainerPrincipal";
 
 export default function FiltersResultsComponent({ querySearch }) {
+  useEffect(() => {
+    // Cargar los valores de los filtros desde el Local Storage al montar el componente
+    const storedFilters = localStorage.getItem('selectedFilters');
+    if (storedFilters) {
+      const filtersData = JSON.parse(storedFilters);
+      setMinAgeFilter(filtersData.minAge);
+      setMaxAgeFilter(filtersData.maxAge);
+      setMinPriceFilter(filtersData.minPrice);
+      setMaxPriceFilter(filtersData.maxPrice);
+      setSelectedBrands(filtersData.selectedBrands);
+    }
+  }, []);
 
   //querySearch me indica el tipo de filtro y el valor del filtro
   const [minPriceFilter, setMinPriceFilter] = useState(0);
@@ -152,6 +164,15 @@ export default function FiltersResultsComponent({ querySearch }) {
     setMinPriceFilter(minPrice);
     setMaxPriceFilter(maxPrice);
     setSelectedBrands(selectedBrands);
+
+    const filtersData = {
+      minAge,
+      maxAge,
+      minPrice,
+      maxPrice,
+      selectedBrands
+    };
+    localStorage.setItem('selectedFilters', JSON.stringify(filtersData));
 
     // Verificar y corregir valores nulos o indefinidos para minAge y maxAge
     if (minAge === null || minAge === undefined || minAge === "") {
