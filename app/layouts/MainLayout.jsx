@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import ProductCard from "@/components/ProductCard";
 import GiftIdeasCard from "@/components/GiftIdeasCard";
 import heart from "../assets/heart.png";
@@ -11,7 +11,6 @@ import BodyComponent from "@/components/BodyComponent";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import "../../styles/fonts.css";
 import toast from "react-hot-toast";
-
 
 const MainLayout = ({ children }) => {
   return (

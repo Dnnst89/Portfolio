@@ -9,7 +9,6 @@ const Page = () => {
 
   useEffect(() => {
     setQuerySearch(window?.location?.search?.split("?")[1]);
-
   }, []);
 
   return (
