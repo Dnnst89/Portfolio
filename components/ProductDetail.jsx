@@ -389,7 +389,7 @@ function ProductDetail({ product, variantId, ItemQt }) {
                         <p className="text-sm md:text-base">
                           Existencias: <br />
                           {stockVariantSelected === 0
-                            ? "Agotados"
+                            ? <span className="text-red">Agotados</span>
                             : "Disponibles"}
                         </p>
                       ) : (
@@ -397,7 +397,7 @@ function ProductDetail({ product, variantId, ItemQt }) {
                           Existencias: <br />
                           {variantSelected?.variant?.data?.attributes?.stock ===
                           0
-                            ? "Agotados"
+                            ? <span className="text-red">Agotados</span>
                             : "Disponibles"}
                         </p>
                       )}
@@ -441,15 +441,15 @@ function ProductDetail({ product, variantId, ItemQt }) {
                         <p className="text-sm md:text-base">
                           Existencias: <br />
                           {stockVariantSelected == 0
-                            ? "Agotados"
+                            ? <span className="text-red">Agotados</span>
                             : "Disponibles"}
                         </p>
                       ) : (
-                        <p className="text-sm md:text-base">
+                        <p className="text-sm md:text-base" >
                           Existencias: <br />
-                          {variantSelected?.variant?.data?.attributes?.stock ||
-                          variants[0].attributes.stock <= 0
-                            ? "Agotados"
+                          {(variantSelected?.variant?.data?.attributes?.stock ||
+                          variants[0].attributes.stock) <= 0
+                            ? <span className="text-red">Agotados</span>
                             : "Disponibles"}
                         </p>
                       )}

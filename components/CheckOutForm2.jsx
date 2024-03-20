@@ -422,14 +422,17 @@ export default function CheckOutForm2({
       </div>
       {!checktOutForm2Visible ? (
         <form onSubmit={onSubmit}>
-          <DeliveryChoice
-            labelName="Recoger en tienda"
-            register={register}
-            logo={logo}
-            valueName="SPU"
-            deliveryId={"SPU"}
-            className=""
-          />
+          {false && ( // Cambia 'false' a 'true' cuando desees mostrar este DeliveryChoice
+            <DeliveryChoice
+              labelName="Recoger en tienda"
+              register={register}
+              logo={logo}
+              valueName="SPU"
+              deliveryId={"SPU"}
+              className=""
+              disabled={true}
+            />
+          )}
           {!blockMoovin ? (
             <DeliveryChoice
               labelName={"Envío a través de"}
