@@ -8,15 +8,20 @@ import "../../styles/fonts.css";
 
 export default function GetDetail() {
   const [detailId, setDetailId] = useState(null);
+  
+
   const router = useRouter();
 
   const handleGoBack = () => {
+  
+    //localStorage.setItem("isFromDetailPage", "true");
     router.back(); // Función para regresar
   };
 
   useEffect(() => {
     const id = window?.location?.search?.split("=")[1];
     setDetailId(id);
+
   }, []);
   return (
     <section>

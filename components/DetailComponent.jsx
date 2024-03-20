@@ -11,16 +11,26 @@ import Spinner from "@/components/Spinner";
 import toast from "react-hot-toast";
 
 export default function DetailComponent({ id, idVariant,handleGoBack }) {
+
   const [querySearch, setQuerySearch] = useState("");
   const [idVariantSelected, setIdVariantSelected] = useState();
   const [idItemSelected, setIdItemSelected] = useState();
-
+  const [previousPage, setPreviousPage] = useState("");
+ 
   //obtengo el url
   useEffect(() => {
     const queryString = window?.location?.search?.split("?")[1];
     setQuerySearch(queryString);
+
+    setPreviousPage(document.referrer);
+    console.log("previousPage",previousPage)
+    
   }, []);
 
+  console.log("previousPage",previousPage)
+  if (previousPage.includes("/filtersResults")) { // Verificar si la página anterior contiene /filtersResults
+    localStorage.setItem("isFromDetailPage", "true");
+  }
   //obtengo los valores de productId, idVariant y ItemQt que viene en la url
   useEffect(() => {
     if (querySearch) {
@@ -45,6 +55,15 @@ export default function DetailComponent({ id, idVariant,handleGoBack }) {
       }
     }
   }, [querySearch]);
+
+  // console.log(idVariantSelected)
+  // if(idVariantSelected !== undefined){
+  //   console.log("zi")
+  //   localStorage.removeItem("isFromDetailPage");
+  // }else{
+  //   console.log("aquo")
+  //   localStorage.setItem("isFromDetailPage", "true");
+  // }
 
   const [errorToastShown, setErrorToastShown] = useState(false);
 

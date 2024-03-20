@@ -8,18 +8,34 @@ import getProductsFiltered from "@/src/graphQl/queries/getProductsFiltered";
 import getProductsFilteredWithBrands from "@/src/graphQl/queries/getProductsFilteredWithBrands";
 import FilterContainer from "./FilterContainer";
 import FilterContainerPrincipal from "./FilterContainerPrincipal";
+import { useRouter } from "next/navigation";
 
 export default function FiltersResultsComponent({ querySearch }) {
+
+  
+  const router = useRouter();
+
+  // Cargar los valores de los filtros desde el Local Storage solo si viene de la página de detalle
   useEffect(() => {
-    // Cargar los valores de los filtros desde el Local Storage al montar el componente
-    const storedFilters = localStorage.getItem('selectedFilters');
-    if (storedFilters) {
-      const filtersData = JSON.parse(storedFilters);
-      setMinAgeFilter(filtersData.minAge);
-      setMaxAgeFilter(filtersData.maxAge);
-      setMinPriceFilter(filtersData.minPrice);
-      setMaxPriceFilter(filtersData.maxPrice);
-      setSelectedBrands(filtersData.selectedBrands);
+    const isFromDetailPage = localStorage.getItem("isFromDetailPage");
+    if (isFromDetailPage) {
+      const storedFilters = localStorage.getItem("selectedFilters");
+      if (storedFilters) {
+        const filtersData = JSON.parse(storedFilters);
+        setMinAgeFilter(filtersData.minAge);
+        setMaxAgeFilter(filtersData.maxAge);
+        setMinPriceFilter(filtersData.minPrice);
+        setMaxPriceFilter(filtersData.maxPrice);
+        setSelectedBrands(filtersData.selectedBrands);
+        console.log(filtersData.minAge)
+        console.log(filtersData.maxAge)
+        console.log(filtersData.minPrice)
+        console.log(filtersData.maxPrice)
+        console.log(filtersData.selectedBrands)
+      }
+
+      // Eliminar la bandera del Local Storage
+      localStorage.removeItem("isFromDetailPage");
     }
   }, []);
 
@@ -170,7 +186,8 @@ export default function FiltersResultsComponent({ querySearch }) {
       maxAge,
       minPrice,
       maxPrice,
-      selectedBrands
+      selectedBrands,
+      
     };
     localStorage.setItem('selectedFilters', JSON.stringify(filtersData));
 
