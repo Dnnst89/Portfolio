@@ -44,6 +44,7 @@ import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { CREATE_ELECTRONIC_INVOICE } from "@/src/graphQl/queries/createElectronicInvoice";
 import { CREATE_ORDER_EMAIL } from "@/src/graphQl/queries/sendEmail";
 import { UPDATE_SHOPPING_SESSION_ACTIVE } from "@/src/graphQl/queries/updateShoppingSessionActive";
+import { GET_USER_SESSIONS } from "@/src/graphQl/queries/getUserSessions";
 import CREATE_SHOPPING_SESSION_MUTATION from "@/src/graphQl/queries/createShoppingSession";
 
 /*
@@ -83,6 +84,7 @@ export default function ThankYouMessage() {
   const [updateShoppingSessionActive] = useMutation(
     UPDATE_SHOPPING_SESSION_ACTIVE
   );
+  const [getUserSessions] = useLazyQuery(GET_USER_SESSIONS);
   const [createShoppingSession] = useMutation(CREATE_SHOPPING_SESSION_MUTATION);
 
   // const { user } = useStorage();
@@ -163,6 +165,14 @@ export default function ThankYouMessage() {
               stock: newStock,
             },
           });
+
+          const { data: activeSessions } = getUserSessions({
+            variables: {
+              id: userId,
+            },
+          });
+          console.log("sesiones activas", activeSessions);
+
           updateShoppingSessionActive({
             //inactivo la sesion del carrito viejo
             variables: {
