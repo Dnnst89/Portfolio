@@ -178,7 +178,7 @@ export default function FiltersResultsComponent({ querySearch }) {
           <div>
             <Toaster />
             <div className="flex flex-wrap">
-              <div className="w-1/4 p-2">
+              <div className="sm:w-1/4 p-2">
                 <FilterContainerPrincipal
                   /**
                    * Se toma como referencia la seccion en que se esta ubicado
@@ -210,7 +210,7 @@ export default function FiltersResultsComponent({ querySearch }) {
                 />
               </div>
 
-              <div className="w-3/4">
+              <div className="sm:w-3/4">
                 <div className="w-full">
                   {filterType === "ageRange" ? (
                     <h1 className="text-center flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
