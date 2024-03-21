@@ -134,7 +134,25 @@ export default function ThankYouMessage() {
     handleTilopayResponse();
     // eslint-disablece en el enfoque react-hooks/exhaustive-deps
   }, [loading]);
-
+  const closeSessions = async () => {
+    const { data: activeSessions } = await getUserSessions({
+      variables: {
+        id: userId,
+      },
+    });
+    const sesiones =
+      activeSessions?.usersPermissionsUser?.data?.attributes?.shopping_sessions
+        ?.data;
+    sesiones.map((session) => {
+      updateShoppingSessionActive({
+        //inactivo la sesion del carrito viejo
+        variables: {
+          id: session.id,
+          active: false,
+        },
+      });
+    });
+  };
   const handleCartItems = async () => {
     const fechaActual = new Date();
     const fechaFormateada = fechaActual.toISOString();
@@ -166,20 +184,15 @@ export default function ThankYouMessage() {
             },
           });
 
-          const { data: activeSessions } = getUserSessions({
-            variables: {
-              id: userId,
-            },
-          });
-          console.log("sesiones activas", activeSessions);
-
-          updateShoppingSessionActive({
-            //inactivo la sesion del carrito viejo
-            variables: {
-              id: sessionId,
-              active: false,
-            },
-          });
+          /*
+           const { data: activeSessions } = await getUserSessions({
+      variables: {
+        id: userId,
+      },
+    });
+    console.log("sesiones activas", activeSessions);
+           */
+          closeSessions();
           createShoppingSession({
             //se le crea una nueva sesion de carrito
             variables: {
