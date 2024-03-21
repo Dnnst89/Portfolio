@@ -388,17 +388,21 @@ function ProductDetail({ product, variantId, ItemQt }) {
                       {stockVariantSelected != null ? (
                         <p className="text-sm md:text-base">
                           Existencias: <br />
-                          {stockVariantSelected === 0
-                            ? "Agotados"
-                            : "Disponibles"}
+                          {stockVariantSelected === 0 ? (
+                            <span className="text-red">Agotados</span>
+                          ) : (
+                            "Disponibles"
+                          )}
                         </p>
                       ) : (
                         <p className="text-sm md:text-base">
                           Existencias: <br />
                           {variantSelected?.variant?.data?.attributes?.stock ===
-                          0
-                            ? "Agotados"
-                            : "Disponibles"}
+                          0 ? (
+                            <span className="text-red">Agotados</span>
+                          ) : (
+                            "Disponibles"
+                          )}
                         </p>
                       )}
                     </div>
@@ -440,17 +444,21 @@ function ProductDetail({ product, variantId, ItemQt }) {
                       {stockVariantSelected != null ? (
                         <p className="text-sm md:text-base">
                           Existencias: <br />
-                          {stockVariantSelected == 0
-                            ? "Agotados"
-                            : "Disponibles"}
+                          {stockVariantSelected == 0 ? (
+                            <span className="text-red">Agotados</span>
+                          ) : (
+                            "Disponibles"
+                          )}
                         </p>
                       ) : (
                         <p className="text-sm md:text-base">
                           Existencias: <br />
-                          {variantSelected?.variant?.data?.attributes?.stock ||
-                          variants[0].attributes.stock <= 0
-                            ? "Agotados"
-                            : "Disponibles"}
+                          {(variantSelected?.variant?.data?.attributes?.stock ||
+                            variants[0].attributes.stock) <= 0 ? (
+                            <span className="text-red">Agotados</span>
+                          ) : (
+                            "Disponibles"
+                          )}
                         </p>
                       )}
                     </div>

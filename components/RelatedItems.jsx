@@ -3,17 +3,19 @@ import ProductCard from "./ProductCard";
 import ProductsByCategory from "@/src/graphQl/queries/getProductsByCategory";
 import { useQuery } from "@apollo/client";
 import FilterProductCard from "./FilterProductCard";
-
+import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 function RelatedItems({ categories, productId }) {
   const category = categories[0].attributes.name;
   const { loading, error, data } = useQuery(ProductsByCategory, {
     variables: { category },
   });
-
+  const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 13 },
+  });
   if (loading) return "Cargando...";
   if (error)
     return toast.error(
-      "Lo sentimos, ha ocurrido un error al cargar los datos",
+      errorMessage.errorInformation.data.attributes.error_message,
       {
         autoClose: 5000,
       }
@@ -51,7 +53,7 @@ function RelatedItems({ categories, productId }) {
     <div className="flex grid w-full justify-center">
       <div className="flex justify-center p-6 pt-10">
         <h1 className="text-xl shadow-text font-bold">
-          Encuentra nuestros articulos relacionados
+          Encuentra nuestros artículos relacionados
         </h1>
       </div>
       <section className="flex flex-wrap max-w-screen-xl m-auto justify-center">

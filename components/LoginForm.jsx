@@ -11,6 +11,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import CheckOutHeader from "./CheckoutHeader";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 const SignupSchema = Yup.object().shape({
   identifier: Yup.string().required("Este campo es requerido"),
   password: Yup.string().required("Este campo es requerido"),
@@ -23,7 +24,9 @@ const LoginForm = () => {
   const authUser = useSelector((state) => state.auth.user);
   const [loginMutation, { data: loginData }] = useMutation(LOGIN_MUTATION);
   const [passwordVisible, setPasswordVisible] = useState(false); // State to track password visibility
-
+  const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 2 },
+  });
   const submitLogin = async (values, { resetForm }) => {
     // validate if form values is empty
     const dataValues = Object.keys(values).map((el) => {
@@ -61,7 +64,7 @@ const LoginForm = () => {
         }, 3000);
       }
     } catch (error) {
-      toast.error(`Credenciales incorrectas, intentalo nuevamente.`, {
+      toast.error(errorMessage.errorInformation.data.attributes.error_message, {
         duration: 4000,
       });
     } finally {
