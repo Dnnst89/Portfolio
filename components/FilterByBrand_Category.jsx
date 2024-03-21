@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 function FilterByBrand_Category({
   brandsForCheckbox,
   minAgeFilter,
@@ -41,7 +40,7 @@ function FilterByBrand_Category({
     // si la condicion se cumple renderizara la marcas segun las edades y  no la categoria
   } else if (filterType === "ageRange") {
     //Obtenemos las marcas
-    const brandsByAge = brandsForCheckbox.products.data.map((entry) => {
+    const brandsByAge = brandsForCheckbox?.products?.data.map((entry) => {
       return entry.attributes.brand;
     });
     // Filtramos las marcas repetidas
