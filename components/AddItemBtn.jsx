@@ -9,6 +9,7 @@ import UPDATE_CART_ITEM_QUANTITY_MUTATION from "@/src/graphQl/queries/updateCart
 import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 import { useQuery } from "@apollo/client";
 const AddItemBtn = ({
+  variantData,
   product,
   quantityItem,
   variant,
@@ -22,6 +23,8 @@ const AddItemBtn = ({
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((x) => x.auth);
   const [createCartItem] = useMutation(CREATE_CART_ITEM_MUTATION, {});
+  let newQuantity = 0;
+
   const [updateCartItemQuantity] = useMutation(
     UPDATE_CART_ITEM_QUANTITY_MUTATION
   );
@@ -37,11 +40,13 @@ const AddItemBtn = ({
   const { data: errorMessageAddProduct } = useQuery(GET_ERROR_INFO, {
     variables: { id: 9 },
   });
+  //-----------------------
+
   const handleAdd = () => {
     //filtro los items para verificar si ya ese producto fue agregado, si fue agregado, se actualiza los  item en el carrito
     //si no esta en los items del carrito se crea o agrega como uno nuevo
     if (!user?.id && !isAuthenticated) {
-      toast.error(errorMessage.errorInformation.data.attributes.error_message);
+      toast.error("Debe iniciar sesión para agregar este producto al carrito");
     } else {
       const itemFiltrado = cartItems.find(
         (item) => item.attributes.variant.data.id === variant?.id
@@ -50,14 +55,20 @@ const AddItemBtn = ({
       const fechaFormateada = fechaActual.toISOString();
       if (itemFiltrado) {
         //si el item esta en carrito
-        const newQuantity = quantityItem + itemFiltrado.quantity;
+        if (variantData && variantData.variant && variantData.variant.data) {
+          if (quantityItem < itemFiltrado.quantity) {
+            newQuantity = quantityItem;
+          } else {
+            const quantityDetail = quantityItem - itemFiltrado.quantity;
+            newQuantity = quantityDetail + itemFiltrado.quantity;
+          }
+        } else {
+          newQuantity = quantityItem + itemFiltrado.quantity;
+        }
         if (
           newQuantity > itemFiltrado.attributes.variant.data.attributes.stock
         ) {
-          toast.error(
-            errorMessageAddProduct.errorInformation.data.attributes
-              .error_message
-          );
+          toast.error("No puedes agregar mas de este producto al carrito");
         } else {
           updateCartItemQuantity({
             variables: {
@@ -67,15 +78,12 @@ const AddItemBtn = ({
           })
             .then((response) => {
               dispatch(updateQtyItems(cartQuantity + quantityItem));
-              toast.success("Se ha actulizado un producto");
+              toast.success("Se ha actualizado un producto");
               // Manejar la respuesta de la mutación aquí, si es necesario
             })
             .catch((error) => {
               // Manejar errores de la mutación aquí
-              toast.error(
-                errorMessageGeneral.errorInformation.data.attributes
-                  .error_message
-              );
+              toast.error("Ha sucedido un error ");
             });
         }
       } else {
@@ -108,15 +116,11 @@ const AddItemBtn = ({
             })
             .catch((error) => {
               // Manejar errores de la mutación aquí
-              toast.error(
-                errorMessageGeneral.errorInformation.data.attributes
-                  .error_message,
-                error
-              );
+              toast.error("Ha sucedido un error ", error);
             });
         } else {
           toast.error(
-            errorMessageStock.errorInformation.data.attributes.error_message
+            "Lo sentimos, no tenemos suficiente stock para este producto"
           );
         }
       }

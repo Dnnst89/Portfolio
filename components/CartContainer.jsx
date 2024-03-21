@@ -49,6 +49,7 @@ const CartContainer = () => {
               <CartItem
                 key={item.id}
                 cartItemId={item.id}
+                features={item.attributes.features}
                 quantityCartItem={item.attributes.quantity}
                 idVariant={variant.id}
                 productName={productAtt.name}
