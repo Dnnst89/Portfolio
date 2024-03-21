@@ -1,5 +1,3 @@
-// ProductFeatureSelector
-
 import React, { useState } from "react";
 
 const ProductFeatureSelector = ({

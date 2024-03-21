@@ -11,7 +11,6 @@ import { useEffect } from "react";
 const CartContainer = () => {
   const { user } = useStorage(); //me trae el usuario de local storage
   const cart = useSelector((state) => state.cart);
-
   const { items, errors, loading } = useCartSummary({
     userId: user?.id,
   });

@@ -4,8 +4,8 @@ import FilterProductCard from "./FilterProductCard";
 //GQL
 import { useQuery, useLazyQuery } from "@apollo/client";
 import GET_FEATURED_PRODUCTS from "@/src/graphQl/queries/getFeaturedProducts";
+import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 import { Swiper, SwiperSlide } from "swiper/react";
-
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/navigation";
@@ -14,19 +14,40 @@ import "swiper/css/scrollbar";
 import toast, { Toaster } from "react-hot-toast";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import { EffectCoverflow } from "swiper/modules";
+import { useState } from "react";
 
 const FeaturedProducts = () => {
   //GQL
   const { loading, error, data } = useQuery(GET_FEATURED_PRODUCTS);
+  const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 1 },
+  });
 
+  const [showError, setShowError] = useState(false);
+  const message =
+    errorMessage?.errorInformation?.data?.attributes?.error_message;
   if (loading) return "Loading...";
-  if (error)
-    return toast.error(
-      "Lo sentimos, ha ocurrido un error al cargar los datos",
-      {
-        autoClose: 5000,
-      }
-    );
+  if (error && !loading && !showError) {
+    if (message !== undefined) {
+      setShowError(true);
+
+      return toast.error(
+        errorMessage?.errorInformation?.data?.attributes?.error_message,
+        {
+          autoClose: 5000,
+        }
+      );
+    } else {
+      setShowError(true);
+
+      return toast.error(
+        "Lo sentimos, ha ocurrido un error al cargar los datos",
+        {
+          autoClose: 5000,
+        }
+      );
+    }
+  }
 
   const max = data?.products.data.length;
   const myArray = [];

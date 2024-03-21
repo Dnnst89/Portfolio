@@ -17,7 +17,8 @@ import CheckOutHeader from "./CheckoutHeader";
 import { updateShoppingSession } from "@/redux/features/cart-slice";
 import CREATE_SHOPPING_SESSION_MUTATION from "@/src/graphQl/queries/createShoppingSession";
 import useSession from "@/hooks/useSession";
-
+import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
+import { useQuery } from "@apollo/client";
 const initialValues = {
   username: "",
   email: "",
@@ -52,7 +53,9 @@ const RegisterFormTwo = () => {
   const dispatch = useDispatch();
   const [createUser] = useMutation(RegisterUser);
   const [createShoppingSession] = useMutation(CREATE_SHOPPING_SESSION_MUTATION);
-
+  const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 4 },
+  });
   const handleSubmit = async (values, { resetForm }) => {
     const dataValues = Object.keys(values).map((el) => {
       return values[el];
@@ -75,7 +78,7 @@ const RegisterFormTwo = () => {
         variables: {
           publishedAt: fechaFormateada,
           userId: data.register.user.id,
-          active: true
+          active: true,
         },
       });
       toast.success(`Hemos enviado un correo electrónico de confirmación.`, {
@@ -83,12 +86,9 @@ const RegisterFormTwo = () => {
       });
       dispatch(updateShoppingSession(dataSession.createShoppingSession.data)); //ACTUALIZO LA SESSION CON LOS DATOS OBTENIDOS
     } catch (error) {
-      toast.error(
-        "No se pudo registrar tu cuenta, por favor intentalo más tarde",
-        {
-          duration: 4000,
-        }
-      );
+      toast.error(errorMessage.errorInformation.data.attributes.error_message, {
+        duration: 4000,
+      });
     } finally {
       setLoading(false);
       resetForm();

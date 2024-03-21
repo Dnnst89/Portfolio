@@ -7,7 +7,8 @@ import useStorage from "@/hooks/useStorage";
 import toast, { Toaster } from "react-hot-toast";
 import { UPDATE_BASIC_ADDRESS } from "@/src/graphQl/queries/updateBasicAddress";
 import { CREATE_BASIC_ADDRESS } from "@/src/graphQl/queries/createBasicAddress";
-
+import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
+import { useQuery } from "@apollo/client";
 export default function Edit() {
   const redirect = () => {
     window.location.href = `/address`;
@@ -29,7 +30,9 @@ export default function Edit() {
   const [addressId, setAddressId] = useState();
   const [userInfoExist, setUserInfoExist] = useState();
   const isoDate = new Date().toISOString();
-
+  const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 13 },
+  });
   const [userInformation, setUserInformation] = useState({
     //campos de formulario
     country: "",
@@ -51,7 +54,7 @@ export default function Edit() {
 
       if (error)
         return toast.error(
-          "Lo sentimos, ha ocurrido un error al cargar los datos",
+          errorMessage.errorInformation.data.attributes.error_message,
           {
             autoClose: 5000,
           }

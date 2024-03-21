@@ -2,11 +2,12 @@
 import React from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import CheckOutHeader from "@/components/CheckoutHeader";
 import { RESET_PASSWORD } from "../../src/graphQl/queries/resetPassword";
 import { Toaster, toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 const ResetPasswordSchema = Yup.object().shape({
   email: Yup.string()
     .email("El formato del correo no es el correcto.")
@@ -14,10 +15,12 @@ const ResetPasswordSchema = Yup.object().shape({
 });
 
 const ForgotPassword = () => {
-
   const router = useRouter();
   const [resetPassword, { loading, error, data }] = useMutation(RESET_PASSWORD);
 
+  const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 20 },
+  });
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
       // Call the RESET_PASSWORD mutation here
@@ -39,9 +42,12 @@ const ForgotPassword = () => {
         }, 4000);
       } else {
         // Password reset failed, handle the error
-        toast.error("No fue posible reestablecer tu contraseña", {
-          duration: 4000,
-        });
+        toast.error(
+          errorMessage.errorInformation.data.attributes.error_message,
+          {
+            autoClose: 5000,
+          }
+        );
       }
     } catch (error) {
       console.error("Error occurred during password reset:", error);
@@ -57,7 +63,6 @@ const ForgotPassword = () => {
       <CheckOutHeader regresar={"/personalData"} />
       <div className="flex justify-center items-center w-full md:max-w-screen-xl m-auto">
         <div className="w-full">
-
           <Formik
             initialValues={{ email: "" }}
             validationSchema={ResetPasswordSchema}
@@ -74,11 +79,11 @@ const ForgotPassword = () => {
                     <section className="p-3 m-auto col-span-12 grid grid-cols-12 gap-5">
                       <div className="grid col-span-12 md:col-span-12 content-baseline w-full">
                         <label htmlFor="email">Email:</label>
-                        <Field 
-                        type="email" 
-                        id="email" 
-                        className="focus:border-blue-500 outline-none md:px-6 py-2 mb-2 rounded-lg border-2 border-grey-200 w-full"
-                        name="email" 
+                        <Field
+                          type="email"
+                          id="email"
+                          className="focus:border-blue-500 outline-none md:px-6 py-2 mb-2 rounded-lg border-2 border-grey-200 w-full"
+                          name="email"
                         />
                         <ErrorMessage
                           className="text-[#ef4444] text-sm"
@@ -103,7 +108,7 @@ const ForgotPassword = () => {
           </Formik>
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 
