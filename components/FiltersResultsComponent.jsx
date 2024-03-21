@@ -177,7 +177,7 @@ export default function FiltersResultsComponent({ querySearch }) {
         ) : (
           <div>
             <Toaster />
-            <div className="flex flex-wrap">
+            <div className="sm:flex sm:flex-wrap mt-10">
               <div className="sm:w-1/4 p-2">
                 <FilterContainerPrincipal
                   /**
@@ -221,8 +221,8 @@ export default function FiltersResultsComponent({ querySearch }) {
                     </h1>
                   ) : nbHits === 0 ? (
                     <div className="text-center flex flex-col items-center justify-center h-80">
-                      <div className="w-full text-center mb-4">
-                        <h1 className="text-center">
+                      <div className="w-full text-center  mb-4">
+                        <h1 className=" text-center">
                           Resultados de &#34;{decodeURIComponent(category)}
                           &#34;
                         </h1>
@@ -233,13 +233,7 @@ export default function FiltersResultsComponent({ querySearch }) {
                       </div>
                     </div>
                   ) : (
-                    <div
-                      className={
-                        nbHits === 0
-                          ? "my-10 my-30 md:ml-auto mx-auto"
-                          : "my-10 ml-auto mx-auto"
-                      }
-                    >
+                    <div>
                       <div className="w-full text-center">
                         <h1 className="text-center">
                           Resultados de &#34;{decodeURIComponent(category)}
