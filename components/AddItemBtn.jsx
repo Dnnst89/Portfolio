@@ -67,7 +67,10 @@ const AddItemBtn = ({
         if (
           newQuantity > itemFiltrado.attributes.variant.data.attributes.stock
         ) {
-          errorMessageAddProduct.errorInformation.data.attributes.error_message;
+          toast.error(
+            errorMessageAddProduct.errorInformation.data.attributes
+              .error_message
+          );
         } else {
           updateCartItemQuantity({
             variables: {
@@ -82,8 +85,10 @@ const AddItemBtn = ({
             })
             .catch((error) => {
               // Manejar errores de la mutación aquí
-              errorMessageGeneral.errorInformation.data.attributes
-                .error_message;
+              toast.error(
+                errorMessageGeneral.errorInformation.data.attributes
+                  .error_message
+              );
             });
         }
       } else {
@@ -116,9 +121,11 @@ const AddItemBtn = ({
             })
             .catch((error) => {
               // Manejar errores de la mutación aquí
-              errorMessageGeneral.errorInformation.data.attributes
-                .error_message,
-                error;
+              toast.error(
+                errorMessageGeneral.errorInformation.data.attributes
+                  .error_message,
+                error
+              );
             });
         } else {
           toast.error(
