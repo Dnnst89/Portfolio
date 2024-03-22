@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
 import DELETE_CART_ITEM_MUTATION from "../src/graphQl/queries/deleteCartItem";
 import GET_CART_ITEMS_LIST from "@/src/graphQl/queries/getCartItems";
-import { updateQtyItems,isTaxesLoading, } from "@/redux/features/cart-slice";
+import { updateQtyItems, isTaxesLoading } from "@/redux/features/cart-slice";
 import { useSelector, useDispatch } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import useStorage from "@/hooks/useStorage";
 import useCartSummary from "@/hooks/useCartSummary";
 import { MdOutlineDeleteForever } from "react-icons/md";
+import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
+import { useQuery } from "@apollo/client";
 const DeleteCartItemBtn = ({ idItem, qtyItem }) => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
@@ -15,7 +17,9 @@ const DeleteCartItemBtn = ({ idItem, qtyItem }) => {
   const { items, quantity, errors, sessionId } = useCartSummary({
     userId: user?.id,
   });
-
+  const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 7 },
+  });
   const [deleteCartItem] = useMutation(DELETE_CART_ITEM_MUTATION, {});
 
   useEffect(() => {
@@ -34,7 +38,12 @@ const DeleteCartItemBtn = ({ idItem, qtyItem }) => {
       })
       .catch((error) => {
         // Manejar errores de la mutación aquí
-        toast.error("Ha sucedido un error");
+        toast.error(
+          errorMessage.errorInformation.data.attributes.error_message,
+          {
+            autoClose: 5000,
+          }
+        );
       });
   };
   return (

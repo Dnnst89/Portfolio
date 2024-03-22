@@ -1,8 +1,9 @@
 import { GET_USER_PAYMENT_INFO } from "@/src/graphQl/queries/getUserPaymentInfo";
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import { UPDATE_USER_INFORMATION } from "@/src/graphQl/queries/updateUserInformation";
 import { UPDATE_ADDRESS } from "@/src/graphQl/queries/updateAddress";
 import { CREATE_ADDRESS } from "@/src/graphQl/queries/createAddress";
+import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 import { useForm } from "react-hook-form";
 import CartDetail from "./CartDetail";
 import { useEffect, useState } from "react";
@@ -19,6 +20,7 @@ import ProvinciaDropdown from "./ProvinciaDropdown";
 import CantonDropdown from "./CantonDropdown";
 import DistritoDropdown from "./DistritoDropdown";
 import { PROVINCIAS } from "../api/direcciones/data";
+
 function FormOne() {
   const {
     register,
@@ -33,6 +35,8 @@ function FormOne() {
   const [updateUserInformation] = useMutation(UPDATE_USER_INFORMATION);
   const [updateAddress] = useMutation(UPDATE_ADDRESS);
   const [getUserInfo] = useLazyQuery(GET_USER_PAYMENT_INFO);
+  const [getErrorInfo] = useLazyQuery(GET_ERROR_INFO);
+
   const [createAddress] = useMutation(CREATE_ADDRESS);
   const [checkoutForm1Visible, setCheckoutForm1Visible] = useState(false);
   const { user } = useStorage();
@@ -102,7 +106,18 @@ function FormOne() {
   const handleLat = (data) => {
     setLat(data);
   };
-
+  const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 13 },
+  });
+  const { data: errorMessageUser } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 16 },
+  });
+  const { data: errorMessageCreateAddress } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 17 },
+  });
+  const { data: errorMessageUpdateAddress } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 18 },
+  });
   const [lng, setLng] = useState(0);
   const handleLng = (data) => {
     setLng(data);
@@ -162,7 +177,7 @@ function FormOne() {
 
       if (error)
         return toast.error(
-          "Lo sentimos, ha ocurrido un error al cargar los datos",
+          errorMessage.errorInformation.data.attributes.error_message,
           {
             autoClose: 5000,
           }
@@ -288,9 +303,12 @@ function FormOne() {
       });
 
       if (userError)
-        return toast.error("Error al ingresar la información del usuario", {
-          autoClose: 5000,
-        });
+        return toast.error(
+          errorMessageUser.errorInformation.data.attributes.error_message,
+          {
+            autoClose: 5000,
+          }
+        );
 
       if (userInfoExist) {
         const {
@@ -313,9 +331,13 @@ function FormOne() {
         });
 
         if (addressError)
-          return toast.error("Error al actualizar la dirección", {
-            autoClose: 5000,
-          });
+          return toast.error(
+            errorMessageUpdateAddress.errorInformation.data.attributes
+              .error_message,
+            {
+              autoClose: 5000,
+            }
+          );
       } else {
         /*En este caso se envia por defecto el valor Costa Rica porque
         react bloquea los input que estan desabilitados para edición*/
@@ -338,16 +360,20 @@ function FormOne() {
           },
         });
         if (createAddressError)
-          return toast.error("Error al crear la dirección", {
-            autoClose: 5000,
-          });
+          return toast.error(
+            errorMessageCreateAddress.errorInformation.data.attributes
+              .error_message,
+            {
+              autoClose: 5000,
+            }
+          );
 
         const newAddress = createAddressData.createUsersAddress.data.id;
         setAddressId(newAddress);
         setUserInfoExist(true);
       }
     } catch (error) {
-      toast.error(error.message, {
+      toast.error(errorMessage.errorInformation.data.attributes.error_message, {
         autoClose: 5000,
       });
     }

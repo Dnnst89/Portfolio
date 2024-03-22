@@ -7,7 +7,8 @@ import Spinner from "@/components/Spinner";
 import FilterContainer from "./FilterContainer";
 import FilterContainerPrincipal from "./FilterContainerPrincipal";
 import algoliasearch from "algoliasearch";
-
+import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
+import { useQuery } from "@apollo/client";
 const ResultsComponent = (test) => {
   const [minPriceFilter, setMinPriceFilter] = useState(0);
   const [maxPriceFilter, setMaxPriceFilter] = useState(999999);
@@ -32,7 +33,9 @@ const ResultsComponent = (test) => {
 
   const searchClient = algoliasearch(APPLICATION_ID, SEARCH_API_KEY);
   const index = searchClient.initIndex(ALGOLIA_INDEX);
-
+  const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 13 },
+  });
   async function getHits() {
     try {
       var url = `/development_api::product.product?query=${test.query}&page=${currentPage}`;
@@ -57,13 +60,16 @@ const ResultsComponent = (test) => {
       const { data, statusText, status } = await algoliaInstace.get(url);
 
       if (statusText !== "OK") {
-        toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
-          autoClose: 5000,
-        });
+        toast.error(
+          errorMessage.errorInformation.data.attributes.error_message,
+          {
+            autoClose: 5000,
+          }
+        );
       }
       return data;
     } catch (err) {
-      toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", {
+      toast.error(errorMessage.errorInformation.data.attributes.error_message, {
         autoClose: 5000,
       });
     }
@@ -85,21 +91,21 @@ const ResultsComponent = (test) => {
     }
   }
 
-  useEffect(() => {    
+  useEffect(() => {
     if (test.query) {
       allResults();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, test.query]);
 
-  const handleFilters = (    
+  const handleFilters = (
     selectedBrands,
     minAge,
     maxAge,
     minPrice,
     maxPrice
   ) => {
-      // Establecer los valores de filtro recibidos
+    // Establecer los valores de filtro recibidos
     setMinAgeFilter(minAge);
     setMaxAgeFilter(maxAge);
     setMinPriceFilter(minPrice);
@@ -107,11 +113,11 @@ const ResultsComponent = (test) => {
 
     // Verificar y corregir valores nulos o indefinidos para minAge y maxAge
     if (minAge === null || minAge === undefined || minAge === "") {
-      minAge = 0
+      minAge = 0;
       setMinAgeFilter(0);
     }
     if (maxAge === null || maxAge === undefined || maxAge === "") {
-      maxAge = 100
+      maxAge = 100;
       setMaxAgeFilter(100);
     }
 
@@ -164,11 +170,10 @@ const ResultsComponent = (test) => {
   };
 
   return (
-
     <div className={loading ? "grid place-items-center" : ""}>
       {loading ? (
         <Spinner />
-      ) :
+      ) : (
         <div className="mx-auto">
           <div className="md:flex ">
             <FilterContainer
@@ -203,7 +208,11 @@ const ResultsComponent = (test) => {
               selectedPriceRange={selectedPriceRange}
               selectedAgeRange={selectedAgeRange}
             />
-            <div className={nbHits === 0 ? "my-10 my-30 md:ml-96" : "my-10 mx-auto"}>
+            <div
+              className={
+                nbHits === 0 ? "my-10 my-30 md:ml-96" : "my-10 mx-auto"
+              }
+            >
               <div className="w-full">
                 <h1 className="text-center">
                   Resultados de &#34;{decodeURIComponent(test.query)}&#34;
@@ -222,9 +231,8 @@ const ResultsComponent = (test) => {
             </div>
           </div>
         </div>
-      }
+      )}
     </div>
-
   );
 };
 
