@@ -37,7 +37,6 @@ export default function CheckOutForm2({
   const [paymentDetailId, setPaymentDetailId] = useState(null);
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
   const [isMoreThanDeliveryRange, setIsMoreThanDeliveryRange] = useState(false);
-
   //Exchange rate
   const [createExchangeRate] = useMutation(CREATE_EXCHANGE_RATE);
   const [updateExchangeRate] = useMutation(UPDATE_EXCHANGE_RATE);
@@ -137,9 +136,10 @@ export default function CheckOutForm2({
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting, isValid },
     reset,
   } = useForm();
+
   const fetchTipoCambio = async () => {
     try {
       // // Llama a la función para obtener el tipo de cambio
@@ -383,6 +383,7 @@ export default function CheckOutForm2({
       });
     }
   });
+
   return (
     <div className="w-full">
       <div className="flex justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200 min-w-[375px]">
@@ -390,7 +391,7 @@ export default function CheckOutForm2({
           <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
             2
           </div>
-          <h1 className="text-xl min-w-[210px]">Método de envío</h1>
+          <h1 className="text-xl min-w-[210px]">Métodooo de envío</h1>
           {checktOutForm2Visible ? (
             <div>
               <button
@@ -457,8 +458,9 @@ export default function CheckOutForm2({
           <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
             <button
               type="submit"
-              disabled={total === 0}
-              className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
+              disabled={isSubmitting || total === 0}
+              className={`text-white rounded-sm p-2 w-[150px] whitespace-nowrap bg-pink-200`}
+              title={`${!isSubmitting ? "Seleccione un método de envío" : ""}`}
             >
               {total <= 0 ? <Spinner /> : "Continuar"}
             </button>
