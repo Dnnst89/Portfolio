@@ -14,11 +14,7 @@ const CartContainer = () => {
   const { items, errors, loading } = useCartSummary({
     userId: user?.id,
   });
-  useEffect(() => {
-    if (!loading && items.length == 0) {
-      alert("sdfasdfdsf");
-    }
-  }, [items.length]);
+
   return (
     <>
       <div
