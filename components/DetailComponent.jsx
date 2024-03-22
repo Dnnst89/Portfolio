@@ -10,7 +10,7 @@ import GET_CART_ITEM_BY_ID from "@/src/graphQl/queries/getCartItemById";
 import Spinner from "@/components/Spinner";
 import toast from "react-hot-toast";
 
-export default function DetailComponent({ id, idVariant,handleGoBack }) {
+export default function DetailComponent({ id,handleGoBack }) {
 
   const [querySearch, setQuerySearch] = useState("");
   const [idVariantSelected, setIdVariantSelected] = useState();
@@ -22,15 +22,12 @@ export default function DetailComponent({ id, idVariant,handleGoBack }) {
     const queryString = window?.location?.search?.split("?")[1];
     setQuerySearch(queryString);
 
-    setPreviousPage(document.referrer);
-    console.log("previousPage",previousPage)
+
     
   }, []);
-
-  console.log("previousPage",previousPage)
-  if (previousPage.includes("/filtersResults")) { // Verificar si la página anterior contiene /filtersResults
-    localStorage.setItem("isFromDetailPage", "true");
-  }
+  
+  localStorage.setItem('navigatedFromComponentA', 'true');
+ 
   //obtengo los valores de productId, idVariant y ItemQt que viene en la url
   useEffect(() => {
     if (querySearch) {

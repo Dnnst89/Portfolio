@@ -9,6 +9,33 @@ import FilterContainerPrincipal from "./FilterContainerPrincipal";
 import algoliasearch from "algoliasearch";
 
 const ResultsComponent = (test) => {
+  useEffect(() => {
+    const navigatedFromComponentA = localStorage.getItem('navigatedFromComponentA');
+    if (navigatedFromComponentA) {
+      const storedFilters = localStorage.getItem("selectedFilters");
+      if (storedFilters) {
+        const filtersData = JSON.parse(storedFilters);
+        setMinAgeFilter(filtersData.minAge);
+        setMaxAgeFilter(filtersData.maxAge);
+        setMinPriceFilter(filtersData.minPrice);
+        setMaxPriceFilter(filtersData.maxPrice);
+        setSelectedBrands(filtersData.selectedBrands);
+        setSelectedAgeRange({ minAge: filtersData.minAge, maxAge: filtersData.maxAge });
+        setSelectedPriceRange({ minPrice:filtersData.minPrice , maxPrice: filtersData.maxPrice });
+        setResult(filtersData.response);
+        console.log(filtersData.response);
+        console.log(filtersData.minAge)
+        console.log(filtersData.maxAge)
+        console.log(filtersData.minPrice)
+        console.log(filtersData.maxPrice)
+        console.log(filtersData.selectedBrands)
+      }
+
+      // Eliminar la bandera del Local Storage
+      localStorage.removeItem("navigatedFromComponentA");
+    }
+  }, []);
+
   const [minPriceFilter, setMinPriceFilter] = useState(0);
   const [maxPriceFilter, setMaxPriceFilter] = useState(999999);
 
@@ -16,6 +43,7 @@ const ResultsComponent = (test) => {
   const [maxAgeFilter, setMaxAgeFilter] = useState(100);
 
   const [result, setResult] = useState([]);
+
   const [hitsPerPage, setHitsPerPage] = useState(null);
   const [nbHits, setNbHits] = useState(null);
   const [nbPages, setNbPages] = useState([]);
@@ -32,6 +60,8 @@ const ResultsComponent = (test) => {
 
   const searchClient = algoliasearch(APPLICATION_ID, SEARCH_API_KEY);
   const index = searchClient.initIndex(ALGOLIA_INDEX);
+
+
 
   async function getHits() {
     try {
@@ -68,12 +98,14 @@ const ResultsComponent = (test) => {
       });
     }
   }
+  console.log("resu",result)
 
   async function allResults() {
     try {
       setLoading(true); // Establece loading en true antes de realizar la solicitud
       const result = await getHits();
       const { hitsPerPage, nbHits, nbPages } = result;
+      console.log("lengt",result.length);
       setResult(result);
       setHitsPerPage(hitsPerPage);
       setNbHits(nbHits);
@@ -88,6 +120,7 @@ const ResultsComponent = (test) => {
   useEffect(() => {    
     if (test.query) {
       allResults();
+      console.log("hh",result)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, test.query]);
@@ -104,6 +137,8 @@ const ResultsComponent = (test) => {
     setMaxAgeFilter(maxAge);
     setMinPriceFilter(minPrice);
     setMaxPriceFilter(maxPrice);
+
+    
 
     // Verificar y corregir valores nulos o indefinidos para minAge y maxAge
     if (minAge === null || minAge === undefined || minAge === "") {
@@ -141,6 +176,9 @@ const ResultsComponent = (test) => {
       .filter(Boolean)
       .join(" AND ");
 
+      
+     
+
     // Decodificar la cadena de consulta
     const decodedQueryString = decodeURIComponent(test.query);
 
@@ -151,6 +189,16 @@ const ResultsComponent = (test) => {
       })
       .then((response) => {
         setResult(response);
+        const filtersData = {
+          minAge,
+          maxAge,
+          minPrice,
+          maxPrice,
+          selectedBrands,
+          combinedFilters,
+          response,
+        };
+        localStorage.setItem('selectedFilters', JSON.stringify(filtersData));
         const { hitsPerPage, nbHits, nbPages } = response;
         setHitsPerPage(hitsPerPage);
         setNbHits(nbHits);
@@ -161,6 +209,8 @@ const ResultsComponent = (test) => {
     setCurrentPage(0);
     setSelectedAgeRange({ minAge, maxAge });
     setSelectedPriceRange({ minPrice, maxPrice });
+    
+   
   };
 
   return (

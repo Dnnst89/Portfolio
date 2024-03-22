@@ -12,13 +12,12 @@ import { useRouter } from "next/navigation";
 
 export default function FiltersResultsComponent({ querySearch }) {
 
-  
-  const router = useRouter();
+
 
   // Cargar los valores de los filtros desde el Local Storage solo si viene de la página de detalle
   useEffect(() => {
-    const isFromDetailPage = localStorage.getItem("isFromDetailPage");
-    if (isFromDetailPage) {
+    const navigatedFromComponentA = localStorage.getItem('navigatedFromComponentA');
+    if (navigatedFromComponentA) {
       const storedFilters = localStorage.getItem("selectedFilters");
       if (storedFilters) {
         const filtersData = JSON.parse(storedFilters);
@@ -26,16 +25,14 @@ export default function FiltersResultsComponent({ querySearch }) {
         setMaxAgeFilter(filtersData.maxAge);
         setMinPriceFilter(filtersData.minPrice);
         setMaxPriceFilter(filtersData.maxPrice);
+        setSelectedAgeRange({ minAge:filtersData.minAge , maxAge:filtersData.maxAge  });
+        setSelectedPriceRange({ minPrice:filtersData.minPrice , maxPrice: filtersData.maxPrice });
         setSelectedBrands(filtersData.selectedBrands);
-        console.log(filtersData.minAge)
-        console.log(filtersData.maxAge)
-        console.log(filtersData.minPrice)
-        console.log(filtersData.maxPrice)
-        console.log(filtersData.selectedBrands)
+        
       }
 
       // Eliminar la bandera del Local Storage
-      localStorage.removeItem("isFromDetailPage");
+      localStorage.removeItem("navigatedFromComponentA");
     }
   }, []);
 
