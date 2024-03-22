@@ -44,8 +44,9 @@ import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { CREATE_ELECTRONIC_INVOICE } from "@/src/graphQl/queries/createElectronicInvoice";
 import { CREATE_ORDER_EMAIL } from "@/src/graphQl/queries/sendEmail";
 import { UPDATE_SHOPPING_SESSION_ACTIVE } from "@/src/graphQl/queries/updateShoppingSessionActive";
+import { GET_USER_SESSIONS } from "@/src/graphQl/queries/getUserSessions";
 import CREATE_SHOPPING_SESSION_MUTATION from "@/src/graphQl/queries/createShoppingSession";
-import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
+
 /*
   recives the Tilopay response , based on the returns params 
   redirects to an certain page.
@@ -83,12 +84,7 @@ export default function ThankYouMessage() {
   const [updateShoppingSessionActive] = useMutation(
     UPDATE_SHOPPING_SESSION_ACTIVE
   );
-  const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
-    variables: { id: 13 },
-  });
-  const { data: errorMessageEmail } = useQuery(GET_ERROR_INFO, {
-    variables: { id: 15 },
-  });
+  const [getUserSessions] = useLazyQuery(GET_USER_SESSIONS);
   const [createShoppingSession] = useMutation(CREATE_SHOPPING_SESSION_MUTATION);
 
   // const { user } = useStorage();
@@ -138,7 +134,25 @@ export default function ThankYouMessage() {
     handleTilopayResponse();
     // eslint-disablece en el enfoque react-hooks/exhaustive-deps
   }, [loading]);
-
+  const closeSessions = async () => {
+    const { data: activeSessions } = await getUserSessions({
+      variables: {
+        id: userId,
+      },
+    });
+    const sesiones =
+      activeSessions?.usersPermissionsUser?.data?.attributes?.shopping_sessions
+        ?.data;
+    sesiones.map((session) => {
+      updateShoppingSessionActive({
+        //inactivo la sesion del carrito viejo
+        variables: {
+          id: session.id,
+          active: false,
+        },
+      });
+    });
+  };
   const handleCartItems = async () => {
     const fechaActual = new Date();
     const fechaFormateada = fechaActual.toISOString();
@@ -169,13 +183,16 @@ export default function ThankYouMessage() {
               stock: newStock,
             },
           });
-          updateShoppingSessionActive({
-            //inactivo la sesion del carrito viejo
-            variables: {
-              id: sessionId,
-              active: false,
-            },
-          });
+
+          /*
+           const { data: activeSessions } = await getUserSessions({
+      variables: {
+        id: userId,
+      },
+    });
+    console.log("sesiones activas", activeSessions);
+           */
+          closeSessions();
           createShoppingSession({
             //se le crea una nueva sesion de carrito
             variables: {
@@ -270,7 +287,7 @@ export default function ThankYouMessage() {
       });
     if (storeInformationError)
       return toast.error(
-        errorMessage.errorInformation.data.attributes.error_message,
+        "Lo sentimos, ha ocurrido un error al cargar los datos",
         {
           autoClose: 5000,
         }
@@ -289,7 +306,7 @@ export default function ThankYouMessage() {
     });
     if (sendEmailError)
       return toast.error(
-        errorMessageEmail.errorInformation.data.attributes.error_message,
+        "Lo sentimos, ha ocurrido un error al enviar el correo",
         {
           autoClose: 5000,
         }

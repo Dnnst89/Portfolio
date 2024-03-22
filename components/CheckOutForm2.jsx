@@ -14,6 +14,9 @@ import createEstimationMoovinRequest from "@/api/moovin/createEstimationMoovinRe
 import getTipoCambio from "@/api/cambio/getTipoCambio";
 import GET_DELIVERY_CHOICES from "@/src/graphQl/queries/getDeliveryChoices";
 import GET_STORE_LOCATION from "@/src/graphQl/queries/getStoreLocation";
+import CREATE_EXCHANGE_RATE from "@/src/graphQl/queries/createExchangeRate";
+import UPDATE_EXCHANGE_RATE from "@/src/graphQl/queries/updateExchangeRate";
+import GET_EXCHANGE_RATE from "@/src/graphQl/queries/getExchangeRate";
 import { DeliveryChoice } from "./deliveryChoice";
 import coverageArea from "@/api/moovin/coverageArea";
 import calculateShippingDistance from "@/helpers/calculateShippingDistance";
@@ -35,6 +38,12 @@ export default function CheckOutForm2({
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
   const [isMoreThanDeliveryRange, setIsMoreThanDeliveryRange] = useState(false);
 
+  //Exchange rate
+  const [createExchangeRate] = useMutation(CREATE_EXCHANGE_RATE);
+  const [updateExchangeRate] = useMutation(UPDATE_EXCHANGE_RATE);
+  let exchangeRateResponseId = null;
+  const [exchangeRateId, setExchangeRateId] = useState(null);
+
   //Obtenemos el estado de los regalos que se van a envolver
   //seleccionamos la etiqueta que se mostrar en el correo
   const { selectedGifts } = useSelector((state) => state.selectedGifts);
@@ -53,6 +62,8 @@ export default function CheckOutForm2({
       id: 1,
     },
   });
+
+  const { loading: load, data: exchangeRate } = useQuery(GET_EXCHANGE_RATE, {});
 
   useEffect(() => {
     try {
@@ -82,6 +93,7 @@ export default function CheckOutForm2({
     error,
     data: deliveryChoicesData,
   } = useQuery(GET_DELIVERY_CHOICES);
+
   //Correos de Costa Rica
   const CCR =
     deliveryChoicesData?.deliveries?.data?.[0]?.attributes?.delivery_code;
@@ -130,22 +142,37 @@ export default function CheckOutForm2({
   } = useForm();
   const fetchTipoCambio = async () => {
     try {
-      // Llama a la función para obtener el tipo de cambio
+      // // Llama a la función para obtener el tipo de cambio
       const tipoCambioResultado = await getTipoCambio();
+
       // Almacena el tipo de cambio en el estado del componente
       setTipoCambio(tipoCambioResultado.compra);
+
+      updateExchangeRate({
+        //actualizo el registro en base de datos
+        variables: {
+          exchangeRateId: 1,
+          newPurchase: tipoCambioResultado.compra,
+          newSale: tipoCambioResultado.venta,
+          newDate: isoDate,
+        },
+      });
     } catch (error) {
       // Manejar el error, por ejemplo, mostrar un mensaje al usuario
-      console.error("Error al obtener el tipo de cambio:", error);
+      setTipoCambio(exchangeRate?.exchangeRates?.data[0]?.attributes?.purchase);
     }
   };
+
   useEffect(() => {
-    try {
-      fetchTipoCambio();
-    } catch (error) {
-      console.log("error", error);
+    if (!load) {
+      try {
+        fetchTipoCambio();
+      } catch (error) {
+        console.log("error", error);
+      }
     }
-  }, [handleDeliveryPayment]);
+  }, [load]);
+
   /**
    * Hook
    * Verifica si las cordenadas estan dentro

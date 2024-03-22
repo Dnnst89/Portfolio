@@ -9,6 +9,7 @@ import UPDATE_CART_ITEM_QUANTITY_MUTATION from "@/src/graphQl/queries/updateCart
 import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 import { useQuery } from "@apollo/client";
 const AddItemBtn = ({
+  variantData,
   product,
   quantityItem,
   variant,
@@ -22,6 +23,8 @@ const AddItemBtn = ({
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((x) => x.auth);
   const [createCartItem] = useMutation(CREATE_CART_ITEM_MUTATION, {});
+  let newQuantity = 0;
+
   const [updateCartItemQuantity] = useMutation(
     UPDATE_CART_ITEM_QUANTITY_MUTATION
   );
@@ -37,6 +40,7 @@ const AddItemBtn = ({
   const { data: errorMessageAddProduct } = useQuery(GET_ERROR_INFO, {
     variables: { id: 9 },
   });
+
   const handleAdd = () => {
     //filtro los items para verificar si ya ese producto fue agregado, si fue agregado, se actualiza los  item en el carrito
     //si no esta en los items del carrito se crea o agrega como uno nuevo
@@ -50,7 +54,16 @@ const AddItemBtn = ({
       const fechaFormateada = fechaActual.toISOString();
       if (itemFiltrado) {
         //si el item esta en carrito
-        const newQuantity = quantityItem + itemFiltrado.quantity;
+        if (variantData && variantData.variant && variantData.variant.data) {
+          if (quantityItem < itemFiltrado.quantity) {
+            newQuantity = quantityItem;
+          } else {
+            const quantityDetail = quantityItem - itemFiltrado.quantity;
+            newQuantity = quantityDetail + itemFiltrado.quantity;
+          }
+        } else {
+          newQuantity = quantityItem + itemFiltrado.quantity;
+        }
         if (
           newQuantity > itemFiltrado.attributes.variant.data.attributes.stock
         ) {
@@ -67,7 +80,7 @@ const AddItemBtn = ({
           })
             .then((response) => {
               dispatch(updateQtyItems(cartQuantity + quantityItem));
-              toast.success("Se ha actulizado un producto");
+              toast.success("Se ha actualizado un producto");
               // Manejar la respuesta de la mutación aquí, si es necesario
             })
             .catch((error) => {
