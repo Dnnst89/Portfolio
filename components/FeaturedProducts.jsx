@@ -123,6 +123,12 @@ const FeaturedProducts = () => {
                       coverImage={item.attributes.coverImage.data}
                       defaultPrice={item.attributes.defaultPrice.toFixed(2)}
                       brand={item.attributes.brand}
+                      initialAge={
+                        item.attributes.variants.data[0].attributes.initialAge
+                      }
+                      finalAge={
+                        item.attributes.variants.data[0].attributes.finalAge
+                      }
                     />
                   </SwiperSlide>
                 </div>
