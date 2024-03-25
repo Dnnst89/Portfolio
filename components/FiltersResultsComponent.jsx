@@ -13,28 +13,29 @@ import { useRouter } from "next/navigation";
 export default function FiltersResultsComponent({ querySearch }) {
 
 
+  // localStorage.setItem('navigatedFromComponentB', 'true');
 
-  // Cargar los valores de los filtros desde el Local Storage solo si viene de la página de detalle
-  useEffect(() => {
-    const navigatedFromComponentA = localStorage.getItem('navigatedFromComponentA');
-    if (navigatedFromComponentA) {
-      const storedFilters = localStorage.getItem("selectedFilters");
-      if (storedFilters) {
-        const filtersData = JSON.parse(storedFilters);
-        setMinAgeFilter(filtersData.minAge);
-        setMaxAgeFilter(filtersData.maxAge);
-        setMinPriceFilter(filtersData.minPrice);
-        setMaxPriceFilter(filtersData.maxPrice);
-        setSelectedAgeRange({ minAge:filtersData.minAge , maxAge:filtersData.maxAge  });
-        setSelectedPriceRange({ minPrice:filtersData.minPrice , maxPrice: filtersData.maxPrice });
-        setSelectedBrands(filtersData.selectedBrands);
+  // // Cargar los valores de los filtros desde el Local Storage solo si viene de la página de detalle
+  // useEffect(() => {
+  //   const navigatedFromComponentA = localStorage.getItem('navigatedFromComponentA');
+  //   if (navigatedFromComponentA) {
+  //     const storedFilters = localStorage.getItem("selectedFilters");
+  //     if (storedFilters) {
+  //       const filtersData = JSON.parse(storedFilters);
+  //       setMinAgeFilter(filtersData.minAge);
+  //       setMaxAgeFilter(filtersData.maxAge);
+  //       setMinPriceFilter(filtersData.minPrice);
+  //       setMaxPriceFilter(filtersData.maxPrice);
+  //       setSelectedAgeRange({ minAge:filtersData.minAge , maxAge:filtersData.maxAge  });
+  //       setSelectedPriceRange({ minPrice:filtersData.minPrice , maxPrice: filtersData.maxPrice });
+  //       setSelectedBrands(filtersData.selectedBrands);
         
-      }
+  //     }
 
-      // Eliminar la bandera del Local Storage
-      localStorage.removeItem("navigatedFromComponentA");
-    }
-  }, []);
+  //     // Eliminar la bandera del Local Storage
+  //     localStorage.removeItem("navigatedFromComponentA");
+  //   }
+  // }, []);
 
   //querySearch me indica el tipo de filtro y el valor del filtro
   const [minPriceFilter, setMinPriceFilter] = useState(0);
@@ -178,15 +179,15 @@ export default function FiltersResultsComponent({ querySearch }) {
     setMaxPriceFilter(maxPrice);
     setSelectedBrands(selectedBrands);
 
-    const filtersData = {
-      minAge,
-      maxAge,
-      minPrice,
-      maxPrice,
-      selectedBrands,
+    // const filtersData = {
+    //   minAge,
+    //   maxAge,
+    //   minPrice,
+    //   maxPrice,
+    //   selectedBrands,
       
-    };
-    localStorage.setItem('selectedFilters', JSON.stringify(filtersData));
+    // };
+    // localStorage.setItem('selectedFilters', JSON.stringify(filtersData));
 
     // Verificar y corregir valores nulos o indefinidos para minAge y maxAge
     if (minAge === null || minAge === undefined || minAge === "") {

@@ -26,8 +26,9 @@ export default function DetailComponent({ id,handleGoBack }) {
     
   }, []);
   
-  localStorage.setItem('navigatedFromComponentA', 'true');
- 
+  
+   localStorage.setItem('navigatedFromComponentA', 'true');
+    
   //obtengo los valores de productId, idVariant y ItemQt que viene en la url
   useEffect(() => {
     if (querySearch) {
