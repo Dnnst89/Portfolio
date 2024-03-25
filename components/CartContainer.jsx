@@ -7,13 +7,14 @@ import CartDetail from "@/components/CartDetail";
 import CartProceedPayment from "@/components/CartProceedPayment";
 import { useSelector } from "react-redux";
 import CartSpinner from "./CartSpinner";
+import { useEffect } from "react";
 const CartContainer = () => {
   const { user } = useStorage(); //me trae el usuario de local storage
   const cart = useSelector((state) => state.cart);
-
   const { items, errors, loading } = useCartSummary({
     userId: user?.id,
   });
+
   return (
     <>
       <div
@@ -33,7 +34,6 @@ const CartContainer = () => {
           )
         }
         {items?.map((item, index) => {
-          
           const variant = item.attributes.variant.data; // Desestructuración aquí
           const variantAtt = variant.attributes;
           const productAtt = variant.attributes.product?.data?.attributes; // Desestructuración aquí

@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 const CREATE_EXCHANGE_RATE = gql`
-mutation (
+  mutation (
     $purchase: Float
     $sale: Float
     $date: String

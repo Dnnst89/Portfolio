@@ -55,7 +55,7 @@ export default function FiltersResultsComponent({ querySearch }) {
   let initialAge;
   let finalAge;
   let category;
-  let brands;// Brands filters
+  let brands; // Brands filters
   brands = selectedBrands;
   let minPrice;
   let maxPrice;
@@ -72,7 +72,6 @@ export default function FiltersResultsComponent({ querySearch }) {
     finalAge = maxAgeFilter;
     minPrice = minPriceFilter;
     maxPrice = maxPriceFilter;
-
   }
 
   // gets the brands for checkboxes depending on the selected category
@@ -85,7 +84,9 @@ export default function FiltersResultsComponent({ querySearch }) {
       let hasMorePages = true;
       let brandsSet = new Set(); //set to have unique brands and not repeated
       while (hasMorePages) {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}api/products?filters[categories][name][$contains]=${category}&pagination[page]=${page}&pagination[pageSize]=${hitsPerPage}`);
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_STRAPI_URL}api/products?filters[categories][name][$contains]=${category}&pagination[page]=${page}&pagination[pageSize]=${hitsPerPage}`
+        );
         const data = await response.json();
         if (data && data.data && data.data.length > 0) {
           for (let index = 0; index < data.data.length; index++) {
@@ -99,16 +100,13 @@ export default function FiltersResultsComponent({ querySearch }) {
       let allBrands = [...brandsSet]; //parse set to list
       //Update state after iteration completion
       setBrands(allBrands);
-
     } catch (error) {
-      console.error('Error al obtener los datos:', error);
-    }
-    finally {
+      console.error("Error al obtener los datos:", error);
+    } finally {
       setLoadingBrands(false);
     }
   }
   useEffect(() => {
-
     getBrands();
   }, [category]);
 
@@ -137,11 +135,13 @@ export default function FiltersResultsComponent({ querySearch }) {
       category,
     },
   });
-  
-  // Using results conditionally
-  const { loading, error, data } = brands.length>0 ? queryResultWithBrands  : queryResult;
 
-  useEffect(() => {        //   // Puedes mover la lógica de 'allResults' directamente aquí
+  // Using results conditionally
+  const { loading, error, data } =
+    brands.length > 0 ? queryResultWithBrands : queryResult;
+
+  useEffect(() => {
+    //   // Puedes mover la lógica de 'allResults' directamente aquí
     try {
       // Realiza las operaciones necesarias con 'data'
       setQueryType("category");
@@ -224,7 +224,8 @@ export default function FiltersResultsComponent({ querySearch }) {
       }
     );
 
-  if (!loadingBrands) { //if is not loading brands
+  if (!loadingBrands) {
+    //if is not loading brands
     return (
       <div
         className={
@@ -340,5 +341,4 @@ export default function FiltersResultsComponent({ querySearch }) {
       </div>
     );
   }
-
 }

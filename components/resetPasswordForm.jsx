@@ -12,6 +12,8 @@ import CheckOutHeader from "@/components/CheckoutHeader";
 import ErrorForm from "@/components/ErrorForm";
 import { UPDATE_PASSWORD } from "@/src/graphQl/queries/updatePassword";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@apollo/client";
+import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 const initialValues = {
   password: "",
   confirmPassword: "",
@@ -32,6 +34,9 @@ const validationSchema = Yup.object().shape({
 });
 
 const ResetPasswordForm = ({ code, resetForm }) => {
+  const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 19 },
+  });
   const router = useRouter();
   //const dispatch = useDispatch();
   // Call mutation
@@ -57,8 +62,8 @@ const ResetPasswordForm = ({ code, resetForm }) => {
       // Dispatch user and update shopping session
       // dispatch(setUser(data.resetPassword.user));
     } catch (error) {
-      toast.error("No fue posible actualizar tu contraseña", {
-        duration: 4000,
+      toast.error(errorMessage.errorInformation.data.attributes.error_message, {
+        autoClose: 5000,
       });
     } finally {
       resetForm();
@@ -69,7 +74,7 @@ const ResetPasswordForm = ({ code, resetForm }) => {
     <div className="h-screen">
       <CheckOutHeader regresar={"/"} />
       <div className="flex justify-center items-center w-full md:max-w-screen-xl m-auto">
-          <div className="w-full">
+        <div className="w-full">
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -79,13 +84,13 @@ const ResetPasswordForm = ({ code, resetForm }) => {
               return (
                 <>
                   <Form className="max-w-screen-xl items-center mt-20 grid grid-cols-12 m-auto">
-                      <h1 className=" text-3xl flex justify-center items-center mb-10 col-span-12 text-center">
+                    <h1 className=" text-3xl flex justify-center items-center mb-10 col-span-12 text-center">
                       Ingresa tu nueva contraseña
                     </h1>
 
                     <div className="bg-resene pt-10 w-full flex flex-col items-center border-dashed border-2 border-[#787878] drop-shadow-card col-start-2 col-span-10 md:col-start-3 md:col-span-8">
-                        <div className="flex grid grid-cols-12 m-auto w-full">
-                          <section className="p-3 m-auto col-span-12 grid grid-cols-12 gap-5">
+                      <div className="flex grid grid-cols-12 m-auto w-full">
+                        <section className="p-3 m-auto col-span-12 grid grid-cols-12 gap-5">
                           <div className="grid col-span-12 md:col-span-6 content-baseline w-full">
                             <label htmlFor="password">
                               Constraseña
@@ -102,7 +107,7 @@ const ResetPasswordForm = ({ code, resetForm }) => {
                               <ErrorForm>{errors.password}</ErrorForm>
                             ) : null}
                           </div>
-                        
+
                           <div className="grid col-span-12 md:col-span-6 content-baseline w-full">
                             <label
                               className="whitespace-nowrap w-[100px]"

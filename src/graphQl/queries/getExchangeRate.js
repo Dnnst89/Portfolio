@@ -1,17 +1,17 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 const GET_EXCHANGE_RATE = gql`
-query ExchangeRates {
+  query ExchangeRates {
     exchangeRates {
-        data {
-            id
-            attributes {
-                purchase
-                sale
-                date
-            }
+      data {
+        id
+        attributes {
+          purchase
+          sale
+          date
         }
+      }
     }
-}
+  }
 `;
 export default GET_EXCHANGE_RATE;

@@ -16,6 +16,7 @@ import { GET_PAYMENT_DETAIL } from "@/src/graphQl/queries/getPaymentDetail";
 import { validateID } from "@/helpers";
 import { createOrderData, orderMoovin } from "@/api/moovin/createOrder";
 import { UPDATE_PAYMENT_DELIVERY_ID } from "@/src/graphQl/queries/updatePaymentDeliveryId";
+import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 export default function CheckOutForm3({
   paymentDetailId,
   total,
@@ -40,7 +41,16 @@ export default function CheckOutForm3({
   const [updatePaymentDeliveryId] = useMutation(UPDATE_PAYMENT_DELIVERY_ID);
   // the url return an payment url to redirect the user to Tilopay payment.
   let paymentUrl = "";
+  const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 10 },
+  });
 
+  const { data: errorMessageMoovin } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 11 },
+  });
+  const { data: errorMessageCart } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 12 },
+  });
   // Retrieve user data
   const { loading, error, data } = useQuery(GET_PAYMENT_DETAILS, {
     variables: { userId: id },
@@ -119,7 +129,13 @@ export default function CheckOutForm3({
         } catch (error) {}
       }
     } catch (error) {
-      console.log("error creacion orden moovin", error);
+      toast.error(
+        errorMessageMoovin.errorInformation.data.attributes.error_message,
+        {
+          autoClose: 5000,
+        }
+      );
+      console.log("Error creacion orden moovin", error);
     }
   };
   const key =
@@ -196,7 +212,8 @@ export default function CheckOutForm3({
               <AlertNotAuth
                 t={t}
                 msj={
-                  "Lo sentimos ha sucedido un error con tu compra, verifica tus productos"
+                  errorMessageCart.errorInformation.data.attributes
+                    .error_message
                 }
                 newRoute={"/cart"}
               />
@@ -206,9 +223,12 @@ export default function CheckOutForm3({
           }
         } else {
           setLoadingBtn(false);
-          toast.error("Por favor selecciona la casilla de verificación", {
-            autoClose: 5000,
-          });
+          toast.error(
+            errorMessage.errorInformation.data.attributes.error_message,
+            {
+              autoClose: 5000,
+            }
+          );
         }
       } else {
         setLoadingBtn(true);

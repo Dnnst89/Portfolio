@@ -5,12 +5,10 @@ import CartQuantityBtn from "./CartQuantityBtn";
 import DeleteCartItemBtn from "./DeleteCartItemBtn";
 import CarouselImages from "./CarouselImages";
 import { useSelector } from "react-redux";
-import {useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import PRODUCT_ID_CARTITEM_QUERY from "@/src/graphQl/queries/getProductIdFromCartItem";
-import DetailComponent from './DetailComponent';
+import DetailComponent from "./DetailComponent";
 import Link from "next/link";
-
-
 const CartItem = ({
   cartItemId,
   idVariant,
@@ -31,19 +29,19 @@ const CartItem = ({
   error,
 }) => {
   const cart = useSelector((state) => state.cart);
-
-  
   //Get the data of the product depend on the cartItemId
-  const{ data, loading: productIdLoading}= useQuery(PRODUCT_ID_CARTITEM_QUERY,{
+  const { data, loading: productIdLoading } = useQuery(
+    PRODUCT_ID_CARTITEM_QUERY,
+    {
       variables: {
-        cartItemId: cartItemId
-      }
-  });
-
-  //Product Id 
-  const productId = data?.cartItem?.data?.attributes?.variant?.data?.attributes?.product?.data?.id;
-
-
+        cartItemId: cartItemId,
+      },
+    }
+  );
+  //Product Id
+  const productId =
+    data?.cartItem?.data?.attributes?.variant?.data?.attributes?.product?.data
+      ?.id;
   return (
     <>
       <div
@@ -55,8 +53,6 @@ const CartItem = ({
       >
         <section className="grid grid-cols-12 col-span-12 md:col-span-4">
           <div className="grid grid-cols-12 col-span-12 items-center">
-          
-         
             {images.length > 0 ? (
               <CarouselImages
                 altText={productName}
@@ -64,33 +60,47 @@ const CartItem = ({
                 widthImg={140}
                 heightImg={140}
                 classStyle={"rounded-2xl"}
-                productId ={productId}
+                productId={productId}
                 idVariant={idVariant}
-                ItemQt = {quantityCartItem}
+                ItemQt={quantityCartItem}
               />
             ) : (
-
-             <Link href={{ pathname: "/detail", query: { productId: productId, idVariant: idVariant, ItemQt: quantityCartItem } }}>
-              
-                <Image 
+              <Link
+                href={{
+                  pathname: "/detail",
+                  query: {
+                    productId: productId,
+                    idVariant: idVariant,
+                    ItemQt: quantityCartItem,
+                  },
+                }}
+              >
+                <Image
                   src={test}
                   alt={productName}
                   style={{ width: "140px", height: "140px" }}
                   className="col-span-6"
                 />
-            </Link>
+              </Link>
             )}
-
             <div className="p-3 col-span-6">
-            {!productIdLoading ? (
-              <Link role="link" href={{ pathname: "/detail", query: {productId: productId, idVariant: idVariant,ItemQt: quantityCartItem} }}>
-              <h1 className="text-lg hover:underline">{productName}</h1>
-            </Link>
-                
+              {!productIdLoading ? (
+                <Link
+                  role="link"
+                  href={{
+                    pathname: "/detail",
+                    query: {
+                      productId: productId,
+                      idVariant: idVariant,
+                      ItemQt: quantityCartItem,
+                    },
+                  }}
+                >
+                  <h1 className="text-lg hover:underline">{productName}</h1>
+                </Link>
               ) : (
                 <h1 className="text-lg">{productName}</h1>
               )}
-
               <p className="text-xs text-lightblue">{brand}</p>
               <span className="text-xs text-grey">Ref {idVariant}</span>
             </div>
@@ -117,7 +127,6 @@ const CartItem = ({
             <span className="text-xs mx-2 col-start-2 col-span-6">
               Precio Unitario: ${price}
             </span>
-
             <span className="mx-2 font-bold col-start-2 col-span-6">
               Precio Total: ${totalPrice}
             </span>
@@ -129,5 +138,4 @@ const CartItem = ({
     </>
   );
 };
-
 export default CartItem;

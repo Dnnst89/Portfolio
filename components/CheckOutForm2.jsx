@@ -33,7 +33,6 @@ export default function CheckOutForm2({
   lng,
   handleCheckout,
 }) {
- 
   const isoDate = new Date().toISOString();
   const [paymentDetailId, setPaymentDetailId] = useState(null);
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
@@ -44,7 +43,6 @@ export default function CheckOutForm2({
   const [updateExchangeRate] = useMutation(UPDATE_EXCHANGE_RATE);
   let exchangeRateResponseId = null;
   const [exchangeRateId, setExchangeRateId] = useState(null);
-
 
   //Obtenemos el estado de los regalos que se van a envolver
   //seleccionamos la etiqueta que se mostrar en el correo
@@ -64,13 +62,8 @@ export default function CheckOutForm2({
       id: 1,
     },
   });
- 
-  const { loading: load, data : exchangeRate } = useQuery(GET_EXCHANGE_RATE, {
-    
-  });
 
-
-  
+  const { loading: load, data: exchangeRate } = useQuery(GET_EXCHANGE_RATE, {});
 
   useEffect(() => {
     try {
@@ -100,7 +93,6 @@ export default function CheckOutForm2({
     error,
     data: deliveryChoicesData,
   } = useQuery(GET_DELIVERY_CHOICES);
-
 
   //Correos de Costa Rica
   const CCR =
@@ -149,41 +141,37 @@ export default function CheckOutForm2({
     reset,
   } = useForm();
   const fetchTipoCambio = async () => {
-    
-    try { 
-      
+    try {
       // // Llama a la función para obtener el tipo de cambio
       const tipoCambioResultado = await getTipoCambio();
-  
+
       // Almacena el tipo de cambio en el estado del componente
-      setTipoCambio(tipoCambioResultado.compra) 
-  
-        updateExchangeRate({//actualizo el registro en base de datos
-          variables: {
-            exchangeRateId: 1,
-            newPurchase: tipoCambioResultado.compra,
-            newSale: tipoCambioResultado.venta,
-            newDate: isoDate,
-          },
-        });
-     
+      setTipoCambio(tipoCambioResultado.compra);
+
+      updateExchangeRate({
+        //actualizo el registro en base de datos
+        variables: {
+          exchangeRateId: 1,
+          newPurchase: tipoCambioResultado.compra,
+          newSale: tipoCambioResultado.venta,
+          newDate: isoDate,
+        },
+      });
     } catch (error) {
       // Manejar el error, por ejemplo, mostrar un mensaje al usuario
-     setTipoCambio(exchangeRate?.exchangeRates?.data[0]?.attributes?.purchase);
-     
+      setTipoCambio(exchangeRate?.exchangeRates?.data[0]?.attributes?.purchase);
     }
   };
-  
-  useEffect(() => {
-      if (!load) {
-        try {
-          fetchTipoCambio();
-        } catch (error) {
-          console.log("error", error);
-        }
-      }
-  }, [load]);
 
+  useEffect(() => {
+    if (!load) {
+      try {
+        fetchTipoCambio();
+      } catch (error) {
+        console.log("error", error);
+      }
+    }
+  }, [load]);
 
   /**
    * Hook
@@ -422,14 +410,17 @@ export default function CheckOutForm2({
       </div>
       {!checktOutForm2Visible ? (
         <form onSubmit={onSubmit}>
-          <DeliveryChoice
-            labelName="Recoger en tienda"
-            register={register}
-            logo={logo}
-            valueName="SPU"
-            deliveryId={"SPU"}
-            className=""
-          />
+          {false && ( // Cambia 'false' a 'true' cuando desees mostrar este DeliveryChoice
+            <DeliveryChoice
+              labelName="Recoger en tienda"
+              register={register}
+              logo={logo}
+              valueName="SPU"
+              deliveryId={"SPU"}
+              className=""
+              disabled={true}
+            />
+          )}
           {!blockMoovin ? (
             <DeliveryChoice
               labelName={"Envío a través de"}
