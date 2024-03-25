@@ -42,7 +42,6 @@ export default function CheckOutForm2({
   const [updateExchangeRate] = useMutation(UPDATE_EXCHANGE_RATE);
   let exchangeRateResponseId = null;
   const [exchangeRateId, setExchangeRateId] = useState(null);
-
   //Obtenemos el estado de los regalos que se van a envolver
   //seleccionamos la etiqueta que se mostrar en el correo
   const { selectedGifts } = useSelector((state) => state.selectedGifts);
@@ -61,7 +60,6 @@ export default function CheckOutForm2({
       id: 1,
     },
   });
-
   const { loading: load, data: exchangeRate } = useQuery(GET_EXCHANGE_RATE, {});
 
   useEffect(() => {
@@ -383,7 +381,6 @@ export default function CheckOutForm2({
       });
     }
   });
-
   return (
     <div className="w-full">
       <div className="flex justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200 min-w-[375px]">
@@ -459,7 +456,9 @@ export default function CheckOutForm2({
             <button
               type="submit"
               disabled={isSubmitting || total === 0}
-              className={`text-white rounded-sm p-2 w-[150px] whitespace-nowrap bg-pink-200`}
+              className={`${
+                !isSubmitting ? "cursor-default" : "cursor-pointer"
+              } rounded-sm p-2 w-[150px] whitespace-nowrap bg-pink-200 text-white`}
               title={`${!isSubmitting ? "Seleccione un método de envío" : ""}`}
             >
               {total <= 0 ? <Spinner /> : "Continuar"}
