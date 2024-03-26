@@ -7,7 +7,7 @@ function SearchItem({ hit, components }) {
 
   // when users clicks a product on the search component, then trackEvent is called for Google Analytics traking products.
   const handleClick = () => {
-    trackEvent(hit.brand, "click_on_product", hit.name, hit.defaultPrice);
+    trackEvent(hit.brand, "click_on_product", hit.name, hit.defaultPrice, hit.variants[0].initialAge, hit.variants[0].finalAge);
   }
 
   return (
