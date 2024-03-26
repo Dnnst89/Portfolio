@@ -36,6 +36,7 @@ export default function FiltersResultsComponent({ querySearch }) {
   let maxPrice;
 
   //separo la query para saber que mostrar si es por rango de dedades o por categorias
+
   const [filterType, filterValue] = querySearch.split("=");
   if (filterType == "ageRange") {
     initialAge = parseInt(filterValue.split("-")[0]);
@@ -54,9 +55,6 @@ export default function FiltersResultsComponent({ querySearch }) {
     let page = 1;
     const hitsPerPage = 100; // The number of results per page
     try {
-      if (filterValue === undefined && !loading) {
-        alert("sss");
-      }
       setLoadingBrands(true);
       let hasMorePages = true;
       let brandsSet = new Set(); //set to have unique brands and not repeated
@@ -129,7 +127,8 @@ export default function FiltersResultsComponent({ querySearch }) {
       const total = data.products.meta.pagination.total;
       setNbHits(total);
       // console.log("resultado1", nbHits);
-      if (filterValue === undefined) {
+
+      if (filterValue === undefined || filterType === undefined) {
         router.push("/");
       }
       // Continúa con el resto del código según tus necesidades
