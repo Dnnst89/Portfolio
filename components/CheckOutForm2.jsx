@@ -37,13 +37,11 @@ export default function CheckOutForm2({
   const [paymentDetailId, setPaymentDetailId] = useState(null);
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
   const [isMoreThanDeliveryRange, setIsMoreThanDeliveryRange] = useState(false);
-
   //Exchange rate
   const [createExchangeRate] = useMutation(CREATE_EXCHANGE_RATE);
   const [updateExchangeRate] = useMutation(UPDATE_EXCHANGE_RATE);
   let exchangeRateResponseId = null;
   const [exchangeRateId, setExchangeRateId] = useState(null);
-
   //Obtenemos el estado de los regalos que se van a envolver
   //seleccionamos la etiqueta que se mostrar en el correo
   const { selectedGifts } = useSelector((state) => state.selectedGifts);
@@ -62,7 +60,6 @@ export default function CheckOutForm2({
       id: 1,
     },
   });
-
   const { loading: load, data: exchangeRate } = useQuery(GET_EXCHANGE_RATE, {});
 
   useEffect(() => {
@@ -137,9 +134,10 @@ export default function CheckOutForm2({
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting, isValid },
     reset,
   } = useForm();
+
   const fetchTipoCambio = async () => {
     try {
       // // Llama a la función para obtener el tipo de cambio
@@ -390,7 +388,7 @@ export default function CheckOutForm2({
           <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
             2
           </div>
-          <h1 className="text-xl min-w-[210px]">Método de envío</h1>
+          <h1 className="text-xl min-w-[210px]">Métodooo de envío</h1>
           {checktOutForm2Visible ? (
             <div>
               <button
@@ -457,8 +455,11 @@ export default function CheckOutForm2({
           <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
             <button
               type="submit"
-              disabled={total === 0}
-              className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
+              disabled={isSubmitting || total === 0}
+              className={`${
+                !isSubmitting ? "cursor-default" : "cursor-pointer"
+              } rounded-sm p-2 w-[150px] whitespace-nowrap bg-pink-200 text-white`}
+              title={`${!isSubmitting ? "Seleccione un método de envío" : ""}`}
             >
               {total <= 0 ? <Spinner /> : "Continuar"}
             </button>
