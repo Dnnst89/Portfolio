@@ -135,7 +135,7 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack }) {
         const itemFiltrado = cartSummary.items.find(
           (item) => item.attributes.variant.data.id === variants[0]?.id
         );
-        if (updatedQuantity === itemFiltrado.attributes.quantity) {
+        if (updatedQuantity === itemFiltrado?.attributes?.quantity) {
           setEnableButton(false);
         } else {
           setEnableButton(true);
@@ -159,7 +159,7 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack }) {
         (item) => item.attributes.variant.data.id === variants[0]?.id
       );
       const isQuantityEqualToItemQt =
-        newQuantity === itemFiltrado.attributes.quantity;
+        newQuantity === itemFiltrado?.attributes?.quantity;
 
       // Establecer el botón habilitado o deshabilitado basado en la comparación
       setEnableButton(!isQuantityEqualToItemQt);
@@ -195,7 +195,7 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack }) {
         (item) => item.attributes.variant.data.id === variants[0]?.id
       );
 
-      if (updatedQuantity === itemFiltrado.attributes.quantity) {
+      if (updatedQuantity === itemFiltrado?.attributes?.quantity) {
         setEnableButton(false);
       } else {
         setEnableButton(true);

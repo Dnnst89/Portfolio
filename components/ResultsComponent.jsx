@@ -10,32 +10,11 @@ import algoliasearch from "algoliasearch";
 import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 import { useQuery } from "@apollo/client";
 const ResultsComponent = (test) => {
-  useEffect(() => {
-    const navigatedFromComponentA = localStorage.getItem('navigatedFromComponentA');
-    if (navigatedFromComponentA) {
-      const storedFilters = localStorage.getItem("selectedFilters");
-      if (storedFilters) {
-        const filtersData = JSON.parse(storedFilters);
-        setMinAgeFilter(filtersData.minAge);
-        setMaxAgeFilter(filtersData.maxAge);
-        setMinPriceFilter(filtersData.minPrice);
-        setMaxPriceFilter(filtersData.maxPrice);
-        setSelectedBrands(filtersData.selectedBrands);
-        setSelectedAgeRange({ minAge: filtersData.minAge, maxAge: filtersData.maxAge });
-        setSelectedPriceRange({ minPrice:filtersData.minPrice , maxPrice: filtersData.maxPrice });
-        setResult(filtersData.response);
-        console.log(filtersData.response);
-        console.log(filtersData.minAge)
-        console.log(filtersData.maxAge)
-        console.log(filtersData.minPrice)
-        console.log(filtersData.maxPrice)
-        console.log(filtersData.selectedBrands)
-      }
 
-      // Eliminar la bandera del Local Storage
-      localStorage.removeItem("navigatedFromComponentA");
-    }
-  }, []);
+  //bandera para indicar que estamos en el componente ResultsComponent
+  localStorage.setItem('navigatedFromResult', 'true');
+
+  
 
   const [minPriceFilter, setMinPriceFilter] = useState(0);
   const [maxPriceFilter, setMaxPriceFilter] = useState(999999);
@@ -64,8 +43,40 @@ const ResultsComponent = (test) => {
   const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
     variables: { id: 13 },
   });
+
+  //busco la bandera navigatedFromResultsComponent para saber si debo cargar los datos desde el localStorage
+  const navigatedFromComponent = localStorage.getItem('navigatedFromResultsComponent');
+  // obtengo la data guardada en el localStorage
+  const storedFilters = localStorage.getItem("selectedFilters");
+  const filtersData = JSON.parse(storedFilters);
+  useEffect(() => {
+    
+    if (navigatedFromComponent) {
+      
+      if (storedFilters) {
+        //cargo los filtros con los valores de la data almacenada en el local storage
+        setMinAgeFilter(filtersData.minAge);
+        setMaxAgeFilter(filtersData.maxAge);
+        setMinPriceFilter(filtersData.minPrice);
+        setMaxPriceFilter(filtersData.maxPrice);
+        setSelectedBrands(filtersData.selectedBrands);
+        setSelectedAgeRange({ minAge: filtersData.minAge, maxAge: filtersData.maxAge });
+        setSelectedPriceRange({ minPrice:filtersData.minPrice , maxPrice: filtersData.maxPrice });
+        setResult(filtersData.response);
+        
+      }
+
+      // Eliminar la bandera del Local Storage
+      localStorage.removeItem("navigatedFromResultsComponent");
+      
+    }
+  }, []);
+
+
+
   async function getHits() {
     try {
+      
       var url = `/development_api::product.product?query=${test.query}&page=${currentPage}`;
 
       // Agregar filtros de precio si están presentes
@@ -75,6 +86,7 @@ const ResultsComponent = (test) => {
         minAgeFilter != null &&
         maxAgeFilter != null
       ) {
+        
         url += `&numericFilters=variants.price>=${minPriceFilter},variants.price<=${maxPriceFilter},variants.initialAge<=${maxAgeFilter},variants.finalAge>=${minAgeFilter}`;
       }
 
@@ -102,18 +114,30 @@ const ResultsComponent = (test) => {
       });
     }
   }
-  console.log("resu",result)
+ 
 
   async function allResults() {
     try {
-      setLoading(true); // Establece loading en true antes de realizar la solicitud
-      const result = await getHits();
-      const { hitsPerPage, nbHits, nbPages } = result;
-      console.log("lengt",result.length);
-      setResult(result);
-      setHitsPerPage(hitsPerPage);
-      setNbHits(nbHits);
-      setNbPages(nbPages);
+      
+  setLoading(true); // Establece loading en true antes de realizar la solicitud
+  let result;
+  //si no hay localStorage se llama al metodo getHits
+  if (!navigatedFromComponent) {
+    result = await getHits();
+  } else {
+    //si hay localStorage cargo en result la data almacenada para mostrar el resultado segun los filtros
+    result = filtersData.response;
+  }
+
+  if (result) {
+    setResult(result);
+    const { hitsPerPage, nbHits, nbPages } = result;
+    setHitsPerPage(hitsPerPage);
+    setNbHits(nbHits);
+    setNbPages(nbPages);
+  } else {
+    console.error("Error: result es null o indefinido");
+  }
     } catch (err) {
       // Manejar errores si es necesario
     } finally {
@@ -124,10 +148,12 @@ const ResultsComponent = (test) => {
   useEffect(() => {
     if (test.query) {
       allResults();
-      console.log("hh",result)
+
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, test.query]);
+
+  
 
   const handleFilters = (
     selectedBrands,
@@ -143,7 +169,7 @@ const ResultsComponent = (test) => {
     setMaxPriceFilter(maxPrice);
 
     
-
+    
     // Verificar y corregir valores nulos o indefinidos para minAge y maxAge
     if (minAge === null || minAge === undefined || minAge === "") {
       minAge = 0;
@@ -155,7 +181,9 @@ const ResultsComponent = (test) => {
     }
 
     // Verificar y corregir valores nulos o indefinidos para minPrice
+    
     if (minPrice === null || minPrice === undefined || minPrice === "") {
+      
       setMinPriceFilter(0);
       minPrice = 0;
     }
@@ -193,6 +221,7 @@ const ResultsComponent = (test) => {
       })
       .then((response) => {
         setResult(response);
+        //en el filtersData guardo los valores para almacenarlos en el localStorage y usarlos cuando regrese de detalle del producto
         const filtersData = {
           minAge,
           maxAge,
@@ -216,6 +245,8 @@ const ResultsComponent = (test) => {
     
    
   };
+
+
 
   return (
     <div className={loading ? "grid place-items-center" : ""}>

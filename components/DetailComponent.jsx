@@ -10,6 +10,8 @@ import GET_CART_ITEM_BY_ID from "@/src/graphQl/queries/getCartItemById";
 import Spinner from "@/components/Spinner";
 import toast from "react-hot-toast";
 import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
+
+
 export default function DetailComponent({ id, handleGoBack }) {
   const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
     variables: { id: 13 },
@@ -20,7 +22,9 @@ export default function DetailComponent({ id, handleGoBack }) {
   const [querySearch, setQuerySearch] = useState("");
   const [idVariantSelected, setIdVariantSelected] = useState();
   const [idItemSelected, setIdItemSelected] = useState();
-  const [previousPage, setPreviousPage] = useState("");
+  
+
+
  
   //obtengo el url
   useEffect(() => {
@@ -32,7 +36,6 @@ export default function DetailComponent({ id, handleGoBack }) {
   }, []);
   
   
-   localStorage.setItem('navigatedFromComponentA', 'true');
     
   //obtengo los valores de productId, idVariant y ItemQt que viene en la url
   useEffect(() => {

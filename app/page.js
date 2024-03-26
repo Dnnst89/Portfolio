@@ -5,6 +5,8 @@ import "../styles/fonts.css";
 
 import MainLayout from './layouts/MainLayout';
 export default function Home() {
+  //delete flag from result component to reset filters
+  localStorage.removeItem("navigatedFromResult");
      {/* Adding GOOGLE ANALYTICS for all routes in the app. */}
     React.useEffect(() => {
         ReactGA.initialize(process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_MEASUREMENT_ID);

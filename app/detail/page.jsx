@@ -8,13 +8,21 @@ import "../../styles/fonts.css";
 
 export default function GetDetail() {
   const [detailId, setDetailId] = useState(null);
-  
-
+  const [previousPage, setPreviousPage] = useState("");
   const router = useRouter();
 
+  useEffect(() => {
+    setPreviousPage(document.referrer);
+    
+  }, []);
   const handleGoBack = () => {
-  
-    //localStorage.setItem("isFromDetailPage", "true");
+    if (previousPage.includes("/filtersResults")) { // Verificar si la página anterior contiene /filtersResults
+      localStorage.setItem('navigatedFromFiltersResultsComponent', 'true'); //activar la bandera para el FiltersResultsComponent
+    }
+    const navigatedFromResult = localStorage.getItem('navigatedFromResult');
+     if (navigatedFromResult) {
+    localStorage.setItem('navigatedFromResultsComponent', 'true');//activar la bandera para el ResultsComponent
+    }
     router.back(); // Función para regresar
   };
 
