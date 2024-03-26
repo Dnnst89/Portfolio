@@ -59,6 +59,7 @@ function RelatedItems({ categories, productId }) {
       <section className="flex flex-wrap max-w-screen-xl m-auto justify-center">
         {aux
           ? aux.map((item) => {
+            {console.log(item.attributes)}
               return (
                 <FilterProductCard
                   key={item.id}
@@ -67,9 +68,9 @@ function RelatedItems({ categories, productId }) {
                   coverImage={item.attributes.coverImage.data}
                   defaultPrice={item.attributes.defaultPrice}
                   brand={item.attributes.brand}
-                  initialAge={
-                    item.attributes.variants.data[0].attributes.initialAge
-                  }
+                  // initialAge={
+                  //   item.attributes.variants.data[0].attributes.initialAge
+                  // }
                   finalAge={
                     item.attributes.variants.data[0].attributes.finalAge
                   }

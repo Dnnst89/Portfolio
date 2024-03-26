@@ -83,6 +83,7 @@ const AddItemBtn = ({
             .then((response) => {
               setEnableButton(false);
               dispatch(updateQtyItems(cartQuantity + quantityItem));
+              itemFiltrado.quantity = newQuantity;
               toast.success("Se ha actualizado un producto");
               // Manejar la respuesta de la mutación aquí, si es necesario
             })

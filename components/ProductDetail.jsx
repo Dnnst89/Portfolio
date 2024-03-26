@@ -111,6 +111,11 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack }) {
   //galeria de imagenes para componente se compone de un arreglo [{original: url, thumbnail: url}]
   const [galleryImages, setGalleryImages] = useState([]);
 
+  const itemFiltrado =  cartSummary.items.find(
+    (item) => item.attributes.variant.data.id === variantId
+    
+  );
+  console.log("updatedQuantity fuera",itemFiltrado?.quantity)
   useEffect(() => {
     if (imageVariantSelected) {
       const variantGalleryImages = imageVariantSelected.map((image) => ({
@@ -132,14 +137,20 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack }) {
       if (quantitySelected > 1) {
         const updatedQuantity = quantitySelected - 1;
         SetQuantitySelected(updatedQuantity);
+        console.log(cartSummary.items);
         const itemFiltrado = cartSummary.items.find(
-          (item) => item.attributes.variant.data.id === variants[0]?.id
+          (item) => item.attributes.variant.data.id === variantId
         );
-        if (updatedQuantity === itemFiltrado?.attributes?.quantity) {
+        console.log("variants[0]?.id",itemFiltrado?.attributes?.quantity)
+        console.log("updatedQuantity",updatedQuantity)
+        console.log("updatedQuantity",itemFiltrado)
+        if (itemFiltrado) {
+        if (updatedQuantity === itemFiltrado?.quantity) {
           setEnableButton(false);
         } else {
           setEnableButton(true);
         }
+      }
       } else {
         // Evitar decrementar por debajo de 1
         SetQuantitySelected(1);
@@ -156,10 +167,10 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack }) {
       if (quantitySelected == newQuantity) return; //controla dropdown (detalle del producto desde carrito)
 
       const itemFiltrado = await cartSummary.items.find(
-        (item) => item.attributes.variant.data.id === variants[0]?.id
+        (item) => item.attributes.variant.data.id === variantId
       );
       const isQuantityEqualToItemQt =
-        newQuantity === itemFiltrado?.attributes?.quantity;
+        newQuantity === itemFiltrado?.quantity;
 
       // Establecer el botón habilitado o deshabilitado basado en la comparación
       setEnableButton(!isQuantityEqualToItemQt);
@@ -186,24 +197,31 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack }) {
   };
 
   const increaseCounter = async () => {
+
     if (ItemQt) {
       if (quantitySelected >= stockVariantSelected) return;
       const updatedQuantity = parseInt(quantitySelected, 10) + 1;
 
       SetQuantitySelected(updatedQuantity);
-      const itemFiltrado = await cartSummary.items.find(
-        (item) => item.attributes.variant.data.id === variants[0]?.id
-      );
-
-      if (updatedQuantity === itemFiltrado?.attributes?.quantity) {
+      // const itemFiltrado = await cartSummary.items.find(
+      //   (item) => item.attributes.variant.data.id === variantId
+        
+      // );
+      console.log("variants[0]?.id",itemFiltrado?.attributes?.quantity)
+      console.log("updatedQuantity",updatedQuantity)
+      console.log("updatedQuantity 2",itemFiltrado?.quantity)
+      if (itemFiltrado) {
+      if (updatedQuantity === itemFiltrado?.quantity) {
         setEnableButton(false);
       } else {
         setEnableButton(true);
       }
+    }
     } else {
       const itemFiltrado = await cartSummary.items.find(
         (item) => item.attributes.variant.data.id === variants[0]?.id
       );
+      
       if (itemFiltrado) {
         //si el item ya esta en carrito
         if (variants.length > 0) {
