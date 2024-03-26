@@ -8,9 +8,11 @@ import getProductsFiltered from "@/src/graphQl/queries/getProductsFiltered";
 import getProductsFilteredWithBrands from "@/src/graphQl/queries/getProductsFilteredWithBrands";
 import FilterContainer from "./FilterContainer";
 import FilterContainerPrincipal from "./FilterContainerPrincipal";
+import { useRouter } from "next/navigation";
 
 export default function FiltersResultsComponent({ querySearch }) {
   //querySearch me indica el tipo de filtro y el valor del filtro
+  const router = useRouter();
   const [minPriceFilter, setMinPriceFilter] = useState(0);
   const [maxPriceFilter, setMaxPriceFilter] = useState(999999);
   const [minAgeFilter, setMinAgeFilter] = useState(0);
@@ -35,7 +37,6 @@ export default function FiltersResultsComponent({ querySearch }) {
 
   //separo la query para saber que mostrar si es por rango de dedades o por categorias
   const [filterType, filterValue] = querySearch.split("=");
-
   if (filterType == "ageRange") {
     initialAge = parseInt(filterValue.split("-")[0]);
     finalAge = parseInt(filterValue.split("-")[1]);
@@ -53,6 +54,9 @@ export default function FiltersResultsComponent({ querySearch }) {
     let page = 1;
     const hitsPerPage = 100; // The number of results per page
     try {
+      if (filterValue === undefined && !loading) {
+        alert("sss");
+      }
       setLoadingBrands(true);
       let hasMorePages = true;
       let brandsSet = new Set(); //set to have unique brands and not repeated
@@ -109,7 +113,7 @@ export default function FiltersResultsComponent({ querySearch }) {
     },
   });
 
-  // Using results conditionally
+  // Using results condition
   const { loading, error, data } =
     brands.length > 0 ? queryResultWithBrands : queryResult;
 
@@ -125,7 +129,9 @@ export default function FiltersResultsComponent({ querySearch }) {
       const total = data.products.meta.pagination.total;
       setNbHits(total);
       // console.log("resultado1", nbHits);
-      console.log("first", nbHits);
+      if (filterValue === undefined) {
+        router.push("/");
+      }
       // Continúa con el resto del código según tus necesidades
     } catch (err) {
       // Manejar errores si es necesario
