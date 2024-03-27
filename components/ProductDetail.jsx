@@ -18,23 +18,61 @@ import "swiper/css/scrollbar";
 import ImageGallery from "react-image-gallery";
 import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { useQuery } from "@apollo/client";
+import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
+import GET_CART_ITEM_BY_ID from "@/src/graphQl/queries/getCartItemById";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 
-function ProductDetail({ product }) {
+function ProductDetail({ product, variantId, ItemQt }) {
   const name = product?.attributes?.name;
   const brand = product?.attributes?.brand;
   const description = product?.attributes?.description;
   const variants = product?.attributes?.variants?.data;
   const materials = product?.attributes?.materials?.data;
 
+  const { data, loading: productIdLoading } = useQuery(GET_VARIANT_BY_ID, {
+    variables: {
+      id: variantId,
+    },
+  });
+
+  //variables para cargar los datos en el detalle del producto desde en carrito
+  const lastVariantSelected = data?.variant?.data;
+  const skuSelected = data?.variant?.data?.attributes?.sku;
+  const stockVariantSelected = data?.variant?.data?.attributes?.stock;
+  const ageRangeVariantSelected = data?.variant?.data?.attributes?.ageRange;
+  const priceVariantSelected = data?.variant?.data?.attributes?.price;
+  const sizeVariantSelected = data?.variant?.data?.attributes?.size;
+  const imageVariantSelected = data?.variant?.data?.attributes?.images?.data;
+  const colorTypeParentVariant =
+    data?.variant?.data?.attributes?.parentVariant?.data?.attributes?.type;
+  const colorValueParentVariant =
+    data?.variant?.data?.attributes?.parentVariant?.data?.attributes?.typeValue;
+  const colorTypeVariant = data?.variant?.data?.attributes?.type;
+  const colorValueVariant = data?.variant?.data?.attributes?.typeValue;
+
+  //variable para guardar las selecciones de dropdown para mostrar en el detalle del pedido desde el carrito
+  const featuresSelected = {};
+  if (
+    colorTypeParentVariant !== undefined &&
+    colorValueParentVariant !== undefined
+  ) {
+    featuresSelected[colorTypeParentVariant] = colorValueParentVariant;
+  }
+
+  // Agregar propiedades solo si colorTypeVariant y colorValueVariant no son indefinidos
+  if (colorTypeVariant !== undefined && colorValueVariant !== undefined) {
+    featuresSelected[colorTypeVariant] = colorValueVariant;
+  }
+
   const altText = "Imagen de producto" + name;
   const [quantity, setQuantity] = useState(1);
+  const [quantitySelected, SetQuantitySelected] = useState(ItemQt); //carga la cantidad seleccionada
+
   const [image, setImage] = useState(null);
   let shortDescrption = "";
   const allImages = [];
 
   const baseURL = process.env.NEXT_PUBLIC_URL_DETINMARIN_BUCKET_IMAGES;
-
   const { user } = useStorage();
   const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
   const [variantSelected, setvariantSelected] = useState(); //guarda la variante que actualmente se seleccionó{features:{}, variant:{object}}
@@ -42,6 +80,7 @@ function ProductDetail({ product }) {
     variants.length > 0 ? variants[0].attributes.price.toFixed(2) : null
   ); //precio inicial dado por primer variante
   const [enableButton, setEnableButton] = useState(variants.length <= 1);
+  let variantItems = [];
 
   const { data: storeInformation, error: storeInformationError } = useQuery(
     GET_STORE_INFO,
@@ -53,67 +92,97 @@ function ProductDetail({ product }) {
   );
   const currency =
     storeInformation?.storeInformation?.data?.attributes?.currency;
-
-  variants.forEach((variant) => {
-    if (variant.attributes.images && variant.attributes.images.data) {
-      allImages.push(...variant.attributes.images.data);
-    }
-  });
+  if (imageVariantSelected) {
+    allImages.push(...imageVariantSelected); //muestra solo las imagenes de la variante(detalle del producto desde carrito)
+  } else {
+    variants.forEach((variant) => {
+      if (variant.attributes.images && variant.attributes.images.data) {
+        allImages.push(...variant.attributes.images.data);
+      }
+    });
+  }
 
   const [images, setImages] = useState(allImages.length > 0 ? allImages : null);
-
   //galeria de imagenes para componente se compone de un arreglo [{original: url, thumbnail: url}]
   const [galleryImages, setGalleryImages] = useState([]);
 
   useEffect(() => {
-    const newGalleryImages = images?.map((image) => ({
-      original: image.attributes.url,
-      thumbnail: image.attributes.url,
-    }));
-    setGalleryImages(newGalleryImages);
-  }, [images]);
+    if (imageVariantSelected) {
+      const variantGalleryImages = imageVariantSelected.map((image) => ({
+        original: image.attributes?.url,
+        thumbnail: image.attributes?.url,
+      }));
+      setGalleryImages(variantGalleryImages);
+    } else {
+      const newGalleryImages = images?.map((image) => ({
+        original: image.attributes.url,
+        thumbnail: image.attributes.url,
+      }));
+      setGalleryImages(newGalleryImages);
+    }
+  }, [images, imageVariantSelected]);
 
   const decreaseCounter = () => {
-    if (quantity === 1) return;
-    setQuantity((prev) => --prev);
+    if (ItemQt) {
+      if (quantitySelected > 1) {
+        SetQuantitySelected((prev) => prev - 1);
+      } else {
+        // Evitar decrementar por debajo de 1
+        SetQuantitySelected(1);
+      }
+    } else {
+      if (quantity > 1) {
+        setQuantity((prev) => prev - 1);
+      }
+    }
   };
 
   const handleQuantityChange = async (newQuantity) => {
-    const itemFiltrado = await cartSummary.items.find(
-      (item) => item.attributes.variant.data.id === variants[0]?.id
-    );
-    if (itemFiltrado) {
-      //si el item ya esta en carrito
-      if (variants.length > 0) {
-        if (quantity >= newQuantity) return;
-        setQuantity(newQuantity);
-      }
+    if (ItemQt) {
+      if (quantitySelected == newQuantity) return; //controla dropdown (detalle del producto desde carrito)
+      SetQuantitySelected(newQuantity);
     } else {
-      if (variants.length > 0) {
-        if (quantity >= variants[0].attributes.stock) return;
-        setQuantity(newQuantity);
+      const itemFiltrado = await cartSummary.items.find(
+        (item) => item.attributes.variant.data.id === variants[0]?.id
+      );
+      if (itemFiltrado) {
+        //si el item ya esta en carrito
+        if (variants.length > 0) {
+          if (quantity >= newQuantity) return;
+          setQuantity(newQuantity);
+        }
+      } else {
+        if (variants.length > 0) {
+          if (quantity >= variants[0].attributes.stock) return;
+          setQuantity(newQuantity);
+        }
       }
     }
   };
 
   const increaseCounter = async () => {
-    const itemFiltrado = await cartSummary.items.find(
-      (item) => item.attributes.variant.data.id === variants[0]?.id
-    );
-    if (itemFiltrado) {
-      //si el item ya esta en carrito
-      if (variants.length > 0) {
-        if (
-          quantity >=
-          variants[0].attributes.stock - itemFiltrado.attributes.quantity
-        )
-          return;
-        setQuantity((prev) => ++prev);
-      }
+    if (ItemQt) {
+      if (quantitySelected >= stockVariantSelected) return;
+      SetQuantitySelected((prev) => ++prev);
     } else {
-      if (variants.length > 0) {
-        if (quantity >= variants[0].attributes.stock) return;
-        setQuantity((prev) => ++prev);
+      const itemFiltrado = await cartSummary.items.find(
+        (item) => item.attributes.variant.data.id === variants[0]?.id
+      );
+      if (itemFiltrado) {
+        //si el item ya esta en carrito
+        if (variants.length > 0) {
+          if (
+            quantity >=
+            variants[0].attributes.stock - itemFiltrado.attributes.quantity
+          )
+            return;
+          setQuantity((prev) => ++prev);
+        }
+      } else {
+        if (variants.length > 0) {
+          if (quantity >= variants[0].attributes.stock) return;
+          setQuantity((prev) => ++prev);
+        }
       }
     }
   };
@@ -133,16 +202,31 @@ function ProductDetail({ product }) {
   };
 
   //cuando el producto solo tiene una capa de variante, obtengo el variants[0]
-  const variantItems = variants.map((variant) => {
-    const { size, price, color, stock, ageRange } = variant.attributes;
-    return { size, ageRange };
-  });
+  {
+    data && data.variant && data.variant.data
+      ? (() => {
+          variantItems = [
+            {
+              size: data?.variant?.data?.attributes?.size,
+              ageRange: data?.variant?.data?.attributes?.ageRange,
+            },
+          ];
+        })()
+      : (() => {
+          variantItems = variants.map((variant) => {
+            const { size, price, color, stock, ageRange } = variant.attributes;
+            return { size, ageRange };
+          });
+        })();
+  }
+
   const keyTranslations = {
     size: "Tamaño",
     stock: "Existencias",
     ageRange: "Rango de edad",
   };
   const variantItem = variantItems[0];
+
   return (
     <>
       {variants.length > 0 ? (
@@ -190,15 +274,24 @@ function ProductDetail({ product }) {
               </div>
 
               <div className="col-span-12 md:col-span-6">
-                <h2
-                  aria-label={`Referencia del producto ${variantSelected?.variant?.data?.attributes?.sku}`}
-                  className="flex justify-end text-sm"
-                >
-                  Ref{" "}
-                  {variantSelected
-                    ? variantSelected?.variant?.data?.attributes?.sku
-                    : variants[0]?.attributes?.sku}
-                </h2>
+                {skuSelected ? (
+                  <h2
+                    aria-label={`Referencia del producto ${variantSelected?.variant?.data?.attributes?.sku}`}
+                    className="flex justify-end text-sm"
+                  >
+                    Ref {skuSelected}
+                  </h2>
+                ) : (
+                  <h2
+                    aria-label={`Referencia del producto ${variantSelected?.variant?.data?.attributes?.sku}`}
+                    className="flex justify-end text-sm"
+                  >
+                    Ref{" "}
+                    {variantSelected
+                      ? variantSelected?.variant?.data?.attributes?.sku
+                      : variants[0]?.attributes?.sku}
+                  </h2>
+                )}
               </div>
             </div>
 
@@ -217,6 +310,7 @@ function ProductDetail({ product }) {
             {/* Sección seleccion del producto*/}
             <section>
               <ProductFeatures
+                variantData={data || null}
                 variantsList={variants}
                 setImages={setImages}
                 setImage={setImage}
@@ -240,17 +334,14 @@ function ProductDetail({ product }) {
                 <p className="text-sm md:text-base">
                   Tipo de material: <br />
                   {materials.length > 0
-                    ? materials.map((material, index) => (
-                        <span key={index}>
-                          {material.attributes.name}
-                          {index !== materials.length - 1 && " "}{" "}
-                          {/* Agrega un espacio solo si no es el último elemento */}
-                        </span>
-                      ))
+                    ? materials.map((material, index) => {
+                        return (
+                          <span key={index}>{material.attributes.name}</span>
+                        );
+                      })
                     : null}
                 </p>
               </div>
-
               {/* INFORMACION E ICONOS DE LA VARIANTE, DINAMICOS*/}
               {
                 variantSelected ? (
@@ -266,7 +357,9 @@ function ProductDetail({ product }) {
                       />
                       <p className="text-sm md:text-base">
                         Tamaño: <br />
-                        {variantSelected?.variant?.data?.attributes?.size}
+                        {sizeVariantSelected != null
+                          ? sizeVariantSelected
+                          : variantSelected?.variant?.data?.attributes?.size}
                       </p>
                     </div>
                     <div className="col-span-6 flex mt-5 items-center">
@@ -292,17 +385,29 @@ function ProductDetail({ product }) {
                         alt="tailwind logo"
                         className="rounded-full mr-3"
                       />
-                      <p className="text-sm md:text-base">
-                        Existencias: <br />
-                        {variantSelected?.variant?.data?.attributes?.stock === 0
-                          ? "Agotados"
-                          : "Disponibles"}
-                      </p>
+                      {stockVariantSelected != null ? (
+                        <p className="text-sm md:text-base">
+                          Existencias: <br />
+                          {stockVariantSelected === 0 ? (
+                            <span className="text-red">Agotados</span>
+                          ) : (
+                            "Disponibles"
+                          )}
+                        </p>
+                      ) : (
+                        <p className="text-sm md:text-base">
+                          Existencias: <br />
+                          {variantSelected?.variant?.data?.attributes?.stock ===
+                          0 ? (
+                            <span className="text-red">Agotados</span>
+                          ) : (
+                            "Disponibles"
+                          )}
+                        </p>
+                      )}
                     </div>
                     {Object.entries(variantSelected.features).map(
                       (feature, index) => {
-                        //feature[0] = key feature[1] = value
-
                         return (
                           <div
                             key={index}
@@ -336,13 +441,26 @@ function ProductDetail({ product }) {
                         alt="tailwind logo"
                         className="rounded-full mr-3"
                       />
-                      <p className="text-sm md:text-base">
-                        Existencias: <br />
-                        {variantSelected?.variant?.data?.attributes?.stock ||
-                        variants[0].attributes.stock <= 0
-                          ? "Agotados"
-                          : "Disponibles"}
-                      </p>
+                      {stockVariantSelected != null ? (
+                        <p className="text-sm md:text-base">
+                          Existencias: <br />
+                          {stockVariantSelected == 0 ? (
+                            <span className="text-red">Agotados</span>
+                          ) : (
+                            "Disponibles"
+                          )}
+                        </p>
+                      ) : (
+                        <p className="text-sm md:text-base">
+                          Existencias: <br />
+                          {(variantSelected?.variant?.data?.attributes?.stock ||
+                            variants[0].attributes.stock) <= 0 ? (
+                            <span className="text-red">Agotados</span>
+                          ) : (
+                            "Disponibles"
+                          )}
+                        </p>
+                      )}
                     </div>
 
                     {Object.entries(variantItem).map(([key, value]) => {
@@ -375,6 +493,29 @@ function ProductDetail({ product }) {
                         );
                       }
                     })}
+                    {JSON.stringify(featuresSelected) !==
+                      JSON.stringify({ null: null }) &&
+                      Object.entries(featuresSelected).map((feature, index) => {
+                        return (
+                          <div
+                            key={index}
+                            className="col-span-6 flex mt-5 items-center"
+                          >
+                            <Image
+                              priority={true}
+                              width="50"
+                              height="50"
+                              src={`https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Sitio_Web_iconos_600px_04_97a571b092.webp`}
+                              alt="tailwind logo"
+                              className="rounded-full mr-3"
+                            />
+                            <p className="text-sm md:text-base">
+                              {feature[0]}: <br />
+                              {feature[1]}
+                            </p>
+                          </div>
+                        );
+                      })}
                   </>
                 )
                 //cuando el producto solo tiene una capa de variante, obtengo el variants[0]
@@ -398,19 +539,27 @@ function ProductDetail({ product }) {
                     </button>
                     {/* <span>{quantity}</span> */}
                     <div className="group inline-block relative">
-                      <button
-                        type="button"
-                        className="bg-white rounded-full text-black px-4 py-2 transition duration-300 ease-in-out focus:outline-none focus:shadow-outline min-w-[60px]"
-                      >
-                        {quantity}
-                      </button>
+                      {stockVariantSelected ? (
+                        <button
+                          type="button"
+                          className="bg-white rounded-full text-black px-4 py-2 transition duration-300 ease-in-out focus:outline-none focus:shadow-outline min-w-[60px]"
+                        >
+                          {quantitySelected}
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="bg-white rounded-full text-black px-4 py-2 transition duration-300 ease-in-out focus:outline-none focus:shadow-outline min-w-[60px]"
+                        >
+                          {quantity}
+                        </button>
+                      )}
+
                       <ul className="absolute hidden text-grey-800 group-hover:block border border-grey-200 bg-white max-h-40 overflow-y-auto">
-                        {[
-                          ...Array(
-                            variantSelected?.variant?.data?.attributes?.stock ||
-                              variants[0].attributes.stock
-                          ).keys(),
-                        ].map((index) => (
+                        {(stockVariantSelected
+                          ? [...Array(stockVariantSelected).keys()]
+                          : [...Array(variants[0].attributes.stock).keys()]
+                        ).map((index) => (
                           <li
                             key={index + 1}
                             onClick={() => handleQuantityChange(index + 1)}
@@ -435,14 +584,23 @@ function ProductDetail({ product }) {
                   } rounded-sm p-2 md:p-3  md:mx-4"`}
                 >
                   <AddItemBtn
-                    quantityItem={quantity}
+                    variantData={data || null}
+                    quantityItem={
+                      quantitySelected !== null ? quantitySelected : quantity
+                    }
                     variant={
-                      variantSelected?.variant?.data
+                      lastVariantSelected !== null
+                        ? lastVariantSelected
+                        : variantSelected?.variant?.data
                         ? variantSelected.variant.data
                         : variants[0]
                     } //Se envía la ultima variante seleccionada
                     features={
-                      variantSelected?.features ? variantSelected.features : {}
+                      featuresSelected !== null
+                        ? featuresSelected
+                        : variantSelected?.features
+                        ? variantSelected.features
+                        : {}
                     }
                     cartItems={cartSummary.items}
                     cartQuantity={cartSummary.quantity}

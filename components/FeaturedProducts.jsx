@@ -2,7 +2,7 @@
 
 import FilterProductCard from "./FilterProductCard";
 //GQL
-import { useQuery } from "@apollo/client";
+import { useQuery, useLazyQuery } from "@apollo/client";
 import GET_FEATURED_PRODUCTS from "@/src/graphQl/queries/getFeaturedProducts";
 import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -123,6 +123,12 @@ const FeaturedProducts = () => {
                       coverImage={item.attributes.coverImage.data}
                       defaultPrice={item.attributes.defaultPrice.toFixed(2)}
                       brand={item.attributes.brand}
+                      initialAge={
+                        item.attributes.variants.data[0].attributes.initialAge
+                      }
+                      finalAge={
+                        item.attributes.variants.data[0].attributes.finalAge
+                      }
                     />
                   </SwiperSlide>
                 </div>
