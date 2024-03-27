@@ -458,7 +458,7 @@ export default function CheckOutForm2({
               className={`${
                 !isDirty
                   ? "cursor-default bg-grey-200"
-                  : "cursor-pointer bg-pink-200 hover:bg-pink-700 transition ease-in-out duration-300"
+                  : "cursor-pointer bg-pink-200 "
               } rounded-sm p-2 w-[150px] whitespace-nowrap text-white`}
               title={`${!isDirty ? "Seleccione un método de envío" : ""}`}
             >
