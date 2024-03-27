@@ -36,8 +36,12 @@ export default function FiltersResultsComponent({ querySearch }) {
   let maxPrice;
 
   //separo la query para saber que mostrar si es por rango de dedades o por categorias
+  let [filterType, filterValue] = "";
 
-  const [filterType, filterValue] = querySearch.split("=");
+  if (querySearch) {
+    [filterType, filterValue] = querySearch.split("=");
+  }
+
   if (filterType == "ageRange") {
     initialAge = parseInt(filterValue.split("-")[0]);
     finalAge = parseInt(filterValue.split("-")[1]);
