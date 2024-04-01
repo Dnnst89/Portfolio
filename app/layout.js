@@ -20,7 +20,8 @@ const poppins = Poppins({
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${poppins.className} bg-floralwhite`}>
+      <body
+        className={`${poppins.className} bg-[length:60%] lg:bg-[length:25%] bg-center bg-[url('https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/2_Fondo_Detinmarin_1024px_f324e3d318.svg')]`}>
         <ApolloProviders>
           <Providers>{children}</Providers>
         </ApolloProviders>
