@@ -387,7 +387,7 @@ export default function CheckOutForm2({
           <div className="bg-lightblue rounded-full p-3 w-[50px] flex justify-center text-white text-xl mr-5">
             2
           </div>
-          <h1 className="text-xl min-w-[210px]">Métodooo de envío</h1>
+          <h1 className="text-xl min-w-[210px]">Método de envío</h1>
           {checktOutForm2Visible ? (
             <div>
               <button
