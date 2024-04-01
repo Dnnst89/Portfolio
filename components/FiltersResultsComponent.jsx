@@ -133,7 +133,7 @@ export default function FiltersResultsComponent({ querySearch }) {
       // console.log("resultado1", nbHits);
 
       if (filterValue === undefined || filterType === undefined) {
-        router.push("/not-found.jsx");
+        router.push("/not-found");
       }
       // Continúa con el resto del código según tus necesidades
     } catch (err) {
