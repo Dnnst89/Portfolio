@@ -134,10 +134,9 @@ export default function CheckOutForm2({
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isSubmitting, isValid, isDirty },
     reset,
   } = useForm();
-
   const fetchTipoCambio = async () => {
     try {
       // // Llama a la función para obtener el tipo de cambio
@@ -455,11 +454,13 @@ export default function CheckOutForm2({
           <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
             <button
               type="submit"
-              disabled={isSubmitting || total === 0}
+              disabled={!isDirty || total === 0}
               className={`${
-                !isSubmitting ? "cursor-default" : "cursor-pointer"
-              } rounded-sm p-2 w-[150px] whitespace-nowrap bg-pink-200 text-white`}
-              title={`${!isSubmitting ? "Seleccione un método de envío" : ""}`}
+                !isDirty
+                  ? "cursor-default bg-grey-200"
+                  : "cursor-pointer bg-pink-200 "
+              } rounded-sm p-2 w-[150px] whitespace-nowrap text-white`}
+              title={`${!isDirty ? "Seleccione un método de envío" : ""}`}
             >
               {total <= 0 ? <Spinner /> : "Continuar"}
             </button>
