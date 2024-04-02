@@ -28,6 +28,8 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack }) {
   const description = product?.attributes?.description;
   const variants = product?.attributes?.variants?.data;
   const materials = product?.attributes?.materials?.data;
+  const category = product?.attributes?.categories?.data[0]?.attributes?.name;
+
 
   const { data, loading: productIdLoading } = useQuery(GET_VARIANT_BY_ID, {
     variables: {
@@ -115,7 +117,7 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack }) {
     (item) => item.attributes.variant.data.id === variantId
     
   );
-  console.log("updatedQuantity fuera",itemFiltrado?.quantity)
+  
   useEffect(() => {
     if (imageVariantSelected) {
       const variantGalleryImages = imageVariantSelected.map((image) => ({
@@ -137,13 +139,9 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack }) {
       if (quantitySelected > 1) {
         const updatedQuantity = quantitySelected - 1;
         SetQuantitySelected(updatedQuantity);
-        console.log(cartSummary.items);
         const itemFiltrado = cartSummary.items.find(
           (item) => item.attributes.variant.data.id === variantId
         );
-        console.log("variants[0]?.id",itemFiltrado?.attributes?.quantity)
-        console.log("updatedQuantity",updatedQuantity)
-        console.log("updatedQuantity",itemFiltrado)
         if (itemFiltrado) {
         if (updatedQuantity === itemFiltrado?.quantity) {
           setEnableButton(false);
@@ -207,9 +205,6 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack }) {
       //   (item) => item.attributes.variant.data.id === variantId
         
       // );
-      console.log("variants[0]?.id",itemFiltrado?.attributes?.quantity)
-      console.log("updatedQuantity",updatedQuantity)
-      console.log("updatedQuantity 2",itemFiltrado?.quantity)
       if (itemFiltrado) {
       if (updatedQuantity === itemFiltrado?.quantity) {
         setEnableButton(false);
@@ -283,39 +278,43 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack }) {
 
   return (
     <>
+    
       {variants.length > 0 ? (
         <section
+        
           aria-label="Descripción del producto"
           className="bg-floralwhite max-w-screen-xl grid grid-cols-12 m-auto p-5 z-0"
           target="_blank"
           rel="noopener noreferrer"
         >
+    
           {/* Columna de imagenes */}
-
-          <section
-            aria-label="Imágenes del producto"
-            className="mb-10 col-span-12 md:col-span-6 flex items-start"
-          >
-            <div style={{ marginTop: "12px" }}>
-              <button onClick={handleGoBack}>
-                <BiArrowBack className="text-3xl" />
+          
+          <section aria-label="Imágenes del producto" className="mb-10 col-span-12 md:col-span-6 flex flex-col items-start">
+            {/* Botón de regreso */}
+            <div className="md:w-5/6 mx-auto mt-2">
+            <a onClick={() => handleGoBack()} className="self-start mb-3">
+              <button className="flex justify-start text-lightblue bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
+              {variantId !== null ? "Regresar al carrito" : `Regresar a ${category}`}
               </button>
+            </a>
             </div>
-            {/* //imagenes debajo de la principal */}
-            <div className="md:w-5/6 m-auto mt-2 ">
-              {images && images.length > 0 ? (
-                <ImageGallery
-                  showPlayButton={false}
-                  originalHeight={"275px"}
-                  disableThumbnailScroll={false}
-                  disableKeyDown={false}
-                  disableSwipe={false}
-                  loading={"lazy"}
-                  items={galleryImages}
-                />
-              ) : null}
-            </div>
-          </section>
+  {/* Imágenes debajo de la principal */}
+  <div className="md:w-5/6 m-auto mt-2">
+    {images && images.length > 0 ? (
+      <ImageGallery
+        showPlayButton={false}
+        originalHeight={"275px"}
+        disableThumbnailScroll={false}
+        disableKeyDown={false}
+        disableSwipe={false}
+        loading={"lazy"}
+        items={galleryImages}
+      />
+    ) : null}
+  </div>
+</section>
+
 
           {/* Sección con los detalles del producto*/}
           <section
@@ -364,7 +363,7 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack }) {
             <p>{shortDescrption}...</p>
             <a onClick={() => handleClick()}>
               <button className="flex justify-start text-lightblue mb-3 bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
-                Leer mas
+                Leer más
               </button>
             </a>
             {/* Sección seleccion del producto*/}

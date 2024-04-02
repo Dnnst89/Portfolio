@@ -62,14 +62,6 @@ export default function DetailComponent({ id, handleGoBack }) {
     }
   }, [querySearch]);
 
-  // console.log(idVariantSelected)
-  // if(idVariantSelected !== undefined){
-  //   console.log("zi")
-  //   localStorage.removeItem("isFromDetailPage");
-  // }else{
-  //   console.log("aquo")
-  //   localStorage.setItem("isFromDetailPage", "true");
-  // }
 
   const [errorToastShown, setErrorToastShown] = useState(false);
 

@@ -16,30 +16,6 @@ export default function FiltersResultsComponent({ querySearch }) {
 
 
 
-
-  // Cargar los valores de los filtros desde el Local Storage solo si viene de la página de detalle
-  useEffect(() => {
-    const navigatedFromFiltersResultsComponent = localStorage.getItem('navigatedFromFiltersResultsComponent');
-    if (navigatedFromFiltersResultsComponent) {
-      const storedFilters = localStorage.getItem("selectedFilters");
-      if (storedFilters) {
-        //cargo los filtros con los valores de la data almacenada en el local storage
-        const filtersData = JSON.parse(storedFilters);
-        setMinAgeFilter(filtersData.minAge);
-        setMaxAgeFilter(filtersData.maxAge);
-        setMinPriceFilter(filtersData.minPrice);
-        setMaxPriceFilter(filtersData.maxPrice);
-        setSelectedAgeRange({ minAge:filtersData.minAge , maxAge:filtersData.maxAge  });
-        setSelectedPriceRange({ minPrice:filtersData.minPrice , maxPrice: filtersData.maxPrice });
-        setSelectedBrands(filtersData.selectedBrands);
-        
-     }
-
-      // Eliminar la bandera del Local Storage
-      localStorage.removeItem("navigatedFromFiltersResultsComponent");
-    }
-  }, []);
-
   //querySearch me indica el tipo de filtro y el valor del filtro
   const dispatch = useDispatch();
   const [minPriceFilter, setMinPriceFilter] = useState(0);
@@ -63,6 +39,9 @@ export default function FiltersResultsComponent({ querySearch }) {
   brands = selectedBrands;
   let minPrice;
   let maxPrice;
+
+
+
 
   //separo la query para saber que mostrar si es por rango de dedades o por categorias
   const [filterType, filterValue] = querySearch.split("=");
@@ -181,17 +160,7 @@ export default function FiltersResultsComponent({ querySearch }) {
     setMaxPriceFilter(maxPrice);
     setSelectedBrands(selectedBrands);
 
-      //en el filtersData guardo los valores para almacenarlos en el localStorage y usarlos cuando regrese de detalle del producto
-    const filtersData = {
-      minAge,
-      maxAge,
-      minPrice,
-      maxPrice,
-      selectedBrands,
-      
-    };
-    localStorage.setItem('selectedFilters', JSON.stringify(filtersData));
-
+ 
     // Verificar y corregir valores nulos o indefinidos para minAge y maxAge
     if (minAge === null || minAge === undefined || minAge === "") {
       minAge = 0;
