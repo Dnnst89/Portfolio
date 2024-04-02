@@ -116,7 +116,7 @@ export default function OrderDetail() {
   }
 
   return (
-    <div className="bg-resene  flex flex-col items-center h-fit col-span-12 mx-3  md:col-span-8">
+    <div className="flex flex-col items-center h-fit col-span-12 mx-3  md:col-span-8">
 
       <h1 className="flex justify-center mt-3 text-xl  md:col-span-12">Tus pedidos</h1>
       <div className="p-4 h-auto grid grid-cols-12 gap-4 pt-5 w-full">
