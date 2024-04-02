@@ -86,9 +86,21 @@ const RegisterFormTwo = () => {
       });
       dispatch(updateShoppingSession(dataSession.createShoppingSession.data)); //ACTUALIZO LA SESSION CON LOS DATOS OBTENIDOS
     } catch (error) {
-      toast.error(errorMessage.errorInformation.data.attributes.error_message, {
-        duration: 4000,
-      });
+      if (errorMessage) {
+        toast.error(
+          errorMessage.errorInformation.data.attributes.error_message,
+          {
+            duration: 4000,
+          }
+        );
+      } else {
+        toast.error(
+          "No se pudo registrar tu cuenta, por favor inténtalo más tarde",
+          {
+            duration: 4000,
+          }
+        );
+      }
     } finally {
       setLoading(false);
       resetForm();

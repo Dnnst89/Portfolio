@@ -39,7 +39,7 @@ function FilterContainerPrincipal({
       {true && (
         <div className="">
           <div>
-            <div className="">
+            <div className="bg-floralwhite">
               <div className=""></div>
               <div className="">
                 <div className="relative mr-auto flex h-full max-w-xs flex-col py-4 pb-12 shadow-xl">

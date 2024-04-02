@@ -13,6 +13,7 @@ import useFilteredBrand from "@/hooks/useFilteredBrand";
 import useBrandsByAgeRange from "@/hooks/useBrandsByAgeRange";
 export default function FiltersResultsComponent({ querySearch }) {
   //querySearch me indica el tipo de filtro y el valor del filtro
+  const router = useRouter();
   const [minPriceFilter, setMinPriceFilter] = useState(0);
   const [maxPriceFilter, setMaxPriceFilter] = useState(999999);
   const [minAgeFilter, setMinAgeFilter] = useState(0);
@@ -35,7 +36,11 @@ export default function FiltersResultsComponent({ querySearch }) {
   let maxPrice;
 
   //separo la query para saber que mostrar si es por rango de dedades o por categorias
-  const [filterType, filterValue] = querySearch.split("=");
+  let [filterType, filterValue] = "";
+
+  if (querySearch) {
+    [filterType, filterValue] = querySearch.split("=");
+  }
 
   if (filterType == "ageRange") {
     initialAge = parseInt(filterValue.split("-")[0]);

@@ -64,9 +64,18 @@ const LoginForm = () => {
         }, 3000);
       }
     } catch (error) {
-      toast.error(errorMessage.errorInformation.data.attributes.error_message, {
-        duration: 4000,
-      });
+      if (errorMessage) {
+        toast.error(
+          errorMessage.errorInformation.data.attributes.error_message,
+          {
+            duration: 4000,
+          }
+        );
+      } else {
+        toast.error("Credenciales incorrectas, intentalo nuevamente.", {
+          duration: 4000,
+        });
+      }
     } finally {
       //limpiar formulario
       resetForm();

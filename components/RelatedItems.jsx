@@ -67,6 +67,12 @@ function RelatedItems({ categories, productId }) {
                   coverImage={item.attributes.coverImage.data}
                   defaultPrice={item.attributes.defaultPrice}
                   brand={item.attributes.brand}
+                  initialAge={
+                    item?.attributes?.variants?.data[0]?.attributes?.initialAge
+                  }
+                  finalAge={
+                    item?.attributes?.variants?.data[0]?.attributes?.finalAge
+                  }
                 />
               );
             })
