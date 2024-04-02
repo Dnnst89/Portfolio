@@ -1,10 +1,11 @@
 import * as React from "react";
+
 const SocialMedia = (props) => (
   <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={128}
-    height={128}
-    viewBox="0 0 24 24"
+    xmlns={props.url}
+    width={props.width}
+    height={props.height}
+    viewBox={props.viewBox}
     {...props}
   >
     <path fill={props.fill} d={props.icon} />
