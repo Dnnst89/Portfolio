@@ -11,9 +11,9 @@ import FilterContainer from "./FilterContainer";
 import FilterContainerPrincipal from "./FilterContainerPrincipal";
 import useFilteredBrand from "@/hooks/useFilteredBrand";
 import useBrandsByAgeRange from "@/hooks/useBrandsByAgeRange";
+
 export default function FiltersResultsComponent({ querySearch }) {
   //querySearch me indica el tipo de filtro y el valor del filtro
-  const router = useRouter();
   const [minPriceFilter, setMinPriceFilter] = useState(0);
   const [maxPriceFilter, setMaxPriceFilter] = useState(999999);
   const [minAgeFilter, setMinAgeFilter] = useState(0);
