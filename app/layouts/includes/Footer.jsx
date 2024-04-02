@@ -66,6 +66,7 @@ const Footer = () => {
                     className="hover:underline ga"
                   >
                     <SocialMedia
+                      url={"http://www.w3.org/2000/svg"}
                       fill={"#67C3AD"}
                       height={30}
                       width={30}
@@ -83,6 +84,7 @@ const Footer = () => {
                     className="hover:underline"
                   >
                     <SocialMedia
+                      url={"http://www.w3.org/2000/svg"}
                       fill={"#67C3AD"}
                       height={30}
                       width={30}
@@ -102,6 +104,7 @@ const Footer = () => {
                     className="hover:underline"
                   >
                     <SocialMedia
+                      url={"http://www.w3.org/2000/svg"}
                       fill={"#67C3AD"}
                       height={30}
                       width={30}

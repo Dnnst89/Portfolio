@@ -2,7 +2,7 @@ import * as React from "react";
 
 const SocialMedia = (props) => (
   <svg
-    xmlns="http://www.w3.org/2000/svg"
+    xmlns={props.url}
     width={props.width}
     height={props.height}
     viewBox={props.viewBox}
