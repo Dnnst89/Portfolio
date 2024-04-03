@@ -290,7 +290,7 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack }) {
     
           {/* Columna de imagenes */}
           
-          <section aria-label="Imágenes del producto" className="mb-10 col-span-12 md:col-span-6 flex flex-col items-start">
+          <section aria-label="Imágenes del producto" className="mb-10 col-span-12 md:col-span-6 ">
             {/* Botón de regreso */}
             <div className="md:w-5/6 mx-auto mt-2">
             <a onClick={() => handleGoBack()} className="self-start mb-3">
@@ -299,21 +299,21 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack }) {
               </button>
             </a>
             </div>
-  {/* Imágenes debajo de la principal */}
-  <div className="md:w-5/6 m-auto mt-2">
-    {images && images.length > 0 ? (
-      <ImageGallery
-        showPlayButton={false}
-        originalHeight={"275px"}
-        disableThumbnailScroll={false}
-        disableKeyDown={false}
-        disableSwipe={false}
-        loading={"lazy"}
-        items={galleryImages}
-      />
-    ) : null}
-  </div>
-</section>
+              {/* Imágenes debajo de la principal */}
+              <div className="md:w-5/6 m-auto mt-2">
+                {images && images.length > 0 ? (
+                  <ImageGallery
+                    showPlayButton={false}
+                    originalHeight={"275px"}
+                    disableThumbnailScroll={false}
+                    disableKeyDown={false}
+                    disableSwipe={false}
+                    loading={"lazy"}
+                    items={galleryImages}
+                  />
+                ) : null}
+              </div>
+          </section>
 
 
           {/* Sección con los detalles del producto*/}
