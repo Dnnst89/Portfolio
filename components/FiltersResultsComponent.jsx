@@ -9,15 +9,13 @@ import getProductsFilteredWithBrands from "@/src/graphQl/queries/getProductsFilt
 import FilterContainer from "./FilterContainer";
 import FilterContainerPrincipal from "./FilterContainerPrincipal";
 import { useRouter } from "next/navigation";
-import {useDispatch, useSelector} from  "react-redux";
-import {setSelectedFilter} from "@/redux/features/filterSlice";
 
 export default function FiltersResultsComponent({ querySearch }) {
 
 
 
   //querySearch me indica el tipo de filtro y el valor del filtro
-  const dispatch = useDispatch();
+  const router = useRouter();
   const [minPriceFilter, setMinPriceFilter] = useState(0);
   const [maxPriceFilter, setMaxPriceFilter] = useState(999999);
   const [minAgeFilter, setMinAgeFilter] = useState(0);
@@ -44,7 +42,11 @@ export default function FiltersResultsComponent({ querySearch }) {
 
 
   //separo la query para saber que mostrar si es por rango de dedades o por categorias
-  const [filterType, filterValue] = querySearch.split("=");
+  let [filterType, filterValue] = "";
+
+  if (querySearch) {
+    [filterType, filterValue] = querySearch.split("=");
+  }
 
   if (filterType == "ageRange") {
     initialAge = parseInt(filterValue.split("-")[0]);
@@ -119,7 +121,7 @@ export default function FiltersResultsComponent({ querySearch }) {
     },
   });
 
-  // Using results conditionally
+  // Using results condition
   const { loading, error, data } =
     brands.length > 0 ? queryResultWithBrands : queryResult;
 
@@ -134,6 +136,11 @@ export default function FiltersResultsComponent({ querySearch }) {
       maxPrice = maxPriceFilter;
       const total = data.products.meta.pagination.total;
       setNbHits(total);
+      // console.log("resultado1", nbHits);
+
+      if (filterValue === undefined || filterType === undefined) {
+        router.push("/not-found");
+      }
       // Continúa con el resto del código según tus necesidades
     } catch (err) {
       // Manejar errores si es necesario

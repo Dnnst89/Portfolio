@@ -9,7 +9,9 @@ import FilterContainerPrincipal from "./FilterContainerPrincipal";
 import algoliasearch from "algoliasearch";
 import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 import { useQuery } from "@apollo/client";
+import { useRouter } from "next/navigation";
 const ResultsComponent = (test) => {
+  const router = useRouter();
   const [minPriceFilter, setMinPriceFilter] = useState(0);
   const [maxPriceFilter, setMaxPriceFilter] = useState(999999);
 
@@ -38,7 +40,11 @@ const ResultsComponent = (test) => {
   });
   async function getHits() {
     try {
-      var url = `/development_api::product.product?query=${test.query}&page=${currentPage}`;
+      if (test.query) {
+        var url = `/development_api::product.product?query=${test.query}&page=${currentPage}`;
+      } else {
+        var url = `/development_api::product.product?query="todo"&page=${currentPage}`;
+      }
 
       // Agregar filtros de precio si están presentes
       if (
@@ -94,6 +100,8 @@ const ResultsComponent = (test) => {
   useEffect(() => {
     if (test.query) {
       allResults();
+    } else {
+      router.push("/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, test.query]);
