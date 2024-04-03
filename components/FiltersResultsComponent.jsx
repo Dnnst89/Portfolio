@@ -11,7 +11,6 @@ import FilterContainer from "./FilterContainer";
 import FilterContainerPrincipal from "./FilterContainerPrincipal";
 import useFilteredBrand from "@/hooks/useFilteredBrand";
 import useBrandsByAgeRange from "@/hooks/useBrandsByAgeRange";
-
 export default function FiltersResultsComponent({ querySearch }) {
   //querySearch me indica el tipo de filtro y el valor del filtro
   const [minPriceFilter, setMinPriceFilter] = useState(0);
@@ -36,11 +35,7 @@ export default function FiltersResultsComponent({ querySearch }) {
   let maxPrice;
 
   //separo la query para saber que mostrar si es por rango de dedades o por categorias
-  let [filterType, filterValue] = "";
-
-  if (querySearch) {
-    [filterType, filterValue] = querySearch.split("=");
-  }
+  const [filterType, filterValue] = querySearch.split("=");
 
   if (filterType == "ageRange") {
     initialAge = parseInt(filterValue.split("-")[0]);
@@ -182,8 +177,8 @@ export default function FiltersResultsComponent({ querySearch }) {
         ) : (
           <div>
             <Toaster />
-            <div className="sm:flex sm:flex-wrap mt-10">
-              <div className="sm:w-1/4 p-2">
+            <div className=" sm:flex justify-center mt-10">
+              <div className="hidden md:block sm:w-1/4 p-2">
                 <FilterContainerPrincipal
                   /**
                    * Se toma como referencia la seccion en que se esta ubicado
@@ -247,7 +242,31 @@ export default function FiltersResultsComponent({ querySearch }) {
                       </div>
                     </div>
                   )}
-
+                  <FilterContainer
+                    brandsForCheckbox={
+                      filterType === "category"
+                        ? brandsForCheckbox
+                        : getBrandsByAgeData
+                    }
+                    test={data}
+                    filterType={filterType}
+                    minAgeFilter={minAgeFilter}
+                    maxAgeFilter={maxAgeFilter}
+                    setMaxAgeFilter={setMaxAgeFilter}
+                    setMinAgeFilter={setMinAgeFilter}
+                    minPriceFilter={minPriceFilter}
+                    maxPriceFilter={maxPriceFilter}
+                    setMaxPriceFilter={setMaxPriceFilter}
+                    setMinPriceFilter={setMinPriceFilter}
+                    selectedBrands={selectedBrands}
+                    setSelectedBrands={setSelectedBrands}
+                    handleFilters={handleFilters}
+                    selectedPriceRange={selectedPriceRange}
+                    selectedAgeRange={selectedAgeRange}
+                    queryType={queryType}
+                    querySearch={querySearch}
+                    result={data.products}
+                  />
                   <ProductFilterContainer
                     result={data.products}
                     currentPage={currentPage}
