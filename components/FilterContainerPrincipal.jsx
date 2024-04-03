@@ -151,18 +151,18 @@ function FilterContainerPrincipal({
 
                   <div className="pt-6" id="filter-section-mobile-0">
                     <div className="space-y-6">
-                      <FilterByBrand_Category
-                        filteredBrands={uniqueBrandsArray}
-                        isAgeRangeURL={isAgeRangeURL}
+                      <FilterByBrand
+                        filterType={filterType}
+                        brandsForCheckbox={brandsForCheckbox}
                         minPriceFilter={minPriceFilter}
                         maxPriceFilter={maxPriceFilter}
                         handleFilters={handleFilters}
-                        test={test}
                         selectedBrands={selectedBrands}
                         setSelectedBrands={setSelectedBrands}
                         minAgeFilter={minAgeFilter}
                         maxAgeFilter={maxAgeFilter}
-                      ></FilterByBrand_Category>
+                        test={test}
+                      ></FilterByBrand>
                     </div>
                   </div>
                 </div> // end div for filter when use the search component
