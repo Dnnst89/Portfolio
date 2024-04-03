@@ -11,8 +11,13 @@ export default function GetDetail() {
 
  
   const handleGoBack = () => {
-    router.back(); // Función para regresar
+    router.back(); // Función para regresar a página anterior
   };
+
+  const handleGoToCategory =(category) => {
+    router.push(`/filtersResults/?category=${category}`); //Función para regresar a la categoría respectiva
+    
+  }
 
   useEffect(() => {
     const id = window?.location?.search?.split("=")[1];
@@ -21,7 +26,7 @@ export default function GetDetail() {
   }, []);
   return (
     <section>
-      <DetailComponent id={detailId} handleGoBack={handleGoBack} />
+      <DetailComponent id={detailId} handleGoBack={handleGoBack} handleGoToCategory={handleGoToCategory} />
     </section>
   );
 }

@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 
 
-export default function DetailComponent({ id, handleGoBack }) {
+export default function DetailComponent({ id, handleGoBack, handleGoToCategory}) {
   const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
     variables: { id: 13 },
   });
@@ -96,6 +96,7 @@ export default function DetailComponent({ id, handleGoBack }) {
                 variantId={idVariantSelected || null}
                 ItemQt={idItemSelected || null}
                 handleGoBack = {handleGoBack}
+                handleGoToCategory={handleGoToCategory}
               />
               <ProductDetailSecondary
                 id={data.product.data.id}

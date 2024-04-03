@@ -22,7 +22,7 @@ import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
 import GET_CART_ITEM_BY_ID from "@/src/graphQl/queries/getCartItemById";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 
-function ProductDetail({ product, variantId, ItemQt, handleGoBack }) {
+function ProductDetail({ product, variantId, ItemQt, handleGoBack , handleGoToCategory}) {
   const name = product?.attributes?.name;
   const brand = product?.attributes?.brand;
   const description = product?.attributes?.description;
@@ -293,11 +293,18 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack }) {
           <section aria-label="Imágenes del producto" className="mb-10 col-span-12 md:col-span-6 ">
             {/* Botón de regreso */}
             <div className="md:w-5/6 mx-auto mt-2">
+              {!variantId ? 
+                <a onClick={() => handleGoToCategory(category)} className="self-start mb-3">
+              <button className="flex justify-start text-lightblue bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
+              {`Regresar a ${category}`}
+              </button>
+            </a> :
             <a onClick={() => handleGoBack()} className="self-start mb-3">
               <button className="flex justify-start text-lightblue bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
-              {variantId !== null ? "Regresar al carrito" : `Regresar a ${category}`}
+               Regresar al carrito
               </button>
             </a>
+            }
             </div>
               {/* Imágenes debajo de la principal */}
               <div className="md:w-5/6 m-auto mt-2">

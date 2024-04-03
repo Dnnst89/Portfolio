@@ -4,7 +4,7 @@ import cartReducer from "./features/cart-slice";
 import registryForm from "./features/registryForm";
 import orderReducer from "./features/orderSlice";
 import selectedGiftsReducer from "./features/selectedGiftsSlice";
-import filterReducer from "./features/filterSlice";
+
 
 
 export const store = configureStore({
@@ -14,6 +14,6 @@ export const store = configureStore({
     registryForm,
     order: orderReducer,
     selectedGifts: selectedGiftsReducer,
-    filter: filterReducer,
+  
   },
 });
