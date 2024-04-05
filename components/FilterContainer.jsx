@@ -6,7 +6,7 @@ import FilterByAge from "./FilterByAge";
 import React from "react";
 import FilterByBrand_Category from "./FilterByBrand_Category";
 function FilterContainer({
-  brands,
+  brandsForCheckbox,
   selectedAgeRange,
   setMaxAgeFilter,
   maxAgeFilter,
@@ -21,7 +21,10 @@ function FilterContainer({
   setMaxPriceFilter,
   selectedBrands,
   setSelectedBrands,
-  queryType
+  queryType,
+  querySearch,
+  result,
+  filterType,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -73,36 +76,39 @@ function FilterContainer({
                     </button>
                   </div>
                   <form className="mt-4 border-t border-gray-200">
-                    <div className="border-t border-gray-200 px-4 py-6">
-                      <h3 className="-mx-2 -my-3 flow-root">
-                        <button
-                          type="button"
-                          className="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500"
-                          aria-controls="filter-section-mobile-0"
-                          aria-expanded="false"
-                        >
-                          <span className="font-medium text-gray-900">
-                            Edad
-                          </span>
-                        </button>
-                      </h3>
-                      <div className="pt-6" id="filter-section-mobile-0">
-                        <div className="space-y-6">
-                          <FilterByAge
-                            test={test}
-                            minAgeFilter={minAgeFilter}
-                            maxAgeFilter={maxAgeFilter}
-                            setMaxAgeFilter={setMaxAgeFilter}
-                            setMinAgeFilter={setMinAgeFilter}
-                            selectedBrands={selectedBrands}
-                            handleFilters={handleFilters}
-                            minPriceFilter={minPriceFilter}
-                            maxPriceFilter={maxPriceFilter}
-                            selectedAgeRange={selectedAgeRange}
-                          />
+                    {filterType !== "ageRange" && (
+                      <div className="border-t border-gray-200 px-4 py-6">
+                        <h3 className="-mx-2 -my-3 flow-root">
+                          <div
+                            type="button"
+                            className="flex w-full items-center justify-between bg-resene px-2 py-3 text-gray-400 hover:text-gray-500"
+                            aria-controls="filter-section-mobile-0"
+                            aria-expanded="false"
+                          >
+                            <span className="font-medium text-gray-900">
+                              Edad
+                            </span>
+                          </div>
+                        </h3>
+                        <div className="pt-6" id="filter-section-mobile-0">
+                          <div className="space-y-6">
+                            <FilterByAge
+                              test={test}
+                              minAgeFilter={minAgeFilter}
+                              maxAgeFilter={maxAgeFilter}
+                              setMaxAgeFilter={setMaxAgeFilter}
+                              setMinAgeFilter={setMinAgeFilter}
+                              selectedBrands={selectedBrands}
+                              handleFilters={handleFilters}
+                              minPriceFilter={minPriceFilter}
+                              maxPriceFilter={maxPriceFilter}
+                              selectedAgeRange={selectedAgeRange}
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    )}
+
                     <div className="border-t border-gray-200 px-4 py-6">
                       <h3 className="-mx-2 -my-3 flow-root">
                         <button
@@ -133,7 +139,7 @@ function FilterContainer({
                         </div>
                       </div>
                     </div>
-                     {/* div for brand options */}
+                    {/* div for brand options */}
                     {queryType == "category" ? (
                       <div className="border-t border-gray-200 px-4 py-6">
                         <h3 className="-mx-2 -my-3 flow-root">
@@ -144,14 +150,15 @@ function FilterContainer({
                             aria-expanded="false"
                           >
                             <span className="font-medium text-gray-900">
-                            Marca
+                              Marca
                             </span>
                           </button>
                         </h3>
                         <div className="pt-6" id="filter-section-mobile-0">
                           <div className="space-y-6">
                             <FilterByBrand_Category
-                              brands={brands} //category selected in NavCategories.jsx
+                              filterType={filterType}
+                              brandsForCheckbox={brandsForCheckbox}
                               minPriceFilter={minPriceFilter}
                               maxPriceFilter={maxPriceFilter}
                               handleFilters={handleFilters}
@@ -159,10 +166,11 @@ function FilterContainer({
                               setSelectedBrands={setSelectedBrands}
                               minAgeFilter={minAgeFilter}
                               maxAgeFilter={maxAgeFilter}
+                              test={test}
                             ></FilterByBrand_Category>
                           </div>
                         </div>
-                      </div>                       
+                      </div>
                     ) : (
                       <div className="border-t border-gray-200 px-4 py-6">
                         <h3 className="-mx-2 -my-3 flow-root">
@@ -191,9 +199,9 @@ function FilterContainer({
                             ></FilterByBrand>
                           </div>
                         </div>
-                      </div>                       
+                      </div>
                     )}
-                     {/* end of div for brand options */}
+                    {/* end of div for brand options */}
                   </form>
                 </div>
               </div>

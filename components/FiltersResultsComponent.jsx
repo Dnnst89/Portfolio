@@ -1,3 +1,4 @@
+/*nuevo*/
 "use client";
 import { useQuery } from "@apollo/client";
 import ProductFilterContainer from "./ProductFilterContainer";
@@ -8,11 +9,10 @@ import getProductsFiltered from "@/src/graphQl/queries/getProductsFiltered";
 import getProductsFilteredWithBrands from "@/src/graphQl/queries/getProductsFilteredWithBrands";
 import FilterContainer from "./FilterContainer";
 import FilterContainerPrincipal from "./FilterContainerPrincipal";
-import { useRouter } from "next/navigation";
-
+import useFilteredBrand from "@/hooks/useFilteredBrand";
+import useBrandsByAgeRange from "@/hooks/useBrandsByAgeRange";
 export default function FiltersResultsComponent({ querySearch }) {
   //querySearch me indica el tipo de filtro y el valor del filtro
-  const router = useRouter();
   const [minPriceFilter, setMinPriceFilter] = useState(0);
   const [maxPriceFilter, setMaxPriceFilter] = useState(999999);
   const [minAgeFilter, setMinAgeFilter] = useState(0);
@@ -25,7 +25,6 @@ export default function FiltersResultsComponent({ querySearch }) {
   const [nbHits, setNbHits] = useState();
   const page = currentPage;
   const pageSize = 12;
-  const [loadingBrands, setLoadingBrands] = useState(true);
 
   let initialAge;
   let finalAge;
@@ -36,15 +35,13 @@ export default function FiltersResultsComponent({ querySearch }) {
   let maxPrice;
 
   //separo la query para saber que mostrar si es por rango de dedades o por categorias
-  let [filterType, filterValue] = "";
-
-  if (querySearch) {
-    [filterType, filterValue] = querySearch.split("=");
-  }
+  const [filterType, filterValue] = querySearch.split("=");
 
   if (filterType == "ageRange") {
     initialAge = parseInt(filterValue.split("-")[0]);
     finalAge = parseInt(filterValue.split("-")[1]);
+    minPrice = minPriceFilter;
+    maxPrice = maxPriceFilter;
   } else if (filterType == "category") {
     category = decodeURIComponent(filterValue); //para transformar el texto con espacios desde el URL
     initialAge = minAgeFilter;
@@ -52,42 +49,17 @@ export default function FiltersResultsComponent({ querySearch }) {
     minPrice = minPriceFilter;
     maxPrice = maxPriceFilter;
   }
-
-  // gets the brands for checkboxes depending on the selected category
-  const [brandsForChecbox, setBrands] = useState(null);
-  async function getBrands() {
-    let page = 1;
-    const hitsPerPage = 100; // The number of results per page
-    try {
-      setLoadingBrands(true);
-      let hasMorePages = true;
-      let brandsSet = new Set(); //set to have unique brands and not repeated
-      while (hasMorePages) {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_STRAPI_URL}api/products?filters[categories][name][$contains]=${category}&pagination[page]=${page}&pagination[pageSize]=${hitsPerPage}`
-        );
-        const data = await response.json();
-        if (data && data.data && data.data.length > 0) {
-          for (let index = 0; index < data.data.length; index++) {
-            brandsSet.add(data.data[index].attributes.brand);
-          }
-          page++;
-        } else {
-          hasMorePages = false; // There are no more pages available
-        }
-      }
-      let allBrands = [...brandsSet]; //parse set to list
-      //Update state after iteration completion
-      setBrands(allBrands);
-    } catch (error) {
-      console.error("Error al obtener los datos:", error);
-    } finally {
-      setLoadingBrands(false);
-    }
-  }
+  // Hook que retorna las marcas tomando como referencia la categoria
+  const { loadingBrands, brandsForCheckbox } = useFilteredBrand(category);
+  //Hook que retorna las marcas segun una edad inicial y una edad final
+  const {
+    loading: loadBrandsByAge,
+    data: getBrandsByAgeData,
+    getBrandsByAge,
+  } = useBrandsByAgeRange(initialAge, finalAge);
   useEffect(() => {
-    getBrands();
-  }, [category]);
+    getBrandsByAge();
+  }, [getBrandsByAge]);
 
   // depending if there´s a brand selected or not we use the necessary query for it, with or without brand variable.
   let queryResultWithBrands = useQuery(getProductsFilteredWithBrands, {
@@ -115,10 +87,9 @@ export default function FiltersResultsComponent({ querySearch }) {
     },
   });
 
-  // Using results condition
+  // Using results conditionally
   const { loading, error, data } =
     brands.length > 0 ? queryResultWithBrands : queryResult;
-
   useEffect(() => {
     //   // Puedes mover la lógica de 'allResults' directamente aquí
     try {
@@ -131,10 +102,6 @@ export default function FiltersResultsComponent({ querySearch }) {
       const total = data.products.meta.pagination.total;
       setNbHits(total);
       // console.log("resultado1", nbHits);
-
-      if (filterValue === undefined || filterType === undefined) {
-        router.push("/not-found");
-      }
       // Continúa con el resto del código según tus necesidades
     } catch (err) {
       // Manejar errores si es necesario
@@ -186,7 +153,6 @@ export default function FiltersResultsComponent({ querySearch }) {
     setSelectedAgeRange({ minAge, maxAge });
     setSelectedPriceRange({ minPrice, maxPrice });
   };
-
   //if (loading) return <Spinner />;
   if (error)
     return toast.error(
@@ -210,103 +176,104 @@ export default function FiltersResultsComponent({ querySearch }) {
           <Spinner />
         ) : (
           <div>
-            {" "}
             <Toaster />
-            <div className="">
-              {filterType == "ageRange" ? (
-                <div>
-                  <h1 className="text-center flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
-                    Resultados de productos para niños de{" "}
-                    {initialAge === 8
-                      ? `${initialAge} o más años`
-                      : `${initialAge} - ${finalAge} años`}
-                  </h1>
+            <div className=" sm:flex justify-center mt-10">
+              <div className="hidden md:block sm:w-1/4 p-2">
+                <FilterContainerPrincipal
+                  /**
+                   * Se toma como referencia la seccion en que se esta ubicado
+                   * para enviar la data segun categoria o segun edades.
+                   */
+                  brandsForCheckbox={
+                    filterType === "category"
+                      ? brandsForCheckbox
+                      : getBrandsByAgeData
+                  }
+                  test={data}
+                  filterType={filterType}
+                  minAgeFilter={minAgeFilter}
+                  maxAgeFilter={maxAgeFilter}
+                  setMaxAgeFilter={setMaxAgeFilter}
+                  setMinAgeFilter={setMinAgeFilter}
+                  minPriceFilter={minPriceFilter}
+                  maxPriceFilter={maxPriceFilter}
+                  setMaxPriceFilter={setMaxPriceFilter}
+                  setMinPriceFilter={setMinPriceFilter}
+                  selectedBrands={selectedBrands}
+                  setSelectedBrands={setSelectedBrands}
+                  handleFilters={handleFilters}
+                  selectedPriceRange={selectedPriceRange}
+                  selectedAgeRange={selectedAgeRange}
+                  queryType={queryType}
+                  querySearch={querySearch}
+                  result={data.products}
+                />
+              </div>
+
+              <div className="sm:w-3/4">
+                <div className="w-full">
+                  {filterType === "ageRange" ? (
+                    <h1 className="text-center flex flex-wrap max-w-screen-xl m-auto justify-center my-10">
+                      Resultados de productos para niños de{" "}
+                      {initialAge === 8
+                        ? `${initialAge} o más años`
+                        : `${initialAge} - ${finalAge} años`}
+                    </h1>
+                  ) : nbHits === 0 ? (
+                    <div className="text-center flex flex-col items-center justify-center h-80">
+                      <div className="w-full text-center  mb-4">
+                        <h1 className=" text-center">
+                          Resultados de &#34;{decodeURIComponent(category)}
+                          &#34;
+                        </h1>
+                      </div>
+                      <div>
+                        <h1 className="font-bold mb-2">¡Lo sentimos!</h1>
+                        <h2>No se encontraron resultados.</h2>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="w-full text-center">
+                        <h1 className="text-center">
+                          Resultados de &#34;{decodeURIComponent(category)}
+                          &#34;
+                        </h1>
+                      </div>
+                    </div>
+                  )}
+                  <FilterContainer
+                    brandsForCheckbox={
+                      filterType === "category"
+                        ? brandsForCheckbox
+                        : getBrandsByAgeData
+                    }
+                    test={data}
+                    filterType={filterType}
+                    minAgeFilter={minAgeFilter}
+                    maxAgeFilter={maxAgeFilter}
+                    setMaxAgeFilter={setMaxAgeFilter}
+                    setMinAgeFilter={setMinAgeFilter}
+                    minPriceFilter={minPriceFilter}
+                    maxPriceFilter={maxPriceFilter}
+                    setMaxPriceFilter={setMaxPriceFilter}
+                    setMinPriceFilter={setMinPriceFilter}
+                    selectedBrands={selectedBrands}
+                    setSelectedBrands={setSelectedBrands}
+                    handleFilters={handleFilters}
+                    selectedPriceRange={selectedPriceRange}
+                    selectedAgeRange={selectedAgeRange}
+                    queryType={queryType}
+                    querySearch={querySearch}
+                    result={data.products}
+                  />
                   <ProductFilterContainer
                     result={data.products}
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
                   />
                 </div>
-              ) : (
-                <div>
-                  <div className="md:flex">
-                    <FilterContainerPrincipal
-                      brands={brandsForChecbox} //brands depending on selected category in NavCategories.jsx
-                      test={data}
-                      minAgeFilter={minAgeFilter}
-                      maxAgeFilter={maxAgeFilter}
-                      setMaxAgeFilter={setMaxAgeFilter}
-                      setMinAgeFilter={setMinAgeFilter}
-                      minPriceFilter={minPriceFilter}
-                      maxPriceFilter={maxPriceFilter}
-                      setMaxPriceFilter={setMaxPriceFilter}
-                      setMinPriceFilter={setMinPriceFilter}
-                      selectedBrands={selectedBrands}
-                      setSelectedBrands={setSelectedBrands}
-                      handleFilters={handleFilters}
-                      selectedPriceRange={selectedPriceRange}
-                      selectedAgeRange={selectedAgeRange}
-                      queryType={queryType}
-                    />
-
-                    <div
-                      className={
-                        nbHits === 0
-                          ? "my-10 my-30 md:ml-auto mx-auto"
-                          : "my-10 ml-auto mx-auto"
-                      }
-                    >
-                      {nbHits === 0 ? (
-                        <div className="text-center flex flex-col items-center justify-center h-80">
-                          <div className="w-full text-center mb-4">
-                            <h1 className="text-center">
-                              Resultados de &#34;{decodeURIComponent(category)}
-                              &#34;
-                            </h1>
-                          </div>
-                          <div>
-                            <h1 className="font-bold mb-2">¡Lo sentimos!</h1>
-                            <h2>No se encontraron resultados.</h2>
-                          </div>
-                        </div>
-                      ) : (
-                        <>
-                          <div className="w-full text-center">
-                            <h1 className="text-center">
-                              Resultados de &#34;{decodeURIComponent(category)}
-                              &#34;
-                            </h1>
-                          </div>
-
-                          <FilterContainer
-                            brands={brandsForChecbox}
-                            test={data}
-                            minAgeFilter={minAgeFilter}
-                            maxAgeFilter={maxAgeFilter}
-                            setMaxAgeFilter={setMaxAgeFilter}
-                            setMinAgeFilter={setMinAgeFilter}
-                            minPriceFilter={minPriceFilter}
-                            maxPriceFilter={maxPriceFilter}
-                            setMaxPriceFilter={setMaxPriceFilter}
-                            setMinPriceFilter={setMinPriceFilter}
-                            selectedBrands={selectedBrands}
-                            setSelectedBrands={setSelectedBrands}
-                            handleFilters={handleFilters}
-                            selectedPriceRange={selectedPriceRange}
-                            selectedAgeRange={selectedAgeRange}
-                            queryType={queryType}
-                          />
-                          <ProductFilterContainer
-                            result={data.products}
-                            currentPage={currentPage}
-                            setCurrentPage={setCurrentPage}
-                          />
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
+              </div>
             </div>
           </div>
         )}
