@@ -29,6 +29,10 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack , handleGoToCa
   const variants = product?.attributes?.variants?.data;
   const materials = product?.attributes?.materials?.data;
   const category = product?.attributes?.categories?.data[0]?.attributes?.name;
+  const categoryData = product?.attributes?.categories?.data;
+  let previousPage = "";
+  let prevCategory = "";
+
 
 
   const { data, loading: productIdLoading } = useQuery(GET_VARIANT_BY_ID, {
@@ -52,6 +56,20 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack , handleGoToCa
   const colorTypeVariant = data?.variant?.data?.attributes?.type;
   const colorValueVariant = data?.variant?.data?.attributes?.typeValue;
 
+  
+    previousPage = document.referrer;
+    const url = new URL(previousPage);
+    const params = new URLSearchParams(url.search);
+    const previousCategory = params.get("category");
+    prevCategory = previousCategory;
+    
+    // Verificar si prevCategory existe en el array de categorías
+    const isPrevCategoryExist = categoryData.some(item => {
+      const categoryName = item.attributes.name.trim(); // Eliminar espacios en blanco al final
+      return categoryName === prevCategory;
+    });
+
+   
   //variable para guardar las selecciones de dropdown para mostrar en el detalle del pedido desde el carrito
   const featuresSelected = {};
   if (
@@ -293,17 +311,21 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack , handleGoToCa
           <section aria-label="Imágenes del producto" className="mb-10 col-span-12 md:col-span-6 ">
             {/* Botón de regreso */}
             <div className="md:w-5/6 mx-auto mt-2">
-              {!variantId ? 
-                <a onClick={() => handleGoToCategory(category)} className="self-start mb-3">
+              {variantId  || previousPage.includes("/filtersResults/?category") ? 
+               (
+               <a onClick={() => handleGoBack()} className="self-start mb-3">
+               <button className="flex justify-start text-lightblue bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
+                {variantId ? "Regresar al carrito" : isPrevCategoryExist ? `Regresar a ${prevCategory}` : `Regresar a ${category}` }
+               </button>
+             </a>)
+               :
+               (
+                 <a onClick={() => handleGoToCategory(category)} className="self-start mb-3">
               <button className="flex justify-start text-lightblue bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
               {`Regresar a ${category}`}
               </button>
-            </a> :
-            <a onClick={() => handleGoBack()} className="self-start mb-3">
-              <button className="flex justify-start text-lightblue bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
-               Regresar al carrito
-              </button>
-            </a>
+            </a> )
+           
             }
             </div>
               {/* Imágenes debajo de la principal */}
