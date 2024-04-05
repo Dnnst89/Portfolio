@@ -46,7 +46,6 @@ function FilterByPrice({
       maxPrice
     );
   };
-
   return (
     <div>
       <div className="flex items-center">
