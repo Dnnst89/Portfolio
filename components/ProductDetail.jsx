@@ -56,6 +56,7 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack , handleGoToCa
   const colorTypeVariant = data?.variant?.data?.attributes?.type;
   const colorValueVariant = data?.variant?.data?.attributes?.typeValue;
 
+  const navigatedFromComponentB = localStorage.getItem('navigatedFromComponentB');
   
     previousPage = document.referrer;
     const url = new URL(previousPage);
@@ -311,18 +312,19 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack , handleGoToCa
           <section aria-label="Imágenes del producto" className="mb-10 col-span-12 md:col-span-6 ">
             {/* Botón de regreso */}
             <div className="md:w-5/6 mx-auto mt-2">
-              {variantId  || previousPage.includes("/filtersResults/?category") ? 
+              {variantId  ? 
                (
                <a onClick={() => handleGoBack()} className="self-start mb-3">
                <button className="flex justify-start text-lightblue bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
-                {variantId ? "Regresar al carrito" : isPrevCategoryExist ? `Regresar a ${prevCategory}` : `Regresar a ${category}` }
+                Regresar al carrito
                </button>
              </a>)
                :
                (
-                 <a onClick={() => handleGoToCategory(category)} className="self-start mb-3">
+               
+              <a onClick={() => isPrevCategoryExist ? handleGoToCategory(prevCategory) : handleGoToCategory(category)} className="self-start mb-3">
               <button className="flex justify-start text-lightblue bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
-              {`Regresar a ${category}`}
+              {isPrevCategoryExist ? `Regresar a ${prevCategory}` : `Regresar a ${category}` }
               </button>
             </a> )
            
