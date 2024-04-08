@@ -56,8 +56,8 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack , handleGoToCa
   const colorTypeVariant = data?.variant?.data?.attributes?.type;
   const colorValueVariant = data?.variant?.data?.attributes?.typeValue;
 
-  const navigatedFromComponentB = localStorage.getItem('navigatedFromComponentB');
   
+    //obtener la categoria desde la url de la pagina anterior
     previousPage = document.referrer;
     const url = new URL(previousPage);
     const params = new URLSearchParams(url.search);

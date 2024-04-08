@@ -37,7 +37,7 @@ export default function FiltersResultsComponent({ querySearch }) {
   let minPrice;
   let maxPrice;
 
-  localStorage.setItem('navigatedFromComponentB', 'false');
+
 
 
   //separo la query para saber que mostrar si es por rango de dedades o por categorias
