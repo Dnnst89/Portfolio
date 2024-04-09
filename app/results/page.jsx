@@ -11,9 +11,9 @@ const GetResults = () => {
 
   useEffect(() => {
     setQuerySearch(window?.location?.search?.split("=")[1]);
+    
     setLoading(false);
   }, []);
-
   return (
     <>
       <div className={loading ? "grid place-items-center" : ""}>

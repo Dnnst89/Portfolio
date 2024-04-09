@@ -18,8 +18,10 @@ const AddItemBtn = ({
   sessionId,
   user,
   features,
+  setEnableButton,
   enableButton,
 }) => {
+  
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((x) => x.auth);
   const [createCartItem] = useMutation(CREATE_CART_ITEM_MUTATION, {});
@@ -79,7 +81,9 @@ const AddItemBtn = ({
             },
           })
             .then((response) => {
+              setEnableButton(false);
               dispatch(updateQtyItems(cartQuantity + quantityItem));
+              itemFiltrado.quantity = newQuantity;
               toast.success("Se ha actualizado un producto");
               // Manejar la respuesta de la mutación aquí, si es necesario
             })
@@ -138,13 +142,27 @@ const AddItemBtn = ({
   return (
     <div>
       {" "}
-      <button
+      {(variantData && variantData.variant && variantData.variant.data) ?
+      (
+        <button
+        disabled={!enableButton}
+        className="text-white text-sm"
+        onClick={handleAdd}
+      >
+        Actualizar cantidad
+      </button>
+      )
+      :
+      (
+        <button
         disabled={!enableButton}
         className="text-white text-sm"
         onClick={handleAdd}
       >
         Agregar al carrito
       </button>
+      )
+      }
     </div>
   );
 };

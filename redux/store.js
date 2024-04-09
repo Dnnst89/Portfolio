@@ -5,6 +5,8 @@ import registryForm from "./features/registryForm";
 import orderReducer from "./features/orderSlice";
 import selectedGiftsReducer from "./features/selectedGiftsSlice";
 
+
+
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -12,5 +14,6 @@ export const store = configureStore({
     registryForm,
     order: orderReducer,
     selectedGifts: selectedGiftsReducer,
+  
   },
 });
