@@ -5,6 +5,7 @@ import CartDetail from "@/components/CartDetail";
 import CartProceedPayment from "@/components/CartProceedPayment";
 import { useEffect, useState } from "react";
 import GET_ORDER_ITEMS_BY_ORDER_ID from "@/src/graphQl/queries/getOrderItemsByOrderId";
+import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
 import { useLazyQuery } from "@apollo/client";
 import OrderDetailSummary from "./OrderSummary";
 import Spinner from "./Spinner";
@@ -34,8 +35,14 @@ export default function OrderDetailSecondary({ orderId }) {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [getOrderItems] = useLazyQuery(GET_ORDER_ITEMS_BY_ORDER_ID);
-
+  const [getProductByVariant] = useLazyQuery(GET_VARIANT_BY_ID);
+  const [orderVariant, setOrderVariant] = useState();
+  const [productId, setProductId] = useState();
+   let orderVariantTest = "";
+  // let productId = "";
+  
   useEffect(() => {
+    
     const getOrdersItemsInfo = async (id) => {
       try {
         //me trae las ordenes e informacion del usuario
@@ -45,7 +52,7 @@ export default function OrderDetailSecondary({ orderId }) {
           //llamo la query para traer la shopping session
           variables: { orderId: id },
         });
-        console.log(data);
+        
         if (data) {
           const orderInfo = data?.orderDetail?.data;
           setOrderData((prev) => ({
@@ -70,6 +77,7 @@ export default function OrderDetailSecondary({ orderId }) {
                   quantity: item.attributes.quantity,
                   name: item.attributes.name,
                   brand: item.attributes.brand,
+                  idVariant : item.attributes.variantId,
                   price: item.attributes.price.toFixed(2), //se saca el precio de la unica variante que tiene
                   images: item.attributes.images?.data.map(
                     (img) => img.attributes.url
@@ -78,6 +86,7 @@ export default function OrderDetailSecondary({ orderId }) {
               }
             ),
           }));
+           
         }
       } catch (error) {
         setError(error);
@@ -88,8 +97,29 @@ export default function OrderDetailSecondary({ orderId }) {
     if (orderId) {
       getOrdersItemsInfo(orderId);
     }
+   
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId]);
+  useEffect(() => {
+    const fetchData = async (variantId) => {
+      try {
+        const { data } = await getProductByVariant({
+          variables: {
+            id: variantId,
+          },
+        });
+        const productId = data?.variant?.data?.attributes?.product?.data?.id;
+        setProductId(productId);
+      } catch (error) {
+        console.error("Error fetching product data:", error);
+      }
+    };
+  
+    orderData.orderItems.forEach((item) => {
+      fetchData(item.idVariant);
+    });
+  }, [orderData.orderItems]);
+
   if (loading) {
     return (
       <div className="flex justify-center">
@@ -98,7 +128,6 @@ export default function OrderDetailSecondary({ orderId }) {
     );
   }
 
-  console.log(orderData.orderItems.images);
 
   return (
     <div className="bg-resene col-span-12 md:col-span-8 grid grid-cols-12">
@@ -126,6 +155,9 @@ export default function OrderDetailSecondary({ orderId }) {
                             widthImg={100}
                             heightImg={100}
                             classStyle={"rounded-2xl col-span-4"}
+                            productId={productId}
+                            idVariant={item.idVariant}
+                            ItemQt={item.quantity}
                           />
                         ) : (
                           <Image
