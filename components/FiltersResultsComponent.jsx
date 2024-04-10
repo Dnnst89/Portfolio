@@ -11,6 +11,7 @@ import FilterContainer from "./FilterContainer";
 import FilterContainerPrincipal from "./FilterContainerPrincipal";
 import useFilteredBrand from "@/hooks/useFilteredBrand";
 import useBrandsByAgeRange from "@/hooks/useBrandsByAgeRange";
+import { useRouter } from "next/navigation";
 export default function FiltersResultsComponent({ querySearch }) {
   //querySearch me indica el tipo de filtro y el valor del filtro
   const [minPriceFilter, setMinPriceFilter] = useState(0);
@@ -33,9 +34,15 @@ export default function FiltersResultsComponent({ querySearch }) {
   brands = selectedBrands;
   let minPrice;
   let maxPrice;
+  const router = useRouter();
+
+  let [filterType, filterValue] = "";
+
+  if (querySearch) {
+    [filterType, filterValue] = querySearch.split("=");
+  }
 
   //separo la query para saber que mostrar si es por rango de dedades o por categorias
-  const [filterType, filterValue] = querySearch.split("=");
 
   if (filterType == "ageRange") {
     initialAge = parseInt(filterValue.split("-")[0]);
@@ -101,6 +108,9 @@ export default function FiltersResultsComponent({ querySearch }) {
       maxPrice = maxPriceFilter;
       const total = data.products.meta.pagination.total;
       setNbHits(total);
+      if (filterValue === undefined || filterType === undefined) {
+        router.push("/not-found");
+      }
       // console.log("resultado1", nbHits);
       // Continúa con el resto del código según tus necesidades
     } catch (err) {
