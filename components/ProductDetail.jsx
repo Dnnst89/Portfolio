@@ -316,7 +316,7 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack , handleGoToCa
                (
                <a onClick={() => handleGoBack()} className="self-start mb-3">
                <button className="flex justify-start text-lightblue bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
-                Regresar al carrito
+                {previousPage.includes("/orderViewDetail") ? "Regresar al detalle" : "Regresar al carrito"}
                </button>
              </a>)
                :
