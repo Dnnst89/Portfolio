@@ -9,7 +9,6 @@ import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { useQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 import { isTaxesLoading } from "@/redux/features/cart-slice";
-
 const CartDetail = ({
   isCheckout = false,
   detailTitle = "Detalle del carrito",
@@ -143,7 +142,7 @@ const CartDetail = ({
       {!cart.loadingTaxes ? (
         <>
           <div className="flex justify-between ">
-            <p className="whitespace-nowrap">N° artículos</p>
+            <p className="whitespace-nowrap">N° artículos:</p>
             <p className="whitespace-nowrap">{quantity}</p>
           </div>
           <div className="flex justify-between ">
@@ -153,11 +152,16 @@ const CartDetail = ({
               {amounts.currencyType}
             </p>
           </div>
+
           <div className="flex justify-between border-dashed border-grey-200 border-b-[2px] pb-3">
-            <p>Impuestos:</p>
-            <p className="whitespace-nowrap">
-              {amounts.tax.toFixed(2)} {amounts.currencyType}
-            </p>
+            {cart.showTaxes ? (
+              <>
+                <p>Impuestos:</p>
+                <p className="whitespace-nowrap">
+                  {amounts.tax.toFixed(2)} {amounts.currencyType}
+                </p>
+              </>
+            ) : null}
           </div>
 
           <>
@@ -177,7 +181,9 @@ const CartDetail = ({
             }
 
             <div className="flex flex-col p-4 space-y-3">
-              <p className="flex justify-center">Costo Total (IVA Incluido)</p>
+            {cart.showTaxes ? (
+              <p className="flex justify-center">Costo Total (IVA Incluido):</p>
+            ) : <p className="flex justify-center">Costo Total:</p> }
               <p className="flex justify-center whitespace-nowrap">
                 {amounts?.total.toFixed(2)} {amounts.currencyType}
               </p>
