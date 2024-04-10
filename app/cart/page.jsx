@@ -10,7 +10,7 @@ import "../../styles/fonts.css";
 
 export default function CartView() {
 
-  
+  localStorage.removeItem("navigatedFromOrderComponent");
   useProtectionRoute()
   return (
     <div className="bg-floralwhite flex flex-wrap max-w-screen-xl m-auto justify-center">

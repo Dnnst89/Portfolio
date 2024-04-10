@@ -32,7 +32,7 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack , handleGoToCa
   const categoryData = product?.attributes?.categories?.data;
   let previousPage = "";
   let prevCategory = "";
-
+  const navigatedFromOrderComponent = localStorage.getItem('navigatedFromOrderComponent');
 
 
   const { data, loading: productIdLoading } = useQuery(GET_VARIANT_BY_ID, {
@@ -316,7 +316,7 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack , handleGoToCa
                (
                <a onClick={() => handleGoBack()} className="self-start mb-3">
                <button className="flex justify-start text-lightblue bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
-                {previousPage.includes("/orderViewDetail") ? "Regresar al detalle" : "Regresar al carrito"}
+                {navigatedFromOrderComponent ? "Regresar al detalle del pedido" : "Regresar al carrito"}
                </button>
              </a>)
                :

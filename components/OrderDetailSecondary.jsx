@@ -39,6 +39,7 @@ export default function OrderDetailSecondary({ orderId }) {
   const [orderVariant, setOrderVariant] = useState();
   const [productId, setProductId] = useState();
    let orderVariantTest = "";
+   localStorage.setItem('navigatedFromOrderComponent', 'true');
   // let productId = "";
   
   useEffect(() => {
