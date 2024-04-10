@@ -9,6 +9,7 @@ import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { useQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 import { isTaxesLoading } from "@/redux/features/cart-slice";
+import  useTotalWithoutTaxes from "@/hooks/useTotalWithoutTaxes";
 const CartDetail = ({
   isCheckout = false,
   detailTitle = "Detalle del carrito",
@@ -43,6 +44,7 @@ const CartDetail = ({
   } = useCartSummary({
     userId: user?.id,
   });
+  
   useEffect(() => {
     if (subTotal !== undefined) {
       if (deliveryPayment != 0) {
@@ -81,61 +83,72 @@ const CartDetail = ({
     //fetchEstimation();
   }, [deliveryPayment]); // El segundo argumento [] asegura que useEffect se ejecute solo una vez al montar el componente
 
-  useEffect(() => {
-    getTaxCost();
-  }, [quantity]);
+  
 
-  const getTaxCost = async () => {
-    setAmounts((prev) => ({
-      //mientras obtiene los taxes pone a cargar el loading
-      ...prev,
-      loading: true,
-    }));
-
-    try {
-      if (!items.length) {
-        // si no hay items se pone por default todo en 0
+  /**
+   * Verifica si la entidad requiere el calculo de impuesto.
+   */
+  if (cart.showTaxes){
+    const getTaxCost = async () => {
+      setAmounts((prev) => ({
+        //mientras obtiene los taxes pone a cargar el loading
+        ...prev,
+        loading: true,
+      }));
+  
+      try {
+        if (!items.length) {
+          // si no hay items se pone por default todo en 0
+          setAmounts((prev) => ({
+            ...prev,
+            total: 0,
+            tax: 0,
+          }));
+        }
+        const token = await getAccessToken();
+        const formatedItems = formatTaxData(items);
+        const body = {
+          serviceDetail: {
+            lineDetails: [...formatedItems],
+          },
+        };
+        const { data } = await facturationInstace.post(
+          `/utils/get-detail-line?access_token=${token}`,
+          body
+        );
         setAmounts((prev) => ({
           ...prev,
-          total: 0,
-          tax: 0,
-        }));
-      }
-      const token = await getAccessToken();
-      const formatedItems = formatTaxData(items);
-      const body = {
-        serviceDetail: {
-          lineDetails: [...formatedItems],
-        },
-      };
-      const { data } = await facturationInstace.post(
-        `/utils/get-detail-line?access_token=${token}`,
-        body
-      );
-      setAmounts((prev) => ({
-        ...prev,
-        total: parseFloat(data?.billSummary?.totalDocument.toFixed(2)),
-        tax: parseFloat(data?.billSummary?.totalTax.toFixed(2)),
-      }));
-      if (isCheckout) {
-        onChange({
           total: parseFloat(data?.billSummary?.totalDocument.toFixed(2)),
-          taxes: parseFloat(data?.billSummary?.totalTax.toFixed(2)),
-          subTotal,
-        });
+          tax: parseFloat(data?.billSummary?.totalTax.toFixed(2)),
+        }));
+        if (isCheckout) {
+          onChange({
+            total: parseFloat(data?.billSummary?.totalDocument.toFixed(2)),
+            taxes: parseFloat(data?.billSummary?.totalTax.toFixed(2)),
+            subTotal,
+          });
+        }
+      } catch (error) {
+        console.error("La solicitud de impuestos ha presentado un error.", error);
+      } finally {
+        setAmounts((prev) => ({
+          ...prev,
+          loading: false,
+        }));
+        // Se finaliza el proceso de request a gateway.
+        // se cambia el estado.
       }
-    } catch (error) {
-      console.error("La solicitud de impuestos ha presentado un error.", error);
-    } finally {
-      setAmounts((prev) => ({
-        ...prev,
-        loading: false,
-      }));
-      // Se finaliza el proceso de request a gateway.
-      // se cambia el estado.
-    }
-    dispatch(isTaxesLoading(false));
-  };
+      dispatch(isTaxesLoading(false));
+    };
+    useEffect(() => {
+      getTaxCost();
+    }, [quantity]);
+  }else{
+    const data=useTotalWithoutTaxes(items,quantity, subTotal)  
+    console.log("data",data)
+  }
+  
+  
   return (
     <div className="p-3 md:space-y-3">
       <h2 className="tittle flex justify-center">{detailTitle}</h2>
