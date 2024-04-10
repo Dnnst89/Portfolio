@@ -144,8 +144,21 @@ const CartDetail = ({
       getTaxCost();
     }, [quantity]);
   }else{
-    const data=useTotalWithoutTaxes(items,quantity, subTotal)  
-    console.log("data",data)
+    useEffect(() => {
+      setAmounts({
+          tax: 0,
+          total: subTotal,
+          loading: false,
+          currencyType: currency,
+        })
+        if (isCheckout) {
+          onChange({
+            total: subTotal,
+            taxes: 0,
+            subTotal,
+          });
+        }
+    }, [quantity]);
   }
   
   

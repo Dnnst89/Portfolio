@@ -205,14 +205,14 @@ export default function CheckOutForm2({
            */
 
           handleDeliveryPayment(deliveryPrice.toFixed(2));
-
+          console.log("subTotal" ,subTotal);
           const suma = subTotal + taxes + deliveryPrice;
           const finalAmount = {
             total: parseFloat(suma.toFixed(2)),
             subTotal: subTotal,
             taxes: taxes,
           };
-
+          
           setEstima(estimation.idEstimation);
           setAmount(finalAmount);
           try {
