@@ -59,7 +59,12 @@ function FormOne() {
   const [provincia, setProvincia] = useState("");
   const [cantonw, setCantonw] = useState("");
   const [distrito, setDistrito] = useState("");
-
+  // Asigna los valores a pagar en el carrito
+  const [amount, setAmount] = useState({
+    total: 0,
+    subTotal: 0,
+    taxes: 0,
+  });
   const [userInformation, setUserInformation] = useState({
     //campos de formulario
     firstName: "",
@@ -122,14 +127,13 @@ function FormOne() {
   const handleLng = (data) => {
     setLng(data);
   };
-  // Asigna los valores a pagar en el carrito
-  const [amount, setAmount] = useState({
-    total: 0,
-    subTotal: 0,
-    taxes: 0,
-  });
 
-  const handleChange = (data) => {
+  /**
+   * @param {Object} data - Total,subTotal,Taxes
+   * @returns Set the payment amounts
+   */
+  const handlePaymentAmount = (data) => {
+    console.log("dataa", data);
     setAmount(data);
   };
   const handleProvince = (data, provincias) => {
@@ -801,145 +805,6 @@ function FormOne() {
                       </h4>
                       <WrappedGiftCheckbox />
                     </div>
-                    {/*
-                    <div className="inline-block justify-center w-full">
-                      <section className="w-3/4 m-auto mt-10 mb-3 flex items-center space-x-5">
-                        <label htmlFor="idType">Factura Electrónica</label>
-                        <input
-                          className="p-3"
-                          type="checkbox"
-                          id="checkbox"
-                          {...register("checkbox", {
-                            onChange: (e) => {
-                              if (e.target.checked) {
-                                setCheckbox(true);
-                              } else {
-                                setCheckbox(false);
-                              }
-                            },
-                          })}
-                        ></input>
-                      </section>
-                    </div>
-                    {checkbox && (
-                      <>
-                        <div className="flex justify-center">
-                          <section className="md:w-4/6 grid grid-cols-12 gap-4">
-                            <div className="col-span-12 md:col-span-6 grid">
-                              <label htmlFor="idType">Tipo De Cédula</label>
-                              <select
-                                {...register("idType", {
-                                  onChange: (e) => {
-                                    const selectedValue = e.target.value;
-                                    if (selectedValue === "Física") {
-                                      setFisica(true);
-                                    } else {
-                                      setFisica(false);
-                                    }
-                                  },
-                                })}
-                              >
-                                <option value={"Física"}>Física</option>
-                                <option value={"Jurídica"}>Jurídica</option>
-                              </select>
-                            </div>
-                            {fisica ? (
-                              <div className="col-span-12 md:col-span-6 grid">
-                                <label htmlFor="idNumber">Cédula</label>
-                                <input
-                                  type="text"
-                                  id="idNumber"
-                                  {...register("idNumber", {
-                                    required: {
-                                      value: true,
-                                      message: "La cédula es requerida",
-                                    },
-                                    minLength: {
-                                      value: 9,
-                                      message:
-                                        "La cédula física no puede tener menos de 9 dígitos",
-                                    },
-                                    maxLength: {
-                                      value: 9,
-                                      message:
-                                        "La cédula física no puede tener más de 9 dígitos",
-                                    },
-                                    pattern: {
-                                      value: /^[0-9]*$/, // Expresión regular que solo permite números
-                                      message: "Ingresa solo números",
-                                    },
-                                  })}
-                                ></input>
-                                <p className="text-red text-xs">
-                                  {errors.idNumber?.message}
-                                </p>
-                              </div>
-                            ) : (
-                              <div className="col-span-6 grid">
-                                <label htmlFor="idNumber">Cédula</label>
-                                <input
-                                  type="text"
-                                  id="idNumber"
-                                  {...register("idNumber", {
-                                    required: {
-                                      value: true,
-                                      message: "La cédula es requerida",
-                                    },
-                                    minLength: {
-                                      value: 10,
-                                      message:
-                                        "La cédula jurídica no puede tener menos de 10 dígitos",
-                                    },
-                                    maxLength: {
-                                      value: 10,
-                                      message:
-                                        "La cédula jurídica no puede tener más de 10 dígitos",
-                                    },
-                                    pattern: {
-                                      value: /^[0-9]*$/, // Expresión regular que solo permite números
-                                      message: "Ingresa solo números",
-                                    },
-                                  })}
-                                ></input>
-                                <p className="text-red text-xs">
-                                  {errors.idNumber?.message}
-                                </p>
-                              </div>
-                            )}
-                          </section>
-                        </div>
-                        <section className="flex justify-center">
-                          <section className="md:w-4/6 grid grid-cols-12 gap-4">
-                            <div className="col-span-12 md:col-span-6 grid">
-                              <label
-                                className="whitespace-nowrap  w-full pt-4"
-                                htmlFor="invoiceEmail"
-                              >
-                                Correo electrónico para factura
-                              </label>
-                              <input
-                                type="text"
-                                id="invoiceEmail"
-                                {...register("invoiceEmail", {
-                                  required: {
-                                    value: true,
-                                    message: "El correo es requerido",
-                                  },
-                                  pattern: {
-                                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                    message:
-                                      "Ingresa una dirección de correo electrónico válida",
-                                  },
-                                })}
-                              ></input>
-                              <p className="text-red text-xs">
-                                {errors.invoiceEmail?.message}
-                              </p>
-                            </div>
-                          </section>
-                        </section>
-                      </>
-                    )} */}
                   </section>
                 </main>
                 <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
@@ -956,7 +821,7 @@ function FormOne() {
               amount={amount}
               checkbox={checkbox}
               handleDeliveryPayment={handleDeliveryPayment}
-              setAmount={handleChange}
+              setAmount={handlePaymentAmount}
               lat={lat}
               lng={lng}
               handleCheckout={handleCheckout}
@@ -968,7 +833,7 @@ function FormOne() {
             <CartDetail
               detailTitle={"Detalle del carrito"}
               isCheckout
-              onChange={handleChange}
+              paymentAmount={handlePaymentAmount}
               deliveryPayment={deliveryPayment}
               showDeliveryPayment={isCheckOut}
             />

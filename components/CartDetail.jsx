@@ -9,12 +9,12 @@ import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { useQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 import { isTaxesLoading } from "@/redux/features/cart-slice";
-import  useTotalWithoutTaxes from "@/hooks/useTotalWithoutTaxes";
+
 const CartDetail = ({
   isCheckout = false,
   detailTitle = "Detalle del carrito",
   deliveryPayment,
-  onChange,
+  paymentAmount,
   showDeliveryPayment,
 }) => {
   const { user } = useStorage();
@@ -44,7 +44,7 @@ const CartDetail = ({
   } = useCartSummary({
     userId: user?.id,
   });
-  
+
   useEffect(() => {
     if (subTotal !== undefined) {
       if (deliveryPayment != 0) {
@@ -83,19 +83,17 @@ const CartDetail = ({
     //fetchEstimation();
   }, [deliveryPayment]); // El segundo argumento [] asegura que useEffect se ejecute solo una vez al montar el componente
 
-  
-
   /**
    * Verifica si la entidad requiere el calculo de impuesto.
    */
-  if (cart.showTaxes){
+  if (cart.showTaxes) {
     const getTaxCost = async () => {
       setAmounts((prev) => ({
         //mientras obtiene los taxes pone a cargar el loading
         ...prev,
         loading: true,
       }));
-  
+
       try {
         if (!items.length) {
           // si no hay items se pone por default todo en 0
@@ -122,14 +120,17 @@ const CartDetail = ({
           tax: parseFloat(data?.billSummary?.totalTax.toFixed(2)),
         }));
         if (isCheckout) {
-          onChange({
+          paymentAmount({
             total: parseFloat(data?.billSummary?.totalDocument.toFixed(2)),
             taxes: parseFloat(data?.billSummary?.totalTax.toFixed(2)),
             subTotal,
           });
         }
       } catch (error) {
-        console.error("La solicitud de impuestos ha presentado un error.", error);
+        console.error(
+          "La solicitud de impuestos ha presentado un error.",
+          error
+        );
       } finally {
         setAmounts((prev) => ({
           ...prev,
@@ -143,26 +144,33 @@ const CartDetail = ({
     useEffect(() => {
       getTaxCost();
     }, [quantity]);
-  }else{
+  } else {
     useEffect(() => {
+      /**
+       * Se envía la data necesaria al setAmounts para mostrar
+       *  los valores en la tabla del detalle del carrito
+       */
       setAmounts({
-          tax: 0,
+        tax: 0,
+        total: subTotal,
+        loading: false,
+        currencyType: currency,
+      });
+      /**
+       * si esta en el checkout, se envía la data al método handlePaymentAmount(formOne),
+       * data necesaria para proceder al pago final
+       */
+      if (isCheckout) {
+        paymentAmount({
           total: subTotal,
-          loading: false,
-          currencyType: currency,
-        })
-        if (isCheckout) {
-          onChange({
-            total: subTotal,
-            taxes: 0,
-            subTotal,
-          });
-        }
-        dispatch(isTaxesLoading(false));
+          taxes: 0,
+          subTotal,
+        });
+      }
+      dispatch(isTaxesLoading(false));
     }, [quantity]);
   }
-  
-  
+
   return (
     <div className="p-3 md:space-y-3">
       <h2 className="tittle flex justify-center">{detailTitle}</h2>
@@ -208,9 +216,13 @@ const CartDetail = ({
             }
 
             <div className="flex flex-col p-4 space-y-3">
-            {cart.showTaxes ? (
-              <p className="flex justify-center">Costo Total (IVA Incluido):</p>
-            ) : <p className="flex justify-center">Costo Total:</p> }
+              {cart.showTaxes ? (
+                <p className="flex justify-center">
+                  Costo Total (IVA Incluido):
+                </p>
+              ) : (
+                <p className="flex justify-center">Costo Total:</p>
+              )}
               <p className="flex justify-center whitespace-nowrap">
                 {amounts?.total.toFixed(2)} {amounts.currencyType}
               </p>
