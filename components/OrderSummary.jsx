@@ -27,7 +27,7 @@ const OrderSummary = ({
             <p className="text-grey-100">${subTotal}</p>
           </div>
 
-          {cart.showTaxes ? (
+          {taxes != 0 ? (
             <>
               <div className="flex justify-between ">
                 <p>Impuestos:</p>
@@ -41,7 +41,7 @@ const OrderSummary = ({
             <p className="text-grey-100">${deliveryPayment}</p>
           </div>
           <div className="flex justify-between ">
-            {cart.showTaxes ? (
+            {taxes != 0 ? (
               <>
                 <p>Costo Total(IVA Incluido):</p>
               </>
