@@ -838,7 +838,8 @@ function FormOne() {
               showDeliveryPayment={isCheckOut}
             />
           </div>
-          <div>
+          {/* TODO: se agrega clase hidden para ocultar checkbox de factura electronica */}
+          <div className="hidden">
             {" "}
             <div className="flex w-full">
               <section className="w-3/4 ml-4 mt-10 mb-5 flex space-x-5">
@@ -956,15 +957,6 @@ function FormOne() {
                 </>
               )}
             </div>
-            {/* 
-            <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
-              <input
-                className="bg-pink-200 text-white rounded-sm p-2 w-[150px] whitespace-nowrap"
-                type="submit"
-                value={"Continuar"}
-              ></input>
-            </div>
-            */}
           </div>
         </div>
       </div>
