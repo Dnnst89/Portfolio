@@ -86,69 +86,64 @@ const CartDetail = ({
   /**
    * Verifica si la entidad requiere el calculo de impuesto.
    */
-  if (cart.showTaxes) {
-    const getTaxCost = async () => {
-      setAmounts((prev) => ({
-        //mientras obtiene los taxes pone a cargar el loading
-        ...prev,
-        loading: true,
-      }));
+  useEffect(() => {
+    if (cart.showTaxes) {
+      const getTaxCost = async () => {
+        setAmounts((prev) => ({
+          ...prev,
+          loading: true,
+        }));
 
-      try {
-        if (!items.length) {
-          // si no hay items se pone por default todo en 0
+        try {
+          if (!items.length) {
+            setAmounts((prev) => ({
+              ...prev,
+              total: 0,
+              tax: 0,
+            }));
+          }
+          const token = await getAccessToken();
+          const formatedItems = formatTaxData(items);
+          const body = {
+            serviceDetail: {
+              lineDetails: [...formatedItems],
+            },
+          };
+          const { data } = await facturationInstace.post(
+            `/utils/get-detail-line?access_token=${token}`,
+            body
+          );
           setAmounts((prev) => ({
             ...prev,
-            total: 0,
-            tax: 0,
+            total: parseFloat(data?.billSummary?.totalDocument.toFixed(2)),
+            tax: parseFloat(data?.billSummary?.totalTax.toFixed(2)),
+          }));
+          if (isCheckout) {
+            paymentAmount({
+              total: parseFloat(data?.billSummary?.totalDocument.toFixed(2)),
+              taxes: parseFloat(data?.billSummary?.totalTax.toFixed(2)),
+              subTotal,
+            });
+          }
+        } catch (error) {
+          console.error(
+            "La solicitud de impuestos ha presentado un error.",
+            error
+          );
+        } finally {
+          setAmounts((prev) => ({
+            ...prev,
+            loading: false,
           }));
         }
-        const token = await getAccessToken();
-        const formatedItems = formatTaxData(items);
-        const body = {
-          serviceDetail: {
-            lineDetails: [...formatedItems],
-          },
-        };
-        const { data } = await facturationInstace.post(
-          `/utils/get-detail-line?access_token=${token}`,
-          body
-        );
-        setAmounts((prev) => ({
-          ...prev,
-          total: parseFloat(data?.billSummary?.totalDocument.toFixed(2)),
-          tax: parseFloat(data?.billSummary?.totalTax.toFixed(2)),
-        }));
-        if (isCheckout) {
-          paymentAmount({
-            total: parseFloat(data?.billSummary?.totalDocument.toFixed(2)),
-            taxes: parseFloat(data?.billSummary?.totalTax.toFixed(2)),
-            subTotal,
-          });
-        }
-      } catch (error) {
-        console.error(
-          "La solicitud de impuestos ha presentado un error.",
-          error
-        );
-      } finally {
-        setAmounts((prev) => ({
-          ...prev,
-          loading: false,
-        }));
-        // Se finaliza el proceso de request a gateway.
-        // se cambia el estado.
-      }
-      dispatch(isTaxesLoading(false));
-    };
-    useEffect(() => {
+        dispatch(isTaxesLoading(false));
+      };
+
       getTaxCost();
-    }, [quantity]);
-  } else {
-    useEffect(() => {
+    } else {
       /**
        * Se envía la data necesaria al setAmounts para mostrar
-       *  los valores en la tabla del detalle del carrito
+       * los valores en la tabla del detalle del carrito
        */
       setAmounts({
         tax: 0,
@@ -168,8 +163,8 @@ const CartDetail = ({
         });
       }
       dispatch(isTaxesLoading(false));
-    }, [quantity]);
-  }
+    }
+  }, [cart.showTaxes, quantity]);
 
   return (
     <div className="p-3 md:space-y-3">
