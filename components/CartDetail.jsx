@@ -158,6 +158,7 @@ const CartDetail = ({
             subTotal,
           });
         }
+        dispatch(isTaxesLoading(false));
     }, [quantity]);
   }
   
