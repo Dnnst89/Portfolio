@@ -164,7 +164,7 @@ const CartDetail = ({
       }
       dispatch(isTaxesLoading(false));
     }
-  }, [cart.showTaxes, quantity]);
+  }, [quantity]);
 
   return (
     <div className="p-3 md:space-y-3">
