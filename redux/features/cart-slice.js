@@ -6,6 +6,7 @@ const initialState = {
   quantity: 0,
   sessionId: null,
   loadingTaxes: false,
+  showTaxes: false,
 };
 export const cart = createSlice({
   name: "cart",
@@ -37,6 +38,9 @@ export const cart = createSlice({
     isTaxesLoading: (state, action) => {
       state.loadingTaxes = action.payload;
     },
+    updateTaxesState: (state,action)=> {
+      state.showTaxes = action.payload;
+    }
   },
 });
 
@@ -48,5 +52,6 @@ export const {
   addItemToCart,
   updateCartItems,
   isTaxesLoading,
+  updateTaxesState
 } = cart.actions;
 export default cart.reducer;
