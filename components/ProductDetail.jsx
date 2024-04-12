@@ -61,19 +61,24 @@ function ProductDetail({
     data?.variant?.data?.attributes?.parentVariant?.data?.attributes?.typeValue;
   const colorTypeVariant = data?.variant?.data?.attributes?.type;
   const colorValueVariant = data?.variant?.data?.attributes?.typeValue;
+  let isPrevCategoryExist;
 
-  //obtener la categoria desde la url de la pagina anterior
   previousPage = document.referrer;
-  const url = new URL(previousPage);
-  const params = new URLSearchParams(url.search);
-  const previousCategory = params.get("category");
-  prevCategory = previousCategory;
+  //obtener la categoria desde la url de la pagina anterior
+  if (previousPage !== "") {
+    const url = new URL(previousPage);
+    const params = new URLSearchParams(url.search);
+    const previousCategory = params.get("category");
+    prevCategory = previousCategory;
 
-  // Verificar si prevCategory existe en el array de categorías
-  const isPrevCategoryExist = categoryData.some((item) => {
-    const categoryName = item.attributes.name.trim(); // Eliminar espacios en blanco al final
-    return categoryName === prevCategory;
-  });
+    // Verificar si prevCategory existe en el array de categorías
+    isPrevCategoryExist = categoryData.some((item) => {
+      const categoryName = item.attributes.name.trim(); // Eliminar espacios en blanco al final
+      return categoryName === prevCategory;
+    });
+
+    //
+  }
 
   //variable para guardar las selecciones de dropdown para mostrar en el detalle del pedido desde el carrito
   const featuresSelected = {};
