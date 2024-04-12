@@ -12,6 +12,8 @@ import Spinner from "./Spinner";
 import OrderSummary from "./OrderSummary";
 import { Carousel } from "react-responsive-carousel";
 import CarouselImages from "./CarouselImages";
+import { isFromOrderDetail } from "@/redux/features/fromOrder-slice";
+import { useDispatch, useSelector } from "react-redux";
 export default function OrderDetailSecondary({ orderId }) {
   const [orderData, setOrderData] = useState({
     order: {
@@ -38,12 +40,12 @@ export default function OrderDetailSecondary({ orderId }) {
   const [getProductByVariant] = useLazyQuery(GET_VARIANT_BY_ID);
   const [orderVariant, setOrderVariant] = useState();
   const [productId, setProductId] = useState();
-   let orderVariantTest = "";
-   localStorage.setItem('navigatedFromOrderComponent', 'true');
+  let orderVariantTest = "";
+  const dispatch = useDispatch();
+  dispatch(isFromOrderDetail(true));
   // let productId = "";
-  
+
   useEffect(() => {
-    
     const getOrdersItemsInfo = async (id) => {
       try {
         //me trae las ordenes e informacion del usuario
@@ -53,7 +55,7 @@ export default function OrderDetailSecondary({ orderId }) {
           //llamo la query para traer la shopping session
           variables: { orderId: id },
         });
-        
+
         if (data) {
           const orderInfo = data?.orderDetail?.data;
           setOrderData((prev) => ({
@@ -78,7 +80,7 @@ export default function OrderDetailSecondary({ orderId }) {
                   quantity: item.attributes.quantity,
                   name: item.attributes.name,
                   brand: item.attributes.brand,
-                  idVariant : item.attributes.variantId,
+                  idVariant: item.attributes.variantId,
                   price: item.attributes.price.toFixed(2), //se saca el precio de la unica variante que tiene
                   images: item.attributes.images?.data.map(
                     (img) => img.attributes.url
@@ -87,7 +89,6 @@ export default function OrderDetailSecondary({ orderId }) {
               }
             ),
           }));
-           
         }
       } catch (error) {
         setError(error);
@@ -98,7 +99,7 @@ export default function OrderDetailSecondary({ orderId }) {
     if (orderId) {
       getOrdersItemsInfo(orderId);
     }
-   
+
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId]);
   useEffect(() => {
@@ -115,7 +116,7 @@ export default function OrderDetailSecondary({ orderId }) {
         console.error("Error fetching product data:", error);
       }
     };
-  
+
     orderData.orderItems.forEach((item) => {
       fetchData(item.idVariant);
     });
@@ -128,7 +129,6 @@ export default function OrderDetailSecondary({ orderId }) {
       </div>
     );
   }
-
 
   return (
     <div className="bg-resene col-span-12 md:col-span-8 grid grid-cols-12">

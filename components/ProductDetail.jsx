@@ -21,8 +21,15 @@ import { useQuery } from "@apollo/client";
 import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
 import GET_CART_ITEM_BY_ID from "@/src/graphQl/queries/getCartItemById";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
+import { useSelector } from "react-redux";
 
-function ProductDetail({ product, variantId, ItemQt, handleGoBack , handleGoToCategory}) {
+function ProductDetail({
+  product,
+  variantId,
+  ItemQt,
+  handleGoBack,
+  handleGoToCategory,
+}) {
   const name = product?.attributes?.name;
   const brand = product?.attributes?.brand;
   const description = product?.attributes?.description;
@@ -32,8 +39,7 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack , handleGoToCa
   const categoryData = product?.attributes?.categories?.data;
   let previousPage = "";
   let prevCategory = "";
-  const navigatedFromOrderComponent = localStorage.getItem('navigatedFromOrderComponent');
-
+  const fromOrder = useSelector((state) => state.fromOrder);
 
   const { data, loading: productIdLoading } = useQuery(GET_VARIANT_BY_ID, {
     variables: {
@@ -56,21 +62,19 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack , handleGoToCa
   const colorTypeVariant = data?.variant?.data?.attributes?.type;
   const colorValueVariant = data?.variant?.data?.attributes?.typeValue;
 
-  
-    //obtener la categoria desde la url de la pagina anterior
-    previousPage = document.referrer;
-    const url = new URL(previousPage);
-    const params = new URLSearchParams(url.search);
-    const previousCategory = params.get("category");
-    prevCategory = previousCategory;
-    
-    // Verificar si prevCategory existe en el array de categorías
-    const isPrevCategoryExist = categoryData.some(item => {
-      const categoryName = item.attributes.name.trim(); // Eliminar espacios en blanco al final
-      return categoryName === prevCategory;
-    });
+  //obtener la categoria desde la url de la pagina anterior
+  previousPage = document.referrer;
+  const url = new URL(previousPage);
+  const params = new URLSearchParams(url.search);
+  const previousCategory = params.get("category");
+  prevCategory = previousCategory;
 
-   
+  // Verificar si prevCategory existe en el array de categorías
+  const isPrevCategoryExist = categoryData.some((item) => {
+    const categoryName = item.attributes.name.trim(); // Eliminar espacios en blanco al final
+    return categoryName === prevCategory;
+  });
+
   //variable para guardar las selecciones de dropdown para mostrar en el detalle del pedido desde el carrito
   const featuresSelected = {};
   if (
@@ -132,11 +136,10 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack , handleGoToCa
   //galeria de imagenes para componente se compone de un arreglo [{original: url, thumbnail: url}]
   const [galleryImages, setGalleryImages] = useState([]);
 
-  const itemFiltrado =  cartSummary.items.find(
+  const itemFiltrado = cartSummary.items.find(
     (item) => item.attributes.variant.data.id === variantId
-    
   );
-  
+
   useEffect(() => {
     if (imageVariantSelected) {
       const variantGalleryImages = imageVariantSelected.map((image) => ({
@@ -162,12 +165,12 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack , handleGoToCa
           (item) => item.attributes.variant.data.id === variantId
         );
         if (itemFiltrado) {
-        if (updatedQuantity === itemFiltrado?.quantity) {
-          setEnableButton(false);
-        } else {
-          setEnableButton(true);
+          if (updatedQuantity === itemFiltrado?.quantity) {
+            setEnableButton(false);
+          } else {
+            setEnableButton(true);
+          }
         }
-      }
       } else {
         // Evitar decrementar por debajo de 1
         SetQuantitySelected(1);
@@ -186,8 +189,7 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack , handleGoToCa
       const itemFiltrado = await cartSummary.items.find(
         (item) => item.attributes.variant.data.id === variantId
       );
-      const isQuantityEqualToItemQt =
-        newQuantity === itemFiltrado?.quantity;
+      const isQuantityEqualToItemQt = newQuantity === itemFiltrado?.quantity;
 
       // Establecer el botón habilitado o deshabilitado basado en la comparación
       setEnableButton(!isQuantityEqualToItemQt);
@@ -214,7 +216,6 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack , handleGoToCa
   };
 
   const increaseCounter = async () => {
-
     if (ItemQt) {
       if (quantitySelected >= stockVariantSelected) return;
       const updatedQuantity = parseInt(quantitySelected, 10) + 1;
@@ -222,20 +223,20 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack , handleGoToCa
       SetQuantitySelected(updatedQuantity);
       // const itemFiltrado = await cartSummary.items.find(
       //   (item) => item.attributes.variant.data.id === variantId
-        
+
       // );
       if (itemFiltrado) {
-      if (updatedQuantity === itemFiltrado?.quantity) {
-        setEnableButton(false);
-      } else {
-        setEnableButton(true);
+        if (updatedQuantity === itemFiltrado?.quantity) {
+          setEnableButton(false);
+        } else {
+          setEnableButton(true);
+        }
       }
-    }
     } else {
       const itemFiltrado = await cartSummary.items.find(
         (item) => item.attributes.variant.data.id === variants[0]?.id
       );
-      
+
       if (itemFiltrado) {
         //si el item ya esta en carrito
         if (variants.length > 0) {
@@ -297,55 +298,61 @@ function ProductDetail({ product, variantId, ItemQt, handleGoBack , handleGoToCa
 
   return (
     <>
-    
       {variants.length > 0 ? (
         <section
-        
           aria-label="Descripción del producto"
           className="bg-floralwhite max-w-screen-xl grid grid-cols-12 m-auto p-5 z-0"
           target="_blank"
           rel="noopener noreferrer"
         >
-    
           {/* Columna de imagenes */}
-          
-          <section aria-label="Imágenes del producto" className="mb-10 col-span-12 md:col-span-6 ">
+
+          <section
+            aria-label="Imágenes del producto"
+            className="mb-10 col-span-12 md:col-span-6 "
+          >
             {/* Botón de regreso */}
             <div className="md:w-5/6 mx-auto mt-2">
-              {variantId  ? 
-               (
-               <a onClick={() => handleGoBack()} className="self-start mb-3">
-               <button className="flex justify-start text-lightblue bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
-                {navigatedFromOrderComponent ? "Regresar al detalle del pedido" : "Regresar al carrito"}
-               </button>
-             </a>)
-               :
-               (
-               
-              <a onClick={() => isPrevCategoryExist ? handleGoToCategory(prevCategory) : handleGoToCategory(category)} className="self-start mb-3">
-              <button className="flex justify-start text-lightblue bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
-              {isPrevCategoryExist ? `Regresar a ${prevCategory}` : `Regresar a ${category}` }
-              </button>
-            </a> )
-           
-            }
+              {variantId ? (
+                <a onClick={() => handleGoBack()} className="self-start mb-3">
+                  <button className="flex justify-start text-lightblue bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
+                    {fromOrder.isFromOrderDetail
+                      ? "Regresar al detalle del pedido"
+                      : "Regresar al carrito"}
+                  </button>
+                </a>
+              ) : (
+                <a
+                  onClick={() =>
+                    isPrevCategoryExist
+                      ? handleGoToCategory(prevCategory)
+                      : handleGoToCategory(category)
+                  }
+                  className="self-start mb-3"
+                >
+                  <button className="flex justify-start text-lightblue bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
+                    {isPrevCategoryExist
+                      ? `Regresar a ${prevCategory}`
+                      : `Regresar a ${category}`}
+                  </button>
+                </a>
+              )}
             </div>
-              {/* Imágenes debajo de la principal */}
-              <div className="md:w-5/6 m-auto mt-2">
-                {images && images.length > 0 ? (
-                  <ImageGallery
-                    showPlayButton={false}
-                    originalHeight={"275px"}
-                    disableThumbnailScroll={false}
-                    disableKeyDown={false}
-                    disableSwipe={false}
-                    loading={"lazy"}
-                    items={galleryImages}
-                  />
-                ) : null}
-              </div>
+            {/* Imágenes debajo de la principal */}
+            <div className="md:w-5/6 m-auto mt-2">
+              {images && images.length > 0 ? (
+                <ImageGallery
+                  showPlayButton={false}
+                  originalHeight={"275px"}
+                  disableThumbnailScroll={false}
+                  disableKeyDown={false}
+                  disableSwipe={false}
+                  loading={"lazy"}
+                  items={galleryImages}
+                />
+              ) : null}
+            </div>
           </section>
-
 
           {/* Sección con los detalles del producto*/}
           <section
