@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import { BiArrowBack } from "react-icons/bi";
 
 const NotFound = () => {
   return (
