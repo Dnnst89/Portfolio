@@ -1,5 +1,6 @@
 import React from "react";
 import Spinner from "./Spinner";
+import { useSelector } from "react-redux";
 
 const OrderSummary = ({
   detailTitle,
@@ -9,6 +10,8 @@ const OrderSummary = ({
   total,
   deliveryPayment,
 }) => {
+  const cart = useSelector((state) => state.cart);
+
   return (
     <div className="p-3 space-y-3">
       {
@@ -23,16 +26,28 @@ const OrderSummary = ({
             <p>Subtotal:</p>
             <p className="text-grey-100">${subTotal}</p>
           </div>
-          <div className="flex justify-between ">
-            <p>Impuestos:</p>
-            <p className="text-grey-100">${taxes}</p>
-          </div>
+
+          {taxes != 0 ? (
+            <>
+              <div className="flex justify-between ">
+                <p>Impuestos:</p>
+                <p className="text-grey-100">${taxes}</p>
+              </div>
+            </>
+          ) : null}
+
           <div className="flex justify-between ">
             <p>Costo de envío:</p>
             <p className="text-grey-100">${deliveryPayment}</p>
           </div>
           <div className="flex justify-between ">
-            <p>Costo Total(IVA Incluido):</p>
+            {taxes != 0 ? (
+              <>
+                <p>Costo Total(IVA Incluido):</p>
+              </>
+            ) : (
+              <p>Costo Total:</p>
+            )}
             <p className="text-grey-100">${total}</p>
           </div>
           <hr />
