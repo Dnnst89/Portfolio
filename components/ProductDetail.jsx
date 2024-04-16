@@ -630,89 +630,99 @@ function ProductDetail({
                 {currency} {price}
               </span>
               <div className="col-span-8 mdd:col-span-7 md:flex md:flex-col items-end md:items-end p-3">
-                <div className="grid md:flex items-center mb-2 ">
-                  <span className="text-grey mx-3">Cantidad:</span>
-                  <div className="bg-resene rounded-full md:m-3 w-[140px] flex items-center justify-center p-2 space-x-4">
-                    <button
-                      aria-label="Disminuir cantidad de produto"
-                      className=" bg-grey-100 rounded-full text-white"
-                    >
-                      <BiMinus onClick={decreaseCounter} />
-                    </button>
-                    {/* <span>{quantity}</span> */}
-                    <div className="group inline-block relative">
-                      {stockVariantSelected ? (
+                {/**
+                 * oculta los botones para agregar unidades y agregar producto al carrito
+                 */}
+                {!fromOrder.isFromOrderDetail ? (
+                  <>
+                    <div className="grid md:flex items-center mb-2 ">
+                      <span className="text-grey mx-3">Cantidad:</span>
+                      <div className="bg-resene rounded-full md:m-3 w-[140px] flex items-center justify-center p-2 space-x-4">
                         <button
-                          type="button"
-                          className="bg-white rounded-full text-black px-4 py-2 transition duration-300 ease-in-out focus:outline-none focus:shadow-outline min-w-[60px]"
+                          aria-label="Disminuir cantidad de produto"
+                          className=" bg-grey-100 rounded-full text-white"
                         >
-                          {quantitySelected}
+                          <BiMinus onClick={decreaseCounter} />
                         </button>
-                      ) : (
-                        <button
-                          type="button"
-                          className="bg-white rounded-full text-black px-4 py-2 transition duration-300 ease-in-out focus:outline-none focus:shadow-outline min-w-[60px]"
-                        >
-                          {quantity}
-                        </button>
-                      )}
+                        {/* <span>{quantity}</span> */}
+                        <div className="group inline-block relative">
+                          {stockVariantSelected ? (
+                            <button
+                              type="button"
+                              className="bg-white rounded-full text-black px-4 py-2 transition duration-300 ease-in-out focus:outline-none focus:shadow-outline min-w-[60px]"
+                            >
+                              {quantitySelected}
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              className="bg-white rounded-full text-black px-4 py-2 transition duration-300 ease-in-out focus:outline-none focus:shadow-outline min-w-[60px]"
+                            >
+                              {quantity}
+                            </button>
+                          )}
 
-                      <ul className="absolute hidden text-grey-800 group-hover:block border border-grey-200 bg-white max-h-40 overflow-y-auto">
-                        {(stockVariantSelected
-                          ? [...Array(stockVariantSelected).keys()]
-                          : [...Array(variants[0].attributes.stock).keys()]
-                        ).map((index) => (
-                          <li
-                            key={index + 1}
-                            onClick={() => handleQuantityChange(index + 1)}
-                            className="cursor-pointer py-2 px-4 hover:bg-grey-200"
-                          >
-                            {index + 1}
-                          </li>
-                        ))}
-                      </ul>
+                          <ul className="absolute hidden text-grey-800 group-hover:block border border-grey-200 bg-white max-h-40 overflow-y-auto">
+                            {(stockVariantSelected
+                              ? [...Array(stockVariantSelected).keys()]
+                              : [...Array(variants[0].attributes.stock).keys()]
+                            ).map((index) => (
+                              <li
+                                key={index + 1}
+                                onClick={() => handleQuantityChange(index + 1)}
+                                className="cursor-pointer py-2 px-4 hover:bg-grey-200"
+                              >
+                                {index + 1}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <button
+                          aria-label="Aumentar cantidad de produto"
+                          className=" bg-grey-100 rounded-full  text-white"
+                        >
+                          <BiPlus onClick={increaseCounter} />
+                        </button>
+                      </div>
                     </div>
-                    <button
-                      aria-label="Aumentar cantidad de produto"
-                      className=" bg-grey-100 rounded-full  text-white"
+
+                    <div
+                      className={`${
+                        enableButton ? "bg-aquamarine" : "bg-grey-200"
+                      } rounded-sm p-2 md:p-3  md:mx-4"`}
                     >
-                      <BiPlus onClick={increaseCounter} />
-                    </button>
-                  </div>
-                </div>
-                <div
-                  className={`${
-                    enableButton ? "bg-aquamarine" : "bg-grey-200"
-                  } rounded-sm p-2 md:p-3  md:mx-4"`}
-                >
-                  <AddItemBtn
-                    variantData={data || null}
-                    quantityItem={
-                      quantitySelected !== null ? quantitySelected : quantity
-                    }
-                    variant={
-                      lastVariantSelected !== null
-                        ? lastVariantSelected
-                        : variantSelected?.variant?.data
-                        ? variantSelected.variant.data
-                        : variants[0]
-                    } //Se envía la ultima variante seleccionada
-                    features={
-                      featuresSelected !== null
-                        ? featuresSelected
-                        : variantSelected?.features
-                        ? variantSelected.features
-                        : {}
-                    }
-                    cartItems={cartSummary.items}
-                    cartQuantity={cartSummary.quantity}
-                    sessionId={cartSummary.sessionId}
-                    user={user}
-                    setEnableButton={setEnableButton}
-                    enableButton={enableButton}
-                    product={product}
-                  />
-                </div>
+                      <AddItemBtn
+                        variantData={data || null}
+                        quantityItem={
+                          quantitySelected !== null
+                            ? quantitySelected
+                            : quantity
+                        }
+                        variant={
+                          lastVariantSelected !== null
+                            ? lastVariantSelected
+                            : variantSelected?.variant?.data
+                            ? variantSelected.variant.data
+                            : variants[0]
+                        } //Se envía la ultima variante seleccionada
+                        features={
+                          featuresSelected !== null
+                            ? featuresSelected
+                            : variantSelected?.features
+                            ? variantSelected.features
+                            : {}
+                        }
+                        cartItems={cartSummary.items}
+                        cartQuantity={cartSummary.quantity}
+                        sessionId={cartSummary.sessionId}
+                        user={user}
+                        setEnableButton={setEnableButton}
+                        enableButton={enableButton}
+                        product={product}
+                      />
+                    </div>
+                  </>
+                ) : null}
               </div>
             </div>
           </section>

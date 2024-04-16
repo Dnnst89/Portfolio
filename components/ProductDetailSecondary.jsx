@@ -3,6 +3,7 @@ import ProductReview from "./ProductReview";
 import ProductReviewForm from "./ProductReviewForm";
 
 const ProductDetailSecondary = ({ id, description, reviews }) => {
+  console.log("id", id);
   const [showAllReviews, setShowAllReviews] = useState(false);
   return (
     <section className="bg-resene" id="detail-table">
