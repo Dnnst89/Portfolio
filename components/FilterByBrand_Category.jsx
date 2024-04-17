@@ -100,7 +100,7 @@ function FilterByBrand_Category({
         </div>
       );
     } else {
-      router.push("/not-found");
+      // router.push("/not-found");
     }
   }
 }

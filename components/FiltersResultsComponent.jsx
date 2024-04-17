@@ -9,6 +9,7 @@ import getProductsFiltered from "@/src/graphQl/queries/getProductsFiltered";
 import getProductsFilteredWithBrands from "@/src/graphQl/queries/getProductsFilteredWithBrands";
 import FilterContainer from "./FilterContainer";
 import FilterContainerPrincipal from "./FilterContainerPrincipal";
+import NotFound from "./Not-found";
 import useFilteredBrand from "@/hooks/useFilteredBrand";
 import useBrandsByAgeRange from "@/hooks/useBrandsByAgeRange";
 import { useRouter } from "next/navigation";
@@ -115,17 +116,7 @@ export default function FiltersResultsComponent({ querySearch }) {
       const total = data.products.meta.pagination.total;
       setNbHits(total);
       if (filterValue === undefined || filterType === undefined) {
-        if (showToastMessage) {
-          setShowToastMessge(false);
-          return toast.error(
-            errorMessage.errorInformation.data.attributes.error_message,
-            {
-              autoClose: 5000,
-            }
-          );
-        }
-
-        // router.push("\not-found");
+        router.push("/not-found");
       }
       // console.log("resultado1", nbHits);
       // Continúa con el resto del código según tus necesidades
