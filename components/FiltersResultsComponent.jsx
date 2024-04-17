@@ -12,6 +12,7 @@ import FilterContainerPrincipal from "./FilterContainerPrincipal";
 import useFilteredBrand from "@/hooks/useFilteredBrand";
 import useBrandsByAgeRange from "@/hooks/useBrandsByAgeRange";
 import { useRouter } from "next/navigation";
+import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 export default function FiltersResultsComponent({ querySearch }) {
   //querySearch me indica el tipo de filtro y el valor del filtro
   const [minPriceFilter, setMinPriceFilter] = useState(0);
@@ -26,6 +27,11 @@ export default function FiltersResultsComponent({ querySearch }) {
   const [nbHits, setNbHits] = useState();
   const page = currentPage;
   const pageSize = 12;
+  const [showToastMessage, setShowToastMessge] = useState(true);
+
+  const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 3 },
+  });
 
   let initialAge;
   let finalAge;
@@ -109,7 +115,17 @@ export default function FiltersResultsComponent({ querySearch }) {
       const total = data.products.meta.pagination.total;
       setNbHits(total);
       if (filterValue === undefined || filterType === undefined) {
-        router.push("/not-found");
+        if (showToastMessage) {
+          setShowToastMessge(false);
+          return toast.error(
+            errorMessage.errorInformation.data.attributes.error_message,
+            {
+              autoClose: 5000,
+            }
+          );
+        }
+
+        // router.push("\not-found");
       }
       // console.log("resultado1", nbHits);
       // Continúa con el resto del código según tus necesidades
