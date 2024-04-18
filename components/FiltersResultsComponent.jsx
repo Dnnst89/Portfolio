@@ -28,7 +28,7 @@ export default function FiltersResultsComponent({ querySearch }) {
   const [nbHits, setNbHits] = useState();
   const page = currentPage;
   const pageSize = 12;
-  const [showToastMessage, setShowToastMessge] = useState(true);
+  const [showToastMessage, setShowToastMessage] = useState(true);
 
   const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
     variables: { id: 3 },
@@ -115,8 +115,20 @@ export default function FiltersResultsComponent({ querySearch }) {
       maxPrice = maxPriceFilter;
       const total = data.products.meta.pagination.total;
       setNbHits(total);
-      if (filterValue === undefined || filterType === undefined) {
-        router.push("/not-found");
+      if (showToastMessage) {
+        if (filterValue === undefined || filterType === undefined) {
+          toast.error(
+            errorMessage.errorInformation.data.attributes.error_message,
+            {
+              autoClose: 9000,
+            }
+          );
+          setShowToastMessage(false);
+
+          router.push("/not-found");
+        }
+
+        //router.push("/not-found");
       }
       // console.log("resultado1", nbHits);
       // Continúa con el resto del código según tus necesidades
@@ -129,6 +141,7 @@ export default function FiltersResultsComponent({ querySearch }) {
     maxPriceFilter,
     minPriceFilter,
     data,
+    showToastMessage,
     currentPage,
   ]);
   const handleFilters = (
@@ -173,7 +186,7 @@ export default function FiltersResultsComponent({ querySearch }) {
   //if (loading) return <Spinner />;
   if (error)
     return toast.error(
-      "Lo sentimos, ha ocurrido un error al cargar los datos",
+      errorMessage.errorInformation.data.attributes.error_message,
       {
         autoClose: 5000,
       }
