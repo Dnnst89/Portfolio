@@ -117,14 +117,6 @@ export default function FiltersResultsComponent({ querySearch }) {
       setNbHits(total);
       if (showToastMessage) {
         if (filterValue === undefined || filterType === undefined) {
-          toast.error(
-            errorMessage.errorInformation.data.attributes.error_message,
-            {
-              autoClose: 9000,
-            }
-          );
-          setShowToastMessage(false);
-
           router.push("/not-found");
         }
 
