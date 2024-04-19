@@ -14,7 +14,7 @@ const CartDetail = ({
   isCheckout = false,
   detailTitle = "Detalle del carrito",
   deliveryPayment,
-  onChange,
+  paymentAmount,
   showDeliveryPayment,
 }) => {
   const { user } = useStorage();
@@ -44,6 +44,7 @@ const CartDetail = ({
   } = useCartSummary({
     userId: user?.id,
   });
+
   useEffect(() => {
     if (subTotal !== undefined) {
       if (deliveryPayment != 0) {
@@ -82,68 +83,96 @@ const CartDetail = ({
     //fetchEstimation();
   }, [deliveryPayment]); // El segundo argumento [] asegura que useEffect se ejecute solo una vez al montar el componente
 
+  /**
+   * Verifica si la entidad requiere el calculo de impuesto.
+   */
   useEffect(() => {
-    getTaxCost();
-  }, [quantity]);
-
-  const getTaxCost = async () => {
-    setAmounts((prev) => ({
-      //mientras obtiene los taxes pone a cargar el loading
-      ...prev,
-      loading: true,
-    }));
-
-    try {
-      if (!items.length) {
-        // si no hay items se pone por default todo en 0
+    if (cart.showTaxes) {
+      const getTaxCost = async () => {
         setAmounts((prev) => ({
           ...prev,
-          total: 0,
-          tax: 0,
+          loading: true,
         }));
-      }
-      const token = await getAccessToken();
-      const formatedItems = formatTaxData(items);
-      const body = {
-        serviceDetail: {
-          lineDetails: [...formatedItems],
-        },
+
+        try {
+          if (!items.length) {
+            setAmounts((prev) => ({
+              ...prev,
+              total: 0,
+              tax: 0,
+            }));
+          }
+          const token = await getAccessToken();
+          const formatedItems = formatTaxData(items);
+          const body = {
+            serviceDetail: {
+              lineDetails: [...formatedItems],
+            },
+          };
+          const { data } = await facturationInstace.post(
+            `/utils/get-detail-line?access_token=${token}`,
+            body
+          );
+          setAmounts((prev) => ({
+            ...prev,
+            total: parseFloat(data?.billSummary?.totalDocument.toFixed(2)),
+            tax: parseFloat(data?.billSummary?.totalTax.toFixed(2)),
+          }));
+          if (isCheckout) {
+            paymentAmount({
+              total: parseFloat(data?.billSummary?.totalDocument.toFixed(2)),
+              taxes: parseFloat(data?.billSummary?.totalTax.toFixed(2)),
+              subTotal,
+            });
+          }
+        } catch (error) {
+          console.error(
+            "La solicitud de impuestos ha presentado un error.",
+            error
+          );
+        } finally {
+          setAmounts((prev) => ({
+            ...prev,
+            loading: false,
+          }));
+        }
+        dispatch(isTaxesLoading(false));
       };
-      const { data } = await facturationInstace.post(
-        `/utils/get-detail-line?access_token=${token}`,
-        body
-      );
-      setAmounts((prev) => ({
-        ...prev,
-        total: parseFloat(data?.billSummary?.totalDocument.toFixed(2)),
-        tax: parseFloat(data?.billSummary?.totalTax.toFixed(2)),
-      }));
+
+      getTaxCost();
+    } else {
+      /**
+       * Se envía la data necesaria al setAmounts para mostrar
+       * los valores en la tabla del detalle del carrito
+       */
+      setAmounts({
+        tax: 0,
+        total: subTotal,
+        loading: false,
+        currencyType: currency,
+      });
+      /**
+       * si esta en el checkout, se envía la data al método handlePaymentAmount(formOne),
+       * data necesaria para proceder al pago final
+       */
       if (isCheckout) {
-        onChange({
-          total: parseFloat(data?.billSummary?.totalDocument.toFixed(2)),
-          taxes: parseFloat(data?.billSummary?.totalTax.toFixed(2)),
+        paymentAmount({
+          total: subTotal,
+          taxes: 0,
           subTotal,
         });
       }
-    } catch (error) {
-      console.error("La solicitud de impuestos ha presentado un error.", error);
-    } finally {
-      setAmounts((prev) => ({
-        ...prev,
-        loading: false,
-      }));
-      // Se finaliza el proceso de request a gateway.
-      // se cambia el estado.
+      dispatch(isTaxesLoading(false));
     }
-    dispatch(isTaxesLoading(false));
-  };
+  }, [quantity]);
+
   return (
     <div className="p-3 md:space-y-3">
       <h2 className="tittle flex justify-center">{detailTitle}</h2>
       {!cart.loadingTaxes ? (
         <>
           <div className="flex justify-between ">
-            <p className="whitespace-nowrap">N° artículos</p>
+            <p className="whitespace-nowrap">N° artículos:</p>
             <p className="whitespace-nowrap">{quantity}</p>
           </div>
           <div className="flex justify-between ">
@@ -153,11 +182,16 @@ const CartDetail = ({
               {amounts.currencyType}
             </p>
           </div>
+
           <div className="flex justify-between border-dashed border-grey-200 border-b-[2px] pb-3">
-            <p>Impuestos:</p>
-            <p className="whitespace-nowrap">
-              {amounts.tax.toFixed(2)} {amounts.currencyType}
-            </p>
+            {cart.showTaxes ? (
+              <>
+                <p>Impuestos:</p>
+                <p className="whitespace-nowrap">
+                  {amounts.tax.toFixed(2)} {amounts.currencyType}
+                </p>
+              </>
+            ) : null}
           </div>
 
           <>
@@ -177,7 +211,13 @@ const CartDetail = ({
             }
 
             <div className="flex flex-col p-4 space-y-3">
-              <p className="flex justify-center">Costo Total (IVA Incluido)</p>
+              {cart.showTaxes ? (
+                <p className="flex justify-center">
+                  Costo Total (IVA Incluido):
+                </p>
+              ) : (
+                <p className="flex justify-center">Costo Total:</p>
+              )}
               <p className="flex justify-center whitespace-nowrap">
                 {amounts?.total.toFixed(2)} {amounts.currencyType}
               </p>

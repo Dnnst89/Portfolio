@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { BiPlus, BiMinus } from "react-icons/bi";
+import { BiPlus, BiMinus, BiArrowBack } from "react-icons/bi";
 import Link from "next/link";
 import AddItemBtn from "./AddItemBtn";
 import ProductImage from "./ProductImage";
@@ -21,13 +21,25 @@ import { useQuery } from "@apollo/client";
 import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
 import GET_CART_ITEM_BY_ID from "@/src/graphQl/queries/getCartItemById";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
+import { useSelector } from "react-redux";
 
-function ProductDetail({ product, variantId, ItemQt }) {
+function ProductDetail({
+  product,
+  variantId,
+  ItemQt,
+  handleGoBack,
+  handleGoToCategory,
+}) {
   const name = product?.attributes?.name;
   const brand = product?.attributes?.brand;
   const description = product?.attributes?.description;
   const variants = product?.attributes?.variants?.data;
   const materials = product?.attributes?.materials?.data;
+  const category = product?.attributes?.categories?.data[0]?.attributes?.name;
+  const categoryData = product?.attributes?.categories?.data;
+  let previousPage = "";
+  let prevCategory = "";
+  const fromOrder = useSelector((state) => state.fromOrder);
 
   const { data, loading: productIdLoading } = useQuery(GET_VARIANT_BY_ID, {
     variables: {
@@ -49,6 +61,24 @@ function ProductDetail({ product, variantId, ItemQt }) {
     data?.variant?.data?.attributes?.parentVariant?.data?.attributes?.typeValue;
   const colorTypeVariant = data?.variant?.data?.attributes?.type;
   const colorValueVariant = data?.variant?.data?.attributes?.typeValue;
+  let isPrevCategoryExist;
+
+  previousPage = document.referrer;
+  //obtener la categoria desde la url de la pagina anterior
+  if (previousPage !== "") {
+    const url = new URL(previousPage);
+    const params = new URLSearchParams(url.search);
+    const previousCategory = params.get("category");
+    prevCategory = previousCategory;
+
+    // Verificar si prevCategory existe en el array de categorías
+    isPrevCategoryExist = categoryData.some((item) => {
+      const categoryName = item.attributes.name.trim(); // Eliminar espacios en blanco al final
+      return categoryName === prevCategory;
+    });
+
+    //
+  }
 
   //variable para guardar las selecciones de dropdown para mostrar en el detalle del pedido desde el carrito
   const featuresSelected = {};
@@ -90,6 +120,11 @@ function ProductDetail({ product, variantId, ItemQt }) {
       },
     }
   );
+
+  useEffect(() => {
+    if (data && data.variant && data.variant.data) setEnableButton(false);
+  }, [data]);
+
   const currency =
     storeInformation?.storeInformation?.data?.attributes?.currency;
   if (imageVariantSelected) {
@@ -105,6 +140,10 @@ function ProductDetail({ product, variantId, ItemQt }) {
   const [images, setImages] = useState(allImages.length > 0 ? allImages : null);
   //galeria de imagenes para componente se compone de un arreglo [{original: url, thumbnail: url}]
   const [galleryImages, setGalleryImages] = useState([]);
+
+  const itemFiltrado = cartSummary.items.find(
+    (item) => item.attributes.variant.data.id === variantId
+  );
 
   useEffect(() => {
     if (imageVariantSelected) {
@@ -125,7 +164,18 @@ function ProductDetail({ product, variantId, ItemQt }) {
   const decreaseCounter = () => {
     if (ItemQt) {
       if (quantitySelected > 1) {
-        SetQuantitySelected((prev) => prev - 1);
+        const updatedQuantity = quantitySelected - 1;
+        SetQuantitySelected(updatedQuantity);
+        const itemFiltrado = cartSummary.items.find(
+          (item) => item.attributes.variant.data.id === variantId
+        );
+        if (itemFiltrado) {
+          if (updatedQuantity === itemFiltrado?.quantity) {
+            setEnableButton(false);
+          } else {
+            setEnableButton(true);
+          }
+        }
       } else {
         // Evitar decrementar por debajo de 1
         SetQuantitySelected(1);
@@ -140,6 +190,16 @@ function ProductDetail({ product, variantId, ItemQt }) {
   const handleQuantityChange = async (newQuantity) => {
     if (ItemQt) {
       if (quantitySelected == newQuantity) return; //controla dropdown (detalle del producto desde carrito)
+
+      const itemFiltrado = await cartSummary.items.find(
+        (item) => item.attributes.variant.data.id === variantId
+      );
+      const isQuantityEqualToItemQt = newQuantity === itemFiltrado?.quantity;
+
+      // Establecer el botón habilitado o deshabilitado basado en la comparación
+      setEnableButton(!isQuantityEqualToItemQt);
+
+      // Establecer la cantidad seleccionada
       SetQuantitySelected(newQuantity);
     } else {
       const itemFiltrado = await cartSummary.items.find(
@@ -163,11 +223,25 @@ function ProductDetail({ product, variantId, ItemQt }) {
   const increaseCounter = async () => {
     if (ItemQt) {
       if (quantitySelected >= stockVariantSelected) return;
-      SetQuantitySelected((prev) => ++prev);
+      const updatedQuantity = parseInt(quantitySelected, 10) + 1;
+
+      SetQuantitySelected(updatedQuantity);
+      // const itemFiltrado = await cartSummary.items.find(
+      //   (item) => item.attributes.variant.data.id === variantId
+
+      // );
+      if (itemFiltrado) {
+        if (updatedQuantity === itemFiltrado?.quantity) {
+          setEnableButton(false);
+        } else {
+          setEnableButton(true);
+        }
+      }
     } else {
       const itemFiltrado = await cartSummary.items.find(
         (item) => item.attributes.variant.data.id === variants[0]?.id
       );
+
       if (itemFiltrado) {
         //si el item ya esta en carrito
         if (variants.length > 0) {
@@ -237,12 +311,40 @@ function ProductDetail({ product, variantId, ItemQt }) {
           rel="noopener noreferrer"
         >
           {/* Columna de imagenes */}
+
           <section
             aria-label="Imágenes del producto"
-            className="mb-10 col-span-12 md:col-span-6"
+            className="mb-10 col-span-12 md:col-span-6 "
           >
-            {/* //imagenes debajo de la principal */}
-            <div className="md:w-5/6 m-auto mt-2 ">
+            {/* Botón de regreso */}
+            <div className="md:w-5/6 mx-auto mt-2">
+              {variantId ? (
+                <a onClick={() => handleGoBack()} className="self-start mb-3">
+                  <button className="flex justify-start text-lightblue bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
+                    {fromOrder.isFromOrderDetail
+                      ? "Regresar al detalle del pedido"
+                      : "Regresar al carrito"}
+                  </button>
+                </a>
+              ) : (
+                <a
+                  onClick={() =>
+                    isPrevCategoryExist
+                      ? handleGoToCategory(prevCategory)
+                      : handleGoToCategory(category)
+                  }
+                  className="self-start mb-3"
+                >
+                  <button className="flex justify-start text-lightblue bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
+                    {isPrevCategoryExist
+                      ? `Regresar a ${prevCategory}`
+                      : `Regresar a ${category}`}
+                  </button>
+                </a>
+              )}
+            </div>
+            {/* Imágenes debajo de la principal */}
+            <div className="md:w-5/6 m-auto mt-2">
               {images && images.length > 0 ? (
                 <ImageGallery
                   showPlayButton={false}
@@ -304,7 +406,7 @@ function ProductDetail({ product, variantId, ItemQt }) {
             <p>{shortDescrption}...</p>
             <a onClick={() => handleClick()}>
               <button className="flex justify-start text-lightblue mb-3 bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
-                Leer mas
+                Leer más
               </button>
             </a>
             {/* Sección seleccion del producto*/}
@@ -528,88 +630,99 @@ function ProductDetail({ product, variantId, ItemQt }) {
                 {currency} {price}
               </span>
               <div className="col-span-8 mdd:col-span-7 md:flex md:flex-col items-end md:items-end p-3">
-                <div className="grid md:flex items-center mb-2 ">
-                  <span className="text-grey mx-3">Cantidad:</span>
-                  <div className="bg-resene rounded-full md:m-3 w-[140px] flex items-center justify-center p-2 space-x-4">
-                    <button
-                      aria-label="Disminuir cantidad de produto"
-                      className=" bg-grey-100 rounded-full text-white"
-                    >
-                      <BiMinus onClick={decreaseCounter} />
-                    </button>
-                    {/* <span>{quantity}</span> */}
-                    <div className="group inline-block relative">
-                      {stockVariantSelected ? (
+                {/**
+                 * oculta los botones para agregar unidades y agregar producto al carrito
+                 */}
+                {!fromOrder.isFromOrderDetail ? (
+                  <>
+                    <div className="grid md:flex items-center mb-2 ">
+                      <span className="text-grey mx-3">Cantidad:</span>
+                      <div className="bg-resene rounded-full md:m-3 w-[140px] flex items-center justify-center p-2 space-x-4">
                         <button
-                          type="button"
-                          className="bg-white rounded-full text-black px-4 py-2 transition duration-300 ease-in-out focus:outline-none focus:shadow-outline min-w-[60px]"
+                          aria-label="Disminuir cantidad de produto"
+                          className=" bg-grey-100 rounded-full text-white"
                         >
-                          {quantitySelected}
+                          <BiMinus onClick={decreaseCounter} />
                         </button>
-                      ) : (
-                        <button
-                          type="button"
-                          className="bg-white rounded-full text-black px-4 py-2 transition duration-300 ease-in-out focus:outline-none focus:shadow-outline min-w-[60px]"
-                        >
-                          {quantity}
-                        </button>
-                      )}
+                        {/* <span>{quantity}</span> */}
+                        <div className="group inline-block relative">
+                          {stockVariantSelected ? (
+                            <button
+                              type="button"
+                              className="bg-white rounded-full text-black px-4 py-2 transition duration-300 ease-in-out focus:outline-none focus:shadow-outline min-w-[60px]"
+                            >
+                              {quantitySelected}
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              className="bg-white rounded-full text-black px-4 py-2 transition duration-300 ease-in-out focus:outline-none focus:shadow-outline min-w-[60px]"
+                            >
+                              {quantity}
+                            </button>
+                          )}
 
-                      <ul className="absolute hidden text-grey-800 group-hover:block border border-grey-200 bg-white max-h-40 overflow-y-auto">
-                        {(stockVariantSelected
-                          ? [...Array(stockVariantSelected).keys()]
-                          : [...Array(variants[0].attributes.stock).keys()]
-                        ).map((index) => (
-                          <li
-                            key={index + 1}
-                            onClick={() => handleQuantityChange(index + 1)}
-                            className="cursor-pointer py-2 px-4 hover:bg-grey-200"
-                          >
-                            {index + 1}
-                          </li>
-                        ))}
-                      </ul>
+                          <ul className="absolute hidden text-grey-800 group-hover:block border border-grey-200 bg-white max-h-40 overflow-y-auto">
+                            {(stockVariantSelected
+                              ? [...Array(stockVariantSelected).keys()]
+                              : [...Array(variants[0].attributes.stock).keys()]
+                            ).map((index) => (
+                              <li
+                                key={index + 1}
+                                onClick={() => handleQuantityChange(index + 1)}
+                                className="cursor-pointer py-2 px-4 hover:bg-grey-200"
+                              >
+                                {index + 1}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <button
+                          aria-label="Aumentar cantidad de produto"
+                          className=" bg-grey-100 rounded-full  text-white"
+                        >
+                          <BiPlus onClick={increaseCounter} />
+                        </button>
+                      </div>
                     </div>
-                    <button
-                      aria-label="Aumentar cantidad de produto"
-                      className=" bg-grey-100 rounded-full  text-white"
+
+                    <div
+                      className={`${
+                        enableButton ? "bg-aquamarine" : "bg-grey-200"
+                      } rounded-sm p-2 md:p-3  md:mx-4"`}
                     >
-                      <BiPlus onClick={increaseCounter} />
-                    </button>
-                  </div>
-                </div>
-                <div
-                  className={`${
-                    enableButton ? "bg-aquamarine" : "bg-grey-200"
-                  } rounded-sm p-2 md:p-3  md:mx-4"`}
-                >
-                  <AddItemBtn
-                    variantData={data || null}
-                    quantityItem={
-                      quantitySelected !== null ? quantitySelected : quantity
-                    }
-                    variant={
-                      lastVariantSelected !== null
-                        ? lastVariantSelected
-                        : variantSelected?.variant?.data
-                        ? variantSelected.variant.data
-                        : variants[0]
-                    } //Se envía la ultima variante seleccionada
-                    features={
-                      featuresSelected !== null
-                        ? featuresSelected
-                        : variantSelected?.features
-                        ? variantSelected.features
-                        : {}
-                    }
-                    cartItems={cartSummary.items}
-                    cartQuantity={cartSummary.quantity}
-                    sessionId={cartSummary.sessionId}
-                    user={user}
-                    enableButton={enableButton}
-                    product={product}
-                  />
-                </div>
+                      <AddItemBtn
+                        variantData={data || null}
+                        quantityItem={
+                          quantitySelected !== null
+                            ? quantitySelected
+                            : quantity
+                        }
+                        variant={
+                          lastVariantSelected !== null
+                            ? lastVariantSelected
+                            : variantSelected?.variant?.data
+                            ? variantSelected.variant.data
+                            : variants[0]
+                        } //Se envía la ultima variante seleccionada
+                        features={
+                          featuresSelected !== null
+                            ? featuresSelected
+                            : variantSelected?.features
+                            ? variantSelected.features
+                            : {}
+                        }
+                        cartItems={cartSummary.items}
+                        cartQuantity={cartSummary.quantity}
+                        sessionId={cartSummary.sessionId}
+                        user={user}
+                        setEnableButton={setEnableButton}
+                        enableButton={enableButton}
+                        product={product}
+                      />
+                    </div>
+                  </>
+                ) : null}
               </div>
             </div>
           </section>

@@ -15,6 +15,9 @@ import useBrandsByAgeRange from "@/hooks/useBrandsByAgeRange";
 import { useRouter } from "next/navigation";
 import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 export default function FiltersResultsComponent({ querySearch }) {
+
+
+
   //querySearch me indica el tipo de filtro y el valor del filtro
   const [minPriceFilter, setMinPriceFilter] = useState(0);
   const [maxPriceFilter, setMaxPriceFilter] = useState(999999);
@@ -48,6 +51,9 @@ export default function FiltersResultsComponent({ querySearch }) {
   if (querySearch) {
     [filterType, filterValue] = querySearch.split("=");
   }
+
+
+
 
   //separo la query para saber que mostrar si es por rango de dedades o por categorias
 
@@ -150,6 +156,7 @@ export default function FiltersResultsComponent({ querySearch }) {
     setMaxPriceFilter(maxPrice);
     setSelectedBrands(selectedBrands);
 
+ 
     // Verificar y corregir valores nulos o indefinidos para minAge y maxAge
     if (minAge === null || minAge === undefined || minAge === "") {
       minAge = 0;

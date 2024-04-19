@@ -16,6 +16,7 @@ const ProductFilterContainer = ({ result, currentPage, setCurrentPage }) => {
       <div className="flex flex-wrap items-center justify-center w-full m-auto sm:p-4">
         {data
           ? data.map((item) => {
+            {console.log(item.attributes.variants)}
               return (
                 <FilterProductCard
                   key={item.id}

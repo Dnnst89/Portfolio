@@ -10,7 +10,9 @@ import GET_CART_ITEM_BY_ID from "@/src/graphQl/queries/getCartItemById";
 import Spinner from "@/components/Spinner";
 import toast from "react-hot-toast";
 import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
-export default function DetailComponent({ id, idVariant }) {
+
+
+export default function DetailComponent({ id, handleGoBack, handleGoToCategory}) {
   const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
     variables: { id: 13 },
   });
@@ -20,13 +22,21 @@ export default function DetailComponent({ id, idVariant }) {
   const [querySearch, setQuerySearch] = useState("");
   const [idVariantSelected, setIdVariantSelected] = useState();
   const [idItemSelected, setIdItemSelected] = useState();
+  
 
+
+ 
   //obtengo el url
   useEffect(() => {
     const queryString = window?.location?.search?.split("?")[1];
     setQuerySearch(queryString);
-  }, []);
 
+
+    
+  }, []);
+  
+  
+    
   //obtengo los valores de productId, idVariant y ItemQt que viene en la url
   useEffect(() => {
     if (querySearch) {
@@ -51,6 +61,7 @@ export default function DetailComponent({ id, idVariant }) {
       }
     }
   }, [querySearch]);
+
 
   const [errorToastShown, setErrorToastShown] = useState(false);
 
@@ -79,10 +90,13 @@ export default function DetailComponent({ id, idVariant }) {
         <div>
           {data && data.product && data.product.data ? (
             <>
+              
               <ProductDetail
                 product={data.product.data}
                 variantId={idVariantSelected || null}
                 ItemQt={idItemSelected || null}
+                handleGoBack = {handleGoBack}
+                handleGoToCategory={handleGoToCategory}
               />
               <ProductDetailSecondary
                 id={data.product.data.id}

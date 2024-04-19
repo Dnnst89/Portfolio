@@ -20,6 +20,7 @@ query GetVariantById($id: ID) {
         ageRange
         product{
           data{
+            id
             attributes{
               name
               cabys
