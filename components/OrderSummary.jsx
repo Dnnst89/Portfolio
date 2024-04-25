@@ -38,7 +38,7 @@ const OrderSummary = ({
 
           <div className="flex justify-between ">
             <p>Costo de envío:</p>
-            <p className="text-grey-100">${deliveryPayment}</p>
+            <p className="text-grey-100">${parseFloat(deliveryPayment).toLocaleString('en-US', { minimumFractionDigits: 0})}</p>
           </div>
           <div className="flex justify-between ">
             {taxes != 0 ? (

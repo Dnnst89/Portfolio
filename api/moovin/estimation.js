@@ -19,6 +19,8 @@ const requestEstimation = async (data) => {
     }
   );
   const estimation = await estimationResponsde.json();
+  console.log(estimation);
   return estimation;
+
 };
 export default requestEstimation;

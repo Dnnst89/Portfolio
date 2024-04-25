@@ -66,9 +66,6 @@ const createOrderData = (
   payment,
   deliveryInformation
 ) => {
-  console.log(items);
-
-  console.log("products", addProducts(items));
   const data = {
     idEstimation: payment,
     idDelivery: 2,

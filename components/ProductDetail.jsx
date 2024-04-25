@@ -107,7 +107,7 @@ function ProductDetail({
   const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
   const [variantSelected, setvariantSelected] = useState(); //guarda la variante que actualmente se seleccionó{features:{}, variant:{object}}
   const [price, setPrice] = useState(
-    variants.length > 0 ? variants[0].attributes.price.toFixed(2) : null
+    variants.length > 0 ? variants[0].attributes.price : null
   ); //precio inicial dado por primer variante
   const [enableButton, setEnableButton] = useState(variants.length <= 1);
   let variantItems = [];
@@ -627,7 +627,7 @@ function ProductDetail({
             {/* precio, cantidad de la variante */}
             <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between p-4">
               <span className="col-span-4 md:col-span-5 font-bold md:text-[30px]">
-                {currency} {price}
+                {currency} {parseFloat(price).toLocaleString('en-US',{maximumFractionDigits: 0 })}
               </span>
               <div className="col-span-8 mdd:col-span-7 md:flex md:flex-col items-end md:items-end p-3">
                 {/**

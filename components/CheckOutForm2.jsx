@@ -11,7 +11,7 @@ import Spinner from "./Spinner";
 import { useForm } from "react-hook-form";
 import requestEstimation from "@/api/moovin/estimation";
 import createEstimationMoovinRequest from "@/api/moovin/createEstimationMoovinRequest";
-import getTipoCambio from "@/api/cambio/getTipoCambio";
+// import getTipoCambio from "@/api/cambio/getTipoCambio";
 import GET_DELIVERY_CHOICES from "@/src/graphQl/queries/getDeliveryChoices";
 import GET_STORE_LOCATION from "@/src/graphQl/queries/getStoreLocation";
 import CREATE_EXCHANGE_RATE from "@/src/graphQl/queries/createExchangeRate";
@@ -140,10 +140,11 @@ export default function CheckOutForm2({
   const fetchTipoCambio = async () => {
     try {
       // // Llama a la función para obtener el tipo de cambio
-      const tipoCambioResultado = await getTipoCambio();
+      // TODO *******EXCHANGE RATE IS NOT USED AT THIS MOMENT****
+      // const tipoCambioResultado = await getTipoCambio();
 
-      // Almacena el tipo de cambio en el estado del componente
-      setTipoCambio(tipoCambioResultado.compra);
+      // // Almacena el tipo de cambio en el estado del componente
+      // setTipoCambio(tipoCambioResultado.compra);
 
       updateExchangeRate({
         //actualizo el registro en base de datos
@@ -159,16 +160,16 @@ export default function CheckOutForm2({
       setTipoCambio(exchangeRate?.exchangeRates?.data[0]?.attributes?.purchase);
     }
   };
-
-  useEffect(() => {
-    if (!load) {
-      try {
-        fetchTipoCambio();
-      } catch (error) {
-        console.log("error", error);
-      }
-    }
-  }, [load]);
+      // TODO *******EXCHANGE RATE IS NOT USED AT THIS MOMENT****
+  // useEffect(() => {
+  //   if (!load) {
+  //     try {
+  //       fetchTipoCambio();
+  //     } catch (error) {
+  //       console.log("error", error);
+  //     }
+  //   }
+  // }, [load]);
 
   /**
    * Hook
@@ -197,18 +198,17 @@ export default function CheckOutForm2({
         );
         if (routeOption) {
           //obtenemos el costo del delivery
-          const deliveryPrice = Math.ceil(routeOption.amount / tipoCambio);
+          const deliveryPrice = Math.ceil(routeOption.amount);
           /**
            * - Metodo llamado en FormOne
            * - Modifica el estado del deliveryPayment
            * - se envia unicamente cuando moovin tiene disponibilidad.
            */
 
-          handleDeliveryPayment(deliveryPrice.toFixed(2));
-          console.log("subTotal" ,subTotal);
+          handleDeliveryPayment(deliveryPrice);
           const suma = subTotal + taxes + deliveryPrice;
           const finalAmount = {
-            total: parseFloat(suma.toFixed(2)),
+            total: parseFloat(suma),
             subTotal: subTotal,
             taxes: taxes,
           };
@@ -248,7 +248,7 @@ export default function CheckOutForm2({
     } else if (data.deliveryMethod === SPU) {
       try {
         const finalAmount = {
-          total: parseFloat((subTotal + taxes).toFixed(2)),
+          total: subTotal + taxes,
           subTotal: subTotal,
           taxes: taxes,
         };
@@ -285,7 +285,7 @@ export default function CheckOutForm2({
 
       const finalPriceToPay = {
         // Total final le agregamos el costo del envio
-        total: parseFloat(totalToPay.toFixed(2)),
+        total: totalToPay,
         subTotal: subTotal,
         taxes: taxes,
       };
@@ -306,7 +306,7 @@ export default function CheckOutForm2({
               status: "Inicial",
               subTotal: subTotal,
               taxes: taxes,
-              total: parseFloat(totalToPay.toFixed(2)),
+              total: totalToPay,
               invoiceRequired: checkbox,
               deliveryPayment: parseFloat(LongDistancePrice),
               deliveryId: parseInt(CCR_ID),
@@ -340,7 +340,7 @@ export default function CheckOutForm2({
 
           const finalPriceToPay = {
             // Total final le agregamos el costo del envio
-            total: parseFloat(totalToPay.toFixed(2)),
+            total: totalToPay,
             subTotal: subTotal,
             taxes: taxes,
           };
@@ -351,7 +351,7 @@ export default function CheckOutForm2({
               status: "Inicial",
               subTotal: subTotal,
               taxes: taxes,
-              total: parseFloat(totalToPay.toFixed(2)),
+              total: totalToPay,
               invoiceRequired: checkbox,
               deliveryPayment: parseFloat(ShortDistancePrice),
               deliveryId: parseInt(CCR_ID),

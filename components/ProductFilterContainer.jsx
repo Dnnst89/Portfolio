@@ -23,7 +23,7 @@ const ProductFilterContainer = ({ result, currentPage, setCurrentPage }) => {
                   id={item.id}
                   name={item.attributes.name}
                   coverImage={item.attributes.coverImage.data}
-                  defaultPrice={item.attributes.defaultPrice.toFixed(2)}
+                  defaultPrice={item.attributes.defaultPrice}
                   brand={item.attributes.brand}
                   initialAge={
                     item?.attributes?.variants?.data[0]?.attributes?.initialAge

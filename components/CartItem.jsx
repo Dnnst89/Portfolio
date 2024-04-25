@@ -125,10 +125,12 @@ const CartItem = ({
         <section className="grid grid-cols-12 col-span-12 md:col-span-5 ">
           <div className="grid grid-cols-6 col-span-10 md:col-span-6 place-content-center ">
             <span className="text-xs mx-2 col-start-2 col-span-6">
-              Precio Unitario: ${price}
+              Precio Unitario: ₡{parseFloat(price).toLocaleString('en-US',{maximumFractionDigits: 0 })}
             </span>
             <span className="mx-2 font-bold col-start-2 col-span-6">
-              Precio Total: ${totalPrice}
+              {console.log(price)}
+              Precio Total: ₡{parseFloat(totalPrice).toLocaleString('en-US',{maximumFractionDigits: 0 })}
+            
             </span>
           </div>
           {/* Botón para eliminar el producto del carrito */}

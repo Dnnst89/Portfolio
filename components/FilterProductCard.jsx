@@ -67,7 +67,7 @@ const FilterProductCard = ({
       </div>
 
       <div className="bg-aquamarine text-xs md:text-lg rounded-b-[15px] font-bold flex justify-center absolute bottom-0 left-0 right-0 hover:underline text-white p-1">
-        $ {defaultPrice}
+      ₡ {parseFloat(defaultPrice).toLocaleString('en-US',{maximumFractionDigits: 0 })}
       </div>
     </div>
   );

@@ -35,7 +35,7 @@ const ProductContainer = ({
                     key={item.id}
                     id={item.id}
                     name={item.name}
-                    defaultPrice={item.defaultPrice.toFixed(2)}
+                    defaultPrice={parseFloat(item.defaultPrice).toLocaleString('en-US',{maximumFractionDigits: 0 })}
                     coverImage={item.coverImage}
                     brand={item.brand}
                   />

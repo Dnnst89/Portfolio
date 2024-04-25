@@ -133,7 +133,6 @@ function FormOne() {
    * @returns Set the payment amounts
    */
   const handlePaymentAmount = (data) => {
-    console.log("dataa", data);
     setAmount(data);
   };
   const handleProvince = (data, provincias) => {

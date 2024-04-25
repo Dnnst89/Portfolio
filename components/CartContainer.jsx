@@ -46,6 +46,7 @@ const CartContainer = () => {
               </div>
             );
           }
+
           return (
             <div key={item.id}>
               <CartItem
@@ -58,8 +59,8 @@ const CartContainer = () => {
                 brand={productAtt.brand}
                 description={productAtt.description}
                 color={variantAtt.color}
-                price={variantAtt.price.toFixed(2)}
-                totalPrice={item.totalItemPrice.toFixed(2)}
+                price={variantAtt.price}                
+                totalPrice={item.totalItemPrice}
                 stockVariant={variantAtt.stock}
                 ageRange={variantAtt.ageRange}
                 size={variantAtt.size}
