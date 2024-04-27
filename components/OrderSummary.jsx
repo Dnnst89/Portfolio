@@ -9,6 +9,7 @@ const OrderSummary = ({
   taxes,
   total,
   deliveryPayment,
+  currency,
 }) => {
   const cart = useSelector((state) => state.cart);
 
@@ -24,21 +25,40 @@ const OrderSummary = ({
           </div>
           <div className="flex justify-between ">
             <p>Subtotal:</p>
-            <p className="text-grey-100">${subTotal}</p>
+
+            <p className="text-grey-100">
+              {currency
+                ? `${currency} ${subTotal.toLocaleString("en-US", {
+                    maximumFractionDigits: 0,
+                  })}`
+                : `USD ${subTotal.toFixed(2)}`}
+            </p>
           </div>
 
           {taxes != 0 ? (
             <>
               <div className="flex justify-between ">
                 <p>Impuestos:</p>
-                <p className="text-grey-100">${taxes}</p>
+                <p className="text-grey-100">
+                  {currency
+                    ? `${currency} ${taxes.toLocaleString("en-US", {
+                        maximumFractionDigits: 0,
+                      })}`
+                    : `USD ${taxes.toFixed(2)}`}
+                </p>
               </div>
             </>
           ) : null}
 
           <div className="flex justify-between ">
             <p>Costo de envío:</p>
-            <p className="text-grey-100">${parseFloat(deliveryPayment).toLocaleString('en-US', { minimumFractionDigits: 0})}</p>
+            <p className="text-grey-100">
+              {currency
+                ? `${currency} ${deliveryPayment.toLocaleString("en-US", {
+                    maximumFractionDigits: 0,
+                  })}`
+                : `USD ${deliveryPayment.toFixed(2)}`}
+            </p>
           </div>
           <div className="flex justify-between ">
             {taxes != 0 ? (
@@ -48,7 +68,13 @@ const OrderSummary = ({
             ) : (
               <p>Costo Total:</p>
             )}
-            <p className="text-grey-100">${total}</p>
+            <p className="text-grey-100">
+              {currency
+                ? `${currency} ${total.toLocaleString("en-US", {
+                    maximumFractionDigits: 0,
+                  })}`
+                : `USD ${total.toFixed(2)}`}
+            </p>
           </div>
           <hr />
         </>

@@ -9,6 +9,9 @@ import { useQuery } from "@apollo/client";
 import PRODUCT_ID_CARTITEM_QUERY from "@/src/graphQl/queries/getProductIdFromCartItem";
 import DetailComponent from "./DetailComponent";
 import Link from "next/link";
+import useStoreInformation from "../helpers/getStoreInformation.js"
+import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
+
 const CartItem = ({
   cartItemId,
   idVariant,
@@ -28,6 +31,20 @@ const CartItem = ({
   loading,
   error,
 }) => {
+  const { data: storeInformation, error: storeInformationError } = useQuery(
+    GET_STORE_INFO,
+    {
+      variables: {
+        id: 1,
+      },
+    }
+  );
+//   const storeInformation = () => {
+//   useStoreInformation(1);
+// }
+  console.log(storeInformation);
+  const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
+
   const cart = useSelector((state) => state.cart);
   //Get the data of the product depend on the cartItemId
   const { data, loading: productIdLoading } = useQuery(
@@ -125,11 +142,11 @@ const CartItem = ({
         <section className="grid grid-cols-12 col-span-12 md:col-span-5 ">
           <div className="grid grid-cols-6 col-span-10 md:col-span-6 place-content-center ">
             <span className="text-xs mx-2 col-start-2 col-span-6">
-              Precio Unitario: ₡{parseFloat(price).toLocaleString('en-US',{maximumFractionDigits: 0 })}
+              Precio Unitario: {currency + " "}{parseFloat(price).toLocaleString('en-US',{maximumFractionDigits: 0 })}
             </span>
             <span className="mx-2 font-bold col-start-2 col-span-6">
-              {console.log(price)}
-              Precio Total: ₡{parseFloat(totalPrice).toLocaleString('en-US',{maximumFractionDigits: 0 })}
+            
+              Precio Total: {currency + " "}{parseFloat(totalPrice).toLocaleString('en-US',{maximumFractionDigits: 0 })}
             
             </span>
           </div>

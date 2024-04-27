@@ -9,6 +9,7 @@ import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { useQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 import { isTaxesLoading } from "@/redux/features/cart-slice";
+import useStoreInformation from "../helpers/getStoreInformation.js"
 
 const CartDetail = ({
   isCheckout = false,
@@ -28,6 +29,10 @@ const CartDetail = ({
       },
     }
   );
+  // const storeInformation = () => {
+  //   useStoreInformation(1);
+  // }
+  // console.log(storeInformation);
   const withoutDelivery = 0;
   const currency =
     storeInformation?.storeInformation?.data?.attributes?.currency;
@@ -181,8 +186,8 @@ const CartDetail = ({
           <div className="flex justify-between ">
             <p>Subtotal:</p>
             <p className="whitespace-nowrap">
+              {amounts.currencyType +" "}
               {parseFloat(subTotal).toLocaleString('en-US',{maximumFractionDigits: 0 })} &nbsp;
-              {amounts.currencyType}
             </p>
           </div>
 
@@ -204,8 +209,8 @@ const CartDetail = ({
                 <div className="flex justify-between ">
                   <p>Costo de envío:</p>
                   <p className="whitespace-nowrap">
-                    {parseFloat(deliveryPayment).toLocaleString('en-US', { minimumFractionDigits: 0})}{" "}
-                    {amounts.currencyType}
+                  {amounts.currencyType}{parseFloat(deliveryPayment).toLocaleString('en-US', { minimumFractionDigits: 0})}{" "}
+                    
                   </p>
                 </div>
               ) : (
@@ -222,7 +227,7 @@ const CartDetail = ({
                 <p className="flex justify-center">Costo Total:</p>
               )}
               <p className="flex justify-center whitespace-nowrap">
-                {parseFloat(amounts?.total).toLocaleString('en-US',{maximumFractionDigits: 0 })} {amounts.currencyType}
+              {amounts.currencyType +" "}{parseFloat(amounts?.total).toLocaleString('en-US',{maximumFractionDigits: 0 })}
               </p>
             </div>
           </>

@@ -1,6 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import algoliasearch from "algoliasearch";
+import { useQuery } from "@apollo/client";
+import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 
 function FilterByPrice({
   minAgeFilter,
@@ -13,6 +15,21 @@ function FilterByPrice({
   setMinPriceFilter,
   setMaxPriceFilter,
 }) {
+
+  const { data: storeInformation, error: storeInformationError } = useQuery(
+    GET_STORE_INFO,
+    {
+      variables: {
+        id: 1,
+      },
+    }
+  );
+//   const storeInformation = () => {
+//   useStoreInformation(1);
+// }
+  console.log(storeInformation);
+  const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
+
   const [minInputValue, setMinInputValue] = useState("");
   const [maxInputValue, setMaxInputValue] = useState("");
 
@@ -56,13 +73,13 @@ function FilterByPrice({
           checked={
             selectedPriceRange &&
             selectedPriceRange.minPrice === 0 &&
-            selectedPriceRange.maxPrice === 25
+            selectedPriceRange.maxPrice === 12000
           }
           onChange={() => {
             if (
               selectedPriceRange &&
               selectedPriceRange.minPrice === 0 &&
-              selectedPriceRange.maxPrice === 25
+              selectedPriceRange.maxPrice === 12000
             ) {
               // If the checkbox is already checked, uncheck it
               handleFilters(
@@ -74,7 +91,7 @@ function FilterByPrice({
               );
             } else {
               // If the checkbox is unchecked, check it with the specified range
-              handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, 0, 25);
+              handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, 0, 12000);
             }
           }}
         />
@@ -82,7 +99,7 @@ function FilterByPrice({
           className="ml-3 min-w-0 flex-1 text-gray-500"
           htmlFor="priceRange1"
         >
-          Hasta $25
+          Hasta {currency} 12000
         </label>
       </div>
       <div className="flex items-center">
@@ -92,14 +109,14 @@ function FilterByPrice({
           id="priceRange2"
           checked={
             selectedPriceRange &&
-            selectedPriceRange.minPrice === 25 &&
-            selectedPriceRange.maxPrice === 50
+            selectedPriceRange.minPrice === 12000 &&
+            selectedPriceRange.maxPrice === 25000
           }
           onChange={() => {
             if (
               selectedPriceRange &&
-              selectedPriceRange.minPrice === 25 &&
-              selectedPriceRange.maxPrice === 50
+              selectedPriceRange.minPrice === 12000 &&
+              selectedPriceRange.maxPrice === 25000
             ) {
               // If the checkbox is already checked, uncheck it
               handleFilters(
@@ -111,7 +128,7 @@ function FilterByPrice({
               );
             } else {
               // If the checkbox is unchecked, check it with the specified range
-              handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, 25, 50);
+              handleFilters(selectedBrands, minAgeFilter, maxAgeFilter, 12000, 25000);
             }
           }}
         />
@@ -119,7 +136,7 @@ function FilterByPrice({
           className="ml-3 min-w-0 flex-1 text-gray-500"
           htmlFor="priceRange2"
         >
-          $25 a $50
+          {currency} 12000 a 25000
         </label>
       </div>
       <div className="flex items-center">
@@ -129,14 +146,14 @@ function FilterByPrice({
           id="priceRange3"
           checked={
             selectedPriceRange &&
-            selectedPriceRange.minPrice === 50 &&
-            selectedPriceRange.maxPrice === 100
+            selectedPriceRange.minPrice === 25000 &&
+            selectedPriceRange.maxPrice === 50000
           }
           onChange={() => {
             if (
               selectedPriceRange &&
-              selectedPriceRange.minPrice === 50 &&
-              selectedPriceRange.maxPrice === 100
+              selectedPriceRange.minPrice === 25000 &&
+              selectedPriceRange.maxPrice === 50000
             ) {
               // If the checkbox is already checked, uncheck it
               handleFilters(
@@ -152,8 +169,8 @@ function FilterByPrice({
                 selectedBrands,
                 minAgeFilter,
                 maxAgeFilter,
-                50,
-                100
+                25000,
+                50000
               );
             }
           }}
@@ -162,7 +179,7 @@ function FilterByPrice({
           className="ml-3 min-w-0 flex-1 text-gray-500"
           htmlFor="priceRange3"
         >
-          $50 a $100
+          {currency} 25000 a 50000
         </label>
       </div>
       <div className="flex items-center">
@@ -172,14 +189,14 @@ function FilterByPrice({
           id="priceRange4"
           checked={
             selectedPriceRange &&
-            selectedPriceRange.minPrice === 100 &&
-            selectedPriceRange.maxPrice === 200
+            selectedPriceRange.minPrice === 50000 &&
+            selectedPriceRange.maxPrice === 100000
           }
           onChange={() => {
             if (
               selectedPriceRange &&
-              selectedPriceRange.minPrice === 100 &&
-              selectedPriceRange.maxPrice === 200
+              selectedPriceRange.minPrice === 50000 &&
+              selectedPriceRange.maxPrice === 100000
             ) {
               // If the checkbox is already checked, uncheck it
               handleFilters(
@@ -195,8 +212,8 @@ function FilterByPrice({
                 selectedBrands,
                 minAgeFilter,
                 maxAgeFilter,
-                100,
-                200
+                50000,
+                100000
               );
             }
           }}
@@ -205,7 +222,7 @@ function FilterByPrice({
           className="ml-3 min-w-0 flex-1 text-gray-500"
           htmlFor="priceRange4"
         >
-          $100 a $200
+          {currency} 50000 a 100000
         </label>
       </div>
       <div className="flex items-center">
@@ -215,13 +232,13 @@ function FilterByPrice({
           id="priceRange5"
           checked={
             selectedPriceRange &&
-            selectedPriceRange.minPrice === 200 &&
+            selectedPriceRange.minPrice === 100000 &&
             selectedPriceRange.maxPrice === 999999
           }
           onChange={() => {
             if (
               selectedPriceRange &&
-              selectedPriceRange.minPrice === 200 &&
+              selectedPriceRange.minPrice === 100000 &&
               selectedPriceRange.maxPrice === 999999
             ) {
               // If the checkbox is already checked, uncheck it
@@ -238,7 +255,7 @@ function FilterByPrice({
                 selectedBrands,
                 minAgeFilter,
                 maxAgeFilter,
-                200,
+                100000,
                 999999
               );
             }
@@ -248,7 +265,7 @@ function FilterByPrice({
           className="ml-3 min-w-0 flex-1 text-gray-500"
           htmlFor="priceRange5"
         >
-          $200 y más
+          {currency} 100000 y más
         </label>
       </div>
 
@@ -258,7 +275,7 @@ function FilterByPrice({
           <input
             id="min"
             type="text"
-            placeholder="$ min"
+            placeholder="min"
             className="w-20 mr-2"
             value={minInputValue}
             onChange={handleMinInputChange}
@@ -267,7 +284,7 @@ function FilterByPrice({
           <input
             id="max"
             type="text"
-            placeholder="$ max"
+            placeholder="max"
             className="w-20 mr-2"
             value={maxInputValue}
             onChange={handleMaxInputChange}

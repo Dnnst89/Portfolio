@@ -31,6 +31,7 @@ export default function OrderDetailSecondary({ orderId }) {
         price: 0,
         quantity: 0,
         images: [],
+        currency: "",
       },
     ],
   });
@@ -85,6 +86,7 @@ export default function OrderDetailSecondary({ orderId }) {
                   images: item.attributes.images?.data.map(
                     (img) => img.attributes.url
                   ),
+                  currency: item.attributes.currency,
                 };
               }
             ),
@@ -183,7 +185,13 @@ export default function OrderDetailSecondary({ orderId }) {
                           N° artículos: {item.quantity}{" "}
                         </h1>
                         <p className="sm:text-sm ">
-                          ${item.price * item.quantity}
+                          {item.currency
+                              ? `${item.currency} ${(
+                                  item.price * item.quantity
+                                ).toLocaleString('en-US',{maximumFractionDigits: 0 })}`
+                              : `USD ${(item.price * item.quantity).toFixed(
+                                  2
+                                )}`}
                         </p>
                       </div>
                     </div>
@@ -196,6 +204,7 @@ export default function OrderDetailSecondary({ orderId }) {
           }
         </div>
         <section className="lg:border-l-4 lg:border-lightblue  h-fit sm:border-0 col-span-12 md:col-span-5">
+          {console.log(orderData.orderItems[0].currency)}
           <OrderSummary
             detailTitle={"Detalle del pedido"}
             quantity={orderData.orderItems.reduce((accumulator, item) => {
@@ -205,6 +214,7 @@ export default function OrderDetailSecondary({ orderId }) {
             taxes={orderData.order.taxes}
             total={orderData.order.total}
             deliveryPayment={orderData.order.deliveryPayment}
+            currency = {orderData.orderItems[0].currency}
           />
           <CartProceedPayment textButton={"Ver dirección"} page={""} />
         </section>

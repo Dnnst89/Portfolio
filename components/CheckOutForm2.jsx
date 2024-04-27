@@ -198,7 +198,7 @@ export default function CheckOutForm2({
         );
         if (routeOption) {
           //obtenemos el costo del delivery
-          const deliveryPrice = Math.ceil(routeOption.amount);
+          const deliveryPrice = Math.ceil(routeOption.amount/1000)*1000;
           /**
            * - Metodo llamado en FormOne
            * - Modifica el estado del deliveryPayment

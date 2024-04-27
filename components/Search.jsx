@@ -9,9 +9,11 @@ import algoliasearch from "algoliasearch";
 import { Autocomplete } from "./Autocomplete";
 import SearchItem from "./SearchItem";
 import "@algolia/autocomplete-theme-classic";
+import { useQuery } from "@apollo/client";
+import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 
-const APPLICATION_ID = "6TQCC8J5LB";
-const SEARCH_API_KEY = "5a6490a15e1b2c9a3c53d7f8328c3f8d";
+const APPLICATION_ID = "DGPT78XWPO";
+const SEARCH_API_KEY = "b609a499a2da96e45f662b177464f423";
 const ALGOLIA_INDEX = "development_api::product.product";
 
 const searchClient = algoliasearch(APPLICATION_ID, SEARCH_API_KEY);
@@ -19,6 +21,15 @@ const index = searchClient.initIndex(ALGOLIA_INDEX);
 
 const Searchbar = () => {
 
+  const { data: storeInformation, error: storeInformationError } = useQuery(
+    GET_STORE_INFO,
+    {
+      variables: {
+        id: 1,
+      },
+    }
+  );
+  const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
   const onSubmit = (data) => {
     if (data.state.query.trim() != "") {
       const query = data.state.query
@@ -54,7 +65,7 @@ const Searchbar = () => {
             },
             templates: {
               item({ item, components }) {
-                return <SearchItem hit={item} components={components} />;
+                return <SearchItem hit={item} currency={currency} components={components} />;
               },
               footer() {
                 return (
