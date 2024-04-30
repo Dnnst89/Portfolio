@@ -81,7 +81,7 @@ function FilterContainer({
                         <h3 className="-mx-2 -my-3 flow-root">
                           <div
                             type="button"
-                            className="flex w-full items-center justify-between bg-resene px-2 py-3 text-gray-400 hover:text-gray-500"
+                            className="flex w-full items-center justify-between px-2 py-3 text-gray-400 hover:text-gray-500"
                             aria-controls="filter-section-mobile-0"
                             aria-expanded="false"
                           >

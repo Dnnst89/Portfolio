@@ -2,17 +2,11 @@ import { useQuery } from '@apollo/client';
 import GET_STORE_INFO from '@/src/graphQl/queries/getStoreInformation';
 
 const useStoreInformation = (id) => {
-  const { loading, error, data: storeInformation } = useQuery(GET_STORE_INFO, {
-    variables: {
-      id: id,
-    },
+  const { data, error, loading } = useQuery(GET_STORE_INFO, {
+    variables: { id },
   });
 
-  if (loading || error) {
-    return null; 
-  }
-
-  return storeInformation;
+  return { storeInformation: data, storeInformationError: error, loading };
 };
 
 export default useStoreInformation;

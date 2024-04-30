@@ -1,8 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import algoliasearch from "algoliasearch";
-import { useQuery } from "@apollo/client";
-import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
+import useStoreInformation from "../helpers/useStoreInformation";
 
 function FilterByPrice({
   minAgeFilter,
@@ -16,18 +15,7 @@ function FilterByPrice({
   setMaxPriceFilter,
 }) {
 
-  const { data: storeInformation, error: storeInformationError } = useQuery(
-    GET_STORE_INFO,
-    {
-      variables: {
-        id: 1,
-      },
-    }
-  );
-//   const storeInformation = () => {
-//   useStoreInformation(1);
-// }
-  console.log(storeInformation);
+  const { storeInformation, storeInformationError} = useStoreInformation(1);
   const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
 
   const [minInputValue, setMinInputValue] = useState("");
@@ -99,7 +87,7 @@ function FilterByPrice({
           className="ml-3 min-w-0 flex-1 text-gray-500"
           htmlFor="priceRange1"
         >
-          Hasta {currency} 12000
+          Hasta {currency} 12,000
         </label>
       </div>
       <div className="flex items-center">
@@ -136,7 +124,7 @@ function FilterByPrice({
           className="ml-3 min-w-0 flex-1 text-gray-500"
           htmlFor="priceRange2"
         >
-          {currency} 12000 a 25000
+          {currency} 12,000 a {currency} 25,000
         </label>
       </div>
       <div className="flex items-center">
@@ -179,7 +167,7 @@ function FilterByPrice({
           className="ml-3 min-w-0 flex-1 text-gray-500"
           htmlFor="priceRange3"
         >
-          {currency} 25000 a 50000
+          {currency} 25,000 a {currency} 50,000
         </label>
       </div>
       <div className="flex items-center">
@@ -222,7 +210,7 @@ function FilterByPrice({
           className="ml-3 min-w-0 flex-1 text-gray-500"
           htmlFor="priceRange4"
         >
-          {currency} 50000 a 100000
+          {currency} 50,000 a {currency} 100,000
         </label>
       </div>
       <div className="flex items-center">
@@ -265,7 +253,7 @@ function FilterByPrice({
           className="ml-3 min-w-0 flex-1 text-gray-500"
           htmlFor="priceRange5"
         >
-          {currency} 100000 y más
+          {currency} 100,000 y más
         </label>
       </div>
 

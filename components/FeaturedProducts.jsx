@@ -124,10 +124,10 @@ const FeaturedProducts = () => {
                       defaultPrice={item.attributes.defaultPrice}
                       brand={item.attributes.brand}
                       initialAge={
-                        item.attributes.variants.data[0].attributes.initialAge
+                        item?.attributes?.variants?.data[0]?.attributes?.initialAge
                       }
                       finalAge={
-                        item.attributes.variants.data[0].attributes.finalAge
+                        item?.attributes?.variants?.data[0]?.attributes?.finalAge
                       }
                     />
                   </SwiperSlide>

@@ -316,6 +316,13 @@ export default function ThankYouMessage() {
   const creatingOrderItems = async (orderId) => {
     // me trae los items del carrito y los almaceno en la orden
     const isoDate = new Date().toISOString();
+    const { data: storeInformation, error: storeInformationError } =
+      await getStoreInformation({
+        variables: {
+          id: 1,
+        },
+      });
+      const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
     if (orderId) {
       let orderItems = items.map(async (item) => {
         try {
@@ -333,6 +340,7 @@ export default function ThankYouMessage() {
               brand: variantAtt.product.data.attributes.brand,
               cabys: variantAtt.product.data.attributes.cabys,
               imagesIds: variantAtt.images.data.map((img) => img.id),
+              currency : currency,
             },
           });
 

@@ -2,25 +2,19 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { BiPlus, BiMinus, BiArrowBack } from "react-icons/bi";
-import Link from "next/link";
 import AddItemBtn from "./AddItemBtn";
-import ProductImage from "./ProductImage";
 import ProductFeatures from "./ProductFeatures";
 import useCartSummary from "@/hooks/useCartSummary";
 import useStorage from "@/hooks/useStorage";
-import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import ImageGallery from "react-image-gallery";
-import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { useQuery } from "@apollo/client";
+import useStoreInformation from "../helpers/useStoreInformation";
 import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
-import GET_CART_ITEM_BY_ID from "@/src/graphQl/queries/getCartItemById";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import { useSelector } from "react-redux";
 
 function ProductDetail({
@@ -112,21 +106,14 @@ function ProductDetail({
   const [enableButton, setEnableButton] = useState(variants.length <= 1);
   let variantItems = [];
 
-  const { data: storeInformation, error: storeInformationError } = useQuery(
-    GET_STORE_INFO,
-    {
-      variables: {
-        id: 1,
-      },
-    }
-  );
+  const { storeInformation, storeInformationError} = useStoreInformation(1);
+  const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
 
   useEffect(() => {
     if (data && data.variant && data.variant.data) setEnableButton(false);
   }, [data]);
 
-  const currency =
-    storeInformation?.storeInformation?.data?.attributes?.currency;
+  
   if (imageVariantSelected) {
     allImages.push(...imageVariantSelected); //muestra solo las imagenes de la variante(detalle del producto desde carrito)
   } else {

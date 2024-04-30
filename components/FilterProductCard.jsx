@@ -3,8 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import trackEvent from "../helpers/analytics.js";
-import { useQuery } from "@apollo/client";
-import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
+import useStoreInformation from "../helpers/useStoreInformation";
 
 const FilterProductCard = ({
   id,
@@ -29,20 +28,8 @@ const FilterProductCard = ({
     window.location.href = `/detail/?id=${id}`;
   };
 
-  const { data: storeInformation, error: storeInformationError } = useQuery(
-    GET_STORE_INFO,
-    {
-      variables: {
-        id: 1,
-      },
-    }
-  );
-//   const storeInformation = () => {
-//   useStoreInformation(1);
-// }
-  console.log(storeInformation);
-  const currency =
-    storeInformation?.storeInformation?.data?.attributes?.currency;
+  const { storeInformation, storeInformationError} = useStoreInformation(1);
+  const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
 
   return (
     <div

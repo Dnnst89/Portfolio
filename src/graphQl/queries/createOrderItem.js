@@ -10,6 +10,7 @@ mutation CreateOrderItem(
   $brand: String!,
   $cabys: Long!,
   $orderDetailId: ID!,
+  $currency: String!,
   $publishedAt: DateTime!,
   $features: JSON,
 ) {
@@ -24,6 +25,7 @@ mutation CreateOrderItem(
       cabys: $cabys,
       images: $imagesIds,
       order_details: [$orderDetailId],
+      currency: $currency
       publishedAt: $publishedAt,
     }
   ) {
@@ -37,6 +39,7 @@ mutation CreateOrderItem(
         cabys
         variantId
         features
+        currency
         images {
           data {
             id

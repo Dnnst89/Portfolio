@@ -1,16 +1,12 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from 'next/router';
-
 import { getAlgoliaResults } from "@algolia/autocomplete-js";
 import algoliasearch from "algoliasearch";
 import { Autocomplete } from "./Autocomplete";
 import SearchItem from "./SearchItem";
 import "@algolia/autocomplete-theme-classic";
-import { useQuery } from "@apollo/client";
-import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
+import useStoreInformation from "../helpers/useStoreInformation";
 
 const APPLICATION_ID = "DGPT78XWPO";
 const SEARCH_API_KEY = "b609a499a2da96e45f662b177464f423";
@@ -21,15 +17,9 @@ const index = searchClient.initIndex(ALGOLIA_INDEX);
 
 const Searchbar = () => {
 
-  const { data: storeInformation, error: storeInformationError } = useQuery(
-    GET_STORE_INFO,
-    {
-      variables: {
-        id: 1,
-      },
-    }
-  );
+  const { storeInformation, storeInformationError} = useStoreInformation(1);
   const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
+
   const onSubmit = (data) => {
     if (data.state.query.trim() != "") {
       const query = data.state.query

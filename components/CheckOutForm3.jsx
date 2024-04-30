@@ -10,13 +10,13 @@ import AlertNotAuth from "./AlertNotAuth";
 import Spinner from "./Spinner";
 import ReCAPTCHA from "react-google-recaptcha";
 import toast, { Toaster } from "react-hot-toast";
-import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { GET_USER_ADDRESS } from "@/src/graphQl/queries/getUserAddress";
 import { GET_PAYMENT_DETAIL } from "@/src/graphQl/queries/getPaymentDetail";
 import { validateID } from "@/helpers";
 import { createOrderData, orderMoovin } from "@/api/moovin/createOrder";
 import { UPDATE_PAYMENT_DELIVERY_ID } from "@/src/graphQl/queries/updatePaymentDeliveryId";
 import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
+import useStoreInformation from "../helpers/useStoreInformation";
 export default function CheckOutForm3({
   paymentDetailId,
   total,
@@ -57,16 +57,9 @@ export default function CheckOutForm3({
     variables: { userId: id },
   });
 
-  const { data: storeInformation, error: storeInformationError } = useQuery(
-    GET_STORE_INFO,
-    {
-      variables: {
-        id: 1,
-      },
-    }
-  );
-  const currency =
-    storeInformation?.storeInformation?.data?.attributes?.currency;
+  const { storeInformation, storeInformationError} = useStoreInformation(1);
+  const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
+
   const fetchOrderMoovin = async (orderNumber) => {
     try {
       const paymentUser = data;

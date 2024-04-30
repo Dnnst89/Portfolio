@@ -5,11 +5,9 @@ import Spinner from "./Spinner";
 import { getAccessToken, formatTaxData } from "@/helpers";
 import { useEffect, useState } from "react";
 import { facturationInstace } from "@/src/axios/algoliaIntance/config";
-import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
-import { useQuery } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 import { isTaxesLoading } from "@/redux/features/cart-slice";
-import useStoreInformation from "../helpers/getStoreInformation.js"
+import useStoreInformation from "../helpers/useStoreInformation";
 
 const CartDetail = ({
   isCheckout = false,
@@ -21,21 +19,12 @@ const CartDetail = ({
   const { user } = useStorage();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
-  const { data: storeInformation, error: storeInformationError } = useQuery(
-    GET_STORE_INFO,
-    {
-      variables: {
-        id: 1,
-      },
-    }
-  );
-  // const storeInformation = () => {
-  //   useStoreInformation(1);
-  // }
-  // console.log(storeInformation);
-  const withoutDelivery = 0;
+  const { storeInformation, storeInformationError, loading } =
+    useStoreInformation(1);
   const currency =
     storeInformation?.storeInformation?.data?.attributes?.currency;
+
+  const withoutDelivery = 0;
   const [amounts, setAmounts] = useState({
     total: 0,
     tax: 0,
@@ -75,7 +64,6 @@ const CartDetail = ({
         };
         setAmounts(newAmount);
       } else {
-        
         const newTotal = subTotal + amounts.tax;
         const newAmount = {
           tax: amounts.tax,
@@ -93,7 +81,7 @@ const CartDetail = ({
    * Verifica si la entidad requiere el calculo de impuesto.
    */
   useEffect(() => {
-    if (cart.showTaxes) {   
+    if (cart.showTaxes) {
       getTaxCost();
       console.log(amounts);
     } else {
@@ -149,22 +137,29 @@ const CartDetail = ({
       );
       setAmounts((prev) => ({
         ...prev,
-        total: parseFloat(data?.billSummary?.totalDocument).toLocaleString('en-US',{maximumFractionDigits: 0 }),
-        tax: parseFloat(data?.billSummary?.totalTax).toLocaleString('en-US',{maximumFractionDigits: 0 }),
+        total: parseFloat(data?.billSummary?.totalDocument).toLocaleString(
+          "en-US",
+          { maximumFractionDigits: 0 }
+        ),
+        tax: parseFloat(data?.billSummary?.totalTax).toLocaleString("en-US", {
+          maximumFractionDigits: 0,
+        }),
       }));
       alert(data?.billSummary?.totalDocument);
       if (isCheckout) {
         paymentAmount({
-        total: parseFloat(data?.billSummary?.totalDocument).toLocaleString('en-US',{maximumFractionDigits: 0 }),
-        tax: parseFloat(data?.billSummary?.totalTax).toLocaleString('en-US',{maximumFractionDigits: 0 }),
+          total: parseFloat(data?.billSummary?.totalDocument).toLocaleString(
+            "en-US",
+            { maximumFractionDigits: 0 }
+          ),
+          tax: parseFloat(data?.billSummary?.totalTax).toLocaleString("en-US", {
+            maximumFractionDigits: 0,
+          }),
           subTotal,
         });
       }
     } catch (error) {
-      console.error(
-        "La solicitud de impuestos ha presentado un error.",
-        error
-      );
+      console.error("La solicitud de impuestos ha presentado un error.", error);
     } finally {
       setAmounts((prev) => ({
         ...prev,
@@ -186,8 +181,11 @@ const CartDetail = ({
           <div className="flex justify-between ">
             <p>Subtotal:</p>
             <p className="whitespace-nowrap">
-              {amounts.currencyType +" "}
-              {parseFloat(subTotal).toLocaleString('en-US',{maximumFractionDigits: 0 })} &nbsp;
+              {amounts.currencyType ? amounts.currencyType + " " : ""}
+              {parseFloat(subTotal).toLocaleString("en-US", {
+                maximumFractionDigits: 0,
+              })}{" "}
+              &nbsp;
             </p>
           </div>
 
@@ -196,7 +194,10 @@ const CartDetail = ({
               <>
                 <p>Impuestos:</p>
                 <p className="whitespace-nowrap">
-                  {parseFloat(amounts.tax).toLocaleString('en-US',{maximumFractionDigits: 0 })} {amounts.currencyType}
+                  {parseFloat(amounts.tax).toLocaleString("en-US", {
+                    maximumFractionDigits: 0,
+                  })}{" "}
+                  {amounts.currencyType}
                 </p>
               </>
             ) : null}
@@ -209,8 +210,11 @@ const CartDetail = ({
                 <div className="flex justify-between ">
                   <p>Costo de envío:</p>
                   <p className="whitespace-nowrap">
-                  {amounts.currencyType}{parseFloat(deliveryPayment).toLocaleString('en-US', { minimumFractionDigits: 0})}{" "}
-                    
+                  {amounts.currencyType ? amounts.currencyType + " " : ""}
+              {parseFloat(deliveryPayment).toLocaleString("en-US", {
+                maximumFractionDigits: 0,
+              })}{" "}
+              &nbsp;
                   </p>
                 </div>
               ) : (
@@ -227,7 +231,11 @@ const CartDetail = ({
                 <p className="flex justify-center">Costo Total:</p>
               )}
               <p className="flex justify-center whitespace-nowrap">
-              {amounts.currencyType +" "}{parseFloat(amounts?.total).toLocaleString('en-US',{maximumFractionDigits: 0 })}
+              {amounts.currencyType ? amounts.currencyType + " " : ""}
+              {parseFloat(amounts?.total).toLocaleString("en-US", {
+                maximumFractionDigits: 0,
+              })}{" "}
+              &nbsp;
               </p>
             </div>
           </>
