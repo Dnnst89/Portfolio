@@ -21,6 +21,7 @@ import { useQuery } from "@apollo/client";
 import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
 import GET_CART_ITEM_BY_ID from "@/src/graphQl/queries/getCartItemById";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
+import { isFromOrderDetail } from "@/redux/features/fromOrder-slice";
 import { useSelector } from "react-redux";
 
 function ProductDetail({
@@ -40,6 +41,9 @@ function ProductDetail({
   let previousPage = "";
   let prevCategory = "";
   const fromOrder = useSelector((state) => state.fromOrder);
+  console.log(fromOrder);
+
+
   const { data, loading: productIdLoading } = useQuery(GET_VARIANT_BY_ID, {
     variables: {
       id: variantId,

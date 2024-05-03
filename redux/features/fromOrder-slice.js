@@ -1,25 +1,36 @@
 import { createSlice } from "@reduxjs/toolkit";
-let initialState;
-if (typeof window !== "undefined") {
-  const storedState = localStorage?.getItem("fromOrderState");
-  if (storedState) {
-    initialState = JSON.parse(storedState);
+// Function to get initial state from storage
+const getInitialStateFromStorage = () => {
+  // Attempt to get value from storage
+  if (typeof window !== "undefined") {
+    const storedState = localStorage?.getItem("fromOrderState");
+    // If no stored value, return default state
+    if (storedState) {
+      return { isFromOrderDetail: JSON.parse(storedState) };
+    }
   } else {
-    initialState = false;
+    return {
+      isFromOrderDetail: false,
+    };
   }
-} else {
-  initialState = false;
-}
+};
+const initialState = getInitialStateFromStorage()
+  ? getInitialStateFromStorage()
+  : false;
+
 export const fromOrder = createSlice({
   name: "fromOrder",
-  initialState: {initialState},
+  initialState,
   reducers: {
     updatefromOrder: (state, action) => {
+      // Update state with value provided in action
+      state.isFromOrderDetail = action.payload;
       // Save the new state to local storage
       if (typeof window !== "undefined") {
-        // Update state with value provided in action
-        state.isFromOrderDetail = action.payload;
-        localStorage.setItem("fromOrderState", JSON.stringify(state));
+        localStorage.setItem(
+          "fromOrderState",
+          JSON.stringify(state.isFromOrderDetail)
+        );
       }
     },
     isFromOrderDetail: (state, action) => {
@@ -27,9 +38,10 @@ export const fromOrder = createSlice({
       state.isFromOrderDetail = action.payload;
       // Save the new state to local storage
       if (typeof window !== "undefined") {
-        // Update state with value provided in action
-        state.isFromOrderDetail = action.payload;
-        localStorage.setItem("fromOrderState", JSON.stringify(state));
+        localStorage.setItem(
+          "fromOrderState",
+          JSON.stringify(state.isFromOrderDetail)
+        );
       }
     },
   },
