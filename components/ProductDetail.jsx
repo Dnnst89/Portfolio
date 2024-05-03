@@ -29,7 +29,7 @@ function ProductDetail({
   ItemQt,
   handleGoBack,
   handleGoToCategory,
-}) {
+}) {  
   const name = product?.attributes?.name;
   const brand = product?.attributes?.brand;
   const description = product?.attributes?.description;
@@ -40,7 +40,6 @@ function ProductDetail({
   let previousPage = "";
   let prevCategory = "";
   const fromOrder = useSelector((state) => state.fromOrder);
-
   const { data, loading: productIdLoading } = useQuery(GET_VARIANT_BY_ID, {
     variables: {
       id: variantId,
@@ -633,6 +632,7 @@ function ProductDetail({
                 {/**
                  * oculta los botones para agregar unidades y agregar producto al carrito
                  */}
+               
                 {!fromOrder.isFromOrderDetail ? (
                   <>
                     <div className="grid md:flex items-center mb-2 ">
