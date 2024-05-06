@@ -14,9 +14,11 @@ import useFilteredBrand from "@/hooks/useFilteredBrand";
 import useBrandsByAgeRange from "@/hooks/useBrandsByAgeRange";
 import { useRouter } from "next/navigation";
 import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
+import useFromOrderState from "../helpers/useFromOrderState";
 export default function FiltersResultsComponent({ querySearch }) {
-
-
+  
+  const { getFromOrderState, updateFromOrder } = useFromOrderState();
+  updateFromOrder(false);
 
   //querySearch me indica el tipo de filtro y el valor del filtro
   const [minPriceFilter, setMinPriceFilter] = useState(0);
@@ -51,9 +53,6 @@ export default function FiltersResultsComponent({ querySearch }) {
   if (querySearch) {
     [filterType, filterValue] = querySearch.split("=");
   }
-
-
-
 
   //separo la query para saber que mostrar si es por rango de dedades o por categorias
 

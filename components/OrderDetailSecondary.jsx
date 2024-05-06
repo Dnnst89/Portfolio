@@ -1,19 +1,16 @@
 "use client";
 import Image from "next/image";
 import test from "../app/assets/heart.png";
-import CartDetail from "@/components/CartDetail";
 import CartProceedPayment from "@/components/CartProceedPayment";
 import { useEffect, useState } from "react";
 import GET_ORDER_ITEMS_BY_ORDER_ID from "@/src/graphQl/queries/getOrderItemsByOrderId";
 import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
 import { useLazyQuery } from "@apollo/client";
-import OrderDetailSummary from "./OrderSummary";
 import Spinner from "./Spinner";
 import OrderSummary from "./OrderSummary";
-import { Carousel } from "react-responsive-carousel";
 import CarouselImages from "./CarouselImages";
-import { isFromOrderDetail } from "@/redux/features/fromOrder-slice";
-import { useDispatch, useSelector } from "react-redux";
+import  useFromOrderState  from '../helpers/useFromOrderState';
+
 export default function OrderDetailSecondary({ orderId }) {
   const [orderData, setOrderData] = useState({
     order: {
@@ -41,10 +38,10 @@ export default function OrderDetailSecondary({ orderId }) {
   const [orderVariant, setOrderVariant] = useState();
   const [productId, setProductId] = useState();
   let orderVariantTest = "";
-  const dispatch = useDispatch();
-  dispatch(isFromOrderDetail(true));
-  // let productId = "";
 
+  const { getFromOrderState, updateFromOrder } = useFromOrderState();
+  updateFromOrder(true);
+ 
   useEffect(() => {
     const getOrdersItemsInfo = async (id) => {
       try {

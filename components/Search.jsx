@@ -18,7 +18,7 @@ const searchClient = algoliasearch(APPLICATION_ID, SEARCH_API_KEY);
 const index = searchClient.initIndex(ALGOLIA_INDEX);
 
 const Searchbar = () => {
-
+  
   const onSubmit = (data) => {
     if (data.state.query.trim() != "") {
       const query = data.state.query

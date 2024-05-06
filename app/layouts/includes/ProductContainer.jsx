@@ -4,6 +4,7 @@ import ProductCard from "../../../components/ProductCard";
 import Pagination from "@/components/Pagination";
 import { useEffect, useState } from "react";
 import Spinner from "@/components/Spinner";
+
 const ProductContainer = ({
   result,
   hitsPerPage,
@@ -12,7 +13,7 @@ const ProductContainer = ({
   currentPage,
   setCurrentPage,
   loading,
-  setLoading
+  setLoading,
 }) => {
   const { hits } = result;
 
@@ -30,17 +31,17 @@ const ProductContainer = ({
           <div className="flex flex-wrap items-center justify-center w-full m-auto sm:p-4">
             {hits
               ? hits.map((item) => {
-                return (
-                  <ProductCard
-                    key={item.id}
-                    id={item.id}
-                    name={item.name}
-                    defaultPrice={item.defaultPrice.toFixed(2)}
-                    coverImage={item.coverImage}
-                    brand={item.brand}
-                  />
-                );
-              })
+                  return (
+                    <ProductCard
+                      key={item.id}
+                      id={item.id}
+                      name={item.name}
+                      defaultPrice={item.defaultPrice.toFixed(2)}
+                      coverImage={item.coverImage}
+                      brand={item.brand}
+                    />
+                  );
+                })
               : null}
           </div>
           <Pagination

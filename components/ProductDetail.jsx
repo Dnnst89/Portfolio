@@ -2,15 +2,11 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { BiPlus, BiMinus, BiArrowBack } from "react-icons/bi";
-import Link from "next/link";
 import AddItemBtn from "./AddItemBtn";
-import ProductImage from "./ProductImage";
 import ProductFeatures from "./ProductFeatures";
 import useCartSummary from "@/hooks/useCartSummary";
 import useStorage from "@/hooks/useStorage";
-import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -19,10 +15,8 @@ import ImageGallery from "react-image-gallery";
 import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { useQuery } from "@apollo/client";
 import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
-import GET_CART_ITEM_BY_ID from "@/src/graphQl/queries/getCartItemById";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
-import { isFromOrderDetail } from "@/redux/features/fromOrder-slice";
-import { useSelector } from "react-redux";
+import  useFromOrderState  from '../helpers/useFromOrderState';
+
 
 function ProductDetail({
   product,
@@ -40,9 +34,9 @@ function ProductDetail({
   const categoryData = product?.attributes?.categories?.data;
   let previousPage = "";
   let prevCategory = "";
-  const fromOrder = useSelector((state) => state.fromOrder);
-  console.log(fromOrder);
 
+  const { getFromOrderState, updateFromOrder } = useFromOrderState();
+  const isFromOrderDetail = JSON.parse(getFromOrderState());
 
   const { data, loading: productIdLoading } = useQuery(GET_VARIANT_BY_ID, {
     variables: {
@@ -324,7 +318,7 @@ function ProductDetail({
               {variantId ? (
                 <a onClick={() => handleGoBack()} className="self-start mb-3">
                   <button className="flex justify-start text-lightblue bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
-                    {fromOrder.isFromOrderDetail
+                    {isFromOrderDetail
                       ? "Regresar al detalle del pedido"
                       : "Regresar al carrito"}
                   </button>
@@ -637,7 +631,7 @@ function ProductDetail({
                  * oculta los botones para agregar unidades y agregar producto al carrito
                  */}
                
-                {!fromOrder.isFromOrderDetail ? (
+                {!isFromOrderDetail ? (
                   <>
                     <div className="grid md:flex items-center mb-2 ">
                       <span className="text-grey mx-3">Cantidad:</span>
