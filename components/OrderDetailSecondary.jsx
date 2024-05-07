@@ -39,6 +39,8 @@ export default function OrderDetailSecondary({ orderId }) {
   const [productId, setProductId] = useState();
   let orderVariantTest = "";
 
+  const [productIdMap, setProductIdMap] = useState({});
+
   const { getFromOrderState, updateFromOrder } = useFromOrderState();
   updateFromOrder(true);
  
@@ -99,25 +101,35 @@ export default function OrderDetailSecondary({ orderId }) {
 
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId]);
+ 
+  
   useEffect(() => {
     const fetchData = async (variantId) => {
       try {
-        const { data } = await getProductByVariant({
-          variables: {
-            id: variantId,
-          },
-        });
-        const productId = data?.variant?.data?.attributes?.product?.data?.id;
-        setProductId(productId);
+        // Verifica si ya has obtenido el productId para este variantId
+        if (!productIdMap[variantId]) {
+          const { data } = await getProductByVariant({
+            variables: {
+              id: variantId,
+            },
+          });
+          const productId = data?.variant?.data?.attributes?.product?.data?.id;
+          setProductIdMap((prevMap) => ({
+            ...prevMap,
+            [variantId]: productId,
+          }));
+        }
       } catch (error) {
         console.error("Error fetching product data:", error);
       }
     };
-
-    orderData.orderItems.forEach((item) => {
-      fetchData(item.idVariant);
-    });
-  }, [orderData.orderItems]);
+    // Assuming orderData is populated and the variantId is available in orderItems
+    if (orderData.orderItems.length > 0) {
+      orderData.orderItems.forEach((item) => {
+        fetchData(item.idVariant);
+      });
+    }
+  }, [orderData]);
 
   if (loading) {
     return (
@@ -153,7 +165,7 @@ export default function OrderDetailSecondary({ orderId }) {
                             widthImg={100}
                             heightImg={100}
                             classStyle={"rounded-2xl col-span-4"}
-                            productId={productId}
+                            productId={productIdMap[item.idVariant]}
                             idVariant={item.idVariant}
                             ItemQt={item.quantity}
                           />
