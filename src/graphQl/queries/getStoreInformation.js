@@ -17,8 +17,8 @@ const GET_STORE_INFO = gql`
           district
           otherSigns
           email
-          neighborhood
           currency
+          neighborhood          
           phoneNumber
           latitude
           longitude
