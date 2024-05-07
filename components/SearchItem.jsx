@@ -36,7 +36,7 @@ function SearchItem({ hit, currency, components }) {
           </div>
 
           <div className="flex-1">
-          <p className="text-xl font-semibold text-right">{currency}{parseFloat(hit.defaultPrice).toLocaleString('en-US',{maximumFractionDigits: 0 })}</p>
+          <p className="text-xl font-semibold text-right">{currency} {parseFloat(hit.defaultPrice).toLocaleString('en-US',{maximumFractionDigits: 0 })}</p>
           </div>
 
         </div>
