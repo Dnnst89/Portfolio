@@ -35,10 +35,6 @@ export default function OrderDetailSecondary({ orderId }) {
   const [loading, setLoading] = useState(false);
   const [getOrderItems] = useLazyQuery(GET_ORDER_ITEMS_BY_ORDER_ID);
   const [getProductByVariant] = useLazyQuery(GET_VARIANT_BY_ID);
-  const [orderVariant, setOrderVariant] = useState();
-  const [productId, setProductId] = useState();
-  let orderVariantTest = "";
-
   const [productIdMap, setProductIdMap] = useState({});
 
   const { getFromOrderState, updateFromOrder } = useFromOrderState();
@@ -106,7 +102,7 @@ export default function OrderDetailSecondary({ orderId }) {
   useEffect(() => {
     const fetchData = async (variantId) => {
       try {
-        // Verifica si ya has obtenido el productId para este variantId
+        // Check if you have already obtained the productId for this variantId
         if (!productIdMap[variantId]) {
           const { data } = await getProductByVariant({
             variables: {
