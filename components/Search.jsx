@@ -18,7 +18,7 @@ const index = searchClient.initIndex(ALGOLIA_INDEX);
 const Searchbar = () => {
 
   const { storeInformation, storeInformationError} = useStoreInformation(1);
-  const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
+  const currencySymbol = storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
 
   const onSubmit = (data) => {
     if (data.state.query.trim() != "") {
@@ -55,7 +55,7 @@ const Searchbar = () => {
             },
             templates: {
               item({ item, components }) {
-                return <SearchItem hit={item} currency={currency} components={components} />;
+                return <SearchItem hit={item} currencySymbol={currencySymbol} components={components} />;
               },
               footer() {
                 return (

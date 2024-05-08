@@ -107,7 +107,7 @@ function ProductDetail({
   let variantItems = [];
 
   const { storeInformation, storeInformationError} = useStoreInformation(1);
-  const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
+  const currencySymbol = storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
 
   useEffect(() => {
     if (data && data.variant && data.variant.data) setEnableButton(false);
@@ -614,7 +614,7 @@ function ProductDetail({
             {/* precio, cantidad de la variante */}
             <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between p-4">
               <span className="col-span-4 md:col-span-5 font-bold md:text-[30px]">
-                {currency} {parseFloat(price).toLocaleString('en-US',{maximumFractionDigits: 0 })}
+                {currencySymbol} {parseFloat(price).toLocaleString('en-US',{maximumFractionDigits: 0 })}
               </span>
               <div className="col-span-8 mdd:col-span-7 md:flex md:flex-col items-end md:items-end p-3">
                 {/**

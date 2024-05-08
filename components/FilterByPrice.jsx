@@ -16,7 +16,7 @@ function FilterByPrice({
 }) {
 
   const { storeInformation, storeInformationError} = useStoreInformation(1);
-  const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
+  const currencySymbol = storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
 
   const [minInputValue, setMinInputValue] = useState("");
   const [maxInputValue, setMaxInputValue] = useState("");
@@ -87,7 +87,7 @@ function FilterByPrice({
           className="ml-3 min-w-0 flex-1 text-gray-500"
           htmlFor="priceRange1"
         >
-          Hasta {currency} 12,000
+          Hasta {currencySymbol} 12,000
         </label>
       </div>
       <div className="flex items-center">
@@ -124,7 +124,7 @@ function FilterByPrice({
           className="ml-3 min-w-0 flex-1 text-gray-500"
           htmlFor="priceRange2"
         >
-          {currency} 12,000 a {currency} 25,000
+          {currencySymbol} 12,000 a {currencySymbol} 25,000
         </label>
       </div>
       <div className="flex items-center">
@@ -167,7 +167,7 @@ function FilterByPrice({
           className="ml-3 min-w-0 flex-1 text-gray-500"
           htmlFor="priceRange3"
         >
-          {currency} 25,000 a {currency} 50,000
+          {currencySymbol} 25,000 a {currencySymbol} 50,000
         </label>
       </div>
       <div className="flex items-center">
@@ -210,7 +210,7 @@ function FilterByPrice({
           className="ml-3 min-w-0 flex-1 text-gray-500"
           htmlFor="priceRange4"
         >
-          {currency} 50,000 a {currency} 100,000
+          {currencySymbol} 50,000 a {currencySymbol} 100,000
         </label>
       </div>
       <div className="flex items-center">
@@ -253,7 +253,7 @@ function FilterByPrice({
           className="ml-3 min-w-0 flex-1 text-gray-500"
           htmlFor="priceRange5"
         >
-          {currency} 100,000 y más
+          {currencySymbol} 100,000 y más
         </label>
       </div>
 

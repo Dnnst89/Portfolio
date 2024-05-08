@@ -29,7 +29,7 @@ const FilterProductCard = ({
   };
 
   const { storeInformation, storeInformationError} = useStoreInformation(1);
-  const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
+  const currencySymbol = storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
 
   return (
     <div
@@ -71,7 +71,7 @@ const FilterProductCard = ({
       </div>
 
       <div className="bg-aquamarine text-xs md:text-lg rounded-b-[15px] font-bold flex justify-center absolute bottom-0 left-0 right-0 hover:underline text-white p-1">
-      {currency} {parseFloat(defaultPrice).toLocaleString('en-US',{maximumFractionDigits: 0 })}
+      {currencySymbol} {parseFloat(defaultPrice).toLocaleString('en-US',{maximumFractionDigits: 0 })}
       </div>
     </div>
   );

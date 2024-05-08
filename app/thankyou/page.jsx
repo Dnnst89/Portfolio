@@ -294,7 +294,7 @@ export default function ThankYouMessage() {
       );
 
     const currency =
-      storeInformation?.storeInformation?.data?.attributes?.currency;
+      storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
 
     const { data: emailInfo, error: sendEmailError } = await createOrderEmail({
       variables: {
@@ -322,7 +322,8 @@ export default function ThankYouMessage() {
           id: 1,
         },
       });
-      const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
+      const currency = storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
+      console.log(currency);
     if (orderId) {
       let orderItems = items.map(async (item) => {
         try {

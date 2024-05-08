@@ -19,6 +19,7 @@ const GET_STORE_INFO = gql`
           email
           neighborhood
           currency
+          currencySymbol
           phoneNumber
           latitude
           longitude

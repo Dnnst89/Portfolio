@@ -21,14 +21,14 @@ const CartDetail = ({
   const cart = useSelector((state) => state.cart);
   const { storeInformation, storeInformationError, loading } =
     useStoreInformation(1);
-  const currency =
-    storeInformation?.storeInformation?.data?.attributes?.currency;
+  const currencySymbol =
+    storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
 
   const withoutDelivery = 0;
   const [amounts, setAmounts] = useState({
     total: 0,
     tax: 0,
-    currencyType: currency,
+    currencyType: currencySymbol,
     loading: false,
   });
   const {
@@ -50,7 +50,7 @@ const CartDetail = ({
           tax: amounts.tax,
           total: parseFloat(newTotal),
           loading: false,
-          currencyType: currency,
+          currencyType: currencySymbol,
         };
 
         setAmounts(newAmount);
@@ -60,7 +60,7 @@ const CartDetail = ({
           tax: amounts.tax,
           total: parseFloat(newTotal),
           loading: false,
-          currencyType: currency,
+          currencyType: currencySymbol,
         };
         setAmounts(newAmount);
       } else {
@@ -69,7 +69,7 @@ const CartDetail = ({
           tax: amounts.tax,
           total: newTotal,
           loading: false,
-          currencyType: currency,
+          currencyType: currencySymbol,
         };
         setAmounts(newAmount);
       }
@@ -93,7 +93,7 @@ const CartDetail = ({
         tax: 0,
         total: subTotal,
         loading: false,
-        currencyType: currency,
+        currencyType: currencySymbol,
       });
       /**
        * si esta en el checkout, se envía la data al método handlePaymentAmount(formOne),

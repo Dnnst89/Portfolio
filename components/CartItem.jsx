@@ -30,8 +30,9 @@ const CartItem = ({
   loading,
   error,
 }) => {
-  const { storeInformation, storeInformationError} = useStoreInformation(1);
-  const currency = storeInformation?.storeInformation?.data?.attributes?.currency;
+  const { storeInformation, storeInformationError } = useStoreInformation(1);
+  const currencySymbol =
+    storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
 
   const cart = useSelector((state) => state.cart);
   //Get the data of the product depend on the cartItemId
@@ -133,14 +134,17 @@ const CartItem = ({
               Precio Unitario:
             </span>
             <span class="text-xs mx-2 col-start-2 col-span-6">
-              {currency + " "}
+              {currencySymbol + " "}
               {parseFloat(price).toLocaleString("en-US", {
                 maximumFractionDigits: 0,
               })}
             </span>
 
             <span className="mx-2 font-bold col-start-2 col-span-6">
-              Precio Total: {currency + " "}
+              Precio Total:{" "}
+            </span>
+            <span class="text-xs font-bold mx-2 col-start-2 col-span-6">
+              {currencySymbol + " "}
               {parseFloat(totalPrice).toLocaleString("en-US", {
                 maximumFractionDigits: 0,
               })}
