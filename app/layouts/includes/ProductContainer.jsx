@@ -35,7 +35,9 @@ const ProductContainer = ({
                     key={item.id}
                     id={item.id}
                     name={item.name}
-                    defaultPrice={parseFloat(item.defaultPrice).toLocaleString('en-US',{maximumFractionDigits: 0 })}
+                    defaultPrice={parseFloat(item.defaultPrice).toLocaleString("en-US", {
+                      minimumFractionDigits: 2,  
+                      })}
                     coverImage={item.coverImage}
                     brand={item.brand}
                   />

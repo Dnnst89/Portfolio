@@ -29,7 +29,7 @@ const OrderSummary = ({
             <p className="text-grey-100">
               {currency
                 ? `${currency} ${subTotal.toLocaleString("en-US", {
-                    maximumFractionDigits: 0,
+                  minimumFractionDigits: 2,
                   })}`
                 : `USD ${subTotal.toFixed(2)}`}
             </p>
@@ -42,7 +42,7 @@ const OrderSummary = ({
                 <p className="text-grey-100">
                   {currency
                     ? `${currency} ${taxes.toLocaleString("en-US", {
-                        maximumFractionDigits: 0,
+                        minimumFractionDigits: 2,
                       })}`
                     : `USD ${taxes.toFixed(2)}`}
                 </p>
@@ -55,7 +55,7 @@ const OrderSummary = ({
             <p className="text-grey-100">
               {currency
                 ? `${currency} ${deliveryPayment.toLocaleString("en-US", {
-                    maximumFractionDigits: 0,
+                    minimumFractionDigits: 2,
                   })}`
                 : `USD ${deliveryPayment.toFixed(2)}`}
             </p>
@@ -71,7 +71,7 @@ const OrderSummary = ({
             <p className="text-grey-100">
               {currency
                 ? `${currency} ${total.toLocaleString("en-US", {
-                    maximumFractionDigits: 0,
+                    minimumFractionDigits: 2,
                   })}`
                 : `USD ${total.toFixed(2)}`}
             </p>

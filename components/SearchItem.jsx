@@ -36,7 +36,9 @@ function SearchItem({ hit, currencySymbol, components }) {
           </div>
 
           <div className="flex-1">
-          <p className="text-xl font-semibold text-right">{currencySymbol} {parseFloat(hit.defaultPrice).toLocaleString('en-US',{maximumFractionDigits: 0 })}</p>
+          <p className="text-xl font-semibold text-right">{currencySymbol} {parseFloat(hit.defaultPrice).toLocaleString("en-US", {
+              minimumFractionDigits: 2,  
+              })}</p>
           </div>
 
         </div>

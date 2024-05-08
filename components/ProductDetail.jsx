@@ -614,7 +614,9 @@ function ProductDetail({
             {/* precio, cantidad de la variante */}
             <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between p-4">
               <span className="col-span-4 md:col-span-5 font-bold md:text-[30px]">
-                {currencySymbol} {parseFloat(price).toLocaleString('en-US',{maximumFractionDigits: 0 })}
+                {currencySymbol} {parseFloat(price).toLocaleString("en-US", {
+              minimumFractionDigits: 2,  
+              })}
               </span>
               <div className="col-span-8 mdd:col-span-7 md:flex md:flex-col items-end md:items-end p-3">
                 {/**

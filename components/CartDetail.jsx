@@ -139,10 +139,10 @@ const CartDetail = ({
         ...prev,
         total: parseFloat(data?.billSummary?.totalDocument).toLocaleString(
           "en-US",
-          { maximumFractionDigits: 0 }
+          { minimumFractionDigits: 2,maximumFractionDigits: 0 }
         ),
         tax: parseFloat(data?.billSummary?.totalTax).toLocaleString("en-US", {
-          maximumFractionDigits: 0,
+          minimumFractionDigits: 2,  
         }),
       }));
       alert(data?.billSummary?.totalDocument);
@@ -150,10 +150,10 @@ const CartDetail = ({
         paymentAmount({
           total: parseFloat(data?.billSummary?.totalDocument).toLocaleString(
             "en-US",
-            { maximumFractionDigits: 0 }
+            {minimumFractionDigits: 2, maximumFractionDigits: 0 }
           ),
           tax: parseFloat(data?.billSummary?.totalTax).toLocaleString("en-US", {
-            maximumFractionDigits: 0,
+            minimumFractionDigits: 2, 
           }),
           subTotal,
         });
@@ -183,7 +183,7 @@ const CartDetail = ({
             <p className="whitespace-nowrap">
               {amounts.currencyType ? amounts.currencyType + " " : ""}
               {parseFloat(subTotal).toLocaleString("en-US", {
-                maximumFractionDigits: 0,
+               minimumFractionDigits: 2, 
               })}{" "}
               &nbsp;
             </p>
@@ -195,7 +195,7 @@ const CartDetail = ({
                 <p>Impuestos:</p>
                 <p className="whitespace-nowrap">
                   {parseFloat(amounts.tax).toLocaleString("en-US", {
-                    maximumFractionDigits: 0,
+                  minimumFractionDigits: 2,  
                   })}{" "}
                   {amounts.currencyType}
                 </p>
@@ -212,7 +212,7 @@ const CartDetail = ({
                   <p className="whitespace-nowrap">
                   {amounts.currencyType ? amounts.currencyType + " " : ""}
               {parseFloat(deliveryPayment).toLocaleString("en-US", {
-                maximumFractionDigits: 0,
+              minimumFractionDigits: 2,  
               })}{" "}
               &nbsp;
                   </p>
@@ -233,7 +233,7 @@ const CartDetail = ({
               <p className="flex justify-center whitespace-nowrap">
               {amounts.currencyType ? amounts.currencyType + " " : ""}
               {parseFloat(amounts?.total).toLocaleString("en-US", {
-                maximumFractionDigits: 0,
+              minimumFractionDigits: 2,  
               })}{" "}
               &nbsp;
               </p>

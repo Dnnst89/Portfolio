@@ -136,7 +136,7 @@ const CartItem = ({
             <span class="text-xs mx-2 col-start-2 col-span-6">
               {currencySymbol + " "}
               {parseFloat(price).toLocaleString("en-US", {
-                maximumFractionDigits: 0,
+              minimumFractionDigits: 2,  
               })}
             </span>
 
@@ -146,7 +146,7 @@ const CartItem = ({
             <span class="text-xs font-bold mx-2 col-start-2 col-span-6">
               {currencySymbol + " "}
               {parseFloat(totalPrice).toLocaleString("en-US", {
-                maximumFractionDigits: 0,
+              minimumFractionDigits: 2,  
               })}
             </span>
           </div>

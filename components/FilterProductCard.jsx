@@ -71,7 +71,9 @@ const FilterProductCard = ({
       </div>
 
       <div className="bg-aquamarine text-xs md:text-lg rounded-b-[15px] font-bold flex justify-center absolute bottom-0 left-0 right-0 hover:underline text-white p-1">
-      {currencySymbol} {parseFloat(defaultPrice).toLocaleString('en-US',{maximumFractionDigits: 0 })}
+      {currencySymbol} {parseFloat(defaultPrice).toLocaleString("en-US", {
+              minimumFractionDigits: 2,  
+              })}
       </div>
     </div>
   );
