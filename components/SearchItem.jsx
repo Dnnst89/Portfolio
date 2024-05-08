@@ -2,8 +2,12 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import trackEvent from '../helpers/analytics.js';
+import useFromOrderState from "../helpers/useFromOrderState";
 
 function SearchItem({ hit, currencySymbol, components }) {
+
+  const { getFromOrderState, updateFromOrder } = useFromOrderState();
+  updateFromOrder(false);
 
   // when users clicks a product on the search component, then trackEvent is called for Google Analytics traking products.
   const handleClick = () => {

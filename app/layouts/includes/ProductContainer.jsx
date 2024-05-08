@@ -4,6 +4,7 @@ import ProductCard from "../../../components/ProductCard";
 import Pagination from "@/components/Pagination";
 import { useEffect, useState } from "react";
 import Spinner from "@/components/Spinner";
+
 const ProductContainer = ({
   result,
   hitsPerPage,
@@ -12,7 +13,7 @@ const ProductContainer = ({
   currentPage,
   setCurrentPage,
   loading,
-  setLoading
+  setLoading,
 }) => {
   const { hits } = result;
 

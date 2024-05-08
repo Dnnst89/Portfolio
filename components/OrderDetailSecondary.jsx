@@ -1,19 +1,16 @@
 "use client";
 import Image from "next/image";
 import test from "../app/assets/heart.png";
-import CartDetail from "@/components/CartDetail";
 import CartProceedPayment from "@/components/CartProceedPayment";
 import { useEffect, useState } from "react";
 import GET_ORDER_ITEMS_BY_ORDER_ID from "@/src/graphQl/queries/getOrderItemsByOrderId";
 import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
 import { useLazyQuery } from "@apollo/client";
-import OrderDetailSummary from "./OrderSummary";
 import Spinner from "./Spinner";
 import OrderSummary from "./OrderSummary";
-import { Carousel } from "react-responsive-carousel";
 import CarouselImages from "./CarouselImages";
-import { isFromOrderDetail } from "@/redux/features/fromOrder-slice";
-import { useDispatch, useSelector } from "react-redux";
+import  useFromOrderState  from '../helpers/useFromOrderState';
+
 export default function OrderDetailSecondary({ orderId }) {
   const [orderData, setOrderData] = useState({
     order: {
@@ -39,13 +36,11 @@ export default function OrderDetailSecondary({ orderId }) {
   const [loading, setLoading] = useState(false);
   const [getOrderItems] = useLazyQuery(GET_ORDER_ITEMS_BY_ORDER_ID);
   const [getProductByVariant] = useLazyQuery(GET_VARIANT_BY_ID);
-  const [orderVariant, setOrderVariant] = useState();
-  const [productId, setProductId] = useState();
-  let orderVariantTest = "";
-  const dispatch = useDispatch();
-  dispatch(isFromOrderDetail(true));
-  // let productId = "";
+  const [productIdMap, setProductIdMap] = useState({});
 
+  const { getFromOrderState, updateFromOrder } = useFromOrderState();
+  updateFromOrder(true);
+ 
   useEffect(() => {
     const getOrdersItemsInfo = async (id) => {
       try {
@@ -104,25 +99,35 @@ export default function OrderDetailSecondary({ orderId }) {
 
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId]);
+ 
+  
   useEffect(() => {
     const fetchData = async (variantId) => {
       try {
-        const { data } = await getProductByVariant({
-          variables: {
-            id: variantId,
-          },
-        });
-        const productId = data?.variant?.data?.attributes?.product?.data?.id;
-        setProductId(productId);
+        // Check if you have already obtained the productId for this variantId
+        if (!productIdMap[variantId]) {
+          const { data } = await getProductByVariant({
+            variables: {
+              id: variantId,
+            },
+          });
+          const productId = data?.variant?.data?.attributes?.product?.data?.id;
+          setProductIdMap((prevMap) => ({
+            ...prevMap,
+            [variantId]: productId,
+          }));
+        }
       } catch (error) {
         console.error("Error fetching product data:", error);
       }
     };
-
-    orderData.orderItems.forEach((item) => {
-      fetchData(item.idVariant);
-    });
-  }, [orderData.orderItems]);
+    // Assuming orderData is populated and the variantId is available in orderItems
+    if (orderData.orderItems.length > 0) {
+      orderData.orderItems.forEach((item) => {
+        fetchData(item.idVariant);
+      });
+    }
+  }, [orderData]);
 
   if (loading) {
     return (
@@ -158,7 +163,7 @@ export default function OrderDetailSecondary({ orderId }) {
                             widthImg={100}
                             heightImg={100}
                             classStyle={"rounded-2xl col-span-4"}
-                            productId={productId}
+                            productId={productIdMap[item.idVariant]}
                             idVariant={item.idVariant}
                             ItemQt={item.quantity}
                           />

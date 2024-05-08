@@ -15,7 +15,8 @@ import ImageGallery from "react-image-gallery";
 import { useQuery } from "@apollo/client";
 import useStoreInformation from "../helpers/useStoreInformation";
 import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
-import { useSelector } from "react-redux";
+import  useFromOrderState  from '../helpers/useFromOrderState';
+
 
 function ProductDetail({
   product,
@@ -23,7 +24,7 @@ function ProductDetail({
   ItemQt,
   handleGoBack,
   handleGoToCategory,
-}) {
+}) {  
   const name = product?.attributes?.name;
   const brand = product?.attributes?.brand;
   const description = product?.attributes?.description;
@@ -33,7 +34,9 @@ function ProductDetail({
   const categoryData = product?.attributes?.categories?.data;
   let previousPage = "";
   let prevCategory = "";
-  const fromOrder = useSelector((state) => state.fromOrder);
+
+  const { getFromOrderState, updateFromOrder } = useFromOrderState();
+  const isFromOrderDetail = JSON.parse(getFromOrderState());
 
   const { data, loading: productIdLoading } = useQuery(GET_VARIANT_BY_ID, {
     variables: {
@@ -308,7 +311,7 @@ function ProductDetail({
               {variantId ? (
                 <a onClick={() => handleGoBack()} className="self-start mb-3">
                   <button className="flex justify-start text-lightblue bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
-                    {fromOrder.isFromOrderDetail
+                    {isFromOrderDetail
                       ? "Regresar al detalle del pedido"
                       : "Regresar al carrito"}
                   </button>
@@ -349,7 +352,7 @@ function ProductDetail({
           {/* Sección con los detalles del producto*/}
           <section
             aria-label="Detalles del producto"
-            className="mb-10 col-span-12 md:col-span-6 m-auto m-0"
+            className="mb-40 col-span-12 md:col-span-6 m-auto m-0"
           >
             <div className="grid grid-cols-12 md:col-span-12">
               <div className="col-span-12 md:col-span-6">
@@ -622,7 +625,8 @@ function ProductDetail({
                 {/**
                  * oculta los botones para agregar unidades y agregar producto al carrito
                  */}
-                {!fromOrder.isFromOrderDetail ? (
+               
+                {!isFromOrderDetail ? (
                   <>
                     <div className="grid md:flex items-center mb-2 ">
                       <span className="text-grey mx-3">Cantidad:</span>

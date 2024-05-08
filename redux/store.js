@@ -4,7 +4,6 @@ import cartReducer from "./features/cart-slice";
 import registryForm from "./features/registryForm";
 import orderReducer from "./features/orderSlice";
 import selectedGiftsReducer from "./features/selectedGiftsSlice";
-import fromOrderReducer from "./features/fromOrder-slice";
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +12,5 @@ export const store = configureStore({
     registryForm,
     order: orderReducer,
     selectedGifts: selectedGiftsReducer,
-    fromOrder: fromOrderReducer,
   },
 });

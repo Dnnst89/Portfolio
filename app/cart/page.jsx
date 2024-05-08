@@ -1,18 +1,17 @@
 "use client";
-import ShoppingCart from "@/components/ShoppingCart";
 import FeaturedProducts from "@/components/FeaturedProducts";
-
 import CartContainer from "@/components/CartContainer";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import useProtectionRoute from "@/hooks/useProtectionRoute";
-import { isFromOrderDetail } from "@/redux/features/fromOrder-slice";
-import { useDispatch, useSelector } from "react-redux";
+import  useFromOrderState  from '../../helpers/useFromOrderState';
 import "../../styles/fonts.css";
 
 export default function CartView() {
-  const dispatch = useDispatch();
-  dispatch(isFromOrderDetail(false));
+
+  const { getFromOrderState, updateFromOrder } = useFromOrderState();
+  updateFromOrder(false);
+  console.log(getFromOrderState());
+
+
   useProtectionRoute();
   return (
     <div className="bg-floralwhite flex flex-wrap max-w-screen-xl m-auto justify-center">
