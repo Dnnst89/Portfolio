@@ -211,7 +211,7 @@ export default function OrderDetailSecondary({ orderId }) {
           }
         </div>
         <section className="lg:border-l-4 lg:border-lightblue  h-fit sm:border-0 col-span-12 md:col-span-5">
-          {console.log(orderData.orderItems[0].currency)}
+       
           <OrderSummary
             detailTitle={"Detalle del pedido"}
             quantity={orderData.orderItems.reduce((accumulator, item) => {

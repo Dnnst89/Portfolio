@@ -162,7 +162,7 @@ export default function CheckOutForm3({
                 ? "http://localhost:3000/thankyou/"
                 : `${process.env.NEXT_PUBLIC_APP_URL}/thankyou/`,
             key: process.env.NEXT_PUBLIC_TILOPAY_API_KEY,
-            amount: parseFloat(total.toFixed(0)),
+            amount: parseFloat(total),
             currency: currency,
             billToFirstName: firstName,
             billToLastName: lastName,
@@ -181,7 +181,6 @@ export default function CheckOutForm3({
             returnData: "dXNlcl9pZD0xMg==",
             hashVersion: "V2",
           });
-          console.log(formData);
           fetchOrderMoovin(orderNumber);
         } else {
           // Handle the case where the specific order is not found

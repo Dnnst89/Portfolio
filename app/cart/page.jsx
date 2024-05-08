@@ -9,9 +9,7 @@ export default function CartView() {
 
   const { getFromOrderState, updateFromOrder } = useFromOrderState();
   updateFromOrder(false);
-  console.log(getFromOrderState());
-
-
+ 
   useProtectionRoute();
   return (
     <div className="bg-floralwhite flex flex-wrap max-w-screen-xl m-auto justify-center">

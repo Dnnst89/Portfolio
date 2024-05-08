@@ -18,7 +18,6 @@ const useInvoiceDetail = () => {
       body
     );
     const prob = data.serviceDetail.lineDetails[0].taxes;
-    console.log("sss", prob);
   };
 
   const getInvoice = async () => {

@@ -14,7 +14,6 @@ const CantonDropdown = ({
   });
 
   useEffect(() => {
-    console.log("sdfad", defaultValue);
     const cantonDefault = defaultValue || "";
     setSelectedCanton({
       id: cantonDefault,

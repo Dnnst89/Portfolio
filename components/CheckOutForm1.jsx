@@ -282,9 +282,7 @@ const CheckOutForm1 = () => {
                                   name="firstName"
                                   id="firstName"
                                   className="form-input"
-                                  onChange={(e) => {
-                                    console.log(e);
-                                    console.log(userInformation);
+                                  onChange={(e) => {                                    
                                     setUserInformation({
                                       ...userInformation,
                                       firstName: e.target.value,

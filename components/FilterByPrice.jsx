@@ -263,7 +263,7 @@ function FilterByPrice({
           <input
             id="min"
             type="text"
-            placeholder="min"
+            placeholder={currencySymbol+" min"}
             className="w-20 mr-2"
             value={minInputValue}
             onChange={handleMinInputChange}
@@ -272,7 +272,7 @@ function FilterByPrice({
           <input
             id="max"
             type="text"
-            placeholder="max"
+            placeholder={currencySymbol+" max"}
             className="w-20 mr-2"
             value={maxInputValue}
             onChange={handleMaxInputChange}

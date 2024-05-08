@@ -59,7 +59,7 @@ function RelatedItems({ categories, productId }) {
       <section className="flex flex-wrap max-w-screen-xl m-auto justify-center">
         {aux
           ? aux.map((item) => {
-            {console.log(item.attributes)}
+          
               return (
                 <FilterProductCard
                   key={item.id}

@@ -83,7 +83,7 @@ const CartDetail = ({
   useEffect(() => {
     if (cart.showTaxes) {
       getTaxCost();
-      console.log(amounts);
+      
     } else {
       /**
        * Se envía la data necesaria al setAmounts para mostrar

@@ -28,7 +28,6 @@ const ProvinciaDropdown = ({
     });
 
     onProvinciaChange(value);
-    // console.log("provinciasdfadf", selectedProvince);
     handleProvince(value, provincias);
   };
 

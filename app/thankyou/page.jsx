@@ -323,7 +323,7 @@ export default function ThankYouMessage() {
         },
       });
       const currency = storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
-      console.log(currency);
+     
     if (orderId) {
       let orderItems = items.map(async (item) => {
         try {
@@ -453,7 +453,7 @@ export default function ThankYouMessage() {
               body
             );
 
-            console.log("feeResult", feeResult);
+            
             const billSummary = feeResult?.data?.billSummary;
             const imp = feeResult?.data?.serviceDetail?.lineDetails;
 
@@ -559,12 +559,12 @@ export default function ThankYouMessage() {
                 },
                 returnCompleteAnswer: true,
               };
-              console.log("factura", bodyInvoice);
+            
               const InvoiceResult = await facturationInstace.post(
                 `document/electronic-invoice?access_token=${token}`,
                 bodyInvoice
               );
-              console.log("resultado factura", InvoiceResult);
+             
               try {
                 const isoDate = new Date().toISOString();
                 const resulta = await getStoreInformation({
