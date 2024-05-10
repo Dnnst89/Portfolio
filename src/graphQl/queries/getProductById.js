@@ -34,6 +34,7 @@ const ProductDetailQuery = gql`
                 size
                 sku
                 price
+                localCurrencyPrice
                 weight {
                   id
                   unitWeight

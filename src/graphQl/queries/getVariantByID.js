@@ -11,6 +11,7 @@ query GetVariantById($id: ID) {
         size
         sku
         price
+        localCurrencyPrice
         weight {
           id
           unitWeight

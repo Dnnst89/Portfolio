@@ -49,7 +49,7 @@ function ProductDetail({
   const skuSelected = data?.variant?.data?.attributes?.sku;
   const stockVariantSelected = data?.variant?.data?.attributes?.stock;
   const ageRangeVariantSelected = data?.variant?.data?.attributes?.ageRange;
-  const priceVariantSelected = data?.variant?.data?.attributes?.price;
+  const localCurrencyPriceVariantSelected = data?.variant?.data?.attributes?.localCurrencyPrice;
   const sizeVariantSelected = data?.variant?.data?.attributes?.size;
   const imageVariantSelected = data?.variant?.data?.attributes?.images?.data;
   const colorTypeParentVariant =
@@ -103,9 +103,11 @@ function ProductDetail({
   const { user } = useStorage();
   const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
   const [variantSelected, setvariantSelected] = useState(); //guarda la variante que actualmente se seleccionó{features:{}, variant:{object}}
-  const [price, setPrice] = useState(
-    variants.length > 0 ? variants[0].attributes.price : null
+  const [localCurrencyPrice, setLocalCurrencyPrice] = useState(
+    variants.length > 0 ? variants[0]?.attributes?.localCurrencyPrice : null
+    
   ); //precio inicial dado por primer variante
+  console.log("variants", variants);
   const [enableButton, setEnableButton] = useState(variants.length <= 1);
   let variantItems = [];
 
@@ -278,7 +280,7 @@ function ProductDetail({
         })()
       : (() => {
           variantItems = variants.map((variant) => {
-            const { size, price, color, stock, ageRange } = variant.attributes;
+            const { size, localCurrencyPrice, color, stock, ageRange } = variant.attributes;
             return { size, ageRange };
           });
         })();
@@ -407,7 +409,7 @@ function ProductDetail({
                 setImages={setImages}
                 setImage={setImage}
                 setvariantSelected={setvariantSelected}
-                setPrice={setPrice}
+                setLocalCurrencyPrice={setLocalCurrencyPrice}
                 setEnableButton={setEnableButton}
               />
             </section>
@@ -617,7 +619,7 @@ function ProductDetail({
             {/* precio, cantidad de la variante */}
             <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between p-4">
               <span className="col-span-4 md:col-span-5 font-bold md:text-[30px]">
-                {currencySymbol} {parseFloat(price).toLocaleString("en-US", {
+                {currencySymbol} {parseFloat(localCurrencyPrice).toLocaleString("en-US", {
               minimumFractionDigits: 2,  
               })}
               </span>
