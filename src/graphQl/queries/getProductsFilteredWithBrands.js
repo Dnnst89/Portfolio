@@ -18,7 +18,7 @@ query GetProductsFiltered(
                 variants: {
                     finalAge: { gte: $initialAge }
                     initialAge: { lte: $finalAge }
-                    price: { gte: $minPrice, lte: $maxPrice }
+                    localCurrencyPrice: { gte: $minPrice, lte: $maxPrice }
                 }
             }
             brand: { in: $brands }
@@ -36,7 +36,7 @@ query GetProductsFiltered(
                         attributes {
                             initialAge
                             finalAge
-                            price
+                            localCurrencyPrice
                         }
                     }
                 }

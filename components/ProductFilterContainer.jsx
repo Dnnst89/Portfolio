@@ -16,14 +16,14 @@ const ProductFilterContainer = ({ result, currentPage, setCurrentPage }) => {
       <div className="flex flex-wrap items-center justify-center w-full m-auto sm:p-4">
         {data
           ? data.map((item) => {
-           
+           {console.log("item",item)}
               return (
                 <FilterProductCard
                   key={item.id}
                   id={item.id}
                   name={item.attributes.name}
                   coverImage={item.attributes.coverImage.data}
-                  defaultPrice={item.attributes.defaultPrice}
+                  localCurrencyPrice={item?.attributes?.variants?.data[0]?.attributes?.localCurrencyPrice}
                   brand={item.attributes.brand}
                   initialAge={
                     item?.attributes?.variants?.data[0]?.attributes?.initialAge

@@ -115,13 +115,14 @@ const FeaturedProducts = () => {
                   key={item.id}
                   style={{ pointerEvents: "auto" }}
                 >
+                  {console.log("item",item)}
                   <SwiperSlide key={item.id}>
                     <FilterProductCard
                       key={item.id}
                       id={item.id}
                       name={item.attributes.name}
                       coverImage={item.attributes.coverImage.data}
-                      defaultPrice={item.attributes.defaultPrice}
+                      localCurrencyPrice={item?.attributes?.variants?.data[0]?.attributes?.localCurrencyPrice}
                       brand={item.attributes.brand}
                       initialAge={
                         item?.attributes?.variants?.data[0]?.attributes?.initialAge

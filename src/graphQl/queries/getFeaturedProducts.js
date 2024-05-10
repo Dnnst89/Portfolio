@@ -25,6 +25,7 @@ const GET_FEATURED_PRODUCTS = gql`
                 sku
                 size
                 price
+                localCurrencyPrice
                 ageRange
                 stock
                 initialAge
