@@ -109,7 +109,7 @@ const AddItemBtn = ({
               shoppingSessionId: sessionId,
               publishedAt: fechaFormateada,
               variantNumber: parseInt(variant?.id),
-              price: variantAtt.price,
+              price: variantAtt.localCurrencyPrice,
               name: product?.attributes?.name,
               brand: product?.attributes?.brand,
               cabys: product?.attributes?.cabys,

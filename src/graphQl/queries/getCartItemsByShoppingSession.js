@@ -57,6 +57,7 @@ query GetCartItemsBySession(
                 }
               }
               price
+              localCurrencyPrice
               ageRange
               size
               weight {

@@ -18,7 +18,7 @@ const CartItem = ({
   brand,
   description,
   color,
-  price,
+  localCurrencyPrice,
   totalPrice,
   ageRange,
   size,
@@ -135,7 +135,7 @@ const CartItem = ({
             </span>
             <span class="text-xs mx-2 col-start-2 col-span-6">
               {currencySymbol + " "}
-              {parseFloat(price).toLocaleString("en-US", {
+              {parseFloat(localCurrencyPrice).toLocaleString("en-US", {
               minimumFractionDigits: 2,  
               })}
             </span>
