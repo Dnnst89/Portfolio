@@ -117,17 +117,17 @@ const FeaturedProducts = () => {
                 >
                   <SwiperSlide key={item.id}>
                     <FilterProductCard
-                      key={item.id}
-                      id={item.id}
-                      name={item.attributes.name}
-                      coverImage={item.attributes.coverImage.data}
-                      defaultPrice={item.attributes.defaultPrice.toFixed(2)}
-                      brand={item.attributes.brand}
+                      key={item?.id}
+                      id={item?.id}
+                      name={item?.attributes?.name}
+                      coverImage={item?.attributes?.coverImage?.data}
+                      defaultPrice={item?.attributes?.defaultPrice?.toFixed(2)}
+                      brand={item?.attributes?.brand}
                       initialAge={
-                        item.attributes.variants.data[0].attributes.initialAge
+                        item?.attributes?.variants?.data[0]?.attributes?.initialAge
                       }
                       finalAge={
-                        item.attributes.variants.data[0].attributes.finalAge
+                        item?.attributes?.variants?.data[0]?.attributes?.finalAge
                       }
                     />
                   </SwiperSlide>
