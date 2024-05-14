@@ -76,6 +76,9 @@ const FeaturedProducts = () => {
 
   return (
     <>
+    <div className="flex justify-center pt-10">
+            <h1>Top de productos</h1>
+          </div>
       <Swiper
         loop={true}
         modules={[EffectCoverflow, Navigation, A11y]}
@@ -116,7 +119,7 @@ const FeaturedProducts = () => {
                   style={{ pointerEvents: "auto" }}
                 >
                   <SwiperSlide key={item.id}>
-                    <FilterProductCard
+                    {/* <FilterProductCard
                       key={item?.id}
                       id={item?.id}
                       name={item?.attributes?.name}
@@ -129,7 +132,7 @@ const FeaturedProducts = () => {
                       finalAge={
                         item?.attributes?.variants?.data[0]?.attributes?.finalAge
                       }
-                    />
+                    /> */}
                   </SwiperSlide>
                 </div>
               );
