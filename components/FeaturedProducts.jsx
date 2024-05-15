@@ -1,6 +1,5 @@
 import FilterProductCard from "./FilterProductCard";
-//GQL
-import { useQuery, useLazyQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import GET_FEATURED_PRODUCTS from "@/src/graphQl/queries/getFeaturedProducts";
 import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -9,8 +8,7 @@ import "swiper/css/effect-coverflow";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import toast, { Toaster } from "react-hot-toast";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
+import { Navigation, A11y } from "swiper/modules";
 import { EffectCoverflow } from "swiper/modules";
 import { useEffect, useState } from "react";
 
@@ -21,7 +19,7 @@ const FeaturedProducts = () => {
   const [GetErrorInfo] = useLazyQuery(GET_ERROR_INFO, {
     variables: { id: 1 },
   });
-  const [aux, setAux] = useState([]);
+  const [auxProducts, setAuxProducts] = useState([]);
 
   const getTopProducts = async () => {
     try {
@@ -31,8 +29,8 @@ const FeaturedProducts = () => {
       if (error) {
         const message = errorMessage?.errorInformation?.data?.attributes?.error_message;
         setShowError(true);
-        const errorMsg = message || "Lo sentimos, ha ocurrido un error al cargar los datos";
-        toast.error(errorMsg, { autoClose: 5000 });
+        // const errorMsg = message || "Lo sentimos, ha ocurrido un error al cargar los datos";
+        // toast.error(errorMsg, { autoClose: 5000 });
         setLoading(false);
         return;
       }
@@ -47,11 +45,11 @@ const FeaturedProducts = () => {
       }
 
       const selectedProducts = myArray.slice(0, 20).map(index => data?.products?.data[index]);
-      setAux(selectedProducts);
+      setAuxProducts(selectedProducts);
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      toast.error("An unexpected error occurred.", { autoClose: 5000 });
+      // toast.error("Lo sentimos, ha ocurrido un error al cargar los datos", { autoClose: 5000 });
     }
   };
 
@@ -59,11 +57,11 @@ const FeaturedProducts = () => {
     getTopProducts();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
+  if (loading || auxProducts.length ==0) {
+    return <div></div>; // to not show the Top de productos title when is loading or there're not records in DB
   }
 
-  if (showError) {
+  if (showError) {// to not show the Top de productos title when there's an error in the GRAPHQL request.
     return '';
   }
 
@@ -98,7 +96,7 @@ const FeaturedProducts = () => {
           },
         }}
       >
-        {aux.map((item) => (
+        {auxProducts.map((item) => (
           <div role="link" key={item.id} style={{ pointerEvents: "auto" }}>
             <SwiperSlide key={item.id}>
               <FilterProductCard
