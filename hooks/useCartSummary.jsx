@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { useMemo, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import GET_CART_ITEMS_LIST_SHOPPING_SESSION from "@/src/graphQl/queries/getCartItemsByShoppingSession";
 import GET_ACTIVE_SHOPPING_SESSION_BY_USER from "@/src/graphQl/queries/getActiveShoppingSessionByUser";
 import { useLazyQuery } from "@apollo/client";
@@ -40,7 +40,7 @@ const useCartSummary = ({ userId }) => {
         });
         if (data) {
           // Si existe la sesión
-          const shoppingSession = data.shoppingSessions.data[0];
+          const shoppingSession = data?.shoppingSessions?.data[0];
           let currentPage = 1;
           let pageSize = 25;
           let fetchedData = []; // para ir juntando los datos de cada pagina
@@ -50,7 +50,7 @@ const useCartSummary = ({ userId }) => {
             //debemos hacer un primer recorrido ya que el dato paeCount de la consulta es incierto
             const { data: cartItemsData } = await getCart({
               variables: {
-                shoppingSessionId: shoppingSession.id,
+                shoppingSessionId: shoppingSession?.id,
                 page: currentPage,
                 pageSize,
               },
@@ -65,14 +65,14 @@ const useCartSummary = ({ userId }) => {
           // Ahora,se procesa los datos recopilados
           const total = fetchedData.reduce((accumulator, item) => {
             if (
-              item.attributes.variant.data &&
-              item.attributes.variant.data.attributes.product.data
+              item?.attributes?.variant?.data &&
+              item?.attributes?.variant?.data?.attributes?.product?.data
             ) {
               //debe existir un producto con su respectiva variante
               return (
                 accumulator +
-                item.attributes.variant.data.attributes.price *
-                  item.attributes.quantity
+                item?.attributes?.variant?.data?.attributes?.price *
+                  item?.attributes?.quantity
               );
             }
             return accumulator;
@@ -80,11 +80,11 @@ const useCartSummary = ({ userId }) => {
 
           const quantity = fetchedData.reduce((accumulator, item) => {
             if (
-              item.attributes.variant.data &&
-              item.attributes.variant.data.attributes.product.data
+              item?.attributes?.variant?.data &&
+              item?.attributes?.variant?.data?.attributes?.product?.data
             ) {
               //debe existir un producto con su respectiva variante
-              return accumulator + item.attributes.quantity;
+              return accumulator + item?.attributes?.quantity;
             }
             return accumulator;
           }, 0);

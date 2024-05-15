@@ -16,10 +16,7 @@ const MainLayout = ({ children }) => {
   return (
     <>
       <BodyComponent role="article">
-        <section>
-          <div className="flex justify-center pt-10">
-            <h1>Top de productos</h1>
-          </div>
+        <section>          
           <div className="flex flex-wrap max-w-screen-xl m-auto justify-center">
             <FeaturedProducts />
           </div>
