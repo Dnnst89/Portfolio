@@ -29,7 +29,7 @@ const processCartItems = (items, errors, setErrors) => {
 
       return {
         totalItemPrice:
-          item.attributes.variant.data.attributes.price *
+          item.attributes.variant.data.attributes.localCurrencyPrice *
           item.attributes.quantity,
         quantity: item.attributes.quantity,
         ...item,

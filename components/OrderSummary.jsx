@@ -12,7 +12,7 @@ const OrderSummary = ({
   currency,
 }) => {
   const cart = useSelector((state) => state.cart);
-
+  console.log('subTotal',subTotal)
   return (
     <div className="p-3 space-y-3">
       {
