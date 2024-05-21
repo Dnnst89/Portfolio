@@ -59,14 +59,14 @@ function RelatedItems({ categories, productId }) {
       <section className="flex flex-wrap max-w-screen-xl m-auto justify-center">
         {aux
           ? aux.map((item) => {
-          
               return (
                 <FilterProductCard
                   key={item.id}
                   id={item.id}
                   name={item.attributes.name}
                   coverImage={item.attributes.coverImage.data}
-                  defaultPrice={item.attributes.defaultPrice}
+                  price={item?.attributes?.variants?.data[0]?.attributes?.price}
+                  localCurrencyPrice={item?.attributes?.variants?.data[0]?.attributes?.localCurrencyPrice}
                   brand={item.attributes.brand}
                   initialAge={
                     item?.attributes?.variants?.data[0]?.attributes?.initialAge

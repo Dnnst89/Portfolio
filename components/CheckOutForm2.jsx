@@ -11,7 +11,7 @@ import Spinner from "./Spinner";
 import { useForm } from "react-hook-form";
 import requestEstimation from "@/api/moovin/estimation";
 import createEstimationMoovinRequest from "@/api/moovin/createEstimationMoovinRequest";
-// import getTipoCambio from "@/api/cambio/getTipoCambio";
+import getTipoCambio from "@/api/cambio/getTipoCambio";
 import GET_DELIVERY_CHOICES from "@/src/graphQl/queries/getDeliveryChoices";
 import GET_STORE_LOCATION from "@/src/graphQl/queries/getStoreLocation";
 import CREATE_EXCHANGE_RATE from "@/src/graphQl/queries/createExchangeRate";
@@ -24,6 +24,7 @@ import { CgArrowLongRight } from "react-icons/cg";
 import { useSelector } from "react-redux";
 import { MOOVIN_ERROR, MOOVIN_RESPONSE } from "@/helpers/messageTypes";
 import useFetchMoovinCoverageData from "@/hooks/useFetchMoovinCoverageData";
+import { useLocalCurrencyContext } from "@/src/context/useLocalCurrency";
 export default function CheckOutForm2({
   amount,
   checkbox,
@@ -33,6 +34,9 @@ export default function CheckOutForm2({
   lng,
   handleCheckout,
 }) {
+  // if true send LocalCurrencyPrice as price for products else send variant price
+  const useLocalCurrency = useLocalCurrencyContext();
+
   const isoDate = new Date().toISOString();
   const [paymentDetailId, setPaymentDetailId] = useState(null);
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
@@ -139,12 +143,10 @@ export default function CheckOutForm2({
   } = useForm();
   const fetchTipoCambio = async () => {
     try {
-      // // Llama a la función para obtener el tipo de cambio
-      // TODO *******EXCHANGE RATE IS NOT USED AT THIS MOMENT****
-      // const tipoCambioResultado = await getTipoCambio();
+      const tipoCambioResultado = await getTipoCambio();
 
-      // // Almacena el tipo de cambio en el estado del componente
-      // setTipoCambio(tipoCambioResultado.compra);
+      // Almacena el tipo de cambio en el estado del componente
+      setTipoCambio(tipoCambioResultado.compra);
 
       updateExchangeRate({
         //actualizo el registro en base de datos
@@ -160,16 +162,15 @@ export default function CheckOutForm2({
       setTipoCambio(exchangeRate?.exchangeRates?.data[0]?.attributes?.purchase);
     }
   };
-      // TODO *******EXCHANGE RATE IS NOT USED AT THIS MOMENT****
-  // useEffect(() => {
-  //   if (!load) {
-  //     try {
-  //       fetchTipoCambio();
-  //     } catch (error) {
-  //       console.log("error", error);
-  //     }
-  //   }
-  // }, [load]);
+  useEffect(() => {
+    if (!load) {
+      try {
+        fetchTipoCambio();
+      } catch (error) {
+        console.log("error", error);
+      }
+    }
+  }, [load]);
 
   /**
    * Hook
@@ -198,7 +199,10 @@ export default function CheckOutForm2({
         );
         if (routeOption) {
           //obtenemos el costo del delivery
-          const deliveryPrice = Math.ceil(routeOption.amount/1000)*1000;
+          // const deliveryPrice = Math.ceil(routeOption.amount/1000)*1000;
+          const deliveryPrice = useLocalCurrency
+            ? Math.ceil(routeOption.amount / 1000) * 1000
+            : Math.ceil(routeOption.amount / tipoCambio);
           /**
            * - Metodo llamado en FormOne
            * - Modifica el estado del deliveryPayment
@@ -212,7 +216,7 @@ export default function CheckOutForm2({
             subTotal: subTotal,
             taxes: taxes,
           };
-          
+
           setEstima(estimation.idEstimation);
           setAmount(finalAmount);
           try {

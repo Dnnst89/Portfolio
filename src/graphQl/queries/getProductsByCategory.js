@@ -26,6 +26,7 @@ const ProductsByCategory = gql`
                 sku
                 size
                 price
+                localCurrencyPrice
                 ageRange
                 stock
                 initialAge

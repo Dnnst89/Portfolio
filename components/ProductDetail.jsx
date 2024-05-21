@@ -16,6 +16,7 @@ import { useQuery } from "@apollo/client";
 import useStoreInformation from "../helpers/useStoreInformation";
 import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
 import  useFromOrderState  from '../helpers/useFromOrderState';
+import { useLocalCurrencyContext } from "@/src/context/useLocalCurrency";
 
 
 function ProductDetail({
@@ -25,6 +26,9 @@ function ProductDetail({
   handleGoBack,
   handleGoToCategory,
 }) {  
+  // if true send LocalCurrencyPrice as price for products else send variant price
+  const useLocalCurrency = useLocalCurrencyContext();
+
   const name = product?.attributes?.name;
   const brand = product?.attributes?.brand;
   const description = product?.attributes?.description;
@@ -619,9 +623,13 @@ function ProductDetail({
             {/* precio, cantidad de la variante */}
             <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between p-4">
               <span className="col-span-4 md:col-span-5 font-bold md:text-[30px]">
-                {currencySymbol} {parseFloat(localCurrencyPrice).toLocaleString("en-US", {
-              minimumFractionDigits: 2,  
-              })}
+                {useLocalCurrency
+                ? `${currencySymbol} ${parseFloat(localCurrencyPrice).toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                  })}`
+                : `$ ${parseFloat(localCurrencyPrice).toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                  })}`}
               </span>
               <div className="col-span-8 mdd:col-span-7 md:flex md:flex-col items-end md:items-end p-3">
                 {/**

@@ -293,8 +293,7 @@ export default function ThankYouMessage() {
         }
       );
 
-    const currency =
-      storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
+    const currency = storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
 
     const { data: emailInfo, error: sendEmailError } = await createOrderEmail({
       variables: {

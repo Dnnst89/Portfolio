@@ -12,7 +12,7 @@ const OrderSummary = ({
   currency,
 }) => {
   const cart = useSelector((state) => state.cart);
-  console.log('subTotal',subTotal)
+
   return (
     <div className="p-3 space-y-3">
       {
@@ -25,7 +25,6 @@ const OrderSummary = ({
           </div>
           <div className="flex justify-between ">
             <p>Subtotal:</p>
-
             <p className="text-grey-100">
               {currency
                 ? `${currency} ${subTotal.toLocaleString("en-US", {

@@ -34,6 +34,7 @@ query GetProductsFiltered(
             attributes {
               initialAge
               finalAge
+              price
               localCurrencyPrice
             }
           }

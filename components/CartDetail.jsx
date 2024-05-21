@@ -8,6 +8,7 @@ import { facturationInstace } from "@/src/axios/algoliaIntance/config";
 import { useDispatch, useSelector } from "react-redux";
 import { isTaxesLoading } from "@/redux/features/cart-slice";
 import useStoreInformation from "../helpers/useStoreInformation";
+import { useLocalCurrencyContext } from "@/src/context/useLocalCurrency";
 
 const CartDetail = ({
   isCheckout = false,
@@ -16,13 +17,16 @@ const CartDetail = ({
   paymentAmount,
   showDeliveryPayment,
 }) => {
+  // if true send LocalCurrencyPrice as price for products else send variant price
+  const useLocalCurrency = useLocalCurrencyContext();
+
   const { user } = useStorage();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
   const { storeInformation, storeInformationError, loading } =
     useStoreInformation(1);
-  const currencySymbol =
-    storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
+  const currencySymbol = storeInformation ?
+    storeInformation?.storeInformation?.data?.attributes?.currencySymbol : '';
 
   const withoutDelivery = 0;
   const [amounts, setAmounts] = useState({
@@ -83,7 +87,6 @@ const CartDetail = ({
   useEffect(() => {
     if (cart.showTaxes) {
       getTaxCost();
-      
     } else {
       /**
        * Se envía la data necesaria al setAmounts para mostrar
@@ -139,10 +142,10 @@ const CartDetail = ({
         ...prev,
         total: parseFloat(data?.billSummary?.totalDocument).toLocaleString(
           "en-US",
-          { minimumFractionDigits: 2,maximumFractionDigits: 0 }
+          { minimumFractionDigits: 2, maximumFractionDigits: 0 }
         ),
         tax: parseFloat(data?.billSummary?.totalTax).toLocaleString("en-US", {
-          minimumFractionDigits: 2,  
+          minimumFractionDigits: 2,
         }),
       }));
       alert(data?.billSummary?.totalDocument);
@@ -150,10 +153,10 @@ const CartDetail = ({
         paymentAmount({
           total: parseFloat(data?.billSummary?.totalDocument).toLocaleString(
             "en-US",
-            {minimumFractionDigits: 2, maximumFractionDigits: 0 }
+            { minimumFractionDigits: 2, maximumFractionDigits: 0 }
           ),
           tax: parseFloat(data?.billSummary?.totalTax).toLocaleString("en-US", {
-            minimumFractionDigits: 2, 
+            minimumFractionDigits: 2,
           }),
           subTotal,
         });
@@ -181,9 +184,9 @@ const CartDetail = ({
           <div className="flex justify-between ">
             <p>Subtotal:</p>
             <p className="whitespace-nowrap">
-              {amounts.currencyType ? amounts.currencyType + " " : ""}
+              {useLocalCurrency ? amounts.currencyType + " " : "$ "}
               {parseFloat(subTotal).toLocaleString("en-US", {
-               minimumFractionDigits: 2, 
+                minimumFractionDigits: 2,
               })}{" "}
               &nbsp;
             </p>
@@ -195,7 +198,7 @@ const CartDetail = ({
                 <p>Impuestos:</p>
                 <p className="whitespace-nowrap">
                   {parseFloat(amounts.tax).toLocaleString("en-US", {
-                  minimumFractionDigits: 2,  
+                    minimumFractionDigits: 2,
                   })}{" "}
                   {amounts.currencyType}
                 </p>
@@ -210,11 +213,11 @@ const CartDetail = ({
                 <div className="flex justify-between ">
                   <p>Costo de envío:</p>
                   <p className="whitespace-nowrap">
-                  {amounts.currencyType ? amounts.currencyType + " " : ""}
-              {parseFloat(deliveryPayment).toLocaleString("en-US", {
-              minimumFractionDigits: 2,  
-              })}{" "}
-              &nbsp;
+                    {useLocalCurrency ? amounts.currencyType + " " : "$ "}
+                    {parseFloat(deliveryPayment).toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                    })}{" "}
+                    &nbsp;
                   </p>
                 </div>
               ) : (
@@ -231,11 +234,11 @@ const CartDetail = ({
                 <p className="flex justify-center">Costo Total:</p>
               )}
               <p className="flex justify-center whitespace-nowrap">
-              {amounts.currencyType ? amounts.currencyType + " " : ""}
-              {parseFloat(amounts?.total).toLocaleString("en-US", {
-              minimumFractionDigits: 2,  
-              })}{" "}
-              &nbsp;
+                {useLocalCurrency ? amounts.currencyType + " " : "$ "}
+                {parseFloat(amounts?.total).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                })}{" "}
+                &nbsp;
               </p>
             </div>
           </>

@@ -3,7 +3,7 @@ import Image from "next/image";
 import test from "../app/assets/heart.png";
 import CartProceedPayment from "@/components/CartProceedPayment";
 import { useEffect, useState } from "react";
-import GET_VARIANT_BY_PRODUCT_ID from "@/src/graphQl/queries/getOrderItemsByOrderId";
+import GET_ORDER_ITEMS_BY_ORDER_ID from "@/src/graphQl/queries/getOrderItemsByOrderId";
 import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
 import { useLazyQuery } from "@apollo/client";
 import Spinner from "./Spinner";
