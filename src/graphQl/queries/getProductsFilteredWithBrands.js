@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-const getProductsFilteredWithBrands = gql`
+const getProductsFilteredWithBrands = (useLocalCurrency) => gql`
 query GetProductsFiltered(
     $initialAge: Float
     $finalAge: Float
@@ -18,7 +18,7 @@ query GetProductsFiltered(
                 variants: {
                     finalAge: { gte: $initialAge }
                     initialAge: { lte: $finalAge }
-                    localCurrencyPrice: { gte: $minPrice, lte: $maxPrice }
+                    ${useLocalCurrency ? 'localCurrencyPrice' : 'price'}: { gte: $minPrice, lte: $maxPrice }
                 }
             }
             brand: { in: $brands }
@@ -36,6 +36,7 @@ query GetProductsFiltered(
                         attributes {
                             initialAge
                             finalAge
+                            price
                             localCurrencyPrice
                         }
                     }

@@ -108,11 +108,18 @@ export default function CheckOutForm2({
   const SPU =
     deliveryChoicesData?.deliveries?.data?.[2]?.attributes?.delivery_code;
   //Precio por distancia correos de costa rica
-  const ShortDistancePrice =
-    deliveryChoicesData?.deliveries?.data?.[0]?.attributes
-      ?.short_distance_price;
-  const LongDistancePrice =
-    deliveryChoicesData?.deliveries?.data?.[0]?.attributes?.long_distance_price;
+  const ShortDistancePrice = useLocalCurrency
+    ? deliveryChoicesData?.deliveries?.data?.[0]?.attributes
+        ?.short_distance_price
+    : deliveryChoicesData?.deliveries?.data?.[3]?.attributes
+        ?.short_distance_price;
+
+  const LongDistancePrice = useLocalCurrency
+    ? deliveryChoicesData?.deliveries?.data?.[0]?.attributes
+        ?.long_distance_price
+    : deliveryChoicesData?.deliveries?.data?.[3]?.attributes
+        ?.long_distance_price;
+
   // Dias estimados para la entrega de Correos de Costa Rica
   const LongEstimatedDelivery =
     deliveryChoicesData?.deliveries?.data?.[0]?.attributes

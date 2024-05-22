@@ -34,7 +34,6 @@ export default function CheckOutForm3({
   const cartSummary = useCartSummary({
     userId: user?.id,
   });
-  // total = parseFloat(total).toLocaleString('en-US',{maximumFractionDigits: 0 })
 
   const [getUserAddress] = useLazyQuery(GET_USER_ADDRESS);
   // const [getPaymentDetails] = useLazyQuery(GET_PAYMENT_DETAILS);

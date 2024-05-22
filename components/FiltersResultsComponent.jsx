@@ -15,6 +15,7 @@ import useBrandsByAgeRange from "@/hooks/useBrandsByAgeRange";
 import { useRouter } from "next/navigation";
 import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
 import useFromOrderState from "../helpers/useFromOrderState";
+import {useLocalCurrencyContext}  from "@/src/context/useLocalCurrency";
 export default function FiltersResultsComponent({ querySearch }) {
   
   const { getFromOrderState, updateFromOrder } = useFromOrderState();
@@ -34,6 +35,9 @@ export default function FiltersResultsComponent({ querySearch }) {
   const page = currentPage;
   const pageSize = 12;
   const [showToastMessage, setShowToastMessage] = useState(true);
+
+  // if true send LocalCurrencyPrice as price for products else send variant price
+  const useLocalCurrency = useLocalCurrencyContext();
 
   const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
     variables: { id: 3 },
@@ -81,7 +85,7 @@ export default function FiltersResultsComponent({ querySearch }) {
   }, [getBrandsByAge]);
 
   // depending if there´s a brand selected or not we use the necessary query for it, with or without brand variable.
-  let queryResultWithBrands = useQuery(getProductsFilteredWithBrands, {
+  let queryResultWithBrands = useQuery(getProductsFilteredWithBrands(useLocalCurrency), {
     variables: {
       initialAge,
       finalAge,
@@ -94,7 +98,7 @@ export default function FiltersResultsComponent({ querySearch }) {
     },
   });
 
-  let queryResult = useQuery(getProductsFiltered, {
+  let queryResult = useQuery(getProductsFiltered(useLocalCurrency), {
     variables: {
       initialAge,
       finalAge,
@@ -109,7 +113,27 @@ export default function FiltersResultsComponent({ querySearch }) {
   // Using results conditionally
   const { loading, error, data } =
     brands.length > 0 ? queryResultWithBrands : queryResult;
+
+    
+
   useEffect(() => {
+    const useFilteredProducts = () => {
+         
+      // Filtrar los productos para excluir aquellos sin variantes dentro del rango de precios
+      const filteredProducts = data?.products?.data.filter(product => {
+        const validVariants = product.attributes.variants.data.filter(variant => {
+          const priceField = useLocalCurrency ? 'localCurrencyPrice' : 'price';
+          return (
+            variant.attributes[priceField] >= minPrice &&
+            variant.attributes[priceField] <= maxPrice
+          );
+        });
+        return validVariants.length > 0;
+      });
+    
+      return { data: { products: { ...data?.products, data: filteredProducts } }, loading, error };
+    };
+    useFilteredProducts();
     //   // Puedes mover la lógica de 'allResults' directamente aquí
     try {
       // Realiza las operaciones necesarias con 'data'

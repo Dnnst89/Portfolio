@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-const getProductsFiltered = gql`
+const getProductsFiltered = (useLocalCurrency) => gql`
 query GetProductsFiltered(
   $initialAge: Float
   $finalAge: Float

@@ -15,9 +15,8 @@ import ImageGallery from "react-image-gallery";
 import { useQuery } from "@apollo/client";
 import useStoreInformation from "../helpers/useStoreInformation";
 import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
-import  useFromOrderState  from '../helpers/useFromOrderState';
+import useFromOrderState from "../helpers/useFromOrderState";
 import { useLocalCurrencyContext } from "@/src/context/useLocalCurrency";
-
 
 function ProductDetail({
   product,
@@ -25,8 +24,8 @@ function ProductDetail({
   ItemQt,
   handleGoBack,
   handleGoToCategory,
-}) {  
-  // if true send LocalCurrencyPrice as price for products else send variant price
+}) {
+  // if true send variantPrice as price for products else send variant price
   const useLocalCurrency = useLocalCurrencyContext();
 
   const name = product?.attributes?.name;
@@ -53,7 +52,8 @@ function ProductDetail({
   const skuSelected = data?.variant?.data?.attributes?.sku;
   const stockVariantSelected = data?.variant?.data?.attributes?.stock;
   const ageRangeVariantSelected = data?.variant?.data?.attributes?.ageRange;
-  const localCurrencyPriceVariantSelected = data?.variant?.data?.attributes?.localCurrencyPrice;
+  const variantPriceVariantSelected =
+    data?.variant?.data?.attributes?.variantPrice;
   const sizeVariantSelected = data?.variant?.data?.attributes?.size;
   const imageVariantSelected = data?.variant?.data?.attributes?.images?.data;
   const colorTypeParentVariant =
@@ -107,22 +107,27 @@ function ProductDetail({
   const { user } = useStorage();
   const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
   const [variantSelected, setvariantSelected] = useState(); //guarda la variante que actualmente se seleccionó{features:{}, variant:{object}}
-  const [localCurrencyPrice, setLocalCurrencyPrice] = useState(
-    variants.length > 0 ? variants[0]?.attributes?.localCurrencyPrice : null
-    
+  const [variantPrice, setvariantPrice] = useState(
+    useLocalCurrency
+      ? variants.length > 0
+        ? variants[0]?.attributes?.localCurrencyPrice
+        : null
+      : variants.length > 0
+      ? variants[0]?.attributes?.price
+      : null
   ); //precio inicial dado por primer variante
-  console.log("variants", variants);
+
   const [enableButton, setEnableButton] = useState(variants.length <= 1);
   let variantItems = [];
 
-  const { storeInformation, storeInformationError} = useStoreInformation(1);
-  const currencySymbol = storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
+  const { storeInformation, storeInformationError } = useStoreInformation(1);
+  const currencySymbol =
+    storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
 
   useEffect(() => {
     if (data && data.variant && data.variant.data) setEnableButton(false);
   }, [data]);
 
-  
   if (imageVariantSelected) {
     allImages.push(...imageVariantSelected); //muestra solo las imagenes de la variante(detalle del producto desde carrito)
   } else {
@@ -284,7 +289,8 @@ function ProductDetail({
         })()
       : (() => {
           variantItems = variants.map((variant) => {
-            const { size, localCurrencyPrice, color, stock, ageRange } = variant.attributes;
+            const { size, variantPrice, color, stock, ageRange } =
+              variant.attributes;
             return { size, ageRange };
           });
         })();
@@ -412,8 +418,9 @@ function ProductDetail({
                 variantsList={variants}
                 setImages={setImages}
                 setImage={setImage}
+                useLocalCurrency = {useLocalCurrency}
                 setvariantSelected={setvariantSelected}
-                setLocalCurrencyPrice={setLocalCurrencyPrice}
+                setvariantPrice={setvariantPrice}
                 setEnableButton={setEnableButton}
               />
             </section>
@@ -624,18 +631,20 @@ function ProductDetail({
             <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between p-4">
               <span className="col-span-4 md:col-span-5 font-bold md:text-[30px]">
                 {useLocalCurrency
-                ? `${currencySymbol} ${parseFloat(localCurrencyPrice).toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                  })}`
-                : `$ ${parseFloat(localCurrencyPrice).toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                  })}`}
+                  ? `${currencySymbol} ${parseFloat(
+                      variantPrice
+                    ).toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                    })}`
+                  : `$ ${parseFloat(variantPrice).toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                    })}`}
               </span>
               <div className="col-span-8 mdd:col-span-7 md:flex md:flex-col items-end md:items-end p-3">
                 {/**
                  * oculta los botones para agregar unidades y agregar producto al carrito
                  */}
-               
+
                 {!isFromOrderDetail ? (
                   <>
                     <div className="grid md:flex items-center mb-2 ">

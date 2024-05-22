@@ -54,7 +54,7 @@ function SearchItem({ hit, currencySymbol, useLocalCurrency, components }) {
             {useLocalCurrency ? (
               <p className="text-xl font-semibold text-right">
                 {currencySymbol}{" "}
-                {parseFloat(hit.variants[0].localCurrencyPrice).toLocaleString("en-US", {
+                {parseFloat(hit?.variants[0]?.localCurrencyPrice).toLocaleString("en-US", {
                   minimumFractionDigits: 2,
                 })}
               </p>

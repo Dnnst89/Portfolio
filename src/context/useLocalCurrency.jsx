@@ -1,8 +1,8 @@
-  //TODO set the useLocalCurrency with the store information value.
-// context/LocalCurrencyContext.jsx
+  //TODO set the useLocalCurrency with the store information value in Context.
+
 import { createContext, useContext } from 'react';
 
-const UseLocalCurrencyContext = createContext(false);
+const UseLocalCurrencyContext = createContext(true);
 
 export function UseLocalCurrencyProvider({ children, value }) {
   return (

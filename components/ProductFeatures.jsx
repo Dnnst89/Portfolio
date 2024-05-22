@@ -10,7 +10,7 @@ import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
  * @param {Function} props.setImages - Función para establecer las imágenes en carrusel del producto.
  * @param {Function} props.setImage - Función para establecer la imagen actual del producto.
  * @param {Function} props.setvariantSelected - Función para establecer la variante seleccionada. {variant: objetoVariante, features: objetoFeatures}
- * @param {Function} props.setLocalCurrencyPrice - Función para establecer el precio del producto.
+ * @param {Function} props.setvariantPrice - Función para establecer el precio del producto.
  * @param {Function} props.setEnableButton - Función para habilitar/deshabilitar el botón.
  */
 const ProductFeatures = ({
@@ -19,7 +19,8 @@ const ProductFeatures = ({
   setImages,
   setImage,
   setvariantSelected,
-  setLocalCurrencyPrice,
+  useLocalCurrency,
+  setvariantPrice,
   setEnableButton,
 }) => {
   const [featureCount, setFeatureCount] = useState(1);
@@ -159,7 +160,11 @@ const ProductFeatures = ({
         features: updatedFeatureObject,
       };
       setvariantSelected(variant);
-      setLocalCurrencyPrice(variant?.variant?.data?.attributes?.localCurrencyPrice);
+      setvariantPrice(
+        useLocalCurrency
+          ? variant?.variant?.data?.attributes?.localCurrencyPrice
+          : variant?.variant?.data?.attributes?.price
+      );
     } else {
       console.warn("Warnning: variantObject or its properties are undefined");
     }
