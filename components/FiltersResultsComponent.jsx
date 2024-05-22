@@ -116,25 +116,7 @@ export default function FiltersResultsComponent({ querySearch }) {
 
     
 
-  useEffect(() => {
-    const useFilteredProducts = () => {
-         
-      // Filtrar los productos para excluir aquellos sin variantes dentro del rango de precios
-      const filteredProducts = data?.products?.data.filter(product => {
-        const validVariants = product.attributes.variants.data.filter(variant => {
-          const priceField = useLocalCurrency ? 'localCurrencyPrice' : 'price';
-          return (
-            variant.attributes[priceField] >= minPrice &&
-            variant.attributes[priceField] <= maxPrice
-          );
-        });
-        return validVariants.length > 0;
-      });
-    
-      return { data: { products: { ...data?.products, data: filteredProducts } }, loading, error };
-    };
-    useFilteredProducts();
-    //   // Puedes mover la lógica de 'allResults' directamente aquí
+  useEffect(() => {    //   // Puedes mover la lógica de 'allResults' directamente aquí
     try {
       // Realiza las operaciones necesarias con 'data'
       setQueryType("category");
