@@ -87,9 +87,9 @@ const SidebarButton: React.FC<{ isOpen: boolean; onClick: () => void }> = ({
   >
     <span className="mr-2">
       {isOpen ? (
-        <FaArrowLeftLong size={30} className="text-primary" />
+        <FaArrowLeftLong size={30} className="text-[#0891b2]" />
       ) : (
-        <FaBars size={32} className="text-primary" />
+        <FaBars size={32} className="text-[#0891b2]" />
       )}
     </span>
   </button>
@@ -101,6 +101,13 @@ export default function Home() {
 
   const handleRouteClick = (id: number) => {
     setActiveRoute(id);
+    setIsSidebarOpen(false); // Close sidebar on route click
+  };
+
+  const handleMainContentClick = () => {
+    if (isSidebarOpen) {
+      setIsSidebarOpen(false); // Close sidebar when clicking on main content
+    }
   };
 
   return (
@@ -142,6 +149,7 @@ export default function Home() {
         className={`flex-1 bg-gray-50 dark:bg-gray-900 transition-all duration-300 ${
           isSidebarOpen ? "opacity-80" : "opacity-100"
         }`}
+        onClick={handleMainContentClick}
       >
         {routes.find((route) => route.id === activeRoute)?.component}
       </div>
