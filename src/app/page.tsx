@@ -10,7 +10,6 @@ import { BsCloudDownload } from "react-icons/bs";
 import { GrUserWorker } from "react-icons/gr";
 
 import Main from "@/components/main/Main";
-import Me from "@/components/me/Me";
 import Experience from "@/components/experience/Experience";
 import Projects from "@/components/projects/Projects";
 import Skills from "@/components/skills/Skills";
@@ -18,6 +17,7 @@ import ContactMe from "@/components/contactMe/ContactMe";
 import Hobbies from "@/components/hobbies/Hobbies";
 import DownloadResume from "@/components/downloadResume/DownloadResume";
 import Settings from "@/components/settings/Settings";
+import SoftSkills from "@/components/softSkills/SoftSkills";
 
 interface Route {
   id: number;
@@ -35,8 +35,8 @@ const routes: Route[] = [
   },
   {
     id: 2,
-    component: <Me />,
-    description: "Me",
+    component: <SoftSkills />,
+    description: "Soft Skills",
     icon: <IoPersonOutline size={25} style={{ color: "#0891b2" }} />,
   },
   {
@@ -145,13 +145,10 @@ export default function Home() {
         </div>
         <div className="flex flex-col items-end gap-6 w-full px-4">Logout</div>
       </div>
-      <div
-        className={`flex-1 bg-gray-50 dark:bg-gray-900 transition-all duration-300 ${
-          isSidebarOpen ? "opacity-80" : "opacity-100"
-        }`}
-        onClick={handleMainContentClick}
-      >
-        {routes.find((route) => route.id === activeRoute)?.component}
+      <div className="flex-1 bg-gray-50 dark:bg-gray-900 transition-all duration-300">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          {routes.find((route) => route.id === activeRoute)?.component}
+        </div>
       </div>
     </div>
   );

@@ -45,7 +45,7 @@ const Main = () => {
         </p>
         <div className="mt-4 flex justify-center space-x-4">
           <a
-            href="https://www.linkedin.com/in/your-profile"
+            href="https://linkedin.com/in/dannyst89"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -85,7 +85,7 @@ const Main = () => {
             />
           </a>
           <a
-            href="https://www.facebook.com/your-username"
+            href="https://www.facebook.com/profile.php?id=100079033674689&mibextid=ZbWKwL"
             target="_blank"
             rel="noopener noreferrer"
           >
