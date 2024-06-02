@@ -1,11 +1,10 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { FaBars, FaArrowLeftLong, FaAngellist } from "react-icons/fa6";
+import { FaAngellist } from "react-icons/fa6";
 import { IoPersonOutline } from "react-icons/io5";
 import { GoHome, GoTools } from "react-icons/go";
-import { CiSettings, CiFolderOn, CiMail } from "react-icons/ci";
-import { IoIosLogOut } from "react-icons/io";
+import { CiFolderOn, CiMail } from "react-icons/ci";
 import { BsCloudDownload } from "react-icons/bs";
 import { GrUserWorker } from "react-icons/gr";
 
@@ -18,6 +17,7 @@ import Hobbies from "@/components/hobbies/Hobbies";
 import DownloadResume from "@/components/downloadResume/DownloadResume";
 import Settings from "@/components/settings/Settings";
 import SoftSkills from "@/components/softSkills/SoftSkills";
+import SidebarBtn from "@/components/sidebarbtn/SidebarBtn";
 
 interface Route {
   id: number;
@@ -58,6 +58,12 @@ const routes: Route[] = [
     icon: <GoTools size={25} style={{ color: "#0891b2" }} />,
   },
   {
+    id: 5,
+    component: <Skills />,
+    description: "Components",
+    icon: <GoTools size={25} style={{ color: "#0891b2" }} />,
+  },
+  {
     id: 6,
     component: <Hobbies />,
     description: "Hobbies",
@@ -77,43 +83,18 @@ const routes: Route[] = [
   },
 ];
 
-const SidebarButton: React.FC<{ isOpen: boolean; onClick: () => void }> = ({
-  isOpen,
-  onClick,
-}) => (
-  <button
-    className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-    onClick={onClick}
-  >
-    <span className="mr-2">
-      {isOpen ? (
-        <FaArrowLeftLong size={30} className="text-[#0891b2]" />
-      ) : (
-        <FaBars size={32} className="text-[#0891b2]" />
-      )}
-    </span>
-  </button>
-);
-
 export default function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeRoute, setActiveRoute] = useState(routes[0].id);
 
   const handleRouteClick = (id: number) => {
     setActiveRoute(id);
-    setIsSidebarOpen(false); // Close sidebar on route click
+    setIsSidebarOpen(false);
   };
-
-  // const handleMainContentClick = () => {
-  //   if (isSidebarOpen) {
-  //     setIsSidebarOpen(false); // Close sidebar when clicking on main content
-  //   }
-  // };
-
   return (
     <div className="relative flex h-screen w-full">
       <div className="absolute top-4 right-4 z-50 lg:hidden">
-        <SidebarButton
+        <SidebarBtn
           isOpen={isSidebarOpen}
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         />

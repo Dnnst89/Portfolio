@@ -1,7 +1,6 @@
 import Image from "next/image";
 import React, { useState } from "react";
-import Link from "next/link";
-import { FiExternalLink } from "react-icons/fi";
+import DefaultBtn from "../defaultBtn/DefaultBtn";
 interface ExperienceType {
   id: number;
   company: string;
@@ -105,26 +104,18 @@ const Experience: React.FC = () => {
               </p>
               <div className="flex gap-2 mt-4">
                 {experience.projectUrl && (
-                  <Link
-                    href={experience.projectUrl}
-                    passHref
+                  <DefaultBtn
+                    description="View Project"
+                    url={experience.projectUrl}
                     target="_blank"
-                    className="flex items-center justify-center text-sm rounded-full border bg-[#0891b2] text-[#f8fafc] shadow hover:bg-[#06b6d4] transition"
-                    style={{ height: "auto", width: "50%", padding: "10px 0" }}
-                  >
-                    <span className="flex items-center">
-                      View Project
-                      <FiExternalLink className="ml-2" />
-                    </span>
-                  </Link>
+                  ></DefaultBtn>
                 )}
-                <button
-                  onClick={() => handleToggleAchievements(experience.id)}
-                  className="flex items-center justify-center text-sm rounded-full border bg-[#0891b2] text-[#f8fafc] shadow hover:bg-[#06b6d4] transition"
-                  style={{ height: "auto", width: "50%", padding: "10px 0" }}
-                >
-                  <span className="flex items-center">Achievements</span>
-                </button>
+                <DefaultBtn
+                  target=""
+                  url=""
+                  description="Achievements"
+                  onclick={() => handleToggleAchievements(experience.id)}
+                ></DefaultBtn>
               </div>
               {showAchievements[experience.id] && (
                 <div className="mt-4 bg-gray-100 dark:bg-gray-700 p-4 rounded">
