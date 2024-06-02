@@ -25,8 +25,9 @@ const CartDetail = ({
   const cart = useSelector((state) => state.cart);
   const { storeInformation, storeInformationError, loading } =
     useStoreInformation(1);
-  const currencySymbol = storeInformation ?
-    storeInformation?.storeInformation?.data?.attributes?.currencySymbol : '';
+  const currencySymbol = storeInformation
+    ? storeInformation?.storeInformation?.data?.attributes?.currencySymbol
+    : "";
 
   const withoutDelivery = 0;
   const [amounts, setAmounts] = useState({
@@ -142,21 +143,23 @@ const CartDetail = ({
         ...prev,
         total: parseFloat(data?.billSummary?.totalDocument).toLocaleString(
           "en-US",
-          { minimumFractionDigits: 2, maximumFractionDigits: 0 }
+          { minimumFractionDigits: 2, maximumFractionDigits: 2 }
         ),
         tax: parseFloat(data?.billSummary?.totalTax).toLocaleString("en-US", {
           minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
         }),
       }));
-      alert(data?.billSummary?.totalDocument);
+
       if (isCheckout) {
         paymentAmount({
           total: parseFloat(data?.billSummary?.totalDocument).toLocaleString(
             "en-US",
-            { minimumFractionDigits: 2, maximumFractionDigits: 0 }
+            { minimumFractionDigits: 2, maximumFractionDigits: 2 }
           ),
           tax: parseFloat(data?.billSummary?.totalTax).toLocaleString("en-US", {
             minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
           }),
           subTotal,
         });
@@ -187,6 +190,7 @@ const CartDetail = ({
               {useLocalCurrency ? amounts.currencyType + " " : "$ "}
               {parseFloat(subTotal).toLocaleString("en-US", {
                 minimumFractionDigits: 2,
+                maximumFractionDigits : 2
               })}{" "}
               &nbsp;
             </p>
@@ -199,6 +203,7 @@ const CartDetail = ({
                 <p className="whitespace-nowrap">
                   {parseFloat(amounts.tax).toLocaleString("en-US", {
                     minimumFractionDigits: 2,
+                    maximumFractionDigits : 2
                   })}{" "}
                   {amounts.currencyType}
                 </p>
@@ -216,6 +221,7 @@ const CartDetail = ({
                     {useLocalCurrency ? amounts.currencyType + " " : "$ "}
                     {parseFloat(deliveryPayment).toLocaleString("en-US", {
                       minimumFractionDigits: 2,
+                      maximumFractionDigits : 2
                     })}{" "}
                     &nbsp;
                   </p>
@@ -237,6 +243,7 @@ const CartDetail = ({
                 {useLocalCurrency ? amounts.currencyType + " " : "$ "}
                 {parseFloat(amounts?.total).toLocaleString("en-US", {
                   minimumFractionDigits: 2,
+                  maximumFractionDigits : 2
                 })}{" "}
                 &nbsp;
               </p>

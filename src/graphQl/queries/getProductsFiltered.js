@@ -1,62 +1,63 @@
 import { gql } from "@apollo/client";
 
 const getProductsFiltered = (useLocalCurrency) => gql`
-query GetProductsFiltered(
-  $initialAge: Float
-  $finalAge: Float
-  $minPrice: Float
-  $maxPrice: Float
-  $category: String
-  $page: Int!
-  $pageSize: Int!
-) {
-  products(
-    filters: {
-      categories: { name: { containsi: $category } }
-      and: {
-        variants: {
-          finalAge: { gte: $initialAge }
-          initialAge: { lte: $finalAge }
-          localCurrencyPrice: { gte: $minPrice, lte: $maxPrice }
-        }
-      }
-    }
-    pagination: { page: $page, pageSize: $pageSize }
+  query GetProductsFiltered(
+    $initialAge: Float
+    $finalAge: Float
+    $minPrice: Float
+    $maxPrice: Float
+    $category: String
+    $page: Int!
+    $pageSize: Int!
   ) {
-    data {
-      id
-      attributes {
-        name
-        brand
-        defaultPrice
-        variants {
-          data {
-            attributes {
-              initialAge
-              finalAge
-              price
-              localCurrencyPrice
-            }
+    products(
+      filters: {
+        categories: { name: { containsi: $category } }
+        and: {
+          variants: {
+            finalAge: { gte: $initialAge }
+            initialAge: { lte: $finalAge }
+            localCurrencyPrice: { gte: $minPrice, lte: $maxPrice }
           }
         }
-        coverImage {
-          data {
-            attributes {
-              url
+      }
+      pagination: { page: $page, pageSize: $pageSize }
+    ) {
+      data {
+        id
+        attributes {
+          name
+          brand
+          defaultPrice
+          variants {
+            data {
+              attributes {
+                initialAge
+                finalAge
+                price
+                localCurrencyPrice
+                ivaAmount
+                totalPrice
+              }
+            }
+          }
+          coverImage {
+            data {
+              attributes {
+                url
+              }
             }
           }
         }
       }
-    }
-    meta {
-      pagination {
-        total
-        pageCount
+      meta {
+        pagination {
+          total
+          pageCount
+        }
       }
     }
   }
-}
-
 `;
 
 export default getProductsFiltered;

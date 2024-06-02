@@ -14,7 +14,7 @@ function SearchItem({ hit, currencySymbol, useLocalCurrency, components }) {
       hit.brand,
       "click_on_product",
       hit.name,
-      useLocalCurrency ? hit?.variants[0]?.localCurrencyPrice : hit?.variants[0]?.price,
+      hit?.variants[0]?.totalPrice,
       hit.variants[0].initialAge,
       hit.variants[0].finalAge
     );
@@ -51,18 +51,12 @@ function SearchItem({ hit, currencySymbol, useLocalCurrency, components }) {
           </div>
 
           <div className="flex-1">
-            {useLocalCurrency ? (
+            { (
               <p className="text-xl font-semibold text-right">
                 {currencySymbol}{" "}
-                {parseFloat(hit?.variants[0]?.localCurrencyPrice).toLocaleString("en-US", {
+                {parseFloat(hit?.variants[0]?.totalPrice).toLocaleString("en-US", {
                   minimumFractionDigits: 2,
-                })}
-              </p>
-            ) : (
-              <p className="text-xl font-semibold text-right">
-                {"$ "}
-                {parseFloat(hit?.variants[0]?.price).toLocaleString("en-US", {
-                  minimumFractionDigits: 2,
+                  maximumFractionDigits : 2
                 })}
               </p>
             )}

@@ -19,8 +19,6 @@ const CartItem = ({
   brand,
   description,
   color, 
-  price,
-  localCurrencyPrice,
   totalPrice,
   ageRange,
   size,
@@ -138,28 +136,25 @@ const CartItem = ({
               Precio Unitario:
             </span>
             <span className="text-xs mx-2 col-start-2 col-span-6">
-              {useLocalCurrency
-                ? `${currencySymbol} ${parseFloat(
-                    localCurrencyPrice
+              {
+               `${currencySymbol} ${parseFloat(
+                  totalPrice
                   ).toLocaleString("en-US", {
                     minimumFractionDigits: 2,
+                    maximumFractionDigits : 2
                   })}`
-                : `$ ${parseFloat(price).toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                  })}`}
+                }
             </span>
 
             <span className="mx-2 font-bold col-start-2 col-span-6">
               Precio Total:{" "}
             </span>
             <span class="text-xs font-bold mx-2 col-start-2 col-span-6">
-            {useLocalCurrency
-                ? `${currencySymbol} ${parseFloat(localCurrencyPrice * quantityCartItem).toLocaleString("en-US", {
+            { `${currencySymbol} ${parseFloat(totalPrice * quantityCartItem).toLocaleString("en-US", {
                     minimumFractionDigits: 2,
+                    maximumFractionDigits : 2
                   })}`
-                : `$ ${parseFloat(price * quantityCartItem).toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                  })}`}
+                }
             </span>
           </div>
           {/* Botón para eliminar el producto del carrito */}

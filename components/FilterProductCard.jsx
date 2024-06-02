@@ -9,8 +9,7 @@ import { useLocalCurrencyContext } from "@/src/context/useLocalCurrency";
 const FilterProductCard = ({
   id,
   name,
-  price,
-  localCurrencyPrice,
+  totalPrice,
   coverImage,
   brand,
   initialAge,
@@ -26,7 +25,7 @@ const FilterProductCard = ({
       brand,
       "click_on_product",
       name,
-      localCurrencyPrice,
+      totalPrice,
       initialAge,
       finalAge
     );
@@ -77,16 +76,14 @@ const FilterProductCard = ({
       </div>
 
       <div className="bg-aquamarine text-xs md:text-lg rounded-b-[15px] font-bold flex justify-center absolute bottom-0 left-0 right-0 hover:underline text-white p-1">
-        {useLocalCurrency
-          ? `${currencySymbol} ${parseFloat(localCurrencyPrice).toLocaleString(
+        {`${currencySymbol} ${parseFloat(totalPrice).toLocaleString(
               "en-US",
               {
                 minimumFractionDigits: 2,
+                maximumFractionDigits : 2,
               }
             )}`
-          : `$ ${parseFloat(price).toLocaleString("en-US", {
-              minimumFractionDigits: 2,
-            })}`}
+          }
       </div>
     </div>
   );

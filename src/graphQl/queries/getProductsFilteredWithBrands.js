@@ -18,7 +18,9 @@ query GetProductsFiltered(
                 variants: {
                     finalAge: { gte: $initialAge }
                     initialAge: { lte: $finalAge }
-                    ${useLocalCurrency ? 'localCurrencyPrice' : 'price'}: { gte: $minPrice, lte: $maxPrice }
+                    ${
+                      useLocalCurrency ? "localCurrencyPrice" : "price"
+                    }: { gte: $minPrice, lte: $maxPrice }
                 }
             }
             brand: { in: $brands }
@@ -38,6 +40,8 @@ query GetProductsFiltered(
                             finalAge
                             price
                             localCurrencyPrice
+                            ivaAmount
+                            totalPrice
                         }
                     }
                 }

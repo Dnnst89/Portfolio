@@ -160,11 +160,7 @@ const ProductFeatures = ({
         features: updatedFeatureObject,
       };
       setvariantSelected(variant);
-      setvariantPrice(
-        useLocalCurrency
-          ? variant?.variant?.data?.attributes?.localCurrencyPrice
-          : variant?.variant?.data?.attributes?.price
-      );
+      setvariantPrice(variant?.variant?.data?.attributes?.totalPrice);
     } else {
       console.warn("Warnning: variantObject or its properties are undefined");
     }

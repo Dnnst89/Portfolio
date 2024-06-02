@@ -297,7 +297,8 @@ export default function ThankYouMessage() {
         }
       );
 
-    const currency = storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
+    const currency =
+      storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
 
     const { data: emailInfo, error: sendEmailError } = await createOrderEmail({
       variables: {
@@ -325,8 +326,9 @@ export default function ThankYouMessage() {
           id: 1,
         },
       });
-      const currency = storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
-     
+    const currency =
+      storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
+
     if (orderId) {
       let orderItems = items.map(async (item) => {
         try {
@@ -339,12 +341,12 @@ export default function ThankYouMessage() {
               variantId: parseInt(variant?.id), //este dato es un INT no un ID
               publishedAt: isoDate,
               orderDetailId: orderId,
-              price: useLocalCurrency ? variantAtt.localCurrencyPrice :variantAtt.price,
+              totalPrice: variantAtt.totalPrice,
               name: variantAtt.product.data.attributes.name,
               brand: variantAtt.product.data.attributes.brand,
               cabys: variantAtt.product.data.attributes.cabys,
               imagesIds: variantAtt.images.data.map((img) => img.id),
-              currency : currency,
+              currency: currency,
             },
           });
 
@@ -456,7 +458,6 @@ export default function ThankYouMessage() {
               body
             );
 
-            
             const billSummary = feeResult?.data?.billSummary;
             const imp = feeResult?.data?.serviceDetail?.lineDetails;
 
@@ -562,12 +563,12 @@ export default function ThankYouMessage() {
                 },
                 returnCompleteAnswer: true,
               };
-            
+
               const InvoiceResult = await facturationInstace.post(
                 `document/electronic-invoice?access_token=${token}`,
                 bodyInvoice
               );
-             
+
               try {
                 const isoDate = new Date().toISOString();
                 const resulta = await getStoreInformation({

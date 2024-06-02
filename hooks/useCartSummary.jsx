@@ -5,16 +5,15 @@ import GET_ACTIVE_SHOPPING_SESSION_BY_USER from "@/src/graphQl/queries/getActive
 import { useLazyQuery } from "@apollo/client";
 import useStoreInformation from "../helpers/useStoreInformation";
 import processCartItems from "@/helpers/processCartItems";
-import {useLocalCurrencyContext}  from "@/src/context/useLocalCurrency";
+import { useLocalCurrencyContext } from "@/src/context/useLocalCurrency";
 
 // se ocupa ingresar el id del usuario para poder obtener la session y sus respectivos items del carrito,
 //calculos de totales y cantidades de productos, retorna un obj con las props
 
-
 const useCartSummary = ({ userId }) => {
-  const { storeInformation, storeInformationError} = useStoreInformation(1);
-   // if true send LocalCurrencyPrice as price for products else send variant price
-   const useLocalCurrency = useLocalCurrencyContext();
+  const { storeInformation, storeInformationError } = useStoreInformation(1);
+  // if true send LocalCurrencyPrice as price for products else send variant price
+  const useLocalCurrency = useLocalCurrencyContext();
   const cartQuantity = useSelector((state) => state.cart.quantity);
 
   const [cartData, setCartData] = useState({
@@ -75,12 +74,10 @@ const useCartSummary = ({ userId }) => {
               item?.attributes?.variant?.data?.attributes?.product?.data
             ) {
               //debe existir un producto con su respectiva variante
-              return (useLocalCurrency ?
+              return (
                 accumulator +
-                item?.attributes?.variant?.data?.attributes?.localCurrencyPrice *
-                  item?.attributes?.quantity :
-                  accumulator +
-                item?.attributes?.variant?.data?.attributes?.price *
+                item?.attributes?.variant?.data?.attributes
+                  ?.totalPrice *
                   item?.attributes?.quantity
               );
             }

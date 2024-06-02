@@ -65,8 +65,7 @@ function RelatedItems({ categories, productId }) {
                   id={item.id}
                   name={item.attributes.name}
                   coverImage={item.attributes.coverImage.data}
-                  price={item?.attributes?.variants?.data[0]?.attributes?.price}
-                  localCurrencyPrice={item?.attributes?.variants?.data[0]?.attributes?.localCurrencyPrice}
+                  totalPrice={item?.attributes?.variants?.data[0]?.attributes?.totalPrice}                
                   brand={item.attributes.brand}
                   initialAge={
                     item?.attributes?.variants?.data[0]?.attributes?.initialAge

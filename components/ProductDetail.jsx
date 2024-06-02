@@ -108,13 +108,7 @@ function ProductDetail({
   const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
   const [variantSelected, setvariantSelected] = useState(); //guarda la variante que actualmente se seleccionó{features:{}, variant:{object}}
   const [variantPrice, setvariantPrice] = useState(
-    useLocalCurrency
-      ? variants.length > 0
-        ? variants[0]?.attributes?.localCurrencyPrice
-        : null
-      : variants.length > 0
-      ? variants[0]?.attributes?.price
-      : null
+    variants.length > 0 ? variants[0]?.attributes?.totalPrice : null
   ); //precio inicial dado por primer variante
 
   const [enableButton, setEnableButton] = useState(variants.length <= 1);
@@ -418,7 +412,7 @@ function ProductDetail({
                 variantsList={variants}
                 setImages={setImages}
                 setImage={setImage}
-                useLocalCurrency = {useLocalCurrency}
+                useLocalCurrency={useLocalCurrency}
                 setvariantSelected={setvariantSelected}
                 setvariantPrice={setvariantPrice}
                 setEnableButton={setEnableButton}
@@ -635,9 +629,11 @@ function ProductDetail({
                       variantPrice
                     ).toLocaleString("en-US", {
                       minimumFractionDigits: 2,
+                      maximumFractionDigits : 2
                     })}`
                   : `$ ${parseFloat(variantPrice).toLocaleString("en-US", {
                       minimumFractionDigits: 2,
+                      maximumFractionDigits : 2
                     })}`}
               </span>
               <div className="col-span-8 mdd:col-span-7 md:flex md:flex-col items-end md:items-end p-3">

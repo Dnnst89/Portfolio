@@ -40,11 +40,10 @@ const ProductContainer = ({
                     key={item.id}
                     id={item.id}
                     name={item.name}
-                    variantPrice={ useLocalCurrency ? parseFloat(item?.variants[0]?.localCurrencyPrice).toLocaleString("en-US", {
+                    variantPrice={parseFloat(item?.variants[0]?.totalPrice).toLocaleString("en-US", {
                       minimumFractionDigits: 2,  
-                      }): parseFloat(item?.variants[0]?.price).toLocaleString("en-US", {
-                        minimumFractionDigits: 2,  
-                        })}
+                      maximumFractionDigits : 2
+                      })}
                     coverImage={item.coverImage}
                     brand={item.brand}
                   />
