@@ -104,22 +104,22 @@ export default function Home() {
     setIsSidebarOpen(false); // Close sidebar on route click
   };
 
-  const handleMainContentClick = () => {
-    if (isSidebarOpen) {
-      setIsSidebarOpen(false); // Close sidebar when clicking on main content
-    }
-  };
+  // const handleMainContentClick = () => {
+  //   if (isSidebarOpen) {
+  //     setIsSidebarOpen(false); // Close sidebar when clicking on main content
+  //   }
+  // };
 
   return (
     <div className="relative flex h-screen w-full">
-      <div className="absolute top-4 right-4 z-50">
+      <div className="absolute top-4 right-4 z-50 lg:hidden">
         <SidebarButton
           isOpen={isSidebarOpen}
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         />
       </div>
       <div
-        className={`fixed top-0 left-0 h-full flex flex-col items-center justify-between bg-gray-100 dark:bg-gray-800 py-6 transition-transform duration-300 ${
+        className={`fixed top-0 left-0 h-full flex flex-col items-center justify-between bg-gray-100 dark:bg-gray-800 py-6 transition-transform duration-300 transform lg:translate-x-0 lg:w-64 lg:z-40 ${
           isSidebarOpen
             ? "translate-x-0 w-64 z-40"
             : "-translate-x-full w-0 z-10"
@@ -136,7 +136,7 @@ export default function Home() {
               <span
                 className={`${
                   isSidebarOpen ? "block ml-2" : "hidden"
-                } hover:text-gray-900 dark:hover:text-gray-50`}
+                } lg:block hover:text-gray-900 dark:hover:text-gray-50`}
               >
                 {route.description}
               </span>
