@@ -130,14 +130,12 @@ const Experience: React.FC = () => {
                 <div className="mt-4 bg-gray-100 dark:bg-gray-700 p-4 rounded">
                   <ul>
                     {experience.achievements.map((achievement, index) => (
-                      <>
-                        <li
-                          key={index}
-                          className="text-gray-700 dark:text-gray-300"
-                        >
-                          {achievement}
-                        </li>
-                      </>
+                      <li
+                        key={index}
+                        className="text-gray-700 dark:text-gray-300"
+                      >
+                        {achievement}
+                      </li>
                     ))}
                   </ul>
                   <button
