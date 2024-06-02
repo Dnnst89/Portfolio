@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import {
   FaLinkedin,
@@ -23,13 +24,15 @@ const Main = () => {
         </p>
       </div>
       <div className="text-center">
-        <img
-          src="/profile.svg" // Replace with the path to your photo
+        <Image
+          src="/profile.svg"
+          width={50}
+          height={50}
           alt="Profile image"
-          className="w-32 h-32 rounded-full mx-auto mb-4"
+          className="w-[200px] h-[200px]  rounded-full mx-auto mb-4"
         />
         <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-50">
-          Hello, I'm Danny 👋
+          Hello, I&lsquo;m Danny 👋
         </h2>
         <p className="text-lg text-gray-600 dark:text-gray-400 text-center max-w-[1070px] mx-auto leading-relaxed">
           Developer with experience in creating innovative web solutions,
@@ -39,12 +42,12 @@ const Main = () => {
           have contributed to the success of complex projects,
           <strong> continuously improving</strong> user experience and
           operational efficiency. Collaborating with{" "}
-          <strong> multidisciplinary teams</strong>, I am passionate about
+          <strong> multidisciplinary teams </strong>, I am passionate about
           driving<strong> innovation </strong>and excellence in every aspect of
           software development.
         </p>
         <div className="mt-4 flex justify-center space-x-4">
-          <a
+          <Link
             href="https://linkedin.com/in/dannyst89"
             target="_blank"
             rel="noopener noreferrer"
@@ -53,8 +56,8 @@ const Main = () => {
               size={30}
               className="text-gray-900 dark:text-gray-50 hover:text-blue-600 transition"
             />
-          </a>
-          <a
+          </Link>
+          <Link
             href="https://github.com/your-username"
             target="_blank"
             rel="noopener noreferrer"
@@ -63,8 +66,8 @@ const Main = () => {
               size={30}
               className="text-gray-900 dark:text-gray-50 hover:text-gray-700 transition"
             />
-          </a>
-          <a
+          </Link>
+          <Link
             href="https://twitter.com/your-username"
             target="_blank"
             rel="noopener noreferrer"
@@ -73,8 +76,8 @@ const Main = () => {
               size={30}
               className="text-gray-900 dark:text-gray-50 hover:text-blue-400 transition"
             />
-          </a>
-          <a
+          </Link>
+          <Link
             href="https://www.instagram.com/your-username"
             target="_blank"
             rel="noopener noreferrer"
@@ -83,8 +86,8 @@ const Main = () => {
               size={30}
               className="text-gray-900 dark:text-gray-50 hover:text-pink-500 transition"
             />
-          </a>
-          <a
+          </Link>
+          <Link
             href="https://www.facebook.com/profile.php?id=100079033674689&mibextid=ZbWKwL"
             target="_blank"
             rel="noopener noreferrer"
@@ -93,22 +96,22 @@ const Main = () => {
               size={30}
               className="text-gray-900 dark:text-gray-50 hover:text-blue-600 transition"
             />
-          </a>
+          </Link>
         </div>
       </div>
       <div className="mt-8 flex justify-center space-x-4">
-        <a
+        <Link
           href="#projects"
           className="px-4 py-2 rounded-full border text-slate-700 shadow hover:bg-[#d1d5db] transition"
         >
           View Projects
-        </a>
-        <a
+        </Link>
+        <Link
           href="#contact"
           className="px-4 py-2 rounded-full border bg-[#0891b2] text-[#f8fafc] shadow hover:bg-[#06b6d4] transition"
         >
           Contact Me
-        </a>
+        </Link>
       </div>
     </div>
   );

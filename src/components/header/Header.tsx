@@ -29,13 +29,13 @@ const Header = () => {
           //size="icon"
           className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
         >
-          <img
+          {/* <img
             src="/placeholder.svg"
             alt="User Avatar"
             width={32}
             height={32}
             className="rounded-full"
-          />
+          /> */}
         </button>
       </div>
     </header>
