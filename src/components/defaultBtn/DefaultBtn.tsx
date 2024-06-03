@@ -7,12 +7,14 @@ interface BtnType {
   description: string;
   url: string;
   target: string;
+  type: string;
   //styles: React.CSSProperties;
 }
 
 const DefaultBtn = (props: BtnType) => {
   return (
     <Link
+      type={props.type}
       onClick={props.onclick}
       passHref
       href={props.url}
