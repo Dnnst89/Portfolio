@@ -58,7 +58,7 @@ const Main = () => {
             />
           </Link>
           <Link
-            href="https://github.com/your-username"
+            href="https://github.com/DannyST89"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -68,17 +68,7 @@ const Main = () => {
             />
           </Link>
           <Link
-            href="https://twitter.com/your-username"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FaTwitter
-              size={30}
-              className="text-gray-900 dark:text-gray-50 hover:text-blue-400 transition"
-            />
-          </Link>
-          <Link
-            href="https://www.instagram.com/your-username"
+            href="https://www.instagram.com/gallito2401/"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -99,20 +89,7 @@ const Main = () => {
           </Link>
         </div>
       </div>
-      <div className="mt-8 flex justify-center space-x-4">
-        <Link
-          href="#projects"
-          className="px-4 py-2 rounded-full border text-slate-700 shadow hover:bg-[#d1d5db] transition"
-        >
-          View Projects
-        </Link>
-        <Link
-          href="#contact"
-          className="px-4 py-2 rounded-full border bg-[#0891b2] text-[#f8fafc] shadow hover:bg-[#06b6d4] transition"
-        >
-          Contact Me
-        </Link>
-      </div>
+      <div className="mt-8 flex justify-center space-x-4"></div>
     </div>
   );
 };

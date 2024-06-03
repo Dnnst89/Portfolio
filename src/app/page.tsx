@@ -15,7 +15,6 @@ import Skills from "@/components/skills/Skills";
 import ContactMe from "@/components/contactMe/ContactMe";
 import Hobbies from "@/components/hobbies/Hobbies";
 import DownloadResume from "@/components/downloadResume/DownloadResume";
-import Settings from "@/components/settings/Settings";
 import SoftSkills from "@/components/softSkills/SoftSkills";
 import SidebarBtn from "@/components/sidebarbtn/SidebarBtn";
 
@@ -55,12 +54,6 @@ const routes: Route[] = [
     id: 5,
     component: <Skills />,
     description: "Skills",
-    icon: <GoTools size={25} style={{ color: "#0891b2" }} />,
-  },
-  {
-    id: 6,
-    component: <Skills />,
-    description: "Components",
     icon: <GoTools size={25} style={{ color: "#0891b2" }} />,
   },
   {
@@ -117,14 +110,14 @@ export default function Home() {
               <span
                 className={`${
                   isSidebarOpen ? "block ml-2" : "hidden"
-                } lg:block hover:text-gray-900 dark:hover:text-gray-50`}
+                } lg:block hover:text-gray-900 ml-2 dark:hover:text-gray-50`}
               >
                 {route.description}
               </span>
             </button>
           ))}
         </div>
-        <div className="flex flex-col items-end gap-6 w-full px-4">Logout</div>
+        <div className="flex flex-col items-end gap-6 w-full px-4"></div>
       </div>
       <div className="flex-1 bg-gray-50 dark:bg-gray-900 transition-all duration-300">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
