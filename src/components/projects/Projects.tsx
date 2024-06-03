@@ -78,6 +78,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           url={project.projectURL}
           description="View Project"
           target="_blank"
+          type=""
         />
         <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
         <h4 className="text-gray-600 mb-4">{project.subtitle}</h4>

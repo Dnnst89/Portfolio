@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 import { FaCloudDownloadAlt } from "react-icons/fa";
 
@@ -11,7 +12,7 @@ const DownloadResume = () => {
         Get to know my professional journey.
       </p>
       <div className="flex justify-center mb-4">
-        <img
+        <Image
           width={50}
           height={50}
           src="PDF_image.png"

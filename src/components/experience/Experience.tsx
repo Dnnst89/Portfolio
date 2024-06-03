@@ -108,6 +108,7 @@ const Experience: React.FC = () => {
                     description="View Project"
                     url={experience.projectUrl}
                     target="_blank"
+                    type=""
                   ></DefaultBtn>
                 )}
                 <DefaultBtn
@@ -115,6 +116,7 @@ const Experience: React.FC = () => {
                   url=""
                   description="Achievements"
                   onclick={() => handleToggleAchievements(experience.id)}
+                  type=""
                 ></DefaultBtn>
               </div>
               {showAchievements[experience.id] && (
