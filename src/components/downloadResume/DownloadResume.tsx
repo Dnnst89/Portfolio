@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import { FaCloudDownloadAlt } from "react-icons/fa";
 
@@ -21,14 +22,14 @@ const DownloadResume = () => {
         />{" "}
       </div>
       <div className="flex justify-center mb-6">
-        <a
+        <Link
           href="/DannySotoResume.pdf"
           download="DannySotoResume.pdf"
           className="flex items-center justify-center px-4 py-2 bg-[#0891b2] text-white font-bold rounded-full shadow hover:bg-[#06b6d4] focus:outline-none"
         >
           <FaCloudDownloadAlt size={30} className="mr-2" />
           Download
-        </a>
+        </Link>
       </div>
     </div>
   );
