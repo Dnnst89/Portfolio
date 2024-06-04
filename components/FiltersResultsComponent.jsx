@@ -85,7 +85,7 @@ export default function FiltersResultsComponent({ querySearch }) {
   }, [getBrandsByAge]);
 
   // depending if there´s a brand selected or not we use the necessary query for it, with or without brand variable.
-  let queryResultWithBrands = useQuery(getProductsFilteredWithBrands(useLocalCurrency), {
+  let queryResultWithBrands = useQuery(getProductsFilteredWithBrands(), {
     variables: {
       initialAge,
       finalAge,
@@ -98,7 +98,7 @@ export default function FiltersResultsComponent({ querySearch }) {
     },
   });
 
-  let queryResult = useQuery(getProductsFiltered(useLocalCurrency), {
+  let queryResult = useQuery(getProductsFiltered(), {
     variables: {
       initialAge,
       finalAge,

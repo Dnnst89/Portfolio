@@ -18,6 +18,8 @@ const useCartSummary = ({ userId }) => {
 
   const [cartData, setCartData] = useState({
     total: 0,
+    subtotal: 0,
+    taxes: 0,
     items: [],
     quantity: 0,
     sessionId: null,
@@ -84,6 +86,38 @@ const useCartSummary = ({ userId }) => {
             return accumulator;
           }, 0);
 
+          const subtotal = fetchedData.reduce((accumulator, item) => {
+            if (
+              item?.attributes?.variant?.data &&
+              item?.attributes?.variant?.data?.attributes?.product?.data
+            ) {
+              //debe existir un producto con su respectiva variante
+              return (
+                accumulator +
+                item?.attributes?.variant?.data?.attributes
+                  ?.localCurrencyPrice *
+                  item?.attributes?.quantity
+              );
+            }
+            return accumulator;
+          }, 0);
+
+          const taxes = fetchedData.reduce((accumulator, item) => {
+            if (
+              item?.attributes?.variant?.data &&
+              item?.attributes?.variant?.data?.attributes?.product?.data
+            ) {
+              //debe existir un producto con su respectiva variante
+              return (
+                accumulator +
+                item?.attributes?.variant?.data?.attributes
+                  ?.ivaAmount *
+                  item?.attributes?.quantity
+              );
+            }
+            return accumulator;
+          }, 0);
+
           const quantity = fetchedData.reduce((accumulator, item) => {
             if (
               item?.attributes?.variant?.data &&
@@ -103,6 +137,8 @@ const useCartSummary = ({ userId }) => {
           setCartData({
             sessionId: shoppingSession.id,
             total,
+            subtotal,
+            taxes,
             quantity,
             items: items.filter(Boolean), // Filtra elementos nulos
           });
@@ -124,6 +160,8 @@ const useCartSummary = ({ userId }) => {
 
   return {
     total: cartData.total,
+    subtotal: cartData.subtotal,
+    taxes: cartData.taxes,
     items: cartData.items,
     quantity: cartData.quantity,
     errors,

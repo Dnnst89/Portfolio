@@ -30,7 +30,6 @@ const Searchbar = () => {
       window.location.href = `/results/?query=${query}`
     }
   };
-  console.log("getAlgoliaResults",getAlgoliaResults());
   return (
     <div className="border border-lightblue rounded-[4px] focus:outline-none focus:ring-2  w-full">
       <Autocomplete
