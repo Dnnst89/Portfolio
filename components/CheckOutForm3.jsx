@@ -154,7 +154,7 @@ export default function CheckOutForm3({
         } = userData;
         // the next step is to send the data to the request
         // we load data into the state
-        if (userData) {
+        if (userData) {          
           setFormData({
             redirect:
               process.env.NODE_ENV === "development"

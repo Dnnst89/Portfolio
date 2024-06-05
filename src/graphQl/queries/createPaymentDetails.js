@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 const CREATE_PAYMENT_DETAIL = gql`
   mutation (
     $status: String
-    $subTotal: Float
+    $subtotal: Float
     $taxes: Float
     $total: Float
     $invoiceRequired: Boolean
@@ -18,7 +18,7 @@ const CREATE_PAYMENT_DETAIL = gql`
     createPaymentDetail(
       data: {
         status: $status
-        subtotal: $subTotal
+        subtotal: $subtotal
         taxes: $taxes
         total: $total
         invoiceRequired: $invoiceRequired

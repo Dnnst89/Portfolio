@@ -6,7 +6,7 @@ const taxProduct = async (variant) => {
   try {
     const token = await getAccessToken();
     const formatedItem = formatTaxData(unitaryPrice, qty, cabys);
-    console.log('formatedItem',formatedItem);
+
     const body = {
       serviceDetail: {
         lineDetails: [formatedItem],
@@ -17,14 +17,10 @@ const taxProduct = async (variant) => {
       body
     );
 
-    console.log('data',data);
     return data;
   } catch (error) {
-    console.error(
-      "Error getting taxes:",
-      error
-    );
+    console.error("Error getting taxes:", error);
     throw error;
   }
 };
-export { taxProduct};
+export { taxProduct };

@@ -59,7 +59,7 @@ const OrderSummary = ({
                     minimumFractionDigits: 2,
                     maximumFractionDigits : 2
                   })}`
-                : `USD ${deliveryPayment.toFixed(2)}`}
+                : `USD ${deliveryPayment?.toFixed(2)}`}
             </p>
           </div>
           <div className="flex justify-between ">

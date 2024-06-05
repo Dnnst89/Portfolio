@@ -32,31 +32,31 @@ const CartDetail = ({
   const withoutDelivery = 0;
   const [amounts, setAmounts] = useState({
     total: 0,
-    subtotal:0,
+    subtotal: 0,
     tax: 0,
     currencyType: currencySymbol,
     loading: false,
   });
-  const {
-    items,
-    quantity,
-    total,
-    subtotal,
-    taxes,
-  } = useCartSummary({
+  const { items, quantity, total, subtotal, taxes } = useCartSummary({
     userId: user?.id,
   });
 
-    useEffect(() => {   
-      setAmounts({
-        tax: taxes,
+  useEffect(() => {
+    setAmounts({
+      tax: taxes,
+      total: total,
+      subtotal: subtotal,
+      loading: false,
+      currencyType: currencySymbol,
+    });
+    if (isCheckout) {
+      paymentAmount({
         total: total,
         subtotal: subtotal,
-        loading: false,
-        currencyType: currencySymbol,
+        taxes: taxes,
       });
-      dispatch(isTaxesLoading(false));
-     
+    }
+    dispatch(isTaxesLoading(false));
   }, [quantity]);
 
   // useEffect(() => {
@@ -257,9 +257,13 @@ const CartDetail = ({
               )}
               <p className="flex justify-center whitespace-nowrap">
                 {useLocalCurrency ? amounts.currencyType + " " : "$ "}
-                {parseFloat(amounts.total).toLocaleString("en-US", {
+                {parseFloat(
+                  deliveryPayment
+                    ? amounts.total + deliveryPayment
+                    : amounts.total
+                ).toLocaleString("en-US", {
                   minimumFractionDigits: 2,
-                  maximumFractionDigits : 2
+                  maximumFractionDigits: 2,
                 })}{" "}
                 &nbsp;
               </p>

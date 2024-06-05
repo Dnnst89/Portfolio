@@ -26,7 +26,7 @@ export default function OrderDetail() {
       {
         ref: 0,
         total: 0,
-        subTotal: 0,
+        subtotal: 0,
         taxes: 0,
         status: "",
       },
@@ -73,7 +73,7 @@ export default function OrderDetail() {
               return {
                 ref: item?.id,
                 status: item?.attributes?.status,
-                subTotal: item?.attributes?.payment_detail?.data?.attributes?.subTotal,
+                subtotal: item?.attributes?.payment_detail?.data?.attributes?.subtotal,
                 taxes: item?.attributes?.payment_detail?.data?.attributes?.taxes,
                 total: item?.attributes?.payment_detail?.data?.attributes?.total,
               };

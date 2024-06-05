@@ -52,7 +52,7 @@ export default function CheckOutForm2({
   const selectedGiftsLabels = selectedGifts.map((gift) => gift.label);
   const selectedGiftsString = selectedGiftsLabels.join(", ");
 
-  const { total, subTotal, taxes } = amount;
+  const { total, subtotal, taxes } = amount;
 
   let paymentDetailResponseId = null;
   const [createPaymentDetail] = useMutation(CREATE_PAYMENT_DETAIL);
@@ -217,20 +217,21 @@ export default function CheckOutForm2({
            */
 
           handleDeliveryPayment(deliveryPrice);
-          const suma = subTotal + taxes + deliveryPrice;
+          const suma = subtotal + taxes + deliveryPrice;
           const finalAmount = {
             total: parseFloat(suma),
-            subTotal: subTotal,
+            subtotal: subtotal,
             taxes: taxes,
           };
 
           setEstima(estimation.idEstimation);
           setAmount(finalAmount);
+         
           try {
             const paymentDetailResponse = await createPaymentDetail({
               variables: {
                 status: "Inicial",
-                subTotal: subTotal,
+                subtotal: subtotal,
                 taxes: taxes,
                 total: finalAmount.total,
                 invoiceRequired: checkbox,
@@ -259,15 +260,16 @@ export default function CheckOutForm2({
     } else if (data.deliveryMethod === SPU) {
       try {
         const finalAmount = {
-          total: subTotal + taxes,
-          subTotal: subTotal,
+          total: subtotal + taxes,
+          subtotal: subtotal,
           taxes: taxes,
         };
         setAmount(finalAmount);
+       
         const paymentDetailResponse = await createPaymentDetail({
           variables: {
             status: "Inicial",
-            subTotal: subTotal,
+            subtotal: subtotal,
             taxes: taxes,
             total: finalAmount.total,
             invoiceRequired: checkbox,
@@ -290,14 +292,14 @@ export default function CheckOutForm2({
         console.error(error);
       }
     } else if (data.deliveryMethod === CCR) {
-      const totalToPay = subTotal + taxes + LongDistancePrice;
+      const totalToPay = subtotal + taxes + LongDistancePrice;
       // Cargamos el objeto con los montos originales
       //que el cliente debera pagar.
 
       const finalPriceToPay = {
         // Total final le agregamos el costo del envio
         total: totalToPay,
-        subTotal: subTotal,
+        subtotal: subtotal,
         taxes: taxes,
       };
 
@@ -312,10 +314,11 @@ export default function CheckOutForm2({
           //Creamos la mutacion segun los parametros de Correos de Costa Rica.
           //si la distancia de entrega supera los 20 kilometros.
           // TODO: vericar que la estructura del request esta correcto.
+
           createPaymentDetail({
             variables: {
               status: "Inicial",
-              subTotal: subTotal,
+              subtotal: subtotal,
               taxes: taxes,
               total: totalToPay,
               invoiceRequired: checkbox,
@@ -345,22 +348,23 @@ export default function CheckOutForm2({
             });
         } else {
           // si la distancia no exede los 20 kilometros
-          const totalToPay = subTotal + taxes + ShortDistancePrice;
+          const totalToPay = subtotal + taxes + ShortDistancePrice;
           // Cargamos el objeto con los montos originales
           //que el cliente debera pagar.
 
           const finalPriceToPay = {
             // Total final le agregamos el costo del envio
             total: totalToPay,
-            subTotal: subTotal,
+            subtotal: subtotal,
             taxes: taxes,
           };
           handleDeliveryPayment(ShortDistancePrice);
           setAmount(finalPriceToPay);
+
           createPaymentDetail({
             variables: {
               status: "Inicial",
-              subTotal: subTotal,
+              subtotal: subtotal,
               taxes: taxes,
               total: totalToPay,
               invoiceRequired: checkbox,
@@ -480,7 +484,7 @@ export default function CheckOutForm2({
       ) : (
         <CheckOutForm3
           paymentDetailId={paymentDetailId}
-          total={total}
+          total={total.toFixed(2)}
           estimation={estima}
           items={items}
           orderNumber={paymentDetailId}

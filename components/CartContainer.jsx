@@ -47,8 +47,6 @@ const CartContainer = () => {
             );
           }
 
-          {console.log(item)}
-
           return (
             <div key={item.id}>
               <CartItem

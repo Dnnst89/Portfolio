@@ -58,8 +58,7 @@ const Searchbar = () => {
             },            
             templates: {              
               item({ item, components }) {
-                {console.log("item",item)}
-                return <SearchItem hit={item} currencySymbol={currencySymbol} useLocalCurrency = {useLocalCurrency}  components={components} />;
+                  return <SearchItem hit={item} currencySymbol={currencySymbol} useLocalCurrency = {useLocalCurrency}  components={components} />;
               },
               footer() {
                 return (
