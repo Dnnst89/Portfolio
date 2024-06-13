@@ -341,7 +341,9 @@ export default function ThankYouMessage() {
               variantId: parseInt(variant?.id), //este dato es un INT no un ID
               publishedAt: isoDate,
               orderDetailId: orderId,
-              price: variantAtt.totalPrice,
+              price: variantAtt.localCurrencyPrice,
+              totalPrice: variantAtt.totalPrice,
+              ivaAmount: variantAtt.ivaAmount,
               name: variantAtt.product.data.attributes.name,
               brand: variantAtt.product.data.attributes.brand,
               cabys: variantAtt.product.data.attributes.cabys,
@@ -415,194 +417,203 @@ export default function ThankYouMessage() {
       }
     }
   };
-  ////////////////////////////////FUNCION PARA CREAR LA FACTURA ELECTRONICA//////////////////////////////
-//   const createInvoice = async (orderId) => {
-//     //  const key = createKey(1, "3101491212");
-//     try {
-//       const PaymentDetail = await getPaymentDetail({
-//         variables: {
-//           paymentId: paymentId,
-//         },
-//       });
+  // FUNCION PARA CREAR LA FACTURA ELECTRONICA
+  const createInvoice = async (orderId) => {
+    //  const key = createKey(1, "3101491212");
+    try {
+      const PaymentDetail = await getPaymentDetail({
+        variables: {
+          paymentId: paymentId,
+        },
+      });
 
-//       const required =
-//         PaymentDetail.data.paymentDetail.data.attributes.invoiceRequired;
-//       /*const billSummary = {
-//         total: PaymentDetail?.data?.paymentDetail?.data?.attributes?.total,
-//         subtotal:
-//           PaymentDetail?.data?.paymentDetail?.data?.attributes?.subtotal,
-//         taxes: PaymentDetail?.data?.paymentDetail?.data?.attributes?.taxes,
-//       };*/
-//       if (required) {
-//         try {
-//           const { data } = await getOrderItemsByOrderId({
-//             variables: {
-//               orderId: orderId,
-//             },
-//           });
+      const required =
+        PaymentDetail.data.paymentDetail.data.attributes.invoiceRequired;
+      /*const billSummary = {
+        total: PaymentDetail?.data?.paymentDetail?.data?.attributes?.total,
+        subtotal:
+          PaymentDetail?.data?.paymentDetail?.data?.attributes?.subtotal,
+        taxes: PaymentDetail?.data?.paymentDetail?.data?.attributes?.taxes,
+      };*/
+      if (required) {
+        try {
+          const { data } = await getOrderItemsByOrderId({
+            variables: {
+              orderId: orderId,
+            },
+          });
 
-//           const resultado =
-//             data?.orderDetail?.data?.attributes.order_items?.data;
+          const resultado =
+            data?.orderDetail?.data?.attributes.order_items?.data;
+            console.log("resultado", resultado);
 
-//           try {
-//             if (!resultado.length) return;
-//             const token = await getAccessToken();
-//             const formatedItems = formatTaxData(items);
-//             const body = {
-//               serviceDetail: {
-//                 lineDetails: [...formatedItems],
-//               },
-//             };
-//             const feeResult = await facturationInstace.post(
-//               `/utils/get-detail-line?access_token=${token}`,
-//               body
-//             );
+          try {
+            if (!resultado.length) return;
+            const token = await getAccessToken();
+            const formatedItems = formatTaxData(items);
+            const body = {
+              serviceDetail: {
+                lineDetails: [...formatedItems],
+              },
+            };
 
-//             const billSummary = feeResult?.data?.billSummary;
-//             const imp = feeResult?.data?.serviceDetail?.lineDetails;
+            console.log("formatedItems", formatedItems);
+            console.log("body", body);
 
-//             const inv = formatItemInvoice(resultado, imp);
+            const feeResult = await facturationInstace.post(
+              `/utils/get-detail-line?access_token=${token}`,
+              body
+            );
 
-//             try {
-//               /*const store = {
-//                 accountId: "de7a8bf8-63d4-427e-99ce-5870c2ffc338",
-//                 name: "Félix Ojeda Ortiz",
-//                 type: "03",
-//                 number: "155822450521",
-//                 commercialName: "",
-//                 province: "2",
-//                 country: "01",
-//                 district: "01",
-//                 neighborhood: "01",
-//                 otherSigns: "Monserrat",
-//                 email: "yoloyulios@gmail.com",
-//                 ActivityCode: "721001",
-//               };
-//               */
-//               const result = await getStoreInformation({
-//                 variables: {
-//                   id: 1,
-//                 },
-//               });
+            console.log("feeResult", feeResult);
+            const billSummary = feeResult?.data?.billSummary;
+            const imp = feeResult?.data?.serviceDetail?.lineDetails;
+            console.log("imp", imp);
+            const inv = formatItemInvoice(resultado, imp);
 
-//               const paymentUser = await getPaymentDetails({
-//                 variables: {
-//                   userId: userId,
-//                 },
-//               });
+            console.log("inv");
+            console.log(inv);
 
-//               const client = {
-//                 name:
-//                   paymentUser?.data?.usersPermissionsUser?.data?.attributes
-//                     ?.firstName +
-//                   " " +
-//                   paymentUser?.data?.usersPermissionsUser?.data?.attributes
-//                     ?.lastName,
-//                 idType: validateID(
-//                   paymentUser?.data?.usersPermissionsUser?.data?.attributes
-//                     ?.idCard?.idType
-//                 ),
-//                 idNumber:
-//                   paymentUser?.data?.usersPermissionsUser?.data?.attributes
-//                     ?.idCard?.idNumber,
-//                 email:
-//                   paymentUser?.data?.usersPermissionsUser?.data?.attributes
-//                     ?.invoiceEmail,
-//               };
-//               const store = result?.data?.storeInformation?.data?.attributes;
+            try {
+              /*const store = {
+                accountId: "de7a8bf8-63d4-427e-99ce-5870c2ffc338",
+                name: "Félix Ojeda Ortiz",
+                type: "03",
+                number: "155822450521",
+                commercialName: "",
+                province: "2",
+                country: "01",
+                district: "01",
+                neighborhood: "01",
+                otherSigns: "Monserrat",
+                email: "yoloyulios@gmail.com",
+                ActivityCode: "721001",
+              };
+              */
+              const result = await getStoreInformation({
+                variables: {
+                  id: 1,
+                },
+              });
 
-//               const number = await getConsecutiveNumber({
-//                 variables: {
-//                   page: 1,
-//                   pageSize: 1,
-//                 },
-//               });
-//               const InvoiceNumber =
-//                 number?.data?.electronicInvoices?.data[0]?.attributes
-//                   ?.consecutive;
-//               const key = createKey(InvoiceNumber, store.IdNumber);
-//               const consecutive = createConsecutiveNumber(InvoiceNumber);
-//               const bodyInvoice = {
-//                 accountId: store.accountId,
-//                 document: {
-//                   ...InvoiceInformation(store, client, key, consecutive),
-//                   serviceDetail: {
-//                     lineDetails: [...inv],
-//                   },
-//                   otherCharges: [],
-//                   billSummary: {
-//                     ...formatBillSumary(billSummary, "535.86", store.currency),
-//                   },
-//                   referenceInformation: [],
-//                   others: {
-//                     textOthers: [],
-//                   },
-//                 },
-//                 posTicket: false,
-//                 sendMail: true,
-//                 mailTitle:
-//                   "Gracias por su compra en Detinmarin, adjuntamos su factura electrónica",
-//                 mailBody: `
-//                 <p>Estimado(a): ${client.name} </p>
+              const paymentUser = await getPaymentDetails({
+                variables: {
+                  userId: userId,
+                },
+              });
 
-//                 <p>La informaci&oacute;n suministrada ser&aacute; utilizada &uacute;nicamente para los fines de la emisi&oacute;n de la factura electr&oacute;nica para suministrar dicha informaci&oacute;n en el registro&nbsp;conforme a lo establecido en la resoluci&oacute;n de Facturaci&oacute;n Electr&oacute;nica,No.\nDGT-R-033-2019 del 27 de junio de 2019 de la Direcci&oacute;n General de Tributaci&oacute;n.</p>
+              const client = {
+                name:
+                  paymentUser?.data?.usersPermissionsUser?.data?.attributes
+                    ?.firstName +
+                  " " +
+                  paymentUser?.data?.usersPermissionsUser?.data?.attributes
+                    ?.lastName,
+                idType: validateID(
+                  paymentUser?.data?.usersPermissionsUser?.data?.attributes
+                    ?.idCard?.idType
+                ),
+                idNumber:
+                  paymentUser?.data?.usersPermissionsUser?.data?.attributes
+                    ?.idCard?.idNumber,
+                email:
+                  paymentUser?.data?.usersPermissionsUser?.data?.attributes
+                    ?.invoiceEmail,
+              };
+              const store = result?.data?.storeInformation?.data?.attributes;
+
+              const number = await getConsecutiveNumber({
+                variables: {
+                  page: 1,
+                  pageSize: 1,
+                },
+              });
+              const InvoiceNumber =
+                number?.data?.electronicInvoices?.data[0]?.attributes
+                  ?.consecutive;
+              const key = createKey(InvoiceNumber, store.IdNumber);
+              const consecutive = createConsecutiveNumber(InvoiceNumber);
+              const bodyInvoice = {
+                accountId: store.accountId,
+                document: {
+                  ...InvoiceInformation(store, client, key, consecutive),
+                  serviceDetail: {
+                    lineDetails: [...inv],
+                  },
+                  otherCharges: [],
+                  billSummary: {
+                    ...formatBillSumary(billSummary, "1", store.currency),
+                  },
+                  referenceInformation: [],
+                  others: {
+                    textOthers: [],
+                  },
+                },
+                posTicket: false,
+                sendMail: true,
+                mailTitle:
+                  "Gracias por su compra en Detinmarin, adjuntamos su factura electrónica",
+                mailBody: `
+                <p>Estimado(a): ${client.name} </p>
+
+                <p>La informaci&oacute;n suministrada ser&aacute; utilizada &uacute;nicamente para los fines de la emisi&oacute;n de la factura electr&oacute;nica para suministrar dicha informaci&oacute;n en el registro&nbsp;conforme a lo establecido en la resoluci&oacute;n de Facturaci&oacute;n Electr&oacute;nica,No.\nDGT-R-033-2019 del 27 de junio de 2019 de la Direcci&oacute;n General de Tributaci&oacute;n.</p>
                 
-//                 <p>El suministro voluntario de la informaci&oacute;n y datos personales se interpreta como el otorgamiento de su consentimiento para su uso de acuerdo a lo indicado en el presente aviso. Ante cualquier consulta podria comunicarse al correo <a href="mailto:hola@detinmarin.cr">hola@detinmarin.cr</a>&nbsp;o al n&uacute;mero telef&oacute;nico&nbsp;<a href="tel:+506-8771-6588">(+506) 8771-6588</a>&nbsp;</p>
-// <img src="https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Logo_01_c02eda42d1.jpg"
-//                 alt="detinmarin" style="display:block;font-size:14px;border:0;outline:none;text-decoration:none"
-//                 width="140" title="detinmarin">
+                <p>El suministro voluntario de la informaci&oacute;n y datos personales se interpreta como el otorgamiento de su consentimiento para su uso de acuerdo a lo indicado en el presente aviso. Ante cualquier consulta podria comunicarse al correo <a href="mailto:hola@detinmarin.cr">hola@detinmarin.cr</a>&nbsp;o al n&uacute;mero telef&oacute;nico&nbsp;<a href="tel:+506-8771-6588">(+506) 8771-6588</a>&nbsp;</p>
+<img src="https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Logo_01_c02eda42d1.jpg"
+                alt="detinmarin" style="display:block;font-size:14px;border:0;outline:none;text-decoration:none"
+                width="140" title="detinmarin">
                   
                   
-//                   `,
+                  `,
 
-//                 additionalInfo: {
-//                   nameDoc: "Factura Electrónica",
-//                   legendFooter:
-//                     "Emitida conforme a lo establecido en la resolución de Facturación Electrónica, No.\\nDGT-R-033-2019 del 27 de junio de 2019 de la Dirección General de Tributación.",
-//                   fileName: "155822450521-FE-" + consecutive,
-//                 },
-//                 returnCompleteAnswer: true,
-//               };
+                additionalInfo: {
+                  nameDoc: "Factura Electrónica",
+                  legendFooter:
+                    "Emitida conforme a lo establecido en la resolución de Facturación Electrónica, No.\\nDGT-R-033-2019 del 27 de junio de 2019 de la Dirección General de Tributación.",
+                  fileName: "155822450521-FE-" + consecutive,
+                },
+                returnCompleteAnswer: true,
+              };
+              console.log("factura", bodyInvoice);
+              const InvoiceResult = await facturationInstace.post(
+                `document/electronic-invoice?access_token=${token}`,
+                bodyInvoice
+              );
+              console.log("resultado factura", InvoiceResult);
+              try {
+                const isoDate = new Date().toISOString();
+                const resulta = await getStoreInformation({
+                  variables: {
+                    id: 1,
+                  },
+                });
+                const activity = parseInt(
+                  resulta?.data?.storeInformation?.data?.attributes
+                    ?.ActivityCode
+                );
 
-//               const InvoiceResult = await facturationInstace.post(
-//                 `document/electronic-invoice?access_token=${token}`,
-//                 bodyInvoice
-//               );
-
-//               try {
-//                 const isoDate = new Date().toISOString();
-//                 const resulta = await getStoreInformation({
-//                   variables: {
-//                     id: 1,
-//                   },
-//                 });
-//                 const activity = parseInt(
-//                   resulta?.data?.storeInformation?.data?.attributes
-//                     ?.ActivityCode
-//                 );
-
-//                 const invoiceId = await createElectronicInvoice({
-//                   variables: {
-//                     order: orderId,
-//                     consecutive: consecutive,
-//                     keyInvoice: key,
-//                     activityCode: activity,
-//                     publishedAt: isoDate,
-//                   },
-//                 });
-//               } catch (error) {
-//                 console.log("error", error);
-//               }
-//             } catch (error) {}
-//           } catch (error) {}
-//         } catch (error) {
-//           console.log("error crear factura", error);
-//         }
-//       }
-//     } catch (error) {
-//       console.log("error crear factura", error);
-//     }
-//   };
+                const invoiceId = await createElectronicInvoice({
+                  variables: {
+                    order: orderId,
+                    consecutive: consecutive,
+                    keyInvoice: key,
+                    activityCode: activity,
+                    publishedAt: isoDate,
+                  },
+                });
+              } catch (error) {
+                console.log("error", error);
+              }
+            } catch (error) {}
+          } catch (error) {}
+        } catch (error) {
+          console.log("error crear factura", error);
+        }
+      }
+    } catch (error) {
+      console.log("error crear factura", error);
+    }
+  };
 
   return paymentId ? (
     <div className="bg-floralwhite p-[100px] flex justify-center">

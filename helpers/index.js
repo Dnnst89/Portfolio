@@ -23,7 +23,7 @@ const formatTaxData = (items) => {
   return items?.map((item) => {
     return {
       measurementUnit: "1/m",
-      unitaryPrice: item?.attributes?.variant?.data?.attributes?.price,
+      unitaryPrice: item?.attributes?.variant?.data?.attributes?.localCurrencyPrice,
       qty: item?.quantity,
       cabys:
         item?.attributes?.variant?.data?.attributes?.product?.data?.attributes?.cabys?.toString(),
@@ -101,7 +101,7 @@ const validateID = (tipo) => {
     return "01";
   } else return "02";
 };
-const formatBillSumary = (billSummary, exchangeRate, currencyCode) => {
+const formatBillSumary = (billSummary, exchangeRate, currencyCode,imp) => {
   return {
     codeTypeCurrency: {
       currencyCode: currencyCode,
@@ -179,13 +179,13 @@ const formatItemInvoice = (items, imp) => {
       taxes: [
         {
           code: "" + cod,
-          codeFee: "" + imp[cont].taxes[0].codeFee,
+          // codeFee: "" + imp[cont].taxes[0].codeFee,
           fee: imp[cont].taxes[0].fee,
           VATFactor: "" + imp[cont].taxes[0].vatfactor,
-          amount: "" + imp[cont].taxes[0].amount,
+          amount: "" + imp[cont].netTax,
         },
       ],
-      netTax: "" + imp[cont].taxes[0].amount,
+      netTax: "" + imp[cont].netTax,
       lineTotalAmount: "" + imp[cont].lineTotalAmount,
     };
   });

@@ -839,7 +839,7 @@ function FormOne() {
             />
           </div>
           {/* TODO: se agrega clase hidden para ocultar checkbox de factura electronica */}
-          <div className="hidden">
+          <div className="">
             {" "}
             <div className="flex w-full">
               <section className="w-3/4 ml-4 mt-10 mb-5 flex space-x-5">
