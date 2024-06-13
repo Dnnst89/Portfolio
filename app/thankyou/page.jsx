@@ -445,8 +445,7 @@ export default function ThankYouMessage() {
 
           const resultado =
             data?.orderDetail?.data?.attributes.order_items?.data;
-            console.log("resultado", resultado);
-
+           
           try {
             if (!resultado.length) return;
             const token = await getAccessToken();
@@ -457,22 +456,14 @@ export default function ThankYouMessage() {
               },
             };
 
-            console.log("formatedItems", formatedItems);
-            console.log("body", body);
-
             const feeResult = await facturationInstace.post(
               `/utils/get-detail-line?access_token=${token}`,
               body
             );
 
-            console.log("feeResult", feeResult);
             const billSummary = feeResult?.data?.billSummary;
             const imp = feeResult?.data?.serviceDetail?.lineDetails;
-            console.log("imp", imp);
-            const inv = formatItemInvoice(resultado, imp);
-
-            console.log("inv");
-            console.log(inv);
+            const inv = formatItemInvoice(items, imp);
 
             try {
               /*const store = {
