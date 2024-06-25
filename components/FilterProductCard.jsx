@@ -17,6 +17,7 @@ const FilterProductCard = ({
   const altTextDesc = "Imagen Producto " + name;
   const router = useRouter();
   const productChange = () => {
+    console.log("hola");
     trackEvent(
       brand,
       "click_on_product",
@@ -27,9 +28,10 @@ const FilterProductCard = ({
     );
     window.location.href = `/detail/?id=${id}`;
   };
-
-  const { storeInformation, storeInformationError} = useStoreInformation(1);
-  const currencySymbol = storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
+  console.log("test", brand, name, defaultPrice, initialAge, finalAge);
+  const { storeInformation, storeInformationError } = useStoreInformation(1);
+  const currencySymbol =
+    storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
 
   return (
     <div
@@ -71,9 +73,10 @@ const FilterProductCard = ({
       </div>
 
       <div className="bg-aquamarine text-xs md:text-lg rounded-b-[15px] font-bold flex justify-center absolute bottom-0 left-0 right-0 hover:underline text-white p-1">
-      {currencySymbol} {parseFloat(defaultPrice).toLocaleString("en-US", {
-              minimumFractionDigits: 2,  
-              })}
+        {currencySymbol}{" "}
+        {parseFloat(defaultPrice).toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+        })}
       </div>
     </div>
   );
