@@ -25,6 +25,7 @@ import { useSelector } from "react-redux";
 import { MOOVIN_ERROR, MOOVIN_RESPONSE } from "@/helpers/messageTypes";
 import useFetchMoovinCoverageData from "@/hooks/useFetchMoovinCoverageData";
 import { useLocalCurrencyContext } from "@/src/context/useLocalCurrency";
+import { UPDATE_PAYMENT_DETAIL_ORDER } from "@/src/graphQl/queries/UpdatePaymentDetailOrder";
 export default function CheckOutForm2({
   amount,
   checkbox,
@@ -36,14 +37,17 @@ export default function CheckOutForm2({
 }) {
   // if true send LocalCurrencyPrice as price for products else send variant price
   const useLocalCurrency = useLocalCurrencyContext();
-
+  let concatenatedOrderNumber = 0;
   const isoDate = new Date().toISOString();
-  const [paymentDetailId, setPaymentDetailId] = useState(null);
+
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
   const [isMoreThanDeliveryRange, setIsMoreThanDeliveryRange] = useState(false);
+  const [orderGenerated, setOrderGenerated] = useState(null);
   //Exchange rate
   const [createExchangeRate] = useMutation(CREATE_EXCHANGE_RATE);
   const [updateExchangeRate] = useMutation(UPDATE_EXCHANGE_RATE);
+  const [updatePaymentDatailOrder] = useMutation(UPDATE_PAYMENT_DETAIL_ORDER);
+  const [paymentDetailId, setPaymentDetailId] = useState(null);
   let exchangeRateResponseId = null;
   const [exchangeRateId, setExchangeRateId] = useState(null);
   //Obtenemos el estado de los regalos que se van a envolver
@@ -215,7 +219,6 @@ export default function CheckOutForm2({
            * - Modifica el estado del deliveryPayment
            * - se envia unicamente cuando moovin tiene disponibilidad.
            */
-
           handleDeliveryPayment(deliveryPrice);
           const suma = subtotal + taxes + deliveryPrice;
           const finalAmount = {
@@ -226,30 +229,60 @@ export default function CheckOutForm2({
 
           setEstima(estimation.idEstimation);
           setAmount(finalAmount);
-         
+
+          //metodo para generar id unico
+          // se genera un id unico para proceso de pago,
+          // este ID se agrega al request de tilopay
+          const generateUniqueid = () => {
+            const date = new Date();
+
+            //le agregamos el formato correspodiente
+            const formattedDate =
+              date.getFullYear().toString() +
+              (date.getMonth() + 1).toString().padStart(2, "0") +
+              date.getDate().toString().padStart(2, "0") +
+              date.getHours().toString().padStart(2, "0") +
+              date.getMinutes().toString().padStart(2, "0") +
+              date.getSeconds().toString().padStart(2, "0");
+            return formattedDate;
+          };
+          const orderNumber = generateUniqueid();
           try {
             const paymentDetailResponse = await createPaymentDetail({
               variables: {
                 status: "Inicial",
-                subtotal: subtotal,
+                subTotal: subtotal,
                 taxes: taxes,
-                total: finalAmount.total,
+                total: total,
                 invoiceRequired: checkbox,
-                deliveryPayment: parseFloat(deliveryPrice),
-                deliveryId: parseInt(estimation.idEstimation),
+                deliveryPayment: parseFloat(0),
+                deliveryId: parseInt(0),
                 deliveryMethod: data.deliveryMethod,
                 paymentMethod: "Tarjeta Crédito/ Débito",
                 publishedAt: isoDate,
-                //TODO: debe llegar un texto a base de datos
                 gift: selectedGiftsString,
-                estimate_delivery_date: MoovinEstimatedDelivery,
+                //Inicialmente se envia encero,a la espera de la
+                //generacion del id de la orden que se toma como
+                //referencia el pk de la tabla.
+                orderNumber: 1234,
               },
             });
-
             paymentDetailResponseId =
               paymentDetailResponse?.data?.createPaymentDetail?.data?.id;
-            setPaymentDetailId(paymentDetailResponseId);
+            console.log("pk", paymentDetailResponseId);
+            //setPaymentDetailId(paymentDetailResponseId);
+            console.log("ordder", paymentDetailResponseId + orderNumber);
             setChecktOutForm2Visible(true);
+            try {
+              await updatePaymentDatailOrder({
+                variables: {
+                  id: paymentDetailId,
+                  newOrderNumber: paymentDetailResponseId + orderNumber,
+                },
+              });
+            } catch (error) {
+              console.log("No es posible actualizar orden detail", error);
+            }
           } catch (error) {
             console.error(error);
           }
@@ -265,7 +298,7 @@ export default function CheckOutForm2({
           taxes: taxes,
         };
         setAmount(finalAmount);
-       
+
         const paymentDetailResponse = await createPaymentDetail({
           variables: {
             status: "Inicial",
@@ -279,6 +312,7 @@ export default function CheckOutForm2({
             paymentMethod: "Tarjeta Crédito/ Débito",
             publishedAt: isoDate,
             gift: selectedGiftsString,
+            orderNumber: 12421455,
           },
         });
 
@@ -288,6 +322,7 @@ export default function CheckOutForm2({
         setAmount(finalAmount);
         handleDeliveryPayment(0);
         setChecktOutForm2Visible(true);
+        console.log("SPU", paymentDetailId);
       } catch (error) {
         console.error(error);
       }
@@ -329,6 +364,7 @@ export default function CheckOutForm2({
               publishedAt: isoDate,
               estimate_delivery_date: LongEstimatedDelivery,
               gift: selectedGiftsString,
+              orderNumber: 12421455,
             },
           })
             .then((responsePaymentDetail) => {
@@ -338,6 +374,7 @@ export default function CheckOutForm2({
                   responsePaymentDetail?.data?.createPaymentDetail?.data?.id;
                 setPaymentDetailId(orderId);
                 setChecktOutForm2Visible(true);
+                console.log("CCR1", paymentDetailId);
               }
             })
             .catch((error) => {
@@ -375,6 +412,7 @@ export default function CheckOutForm2({
               publishedAt: isoDate,
               estimate_delivery_date: ShortEstimatedDelivery,
               gift: selectedGiftsString,
+              orderNumber: 12421455,
             },
           })
             .then((response) => {
@@ -383,6 +421,7 @@ export default function CheckOutForm2({
                 const orderId = response?.data?.createPaymentDetail?.data?.id;
                 setPaymentDetailId(orderId);
                 setChecktOutForm2Visible(true);
+                console.log("CCR2", paymentDetailId);
               }
             })
             .catch((error) => {
@@ -394,7 +433,26 @@ export default function CheckOutForm2({
         }
       });
     }
+
+    //actualiza payment detail de acuerdo al primary key guarda generado
+    //se concatena la orden generada mas el primery key generado strapi.
+    const concatOrder = paymentDetailId + orderNumber;
+    console.log("paymentdetail", paymentDetailId);
+    console.log("order number", orderNumber);
+    setOrderGenerated(concatOrder);
+    //console.log("concatenatedOrderNumber", orderGenerated);
+    try {
+      await updatePaymentDatailOrder({
+        variables: {
+          id: paymentDetailId,
+          newOrderNumber: orderGenerated,
+        },
+      });
+    } catch (error) {
+      console.log("No es posible actualizar orden detail", error);
+    }
   });
+
   return (
     <div className="w-full">
       <div className="flex justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200 min-w-[375px]">
@@ -487,7 +545,7 @@ export default function CheckOutForm2({
           total={total.toFixed(2)}
           estimation={estima}
           items={items}
-          orderNumber={paymentDetailId}
+          orderNumber={orderGenerated}
         />
       )}
     </div>
