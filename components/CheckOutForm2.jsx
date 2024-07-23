@@ -26,6 +26,8 @@ import { MOOVIN_ERROR, MOOVIN_RESPONSE } from "@/helpers/messageTypes";
 import useFetchMoovinCoverageData from "@/hooks/useFetchMoovinCoverageData";
 import { useLocalCurrencyContext } from "@/src/context/useLocalCurrency";
 import { UPDATE_PAYMENT_DETAIL_ORDER } from "@/src/graphQl/queries/UpdatePaymentDetailOrder";
+import orderGenerator from "@/helpers/orderGenerator";
+import useUpdatePaymentDetailOrder from "@/hooks/useUpdatePaymentDetailOrder";
 export default function CheckOutForm2({
   amount,
   checkbox,
@@ -60,6 +62,11 @@ export default function CheckOutForm2({
 
   let paymentDetailResponseId = null;
   const [createPaymentDetail] = useMutation(CREATE_PAYMENT_DETAIL);
+  const {
+    updateOrder,
+    data: updatedorder,
+    error: updatedOrderError,
+  } = useUpdatePaymentDetailOrder();
   /**
    * Se obtienen las opciones de delivery
    */
@@ -230,23 +237,6 @@ export default function CheckOutForm2({
           setEstima(estimation.idEstimation);
           setAmount(finalAmount);
 
-          //metodo para generar id unico
-          // se genera un id unico para proceso de pago,
-          // este ID se agrega al request de tilopay
-          const generateUniqueid = () => {
-            const date = new Date();
-
-            //le agregamos el formato correspodiente
-            const formattedDate =
-              date.getFullYear().toString() +
-              (date.getMonth() + 1).toString().padStart(2, "0") +
-              date.getDate().toString().padStart(2, "0") +
-              date.getHours().toString().padStart(2, "0") +
-              date.getMinutes().toString().padStart(2, "0") +
-              date.getSeconds().toString().padStart(2, "0");
-            return formattedDate;
-          };
-          const orderNumber = generateUniqueid();
           try {
             const paymentDetailResponse = await createPaymentDetail({
               variables: {
@@ -271,20 +261,15 @@ export default function CheckOutForm2({
               paymentDetailResponse?.data?.createPaymentDetail?.data?.id;
             console.log("pk", paymentDetailResponseId);
             //setPaymentDetailId(paymentDetailResponseId);
-            console.log("ordder", paymentDetailResponseId + orderNumber);
+            //console.log("ordder", paymentDetailResponseId + orderNumber);
             setChecktOutForm2Visible(true);
-            try {
-              await updatePaymentDatailOrder({
-                variables: {
-                  id: paymentDetailId,
-                  newOrderNumber: paymentDetailResponseId + orderNumber,
-                },
-              });
-            } catch (error) {
-              console.log("No es posible actualizar orden detail", error);
-            }
+            //se llama al hook que actualiza la orden
+            // se le pasan los parametros necesarios
+            const orderNumber = orderGenerator();
+
+            await updateOrder(paymentDetailResponseId, orderNumber);
           } catch (error) {
-            console.error(error);
+            console.error("Ne se ha podido crear la orden", error);
           }
         }
       } catch (error) {
@@ -432,24 +417,6 @@ export default function CheckOutForm2({
             });
         }
       });
-    }
-
-    //actualiza payment detail de acuerdo al primary key guarda generado
-    //se concatena la orden generada mas el primery key generado strapi.
-    const concatOrder = paymentDetailId + orderNumber;
-    console.log("paymentdetail", paymentDetailId);
-    console.log("order number", orderNumber);
-    setOrderGenerated(concatOrder);
-    //console.log("concatenatedOrderNumber", orderGenerated);
-    try {
-      await updatePaymentDatailOrder({
-        variables: {
-          id: paymentDetailId,
-          newOrderNumber: orderGenerated,
-        },
-      });
-    } catch (error) {
-      console.log("No es posible actualizar orden detail", error);
     }
   });
 
