@@ -39,7 +39,6 @@ export default function CheckOutForm2({
 }) {
   // if true send LocalCurrencyPrice as price for products else send variant price
   const useLocalCurrency = useLocalCurrencyContext();
-  let concatenatedOrderNumber = 0;
   const isoDate = new Date().toISOString();
 
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
@@ -69,6 +68,9 @@ export default function CheckOutForm2({
     data: updatedorder,
     error: updatedOrderError,
   } = useUpdatePaymentDetailOrder();
+  // se toma la orden final desde strapi que se enviara a tilopay
+  const finalOrderNumber =
+    updatedorder?.updatePaymentDetail?.data?.attributes?.orderNumber;
   /**
    * Se obtienen las opciones de delivery
    */
@@ -265,10 +267,17 @@ export default function CheckOutForm2({
             setPaymentDetailId(paymentDetailResponseId);
             //se muestra el checkout 3
             setChecktOutForm2Visible(true);
+            console.log(
+              "order",
+              updatedorder?.updatePaymentDetailOrder?.orderNumberdata
+                .updatePaymentDetailOrder?.orderNumber
+            );
+
             //se llama al hook que actualiza la orden
             // se le pasan los parametros necesarios
-
-            await updateOrder(paymentDetailResponseId, orderNumber);
+            if (paymentDetailResponseId) {
+              updateOrder(paymentDetailResponseId, orderNumber);
+            }
           } catch (error) {
             console.error("Ne se ha podido crear la orden", error);
           }
@@ -308,7 +317,6 @@ export default function CheckOutForm2({
         setAmount(finalAmount);
         handleDeliveryPayment(0);
         setChecktOutForm2Visible(true);
-        console.log("SPU", paymentDetailId);
       } catch (error) {
         console.error(error);
       }
@@ -511,7 +519,7 @@ export default function CheckOutForm2({
           total={total.toFixed(2)}
           estimation={estima}
           items={items}
-          orderNumber={orderNumber}
+          orderNumber={finalOrderNumber}
         />
       )}
     </div>

@@ -64,14 +64,13 @@ export default function CheckOutForm3({
   const currency =
     storeInformation?.storeInformation?.data?.attributes?.currency;
 
-  const fetchOrderMoovin = async (orderNumber) => {
+  const fetchOrderMoovin = async (paymentDetailId) => {
     try {
       const paymentUser = data;
       const paymentinfo = await getPaymentDetail({
         //obtengo el paymentDetails, para que cuando refresque la pagina no cree mas ordenes
         variables: { paymentId: paymentDetailId },
       });
-      console.log("getPaymentdetailinfo", paymentinfo);
       const client = {
         name:
           paymentUser?.usersPermissionsUser?.data?.attributes?.firstName +
@@ -178,7 +177,7 @@ export default function CheckOutForm3({
             billToCountry: "CR",
             billToTelephone: phoneNumber,
             billToEmail: email,
-            orderNumber: paymentDetailId,
+            orderNumber: orderNumber,
             capture: "1",
             subscription: "1",
             platform: "api",
