@@ -267,12 +267,6 @@ export default function CheckOutForm2({
             setPaymentDetailId(paymentDetailResponseId);
             //se muestra el checkout 3
             setChecktOutForm2Visible(true);
-            console.log(
-              "order",
-              updatedorder?.updatePaymentDetailOrder?.orderNumberdata
-                .updatePaymentDetailOrder?.orderNumber
-            );
-
             //se llama al hook que actualiza la orden
             // se le pasan los parametros necesarios
             if (paymentDetailResponseId) {
@@ -364,10 +358,16 @@ export default function CheckOutForm2({
             .then((responsePaymentDetail) => {
               // Verificamos si la data esta disponible
               if (responsePaymentDetail && responsePaymentDetail.data) {
-                const orderId =
+                const paymentDetailResponseId =
                   responsePaymentDetail?.data?.createPaymentDetail?.data?.id;
-                setPaymentDetailId(orderId);
+                setPaymentDetailId(paymentDetailResponseId);
                 setChecktOutForm2Visible(true);
+                // se toma el primary de la orden para localizarla en el checkout
+                //se llama al hook que actualiza la orden
+                // se le pasan los parametros necesarios
+                if (paymentDetailResponseId) {
+                  updateOrder(paymentDetailResponseId, orderNumber);
+                }
               }
             })
             .catch((error) => {
@@ -411,9 +411,13 @@ export default function CheckOutForm2({
             .then((response) => {
               // Verificamos si la data esta disponible
               if (response && response.data) {
-                const orderId = response?.data?.createPaymentDetail?.data?.id;
-                setPaymentDetailId(orderId);
+                const paymentDetailResponseId =
+                  response?.data?.createPaymentDetail?.data?.id;
+                setPaymentDetailId(paymentDetailResponseId);
                 setChecktOutForm2Visible(true);
+                if (paymentDetailResponseId) {
+                  updateOrder(paymentDetailResponseId, orderNumber);
+                }
               }
             })
             .catch((error) => {
@@ -426,7 +430,6 @@ export default function CheckOutForm2({
       });
     }
   });
-
   return (
     <div className="w-full">
       <div className="flex justify-center items-center bg-resene h-[80px] border-b-2 border-dashed border-grey-200 min-w-[375px]">
