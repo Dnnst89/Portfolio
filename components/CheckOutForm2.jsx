@@ -62,6 +62,8 @@ export default function CheckOutForm2({
 
   let paymentDetailResponseId = null;
   const [createPaymentDetail] = useMutation(CREATE_PAYMENT_DETAIL);
+  // llamamos al metodo que genera el numero de orden
+  const orderNumber = orderGenerator();
   const {
     updateOrder,
     data: updatedorder,
@@ -259,13 +261,12 @@ export default function CheckOutForm2({
             });
             paymentDetailResponseId =
               paymentDetailResponse?.data?.createPaymentDetail?.data?.id;
-            console.log("pk", paymentDetailResponseId);
-            //setPaymentDetailId(paymentDetailResponseId);
-            //console.log("ordder", paymentDetailResponseId + orderNumber);
+            // se toma el primary de la orden para localizarla en el checkout 3
+            setPaymentDetailId(paymentDetailResponseId);
+            //se muestra el checkout 3
             setChecktOutForm2Visible(true);
             //se llama al hook que actualiza la orden
             // se le pasan los parametros necesarios
-            const orderNumber = orderGenerator();
 
             await updateOrder(paymentDetailResponseId, orderNumber);
           } catch (error) {
@@ -359,7 +360,6 @@ export default function CheckOutForm2({
                   responsePaymentDetail?.data?.createPaymentDetail?.data?.id;
                 setPaymentDetailId(orderId);
                 setChecktOutForm2Visible(true);
-                console.log("CCR1", paymentDetailId);
               }
             })
             .catch((error) => {
@@ -406,7 +406,6 @@ export default function CheckOutForm2({
                 const orderId = response?.data?.createPaymentDetail?.data?.id;
                 setPaymentDetailId(orderId);
                 setChecktOutForm2Visible(true);
-                console.log("CCR2", paymentDetailId);
               }
             })
             .catch((error) => {
@@ -512,7 +511,7 @@ export default function CheckOutForm2({
           total={total.toFixed(2)}
           estimation={estima}
           items={items}
-          orderNumber={orderGenerated}
+          orderNumber={orderNumber}
         />
       )}
     </div>

@@ -7,7 +7,6 @@ const useUpdatePaymentDetailOrder = () => {
   );
 
   const updateOrder = async (paymentDetailResponseId, orderNumber) => {
-    console.log("update order", paymentDetailResponseId, orderNumber);
     try {
       await updatePaymentDetailOrder({
         variables: {
@@ -16,7 +15,7 @@ const useUpdatePaymentDetailOrder = () => {
         },
       });
     } catch (err) {
-      console.error("No es posible actualizar orden detail", err);
+      console.error("No es posible actualizar la orden en payment detail", err);
     }
   };
 

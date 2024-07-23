@@ -16,8 +16,6 @@ const orderGenerator = () => {
     date.getMinutes().toString().padStart(2, "0"),
     date.getSeconds().toString().padStart(2, "0"),
   ].join("");
-
-  console.log("formattedDate", formattedDate);
   return formattedDate;
 };
 

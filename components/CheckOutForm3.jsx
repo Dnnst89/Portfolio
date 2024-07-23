@@ -25,6 +25,8 @@ export default function CheckOutForm3({
   items,
   orderNumber,
 }) {
+  console.log("orderNumber", orderNumber);
+  console.log("paymentDetailId", paymentDetailId);
   const captchaRef = useRef(true);
   const router = useRouter();
   const [formData, setFormData] = useState({});
