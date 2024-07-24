@@ -10,7 +10,7 @@ import useStorage from "@/hooks/useStorage";
 import { useQuery } from "@apollo/client";
 import GET_CART_ITEMS_LIST_SHOPPING_SESSION from "@/src/graphQl/queries/getCartItemsByShoppingSession";
 import DELETE_CART_ITEM_MUTATION from "@/src/graphQl/queries/deleteCartItem";
-import { GET_PAYMENT_DETAIL } from "@/src/graphQl/queries/getPaymentDetail";
+import { GET_PAYMENT_DETAIL_CUSTOM } from "@/src/graphQl/queries/getPaymentDetailCustom";
 import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
 import { GET_CONSECUTIVE_NUMBER } from "@/src/graphQl/queries/getConsecutiveNumber";
 import { GET_USER_ADDRESS } from "@/src/graphQl/queries/getUserAddress";
@@ -80,7 +80,7 @@ export default function ThankYouMessage() {
 
   const [getConsecutiveNumber] = useLazyQuery(GET_CONSECUTIVE_NUMBER);
   const [createOrderItem] = useMutation(CREATE_ORDER_ITEM_MUTATION);
-  const [getPaymentDetail] = useLazyQuery(GET_PAYMENT_DETAIL);
+  const [getPaymentDetailCustom] = useLazyQuery(GET_PAYMENT_DETAIL_CUSTOM);
   const [getPaymentDetails] = useLazyQuery(GET_PAYMENT_DETAILS);
   const [getOrderItemsByOrderId] = useLazyQuery(GET_ORDER_ITEMS_BY_ORDER_ID);
   const [getStoreInformation] = useLazyQuery(GET_STORE_INFO);
@@ -217,7 +217,7 @@ export default function ThankYouMessage() {
   const handleCreateOrder = async (status) => {
     const isoDate = new Date().toISOString();
     try {
-      const paymentinfo = await getPaymentDetail({
+      const paymentinfo = await getPaymentDetailCustom({
         //obtengo el paymentDetails, para que cuando refresque la pagina no cree mas ordenes
         variables: { paymentId },
       });
@@ -390,7 +390,7 @@ export default function ThankYouMessage() {
         // I need to change the status of ther Payment to failed
         await handleUpdatePayment("Failed");
         try {
-          const paymentinfo = await getPaymentDetail({
+          const paymentinfo = await getPaymentDetailCustom({
             //obtengo el paymentDetails, para que cuando refresque la pagina no cree mas ordenes
             variables: { paymentId },
           });
@@ -404,7 +404,7 @@ export default function ThankYouMessage() {
       }
     } else {
       try {
-        const paymentinfo = await getPaymentDetail({
+        const paymentinfo = await getPaymentDetailCustom({
           //obtengo el paymentDetails, para que cuando refresque la pagina no cree mas ordenes
           variables: { paymentId },
         });
@@ -421,9 +421,9 @@ export default function ThankYouMessage() {
   const createInvoice = async (orderId) => {
     //  const key = createKey(1, "3101491212");
     try {
-      const PaymentDetail = await getPaymentDetail({
+      const PaymentDetail = await getPaymentDetailCustom({
         variables: {
-          paymentId: paymentId,
+           paymentId,
         },
       });
 
