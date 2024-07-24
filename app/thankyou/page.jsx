@@ -628,7 +628,7 @@ export default function ThankYouMessage() {
                 </div>
                 <div className="bg-white w-[250px] p-3 flex flex-col items-center ml-[20px] rounded-md">
                   <p className="text-grey-100">N° de pedido</p>
-                  <p>{orderId}</p>
+                  <p>{paymentId}</p>
                 </div>
 
                 <button
