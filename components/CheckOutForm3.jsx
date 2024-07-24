@@ -196,7 +196,7 @@ export default function CheckOutForm3({
     paymentUrl = await paymentRequest(formData);
 
     try {
-      if (domain.origin == "https://www.detinmarin.cr") {
+      if (domain.origin == "https://www.detinmarincr.com") {
         const token = captchaRef.current.getValue();
         if (token) {
           setLoadingBtn(true);
@@ -257,7 +257,7 @@ export default function CheckOutForm3({
         </div>
         <h1 className="text-xl">Formulario de pago</h1>
       </div>{" "}
-      {domain.origin == "https://www.detinmarin.cr" ? (
+      {domain.origin == "https://www.detinmarincr.com" ? (
         <div className="flex justify-center m-auto mt-8 mb-8 ">
           <ReCAPTCHA sitekey={key} ref={captchaRef} />
         </div>
