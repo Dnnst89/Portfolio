@@ -70,6 +70,7 @@ export default function ThankYouMessage() {
   const [userName, setUserName] = useState();
   const [userEmail, setUserEmail] = useState();
   const [description, setDescription] = useState();
+  const [emailOrderNumber, setEmailOrderNumber] = useState(null);
   //calling the mutation
   const [updatePaymentDetailStatus] = useMutation(UPDATE_PAYMENT_DETAIL_STATUS);
 
@@ -226,7 +227,7 @@ export default function ThankYouMessage() {
       const tax = paymentinfo?.data?.paymentDetail?.data?.attributes?.taxes;
       const subtotal =
         paymentinfo?.data?.paymentDetail?.data?.attributes?.subtotal;
-      console.log(paymentinfo);
+
       const orderStatus =
         paymentinfo.data.paymentDetails.data[0].attributes.status;
       //se toma el id de payment detail para crear el registro
@@ -254,7 +255,7 @@ export default function ThankYouMessage() {
           });
 
           const orderNumber = data?.createOrderDetail?.data?.id;
-
+          setEmailOrderNumber(orderNumber);
           setOrderId(orderNumber);
           await creatingOrderItems(orderNumber);
 
@@ -318,7 +319,7 @@ export default function ThankYouMessage() {
         currency: currency,
       },
     });
-    console.log("se envia el correo", emailInfo);
+
     if (sendEmailError)
       return toast.error(
         "Lo sentimos, ha ocurrido un error al enviar el correo",
@@ -353,12 +354,12 @@ export default function ThankYouMessage() {
               publishedAt: isoDate,
               orderDetailId: orderId,
               price: variantAtt.localCurrencyPrice,
-              totalPrice: variantAtt.totalPrice,
-              ivaAmount: variantAtt.ivaAmount,
-              name: variantAtt.product.data.attributes.name,
-              brand: variantAtt.product.data.attributes.brand,
-              cabys: variantAtt.product.data.attributes.cabys,
-              imagesIds: variantAtt.images.data.map((img) => img.id),
+              totalPrice: variantAtt?.totalPrice,
+              ivaAmount: variantAtt?.ivaAmount,
+              name: variantAtt?.product?.data?.attributes?.name,
+              brand: variantAtt?.product?.data?.attributes?.brand,
+              cabys: variantAtt?.product?.data?.attributes?.cabys,
+              imagesIds: variantAtt?.images?.data?.map((img) => img.id),
               currency: currency,
             },
           });
@@ -640,7 +641,7 @@ export default function ThankYouMessage() {
                 </div>
                 <div className="bg-white w-[250px] p-3 flex flex-col items-center ml-[20px] rounded-md">
                   <p className="text-grey-100">N° de pedido</p>
-                  <p>{paymentId}</p>
+                  <p>{emailOrderNumber}</p>
                 </div>
 
                 <button
