@@ -6,6 +6,8 @@ mutation CreateOrderItem(
   $quantity: Int!,
   $variantId: Int!,
   $price: Float!,
+  $totalPrice: Float!,
+  $ivaAmount: Float!,
   $name: String!,
   $brand: String!,
   $cabys: Long!,
@@ -20,6 +22,8 @@ mutation CreateOrderItem(
       quantity: $quantity,
       variantId: $variantId,
       price: $price,
+      totalPrice: $totalPrice,
+      ivaAmount: $ivaAmount,
       name: $name,
       brand: $brand,
       cabys: $cabys,
@@ -36,6 +40,8 @@ mutation CreateOrderItem(
         name
         brand
         price
+        totalPrice
+        ivaAmount
         cabys
         variantId
         features

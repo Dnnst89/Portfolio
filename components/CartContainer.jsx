@@ -59,8 +59,7 @@ const CartContainer = () => {
                 brand={productAtt.brand}
                 description={productAtt.description}
                 color={variantAtt.color}
-                price={variantAtt.price}                
-                totalPrice={item.totalItemPrice}
+                totalPrice={variantAtt.totalPrice}                        
                 stockVariant={variantAtt.stock}
                 ageRange={variantAtt.ageRange}
                 size={variantAtt.size}

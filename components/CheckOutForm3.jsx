@@ -34,7 +34,6 @@ export default function CheckOutForm3({
   const cartSummary = useCartSummary({
     userId: user?.id,
   });
-  // total = parseFloat(total).toLocaleString('en-US',{maximumFractionDigits: 0 })
 
   const [getUserAddress] = useLazyQuery(GET_USER_ADDRESS);
   // const [getPaymentDetails] = useLazyQuery(GET_PAYMENT_DETAILS);
@@ -155,7 +154,7 @@ export default function CheckOutForm3({
         } = userData;
         // the next step is to send the data to the request
         // we load data into the state
-        if (userData) {
+        if (userData) {          
           setFormData({
             redirect:
               process.env.NODE_ENV === "development"

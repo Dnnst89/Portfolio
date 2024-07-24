@@ -46,6 +46,7 @@ import { CREATE_ORDER_EMAIL } from "@/src/graphQl/queries/sendEmail";
 import { UPDATE_SHOPPING_SESSION_ACTIVE } from "@/src/graphQl/queries/updateShoppingSessionActive";
 import { GET_USER_SESSIONS } from "@/src/graphQl/queries/getUserSessions";
 import CREATE_SHOPPING_SESSION_MUTATION from "@/src/graphQl/queries/createShoppingSession";
+import { useLocalCurrencyContext } from "@/src/context/useLocalCurrency";
 
 /*
   recives the Tilopay response , based on the returns params 
@@ -56,6 +57,9 @@ import CREATE_SHOPPING_SESSION_MUTATION from "@/src/graphQl/queries/createShoppi
 */
 
 export default function ThankYouMessage() {
+  // if true send LocalCurrencyPrice as price for products else send variant price
+  const useLocalCurrency = useLocalCurrencyContext();
+
   useProtectionRoute();
   const router = useRouter();
   //states
@@ -322,8 +326,9 @@ export default function ThankYouMessage() {
           id: 1,
         },
       });
-      const currency = storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
-     
+    const currency =
+      storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
+
     if (orderId) {
       let orderItems = items.map(async (item) => {
         try {
@@ -336,12 +341,14 @@ export default function ThankYouMessage() {
               variantId: parseInt(variant?.id), //este dato es un INT no un ID
               publishedAt: isoDate,
               orderDetailId: orderId,
-              price: variantAtt.price,
+              price: variantAtt.localCurrencyPrice,
+              totalPrice: variantAtt.totalPrice,
+              ivaAmount: variantAtt.ivaAmount,
               name: variantAtt.product.data.attributes.name,
               brand: variantAtt.product.data.attributes.brand,
               cabys: variantAtt.product.data.attributes.cabys,
               imagesIds: variantAtt.images.data.map((img) => img.id),
-              currency : currency,
+              currency: currency,
             },
           });
 
@@ -410,7 +417,7 @@ export default function ThankYouMessage() {
       }
     }
   };
-  ////////////////////////////////FUNCION PARA CREAR LA FACTURA ELECTRONICA//////////////////////////////
+  // FUNCION PARA CREAR LA FACTURA ELECTRONICA
   const createInvoice = async (orderId) => {
     //  const key = createKey(1, "3101491212");
     try {
@@ -438,7 +445,7 @@ export default function ThankYouMessage() {
 
           const resultado =
             data?.orderDetail?.data?.attributes.order_items?.data;
-
+           
           try {
             if (!resultado.length) return;
             const token = await getAccessToken();
@@ -448,16 +455,15 @@ export default function ThankYouMessage() {
                 lineDetails: [...formatedItems],
               },
             };
+
             const feeResult = await facturationInstace.post(
               `/utils/get-detail-line?access_token=${token}`,
               body
             );
 
-            
             const billSummary = feeResult?.data?.billSummary;
             const imp = feeResult?.data?.serviceDetail?.lineDetails;
-
-            const inv = formatItemInvoice(resultado, imp);
+            const inv = formatItemInvoice(items, imp);
 
             try {
               /*const store = {
@@ -527,7 +533,7 @@ export default function ThankYouMessage() {
                   },
                   otherCharges: [],
                   billSummary: {
-                    ...formatBillSumary(billSummary, "535.86", store.currency),
+                    ...formatBillSumary(billSummary, "1", store.currency),
                   },
                   referenceInformation: [],
                   others: {
@@ -559,12 +565,12 @@ export default function ThankYouMessage() {
                 },
                 returnCompleteAnswer: true,
               };
-            
+              console.log("factura", bodyInvoice);
               const InvoiceResult = await facturationInstace.post(
                 `document/electronic-invoice?access_token=${token}`,
                 bodyInvoice
               );
-             
+              console.log("resultado factura", InvoiceResult);
               try {
                 const isoDate = new Date().toISOString();
                 const resulta = await getStoreInformation({

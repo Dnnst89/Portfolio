@@ -4,6 +4,7 @@ import ProductCard from "../../../components/ProductCard";
 import Pagination from "@/components/Pagination";
 import { useEffect, useState } from "react";
 import Spinner from "@/components/Spinner";
+import { useLocalCurrencyContext } from "@/src/context/useLocalCurrency";
 
 const ProductContainer = ({
   result,
@@ -15,6 +16,9 @@ const ProductContainer = ({
   loading,
   setLoading,
 }) => {
+    // if true send LocalCurrencyPrice as price for products else send variant price
+    const useLocalCurrency = useLocalCurrencyContext();
+
   const { hits } = result;
 
   useEffect(() => {
@@ -36,8 +40,9 @@ const ProductContainer = ({
                     key={item.id}
                     id={item.id}
                     name={item.name}
-                    defaultPrice={parseFloat(item.defaultPrice).toLocaleString("en-US", {
+                    variantPrice={parseFloat(item?.variants[0]?.totalPrice).toLocaleString("en-US", {
                       minimumFractionDigits: 2,  
+                      maximumFractionDigits : 2
                       })}
                     coverImage={item.coverImage}
                     brand={item.brand}

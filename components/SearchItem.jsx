@@ -1,22 +1,31 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import trackEvent from '../helpers/analytics.js';
+import trackEvent from "../helpers/analytics.js";
 import useFromOrderState from "../helpers/useFromOrderState";
 
-function SearchItem({ hit, currencySymbol, components }) {
-
+function SearchItem({ hit, currencySymbol, useLocalCurrency, components }) {
   const { getFromOrderState, updateFromOrder } = useFromOrderState();
   updateFromOrder(false);
 
   // when users clicks a product on the search component, then trackEvent is called for Google Analytics traking products.
   const handleClick = () => {
-    trackEvent(hit.brand, "click_on_product", hit.name, hit.defaultPrice, hit.variants[0].initialAge, hit.variants[0].finalAge);
-  }
+    trackEvent(
+      hit.brand,
+      "click_on_product",
+      hit.name,
+      hit?.variants[0]?.totalPrice,
+      hit.variants[0].initialAge,
+      hit.variants[0].finalAge
+    );
+  };
 
   return (
     <div className="border-b-2 border-dashed border-grey-200 w-full">
-      <Link onClick={handleClick} href={{ pathname: "/detail", query: { id: hit.id } }}>
+      <Link
+        onClick={handleClick}
+        href={{ pathname: "/detail", query: { id: hit.id } }}
+      >
         <div className="hover:bg-blue-300 flex gap-4 p-4 items-center">
           <Image
             priority={true}
@@ -33,23 +42,28 @@ function SearchItem({ hit, currencySymbol, components }) {
           <div className="grid items-center">
             <div>
               <h2 className="text-sm font-semibold">{hit.name}</h2>
-              </div>
-              <div>
-              <h3 className="text-sm font-base text-[7px] md:text-xs  text-[#757575]">{hit.brand}</h3>
+            </div>
+            <div>
+              <h3 className="text-sm font-base text-[7px] md:text-xs  text-[#757575]">
+                {hit.brand}
+              </h3>
             </div>
           </div>
 
           <div className="flex-1">
-          <p className="text-xl font-semibold text-right">{currencySymbol} {parseFloat(hit.defaultPrice).toLocaleString("en-US", {
-              minimumFractionDigits: 2,  
-              })}</p>
+            { (
+              <p className="text-xl font-semibold text-right">
+                {currencySymbol}{" "}
+                {parseFloat(hit?.variants[0]?.totalPrice).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits : 2
+                })}
+              </p>
+            )}
           </div>
-
         </div>
       </Link>
     </div>
-
-
   );
 }
 

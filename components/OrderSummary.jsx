@@ -25,11 +25,11 @@ const OrderSummary = ({
           </div>
           <div className="flex justify-between ">
             <p>Subtotal:</p>
-
             <p className="text-grey-100">
               {currency
                 ? `${currency} ${subTotal.toLocaleString("en-US", {
                   minimumFractionDigits: 2,
+                  maximumFractionDigits : 2
                   })}`
                 : `USD ${subTotal.toFixed(2)}`}
             </p>
@@ -43,6 +43,7 @@ const OrderSummary = ({
                   {currency
                     ? `${currency} ${taxes.toLocaleString("en-US", {
                         minimumFractionDigits: 2,
+                        maximumFractionDigits : 2
                       })}`
                     : `USD ${taxes.toFixed(2)}`}
                 </p>
@@ -56,8 +57,9 @@ const OrderSummary = ({
               {currency
                 ? `${currency} ${deliveryPayment.toLocaleString("en-US", {
                     minimumFractionDigits: 2,
+                    maximumFractionDigits : 2
                   })}`
-                : `USD ${deliveryPayment.toFixed(2)}`}
+                : `USD ${deliveryPayment?.toFixed(2)}`}
             </p>
           </div>
           <div className="flex justify-between ">
@@ -72,6 +74,7 @@ const OrderSummary = ({
               {currency
                 ? `${currency} ${total.toLocaleString("en-US", {
                     minimumFractionDigits: 2,
+                    maximumFractionDigits : 2
                   })}`
                 : `USD ${total.toFixed(2)}`}
             </p>

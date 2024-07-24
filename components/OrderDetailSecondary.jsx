@@ -194,7 +194,8 @@ export default function OrderDetailSecondary({ orderId }) {
                               ? `${item.currency} ${(
                                   item.price * item.quantity
                                 ).toLocaleString("en-US", {
-                                  minimumFractionDigits: 2,  
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits : 2  
                                   })}`
                               : `USD ${(item.price * item.quantity).toFixed(
                                   2

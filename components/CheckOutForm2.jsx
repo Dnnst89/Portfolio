@@ -11,7 +11,7 @@ import Spinner from "./Spinner";
 import { useForm } from "react-hook-form";
 import requestEstimation from "@/api/moovin/estimation";
 import createEstimationMoovinRequest from "@/api/moovin/createEstimationMoovinRequest";
-// import getTipoCambio from "@/api/cambio/getTipoCambio";
+import getTipoCambio from "@/api/cambio/getTipoCambio";
 import GET_DELIVERY_CHOICES from "@/src/graphQl/queries/getDeliveryChoices";
 import GET_STORE_LOCATION from "@/src/graphQl/queries/getStoreLocation";
 import CREATE_EXCHANGE_RATE from "@/src/graphQl/queries/createExchangeRate";
@@ -24,6 +24,7 @@ import { CgArrowLongRight } from "react-icons/cg";
 import { useSelector } from "react-redux";
 import { MOOVIN_ERROR, MOOVIN_RESPONSE } from "@/helpers/messageTypes";
 import useFetchMoovinCoverageData from "@/hooks/useFetchMoovinCoverageData";
+import { useLocalCurrencyContext } from "@/src/context/useLocalCurrency";
 export default function CheckOutForm2({
   amount,
   checkbox,
@@ -33,6 +34,9 @@ export default function CheckOutForm2({
   lng,
   handleCheckout,
 }) {
+  // if true send LocalCurrencyPrice as price for products else send variant price
+  const useLocalCurrency = useLocalCurrencyContext();
+
   const isoDate = new Date().toISOString();
   const [paymentDetailId, setPaymentDetailId] = useState(null);
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
@@ -48,7 +52,7 @@ export default function CheckOutForm2({
   const selectedGiftsLabels = selectedGifts.map((gift) => gift.label);
   const selectedGiftsString = selectedGiftsLabels.join(", ");
 
-  const { total, subTotal, taxes } = amount;
+  const { total, subtotal, taxes } = amount;
 
   let paymentDetailResponseId = null;
   const [createPaymentDetail] = useMutation(CREATE_PAYMENT_DETAIL);
@@ -104,11 +108,18 @@ export default function CheckOutForm2({
   const SPU =
     deliveryChoicesData?.deliveries?.data?.[2]?.attributes?.delivery_code;
   //Precio por distancia correos de costa rica
-  const ShortDistancePrice =
-    deliveryChoicesData?.deliveries?.data?.[0]?.attributes
-      ?.short_distance_price;
-  const LongDistancePrice =
-    deliveryChoicesData?.deliveries?.data?.[0]?.attributes?.long_distance_price;
+  const ShortDistancePrice = useLocalCurrency
+    ? deliveryChoicesData?.deliveries?.data?.[0]?.attributes
+        ?.short_distance_price
+    : deliveryChoicesData?.deliveries?.data?.[3]?.attributes
+        ?.short_distance_price;
+
+  const LongDistancePrice = useLocalCurrency
+    ? deliveryChoicesData?.deliveries?.data?.[0]?.attributes
+        ?.long_distance_price
+    : deliveryChoicesData?.deliveries?.data?.[3]?.attributes
+        ?.long_distance_price;
+
   // Dias estimados para la entrega de Correos de Costa Rica
   const LongEstimatedDelivery =
     deliveryChoicesData?.deliveries?.data?.[0]?.attributes
@@ -139,12 +150,10 @@ export default function CheckOutForm2({
   } = useForm();
   const fetchTipoCambio = async () => {
     try {
-      // // Llama a la función para obtener el tipo de cambio
-      // TODO *******EXCHANGE RATE IS NOT USED AT THIS MOMENT****
-      // const tipoCambioResultado = await getTipoCambio();
+      const tipoCambioResultado = await getTipoCambio();
 
-      // // Almacena el tipo de cambio en el estado del componente
-      // setTipoCambio(tipoCambioResultado.compra);
+      // Almacena el tipo de cambio en el estado del componente
+      setTipoCambio(tipoCambioResultado.compra);
 
       updateExchangeRate({
         //actualizo el registro en base de datos
@@ -160,16 +169,15 @@ export default function CheckOutForm2({
       setTipoCambio(exchangeRate?.exchangeRates?.data[0]?.attributes?.purchase);
     }
   };
-      // TODO *******EXCHANGE RATE IS NOT USED AT THIS MOMENT****
-  // useEffect(() => {
-  //   if (!load) {
-  //     try {
-  //       fetchTipoCambio();
-  //     } catch (error) {
-  //       console.log("error", error);
-  //     }
-  //   }
-  // }, [load]);
+  useEffect(() => {
+    if (!load) {
+      try {
+        fetchTipoCambio();
+      } catch (error) {
+        console.log("error", error);
+      }
+    }
+  }, [load]);
 
   /**
    * Hook
@@ -198,7 +206,10 @@ export default function CheckOutForm2({
         );
         if (routeOption) {
           //obtenemos el costo del delivery
-          const deliveryPrice = Math.ceil(routeOption.amount/1000)*1000;
+          // const deliveryPrice = Math.ceil(routeOption.amount/1000)*1000;
+          const deliveryPrice = useLocalCurrency
+            ? Math.ceil(routeOption.amount / 1000) * 1000
+            : Math.ceil(routeOption.amount / tipoCambio);
           /**
            * - Metodo llamado en FormOne
            * - Modifica el estado del deliveryPayment
@@ -206,20 +217,21 @@ export default function CheckOutForm2({
            */
 
           handleDeliveryPayment(deliveryPrice);
-          const suma = subTotal + taxes + deliveryPrice;
+          const suma = subtotal + taxes + deliveryPrice;
           const finalAmount = {
             total: parseFloat(suma),
-            subTotal: subTotal,
+            subtotal: subtotal,
             taxes: taxes,
           };
-          
+
           setEstima(estimation.idEstimation);
           setAmount(finalAmount);
+         
           try {
             const paymentDetailResponse = await createPaymentDetail({
               variables: {
                 status: "Inicial",
-                subTotal: subTotal,
+                subtotal: subtotal,
                 taxes: taxes,
                 total: finalAmount.total,
                 invoiceRequired: checkbox,
@@ -248,15 +260,16 @@ export default function CheckOutForm2({
     } else if (data.deliveryMethod === SPU) {
       try {
         const finalAmount = {
-          total: subTotal + taxes,
-          subTotal: subTotal,
+          total: subtotal + taxes,
+          subtotal: subtotal,
           taxes: taxes,
         };
         setAmount(finalAmount);
+       
         const paymentDetailResponse = await createPaymentDetail({
           variables: {
             status: "Inicial",
-            subTotal: subTotal,
+            subtotal: subtotal,
             taxes: taxes,
             total: finalAmount.total,
             invoiceRequired: checkbox,
@@ -279,14 +292,14 @@ export default function CheckOutForm2({
         console.error(error);
       }
     } else if (data.deliveryMethod === CCR) {
-      const totalToPay = subTotal + taxes + LongDistancePrice;
+      const totalToPay = subtotal + taxes + LongDistancePrice;
       // Cargamos el objeto con los montos originales
       //que el cliente debera pagar.
 
       const finalPriceToPay = {
         // Total final le agregamos el costo del envio
         total: totalToPay,
-        subTotal: subTotal,
+        subtotal: subtotal,
         taxes: taxes,
       };
 
@@ -301,10 +314,11 @@ export default function CheckOutForm2({
           //Creamos la mutacion segun los parametros de Correos de Costa Rica.
           //si la distancia de entrega supera los 20 kilometros.
           // TODO: vericar que la estructura del request esta correcto.
+
           createPaymentDetail({
             variables: {
               status: "Inicial",
-              subTotal: subTotal,
+              subtotal: subtotal,
               taxes: taxes,
               total: totalToPay,
               invoiceRequired: checkbox,
@@ -334,22 +348,23 @@ export default function CheckOutForm2({
             });
         } else {
           // si la distancia no exede los 20 kilometros
-          const totalToPay = subTotal + taxes + ShortDistancePrice;
+          const totalToPay = subtotal + taxes + ShortDistancePrice;
           // Cargamos el objeto con los montos originales
           //que el cliente debera pagar.
 
           const finalPriceToPay = {
             // Total final le agregamos el costo del envio
             total: totalToPay,
-            subTotal: subTotal,
+            subtotal: subtotal,
             taxes: taxes,
           };
           handleDeliveryPayment(ShortDistancePrice);
           setAmount(finalPriceToPay);
+
           createPaymentDetail({
             variables: {
               status: "Inicial",
-              subTotal: subTotal,
+              subtotal: subtotal,
               taxes: taxes,
               total: totalToPay,
               invoiceRequired: checkbox,
@@ -469,7 +484,7 @@ export default function CheckOutForm2({
       ) : (
         <CheckOutForm3
           paymentDetailId={paymentDetailId}
-          total={total}
+          total={total.toFixed(2)}
           estimation={estima}
           items={items}
           orderNumber={paymentDetailId}

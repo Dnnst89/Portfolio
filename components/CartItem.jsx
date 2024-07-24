@@ -10,6 +10,7 @@ import PRODUCT_ID_CARTITEM_QUERY from "@/src/graphQl/queries/getProductIdFromCar
 import DetailComponent from "./DetailComponent";
 import Link from "next/link";
 import useStoreInformation from "../helpers/useStoreInformation";
+import {useLocalCurrencyContext}  from "@/src/context/useLocalCurrency";
 
 const CartItem = ({
   cartItemId,
@@ -17,8 +18,7 @@ const CartItem = ({
   productName,
   brand,
   description,
-  color,
-  price,
+  color, 
   totalPrice,
   ageRange,
   size,
@@ -33,6 +33,8 @@ const CartItem = ({
   const { storeInformation, storeInformationError } = useStoreInformation(1);
   const currencySymbol =
     storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
+ // if true send LocalCurrencyPrice as price for products else send variant price
+  const useLocalCurrency = useLocalCurrencyContext();
 
   const cart = useSelector((state) => state.cart);
   //Get the data of the product depend on the cartItemId
@@ -133,21 +135,26 @@ const CartItem = ({
             <span class="text-xs mx-2 col-start-2 col-span-6">
               Precio Unitario:
             </span>
-            <span class="text-xs mx-2 col-start-2 col-span-6">
-              {currencySymbol + " "}
-              {parseFloat(price).toLocaleString("en-US", {
-              minimumFractionDigits: 2,  
-              })}
+            <span className="text-xs mx-2 col-start-2 col-span-6">
+              {
+               `${currencySymbol} ${parseFloat(
+                  totalPrice
+                  ).toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits : 2
+                  })}`
+                }
             </span>
 
             <span className="mx-2 font-bold col-start-2 col-span-6">
               Precio Total:{" "}
             </span>
             <span class="text-xs font-bold mx-2 col-start-2 col-span-6">
-              {currencySymbol + " "}
-              {parseFloat(totalPrice).toLocaleString("en-US", {
-              minimumFractionDigits: 2,  
-              })}
+            { `${currencySymbol} ${parseFloat(totalPrice * quantityCartItem).toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits : 2
+                  })}`
+                }
             </span>
           </div>
           {/* Botón para eliminar el producto del carrito */}
