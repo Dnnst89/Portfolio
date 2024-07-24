@@ -261,6 +261,7 @@ export default function ThankYouMessage() {
 
           //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
           await sendOrderEmail(quantity, orderNumber);
+
           //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
           try {
             fetchOrderMoovin(orderNumber);
@@ -273,6 +274,7 @@ export default function ThankYouMessage() {
         }
       } else {
         //no creo otra orden, asigno la que ya tiene
+
         setOrderId(orderPayment.id);
       }
     } catch (error) {
@@ -293,7 +295,7 @@ export default function ThankYouMessage() {
       "-" +
       (day < 10 ? "0" : "") +
       day;
-
+    console.log("emailfunction", totalProducts, orderDetail);
     const { data: storeInformation, error: storeInformationError } =
       await getStoreInformation({
         variables: {

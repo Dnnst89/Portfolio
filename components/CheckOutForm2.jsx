@@ -240,12 +240,12 @@ export default function CheckOutForm2({
 
           setEstima(estimation.idEstimation);
           setAmount(finalAmount);
-
+          console.log("subtotal", subtotal);
           try {
             const paymentDetailResponse = await createPaymentDetail({
               variables: {
                 status: "Inicial",
-                subTotal: subtotal,
+                subtotal: subtotal,
                 taxes: taxes,
                 total: total,
                 invoiceRequired: checkbox,
@@ -261,6 +261,8 @@ export default function CheckOutForm2({
                 orderNumber: 1234,
               },
             });
+
+            console.log("paymentresponse", paymentDetailResponse);
             paymentDetailResponseId =
               paymentDetailResponse?.data?.createPaymentDetail?.data?.id;
             // se toma el primary de la orden para localizarla en el checkout 3
