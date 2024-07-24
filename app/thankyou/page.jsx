@@ -295,7 +295,7 @@ export default function ThankYouMessage() {
       "-" +
       (day < 10 ? "0" : "") +
       day;
-    console.log("emailfunction", totalProducts, orderDetail);
+
     const { data: storeInformation, error: storeInformationError } =
       await getStoreInformation({
         variables: {

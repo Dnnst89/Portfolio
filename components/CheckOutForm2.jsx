@@ -119,6 +119,7 @@ export default function CheckOutForm2({
   //Moovin
   const MVN =
     deliveryChoicesData?.deliveries?.data?.[1]?.attributes?.delivery_code;
+  const MVN_ID = deliveryChoicesData?.deliveries?.data?.[0]?.id;
   //Store Pick Up
   const SPU =
     deliveryChoicesData?.deliveries?.data?.[2]?.attributes?.delivery_code;
@@ -240,7 +241,7 @@ export default function CheckOutForm2({
 
           setEstima(estimation.idEstimation);
           setAmount(finalAmount);
-          console.log("subtotal", subtotal);
+
           try {
             const paymentDetailResponse = await createPaymentDetail({
               variables: {
@@ -250,7 +251,7 @@ export default function CheckOutForm2({
                 total: total,
                 invoiceRequired: checkbox,
                 deliveryPayment: parseFloat(0),
-                deliveryId: parseInt(0),
+                deliveryId: parseInt(MVN_ID),
                 deliveryMethod: data.deliveryMethod,
                 paymentMethod: "Tarjeta Crédito/ Débito",
                 publishedAt: isoDate,
@@ -259,10 +260,10 @@ export default function CheckOutForm2({
                 //generacion del id de la orden que se toma como
                 //referencia el pk de la tabla.
                 orderNumber: 1234,
+                estimate_delivery_date: MoovinEstimatedDelivery,
               },
             });
 
-            console.log("paymentresponse", paymentDetailResponse);
             paymentDetailResponseId =
               paymentDetailResponse?.data?.createPaymentDetail?.data?.id;
             // se toma el primary de la orden para localizarla en el checkout 3
