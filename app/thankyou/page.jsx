@@ -226,25 +226,35 @@ export default function ThankYouMessage() {
       const tax = paymentinfo?.data?.paymentDetail?.data?.attributes?.taxes;
       const subtotal =
         paymentinfo?.data?.paymentDetail?.data?.attributes?.subtotal;
+      console.log(paymentinfo);
       const orderStatus =
-        paymentinfo?.data?.paymentDetail?.data?.attributes?.status;
+        paymentinfo.data.paymentDetails.data[0].attributes.status;
+      //se toma el id de payment detail para crear el registro
+      const paymentDetailId = paymentinfo.data.paymentDetails.data[0]?.id;
+
       const orderPayment =
-        paymentinfo?.data?.paymentDetail?.data?.attributes?.order_detail?.data; //me da la orden asociada al pago
+        paymentinfo?.data?.paymentDetails?.data[0]?.attributes?.order_detail
+          ?.data; //me da la orden asociada al pago
       const moovinId =
         paymentinfo?.data?.paymentDetail?.data?.attributes?.deliveryId;
+
       if (orderPayment === null && orderStatus === "Inicial") {
         // si no tiene orden le asigno una
+
         try {
           const { data } = await createOrder({
             //creo la orden asociada la payment
+
             variables: {
               user_id: userId,
               status: status,
-              paymentId: paymentId,
+              paymentId: paymentDetailId,
               publishedAt: isoDate,
             },
           });
+
           const orderNumber = data?.createOrderDetail?.data?.id;
+
           setOrderId(orderNumber);
           await creatingOrderItems(orderNumber);
 
@@ -308,6 +318,7 @@ export default function ThankYouMessage() {
         currency: currency,
       },
     });
+    console.log("se envia el correo", emailInfo);
     if (sendEmailError)
       return toast.error(
         "Lo sentimos, ha ocurrido un error al enviar el correo",
@@ -423,12 +434,13 @@ export default function ThankYouMessage() {
     try {
       const PaymentDetail = await getPaymentDetailCustom({
         variables: {
-           paymentId,
+          paymentId,
         },
       });
 
       const required =
-        PaymentDetail.data.paymentDetail.data.attributes.invoiceRequired;
+        PaymentDetail.data?.paymentDetails?.data[0]?.attributes
+          ?.invoiceRequired;
       /*const billSummary = {
         total: PaymentDetail?.data?.paymentDetail?.data?.attributes?.total,
         subtotal:
@@ -445,7 +457,7 @@ export default function ThankYouMessage() {
 
           const resultado =
             data?.orderDetail?.data?.attributes.order_items?.data;
-           
+
           try {
             if (!resultado.length) return;
             const token = await getAccessToken();
@@ -565,12 +577,12 @@ export default function ThankYouMessage() {
                 },
                 returnCompleteAnswer: true,
               };
-              console.log("factura", bodyInvoice);
+
               const InvoiceResult = await facturationInstace.post(
                 `document/electronic-invoice?access_token=${token}`,
                 bodyInvoice
               );
-              console.log("resultado factura", InvoiceResult);
+
               try {
                 const isoDate = new Date().toISOString();
                 const resulta = await getStoreInformation({
