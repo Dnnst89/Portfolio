@@ -25,6 +25,7 @@ export default function CheckOutForm3({
   items,
   orderNumber,
 }) {
+  console.log("estima", estimation);
   const captchaRef = useRef(true);
   const router = useRouter();
   const [formData, setFormData] = useState({});
@@ -156,7 +157,7 @@ export default function CheckOutForm3({
         } = userData;
         // the next step is to send the data to the request
         // we load data into the state
-        if (userData) {
+        if (userData || orderNumber !== "") {
           setFormData({
             redirect:
               process.env.NODE_ENV === "development"

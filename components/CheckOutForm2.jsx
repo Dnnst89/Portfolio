@@ -232,7 +232,9 @@ export default function CheckOutForm2({
            * - se envia unicamente cuando moovin tiene disponibilidad.
            */
           handleDeliveryPayment(deliveryPrice);
+
           const suma = subtotal + taxes + deliveryPrice;
+
           const finalAmount = {
             total: parseFloat(suma),
             subtotal: subtotal,
@@ -248,9 +250,9 @@ export default function CheckOutForm2({
                 status: "Inicial",
                 subtotal: subtotal,
                 taxes: taxes,
-                total: total,
+                total: finalAmount.total,
                 invoiceRequired: checkbox,
-                deliveryPayment: parseFloat(0),
+                deliveryPayment: parseFloat(deliveryPrice),
                 deliveryId: parseInt(MVN_ID),
                 deliveryMethod: data.deliveryMethod,
                 paymentMethod: "Tarjeta Crédito/ Débito",
@@ -346,7 +348,7 @@ export default function CheckOutForm2({
               status: "Inicial",
               subtotal: subtotal,
               taxes: taxes,
-              total: totalToPay,
+              total: finalPriceToPay.total,
               invoiceRequired: checkbox,
               deliveryPayment: parseFloat(LongDistancePrice),
               deliveryId: parseInt(CCR_ID),
@@ -399,7 +401,7 @@ export default function CheckOutForm2({
               status: "Inicial",
               subtotal: subtotal,
               taxes: taxes,
-              total: totalToPay,
+              total: finalPriceToPay.total,
               invoiceRequired: checkbox,
               deliveryPayment: parseFloat(ShortDistancePrice),
               deliveryId: parseInt(CCR_ID),
