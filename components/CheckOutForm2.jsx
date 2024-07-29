@@ -196,7 +196,7 @@ export default function CheckOutForm2({
   useEffect(() => {
     // Solo llama a updateOrderNumber si orderNumber y paymentDetailResponseId están disponibles
     if (orderNumber && paymentDetailResponseId) {
-      updateOrderNumber();
+      updateOrderNumber(paymentDetailResponseId, orderNumber);
     }
   }, [orderNumber, paymentDetailResponseId]); // Ejecuta cuando orderNumber o paymentDetailResponseId cambien
 
