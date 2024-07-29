@@ -44,10 +44,11 @@ export default function CheckOutForm2({
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
   const [isMoreThanDeliveryRange, setIsMoreThanDeliveryRange] = useState(false);
   const [orderGenerated, setOrderGenerated] = useState(null);
+  const [FinalOrderNumber, setFinalOrderNumber] = useState(null);
   //Exchange rate
   const [createExchangeRate] = useMutation(CREATE_EXCHANGE_RATE);
   const [updateExchangeRate] = useMutation(UPDATE_EXCHANGE_RATE);
-  const [updatePaymentDatailOrder] = useMutation(UPDATE_PAYMENT_DETAIL_ORDER);
+  const [updatePaymentDetailOrder] = useMutation(UPDATE_PAYMENT_DETAIL_ORDER);
   const [paymentDetailId, setPaymentDetailId] = useState(null);
   let exchangeRateResponseId = null;
   const [exchangeRateId, setExchangeRateId] = useState(null);
@@ -69,7 +70,7 @@ export default function CheckOutForm2({
     error: updatedOrderError,
   } = useUpdatePaymentDetailOrder();
   // se toma la orden final desde strapi que se enviara a tilopay
-  const finalOrderNumber =
+  const finalOrderNumberold =
     updatedorder?.updatePaymentDetail?.data?.attributes?.orderNumber;
   /**
    * Se obtienen las opciones de delivery
@@ -164,6 +165,44 @@ export default function CheckOutForm2({
     formState: { errors, isSubmitting, isValid, isDirty },
     reset,
   } = useForm();
+  
+  const updateOrderNumber = async (paymentDetailResponseId, orderNumber) => {
+    const orderNumberCustom = orderNumber
+    const paymentDetailResponseIdCustom = paymentDetailResponseId
+    console.log("updateOrderNumber", orderNumberCustom,paymentDetailResponseIdCustom);
+    if (!orderNumberCustom || !paymentDetailResponseIdCustom) {
+      console.log("orderNumber or paymentDetailResponseId is missing");
+      return;
+    }
+    
+    try {
+      const { data } = await updatePaymentDetailOrder({
+        variables: {
+          id: paymentDetailResponseIdCustom,
+          newOrderNumber: `${paymentDetailResponseIdCustom}${orderNumberCustom}`,
+        },
+      });
+
+      // Asegúrate de acceder a la propiedad correcta en `data`
+      const newOrderNumber = data?.updatePaymentDetail?.data?.attributes?.orderNumber;
+      console.log("aqui imprimo newOrderNumber", newOrderNumber);
+      console.log("aqui imprimo data", data);
+      setFinalOrderNumber(newOrderNumber || "1234"); // Usa el valor de `newOrderNumber` si está disponible
+    } catch (error) {
+      console.error("Error updating payment detail order:", error);// Valor predeterminado en caso de error
+    }
+  };
+
+  useEffect(() => {
+    // Solo llama a updateOrderNumber si orderNumber y paymentDetailResponseId están disponibles
+    if (orderNumber && paymentDetailResponseId) {
+      updateOrderNumber();
+    }
+  }, [orderNumber, paymentDetailResponseId]); // Ejecuta cuando orderNumber o paymentDetailResponseId cambien
+
+
+
+
   const fetchTipoCambio = async () => {
     try {
       const tipoCambioResultado = await getTipoCambio();
@@ -194,7 +233,6 @@ export default function CheckOutForm2({
       }
     }
   }, [load]);
-
   /**
    * Hook
    * Verifica si las cordenadas estan dentro
@@ -275,7 +313,8 @@ export default function CheckOutForm2({
             //se llama al hook que actualiza la orden
             // se le pasan los parametros necesarios
             if (paymentDetailResponseId) {
-              updateOrder(paymentDetailResponseId, orderNumber);
+              console.log("argumentos1", paymentDetailResponseId,orderNumber);
+              updateOrderNumber(paymentDetailResponseId, orderNumber);
             }
           } catch (error) {
             console.error("Ne se ha podido crear la orden", error);
@@ -371,7 +410,8 @@ export default function CheckOutForm2({
                 //se llama al hook que actualiza la orden
                 // se le pasan los parametros necesarios
                 if (paymentDetailResponseId) {
-                  updateOrder(paymentDetailResponseId, orderNumber);
+                  console.log("argumentos2", paymentDetailResponseId,orderNumber);
+                  updateOrderNumber(paymentDetailResponseId, orderNumber);
                 }
               }
             })
@@ -419,9 +459,11 @@ export default function CheckOutForm2({
                 const paymentDetailResponseId =
                   response?.data?.createPaymentDetail?.data?.id;
                 setPaymentDetailId(paymentDetailResponseId);
+
                 setChecktOutForm2Visible(true);
                 if (paymentDetailResponseId) {
-                  updateOrder(paymentDetailResponseId, orderNumber);
+                  console.log("argumentos3", paymentDetailResponseId,orderNumber);
+                  updateOrderNumber(paymentDetailResponseId, orderNumber);
                 }
               }
             })
@@ -527,7 +569,7 @@ export default function CheckOutForm2({
           total={total.toFixed(2)}
           estimation={estima}
           items={items}
-          orderNumber={finalOrderNumber}
+          orderNumber={FinalOrderNumber}
         />
       )}
     </div>
