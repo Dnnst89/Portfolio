@@ -564,7 +564,7 @@ export default function ThankYouMessage() {
 
                 <p>La informaci&oacute;n suministrada ser&aacute; utilizada &uacute;nicamente para los fines de la emisi&oacute;n de la factura electr&oacute;nica para suministrar dicha informaci&oacute;n en el registro&nbsp;conforme a lo establecido en la resoluci&oacute;n de Facturaci&oacute;n Electr&oacute;nica,No.\nDGT-R-033-2019 del 27 de junio de 2019 de la Direcci&oacute;n General de Tributaci&oacute;n.</p>
                 
-                <p>El suministro voluntario de la informaci&oacute;n y datos personales se interpreta como el otorgamiento de su consentimiento para su uso de acuerdo a lo indicado en el presente aviso. Ante cualquier consulta podria comunicarse al correo <a href="mailto:equipodetinmarin@gmail.com">equipodetinmarin@gmail.com</a>&nbsp;o al n&uacute;mero telef&oacute;nico&nbsp;<a href="tel:+506-8771-6588">(+506) 8771-6588</a>&nbsp;</p>
+                <p>El suministro voluntario de la informaci&oacute;n y datos personales se interpreta como el otorgamiento de su consentimiento para su uso de acuerdo a lo indicado en el presente aviso. Ante cualquier consulta podria comunicarse al correo <a href="mailto:hola@detinmarincr.com">hola@detinmarincr.com</a>&nbsp;o al n&uacute;mero telef&oacute;nico&nbsp;<a href="tel:+506-8771-6588">(+506) 8771-6588</a>&nbsp;</p>
 <img src="https://detinmarin-aws-s3-images-bucket.s3.us-west-2.amazonaws.com/Detinmarin_Logo_01_c02eda42d1.jpg"
                 alt="detinmarin" style="display:block;font-size:14px;border:0;outline:none;text-decoration:none"
                 width="140" title="detinmarin">
