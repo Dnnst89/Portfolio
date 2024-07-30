@@ -10,13 +10,14 @@ import AlertNotAuth from "./AlertNotAuth";
 import Spinner from "./Spinner";
 import ReCAPTCHA from "react-google-recaptcha";
 import toast, { Toaster } from "react-hot-toast";
-import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { GET_USER_ADDRESS } from "@/src/graphQl/queries/getUserAddress";
 import { GET_PAYMENT_DETAIL } from "@/src/graphQl/queries/getPaymentDetail";
 import { validateID } from "@/helpers";
 import { createOrderData, orderMoovin } from "@/api/moovin/createOrder";
 import { UPDATE_PAYMENT_DELIVERY_ID } from "@/src/graphQl/queries/updatePaymentDeliveryId";
+
 import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
+import useStoreInformation from "../helpers/useStoreInformation";
 export default function CheckOutForm3({
   paymentDetailId,
   total,
@@ -24,10 +25,12 @@ export default function CheckOutForm3({
   items,
   orderNumber,
 }) {
+  console.log("estima", estimation);
   const captchaRef = useRef(true);
   const router = useRouter();
   const [formData, setFormData] = useState({});
   const [loadingBtn, setLoadingBtn] = useState(false);
+  const [orderNumberCustomState, setOrderNumberCustom] = useState(null);
   const [domain, setDomain] = useState(false);
   const { user } = useStorage();
   const { id, email } = user || {};
@@ -39,6 +42,7 @@ export default function CheckOutForm3({
   // const [getPaymentDetails] = useLazyQuery(GET_PAYMENT_DETAILS);
   const [getPaymentDetail] = useLazyQuery(GET_PAYMENT_DETAIL);
   const [updatePaymentDeliveryId] = useMutation(UPDATE_PAYMENT_DELIVERY_ID);
+
   // the url return an payment url to redirect the user to Tilopay payment.
   let paymentUrl = "";
   const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
@@ -56,17 +60,11 @@ export default function CheckOutForm3({
     variables: { userId: id },
   });
 
-  const { data: storeInformation, error: storeInformationError } = useQuery(
-    GET_STORE_INFO,
-    {
-      variables: {
-        id: 1,
-      },
-    }
-  );
+  const { storeInformation, storeInformationError } = useStoreInformation(1);
   const currency =
     storeInformation?.storeInformation?.data?.attributes?.currency;
-  const fetchOrderMoovin = async (orderNumber) => {
+
+  const fetchOrderMoovin = async () => {
     try {
       const paymentUser = data;
       const paymentinfo = await getPaymentDetail({
@@ -74,6 +72,10 @@ export default function CheckOutForm3({
         variables: { paymentId: paymentDetailId },
       });
 
+      const orderNumberCustom = paymentinfo?.data?.paymentDetail?.data?.attributes?.orderNumber;
+      console.log("tomo bien el order?", orderNumberCustom,paymentinfo)
+      setOrderNumberCustom(orderNumberCustom);
+      console.log("setee bien?", orderNumberCustomState)
       const client = {
         name:
           paymentUser?.usersPermissionsUser?.data?.attributes?.firstName +
@@ -119,7 +121,7 @@ export default function CheckOutForm3({
 
           const orderId = parseInt(order.idPackage);
           const paymentId = paymentinfo?.data?.paymentDetail?.data?.id;
-
+        
           await updatePaymentDeliveryId({
             variables: {
               id: paymentId,
@@ -168,7 +170,7 @@ export default function CheckOutForm3({
                 ? "http://localhost:3000/thankyou/"
                 : `${process.env.NEXT_PUBLIC_APP_URL}/thankyou/`,
             key: process.env.NEXT_PUBLIC_TILOPAY_API_KEY,
-            amount: total,
+            amount: parseFloat(total),
             currency: currency,
             billToFirstName: firstName,
             billToLastName: lastName,
@@ -180,7 +182,7 @@ export default function CheckOutForm3({
             billToCountry: "CR",
             billToTelephone: phoneNumber,
             billToEmail: email,
-            orderNumber: paymentDetailId,
+            orderNumber: orderNumberCustomState,
             capture: "1",
             subscription: "1",
             platform: "api",
@@ -196,7 +198,7 @@ export default function CheckOutForm3({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     // fetchOrderMoovin(orderNumber);
-  }, [data]);
+  }, [data,orderNumberCustomState]);
 
   const handleVerification = async () => {
     paymentUrl = await paymentRequest(formData);

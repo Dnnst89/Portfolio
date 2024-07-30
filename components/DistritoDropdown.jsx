@@ -27,7 +27,7 @@ const DistritoDropdown = ({
     const nombreDistrito =
       provincias[provinciaSeleccionada]?.cantones[cantonSeleccionado]
         ?.distritos[value];
-    console.log("dfasdfsdaf distrito", nombreDistrito);
+
     setSelectedDistrito({
       id: value,
       nombre: nombreDistrito || "",

@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import { BiArrowBack } from "react-icons/bi";
 
 const NotFound = () => {
   return (
@@ -9,7 +8,7 @@ const NotFound = () => {
         <p>Lo sentimos, ha ocurrido un problema</p>
         <Link href={"/"} className="p-2">
           <button className="bg-aquamarine text-white rounded-sm p-2 flex items-center">
-            Ir a inicio
+            Ir a inicioas
           </button>
         </Link>
       </div>

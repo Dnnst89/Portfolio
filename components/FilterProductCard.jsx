@@ -3,29 +3,38 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import trackEvent from "../helpers/analytics.js";
+import useStoreInformation from "../helpers/useStoreInformation";
+import { useLocalCurrencyContext } from "@/src/context/useLocalCurrency";
 
 const FilterProductCard = ({
   id,
   name,
-  defaultPrice,
+  totalPrice,
   coverImage,
   brand,
   initialAge,
   finalAge,
 }) => {
+  // if true send LocalCurrencyPrice as price for products else send variant price
+  const useLocalCurrency = useLocalCurrencyContext();
+
   const altTextDesc = "Imagen Producto " + name;
   const router = useRouter();
   const productChange = () => {
+    console.log("hola");
     trackEvent(
       brand,
       "click_on_product",
       name,
-      defaultPrice,
+      totalPrice,
       initialAge,
       finalAge
     );
     window.location.href = `/detail/?id=${id}`;
   };
+  const { storeInformation, storeInformationError } = useStoreInformation(1);
+  const currencySymbol =
+    storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
 
   return (
     <div
@@ -67,7 +76,14 @@ const FilterProductCard = ({
       </div>
 
       <div className="bg-aquamarine text-xs md:text-lg rounded-b-[15px] font-bold flex justify-center absolute bottom-0 left-0 right-0 hover:underline text-white p-1">
-        $ {defaultPrice}
+        {`${currencySymbol} ${parseFloat(totalPrice).toLocaleString(
+              "en-US",
+              {
+                minimumFractionDigits: 2,
+                maximumFractionDigits : 2,
+              }
+            )}`
+          }
       </div>
     </div>
   );

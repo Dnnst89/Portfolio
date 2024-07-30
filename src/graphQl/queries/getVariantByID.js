@@ -11,6 +11,9 @@ query GetVariantById($id: ID) {
         size
         sku
         price
+        localCurrencyPrice
+        ivaAmount
+        totalPrice
         weight {
           id
           unitWeight
@@ -20,6 +23,7 @@ query GetVariantById($id: ID) {
         ageRange
         product{
           data{
+            id
             attributes{
               name
               cabys

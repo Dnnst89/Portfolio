@@ -24,6 +24,10 @@ import { CgArrowLongRight } from "react-icons/cg";
 import { useSelector } from "react-redux";
 import { MOOVIN_ERROR, MOOVIN_RESPONSE } from "@/helpers/messageTypes";
 import useFetchMoovinCoverageData from "@/hooks/useFetchMoovinCoverageData";
+import { useLocalCurrencyContext } from "@/src/context/useLocalCurrency";
+import { UPDATE_PAYMENT_DETAIL_ORDER } from "@/src/graphQl/queries/UpdatePaymentDetailOrder";
+import orderGenerator from "@/helpers/orderGenerator";
+import useUpdatePaymentDetailOrder from "@/hooks/useUpdatePaymentDetailOrder";
 export default function CheckOutForm2({
   amount,
   checkbox,
@@ -33,13 +37,19 @@ export default function CheckOutForm2({
   lng,
   handleCheckout,
 }) {
+  // if true send LocalCurrencyPrice as price for products else send variant price
+  const useLocalCurrency = useLocalCurrencyContext();
   const isoDate = new Date().toISOString();
-  const [paymentDetailId, setPaymentDetailId] = useState(null);
+
   const [checktOutForm2Visible, setChecktOutForm2Visible] = useState(false);
   const [isMoreThanDeliveryRange, setIsMoreThanDeliveryRange] = useState(false);
+  const [orderGenerated, setOrderGenerated] = useState(null);
+  const [FinalOrderNumber, setFinalOrderNumber] = useState(null);
   //Exchange rate
   const [createExchangeRate] = useMutation(CREATE_EXCHANGE_RATE);
   const [updateExchangeRate] = useMutation(UPDATE_EXCHANGE_RATE);
+  const [updatePaymentDetailOrder] = useMutation(UPDATE_PAYMENT_DETAIL_ORDER);
+  const [paymentDetailId, setPaymentDetailId] = useState(null);
   let exchangeRateResponseId = null;
   const [exchangeRateId, setExchangeRateId] = useState(null);
   //Obtenemos el estado de los regalos que se van a envolver
@@ -48,10 +58,20 @@ export default function CheckOutForm2({
   const selectedGiftsLabels = selectedGifts.map((gift) => gift.label);
   const selectedGiftsString = selectedGiftsLabels.join(", ");
 
-  const { total, subTotal, taxes } = amount;
+  const { total, subtotal, taxes } = amount;
 
   let paymentDetailResponseId = null;
   const [createPaymentDetail] = useMutation(CREATE_PAYMENT_DETAIL);
+  // llamamos al metodo que genera el numero de orden
+  const orderNumber = orderGenerator();
+  const {
+    updateOrder,
+    data: updatedorder,
+    error: updatedOrderError,
+  } = useUpdatePaymentDetailOrder();
+  // se toma la orden final desde strapi que se enviara a tilopay
+  const finalOrderNumberold =
+    updatedorder?.updatePaymentDetail?.data?.attributes?.orderNumber;
   /**
    * Se obtienen las opciones de delivery
    */
@@ -100,15 +120,23 @@ export default function CheckOutForm2({
   //Moovin
   const MVN =
     deliveryChoicesData?.deliveries?.data?.[1]?.attributes?.delivery_code;
+  const MVN_ID = deliveryChoicesData?.deliveries?.data?.[0]?.id;
   //Store Pick Up
   const SPU =
     deliveryChoicesData?.deliveries?.data?.[2]?.attributes?.delivery_code;
   //Precio por distancia correos de costa rica
-  const ShortDistancePrice =
-    deliveryChoicesData?.deliveries?.data?.[0]?.attributes
-      ?.short_distance_price;
-  const LongDistancePrice =
-    deliveryChoicesData?.deliveries?.data?.[0]?.attributes?.long_distance_price;
+  const ShortDistancePrice = useLocalCurrency
+    ? deliveryChoicesData?.deliveries?.data?.[0]?.attributes
+        ?.short_distance_price
+    : deliveryChoicesData?.deliveries?.data?.[3]?.attributes
+        ?.short_distance_price;
+
+  const LongDistancePrice = useLocalCurrency
+    ? deliveryChoicesData?.deliveries?.data?.[0]?.attributes
+        ?.long_distance_price
+    : deliveryChoicesData?.deliveries?.data?.[3]?.attributes
+        ?.long_distance_price;
+
   // Dias estimados para la entrega de Correos de Costa Rica
   const LongEstimatedDelivery =
     deliveryChoicesData?.deliveries?.data?.[0]?.attributes
@@ -137,9 +165,46 @@ export default function CheckOutForm2({
     formState: { errors, isSubmitting, isValid, isDirty },
     reset,
   } = useForm();
+  
+  const updateOrderNumber = async (paymentDetailResponseId, orderNumber) => {
+    const orderNumberCustom = orderNumber
+    const paymentDetailResponseIdCustom = paymentDetailResponseId
+    console.log("updateOrderNumber", orderNumberCustom,paymentDetailResponseIdCustom);
+    if (!orderNumberCustom || !paymentDetailResponseIdCustom) {
+      console.log("orderNumber or paymentDetailResponseId is missing");
+      return;
+    }
+    
+    try {
+      const { data } = await updatePaymentDetailOrder({
+        variables: {
+          id: paymentDetailResponseIdCustom,
+          newOrderNumber: `${paymentDetailResponseIdCustom}${orderNumberCustom}`,
+        },
+      });
+
+      // Asegúrate de acceder a la propiedad correcta en `data`
+      const newOrderNumber = data?.updatePaymentDetail?.data?.attributes?.orderNumber;
+      console.log("aqui imprimo newOrderNumber", newOrderNumber);
+      console.log("aqui imprimo data", data);
+      setFinalOrderNumber(newOrderNumber || "1234"); // Usa el valor de `newOrderNumber` si está disponible
+    } catch (error) {
+      console.error("Error updating payment detail order:", error);// Valor predeterminado en caso de error
+    }
+  };
+
+  useEffect(() => {
+    // Solo llama a updateOrderNumber si orderNumber y paymentDetailResponseId están disponibles
+    if (orderNumber && paymentDetailResponseId) {
+      updateOrderNumber(paymentDetailResponseId, orderNumber);
+    }
+  }, [orderNumber, paymentDetailResponseId]); // Ejecuta cuando orderNumber o paymentDetailResponseId cambien
+
+
+
+
   const fetchTipoCambio = async () => {
     try {
-      // // Llama a la función para obtener el tipo de cambio
       const tipoCambioResultado = await getTipoCambio();
 
       // Almacena el tipo de cambio en el estado del componente
@@ -159,7 +224,6 @@ export default function CheckOutForm2({
       setTipoCambio(exchangeRate?.exchangeRates?.data[0]?.attributes?.purchase);
     }
   };
-
   useEffect(() => {
     if (!load) {
       try {
@@ -169,7 +233,6 @@ export default function CheckOutForm2({
       }
     }
   }, [load]);
-
   /**
    * Hook
    * Verifica si las cordenadas estan dentro
@@ -197,49 +260,64 @@ export default function CheckOutForm2({
         );
         if (routeOption) {
           //obtenemos el costo del delivery
-          const deliveryPrice = Math.ceil(routeOption.amount / tipoCambio);
+          // const deliveryPrice = Math.ceil(routeOption.amount/1000)*1000;
+          const deliveryPrice = useLocalCurrency
+            ? Math.ceil(routeOption.amount / 1000) * 1000
+            : Math.ceil(routeOption.amount / tipoCambio);
           /**
            * - Metodo llamado en FormOne
            * - Modifica el estado del deliveryPayment
            * - se envia unicamente cuando moovin tiene disponibilidad.
            */
+          handleDeliveryPayment(deliveryPrice);
 
-          handleDeliveryPayment(deliveryPrice.toFixed(2));
-          console.log("subTotal" ,subTotal);
-          const suma = subTotal + taxes + deliveryPrice;
+          const suma = subtotal + taxes + deliveryPrice;
+
           const finalAmount = {
-            total: parseFloat(suma.toFixed(2)),
-            subTotal: subTotal,
+            total: parseFloat(suma),
+            subtotal: subtotal,
             taxes: taxes,
           };
-          
+
           setEstima(estimation.idEstimation);
           setAmount(finalAmount);
+
           try {
             const paymentDetailResponse = await createPaymentDetail({
               variables: {
                 status: "Inicial",
-                subTotal: subTotal,
+                subtotal: subtotal,
                 taxes: taxes,
                 total: finalAmount.total,
                 invoiceRequired: checkbox,
                 deliveryPayment: parseFloat(deliveryPrice),
-                deliveryId: parseInt(estimation.idEstimation),
+                deliveryId: parseInt(MVN_ID),
                 deliveryMethod: data.deliveryMethod,
                 paymentMethod: "Tarjeta Crédito/ Débito",
                 publishedAt: isoDate,
-                //TODO: debe llegar un texto a base de datos
                 gift: selectedGiftsString,
+                //Inicialmente se envia encero,a la espera de la
+                //generacion del id de la orden que se toma como
+                //referencia el pk de la tabla.
+                orderNumber: 1234,
                 estimate_delivery_date: MoovinEstimatedDelivery,
               },
             });
 
             paymentDetailResponseId =
               paymentDetailResponse?.data?.createPaymentDetail?.data?.id;
+            // se toma el primary de la orden para localizarla en el checkout 3
             setPaymentDetailId(paymentDetailResponseId);
+            //se muestra el checkout 3
             setChecktOutForm2Visible(true);
+            //se llama al hook que actualiza la orden
+            // se le pasan los parametros necesarios
+            if (paymentDetailResponseId) {
+              console.log("argumentos1", paymentDetailResponseId,orderNumber);
+              updateOrderNumber(paymentDetailResponseId, orderNumber);
+            }
           } catch (error) {
-            console.error(error);
+            console.error("Ne se ha podido crear la orden", error);
           }
         }
       } catch (error) {
@@ -248,15 +326,16 @@ export default function CheckOutForm2({
     } else if (data.deliveryMethod === SPU) {
       try {
         const finalAmount = {
-          total: parseFloat((subTotal + taxes).toFixed(2)),
-          subTotal: subTotal,
+          total: subtotal + taxes,
+          subtotal: subtotal,
           taxes: taxes,
         };
         setAmount(finalAmount);
+
         const paymentDetailResponse = await createPaymentDetail({
           variables: {
             status: "Inicial",
-            subTotal: subTotal,
+            subtotal: subtotal,
             taxes: taxes,
             total: finalAmount.total,
             invoiceRequired: checkbox,
@@ -266,6 +345,7 @@ export default function CheckOutForm2({
             paymentMethod: "Tarjeta Crédito/ Débito",
             publishedAt: isoDate,
             gift: selectedGiftsString,
+            orderNumber: 12421455,
           },
         });
 
@@ -279,14 +359,14 @@ export default function CheckOutForm2({
         console.error(error);
       }
     } else if (data.deliveryMethod === CCR) {
-      const totalToPay = subTotal + taxes + LongDistancePrice;
+      const totalToPay = subtotal + taxes + LongDistancePrice;
       // Cargamos el objeto con los montos originales
       //que el cliente debera pagar.
 
       const finalPriceToPay = {
         // Total final le agregamos el costo del envio
-        total: parseFloat(totalToPay.toFixed(2)),
-        subTotal: subTotal,
+        total: totalToPay,
+        subtotal: subtotal,
         taxes: taxes,
       };
 
@@ -301,12 +381,13 @@ export default function CheckOutForm2({
           //Creamos la mutacion segun los parametros de Correos de Costa Rica.
           //si la distancia de entrega supera los 20 kilometros.
           // TODO: vericar que la estructura del request esta correcto.
+
           createPaymentDetail({
             variables: {
               status: "Inicial",
-              subTotal: subTotal,
+              subtotal: subtotal,
               taxes: taxes,
-              total: parseFloat(totalToPay.toFixed(2)),
+              total: finalPriceToPay.total,
               invoiceRequired: checkbox,
               deliveryPayment: parseFloat(LongDistancePrice),
               deliveryId: parseInt(CCR_ID),
@@ -315,15 +396,23 @@ export default function CheckOutForm2({
               publishedAt: isoDate,
               estimate_delivery_date: LongEstimatedDelivery,
               gift: selectedGiftsString,
+              orderNumber: 12421455,
             },
           })
             .then((responsePaymentDetail) => {
               // Verificamos si la data esta disponible
               if (responsePaymentDetail && responsePaymentDetail.data) {
-                const orderId =
+                const paymentDetailResponseId =
                   responsePaymentDetail?.data?.createPaymentDetail?.data?.id;
-                setPaymentDetailId(orderId);
+                setPaymentDetailId(paymentDetailResponseId);
                 setChecktOutForm2Visible(true);
+                // se toma el primary de la orden para localizarla en el checkout
+                //se llama al hook que actualiza la orden
+                // se le pasan los parametros necesarios
+                if (paymentDetailResponseId) {
+                  console.log("argumentos2", paymentDetailResponseId,orderNumber);
+                  updateOrderNumber(paymentDetailResponseId, orderNumber);
+                }
               }
             })
             .catch((error) => {
@@ -334,24 +423,25 @@ export default function CheckOutForm2({
             });
         } else {
           // si la distancia no exede los 20 kilometros
-          const totalToPay = subTotal + taxes + ShortDistancePrice;
+          const totalToPay = subtotal + taxes + ShortDistancePrice;
           // Cargamos el objeto con los montos originales
           //que el cliente debera pagar.
 
           const finalPriceToPay = {
             // Total final le agregamos el costo del envio
-            total: parseFloat(totalToPay.toFixed(2)),
-            subTotal: subTotal,
+            total: totalToPay,
+            subtotal: subtotal,
             taxes: taxes,
           };
           handleDeliveryPayment(ShortDistancePrice);
           setAmount(finalPriceToPay);
+
           createPaymentDetail({
             variables: {
               status: "Inicial",
-              subTotal: subTotal,
+              subtotal: subtotal,
               taxes: taxes,
-              total: parseFloat(totalToPay.toFixed(2)),
+              total: finalPriceToPay.total,
               invoiceRequired: checkbox,
               deliveryPayment: parseFloat(ShortDistancePrice),
               deliveryId: parseInt(CCR_ID),
@@ -360,14 +450,21 @@ export default function CheckOutForm2({
               publishedAt: isoDate,
               estimate_delivery_date: ShortEstimatedDelivery,
               gift: selectedGiftsString,
+              orderNumber: 12421455,
             },
           })
             .then((response) => {
               // Verificamos si la data esta disponible
               if (response && response.data) {
-                const orderId = response?.data?.createPaymentDetail?.data?.id;
-                setPaymentDetailId(orderId);
+                const paymentDetailResponseId =
+                  response?.data?.createPaymentDetail?.data?.id;
+                setPaymentDetailId(paymentDetailResponseId);
+
                 setChecktOutForm2Visible(true);
+                if (paymentDetailResponseId) {
+                  console.log("argumentos3", paymentDetailResponseId,orderNumber);
+                  updateOrderNumber(paymentDetailResponseId, orderNumber);
+                }
               }
             })
             .catch((error) => {
@@ -469,10 +566,10 @@ export default function CheckOutForm2({
       ) : (
         <CheckOutForm3
           paymentDetailId={paymentDetailId}
-          total={total}
+          total={total.toFixed(2)}
           estimation={estima}
           items={items}
-          orderNumber={paymentDetailId}
+          orderNumber={FinalOrderNumber}
         />
       )}
     </div>

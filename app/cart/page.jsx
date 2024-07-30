@@ -1,15 +1,16 @@
 "use client";
-import ShoppingCart from "@/components/ShoppingCart";
 import FeaturedProducts from "@/components/FeaturedProducts";
-
 import CartContainer from "@/components/CartContainer";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import useProtectionRoute from "@/hooks/useProtectionRoute";
+import  useFromOrderState  from '../../helpers/useFromOrderState';
 import "../../styles/fonts.css";
 
 export default function CartView() {
-  useProtectionRoute()
+
+  const { getFromOrderState, updateFromOrder } = useFromOrderState();
+  updateFromOrder(false);
+ 
+  useProtectionRoute();
   return (
     <div className="bg-floralwhite flex flex-wrap max-w-screen-xl m-auto justify-center">
       <div className="flex justify-center mt-3">
@@ -18,8 +19,6 @@ export default function CartView() {
 
       <section className="grid p-5 grid-cols-12 w-full max-w-screen-xl m-auto">
         <CartContainer />
-
-
       </section>
       {/* ///////////LOS SIGUIENTES DATOS ESTAN QUEMADOS */}
       <section className="w-full">
@@ -27,7 +26,7 @@ export default function CartView() {
           Descubre nuestros productos estrella
         </h1>
         <div className="flex flex-wrap max-w-screen-xl m-auto justify-center">
-        <FeaturedProducts />
+          <FeaturedProducts />
         </div>
       </section>
     </div>

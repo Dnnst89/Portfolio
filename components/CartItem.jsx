@@ -9,14 +9,16 @@ import { useQuery } from "@apollo/client";
 import PRODUCT_ID_CARTITEM_QUERY from "@/src/graphQl/queries/getProductIdFromCartItem";
 import DetailComponent from "./DetailComponent";
 import Link from "next/link";
+import useStoreInformation from "../helpers/useStoreInformation";
+import {useLocalCurrencyContext}  from "@/src/context/useLocalCurrency";
+
 const CartItem = ({
   cartItemId,
   idVariant,
   productName,
   brand,
   description,
-  color,
-  price,
+  color, 
   totalPrice,
   ageRange,
   size,
@@ -28,6 +30,12 @@ const CartItem = ({
   loading,
   error,
 }) => {
+  const { storeInformation, storeInformationError } = useStoreInformation(1);
+  const currencySymbol =
+    storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
+ // if true send LocalCurrencyPrice as price for products else send variant price
+  const useLocalCurrency = useLocalCurrencyContext();
+
   const cart = useSelector((state) => state.cart);
   //Get the data of the product depend on the cartItemId
   const { data, loading: productIdLoading } = useQuery(
@@ -124,11 +132,29 @@ const CartItem = ({
         </div>
         <section className="grid grid-cols-12 col-span-12 md:col-span-5 ">
           <div className="grid grid-cols-6 col-span-10 md:col-span-6 place-content-center ">
-            <span className="text-xs mx-2 col-start-2 col-span-6">
-              Precio Unitario: ${price}
+            <span class="text-xs mx-2 col-start-2 col-span-6">
+              Precio Unitario:
             </span>
+            <span className="text-xs mx-2 col-start-2 col-span-6">
+              {
+               `${currencySymbol} ${parseFloat(
+                  totalPrice
+                  ).toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits : 2
+                  })}`
+                }
+            </span>
+
             <span className="mx-2 font-bold col-start-2 col-span-6">
-              Precio Total: ${totalPrice}
+              Precio Total:{" "}
+            </span>
+            <span class="text-xs font-bold mx-2 col-start-2 col-span-6">
+            { `${currencySymbol} ${parseFloat(totalPrice * quantityCartItem).toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits : 2
+                  })}`
+                }
             </span>
           </div>
           {/* Botón para eliminar el producto del carrito */}

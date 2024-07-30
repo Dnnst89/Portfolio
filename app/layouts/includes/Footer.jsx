@@ -38,9 +38,7 @@ const Footer = () => {
                     href={"mailto:hola@detinmarin.cr"}
                     className="hover:underline"
                   >
-                    <span className="underline">
-                      equipodetinmarin@gmail.com
-                    </span>
+                    <span className="underline">hola@detinmarincr.com</span>
                   </Link>
                 </li>
                 <li>

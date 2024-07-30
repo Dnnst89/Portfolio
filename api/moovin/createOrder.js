@@ -14,7 +14,6 @@ const orderMoovin = async (data) => {
     body: JSON.stringify(data),
   });
   const order = await creationResponsde.json();
-  console.log("orderResponsde: ", order);
   return order;
 };
 const deleteOrderMoovin = async (data) => {
@@ -31,7 +30,6 @@ const deleteOrderMoovin = async (data) => {
     }
   );
   const order = await deleteResponsde.json();
-  console.log("orderResponsde: ", order);
   return order;
 };
 
@@ -66,9 +64,6 @@ const createOrderData = (
   payment,
   deliveryInformation
 ) => {
-  console.log(items);
-
-  console.log("products", addProducts(items));
   const data = {
     idEstimation: payment,
     idDelivery: 2,

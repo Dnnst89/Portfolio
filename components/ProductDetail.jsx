@@ -1,33 +1,45 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { BiPlus, BiMinus } from "react-icons/bi";
-import Link from "next/link";
+import { BiPlus, BiMinus, BiArrowBack } from "react-icons/bi";
 import AddItemBtn from "./AddItemBtn";
-import ProductImage from "./ProductImage";
 import ProductFeatures from "./ProductFeatures";
 import useCartSummary from "@/hooks/useCartSummary";
 import useStorage from "@/hooks/useStorage";
-import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import ImageGallery from "react-image-gallery";
-import GET_STORE_INFO from "@/src/graphQl/queries/getStoreInformation";
 import { useQuery } from "@apollo/client";
+import useStoreInformation from "../helpers/useStoreInformation";
 import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
-import GET_CART_ITEM_BY_ID from "@/src/graphQl/queries/getCartItemById";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
+import useFromOrderState from "../helpers/useFromOrderState";
+import { useLocalCurrencyContext } from "@/src/context/useLocalCurrency";
 
-function ProductDetail({ product, variantId, ItemQt }) {
+function ProductDetail({
+  product,
+  variantId,
+  ItemQt,
+  handleGoBack,
+  handleGoToCategory,
+}) {
+  // if true send variantPrice as price for products else send variant price
+  const useLocalCurrency = useLocalCurrencyContext();
+
   const name = product?.attributes?.name;
   const brand = product?.attributes?.brand;
   const description = product?.attributes?.description;
   const variants = product?.attributes?.variants?.data;
   const materials = product?.attributes?.materials?.data;
+  const category = product?.attributes?.categories?.data[0]?.attributes?.name;
+  const categoryData = product?.attributes?.categories?.data;
+  let previousPage = "";
+  let prevCategory = "";
+
+  const { getFromOrderState, updateFromOrder } = useFromOrderState();
+  const isFromOrderDetail = JSON.parse(getFromOrderState());
 
   const { data, loading: productIdLoading } = useQuery(GET_VARIANT_BY_ID, {
     variables: {
@@ -40,7 +52,8 @@ function ProductDetail({ product, variantId, ItemQt }) {
   const skuSelected = data?.variant?.data?.attributes?.sku;
   const stockVariantSelected = data?.variant?.data?.attributes?.stock;
   const ageRangeVariantSelected = data?.variant?.data?.attributes?.ageRange;
-  const priceVariantSelected = data?.variant?.data?.attributes?.price;
+  const variantPriceVariantSelected =
+    data?.variant?.data?.attributes?.variantPrice;
   const sizeVariantSelected = data?.variant?.data?.attributes?.size;
   const imageVariantSelected = data?.variant?.data?.attributes?.images?.data;
   const colorTypeParentVariant =
@@ -49,6 +62,24 @@ function ProductDetail({ product, variantId, ItemQt }) {
     data?.variant?.data?.attributes?.parentVariant?.data?.attributes?.typeValue;
   const colorTypeVariant = data?.variant?.data?.attributes?.type;
   const colorValueVariant = data?.variant?.data?.attributes?.typeValue;
+  let isPrevCategoryExist;
+
+  previousPage = document.referrer;
+  //obtener la categoria desde la url de la pagina anterior
+  if (previousPage !== "") {
+    const url = new URL(previousPage);
+    const params = new URLSearchParams(url.search);
+    const previousCategory = params.get("category");
+    prevCategory = previousCategory;
+
+    // Verificar si prevCategory existe en el array de categorías
+    isPrevCategoryExist = categoryData.some((item) => {
+      const categoryName = item.attributes.name.trim(); // Eliminar espacios en blanco al final
+      return categoryName === prevCategory;
+    });
+
+    //
+  }
 
   //variable para guardar las selecciones de dropdown para mostrar en el detalle del pedido desde el carrito
   const featuresSelected = {};
@@ -76,22 +107,21 @@ function ProductDetail({ product, variantId, ItemQt }) {
   const { user } = useStorage();
   const cartSummary = useCartSummary({ userId: user?.id }); //me trae  {total,items,quantity,error,sessionId}
   const [variantSelected, setvariantSelected] = useState(); //guarda la variante que actualmente se seleccionó{features:{}, variant:{object}}
-  const [price, setPrice] = useState(
-    variants.length > 0 ? variants[0].attributes.price.toFixed(2) : null
+  const [variantPrice, setvariantPrice] = useState(
+    variants.length > 0 ? variants[0]?.attributes?.totalPrice : null
   ); //precio inicial dado por primer variante
+
   const [enableButton, setEnableButton] = useState(variants.length <= 1);
   let variantItems = [];
 
-  const { data: storeInformation, error: storeInformationError } = useQuery(
-    GET_STORE_INFO,
-    {
-      variables: {
-        id: 1,
-      },
-    }
-  );
-  const currency =
-    storeInformation?.storeInformation?.data?.attributes?.currency;
+  const { storeInformation, storeInformationError } = useStoreInformation(1);
+  const currencySymbol =
+    storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
+
+  useEffect(() => {
+    if (data && data.variant && data.variant.data) setEnableButton(false);
+  }, [data]);
+
   if (imageVariantSelected) {
     allImages.push(...imageVariantSelected); //muestra solo las imagenes de la variante(detalle del producto desde carrito)
   } else {
@@ -105,6 +135,10 @@ function ProductDetail({ product, variantId, ItemQt }) {
   const [images, setImages] = useState(allImages.length > 0 ? allImages : null);
   //galeria de imagenes para componente se compone de un arreglo [{original: url, thumbnail: url}]
   const [galleryImages, setGalleryImages] = useState([]);
+
+  const itemFiltrado = cartSummary.items.find(
+    (item) => item.attributes.variant.data.id === variantId
+  );
 
   useEffect(() => {
     if (imageVariantSelected) {
@@ -125,7 +159,18 @@ function ProductDetail({ product, variantId, ItemQt }) {
   const decreaseCounter = () => {
     if (ItemQt) {
       if (quantitySelected > 1) {
-        SetQuantitySelected((prev) => prev - 1);
+        const updatedQuantity = quantitySelected - 1;
+        SetQuantitySelected(updatedQuantity);
+        const itemFiltrado = cartSummary.items.find(
+          (item) => item.attributes.variant.data.id === variantId
+        );
+        if (itemFiltrado) {
+          if (updatedQuantity === itemFiltrado?.quantity) {
+            setEnableButton(false);
+          } else {
+            setEnableButton(true);
+          }
+        }
       } else {
         // Evitar decrementar por debajo de 1
         SetQuantitySelected(1);
@@ -140,6 +185,16 @@ function ProductDetail({ product, variantId, ItemQt }) {
   const handleQuantityChange = async (newQuantity) => {
     if (ItemQt) {
       if (quantitySelected == newQuantity) return; //controla dropdown (detalle del producto desde carrito)
+
+      const itemFiltrado = await cartSummary.items.find(
+        (item) => item.attributes.variant.data.id === variantId
+      );
+      const isQuantityEqualToItemQt = newQuantity === itemFiltrado?.quantity;
+
+      // Establecer el botón habilitado o deshabilitado basado en la comparación
+      setEnableButton(!isQuantityEqualToItemQt);
+
+      // Establecer la cantidad seleccionada
       SetQuantitySelected(newQuantity);
     } else {
       const itemFiltrado = await cartSummary.items.find(
@@ -163,11 +218,25 @@ function ProductDetail({ product, variantId, ItemQt }) {
   const increaseCounter = async () => {
     if (ItemQt) {
       if (quantitySelected >= stockVariantSelected) return;
-      SetQuantitySelected((prev) => ++prev);
+      const updatedQuantity = parseInt(quantitySelected, 10) + 1;
+
+      SetQuantitySelected(updatedQuantity);
+      // const itemFiltrado = await cartSummary.items.find(
+      //   (item) => item.attributes.variant.data.id === variantId
+
+      // );
+      if (itemFiltrado) {
+        if (updatedQuantity === itemFiltrado?.quantity) {
+          setEnableButton(false);
+        } else {
+          setEnableButton(true);
+        }
+      }
     } else {
       const itemFiltrado = await cartSummary.items.find(
         (item) => item.attributes.variant.data.id === variants[0]?.id
       );
+
       if (itemFiltrado) {
         //si el item ya esta en carrito
         if (variants.length > 0) {
@@ -214,7 +283,8 @@ function ProductDetail({ product, variantId, ItemQt }) {
         })()
       : (() => {
           variantItems = variants.map((variant) => {
-            const { size, price, color, stock, ageRange } = variant.attributes;
+            const { size, variantPrice, color, stock, ageRange } =
+              variant.attributes;
             return { size, ageRange };
           });
         })();
@@ -237,12 +307,40 @@ function ProductDetail({ product, variantId, ItemQt }) {
           rel="noopener noreferrer"
         >
           {/* Columna de imagenes */}
+
           <section
             aria-label="Imágenes del producto"
-            className="mb-10 col-span-12 md:col-span-6"
+            className="mb-10 col-span-12 md:col-span-6 "
           >
-            {/* //imagenes debajo de la principal */}
-            <div className="md:w-5/6 m-auto mt-2 ">
+            {/* Botón de regreso */}
+            <div className="md:w-5/6 mx-auto mt-2">
+              {variantId ? (
+                <a onClick={() => handleGoBack()} className="self-start mb-3">
+                  <button className="flex justify-start text-lightblue bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
+                    {isFromOrderDetail
+                      ? "Regresar al detalle del pedido"
+                      : "Regresar al carrito"}
+                  </button>
+                </a>
+              ) : (
+                <a
+                  onClick={() =>
+                    isPrevCategoryExist
+                      ? handleGoToCategory(prevCategory)
+                      : handleGoToCategory(category)
+                  }
+                  className="self-start mb-3"
+                >
+                  <button className="flex justify-start text-lightblue bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
+                    {isPrevCategoryExist
+                      ? `Regresar a ${prevCategory}`
+                      : `Regresar a ${category}`}
+                  </button>
+                </a>
+              )}
+            </div>
+            {/* Imágenes debajo de la principal */}
+            <div className="md:w-5/6 m-auto mt-2">
               {images && images.length > 0 ? (
                 <ImageGallery
                   showPlayButton={false}
@@ -260,7 +358,7 @@ function ProductDetail({ product, variantId, ItemQt }) {
           {/* Sección con los detalles del producto*/}
           <section
             aria-label="Detalles del producto"
-            className="mb-10 col-span-12 md:col-span-6 m-auto m-0"
+            className="mb-40 col-span-12 md:col-span-6 m-auto m-0"
           >
             <div className="grid grid-cols-12 md:col-span-12">
               <div className="col-span-12 md:col-span-6">
@@ -304,7 +402,7 @@ function ProductDetail({ product, variantId, ItemQt }) {
             <p>{shortDescrption}...</p>
             <a onClick={() => handleClick()}>
               <button className="flex justify-start text-lightblue mb-3 bg-blue-500 transition duration-200 opacity-60 hover:opacity-100">
-                Leer mas
+                Leer más
               </button>
             </a>
             {/* Sección seleccion del producto*/}
@@ -314,8 +412,9 @@ function ProductDetail({ product, variantId, ItemQt }) {
                 variantsList={variants}
                 setImages={setImages}
                 setImage={setImage}
+                useLocalCurrency={useLocalCurrency}
                 setvariantSelected={setvariantSelected}
-                setPrice={setPrice}
+                setvariantPrice={setvariantPrice}
                 setEnableButton={setEnableButton}
               />
             </section>
@@ -525,91 +624,113 @@ function ProductDetail({ product, variantId, ItemQt }) {
             {/* precio, cantidad de la variante */}
             <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between p-4">
               <span className="col-span-4 md:col-span-5 font-bold md:text-[30px]">
-                {currency} {price}
+                {useLocalCurrency
+                  ? `${currencySymbol} ${parseFloat(
+                      variantPrice
+                    ).toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits : 2
+                    })}`
+                  : `$ ${parseFloat(variantPrice).toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits : 2
+                    })}`}
               </span>
               <div className="col-span-8 mdd:col-span-7 md:flex md:flex-col items-end md:items-end p-3">
-                <div className="grid md:flex items-center mb-2 ">
-                  <span className="text-grey mx-3">Cantidad:</span>
-                  <div className="bg-resene rounded-full md:m-3 w-[140px] flex items-center justify-center p-2 space-x-4">
-                    <button
-                      aria-label="Disminuir cantidad de produto"
-                      className=" bg-grey-100 rounded-full text-white"
-                    >
-                      <BiMinus onClick={decreaseCounter} />
-                    </button>
-                    {/* <span>{quantity}</span> */}
-                    <div className="group inline-block relative">
-                      {stockVariantSelected ? (
-                        <button
-                          type="button"
-                          className="bg-white rounded-full text-black px-4 py-2 transition duration-300 ease-in-out focus:outline-none focus:shadow-outline min-w-[60px]"
-                        >
-                          {quantitySelected}
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          className="bg-white rounded-full text-black px-4 py-2 transition duration-300 ease-in-out focus:outline-none focus:shadow-outline min-w-[60px]"
-                        >
-                          {quantity}
-                        </button>
-                      )}
+                {/**
+                 * oculta los botones para agregar unidades y agregar producto al carrito
+                 */}
 
-                      <ul className="absolute hidden text-grey-800 group-hover:block border border-grey-200 bg-white max-h-40 overflow-y-auto">
-                        {(stockVariantSelected
-                          ? [...Array(stockVariantSelected).keys()]
-                          : [...Array(variants[0].attributes.stock).keys()]
-                        ).map((index) => (
-                          <li
-                            key={index + 1}
-                            onClick={() => handleQuantityChange(index + 1)}
-                            className="cursor-pointer py-2 px-4 hover:bg-grey-200"
-                          >
-                            {index + 1}
-                          </li>
-                        ))}
-                      </ul>
+                {!isFromOrderDetail ? (
+                  <>
+                    <div className="grid md:flex items-center mb-2 ">
+                      <span className="text-grey mx-3">Cantidad:</span>
+                      <div className="bg-resene rounded-full md:m-3 w-[140px] flex items-center justify-center p-2 space-x-4">
+                        <button
+                          aria-label="Disminuir cantidad de produto"
+                          className=" bg-grey-100 rounded-full text-white"
+                        >
+                          <BiMinus onClick={decreaseCounter} />
+                        </button>
+                        {/* <span>{quantity}</span> */}
+                        <div className="group inline-block relative">
+                          {stockVariantSelected ? (
+                            <button
+                              type="button"
+                              className="bg-white rounded-full text-black px-4 py-2 transition duration-300 ease-in-out focus:outline-none focus:shadow-outline min-w-[60px]"
+                            >
+                              {quantitySelected}
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              className="bg-white rounded-full text-black px-4 py-2 transition duration-300 ease-in-out focus:outline-none focus:shadow-outline min-w-[60px]"
+                            >
+                              {quantity}
+                            </button>
+                          )}
+
+                          <ul className="absolute hidden text-grey-800 group-hover:block border border-grey-200 bg-white max-h-40 overflow-y-auto">
+                            {(stockVariantSelected
+                              ? [...Array(stockVariantSelected).keys()]
+                              : [...Array(variants[0].attributes.stock).keys()]
+                            ).map((index) => (
+                              <li
+                                key={index + 1}
+                                onClick={() => handleQuantityChange(index + 1)}
+                                className="cursor-pointer py-2 px-4 hover:bg-grey-200"
+                              >
+                                {index + 1}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <button
+                          aria-label="Aumentar cantidad de produto"
+                          className=" bg-grey-100 rounded-full  text-white"
+                        >
+                          <BiPlus onClick={increaseCounter} />
+                        </button>
+                      </div>
                     </div>
-                    <button
-                      aria-label="Aumentar cantidad de produto"
-                      className=" bg-grey-100 rounded-full  text-white"
+
+                    <div
+                      className={`${
+                        enableButton ? "bg-aquamarine" : "bg-grey-200"
+                      } rounded-sm p-2 md:p-3  md:mx-4"`}
                     >
-                      <BiPlus onClick={increaseCounter} />
-                    </button>
-                  </div>
-                </div>
-                <div
-                  className={`${
-                    enableButton ? "bg-aquamarine" : "bg-grey-200"
-                  } rounded-sm p-2 md:p-3  md:mx-4"`}
-                >
-                  <AddItemBtn
-                    variantData={data || null}
-                    quantityItem={
-                      quantitySelected !== null ? quantitySelected : quantity
-                    }
-                    variant={
-                      lastVariantSelected !== null
-                        ? lastVariantSelected
-                        : variantSelected?.variant?.data
-                        ? variantSelected.variant.data
-                        : variants[0]
-                    } //Se envía la ultima variante seleccionada
-                    features={
-                      featuresSelected !== null
-                        ? featuresSelected
-                        : variantSelected?.features
-                        ? variantSelected.features
-                        : {}
-                    }
-                    cartItems={cartSummary.items}
-                    cartQuantity={cartSummary.quantity}
-                    sessionId={cartSummary.sessionId}
-                    user={user}
-                    enableButton={enableButton}
-                    product={product}
-                  />
-                </div>
+                      <AddItemBtn
+                        variantData={data || null}
+                        quantityItem={
+                          quantitySelected !== null
+                            ? quantitySelected
+                            : quantity
+                        }
+                        variant={
+                          lastVariantSelected !== null
+                            ? lastVariantSelected
+                            : variantSelected?.variant?.data
+                            ? variantSelected.variant.data
+                            : variants[0]
+                        } //Se envía la ultima variante seleccionada
+                        features={
+                          featuresSelected !== null
+                            ? featuresSelected
+                            : variantSelected?.features
+                            ? variantSelected.features
+                            : {}
+                        }
+                        cartItems={cartSummary.items}
+                        cartQuantity={cartSummary.quantity}
+                        sessionId={cartSummary.sessionId}
+                        user={user}
+                        setEnableButton={setEnableButton}
+                        enableButton={enableButton}
+                        product={product}
+                      />
+                    </div>
+                  </>
+                ) : null}
               </div>
             </div>
           </section>

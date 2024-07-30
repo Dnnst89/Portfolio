@@ -10,7 +10,7 @@ import useStorage from "@/hooks/useStorage";
 import { useQuery } from "@apollo/client";
 import GET_CART_ITEMS_LIST_SHOPPING_SESSION from "@/src/graphQl/queries/getCartItemsByShoppingSession";
 import DELETE_CART_ITEM_MUTATION from "@/src/graphQl/queries/deleteCartItem";
-import { GET_PAYMENT_DETAIL } from "@/src/graphQl/queries/getPaymentDetail";
+import { GET_PAYMENT_DETAIL_CUSTOM } from "@/src/graphQl/queries/getPaymentDetailCustom";
 import { GET_PAYMENT_DETAILS } from "@/src/graphQl/queries/getPaymentDetails";
 import { GET_CONSECUTIVE_NUMBER } from "@/src/graphQl/queries/getConsecutiveNumber";
 import { GET_USER_ADDRESS } from "@/src/graphQl/queries/getUserAddress";
@@ -46,6 +46,7 @@ import { CREATE_ORDER_EMAIL } from "@/src/graphQl/queries/sendEmail";
 import { UPDATE_SHOPPING_SESSION_ACTIVE } from "@/src/graphQl/queries/updateShoppingSessionActive";
 import { GET_USER_SESSIONS } from "@/src/graphQl/queries/getUserSessions";
 import CREATE_SHOPPING_SESSION_MUTATION from "@/src/graphQl/queries/createShoppingSession";
+import { useLocalCurrencyContext } from "@/src/context/useLocalCurrency";
 
 /*
   recives the Tilopay response , based on the returns params 
@@ -56,6 +57,9 @@ import CREATE_SHOPPING_SESSION_MUTATION from "@/src/graphQl/queries/createShoppi
 */
 
 export default function ThankYouMessage() {
+  // if true send LocalCurrencyPrice as price for products else send variant price
+  const useLocalCurrency = useLocalCurrencyContext();
+
   useProtectionRoute();
   const router = useRouter();
   //states
@@ -66,6 +70,7 @@ export default function ThankYouMessage() {
   const [userName, setUserName] = useState();
   const [userEmail, setUserEmail] = useState();
   const [description, setDescription] = useState();
+  const [emailOrderNumber, setEmailOrderNumber] = useState(null);
   //calling the mutation
   const [updatePaymentDetailStatus] = useMutation(UPDATE_PAYMENT_DETAIL_STATUS);
 
@@ -76,7 +81,7 @@ export default function ThankYouMessage() {
 
   const [getConsecutiveNumber] = useLazyQuery(GET_CONSECUTIVE_NUMBER);
   const [createOrderItem] = useMutation(CREATE_ORDER_ITEM_MUTATION);
-  const [getPaymentDetail] = useLazyQuery(GET_PAYMENT_DETAIL);
+  const [getPaymentDetailCustom] = useLazyQuery(GET_PAYMENT_DETAIL_CUSTOM);
   const [getPaymentDetails] = useLazyQuery(GET_PAYMENT_DETAILS);
   const [getOrderItemsByOrderId] = useLazyQuery(GET_ORDER_ITEMS_BY_ORDER_ID);
   const [getStoreInformation] = useLazyQuery(GET_STORE_INFO);
@@ -213,7 +218,7 @@ export default function ThankYouMessage() {
   const handleCreateOrder = async (status) => {
     const isoDate = new Date().toISOString();
     try {
-      const paymentinfo = await getPaymentDetail({
+      const paymentinfo = await getPaymentDetailCustom({
         //obtengo el paymentDetails, para que cuando refresque la pagina no cree mas ordenes
         variables: { paymentId },
       });
@@ -222,30 +227,41 @@ export default function ThankYouMessage() {
       const tax = paymentinfo?.data?.paymentDetail?.data?.attributes?.taxes;
       const subtotal =
         paymentinfo?.data?.paymentDetail?.data?.attributes?.subtotal;
+
       const orderStatus =
-        paymentinfo?.data?.paymentDetail?.data?.attributes?.status;
+        paymentinfo.data.paymentDetails.data[0].attributes.status;
+      //se toma el id de payment detail para crear el registro
+      const paymentDetailId = paymentinfo.data.paymentDetails.data[0]?.id;
+
       const orderPayment =
-        paymentinfo?.data?.paymentDetail?.data?.attributes?.order_detail?.data; //me da la orden asociada al pago
+        paymentinfo?.data?.paymentDetails?.data[0]?.attributes?.order_detail
+          ?.data; //me da la orden asociada al pago
       const moovinId =
         paymentinfo?.data?.paymentDetail?.data?.attributes?.deliveryId;
+
       if (orderPayment === null && orderStatus === "Inicial") {
         // si no tiene orden le asigno una
+
         try {
           const { data } = await createOrder({
             //creo la orden asociada la payment
+
             variables: {
               user_id: userId,
               status: status,
-              paymentId: paymentId,
+              paymentId: paymentDetailId,
               publishedAt: isoDate,
             },
           });
+
           const orderNumber = data?.createOrderDetail?.data?.id;
+          setEmailOrderNumber(orderNumber);
           setOrderId(orderNumber);
           await creatingOrderItems(orderNumber);
 
           //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
           await sendOrderEmail(quantity, orderNumber);
+
           //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
           try {
             fetchOrderMoovin(orderNumber);
@@ -258,6 +274,7 @@ export default function ThankYouMessage() {
         }
       } else {
         //no creo otra orden, asigno la que ya tiene
+
         setOrderId(orderPayment.id);
       }
     } catch (error) {
@@ -294,7 +311,7 @@ export default function ThankYouMessage() {
       );
 
     const currency =
-      storeInformation?.storeInformation?.data?.attributes?.currency;
+      storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
 
     const { data: emailInfo, error: sendEmailError } = await createOrderEmail({
       variables: {
@@ -304,6 +321,7 @@ export default function ThankYouMessage() {
         currency: currency,
       },
     });
+
     if (sendEmailError)
       return toast.error(
         "Lo sentimos, ha ocurrido un error al enviar el correo",
@@ -316,6 +334,15 @@ export default function ThankYouMessage() {
   const creatingOrderItems = async (orderId) => {
     // me trae los items del carrito y los almaceno en la orden
     const isoDate = new Date().toISOString();
+    const { data: storeInformation, error: storeInformationError } =
+      await getStoreInformation({
+        variables: {
+          id: 1,
+        },
+      });
+    const currency =
+      storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
+
     if (orderId) {
       let orderItems = items.map(async (item) => {
         try {
@@ -328,11 +355,14 @@ export default function ThankYouMessage() {
               variantId: parseInt(variant?.id), //este dato es un INT no un ID
               publishedAt: isoDate,
               orderDetailId: orderId,
-              price: variantAtt.price,
-              name: variantAtt.product.data.attributes.name,
-              brand: variantAtt.product.data.attributes.brand,
-              cabys: variantAtt.product.data.attributes.cabys,
-              imagesIds: variantAtt.images.data.map((img) => img.id),
+              price: variantAtt.localCurrencyPrice,
+              totalPrice: variantAtt?.totalPrice,
+              ivaAmount: variantAtt?.ivaAmount,
+              name: variantAtt?.product?.data?.attributes?.name,
+              brand: variantAtt?.product?.data?.attributes?.brand,
+              cabys: variantAtt?.product?.data?.attributes?.cabys,
+              imagesIds: variantAtt?.images?.data?.map((img) => img.id),
+              currency: currency,
             },
           });
 
@@ -374,7 +404,7 @@ export default function ThankYouMessage() {
         // I need to change the status of ther Payment to failed
         await handleUpdatePayment("Failed");
         try {
-          const paymentinfo = await getPaymentDetail({
+          const paymentinfo = await getPaymentDetailCustom({
             //obtengo el paymentDetails, para que cuando refresque la pagina no cree mas ordenes
             variables: { paymentId },
           });
@@ -388,7 +418,7 @@ export default function ThankYouMessage() {
       }
     } else {
       try {
-        const paymentinfo = await getPaymentDetail({
+        const paymentinfo = await getPaymentDetailCustom({
           //obtengo el paymentDetails, para que cuando refresque la pagina no cree mas ordenes
           variables: { paymentId },
         });
@@ -401,18 +431,19 @@ export default function ThankYouMessage() {
       }
     }
   };
-  ////////////////////////////////FUNCION PARA CREAR LA FACTURA ELECTRONICA//////////////////////////////
+  // FUNCION PARA CREAR LA FACTURA ELECTRONICA
   const createInvoice = async (orderId) => {
     //  const key = createKey(1, "3101491212");
     try {
-      const PaymentDetail = await getPaymentDetail({
+      const PaymentDetail = await getPaymentDetailCustom({
         variables: {
-          paymentId: paymentId,
+          paymentId,
         },
       });
 
       const required =
-        PaymentDetail.data.paymentDetail.data.attributes.invoiceRequired;
+        PaymentDetail.data?.paymentDetails?.data[0]?.attributes
+          ?.invoiceRequired;
       /*const billSummary = {
         total: PaymentDetail?.data?.paymentDetail?.data?.attributes?.total,
         subtotal:
@@ -439,16 +470,15 @@ export default function ThankYouMessage() {
                 lineDetails: [...formatedItems],
               },
             };
+
             const feeResult = await facturationInstace.post(
               `/utils/get-detail-line?access_token=${token}`,
               body
             );
 
-            console.log("feeResult", feeResult);
             const billSummary = feeResult?.data?.billSummary;
             const imp = feeResult?.data?.serviceDetail?.lineDetails;
-
-            const inv = formatItemInvoice(resultado, imp);
+            const inv = formatItemInvoice(items, imp);
 
             try {
               /*const store = {
@@ -518,7 +548,7 @@ export default function ThankYouMessage() {
                   },
                   otherCharges: [],
                   billSummary: {
-                    ...formatBillSumary(billSummary, "535.86", store.currency),
+                    ...formatBillSumary(billSummary, "1", store.currency),
                   },
                   referenceInformation: [],
                   others: {
@@ -550,12 +580,12 @@ export default function ThankYouMessage() {
                 },
                 returnCompleteAnswer: true,
               };
-              console.log("factura", bodyInvoice);
+
               const InvoiceResult = await facturationInstace.post(
                 `document/electronic-invoice?access_token=${token}`,
                 bodyInvoice
               );
-              console.log("resultado factura", InvoiceResult);
+
               try {
                 const isoDate = new Date().toISOString();
                 const resulta = await getStoreInformation({
@@ -613,7 +643,7 @@ export default function ThankYouMessage() {
                 </div>
                 <div className="bg-white w-[250px] p-3 flex flex-col items-center ml-[20px] rounded-md">
                   <p className="text-grey-100">N° de pedido</p>
-                  <p>{orderId}</p>
+                  <p>{emailOrderNumber}</p>
                 </div>
 
                 <button

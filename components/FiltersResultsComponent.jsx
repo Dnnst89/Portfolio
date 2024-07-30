@@ -9,9 +9,18 @@ import getProductsFiltered from "@/src/graphQl/queries/getProductsFiltered";
 import getProductsFilteredWithBrands from "@/src/graphQl/queries/getProductsFilteredWithBrands";
 import FilterContainer from "./FilterContainer";
 import FilterContainerPrincipal from "./FilterContainerPrincipal";
+import NotFound from "./Not-found";
 import useFilteredBrand from "@/hooks/useFilteredBrand";
 import useBrandsByAgeRange from "@/hooks/useBrandsByAgeRange";
+import { useRouter } from "next/navigation";
+import GET_ERROR_INFO from "@/src/graphQl/queries/getErrorInfo";
+import useFromOrderState from "../helpers/useFromOrderState";
+import {useLocalCurrencyContext}  from "@/src/context/useLocalCurrency";
 export default function FiltersResultsComponent({ querySearch }) {
+  
+  const { getFromOrderState, updateFromOrder } = useFromOrderState();
+  updateFromOrder(false);
+
   //querySearch me indica el tipo de filtro y el valor del filtro
   const [minPriceFilter, setMinPriceFilter] = useState(0);
   const [maxPriceFilter, setMaxPriceFilter] = useState(999999);
@@ -25,6 +34,14 @@ export default function FiltersResultsComponent({ querySearch }) {
   const [nbHits, setNbHits] = useState();
   const page = currentPage;
   const pageSize = 12;
+  const [showToastMessage, setShowToastMessage] = useState(true);
+
+  // if true send LocalCurrencyPrice as price for products else send variant price
+  const useLocalCurrency = useLocalCurrencyContext();
+
+  const { data: errorMessage } = useQuery(GET_ERROR_INFO, {
+    variables: { id: 3 },
+  });
 
   let initialAge;
   let finalAge;
@@ -33,9 +50,15 @@ export default function FiltersResultsComponent({ querySearch }) {
   brands = selectedBrands;
   let minPrice;
   let maxPrice;
+  const router = useRouter();
+
+  let [filterType, filterValue] = "";
+
+  if (querySearch) {
+    [filterType, filterValue] = querySearch.split("=");
+  }
 
   //separo la query para saber que mostrar si es por rango de dedades o por categorias
-  const [filterType, filterValue] = querySearch.split("=");
 
   if (filterType == "ageRange") {
     initialAge = parseInt(filterValue.split("-")[0]);
@@ -62,7 +85,7 @@ export default function FiltersResultsComponent({ querySearch }) {
   }, [getBrandsByAge]);
 
   // depending if there´s a brand selected or not we use the necessary query for it, with or without brand variable.
-  let queryResultWithBrands = useQuery(getProductsFilteredWithBrands, {
+  let queryResultWithBrands = useQuery(getProductsFilteredWithBrands(), {
     variables: {
       initialAge,
       finalAge,
@@ -75,7 +98,7 @@ export default function FiltersResultsComponent({ querySearch }) {
     },
   });
 
-  let queryResult = useQuery(getProductsFiltered, {
+  let queryResult = useQuery(getProductsFiltered(), {
     variables: {
       initialAge,
       finalAge,
@@ -90,8 +113,10 @@ export default function FiltersResultsComponent({ querySearch }) {
   // Using results conditionally
   const { loading, error, data } =
     brands.length > 0 ? queryResultWithBrands : queryResult;
-  useEffect(() => {
-    //   // Puedes mover la lógica de 'allResults' directamente aquí
+
+    
+
+  useEffect(() => {    //   // Puedes mover la lógica de 'allResults' directamente aquí
     try {
       // Realiza las operaciones necesarias con 'data'
       setQueryType("category");
@@ -101,6 +126,13 @@ export default function FiltersResultsComponent({ querySearch }) {
       maxPrice = maxPriceFilter;
       const total = data.products.meta.pagination.total;
       setNbHits(total);
+      if (showToastMessage) {
+        if (filterValue === undefined || filterType === undefined) {
+          router.push("/not-found");
+        }
+
+        //router.push("/not-found");
+      }
       // console.log("resultado1", nbHits);
       // Continúa con el resto del código según tus necesidades
     } catch (err) {
@@ -112,6 +144,7 @@ export default function FiltersResultsComponent({ querySearch }) {
     maxPriceFilter,
     minPriceFilter,
     data,
+    showToastMessage,
     currentPage,
   ]);
   const handleFilters = (
@@ -128,6 +161,7 @@ export default function FiltersResultsComponent({ querySearch }) {
     setMaxPriceFilter(maxPrice);
     setSelectedBrands(selectedBrands);
 
+ 
     // Verificar y corregir valores nulos o indefinidos para minAge y maxAge
     if (minAge === null || minAge === undefined || minAge === "") {
       minAge = 0;
@@ -156,7 +190,7 @@ export default function FiltersResultsComponent({ querySearch }) {
   //if (loading) return <Spinner />;
   if (error)
     return toast.error(
-      "Lo sentimos, ha ocurrido un error al cargar los datos",
+      errorMessage.errorInformation.data.attributes.error_message,
       {
         autoClose: 5000,
       }

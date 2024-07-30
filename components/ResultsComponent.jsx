@@ -29,9 +29,9 @@ const ResultsComponent = (test) => {
   const [selectedPriceRange, setSelectedPriceRange] = useState(null);
   const [selectedAgeRange, setSelectedAgeRange] = useState(null);
 
-  const APPLICATION_ID = "6TQCC8J5LB";
-  const SEARCH_API_KEY = "5a6490a15e1b2c9a3c53d7f8328c3f8d";
-  const ALGOLIA_INDEX = "development_api::product.product";
+  const APPLICATION_ID = process.env.NEXT_PUBLIC_APPLICATION_ID;
+  const SEARCH_API_KEY = process.env.NEXT_PUBLIC_SEARCH_API_KEY;
+  const ALGOLIA_INDEX = process.env.NEXT_PUBLIC_ALGOLIA_INDEX;
 
   const searchClient = algoliasearch(APPLICATION_ID, SEARCH_API_KEY);
   const index = searchClient.initIndex(ALGOLIA_INDEX);

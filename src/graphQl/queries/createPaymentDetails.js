@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 const CREATE_PAYMENT_DETAIL = gql`
   mutation (
     $status: String
-    $subTotal: Float
+    $subtotal: Float
     $taxes: Float
     $total: Float
     $invoiceRequired: Boolean
@@ -13,12 +13,13 @@ const CREATE_PAYMENT_DETAIL = gql`
     $paymentMethod: String
     $estimate_delivery_date: String
     $publishedAt: DateTime
+    $orderNumber: Long
     $gift: String
   ) {
     createPaymentDetail(
       data: {
         status: $status
-        subtotal: $subTotal
+        subtotal: $subtotal
         taxes: $taxes
         total: $total
         invoiceRequired: $invoiceRequired
@@ -28,6 +29,7 @@ const CREATE_PAYMENT_DETAIL = gql`
         paymentMethod: $paymentMethod
         estimate_delivery_date: $estimate_delivery_date
         publishedAt: $publishedAt
+        orderNumber: $orderNumber
         gift: $gift
       }
     ) {
@@ -46,6 +48,7 @@ const CREATE_PAYMENT_DETAIL = gql`
           estimate_delivery_date
           publishedAt
           gift
+          orderNumber
         }
       }
     }

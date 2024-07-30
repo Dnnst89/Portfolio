@@ -41,7 +41,6 @@ function FilterByBrand({
           }
         );
         results = hits;
-        // console.log("first", hits);
         results.forEach((item) => {
           if (item.variants.length > 0) {
             item.variants.forEach((variant) => {
@@ -52,16 +51,13 @@ function FilterByBrand({
           }
         });
 
-        console.log(newResults);
         allBrands = allBrands.concat(
           Array.from(new Set(newResults.map((item) => item.brand)))
         );
 
         page++;
       } while (page * hitsPerPage < results.nbHits);
-    } else {
-      console.log("test", test);
-    }
+    } 
     setBrands(allBrands);
   }
   useEffect(() => {

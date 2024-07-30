@@ -23,7 +23,7 @@ const formatTaxData = (items) => {
   return items?.map((item) => {
     return {
       measurementUnit: "1/m",
-      unitaryPrice: item?.attributes?.variant?.data?.attributes?.price,
+      unitaryPrice: item?.attributes?.variant?.data?.attributes?.localCurrencyPrice,
       qty: item?.quantity,
       cabys:
         item?.attributes?.variant?.data?.attributes?.product?.data?.attributes?.cabys?.toString(),
@@ -101,7 +101,7 @@ const validateID = (tipo) => {
     return "01";
   } else return "02";
 };
-const formatBillSumary = (billSummary, exchangeRate, currencyCode) => {
+const formatBillSumary = (billSummary, exchangeRate, currencyCode,imp) => {
   return {
     codeTypeCurrency: {
       currencyCode: currencyCode,
@@ -155,38 +155,42 @@ const createConsecutiveNumber = (param) => {
 };
 
 const formatItemInvoice = (items, imp) => {
-  var cont = -1;
-
+  console.log("resultado index", items);
+  console.log("imp index", imp);
+  
   if (!items?.length) return [];
-  return items?.map((item) => {
-    cont = cont + 1;
-    var cod = 0;
-    if (imp[cont].taxes[0].code < 10) {
-      cod = "" + imp[cont].taxes[0].code;
-    } else {
-      cod = imp[cont].taxes[0].code;
-    }
+
+  return items?.map((item, index) => {
+    const product = item?.attributes?.variant?.data?.attributes?.product?.data?.attributes;
+    const variant = item?.attributes?.variant?.data?.attributes;
+    const tax = imp[index]?.taxes[0];
+    const code = tax?.code < 10 ? `0${tax.code}` : `${tax.code}`;
+
+    const qty = item?.attributes?.quantity;
+    const unitaryPrice = variant?.localCurrencyPrice;
+    const totalAmount = qty * unitaryPrice;
+
     return {
-      lineNumber: cont + 1,
-      cabys: "" + item?.attributes?.cabys?.toString(),
-      qty: "" + item?.attributes?.quantity,
+      lineNumber: index + 1,
+      cabys: "" + product?.cabys?.toString(),
+      qty: "" + qty,
       measurementUnit: "1/m",
       commercialMeasurementUnit: "1/m",
-      detail: "" + item?.attributes?.name,
-      unitaryPrice: "" + item?.attributes?.price,
-      totalAmount: "" + item?.attributes?.quantity * item?.attributes?.price,
-      subTotal: "" + item?.attributes?.quantity * item?.attributes?.price,
+      detail: "" + product?.name,
+      unitaryPrice: "" + unitaryPrice,
+      totalAmount: "" + totalAmount,
+      subTotal: "" + totalAmount,
       taxes: [
         {
-          code: "" + cod,
-          codeFee: "" + imp[cont].taxes[0].codeFee,
-          fee: imp[cont].taxes[0].fee,
-          VATFactor: "" + imp[cont].taxes[0].vatfactor,
-          amount: "" + imp[cont].taxes[0].amount,
+          code: code,
+          codeFee: "" + tax?.codeFee,
+          fee: tax?.fee,
+          VATFactor: "" + tax?.vatfactor,
+          amount: "" + tax?.amount,
         },
       ],
-      netTax: "" + imp[cont].taxes[0].amount,
-      lineTotalAmount: "" + imp[cont].lineTotalAmount,
+      netTax: "" + imp[index]?.netTax,
+      lineTotalAmount: "" + imp[index]?.lineTotalAmount,
     };
   });
 };

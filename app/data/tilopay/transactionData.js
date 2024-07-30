@@ -5,7 +5,7 @@ export const paymentDataForm = {
       : `${process.env.NEXT_PUBLIC_APP_URL}/thankyou/`,
   key: process.env.NEXT_PUBLIC_TILOPAY_API_KEY,
   amount: "",
-  currency: "USD",
+  currency: "CRC",
   billToFirstName: "",
   billToLastName: "",
   billToAddress: "",

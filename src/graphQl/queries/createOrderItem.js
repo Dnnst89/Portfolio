@@ -6,10 +6,13 @@ mutation CreateOrderItem(
   $quantity: Int!,
   $variantId: Int!,
   $price: Float!,
+  $totalPrice: Float!,
+  $ivaAmount: Float!,
   $name: String!,
   $brand: String!,
   $cabys: Long!,
   $orderDetailId: ID!,
+  $currency: String!,
   $publishedAt: DateTime!,
   $features: JSON,
 ) {
@@ -19,11 +22,14 @@ mutation CreateOrderItem(
       quantity: $quantity,
       variantId: $variantId,
       price: $price,
+      totalPrice: $totalPrice,
+      ivaAmount: $ivaAmount,
       name: $name,
       brand: $brand,
       cabys: $cabys,
       images: $imagesIds,
       order_details: [$orderDetailId],
+      currency: $currency
       publishedAt: $publishedAt,
     }
   ) {
@@ -34,9 +40,12 @@ mutation CreateOrderItem(
         name
         brand
         price
+        totalPrice
+        ivaAmount
         cabys
         variantId
         features
+        currency
         images {
           data {
             id

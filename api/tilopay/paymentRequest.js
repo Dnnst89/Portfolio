@@ -18,6 +18,7 @@ export const paymentRequest = async (formData) => {
 
     if (response.ok) {
       const paymentData = await response.json();
+
       return paymentData.url;
     } else {
       console.error("An error occurred:", response);

@@ -8,12 +8,13 @@ import "swiper/css/effect-coverflow";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import { Navigation, A11y } from "swiper/modules";
+import toast, { Toaster } from "react-hot-toast";
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import { EffectCoverflow } from "swiper/modules";
 import { useEffect, useState } from "react";
 
 const FeaturedProducts = () => {
-  const [loading, setLoading] = useState(true);  
+  const [loading, setLoading] = useState(true);
   const [showError, setShowError] = useState(false);
   const [getFeatureProducts] = useLazyQuery(GET_FEATURED_PRODUCTS);
   const [GetErrorInfo] = useLazyQuery(GET_ERROR_INFO, {
@@ -24,10 +25,13 @@ const FeaturedProducts = () => {
   const getTopProducts = async () => {
     try {
       const { error, data } = await getFeatureProducts();
-      const { data: errorMessage } = await GetErrorInfo({ variables: { id: 1 } });
+      const { data: errorMessage } = await GetErrorInfo({
+        variables: { id: 1 },
+      });
 
       if (error) {
-        const message = errorMessage?.errorInformation?.data?.attributes?.error_message;
+        const message =
+          errorMessage?.errorInformation?.data?.attributes?.error_message;
         setShowError(true);
         // const errorMsg = message || "Lo sentimos, ha ocurrido un error al cargar los datos";
         // toast.error(errorMsg, { autoClose: 5000 });
@@ -44,7 +48,9 @@ const FeaturedProducts = () => {
         }
       }
 
-      const selectedProducts = myArray.slice(0, 20).map(index => data?.products?.data[index]);
+      const selectedProducts = myArray
+        .slice(0, 20)
+        .map((index) => data?.products?.data[index]);
       setAuxProducts(selectedProducts);
       setLoading(false);
     } catch (error) {
@@ -57,12 +63,13 @@ const FeaturedProducts = () => {
     getTopProducts();
   }, []);
 
-  if (loading || auxProducts.length ==0) {
+  if (loading || auxProducts.length == 0) {
     return <div></div>; // to not show the Top de productos title when is loading or there're not records in DB
   }
 
-  if (showError) {// to not show the Top de productos title when there's an error in the GRAPHQL request.
-    return '';
+  if (showError) {
+    // to not show the Top de productos title when there's an error in the GRAPHQL request.
+    return "";
   }
 
   return (
@@ -70,7 +77,7 @@ const FeaturedProducts = () => {
       <div className="flex justify-center pt-10">
         <h1>Top de productos</h1>
       </div>
-      
+
       <Swiper
         loop={true}
         modules={[EffectCoverflow, Navigation, A11y]}
@@ -103,10 +110,14 @@ const FeaturedProducts = () => {
                 id={item.id}
                 name={item.attributes?.name}
                 coverImage={item.attributes?.coverImage?.data}
-                defaultPrice={item.attributes?.defaultPrice?.toFixed(2)}
+                totalPrice={item?.attributes?.variants?.data[0]?.attributes?.totalPrice}
                 brand={item.attributes?.brand}
-                initialAge={item.attributes?.variants?.data[0]?.attributes?.initialAge}
-                finalAge={item.attributes?.variants?.data[0]?.attributes?.finalAge}
+                initialAge={
+                  item.attributes?.variants?.data[0]?.attributes?.initialAge
+                }
+                finalAge={
+                  item.attributes?.variants?.data[0]?.attributes?.finalAge
+                }
               />
             </SwiperSlide>
           </div>

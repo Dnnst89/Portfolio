@@ -15,7 +15,7 @@ const WelcomeUser = () => {
 
   const dispatch = useDispatch();
   const router = useRouter();
-  console.log(router);
+ 
   const handleLogout = () => {
     router.push("/");
     router.refresh();

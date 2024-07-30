@@ -6,7 +6,7 @@ const initialState = {
   quantity: 0,
   sessionId: null,
   loadingTaxes: false,
-  showTaxes: false,
+  showTaxes: true,
 };
 export const cart = createSlice({
   name: "cart",

@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
-export const GET_PAYMENT_DETAIL = gql`
-  query GetPaymentDetail($paymentId: ID!) {
-    paymentDetail(id: $paymentId) {
+export const GET_PAYMENT_DETAIL_CUSTOM = gql`
+ query GetPaymentDetail($paymentId: Long) {
+    paymentDetails(filters: { orderNumber: { eq: $paymentId } }) {
       data {
         id
         attributes {
@@ -23,4 +23,5 @@ export const GET_PAYMENT_DETAIL = gql`
       }
     }
   }
+
 `;

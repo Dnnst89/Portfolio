@@ -1,9 +1,14 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import useStoreInformation from "../helpers/useStoreInformation";
 
-const ProductCard = ({ id, name, defaultPrice, coverImage, brand, url }) => {
-  const altTextDesc="Imagen Producto " + name
+const ProductCard = ({ id, name, variantPrice, coverImage, brand, url }) => {
+  const { storeInformation, storeInformationError, loading } =
+    useStoreInformation(1);
+  const currencySymbol = storeInformation ? storeInformation?.storeInformation?.data?.attributes?.currencySymbol : '';
+
+  const altTextDesc = "Imagen Producto " + name;
   return (
     <Link role="link" href={{ pathname: "/detail", query: { id } }}>
       <div className="m-4 max-w-sm rounded-[15px] drop-shadow-card w-[145px] h-[225px] md:w-[240px] md:h-[360px] transition-transform transform hover:scale-105 hover:bg-floralwhite bg-resene duration-1000 hover:cursor-pointer">
@@ -25,14 +30,16 @@ const ProductCard = ({ id, name, defaultPrice, coverImage, brand, url }) => {
         </div>
 
         <div className="px-4 pb-5">
-          <h2 className="h-[25px] md:h-[40px] text-[10px] md:text-base   font-semibold  leading-3 tracking-normal mt-2 tracking-tight text-[#484848] w-6/7"
-          >
+          <h2 className="h-[25px] md:h-[40px] text-[10px] md:text-base   font-semibold  leading-3 tracking-normal mt-2 tracking-tight text-[#484848] w-6/7">
             {name}
           </h2>
 
           <div className=" rounded-lg">
             <h3 className="flex justify-end  relative">
-              <div href="#" className="px-1 pt-1 text-[9px] md:text-xs  text-[#282828]">
+              <div
+                href="#"
+                className="px-1 pt-1 text-[9px] md:text-xs  text-[#282828]"
+              >
                 {brand}
               </div>
             </h3>
@@ -40,9 +47,7 @@ const ProductCard = ({ id, name, defaultPrice, coverImage, brand, url }) => {
         </div>
 
         <div className="bg-aquamarine text-xs md:text-lg rounded-b-[15px] font-bold flex justify-center absolute bottom-0 left-0 right-0">
-          <div className="hover:underline text-white p-1">
-            $ {defaultPrice}
-          </div>
+          <div className="hover:underline text-white p-1">{currencySymbol} {variantPrice}</div>
         </div>
       </div>
     </Link>

@@ -3,16 +3,23 @@ import { useEffect, useState } from "react";
 import GET_CART_ITEMS_LIST_SHOPPING_SESSION from "@/src/graphQl/queries/getCartItemsByShoppingSession";
 import GET_ACTIVE_SHOPPING_SESSION_BY_USER from "@/src/graphQl/queries/getActiveShoppingSessionByUser";
 import { useLazyQuery } from "@apollo/client";
+import useStoreInformation from "../helpers/useStoreInformation";
 import processCartItems from "@/helpers/processCartItems";
+import { useLocalCurrencyContext } from "@/src/context/useLocalCurrency";
 
 // se ocupa ingresar el id del usuario para poder obtener la session y sus respectivos items del carrito,
 //calculos de totales y cantidades de productos, retorna un obj con las props
 
 const useCartSummary = ({ userId }) => {
+  const { storeInformation, storeInformationError } = useStoreInformation(1);
+  // if true send LocalCurrencyPrice as price for products else send variant price
+  const useLocalCurrency = useLocalCurrencyContext();
   const cartQuantity = useSelector((state) => state.cart.quantity);
 
   const [cartData, setCartData] = useState({
     total: 0,
+    subtotal: 0,
+    taxes: 0,
     items: [],
     quantity: 0,
     sessionId: null,
@@ -71,7 +78,40 @@ const useCartSummary = ({ userId }) => {
               //debe existir un producto con su respectiva variante
               return (
                 accumulator +
-                item?.attributes?.variant?.data?.attributes?.price *
+                item?.attributes?.variant?.data?.attributes
+                  ?.totalPrice *
+                  item?.attributes?.quantity
+              );
+            }
+            return accumulator;
+          }, 0);
+
+          const subtotal = fetchedData.reduce((accumulator, item) => {
+            if (
+              item?.attributes?.variant?.data &&
+              item?.attributes?.variant?.data?.attributes?.product?.data
+            ) {
+              //debe existir un producto con su respectiva variante
+              return (
+                accumulator +
+                item?.attributes?.variant?.data?.attributes
+                  ?.localCurrencyPrice *
+                  item?.attributes?.quantity
+              );
+            }
+            return accumulator;
+          }, 0);
+
+          const taxes = fetchedData.reduce((accumulator, item) => {
+            if (
+              item?.attributes?.variant?.data &&
+              item?.attributes?.variant?.data?.attributes?.product?.data
+            ) {
+              //debe existir un producto con su respectiva variante
+              return (
+                accumulator +
+                item?.attributes?.variant?.data?.attributes
+                  ?.ivaAmount *
                   item?.attributes?.quantity
               );
             }
@@ -97,6 +137,8 @@ const useCartSummary = ({ userId }) => {
           setCartData({
             sessionId: shoppingSession.id,
             total,
+            subtotal,
+            taxes,
             quantity,
             items: items.filter(Boolean), // Filtra elementos nulos
           });
@@ -118,6 +160,8 @@ const useCartSummary = ({ userId }) => {
 
   return {
     total: cartData.total,
+    subtotal: cartData.subtotal,
+    taxes: cartData.taxes,
     items: cartData.items,
     quantity: cartData.quantity,
     errors,

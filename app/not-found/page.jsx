@@ -1,8 +1,7 @@
+"use client";
 import React from "react";
 import Link from "next/link";
-import { BiArrowBack } from "react-icons/bi";
-
-const NotFound = () => {
+export default function CartView() {
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="text-center m-5 flex flex-col justify-center items-center">
@@ -15,6 +14,4 @@ const NotFound = () => {
       </div>
     </div>
   );
-};
-
-export default NotFound;
+}

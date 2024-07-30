@@ -29,6 +29,7 @@ query GetOrderItemsByOrderId($orderId: ID!) {
               name
               brand
               cabys
+              currency
               images {
                 data {
                   id

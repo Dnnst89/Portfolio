@@ -1,16 +1,16 @@
 "use client";
 import Image from "next/image";
 import test from "../app/assets/heart.png";
-import CartDetail from "@/components/CartDetail";
 import CartProceedPayment from "@/components/CartProceedPayment";
 import { useEffect, useState } from "react";
 import GET_ORDER_ITEMS_BY_ORDER_ID from "@/src/graphQl/queries/getOrderItemsByOrderId";
+import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
 import { useLazyQuery } from "@apollo/client";
-import OrderDetailSummary from "./OrderSummary";
 import Spinner from "./Spinner";
 import OrderSummary from "./OrderSummary";
-import { Carousel } from "react-responsive-carousel";
 import CarouselImages from "./CarouselImages";
+import  useFromOrderState  from '../helpers/useFromOrderState';
+
 export default function OrderDetailSecondary({ orderId }) {
   const [orderData, setOrderData] = useState({
     order: {
@@ -28,13 +28,19 @@ export default function OrderDetailSecondary({ orderId }) {
         price: 0,
         quantity: 0,
         images: [],
+        currency: "",
       },
     ],
   });
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [getOrderItems] = useLazyQuery(GET_ORDER_ITEMS_BY_ORDER_ID);
+  const [getProductByVariant] = useLazyQuery(GET_VARIANT_BY_ID);
+  const [productIdMap, setProductIdMap] = useState({});
 
+  const { getFromOrderState, updateFromOrder } = useFromOrderState();
+  updateFromOrder(true);
+ 
   useEffect(() => {
     const getOrdersItemsInfo = async (id) => {
       try {
@@ -45,7 +51,7 @@ export default function OrderDetailSecondary({ orderId }) {
           //llamo la query para traer la shopping session
           variables: { orderId: id },
         });
-        console.log(data);
+
         if (data) {
           const orderInfo = data?.orderDetail?.data;
           setOrderData((prev) => ({
@@ -70,10 +76,12 @@ export default function OrderDetailSecondary({ orderId }) {
                   quantity: item.attributes.quantity,
                   name: item.attributes.name,
                   brand: item.attributes.brand,
-                  price: item.attributes.price.toFixed(2), //se saca el precio de la unica variante que tiene
+                  idVariant: item.attributes.variantId,
+                  price: item.attributes.price, //se saca el precio de la unica variante que tiene
                   images: item.attributes.images?.data.map(
                     (img) => img.attributes.url
                   ),
+                  currency: item.attributes.currency,
                 };
               }
             ),
@@ -88,8 +96,39 @@ export default function OrderDetailSecondary({ orderId }) {
     if (orderId) {
       getOrdersItemsInfo(orderId);
     }
+
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId]);
+ 
+  
+  useEffect(() => {
+    const fetchData = async (variantId) => {
+      try {
+        // Check if you have already obtained the productId for this variantId
+        if (!productIdMap[variantId]) {
+          const { data } = await getProductByVariant({
+            variables: {
+              id: variantId,
+            },
+          });
+          const productId = data?.variant?.data?.attributes?.product?.data?.id;
+          setProductIdMap((prevMap) => ({
+            ...prevMap,
+            [variantId]: productId,
+          }));
+        }
+      } catch (error) {
+        console.error("Error fetching product data:", error);
+      }
+    };
+    // Assuming orderData is populated and the variantId is available in orderItems
+    if (orderData.orderItems.length > 0) {
+      orderData.orderItems.forEach((item) => {
+        fetchData(item.idVariant);
+      });
+    }
+  }, [orderData]);
+
   if (loading) {
     return (
       <div className="flex justify-center">
@@ -97,8 +136,6 @@ export default function OrderDetailSecondary({ orderId }) {
       </div>
     );
   }
-
-  console.log(orderData.orderItems.images);
 
   return (
     <div className="bg-resene col-span-12 md:col-span-8 grid grid-cols-12">
@@ -126,6 +163,9 @@ export default function OrderDetailSecondary({ orderId }) {
                             widthImg={100}
                             heightImg={100}
                             classStyle={"rounded-2xl col-span-4"}
+                            productId={productIdMap[item.idVariant]}
+                            idVariant={item.idVariant}
+                            ItemQt={item.quantity}
                           />
                         ) : (
                           <Image
@@ -150,7 +190,16 @@ export default function OrderDetailSecondary({ orderId }) {
                           N° artículos: {item.quantity}{" "}
                         </h1>
                         <p className="sm:text-sm ">
-                          ${item.price * item.quantity}
+                          {item.currency
+                              ? `${item.currency} ${(
+                                  item.price * item.quantity
+                                ).toLocaleString("en-US", {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits : 2  
+                                  })}`
+                              : `USD ${(item.price * item.quantity).toFixed(
+                                  2
+                                )}`}
                         </p>
                       </div>
                     </div>
@@ -163,15 +212,17 @@ export default function OrderDetailSecondary({ orderId }) {
           }
         </div>
         <section className="lg:border-l-4 lg:border-lightblue  h-fit sm:border-0 col-span-12 md:col-span-5">
+       
           <OrderSummary
             detailTitle={"Detalle del pedido"}
             quantity={orderData.orderItems.reduce((accumulator, item) => {
               return accumulator + item.quantity;
             }, 0)}
-            subTotal={orderData.order.subtotal.toFixed(2)}
-            taxes={orderData.order.taxes.toFixed(2)}
-            total={orderData.order.total.toFixed(2)}
-            deliveryPayment={orderData.order.deliveryPayment.toFixed(2)}
+            subTotal={orderData.order.subtotal}
+            taxes={orderData.order.taxes}
+            total={orderData.order.total}
+            deliveryPayment={orderData.order.deliveryPayment}
+            currency = {orderData.orderItems[0].currency}
           />
           <CartProceedPayment textButton={"Ver dirección"} page={""} />
         </section>
