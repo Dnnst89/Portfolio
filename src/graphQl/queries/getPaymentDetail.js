@@ -13,7 +13,7 @@ export const GET_PAYMENT_DETAIL = gql`
           deliveryId
           deliveryPayment
           deliveryMethod
-
+          orderNumber
           order_detail {
             data {
               id

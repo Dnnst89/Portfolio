@@ -30,6 +30,7 @@ export default function CheckOutForm3({
   const router = useRouter();
   const [formData, setFormData] = useState({});
   const [loadingBtn, setLoadingBtn] = useState(false);
+  const [orderNumberCustomState, setOrderNumberCustom] = useState(null);
   const [domain, setDomain] = useState(false);
   const { user } = useStorage();
   const { id, email } = user || {};
@@ -70,6 +71,11 @@ export default function CheckOutForm3({
         //obtengo el paymentDetails, para que cuando refresque la pagina no cree mas ordenes
         variables: { paymentId: paymentDetailId },
       });
+
+      const orderNumberCustom = paymentinfo?.data?.paymentDetail?.data?.attributes?.orderNumber;
+      console.log("tomo bien el order?", orderNumberCustom,paymentinfo)
+      setOrderNumberCustom(orderNumberCustom);
+      console.log("setee bien?", orderNumberCustomState)
       const client = {
         name:
           paymentUser?.usersPermissionsUser?.data?.attributes?.firstName +
@@ -115,7 +121,7 @@ export default function CheckOutForm3({
 
           const orderId = parseInt(order.idPackage);
           const paymentId = paymentinfo?.data?.paymentDetail?.data?.id;
-
+        
           await updatePaymentDeliveryId({
             variables: {
               id: paymentId,
@@ -157,7 +163,7 @@ export default function CheckOutForm3({
         } = userData;
         // the next step is to send the data to the request
         // we load data into the state
-        if (userData || orderNumber !== "") {
+        if (userData) {
           setFormData({
             redirect:
               process.env.NODE_ENV === "development"
@@ -176,7 +182,7 @@ export default function CheckOutForm3({
             billToCountry: "CR",
             billToTelephone: phoneNumber,
             billToEmail: email,
-            orderNumber: orderNumber,
+            orderNumber: orderNumberCustomState,
             capture: "1",
             subscription: "1",
             platform: "api",
@@ -192,7 +198,7 @@ export default function CheckOutForm3({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     // fetchOrderMoovin(orderNumber);
-  }, [data]);
+  }, [data,orderNumberCustomState]);
 
   const handleVerification = async () => {
     paymentUrl = await paymentRequest(formData);
