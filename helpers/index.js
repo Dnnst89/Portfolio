@@ -79,7 +79,7 @@ const createKey = (number, id) => {
     const clave = createConsecutiveKey();
     const consecutive = createConsecutiveNumber(number);
     const situation = "1";
-    const refill = "00";
+    const refill = "000";
     const key =
       "506" +
       day +
@@ -164,7 +164,7 @@ const formatItemInvoice = (items, imp) => {
     const product = item?.attributes?.variant?.data?.attributes?.product?.data?.attributes;
     const variant = item?.attributes?.variant?.data?.attributes;
     const tax = imp[index]?.taxes[0];
-    const code = tax?.code < 10 ? `0${tax.code}` : `${tax.code}`;
+    const code = tax?.code;
 
     const qty = item?.attributes?.quantity;
     const unitaryPrice = variant?.localCurrencyPrice;
