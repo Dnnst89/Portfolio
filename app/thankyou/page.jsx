@@ -585,7 +585,7 @@ export default function ThankYouMessage() {
                 `document/electronic-invoice?access_token=${token}`,
                 bodyInvoice
               );
-
+                  console.log("response gateway", InvoiceResult)
               try {
                 const isoDate = new Date().toISOString();
                 const resulta = await getStoreInformation({
