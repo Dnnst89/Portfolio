@@ -2,6 +2,7 @@
 import OrderFailed from "@/components/OrderFailed";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { UPDATE_ORDER_DETAILS_STATUS } from "@/src/graphQl/queries/updateOrderDetailsStatus";
@@ -580,12 +581,21 @@ export default function ThankYouMessage() {
                 },
                 returnCompleteAnswer: true,
               };
+              // Verificar si la respuesta tiene un código de estado 200
+                const InvoiceResult = await facturationInstace.post(
+                  `document/electronic-invoice?access_token=${token}`,
+                  bodyInvoice
+                );
 
-              const InvoiceResult = await facturationInstace.post(
-                `document/electronic-invoice?access_token=${token}`,
-                bodyInvoice
-              );
-                  console.log("response gateway", InvoiceResult)
+                // Verificar si la respuesta tiene un código de estado 200
+                if (InvoiceResult.data.status === "202") {
+                  console.log("response gateway", InvoiceResult);
+                   toast.success("Factura enviada correctamente!", {
+                    duration: 6000,
+                  });
+                } 
+
+
               try {
                 const isoDate = new Date().toISOString();
                 const resulta = await getStoreInformation({
@@ -610,8 +620,15 @@ export default function ThankYouMessage() {
               } catch (error) {
                 console.log("error", error);
               }
-            } catch (error) {}
-          } catch (error) {}
+            } catch (error) {
+              console.log("catch error", error);
+              toast.error("Error al enviar factura code: gateway 500", {
+               duration: 6000,
+             });
+            }
+          } catch (error) {
+            console.log("catch error", error);
+          }
         } catch (error) {
           console.log("error crear factura", error);
         }
@@ -623,6 +640,26 @@ export default function ThankYouMessage() {
 
   return paymentId ? (
     <div className="bg-floralwhite p-[100px] flex justify-center">
+      <Toaster
+        containerStyle={{
+          top: 150,
+          left: 20,
+          bottom: 20,
+          right: 20,
+        }}
+        toastOptions={{
+          success: {
+            style: {
+              background: "#67C3AD",
+            },
+          },
+          error: {
+            style: {
+              background: "#f87171",
+            },
+          },
+        }}
+      />
       <main className="bg-resene border-2 border-dashed border-grey-200 grid md:flex md:flex-col justify-center h-auto p-10">
         <section className="grid md:flex justify-center ">
           <figure>
