@@ -79,7 +79,7 @@ const createKey = (number, id) => {
     const clave = createConsecutiveKey();
     const consecutive = createConsecutiveNumber(number);
     const situation = "1";
-    const refill = "000";
+    const refill = "00";
     const key =
       "506" +
       day +
