@@ -17,6 +17,8 @@ import useStoreInformation from "../helpers/useStoreInformation";
 import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
 import useFromOrderState from "../helpers/useFromOrderState";
 import { useLocalCurrencyContext } from "@/src/context/useLocalCurrency";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 function ProductDetail({
   product,
@@ -25,6 +27,16 @@ function ProductDetail({
   handleGoBack,
   handleGoToCategory,
 }) {
+  //Obtengo el precio en que se compro el producto.
+  const purchasedItems = useSelector(
+    (state) => state.purchasedItems.purchasedProducts
+  );
+
+  console.log("selector", purchasedItems);
+  //obtengo la URL para identificar si proviene de pedidos
+  const [idVariant, setIdVariant] = useState(null);
+
+  console.log("idvariant", idVariant);
   // if true send variantPrice as price for products else send variant price
   const useLocalCurrency = useLocalCurrencyContext();
 
@@ -110,9 +122,45 @@ function ProductDetail({
   const [variantPrice, setvariantPrice] = useState(
     variants.length > 0 ? variants[0]?.attributes?.totalPrice : null
   ); //precio inicial dado por primer variante
-
+  const [price, setPrice] = useState(variantPrice);
   const [enableButton, setEnableButton] = useState(variants.length <= 1);
   let variantItems = [];
+
+  //------------------------------------------------
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      // Sample data
+
+      // Get the idVariant from URL
+      const searchParams = new URLSearchParams(window.location.search);
+      const idVariantFromURL = parseInt(searchParams.get("idVariant"), 10);
+      console.log("idVariant from URL:", idVariantFromURL);
+
+      if (idVariantFromURL) {
+        // Find the product with the matching idVariant
+        const product = purchasedItems.find(
+          (item) => item.variantId === idVariantFromURL
+        );
+        console.log("product", product);
+        if (product) {
+          // Se calcula el IVA ya que el precio viene sin iva (13%)
+          const priceValue = product.price;
+          const IVA = priceValue * 0.13; // 13% IVA
+          const finalPrice = priceValue + IVA;
+
+          // Set the final price
+          setPrice(finalPrice);
+        } else {
+          console.error("Product not found");
+          setPrice(null);
+        }
+      }
+    }
+  }, []);
+
+  // usamos el id que viene en la url para filtrar los producto que tenemos
+  // en el store y asi seleccionar el precio del articulo correspondiente
 
   const { storeInformation, storeInformationError } = useStoreInformation(1);
   const currencySymbol =
@@ -624,17 +672,25 @@ function ProductDetail({
             {/* precio, cantidad de la variante */}
             <div className="col-span-12 grid grid-cols-12  md:flex items-center justify-between p-4">
               <span className="col-span-4 md:col-span-5 font-bold md:text-[30px]">
-                {useLocalCurrency
-                  ? `${currencySymbol} ${parseFloat(
-                      variantPrice
-                    ).toLocaleString("en-US", {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits : 2
-                    })}`
-                  : `$ ${parseFloat(variantPrice).toLocaleString("en-US", {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits : 2
-                    })}`}
+                {
+                  /**
+                   * Cuando idVariant esta precente en la url mostramos el precio
+                   * en que se ha comprado el producto, en caso contrario se muestra
+                   * el precio actual.
+                   */
+                  useLocalCurrency
+                    ? `${currencySymbol} ${parseFloat(price).toLocaleString(
+                        "en-US",
+                        {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }
+                      )}`
+                    : `$ ${parseFloat(price).toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}`
+                }
               </span>
               <div className="col-span-8 mdd:col-span-7 md:flex md:flex-col items-end md:items-end p-3">
                 {/**

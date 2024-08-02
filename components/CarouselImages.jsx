@@ -1,8 +1,15 @@
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // Asegúrate de importar los estilos
 import Link from "next/link";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import {
+  setPurchasedProduct,
+  clearPurchasedProducts,
+} from "../redux/features/purchasedItemsSlice";
+
 function CarouselImages({
   altText,
   images,
@@ -12,7 +19,28 @@ function CarouselImages({
   productId,
   idVariant,
   ItemQt,
+  orderData,
 }) {
+  const dispatch = useDispatch();
+
+  const dataInfo = orderData?.orderItems;
+  useEffect(() => {
+    dispatch(clearPurchasedProducts()); // Limpia los productos anteriores
+
+    dataInfo.forEach((item) => {
+      dispatch(
+        setPurchasedProduct({
+          __typename: "OrderItem",
+          variantId: item.idVariant,
+          quantity: item.quantity,
+          price: item.price,
+          name: item.name,
+          brand: item.brand,
+          currency: item.currency,
+        })
+      );
+    });
+  }, [dispatch, dataInfo]);
   return (
     <Carousel
       className={"col-span-6"}
