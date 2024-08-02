@@ -18,7 +18,6 @@ import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
 import useFromOrderState from "../helpers/useFromOrderState";
 import { useLocalCurrencyContext } from "@/src/context/useLocalCurrency";
 import { useSelector } from "react-redux";
-import { useRouter } from "next/router";
 
 function ProductDetail({
   product,
@@ -32,11 +31,6 @@ function ProductDetail({
     (state) => state.purchasedItems.purchasedProducts
   );
 
-  console.log("selector", purchasedItems);
-  //obtengo la URL para identificar si proviene de pedidos
-  const [idVariant, setIdVariant] = useState(null);
-
-  console.log("idvariant", idVariant);
   // if true send variantPrice as price for products else send variant price
   const useLocalCurrency = useLocalCurrencyContext();
 
@@ -126,8 +120,7 @@ function ProductDetail({
   const [enableButton, setEnableButton] = useState(variants.length <= 1);
   let variantItems = [];
 
-  //------------------------------------------------
-
+  //obtengo la URL para identificar si proviene de pedidos
   useEffect(() => {
     if (typeof window !== "undefined") {
       // Sample data
@@ -135,21 +128,18 @@ function ProductDetail({
       // Get the idVariant from URL
       const searchParams = new URLSearchParams(window.location.search);
       const idVariantFromURL = parseInt(searchParams.get("idVariant"), 10);
-      console.log("idVariant from URL:", idVariantFromURL);
 
       if (idVariantFromURL) {
-        // Find the product with the matching idVariant
+        // Busca el producto en el array por medio del id de la variante
         const product = purchasedItems.find(
           (item) => item.variantId === idVariantFromURL
         );
-        console.log("product", product);
         if (product) {
           // Se calcula el IVA ya que el precio viene sin iva (13%)
           const priceValue = product.price;
           const IVA = priceValue * 0.13; // 13% IVA
           const finalPrice = priceValue + IVA;
-
-          // Set the final price
+          //se pasa el precio al estado que setea el precio que se muestra
           setPrice(finalPrice);
         } else {
           console.error("Product not found");
@@ -677,6 +667,7 @@ function ProductDetail({
                    * Cuando idVariant esta precente en la url mostramos el precio
                    * en que se ha comprado el producto, en caso contrario se muestra
                    * el precio actual.
+                   * el precio se setea segun el id de la variante
                    */
                   useLocalCurrency
                     ? `${currencySymbol} ${parseFloat(price).toLocaleString(
