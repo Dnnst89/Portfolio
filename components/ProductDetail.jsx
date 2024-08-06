@@ -18,6 +18,7 @@ import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
 import useFromOrderState from "../helpers/useFromOrderState";
 import { useLocalCurrencyContext } from "@/src/context/useLocalCurrency";
 import { useSelector } from "react-redux";
+import Cookies from "js-cookie";
 
 function ProductDetail({
   product,
@@ -27,9 +28,14 @@ function ProductDetail({
   handleGoToCategory,
 }) {
   //Obtengo el precio en que se compro el producto.
-  const purchasedItems = useSelector(
-    (state) => state.purchasedItems.purchasedProducts
-  );
+  // const purchasedItems = useSelector(
+  //   (state) => state.purchasedItems.purchasedProducts
+  // );
+
+  // lo convertimos a string
+  // const purchasedItemsString = JSON.stringify(purchasedItems);
+
+  // localStorage.setItem("purchasedItemStored", purchasedItemsString);
 
   // if true send variantPrice as price for products else send variant price
   const useLocalCurrency = useLocalCurrencyContext();
@@ -122,29 +128,52 @@ function ProductDetail({
 
   //obtengo la URL para identificar si proviene de pedidos
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      // Sample data
+    // Extract idVariant from URL query parameters
+    const searchParams = new URLSearchParams(window.location.search);
+    const idVariantFromURL = parseInt(searchParams.get("idVariant"), 10);
 
-      // Get the idVariant from URL
-      const searchParams = new URLSearchParams(window.location.search);
-      const idVariantFromURL = parseInt(searchParams.get("idVariant"), 10);
+    if (idVariantFromURL) {
+      // Retrieve the stored items from localStorage
+      const storedItemsString = localStorage.getItem("purchasedItemStored");
 
-      if (idVariantFromURL) {
-        // Busca el producto en el array por medio del id de la variante
-        const product = purchasedItems.find(
-          (item) => item.variantId === idVariantFromURL
-        );
-        if (product) {
-          // Se calcula el IVA ya que el precio viene sin iva (13%)
-          const priceValue = product.price;
-          const IVA = priceValue * 0.13; // 13% IVA
-          const finalPrice = priceValue + IVA;
-          //se pasa el precio al estado que setea el precio que se muestra
-          setPrice(finalPrice);
-        } else {
-          console.error("Product not found");
-          setPrice(null);
+      if (storedItemsString) {
+        try {
+          const parsedPurchasedItems = JSON.parse(storedItemsString);
+
+          // Ensure parsedPurchasedItems is an array
+          if (Array.isArray(parsedPurchasedItems)) {
+            // Find the specific product with the given idVariant
+            const product = parsedPurchasedItems.find(
+              (item) => item.variantId === idVariantFromURL
+            );
+            if (product) {
+              // Calculate IVA (13%)
+              const priceValue = product.price;
+              const IVA = priceValue * 0.13; // 13% IVA
+              const finalPrice = priceValue + IVA;
+
+              // Set the price in the state
+              setPrice(finalPrice);
+            } else {
+              console.error(
+                "Producto con idVariant no encontrado en los elementos almacenados."
+              );
+            }
+          } else {
+            console.error(
+              "Los elementos almacenados no están en el formato de array esperado."
+            );
+          }
+        } catch (error) {
+          console.error(
+            "No se pudo analizar los elementos almacenados:",
+            error
+          );
         }
+      } else {
+        console.error(
+          "No se encontraron elementos almacenados en localStorage."
+        );
       }
     }
   }, []);
