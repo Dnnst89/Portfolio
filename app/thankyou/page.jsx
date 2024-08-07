@@ -37,6 +37,7 @@ import {
   InvoiceInformation,
   validateID,
   formatBillSumary,
+  getAddress
 } from "@/helpers";
 
 import { facturationInstace } from "@/src/axios/algoliaIntance/config";
@@ -476,7 +477,7 @@ export default function ThankYouMessage() {
               `/utils/get-detail-line?access_token=${token}`,
               body
             );
-
+              console.log("que me trae gateway aqui",feeResult)
             const billSummary = feeResult?.data?.billSummary;
             const imp = feeResult?.data?.serviceDetail?.lineDetails;
             const inv = formatItemInvoice(items, imp);
@@ -508,7 +509,12 @@ export default function ThankYouMessage() {
                   userId: userId,
                 },
               });
-
+              const province = paymentUser?.data?.usersPermissionsUser?.data?.attributes
+              ?.users_address?.data?.attributes?.province
+              console.log ("que tiene este objeto", paymentUser)
+             
+              const receptorAddress = getAddress(province);
+              console.log ("tengo la provincia", receptorAddress)
               const client = {
                 name:
                   paymentUser?.data?.usersPermissionsUser?.data?.attributes
@@ -526,7 +532,11 @@ export default function ThankYouMessage() {
                 email:
                   paymentUser?.data?.usersPermissionsUser?.data?.attributes
                     ?.invoiceEmail,
+
+                address:
+                receptorAddress
               };
+
               const store = result?.data?.storeInformation?.data?.attributes;
 
               const number = await getConsecutiveNumber({

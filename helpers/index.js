@@ -1,21 +1,118 @@
 import axios from "axios";
+
 const getAccessToken = async () => {
-  const body = {
-    grant_type: "client_credentials",
-    client_id: "detinmarin_client",
-    client_secret: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_SECRET,
-    scope: "openid profile email",
-  };
-  const { data } = await axios.post(
-    process.env.NEXT_PUBLIC_KEYCLOAK_URL,
-    body,
-    {
+  const apiUrl = process.env.NEXT_PUBLIC_KEYCLOAK_URL;
+  const clientId = process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID;
+  const clientSecret = process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_SECRET;
+  const clientUsername = process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_USERNAME;
+  const clientPassword = process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_PASSWORD;
+
+  if (!apiUrl || !clientId || !clientSecret || !clientUsername || !clientPassword) {
+    console.error('Missing required environment variables');
+    throw new Error('Missing required environment variables');
+  }
+
+  const params = new URLSearchParams();
+  params.append('grant_type', 'password');
+  params.append('client_id', clientId);
+  params.append('client_secret', clientSecret);
+  params.append('scope', 'openid profile email');
+  params.append('username', clientUsername);
+  params.append('password', clientPassword);
+
+  try {
+    const { data } = await axios.post(apiUrl, params, {
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
+    });
+
+    console.log('Access Token:', data.access_token);
+    return data.access_token;
+  } catch (error) {
+    console.error('Error fetching access token:', error.response ? error.response.data : error.message);
+    throw new Error('Failed to fetch access token');
+  }
+};
+
+export default getAccessToken;
+
+const data = {
+  'San Jose': {
+    'San Jose': {
+      'San Jose': '01'
     }
-  );
-  return data?.access_token;
+  },
+  'Alajuela': {
+    'Alajuela': {
+      'Alajuela': '02'
+    }
+  },
+  'Cartago': {
+    'Cartago': {
+      'Cartago': '03'
+    }
+  },
+  'Heredia': {
+    'Heredia': {
+      'Heredia': '04'
+    }
+  },
+  'Guanacaste': {
+    'Liberia': {
+      'Liberia': '05'
+    }
+  },
+  'Puntarenas': {
+    'Puntarenas': {
+      'Puntarenas': '06'
+    }
+  },
+  'Limon': {
+    'Limón': {
+      'Limón': '07'
+    }
+  }
+};
+
+const normalizeString = (str) => {
+  return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+};
+
+// Función que recibe el nombre de la provincia y devuelve el código
+const getAddress = (provinceName) => {
+  if (!provinceName) {
+    return 'false'; // Or you can return null, undefined, or any other value you consider appropriate
+  }
+
+  console.log("Received province name:", provinceName);
+  const normalizedProvinceName = normalizeString(provinceName);
+  
+  for (const key in data) {
+    if (normalizeString(key) === normalizedProvinceName) {
+      const cantons = data[key];
+      if (cantons) {
+        const canton = Object.keys(cantons)[0]; // Take the first canton
+        const districts = cantons[canton];
+        if (districts) {
+          const district = Object.keys(districts)[0]; // Take the first district
+          const code = cantons[canton][district];
+          const provinceCode = code.replace(/^0+/, ''); // Remove leading zeros to ensure it's a single digit
+          return {
+            address: {
+              province: provinceCode,
+              county: code,
+              district: code,
+              neighborhood: code,
+              otherSigns: provinceName
+            }
+          };
+        }
+      }
+    }
+  }
+  
+  return 'false';
 };
 
 const formatTaxData = (items) => {
@@ -185,7 +282,7 @@ const formatItemInvoice = (items, imp) => {
           code: code,
           codeFee: "" + tax?.codeFee,
           fee: tax?.fee,
-          VATFactor: "" + tax?.vatfactor,
+          VATFactor: "" + tax?.VATFactor,
           amount: "" + tax?.amount,
         },
       ],
@@ -196,7 +293,9 @@ const formatItemInvoice = (items, imp) => {
 };
 const InvoiceInformation = (store, client, key, consecutive) => {
   const isoDate = new Date().toISOString();
-  return {
+  console.log("que me llega", client);
+
+  const invoice = {
     key: key,
     activityCode: store.ActivityCode,
     consecutiveNumber: consecutive,
@@ -210,7 +309,7 @@ const InvoiceInformation = (store, client, key, consecutive) => {
       commercialName: store.ComercialName,
       address: {
         province: store.province,
-        //country: store.country,
+        // country: store.country,
         county: store.canton,
         district: store.district,
         neighborhood: store.neighborhood,
@@ -224,12 +323,23 @@ const InvoiceInformation = (store, client, key, consecutive) => {
         type: client.idType,
         number: "" + client.idNumber,
       },
+      address: {
+        province: client.address.address.province,
+        district: client.address.address.district,
+        neighborhood: client.address.address.neighborhood,
+        otherSigns: client.address.address.otherSigns,
+        county: client.address.address.county,
+      },
       email: client.email,
     },
     saleCondition: "01",
     creditTerm: "0",
     paymentMethod: ["02"],
   };
+
+  console.log("Invoice object:", invoice); // Imprime el objeto resultante
+
+  return invoice;
 };
 
 export {
@@ -242,4 +352,5 @@ export {
   InvoiceInformation,
   validateID,
   formatBillSumary,
+  getAddress
 };
