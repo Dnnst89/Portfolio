@@ -9,7 +9,7 @@ import { useLazyQuery } from "@apollo/client";
 import Spinner from "./Spinner";
 import OrderSummary from "./OrderSummary";
 import CarouselImages from "./CarouselImages";
-import  useFromOrderState  from '../helpers/useFromOrderState';
+import useFromOrderState from "../helpers/useFromOrderState";
 
 export default function OrderDetailSecondary({ orderId }) {
   const [orderData, setOrderData] = useState({
@@ -40,7 +40,7 @@ export default function OrderDetailSecondary({ orderId }) {
 
   const { getFromOrderState, updateFromOrder } = useFromOrderState();
   updateFromOrder(true);
- 
+
   useEffect(() => {
     const getOrdersItemsInfo = async (id) => {
       try {
@@ -99,8 +99,7 @@ export default function OrderDetailSecondary({ orderId }) {
 
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId]);
- 
-  
+
   useEffect(() => {
     const fetchData = async (variantId) => {
       try {
@@ -136,7 +135,6 @@ export default function OrderDetailSecondary({ orderId }) {
       </div>
     );
   }
-
   return (
     <div className="bg-resene col-span-12 md:col-span-8 grid grid-cols-12">
       <h1 className="flex justify-center text-xl p-5 col-span-12">
@@ -189,17 +187,26 @@ export default function OrderDetailSecondary({ orderId }) {
                         <h1 className="text-sm md:text-xl">
                           N° artículos: {item.quantity}{" "}
                         </h1>
+                        {}
                         <p className="sm:text-sm ">
                           {item.currency
-                              ? `${item.currency} ${(
-                                  item.price * item.quantity
-                                ).toLocaleString("en-US", {
-                                  minimumFractionDigits: 2,
-                                  maximumFractionDigits : 2  
-                                  })}`
-                              : `USD ${(item.price * item.quantity).toFixed(
-                                  2
-                                )}`}
+                            ? `${item.currency} ${(
+                                item.price *
+                                item.quantity *
+                                (1 +
+                                  orderData.order.taxes /
+                                    orderData.order.subtotal)
+                              ).toLocaleString("en-US", {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              })}`
+                            : `USD ${(
+                                item.price *
+                                item.quantity *
+                                (1 +
+                                  orderData.order.taxes /
+                                    orderData.order.subtotal)
+                              ).toFixed(2)}`}
                         </p>
                       </div>
                     </div>
@@ -212,7 +219,6 @@ export default function OrderDetailSecondary({ orderId }) {
           }
         </div>
         <section className="lg:border-l-4 lg:border-lightblue  h-fit sm:border-0 col-span-12 md:col-span-5">
-       
           <OrderSummary
             detailTitle={"Detalle del pedido"}
             quantity={orderData.orderItems.reduce((accumulator, item) => {
@@ -222,7 +228,7 @@ export default function OrderDetailSecondary({ orderId }) {
             taxes={orderData.order.taxes}
             total={orderData.order.total}
             deliveryPayment={orderData.order.deliveryPayment}
-            currency = {orderData.orderItems[0].currency}
+            currency={orderData.orderItems[0].currency}
           />
           <CartProceedPayment textButton={"Ver dirección"} page={""} />
         </section>
