@@ -127,15 +127,15 @@ export default function CheckOutForm2({
   //Precio por distancia correos de costa rica
   const ShortDistancePrice = useLocalCurrency
     ? deliveryChoicesData?.deliveries?.data?.[0]?.attributes
-        ?.short_distance_price
+      ?.short_distance_price
     : deliveryChoicesData?.deliveries?.data?.[3]?.attributes
-        ?.short_distance_price;
+      ?.short_distance_price;
 
   const LongDistancePrice = useLocalCurrency
     ? deliveryChoicesData?.deliveries?.data?.[0]?.attributes
-        ?.long_distance_price
+      ?.long_distance_price
     : deliveryChoicesData?.deliveries?.data?.[3]?.attributes
-        ?.long_distance_price;
+      ?.long_distance_price;
 
   // Dias estimados para la entrega de Correos de Costa Rica
   const LongEstimatedDelivery =
@@ -165,16 +165,16 @@ export default function CheckOutForm2({
     formState: { errors, isSubmitting, isValid, isDirty },
     reset,
   } = useForm();
-  
+
   const updateOrderNumber = async (paymentDetailResponseId, orderNumber) => {
     const orderNumberCustom = orderNumber
     const paymentDetailResponseIdCustom = paymentDetailResponseId
-    console.log("updateOrderNumber", orderNumberCustom,paymentDetailResponseIdCustom);
+    console.log("updateOrderNumber", orderNumberCustom, paymentDetailResponseIdCustom);
     if (!orderNumberCustom || !paymentDetailResponseIdCustom) {
       console.log("orderNumber or paymentDetailResponseId is missing");
       return;
     }
-    
+
     try {
       const { data } = await updatePaymentDetailOrder({
         variables: {
@@ -313,7 +313,7 @@ export default function CheckOutForm2({
             //se llama al hook que actualiza la orden
             // se le pasan los parametros necesarios
             if (paymentDetailResponseId) {
-              console.log("argumentos1", paymentDetailResponseId,orderNumber);
+              console.log("argumentos1", paymentDetailResponseId, orderNumber);
               updateOrderNumber(paymentDetailResponseId, orderNumber);
             }
           } catch (error) {
@@ -410,7 +410,7 @@ export default function CheckOutForm2({
                 //se llama al hook que actualiza la orden
                 // se le pasan los parametros necesarios
                 if (paymentDetailResponseId) {
-                  console.log("argumentos2", paymentDetailResponseId,orderNumber);
+                  console.log("argumentos2", paymentDetailResponseId, orderNumber);
                   updateOrderNumber(paymentDetailResponseId, orderNumber);
                 }
               }
@@ -462,7 +462,7 @@ export default function CheckOutForm2({
 
                 setChecktOutForm2Visible(true);
                 if (paymentDetailResponseId) {
-                  console.log("argumentos3", paymentDetailResponseId,orderNumber);
+                  console.log("argumentos3", paymentDetailResponseId, orderNumber);
                   updateOrderNumber(paymentDetailResponseId, orderNumber);
                 }
               }
@@ -504,7 +504,7 @@ export default function CheckOutForm2({
       </div>
       {!checktOutForm2Visible ? (
         <form onSubmit={onSubmit}>
-          {false && ( // Cambia 'false' a 'true' cuando desees mostrar este DeliveryChoice
+          {true && ( // Cambia 'false' a 'true' cuando desees mostrar este DeliveryChoice
             <DeliveryChoice
               labelName="Recoger en tienda"
               register={register}
@@ -552,11 +552,10 @@ export default function CheckOutForm2({
             <button
               type="submit"
               disabled={!isDirty || total === 0}
-              className={`${
-                !isDirty
+              className={`${!isDirty
                   ? "cursor-default bg-grey-200"
                   : "cursor-pointer bg-pink-200 "
-              } rounded-sm p-2 w-[150px] whitespace-nowrap text-white`}
+                } rounded-sm p-2 w-[150px] whitespace-nowrap text-white`}
               title={`${!isDirty ? "Seleccione un método de envío" : ""}`}
             >
               {total <= 0 ? <Spinner /> : "Continuar"}
