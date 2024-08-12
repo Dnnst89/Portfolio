@@ -27,15 +27,7 @@ function ProductDetail({
   handleGoBack,
   handleGoToCategory,
 }) {
-  //Obtengo el precio en que se compro el producto.
-  // const purchasedItems = useSelector(
-  //   (state) => state.purchasedItems.purchasedProducts
-  // );
-
-  // lo convertimos a string
-  // const purchasedItemsString = JSON.stringify(purchasedItems);
-
-  // localStorage.setItem("purchasedItemStored", purchasedItemsString);
+  const [purchasedCurrency, setPurchasedCurrency] = useState(0);
 
   // if true send variantPrice as price for products else send variant price
   const useLocalCurrency = useLocalCurrencyContext();
@@ -127,11 +119,10 @@ function ProductDetail({
   let variantItems = [];
 
   //obtengo la URL para identificar si proviene de pedidos
+  // Extract idVariant from URL query parameters
+  const searchParams = new URLSearchParams(window.location.search);
+  const idVariantFromURL = parseInt(searchParams.get("idVariant"), 10);
   useEffect(() => {
-    // Extract idVariant from URL query parameters
-    const searchParams = new URLSearchParams(window.location.search);
-    const idVariantFromURL = parseInt(searchParams.get("idVariant"), 10);
-
     if (idVariantFromURL) {
       // Retrieve the stored items from localStorage
       const storedItemsString = localStorage.getItem("purchasedItemStored");
@@ -139,13 +130,15 @@ function ProductDetail({
       if (storedItemsString) {
         try {
           const parsedPurchasedItems = JSON.parse(storedItemsString);
-
-          // Ensure parsedPurchasedItems is an array
+          // Asegura que parsedPurchasedItems es un array
           if (Array.isArray(parsedPurchasedItems)) {
-            // Find the specific product with the given idVariant
+            // Encuentra el producto especifico con el idVariant
             const product = parsedPurchasedItems.find(
               (item) => item.variantId === idVariantFromURL
             );
+            //cuando mostramos los pedidos necesitamos mostrar el currency en el que se hizo la compra.
+            setPurchasedCurrency(product.currency);
+
             if (product) {
               // Calculate IVA (13%)
               const priceValue = product.price;
@@ -182,8 +175,18 @@ function ProductDetail({
   // en el store y asi seleccionar el precio del articulo correspondiente
 
   const { storeInformation, storeInformationError } = useStoreInformation(1);
-  const currencySymbol =
-    storeInformation?.storeInformation?.data?.attributes?.currencySymbol;
+  //se esta usando el currency de tienda, va a depender si esta en dolares o en colones
+  // si la solicitud no viene de pedidos se muestra el currency de la aplicacion
+  useEffect(() => {
+    if (!idVariantFromURL) {
+      setPurchasedCurrency(
+        storeInformation?.storeInformation?.data?.attributes?.currencySymbol
+      );
+    }
+  }, [
+    idVariantFromURL,
+    storeInformation?.storeInformation?.data?.attributes?.currencySymbol,
+  ]);
 
   useEffect(() => {
     if (data && data.variant && data.variant.data) setEnableButton(false);
@@ -699,7 +702,7 @@ function ProductDetail({
                    * el precio se setea segun el id de la variante
                    */
                   useLocalCurrency
-                    ? `${currencySymbol} ${parseFloat(price).toLocaleString(
+                    ? `${purchasedCurrency} ${parseFloat(price).toLocaleString(
                         "en-US",
                         {
                           minimumFractionDigits: 2,
