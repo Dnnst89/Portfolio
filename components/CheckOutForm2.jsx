@@ -350,6 +350,9 @@ export default function CheckOutForm2({
         setAmount(finalAmount);
         handleDeliveryPayment(0);
         setChecktOutForm2Visible(true);
+        if (paymentDetailResponseId) {
+          updateOrderNumber(paymentDetailResponseId, orderNumber);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -497,7 +500,7 @@ export default function CheckOutForm2({
       </div>
       {!checktOutForm2Visible ? (
         <form onSubmit={onSubmit}>
-          {false && ( // Cambia 'false' a 'true' cuando desees mostrar este DeliveryChoice
+          {true && ( // Cambia 'false' a 'true' cuando desees mostrar este DeliveryChoice
             <DeliveryChoice
               labelName="Recoger en tienda"
               register={register}
