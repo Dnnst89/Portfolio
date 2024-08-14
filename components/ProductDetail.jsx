@@ -17,8 +17,7 @@ import useStoreInformation from "../helpers/useStoreInformation";
 import GET_VARIANT_BY_ID from "@/src/graphQl/queries/getVariantByID";
 import useFromOrderState from "../helpers/useFromOrderState";
 import { useLocalCurrencyContext } from "@/src/context/useLocalCurrency";
-import { useSelector } from "react-redux";
-import Cookies from "js-cookie";
+
 
 function ProductDetail({
   product,
@@ -169,7 +168,7 @@ function ProductDetail({
         );
       }
     }
-  }, []);
+  }, [idVariantFromURL]);
 
   // usamos el id que viene en la url para filtrar los producto que tenemos
   // en el store y asi seleccionar el precio del articulo correspondiente
