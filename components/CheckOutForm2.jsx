@@ -171,7 +171,6 @@ export default function CheckOutForm2({
     const paymentDetailResponseIdCustom = paymentDetailResponseId
     console.log("updateOrderNumber", orderNumberCustom, paymentDetailResponseIdCustom);
     if (!orderNumberCustom || !paymentDetailResponseIdCustom) {
-      console.log("orderNumber or paymentDetailResponseId is missing");
       return;
     }
 
@@ -185,8 +184,6 @@ export default function CheckOutForm2({
 
       // Asegúrate de acceder a la propiedad correcta en `data`
       const newOrderNumber = data?.updatePaymentDetail?.data?.attributes?.orderNumber;
-      console.log("aqui imprimo newOrderNumber", newOrderNumber);
-      console.log("aqui imprimo data", data);
       setFinalOrderNumber(newOrderNumber || "1234"); // Usa el valor de `newOrderNumber` si está disponible
     } catch (error) {
       console.error("Error updating payment detail order:", error);// Valor predeterminado en caso de error
@@ -313,7 +310,7 @@ export default function CheckOutForm2({
             //se llama al hook que actualiza la orden
             // se le pasan los parametros necesarios
             if (paymentDetailResponseId) {
-              console.log("argumentos1", paymentDetailResponseId, orderNumber);
+              console.log("argumentos1", paymentDetailResponseId,orderNumber);
               updateOrderNumber(paymentDetailResponseId, orderNumber);
             }
           } catch (error) {
@@ -355,6 +352,9 @@ export default function CheckOutForm2({
         setAmount(finalAmount);
         handleDeliveryPayment(0);
         setChecktOutForm2Visible(true);
+        if (paymentDetailResponseId) {
+          updateOrderNumber(paymentDetailResponseId, orderNumber);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -410,7 +410,7 @@ export default function CheckOutForm2({
                 //se llama al hook que actualiza la orden
                 // se le pasan los parametros necesarios
                 if (paymentDetailResponseId) {
-                  console.log("argumentos2", paymentDetailResponseId, orderNumber);
+                  console.log("argumentos2", paymentDetailResponseId,orderNumber);
                   updateOrderNumber(paymentDetailResponseId, orderNumber);
                 }
               }
@@ -462,7 +462,7 @@ export default function CheckOutForm2({
 
                 setChecktOutForm2Visible(true);
                 if (paymentDetailResponseId) {
-                  console.log("argumentos3", paymentDetailResponseId, orderNumber);
+                  console.log("argumentos3", paymentDetailResponseId,orderNumber);
                   updateOrderNumber(paymentDetailResponseId, orderNumber);
                 }
               }

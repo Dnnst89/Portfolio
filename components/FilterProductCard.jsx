@@ -21,7 +21,6 @@ const FilterProductCard = ({
   const altTextDesc = "Imagen Producto " + name;
   const router = useRouter();
   const productChange = () => {
-    console.log("hola");
     trackEvent(
       brand,
       "click_on_product",
