@@ -142,7 +142,6 @@ export default function OrderDetailSecondary({ orderId }) {
       </div>
     );
   }
-
   return (
     <div className="bg-resene col-span-12 md:col-span-8 grid grid-cols-12">
       <h1 className="flex justify-center text-xl p-5 col-span-12">
@@ -196,15 +195,26 @@ export default function OrderDetailSecondary({ orderId }) {
                         <h1 className="text-sm md:text-xl">
                           N° artículos: {item.quantity}{" "}
                         </h1>
+                        {}
                         <p className="sm:text-sm ">
                           {item.currency
                             ? `${item.currency} ${(
-                                item.price * item.quantity
+                                item.price *
+                                item.quantity *
+                                (1 +
+                                  orderData.order.taxes /
+                                    orderData.order.subtotal)
                               ).toLocaleString("en-US", {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2,
                               })}`
-                            : `USD ${(item.price * item.quantity).toFixed(2)}`}
+                            : `USD ${(
+                                item.price *
+                                item.quantity *
+                                (1 +
+                                  orderData.order.taxes /
+                                    orderData.order.subtotal)
+                              ).toFixed(2)}`}
                         </p>
                       </div>
                     </div>
