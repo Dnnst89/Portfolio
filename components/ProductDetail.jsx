@@ -27,7 +27,6 @@ function ProductDetail({
   handleGoToCategory,
 }) {
   const [purchasedCurrency, setPurchasedCurrency] = useState(0);
-
   // if true send variantPrice as price for products else send variant price
   const useLocalCurrency = useLocalCurrencyContext();
 
@@ -121,11 +120,13 @@ function ProductDetail({
   // Extract idVariant from URL query parameters
   const searchParams = new URLSearchParams(window.location.search);
   const idVariantFromURL = parseInt(searchParams.get("idVariant"), 10);
+  const currencyFromUrl = searchParams.get('currency');
   useEffect(() => {
     if (idVariantFromURL) {
       // Retrieve the stored items from localStorage
       const storedItemsString = localStorage.getItem("purchasedItemStored");
-
+       //cuando mostramos los pedidos necesitamos mostrar el currency en el que se hizo la compra.
+      setPurchasedCurrency(currencyFromUrl);
       if (storedItemsString) {
         try {
           const parsedPurchasedItems = JSON.parse(storedItemsString);
@@ -135,9 +136,7 @@ function ProductDetail({
             const product = parsedPurchasedItems.find(
               (item) => item.variantId === idVariantFromURL
             );
-            //cuando mostramos los pedidos necesitamos mostrar el currency en el que se hizo la compra.
-            setPurchasedCurrency(product.currency);
-
+            
             if (product) {
               // Calculate IVA (13%)
               const priceValue = product.price;
@@ -168,7 +167,7 @@ function ProductDetail({
         );
       }
     }
-  }, [idVariantFromURL]);
+  }, [idVariantFromURL,currencyFromUrl,product]);
 
   // usamos el id que viene en la url para filtrar los producto que tenemos
   // en el store y asi seleccionar el precio del articulo correspondiente

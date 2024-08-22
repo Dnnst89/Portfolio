@@ -24,12 +24,20 @@ function CarouselImages({
   orderData,
 }) {
   const dispatch = useDispatch();
-  const [currentProduct, setCurrentProduct] = useState(null);
+  const [currentCurrency, setCurrentCurrency] = useState(null);
 
-  const dataInfo = orderData?.orderItems;
+
+
   // Retrieve existing items from localStorage
-
   useEffect(() => {
+    const dataInfo = orderData?.orderItems;
+
+    if (dataInfo?.[0]?.currency != null) {
+      setCurrentCurrency(dataInfo[0].currency);
+    } else {
+      setCurrentCurrency("USD");
+    }
+    
     if (orderData?.orderItems) {
       // Retrieve and parse existing items from localStorage
       const existingItemsString = localStorage.getItem("purchasedItemStored");
@@ -63,7 +71,6 @@ function CarouselImages({
           brand: product.brand,
           currency: product.currency,
         };
-
         // Check if the product already exists in the existing items
         const existingIndex = existingItems.findIndex(
           (item) => item.variantId === idVariant
@@ -105,6 +112,7 @@ function CarouselImages({
                 productId: productId,
                 idVariant: idVariant,
                 ItemQt: ItemQt,
+                currency:currentCurrency
               },
             }}
           >
