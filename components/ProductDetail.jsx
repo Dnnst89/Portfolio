@@ -27,6 +27,7 @@ function ProductDetail({
   handleGoToCategory,
 }) {
   const [purchasedCurrency, setPurchasedCurrency] = useState(0);
+  const [purchasedAmount, setPurchasedAmount] = useState(0);
   // if true send variantPrice as price for products else send variant price
   const useLocalCurrency = useLocalCurrencyContext();
 
@@ -42,6 +43,8 @@ function ProductDetail({
 
   const { getFromOrderState, updateFromOrder } = useFromOrderState();
   const isFromOrderDetail = JSON.parse(getFromOrderState());
+
+  console.log("isFromOrderDetail",isFromOrderDetail)
 
   const { data, loading: productIdLoading } = useQuery(GET_VARIANT_BY_ID, {
     variables: {
@@ -121,12 +124,14 @@ function ProductDetail({
   const searchParams = new URLSearchParams(window.location.search);
   const idVariantFromURL = parseInt(searchParams.get("idVariant"), 10);
   const currencyFromUrl = searchParams.get('currency');
+  const amountFromUrl = searchParams.get('amount');
   useEffect(() => {
     if (idVariantFromURL) {
       // Retrieve the stored items from localStorage
       const storedItemsString = localStorage.getItem("purchasedItemStored");
        //cuando mostramos los pedidos necesitamos mostrar el currency en el que se hizo la compra.
       setPurchasedCurrency(currencyFromUrl);
+      setPurchasedAmount(amountFromUrl);
       if (storedItemsString) {
         try {
           const parsedPurchasedItems = JSON.parse(storedItemsString);
@@ -167,7 +172,7 @@ function ProductDetail({
         );
       }
     }
-  }, [idVariantFromURL,currencyFromUrl,product]);
+  }, [idVariantFromURL,currencyFromUrl,product,amountFromUrl]);
 
   // usamos el id que viene en la url para filtrar los producto que tenemos
   // en el store y asi seleccionar el precio del articulo correspondiente
@@ -718,7 +723,7 @@ function ProductDetail({
                  * oculta los botones para agregar unidades y agregar producto al carrito
                  */}
 
-                {!isFromOrderDetail ? (
+                {!purchasedAmount ? (
                   <>
                     <div className="grid md:flex items-center mb-2 ">
                       <span className="text-grey mx-3">Cantidad:</span>

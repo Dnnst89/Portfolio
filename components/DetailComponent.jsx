@@ -26,7 +26,9 @@ export default function DetailComponent({
   const [idVariantSelected, setIdVariantSelected] = useState();
   const [idItemSelected, setIdItemSelected] = useState();
   const [idCurrencySelected, setIdCurrencySelected] = useState();
+  const [idAmountSelected, setIdAmountSelected] = useState();
 console.log("currency data",idCurrencySelected)
+console.log("amount data",idAmountSelected)
   //obtengo el url
   useEffect(() => {
     const queryString = window?.location?.search?.split("?")[1];
@@ -38,7 +40,7 @@ console.log("currency data",idCurrencySelected)
   //obtengo los valores de productId, idVariant y ItemQt también el currency que viene en la url
   useEffect(() => {
     if (querySearch) {
-      const [filterType, filterValue, ItemQt,Currency] = querySearch.split("&");
+      const [filterType, filterValue, ItemQt,Currency,Amount] = querySearch.split("&");
 
       // Verificar si la URL contiene la cadena esperada
       const containsProductId = filterType.includes("productId");
@@ -46,7 +48,8 @@ console.log("currency data",idCurrencySelected)
         const containsIdVariant = filterValue.includes("idVariant");
         const containsIdItem = ItemQt.includes("ItemQt");
         const containsCurrency = Currency.includes("currency");
-        if (containsProductId && containsIdVariant && containsIdItem && containsCurrency) {
+        const containsAmount = Amount.includes("amount");
+        if (containsProductId && containsIdVariant && containsIdItem && containsCurrency && containsAmount) {
           // Extraer el id de la variante y establecerlo en el estado
           const [, idV] = filterValue.split("=");
           setIdVariantSelected(idV);
@@ -54,15 +57,20 @@ console.log("currency data",idCurrencySelected)
           setIdItemSelected(idItem);
           const [, idCurrency] = Currency.split("=");
           setIdCurrencySelected(idCurrency);
+          const [, idAmount] = Amount.split("=");
+          setIdAmountSelected(idAmount);
         } else {
           setIdVariantSelected(null);
           setIdItemSelected(null);
           setIdCurrencySelected(null);
+          setIdAmountSelected(null);
         }
       }
     }
-  }, [querySearch,idCurrencySelected]);
+  }, [querySearch,idCurrencySelected,idAmountSelected]);
   console.log("que valores currency finally",idCurrencySelected)
+  console.log("que valores amount finally",idAmountSelected)
+
   const [errorToastShown, setErrorToastShown] = useState(false);
 
   const { loading, error, data } = useQuery(ProductDetailQuery, {
@@ -95,6 +103,7 @@ console.log("currency data",idCurrencySelected)
                 variantId={idVariantSelected || null}
                 ItemQt={idItemSelected || null}
                 Currency ={idCurrencySelected || null}
+                Amount={idAmountSelected || null}
                 handleGoBack={handleGoBack}
                 handleGoToCategory={handleGoToCategory}
               />
