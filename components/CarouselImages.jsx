@@ -25,17 +25,33 @@ function CarouselImages({
 }) {
   const dispatch = useDispatch();
   const [currentCurrency, setCurrentCurrency] = useState(null);
-
+  const [currentAmount, setCurrentAmount] = useState(null);
 
 
   // Retrieve existing items from localStorage
   useEffect(() => {
     const dataInfo = orderData?.orderItems;
 
-    if (dataInfo?.[0]?.currency != null) {
+    if (dataInfo?.[0]?.currency != null && dataInfo?.[0]?.currency!= "$" ) {
+      console.log("que me trae data",dataInfo?.[0])
       setCurrentCurrency(dataInfo[0].currency);
+      const originalPrice = dataInfo?.[0]?.price; // Suponiendo que dataInfo[0].price contiene el valor original
+      const priceWithTax = originalPrice * 1.13; // Aumenta el precio en un 13%
+      // Limitar a 2 decimales
+      const priceWithTwoDecimals = parseFloat(priceWithTax.toFixed(2));
+     // Establecer el valor calculado con 2 decimales
+      setCurrentAmount(priceWithTwoDecimals);
+
+
     } else {
-      setCurrentCurrency("USD");
+      setCurrentCurrency("$");
+      const originalPrice = dataInfo?.[0]?.price; // Suponiendo que dataInfo[0].price contiene el valor original
+      const priceWithTax = originalPrice * 1.13; // Aumenta el precio en un 13%
+      // Limitar a 2 decimales
+      const priceWithTwoDecimals = parseFloat(priceWithTax.toFixed(2));
+     // Establecer el valor calculado con 2 decimales
+      setCurrentAmount(priceWithTwoDecimals);
+      console.log("que me trae data",dataInfo?.[0])
     }
     
     if (orderData?.orderItems) {
@@ -112,7 +128,8 @@ function CarouselImages({
                 productId: productId,
                 idVariant: idVariant,
                 ItemQt: ItemQt,
-                currency:currentCurrency
+                currency:currentCurrency,
+                amount:currentAmount
               },
             }}
           >

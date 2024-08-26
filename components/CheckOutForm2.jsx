@@ -81,9 +81,10 @@ export default function CheckOutForm2({
     },
   });
   const { loading: load, data: exchangeRate } = useQuery(GET_EXCHANGE_RATE, {});
-
+  const [firstRender, setfirtsRender] = useState(false);
   useEffect(() => {
     try {
+      setfirtsRender(true);
       handleCheckout(true);
       if (data && data.storeInformation && data.storeInformation.data) {
         // se obtienen las coordenadas de la tienda fisica.
@@ -504,17 +505,14 @@ export default function CheckOutForm2({
       </div>
       {!checktOutForm2Visible ? (
         <form onSubmit={onSubmit}>
-          {true && ( // Cambia 'false' a 'true' cuando desees mostrar este DeliveryChoice
-            <DeliveryChoice
-              labelName="Recoger en tienda"
-              register={register}
-              logo={logo}
-              valueName="SPU"
-              deliveryId={"SPU"}
-              className=""
-              disabled={true}
-            />
-          )}
+          <DeliveryChoice
+            labelName="Recoger en tienda"
+            register={register}
+            logo={logo}
+            valueName="SPU"
+            deliveryId={"SPU"}
+            className=""
+          />
           {!blockMoovin ? (
             <DeliveryChoice
               labelName={"Envío a través de"}
@@ -548,19 +546,20 @@ export default function CheckOutForm2({
             />
           }
 
-          <div className="flex justify-center m-auto mt-8 mb-8 w-3/4 ">
-            <button
-              type="submit"
-              disabled={!isDirty || total === 0}
-              className={`${!isDirty
-                  ? "cursor-default bg-grey-200"
-                  : "cursor-pointer bg-pink-200 "
-                } rounded-sm p-2 w-[150px] whitespace-nowrap text-white`}
-              title={`${!isDirty ? "Seleccione un método de envío" : ""}`}
-            >
-              {total <= 0 ? <Spinner /> : "Continuar"}
-            </button>
-          </div>
+        <div className="flex justify-center m-auto mt-8 mb-8 w-3/4">
+          <button
+            type="submit"
+            disabled={firstRender ? false : !isDirty || total === 0}
+            className={`${firstRender || isDirty
+              ? "cursor-pointer bg-pink-200"
+              : "cursor-default bg-grey-200"
+            } rounded-sm p-2 w-[150px] whitespace-nowrap text-white`}
+            title={`${!isDirty && !firstRender ? "Seleccione un método de envío" : ""}`}
+          >
+            {total <= 0 ? <Spinner /> : "Continuar"}
+          </button>
+        </div>
+
         </form>
       ) : (
         <CheckOutForm3
