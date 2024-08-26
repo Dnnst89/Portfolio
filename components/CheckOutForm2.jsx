@@ -512,7 +512,6 @@ export default function CheckOutForm2({
               valueName="SPU"
               deliveryId={"SPU"}
               className=""
-              disabled={true}
             />
           )}
           {!blockMoovin ? (
