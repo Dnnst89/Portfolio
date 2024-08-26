@@ -9,7 +9,7 @@ mutation CreateOrderItem(
   $totalPrice: Float!,
   $ivaAmount: Float!,
   $name: String!,
-  $brand: String!,
+  $brand: String,
   $cabys: Long!,
   $orderDetailId: ID!,
   $currency: String!,

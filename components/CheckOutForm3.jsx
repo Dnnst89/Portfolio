@@ -25,7 +25,7 @@ export default function CheckOutForm3({
   items,
   orderNumber,
 }) {
-  console.log("estima", estimation);
+
   const captchaRef = useRef(true);
   const router = useRouter();
   const [formData, setFormData] = useState({});
@@ -73,9 +73,7 @@ export default function CheckOutForm3({
       });
 
       const orderNumberCustom = paymentinfo?.data?.paymentDetail?.data?.attributes?.orderNumber;
-      console.log("tomo bien el order?", orderNumberCustom,paymentinfo)
       setOrderNumberCustom(orderNumberCustom);
-      console.log("setee bien?", orderNumberCustomState)
       const client = {
         name:
           paymentUser?.usersPermissionsUser?.data?.attributes?.firstName +

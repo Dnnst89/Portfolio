@@ -25,37 +25,51 @@ export default function DetailComponent({
   const [querySearch, setQuerySearch] = useState("");
   const [idVariantSelected, setIdVariantSelected] = useState();
   const [idItemSelected, setIdItemSelected] = useState();
-
+  const [idCurrencySelected, setIdCurrencySelected] = useState();
+  const [idAmountSelected, setIdAmountSelected] = useState();
+console.log("currency data",idCurrencySelected)
+console.log("amount data",idAmountSelected)
   //obtengo el url
   useEffect(() => {
     const queryString = window?.location?.search?.split("?")[1];
     setQuerySearch(queryString);
   }, []);
 
-  //obtengo los valores de productId, idVariant y ItemQt que viene en la url
+  console.log("que valores traigo aqui",querySearch)
+
+  //obtengo los valores de productId, idVariant y ItemQt también el currency que viene en la url
   useEffect(() => {
     if (querySearch) {
-      const [filterType, filterValue, ItemQt] = querySearch.split("&");
+      const [filterType, filterValue, ItemQt,Currency,Amount] = querySearch.split("&");
 
       // Verificar si la URL contiene la cadena esperada
       const containsProductId = filterType.includes("productId");
       if (filterValue && ItemQt) {
         const containsIdVariant = filterValue.includes("idVariant");
         const containsIdItem = ItemQt.includes("ItemQt");
-
-        if (containsProductId && containsIdVariant && containsIdItem) {
+        const containsCurrency = Currency.includes("currency");
+        const containsAmount = Amount.includes("amount");
+        if (containsProductId && containsIdVariant && containsIdItem && containsCurrency && containsAmount) {
           // Extraer el id de la variante y establecerlo en el estado
           const [, idV] = filterValue.split("=");
           setIdVariantSelected(idV);
           const [, idItem] = ItemQt.split("=");
           setIdItemSelected(idItem);
+          const [, idCurrency] = Currency.split("=");
+          setIdCurrencySelected(idCurrency);
+          const [, idAmount] = Amount.split("=");
+          setIdAmountSelected(idAmount);
         } else {
           setIdVariantSelected(null);
           setIdItemSelected(null);
+          setIdCurrencySelected(null);
+          setIdAmountSelected(null);
         }
       }
     }
-  }, [querySearch]);
+  }, [querySearch,idCurrencySelected,idAmountSelected]);
+  console.log("que valores currency finally",idCurrencySelected)
+  console.log("que valores amount finally",idAmountSelected)
 
   const [errorToastShown, setErrorToastShown] = useState(false);
 
@@ -88,6 +102,8 @@ export default function DetailComponent({
                 product={data.product.data}
                 variantId={idVariantSelected || null}
                 ItemQt={idItemSelected || null}
+                Currency ={idCurrencySelected || null}
+                Amount={idAmountSelected || null}
                 handleGoBack={handleGoBack}
                 handleGoToCategory={handleGoToCategory}
               />
