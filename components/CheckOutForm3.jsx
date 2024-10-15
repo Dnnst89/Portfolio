@@ -25,7 +25,6 @@ export default function CheckOutForm3({
   items,
   orderNumber,
 }) {
-
   const captchaRef = useRef(true);
   const router = useRouter();
   const [formData, setFormData] = useState({});
@@ -72,7 +71,8 @@ export default function CheckOutForm3({
         variables: { paymentId: paymentDetailId },
       });
 
-      const orderNumberCustom = paymentinfo?.data?.paymentDetail?.data?.attributes?.orderNumber;
+      const orderNumberCustom =
+        paymentinfo?.data?.paymentDetail?.data?.attributes?.orderNumber;
       setOrderNumberCustom(orderNumberCustom);
       const client = {
         name:
@@ -119,7 +119,7 @@ export default function CheckOutForm3({
 
           const orderId = parseInt(order.idPackage);
           const paymentId = paymentinfo?.data?.paymentDetail?.data?.id;
-        
+
           await updatePaymentDeliveryId({
             variables: {
               id: paymentId,
@@ -164,8 +164,8 @@ export default function CheckOutForm3({
         if (userData) {
           setFormData({
             redirect:
-              process.env.NODE_ENV === "development"
-                ? "http://localhost:3000/thankyou/"
+              process.env.NODE_ENV === "development" // "http://localhost:3000/thankyou/"
+                ? "http://detinmarin-dev.s3-website-us-west-2.amazonaws.com/thankyou/"
                 : `${process.env.NEXT_PUBLIC_APP_URL}/thankyou/`,
             key: process.env.NEXT_PUBLIC_TILOPAY_API_KEY,
             amount: parseFloat(total),
@@ -196,7 +196,7 @@ export default function CheckOutForm3({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     // fetchOrderMoovin(orderNumber);
-  }, [data,orderNumberCustomState]);
+  }, [data, orderNumberCustomState]);
 
   const handleVerification = async () => {
     paymentUrl = await paymentRequest(formData);
