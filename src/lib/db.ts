@@ -1,0 +1,72 @@
+import { ExperienceType } from "@/types/experiences";
+
+export const experiences: ExperienceType[] = [
+     {
+      id: 1,
+      company: "360Training",
+      position: "Software Engineer",
+      startDate: "Jan 2025",
+      endDate: "Present",
+      projectUrl: ["https://www.compliancetrainingonline.com/","https://www.osha.com/"],
+      description: "E-Commerce",
+      image: "/360training-logo.webp",
+      achievements: [
+        "✔️ Developed a comprehensive e-learning platform using React with TypeScript for type-safe, scalable front-end architecture.",
+        "✔️ Implemented responsive UI components using Tailwind CSS and shadcn/ui component library for consistent design system.",
+        "✔️ Built and documented reusable components in Storybook to enhance team collaboration and maintain design consistency.",
+        "✔️ Established comprehensive testing coverage using Jest and React Testing Library to ensure code reliability and maintainability.",
+        "✔️ Integrated Builder.io for visual content management, enabling non-technical stakeholders to update course content efficiently.",
+        "✔️ Implemented advanced search functionality using Algolia to improve course discovery and user experience.",
+        "✔️ Set up analytics tracking with Google Tag Manager for detailed user behavior analysis and conversion optimization.",
+        "✔️ Ensured cross-browser compatibility and performance testing using BrowserStack across multiple devices and platforms.",
+        "✔️ Collaborated with UX/UI designers using Figma for seamless design handoffs and maintaining pixel-perfect implementations.",
+        "✔️ Managed project dependencies and monorepo architecture efficiently using pnpm for faster installations and better workspace management.",
+        "✔️ Utilized Git for version control with best practices including feature branching, code reviews, and automated deployment workflows.",
+        "✔️ Actively participated in Scrum methodology, contributing to sprint planning, daily standups, and retrospectives for continuous improvement.",
+        "✔️ Delivered high-performance, accessible web applications that enhanced user engagement and learning outcomes for compliance training.",
+        "✔️ Collaborated closely with cross-functional teams including product managers, designers, and QA engineers to ensure timely project delivery."
+        ]
+    },
+    {
+      id: 2,
+      company: "Centauro Solutions",
+      position: "Software Engineer",
+      startDate: "Nov 2022",
+      endDate: "Present",
+      projectUrl: ["https://www.detinmarin.cr/"],
+      description: "E-Commerce",
+      image: "/centauro.svg",
+      achievements: [
+        "✔️ I implemented a robust and scalable platform from scratch, using React for the front-end, GraphQL and Strapi Headless CMS for efficient data management.",
+        "✔️ I have developed expertise in implementing and managing cloud infrastructures using Amazon S3 and Amazon EC2.",
+        "✔️ I integrated Next.js to enhance authentication and authorization processes, quickly adapting to the changing needs of the project.",
+        "✔️ I ensured an accessible user experience across a wide range of devices, from mobile to desktops.",
+        "✔️ I implemented Strapi, a powerful headless CMS, to efficiently manage the dynamic content of the E-commerce platform.",
+        "✔️ I developed and implemented integrations of external delivery services using the SOAP protocol, crucial for efficient order management.",
+        "✔️ I significantly improved the scalability, maintainability, and performance of the E-commerce project through this modern approach.",
+        "✔️ I used Postman to consume external APIs, completing the payment process and ensuring a smooth and functional integration.",
+        "✔️ I was responsible for identifying and solving problems efficiently, ensuring the project's smooth execution.",
+        "✔️ I collaborated closely with a team of developers and designers, ensuring the timely delivery of high-quality software projects.",
+        "✔️ I mastered tools like Visual Studio and version control systems (Git), which allowed me to contribute effectively to the team's workflow.",
+        "✔️ I actively participated in an Agile development environment, using Jira Software and SCRUM methodologies to optimize our work process and delivery.",
+      ],
+    },
+    {
+      id: 3,
+      company: "CSG Informática",
+      position: "Frontend Developer",
+      startDate: "May 2022",
+      endDate: "Oct 2022",
+      projectUrl: [""],
+      description: "Accounting Project",
+      image: "/csg_informatica.svg",
+      achievements: [
+        "✔️ Developed REST APIs using .NET 6 Core and Entity Framework.",
+        "✔️ Knowledge of data transfer objects (DTO), data annotations, LINQ for queries, asynchronous endpoints, anonymous functions lambda, migrations and MVC architecture.",
+        "✔️ Fetching data with a modern tech stack, including JavaScript, React.js, Bootstrap, and CSS, to craft visually appealing and responsive web applications.",
+        "✔️ Using Entity Framework, we migrate entities to SQL to store data.",
+        "✔️ Utilized Git and GitHub for version control.",
+      ],
+    },
+   
+  ];
