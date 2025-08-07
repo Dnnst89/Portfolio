@@ -12,7 +12,6 @@ import {
 const Main = () => {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 lg:py-20 text-center">
-      {" "}
       {/* Center the content */}
       <div className="mb-8 md:mb-12 lg:mb-16">
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-50">
@@ -32,27 +31,27 @@ const Main = () => {
           className="w-[200px] h-[200px]  rounded-full mx-auto mb-4"
         />
          <h2 className="text-4xl font-extrabold text-gray-900 dark:text-gray-50 mb-6 text-center">
-            Hello, I'm Danny 👋
+            Hello, I&apos;m Danny 👋
           </h2>
           <div className="space-y-6 text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
             <p>
-              I'm an experienced <strong>Web Developer</strong> specializing in
-              innovative <strong>E-commerce</strong> and{" "}
-              <strong>E-learning platforms</strong>. My expertise lies in{" "}
-              <strong>React</strong>, <strong>TypeScript</strong>,{" "}
+              I&apos;m an experienced <strong>Web Developer</strong> specializing in
+              innovative <strong>E-commerce</strong> and
+              <strong>E-learning platforms</strong>. My expertise lies in
+              <strong>React</strong>, <strong>TypeScript</strong>,
               <strong>Next.js</strong>, and a wide array of modern web
               technologies.
             </p>
             <p>
               I have a proven track record at industry-leading companies
-              including <strong>360Training</strong>,{" "}
-              <strong>Centauro Solutions</strong>, and{" "}
-              <strong>CSG Informática</strong>. I'm distinguished by my ability
-              to rapidly adapt to emerging web technologies and deliver{" "}
+              including <strong>360Training</strong>,
+              <strong>Centauro Solutions</strong>, and
+              <strong>CSG Informática</strong>. I&apos;m distinguished by my ability
+              to rapidly adapt to emerging web technologies and deliver
               <strong>responsive</strong>, <strong>accessible</strong> web
               applications that enhance user experience and operational
-              efficiency. I'm skilled in{" "}
-              <strong>full-stack development</strong>,{" "}
+              efficiency. I&apos;m skilled in
+              <strong>full-stack development</strong>,
               <strong>performance optimization</strong>, and comprehensive
               testing using modern frameworks and tools.
             </p>
