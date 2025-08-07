@@ -31,21 +31,38 @@ const Main = () => {
           alt="Profile image"
           className="w-[200px] h-[200px]  rounded-full mx-auto mb-4"
         />
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-50">
-          Hello, I&lsquo;m Danny 👋
-        </h2>
-        <p className="text-lg text-gray-600 dark:text-gray-400 text-center max-w-[1070px] mx-auto leading-relaxed">
-          Developer with experience in creating innovative web solutions,
-          focused on delivering highly efficient and accessible
-          <strong> E-commerce platforms</strong>. Distinguished by my ability to
-          <strong> adapt to new technologies </strong> and work methodologies, I
-          have contributed to the success of complex projects,
-          <strong> continuously improving</strong> user experience and
-          operational efficiency. Collaborating with{" "}
-          <strong> multidisciplinary teams </strong>, I am passionate about
-          driving<strong> innovation </strong>and excellence in every aspect of
-          software development.
-        </p>
+         <h2 className="text-4xl font-extrabold text-gray-900 dark:text-gray-50 mb-6 text-center">
+            Hello, I'm Danny 👋
+          </h2>
+          <div className="space-y-6 text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+            <p>
+              I'm an experienced <strong>Web Developer</strong> specializing in
+              innovative <strong>E-commerce</strong> and{" "}
+              <strong>E-learning platforms</strong>. My expertise lies in{" "}
+              <strong>React</strong>, <strong>TypeScript</strong>,{" "}
+              <strong>Next.js</strong>, and a wide array of modern web
+              technologies.
+            </p>
+            <p>
+              I have a proven track record at industry-leading companies
+              including <strong>360Training</strong>,{" "}
+              <strong>Centauro Solutions</strong>, and{" "}
+              <strong>CSG Informática</strong>. I'm distinguished by my ability
+              to rapidly adapt to emerging web technologies and deliver{" "}
+              <strong>responsive</strong>, <strong>accessible</strong> web
+              applications that enhance user experience and operational
+              efficiency. I'm skilled in{" "}
+              <strong>full-stack development</strong>,{" "}
+              <strong>performance optimization</strong>, and comprehensive
+              testing using modern frameworks and tools.
+            </p>
+            <p>
+              I am passionate about creating dynamic web solutions through
+              collaborative teamwork in <strong>Agile environments</strong>,
+              consistently delivering high-quality web applications that drive
+              business growth and user satisfaction.
+            </p>
+          </div>
         <div className="mt-4 flex justify-center space-x-4">
           <Link
             href="https://linkedin.com/in/dannyst89"

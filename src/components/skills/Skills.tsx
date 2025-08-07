@@ -9,18 +9,26 @@ import {
   FaGit,
   FaGithub,
   FaBitbucket,
+  FaNpm,
+  FaFigma,
+  FaReact,
 } from "react-icons/fa";
-import { SiRedux, SiTailwindcss, SiPostman } from "react-icons/si";
-import { DiSqllite } from "react-icons/di";
-import { GrGraphQl } from "react-icons/gr";
-import { DiScrum } from "react-icons/di";
 import {
+  SiRedux,
+  SiTailwindcss,
+  SiPostman,
   SiAmazons3,
   SiAmazonec2,
   SiAmazonroute53,
   SiNextdotjs,
+  SiPnpm,
+  SiJest,
+  SiStorybook,
 } from "react-icons/si";
+import { DiSqllite, DiScrum } from "react-icons/di";
+import { GrGraphQl } from "react-icons/gr";
 import { IoLogoJavascript } from "react-icons/io";
+
 const Skills = () => {
   // Skills data organized by categories
   const categories = [
@@ -39,19 +47,42 @@ const Skills = () => {
       ],
     },
     {
-      title: "Frameworks",
+      title: "Frameworks & Libraries",
       skills: [
         { icon: SiRedux, text: "Redux", color: "text-purple-500" },
-        { icon: SiTailwindcss, text: "Tailwind CSS", color: "text-blue-500" },
-        { icon: SiNextdotjs, text: "Next JS", color: "text-dark" },
+        { icon: SiNextdotjs, text: "Next JS", color: "text-gray-800" },
+        { icon: FaReact, text: "React", color: "text-blue-500" },
       ],
     },
     {
-      title: "Tools",
+      title: "UI/CSS Frameworks",
+      skills: [
+        { icon: SiTailwindcss, text: "Tailwind CSS", color: "text-cyan-500" },
+        { icon: FaToolbox, text: "ShadCN/UI", color: "text-gray-600" },
+      ],
+    },
+    {
+      title: "Development Tools",
       skills: [
         { icon: GrGraphQl, text: "GraphQL", color: "text-pink-500" },
         { icon: SiPostman, text: "Postman", color: "text-orange-500" },
         { icon: FaGit, text: "Git", color: "text-red-500" },
+        { icon: FaFigma, text: "Figma", color: "text-purple-500" },
+        { icon: SiStorybook, text: "Storybook", color: "text-pink-500" },
+      ],
+    },
+    {
+      title: "Package Managers",
+      skills: [
+        { icon: FaNpm, text: "NPM", color: "text-red-500" },
+        { icon: SiPnpm, text: "PNPM", color: "text-yellow-600" },
+      ],
+    },
+    {
+      title: "Testing & Quality",
+      skills: [
+        { icon: SiJest, text: "Jest", color: "text-red-600" },
+        { icon: FaCode, text: "React Testing Library", color: "text-red-500" },
       ],
     },
     {
@@ -63,10 +94,10 @@ const Skills = () => {
       ],
     },
     {
-      title: "Others",
+      title: "Methodologies & Platforms",
       skills: [
         { icon: DiScrum, text: "Scrum", color: "text-blue-500" },
-        { icon: FaGithub, text: "Github", color: "text-dark" },
+        { icon: FaGithub, text: "Github", color: "text-gray-800" },
         { icon: FaBitbucket, text: "Bitbucket", color: "text-blue-500" },
       ],
     },
@@ -84,8 +115,8 @@ const Skills = () => {
           >
             <h3 className="text-xl font-semibold mb-2">{category.title}</h3>
             {/* Mapping over the skills within each category */}
-            {category.skills.map((skill, index) => (
-              <div key={index} className="flex items-center mb-2">
+            {category.skills.map((skill, skillIndex) => (
+              <div key={skillIndex} className="flex items-center mb-2">
                 <skill.icon className={`mr-2 w-8 h-8 ${skill.color}`} />
                 <span>{skill.text}</span>
               </div>

@@ -8,7 +8,7 @@ export const experiences: ExperienceType[] = [
       startDate: "Jan 2025",
       endDate: "Present",
       projectUrl: ["https://www.compliancetrainingonline.com/","https://www.osha.com/"],
-      description: "E-Commerce",
+      description: "Online Training",
       image: "/360training-logo.webp",
       achievements: [
         "✔️ Developed a comprehensive e-learning platform using React with TypeScript for type-safe, scalable front-end architecture.",
